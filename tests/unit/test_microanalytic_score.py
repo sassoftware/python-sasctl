@@ -27,7 +27,7 @@ def test_create_python_module():
                             "    return out1, out2"))
         create_module(source=source)
 
-        post.assert_called_once()
+        assert post.call_count == 1
         json = post.call_args[1].get('json', {})
         assert 'text/x-python' == json['type']
         assert 'public' == json['scope']

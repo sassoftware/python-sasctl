@@ -17,7 +17,7 @@ def test_request():
 
         resp = request('GET', 'example.com', session=mock_sess)
 
-    mock_sess.request.assert_called_once()
+    assert mock_sess.request.call_count == 1
     assert isinstance(resp, RestObj)
     assert hasattr(resp, '_headers')
 
@@ -41,7 +41,7 @@ def test_list_items():
 
         resp = list_items()
 
-    request.assert_called_once()
+    assert request.call_count == 1
     assert [RestObj()] == resp
 
 
@@ -56,7 +56,7 @@ def test_get_item_by_dict():
         resp = get_item(target)
 
     assert target == resp
-    request.assert_not_called()
+    assert request.call_count == 0
 
 
 def test_get_item_by_name():
@@ -86,8 +86,8 @@ def test_get_item_by_id():
             request.return_value = target
             resp = get_item(12345)
 
-    is_uuid.assert_called_once()
-    request.assert_called_once()
+    assert is_uuid.call_count == 1
+    assert request.call_count == 1
     assert target == resp
 
 
@@ -107,7 +107,7 @@ def test_update_item():
 
         target._headers = {'etag': 'abcd'}
         resp = update_item(target)
-    request.assert_called_once()
+    assert request.call_count == 1
     assert ('put', '/widget/12345') == request.call_args[0]
     assert target == resp
 

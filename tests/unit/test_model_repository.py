@@ -46,7 +46,7 @@ def test_create_model():
                                 tool=target['tool'],
                                 is_champion=target['champion'],
                                 properties=dict(custom1=123, custom2='somevalue'))
-            post.assert_called_once()
+            assert post.call_count == 1
             url, data = post.call_args
 
             # dict isn't guaranteed to preserve order
@@ -69,7 +69,7 @@ def test_create_model():
             get_project.return_value = {'id': PROJECT_ID}
             _ = mr.create_model(copy.deepcopy(target), PROJECT_NAME, description='Updated Model')
             target['description'] = 'Updated Model'
-            post.assert_called_once()
+            assert post.call_count == 1
             url, data = post.call_args
 
             # dicts don't preserve order so property order may not match
