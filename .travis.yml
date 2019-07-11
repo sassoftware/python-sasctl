@@ -22,6 +22,7 @@ script:
 jobs:
   include:
     - stage: build
+      python: 3.6
       install: pip install sphinx
       script: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
     - stage: deploy
