@@ -1,0 +1,443 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2019-06-10T21:43:01",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "60"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint gelupdates scim.read SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS USCALA mercuryusers CTRYUNITEDSTATES BLDGC tisurvey GLOBALPRESALES intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install ApplicationAdministrators techoffice COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"5da776cee5a14731ad8ca6a2a19b1d48\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Mon, 10 Jun 2019 21:43:01 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-06-10T21:43:01",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/projects/projects?filter=eq(name,%20%22Test%20Project%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/projects/projects\",\"uri\":\"/projects/projects\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.summary\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/projects/projects?filter=eq(name,%20%22Test%20Project%22)&sortBy=name:ascending&start=0&limit=10\",\"uri\":\"/projects/projects?filter=eq(name,%20%22Test%20Project%22)&sortBy=name:ascending&start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.summary\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/projects/projects\",\"uri\":\"/projects/projects\",\"type\":\"application/vnd.sas.project.summary\",\"responseType\":\"application/vnd.sas.project.summary\"}],\"name\":\"projects\",\"accept\":\"application/vnd.sas.project.summary\",\"start\":0,\"count\":1,\"items\":[{\"creationTimeStamp\":\"2019-06-10T21:42:59.636Z\",\"modifiedTimeStamp\":\"2019-06-10T21:42:59.636Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"name\":\"Test Project\",\"imageUri\":\"/projects/cyan-bubbles.png\",\"folderUri\":\"/folders/folders/7527040e-252b-423f-beba-932fd08fefc3\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"type\":\"application/vnd.sas.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\"}]}],\"limit\":10,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Mon, 10 Jun 2019 21:43:01 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/projects/projects?filter=eq(name,%20%22Test%20Project%22)"
+      }
+    },
+    {
+      "recorded_at": "2019-06-10T21:43:01",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"creationTimeStamp\":\"2019-06-10T21:42:59.636Z\",\"modifiedTimeStamp\":\"2019-06-10T21:42:59.636Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"name\":\"Test Project\",\"imageUri\":\"/projects/cyan-bubbles.png\",\"folderUri\":\"/folders/folders/7527040e-252b-423f-beba-932fd08fefc3\",\"userCount\":1,\"groupCount\":0,\"properties\":[],\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"type\":\"application/vnd.sas.project\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"type\":\"application/vnd.sas.project.summary\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"type\":\"application/vnd.sas.project\",\"responseType\":\"application/vnd.sas.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\"},{\"method\":\"GET\",\"rel\":\"folder\",\"href\":\"/folders/folders/7527040e-252b-423f-beba-932fd08fefc3\",\"uri\":\"/folders/folders/7527040e-252b-423f-beba-932fd08fefc3\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"resources\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/resources\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/resources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.resource\"},{\"method\":\"POST\",\"rel\":\"addResource\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/resources\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/resources\",\"type\":\"application/vnd.sas.project.resource\"},{\"method\":\"GET\",\"rel\":\"participants\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/participants\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/participants\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.participant\"},{\"method\":\"POST\",\"rel\":\"addParticipant\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/participants\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/participants\",\"type\":\"application/vnd.sas.project.participant\"},{\"method\":\"GET\",\"rel\":\"comments\",\"href\":\"/comments/comments?resourceUri={/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5}\",\"uri\":\"/comments/comments?resourceUri={/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5}\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.comment\"},{\"method\":\"POST\",\"rel\":\"createComment\",\"href\":\"/comments/comments\",\"uri\":\"/comments/comments\",\"type\":\"application/vnd.sas.comment\"},{\"method\":\"GET\",\"rel\":\"activities\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/activities\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/activities\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.activity\"}]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.project+json"
+          ],
+          "Date": [
+            "Mon, 10 Jun 2019 21:43:01 GMT"
+          ],
+          "ETag": [
+            "\"jwqwkjsk\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=98"
+          ],
+          "Last-Modified": [
+            "Mon, 10 Jun 2019 21:42:59 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5"
+      }
+    },
+    {
+      "recorded_at": "2019-06-10T21:43:01",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "DELETE",
+        "uri": "https://hostname.com/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": ""
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Date": [
+            "Mon, 10 Jun 2019 21:43:01 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=97"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 204,
+          "message": ""
+        },
+        "url": "https://hostname.com/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5"
+      }
+    },
+    {
+      "recorded_at": "2019-06-10T21:43:01",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/projects/projects?filter=eq(name,%20%22Test%20Project%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/projects/projects\",\"uri\":\"/projects/projects\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.summary\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/projects/projects?filter=eq(name,%20%22Test%20Project%22)&sortBy=name:ascending&start=0&limit=10\",\"uri\":\"/projects/projects?filter=eq(name,%20%22Test%20Project%22)&sortBy=name:ascending&start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.summary\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/projects/projects\",\"uri\":\"/projects/projects\",\"type\":\"application/vnd.sas.project.summary\",\"responseType\":\"application/vnd.sas.project.summary\"}],\"name\":\"projects\",\"accept\":\"application/vnd.sas.project.summary\",\"start\":0,\"count\":0,\"items\":[],\"limit\":10,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Mon, 10 Jun 2019 21:43:01 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=96"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/projects/projects?filter=eq(name,%20%22Test%20Project%22)"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}

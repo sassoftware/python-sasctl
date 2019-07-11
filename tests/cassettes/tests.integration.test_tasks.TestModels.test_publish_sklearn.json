@@ -1,0 +1,2445 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2019-06-13T12:52:47",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "60"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read gelupdates SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey GLOBALPRESALES intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin EsriUsers AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install techoffice ApplicationAdministrators COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"d233772004044621a51945191ea64399\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:46 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:47",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/models?filter=eq(name,%20%22Scikit%20Model%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models?start=0&limit=20\",\"uri\":\"/modelRepository/models?start=0&limit=20\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.summary\"},{\"method\":\"POST\",\"rel\":\"createModel\",\"href\":\"/modelRepository/models\",\"uri\":\"/modelRepository/models\",\"type\":\"application/vnd.sas.models.model\",\"responseType\":\"application/vnd.sas.models.model\"}],\"name\":\"models\",\"start\":0,\"count\":18,\"items\":[{\"creationTimeStamp\":\"2019-05-13T15:38:12.513Z\",\"modifiedTimeStamp\":\"2019-05-15T18:57:40.684Z\",\"createdBy\":\"jifwei\",\"modifiedBy\":\"jifwei\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/8abaf054-519e-413f-8053-f7fb75558127\",\"uri\":\"/modelRepository/models/8abaf054-519e-413f-8053-f7fb75558127\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/8abaf054-519e-413f-8053-f7fb75558127\",\"uri\":\"/modelRepository/models/8abaf054-519e-413f-8053-f7fb75558127\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/8abaf054-519e-413f-8053-f7fb75558127/contents\",\"uri\":\"/modelRepository/models/8abaf054-519e-413f-8053-f7fb75558127/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/8abaf054-519e-413f-8053-f7fb75558127/variables\",\"uri\":\"/modelRepository/models/8abaf054-519e-413f-8053-f7fb75558127/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"8abaf054-519e-413f-8053-f7fb75558127\",\"name\":\"Forest (Pipeline 1)\",\"description\":\"Forest\",\"projectId\":\"b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"projectName\":\"TS_7612761894\",\"projectVersionId\":\"00067e0f-4c5a-4921-9fae-f7db7a982e18\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"indirectFolderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"function\":\"classification\",\"algorithm\":\"forest\",\"tool\":\"Model Studio\",\"toolVersion\":\"8.3\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"jifwei\",\"externalModelId\":\"ca9fe361-2b76-44e0-978b-7ef6ba29d77f\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"3.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-06-12T19:23:44.969Z\",\"modifiedTimeStamp\":\"2019-06-12T19:23:46.249Z\",\"createdBy\":\"dareev\",\"modifiedBy\":\"dareev\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/cd307dac-3c5a-4327-9721-49ddc07c5912\",\"uri\":\"/modelRepository/models/cd307dac-3c5a-4327-9721-49ddc07c5912\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/cd307dac-3c5a-4327-9721-49ddc07c5912\",\"uri\":\"/modelRepository/models/cd307dac-3c5a-4327-9721-49ddc07c5912\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/cd307dac-3c5a-4327-9721-49ddc07c5912/contents\",\"uri\":\"/modelRepository/models/cd307dac-3c5a-4327-9721-49ddc07c5912/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/cd307dac-3c5a-4327-9721-49ddc07c5912/variables\",\"uri\":\"/modelRepository/models/cd307dac-3c5a-4327-9721-49ddc07c5912/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"cd307dac-3c5a-4327-9721-49ddc07c5912\",\"name\":\"VA_BAD_Report 1_1560367422658\",\"folderId\":\"8a42110d-0bf4-40be-8981-52017ceac3ae\",\"indirectFolderId\":\"8a42110d-0bf4-40be-8981-52017ceac3ae\",\"repositoryId\":\"e0b09e48-f1e1-40d9-9517-9aef703ad6b7\",\"function\":\"prediction\",\"algorithm\":\"tree\",\"tool\":\"SAS\u00ae Visual Analytics\",\"toolVersion\":\"8.3.1\",\"scoreCodeType\":\"dataStep\",\"modeler\":\"dareev\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-06-13T12:50:52.201Z\",\"modifiedTimeStamp\":\"2019-06-13T12:50:52.201Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/a82149f9-e1ad-4e01-808b-c1d0da7347a3\",\"uri\":\"/modelRepository/models/a82149f9-e1ad-4e01-808b-c1d0da7347a3\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/a82149f9-e1ad-4e01-808b-c1d0da7347a3\",\"uri\":\"/modelRepository/models/a82149f9-e1ad-4e01-808b-c1d0da7347a3\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/a82149f9-e1ad-4e01-808b-c1d0da7347a3/contents\",\"uri\":\"/modelRepository/models/a82149f9-e1ad-4e01-808b-c1d0da7347a3/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/a82149f9-e1ad-4e01-808b-c1d0da7347a3/variables\",\"uri\":\"/modelRepository/models/a82149f9-e1ad-4e01-808b-c1d0da7347a3/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"a82149f9-e1ad-4e01-808b-c1d0da7347a3\",\"name\":\"AStore Model\",\"description\":\"None\",\"projectId\":\"0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"projectName\":\"SASCTL AStore Test Project\",\"projectVersionId\":\"3f0d18f4-0021-4e7e-a880-94440dbc7c7f\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"indirectFolderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"function\":\"\",\"algorithm\":\"\",\"tool\":\"\",\"toolVersion\":\"\",\"scoreCodeType\":\"ds2Package\",\"modeler\":\"\",\"externalModelId\":\"\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-06-11T18:24:02.255Z\",\"modifiedTimeStamp\":\"2019-06-11T18:42:09.567Z\",\"createdBy\":\"sorowl\",\"modifiedBy\":\"sorowl\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/bdbac9a8-ce7c-497b-aa92-40256f5b20e9\",\"uri\":\"/modelRepository/models/bdbac9a8-ce7c-497b-aa92-40256f5b20e9\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/bdbac9a8-ce7c-497b-aa92-40256f5b20e9\",\"uri\":\"/modelRepository/models/bdbac9a8-ce7c-497b-aa92-40256f5b20e9\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/bdbac9a8-ce7c-497b-aa92-40256f5b20e9/contents\",\"uri\":\"/modelRepository/models/bdbac9a8-ce7c-497b-aa92-40256f5b20e9/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/bdbac9a8-ce7c-497b-aa92-40256f5b20e9/variables\",\"uri\":\"/modelRepository/models/bdbac9a8-ce7c-497b-aa92-40256f5b20e9/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"bdbac9a8-ce7c-497b-aa92-40256f5b20e9\",\"name\":\"Model 1\",\"projectId\":\"85188865-14b3-4569-93da-dfcb47e2abed\",\"projectName\":\"sorowl\",\"projectVersionId\":\"00aa2896-d65d-423e-bfed-1a123843164e\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"indirectFolderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"function\":\"classification\",\"algorithm\":\"factmac\",\"scoreCodeType\":\"analyticStore\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-15T16:39:28.673Z\",\"modifiedTimeStamp\":\"2019-04-15T16:48:29.619Z\",\"createdBy\":\"aucook\",\"modifiedBy\":\"aucook\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/092df19b-575a-4988-8d02-3def1ebc59b1\",\"uri\":\"/modelRepository/models/092df19b-575a-4988-8d02-3def1ebc59b1\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/092df19b-575a-4988-8d02-3def1ebc59b1\",\"uri\":\"/modelRepository/models/092df19b-575a-4988-8d02-3def1ebc59b1\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/092df19b-575a-4988-8d02-3def1ebc59b1/contents\",\"uri\":\"/modelRepository/models/092df19b-575a-4988-8d02-3def1ebc59b1/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/092df19b-575a-4988-8d02-3def1ebc59b1/variables\",\"uri\":\"/modelRepository/models/092df19b-575a-4988-8d02-3def1ebc59b1/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"092df19b-575a-4988-8d02-3def1ebc59b1\",\"name\":\"Python_GradientBoost\",\"projectId\":\"570f6968-ed90-4784-b63e-fac01e056419\",\"projectName\":\"LendingClub\",\"projectVersionId\":\"024ca0a1-8016-4b63-bde7-d0092656cfa2\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"indirectFolderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"function\":\"Classification\",\"algorithm\":\"scikit-learn.GradientBoostingClassifier\",\"tool\":\"Python 3\",\"toolVersion\":\"3.6.5\",\"scoreCodeType\":\"Python\",\"modeler\":\"Austin Cook\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-10T19:20:57.549Z\",\"modifiedTimeStamp\":\"2019-04-10T19:21:07.735Z\",\"createdBy\":\"vagoba\",\"modifiedBy\":\"vagoba\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/3aeeb382-f86b-4302-8592-b1f07fc169f3\",\"uri\":\"/modelRepository/models/3aeeb382-f86b-4302-8592-b1f07fc169f3\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/3aeeb382-f86b-4302-8592-b1f07fc169f3\",\"uri\":\"/modelRepository/models/3aeeb382-f86b-4302-8592-b1f07fc169f3\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/3aeeb382-f86b-4302-8592-b1f07fc169f3/contents\",\"uri\":\"/modelRepository/models/3aeeb382-f86b-4302-8592-b1f07fc169f3/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/3aeeb382-f86b-4302-8592-b1f07fc169f3/variables\",\"uri\":\"/modelRepository/models/3aeeb382-f86b-4302-8592-b1f07fc169f3/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"3aeeb382-f86b-4302-8592-b1f07fc169f3\",\"name\":\"VA_bi3251_BB&T_modernization_1554924037459\",\"folderId\":\"8a42110d-0bf4-40be-8981-52017ceac3ae\",\"indirectFolderId\":\"8a42110d-0bf4-40be-8981-52017ceac3ae\",\"repositoryId\":\"e0b09e48-f1e1-40d9-9517-9aef703ad6b7\",\"function\":\"classification\",\"algorithm\":\"forest\",\"tool\":\"SAS\u00ae Visual Analytics\",\"toolVersion\":\"8.3.1\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"vagoba\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-05-22T20:37:08.432Z\",\"modifiedTimeStamp\":\"2019-05-22T20:37:08.432Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/94a34260-9d63-4aa7-85fa-a2f88bbdabcd\",\"uri\":\"/modelRepository/models/94a34260-9d63-4aa7-85fa-a2f88bbdabcd\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/94a34260-9d63-4aa7-85fa-a2f88bbdabcd\",\"uri\":\"/modelRepository/models/94a34260-9d63-4aa7-85fa-a2f88bbdabcd\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/94a34260-9d63-4aa7-85fa-a2f88bbdabcd/contents\",\"uri\":\"/modelRepository/models/94a34260-9d63-4aa7-85fa-a2f88bbdabcd/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/94a34260-9d63-4aa7-85fa-a2f88bbdabcd/variables\",\"uri\":\"/modelRepository/models/94a34260-9d63-4aa7-85fa-a2f88bbdabcd/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"94a34260-9d63-4aa7-85fa-a2f88bbdabcd\",\"name\":\"Linear Regression (Pipeline 1)\",\"description\":\"Linear Regression\",\"projectId\":\"b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"projectName\":\"Retail Demo (MS)\",\"projectVersionId\":\"e0c501a1-0dc5-4416-a707-8976c645c743\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"indirectFolderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"function\":\"prediction\",\"algorithm\":\"linearreg\",\"tool\":\"Model Studio\",\"toolVersion\":\"8.3\",\"scoreCodeType\":\"dataStep\",\"modeler\":\"USERNAME\",\"externalModelId\":\"e26a6d1b-7e6e-4928-80df-c1b9e9280e9d\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-25T16:38:07.732Z\",\"modifiedTimeStamp\":\"2019-04-30T13:58:36.042Z\",\"createdBy\":\"jifwei\",\"modifiedBy\":\"jifwei\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/fdcb12bc-1f5f-42f1-bf68-21c05d95b6db\",\"uri\":\"/modelRepository/models/fdcb12bc-1f5f-42f1-bf68-21c05d95b6db\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/fdcb12bc-1f5f-42f1-bf68-21c05d95b6db\",\"uri\":\"/modelRepository/models/fdcb12bc-1f5f-42f1-bf68-21c05d95b6db\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/fdcb12bc-1f5f-42f1-bf68-21c05d95b6db/contents\",\"uri\":\"/modelRepository/models/fdcb12bc-1f5f-42f1-bf68-21c05d95b6db/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/fdcb12bc-1f5f-42f1-bf68-21c05d95b6db/variables\",\"uri\":\"/modelRepository/models/fdcb12bc-1f5f-42f1-bf68-21c05d95b6db/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"fdcb12bc-1f5f-42f1-bf68-21c05d95b6db\",\"name\":\"Gradient Boosting (Pipeline 1)\",\"description\":\"Gradient Boosting\",\"projectId\":\"b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"projectName\":\"TS_7612761894\",\"projectVersionId\":\"00067e0f-4c5a-4921-9fae-f7db7a982e18\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"indirectFolderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"function\":\"classification\",\"algorithm\":\"gradboost\",\"tool\":\"Model Studio\",\"toolVersion\":\"8.3\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"jifwei\",\"externalModelId\":\"cf45a501-5ca8-4eb4-bff9-c9024425b904\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"5.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-06-13T12:52:43.195Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:46.463Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"name\":\"Scikit Model\",\"description\":\"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n                   intercept_scaling=1, l1_ratio=None, max_iter=100,\\n                   multi_class='multinomial', n_jobs=None, penalty='l2',\\n                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,\\n                   warm_start=False)\",\"projectId\":\"18c6f33a-be7a-47b3-b233-1efa58030db2\",\"projectName\":\"Test Project\",\"projectVersionId\":\"ae22da1a-f551-4e3e-a2f1-4237cd9ee0a8\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"indirectFolderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"function\":\"Classification\",\"algorithm\":\"Logistic regression\",\"tool\":\"Python 3.6\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"USERNAME\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"challenger\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-10T19:24:51.030Z\",\"modifiedTimeStamp\":\"2019-04-10T19:24:59.207Z\",\"createdBy\":\"vagoba\",\"modifiedBy\":\"vagoba\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/857a697a-2866-4f0f-8838-aff80b0379fd\",\"uri\":\"/modelRepository/models/857a697a-2866-4f0f-8838-aff80b0379fd\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/857a697a-2866-4f0f-8838-aff80b0379fd\",\"uri\":\"/modelRepository/models/857a697a-2866-4f0f-8838-aff80b0379fd\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/857a697a-2866-4f0f-8838-aff80b0379fd/contents\",\"uri\":\"/modelRepository/models/857a697a-2866-4f0f-8838-aff80b0379fd/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/857a697a-2866-4f0f-8838-aff80b0379fd/variables\",\"uri\":\"/modelRepository/models/857a697a-2866-4f0f-8838-aff80b0379fd/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"857a697a-2866-4f0f-8838-aff80b0379fd\",\"name\":\"VA_bi3251_BB&T_modernization_1554924273432\",\"folderId\":\"8a42110d-0bf4-40be-8981-52017ceac3ae\",\"indirectFolderId\":\"8a42110d-0bf4-40be-8981-52017ceac3ae\",\"repositoryId\":\"e0b09e48-f1e1-40d9-9517-9aef703ad6b7\",\"function\":\"classification\",\"algorithm\":\"forest\",\"tool\":\"SAS\u00ae Visual Analytics\",\"toolVersion\":\"8.3.1\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"vagoba\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-10T19:28:55.794Z\",\"modifiedTimeStamp\":\"2019-04-10T19:29:04.765Z\",\"createdBy\":\"vagoba\",\"modifiedBy\":\"vagoba\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/6dee0d9f-6f34-435c-805e-8335800fc9d3\",\"uri\":\"/modelRepository/models/6dee0d9f-6f34-435c-805e-8335800fc9d3\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/6dee0d9f-6f34-435c-805e-8335800fc9d3\",\"uri\":\"/modelRepository/models/6dee0d9f-6f34-435c-805e-8335800fc9d3\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/6dee0d9f-6f34-435c-805e-8335800fc9d3/contents\",\"uri\":\"/modelRepository/models/6dee0d9f-6f34-435c-805e-8335800fc9d3/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/6dee0d9f-6f34-435c-805e-8335800fc9d3/variables\",\"uri\":\"/modelRepository/models/6dee0d9f-6f34-435c-805e-8335800fc9d3/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"6dee0d9f-6f34-435c-805e-8335800fc9d3\",\"name\":\"VA_bi3251_BB&T_modernization_1554924519558\",\"folderId\":\"8a42110d-0bf4-40be-8981-52017ceac3ae\",\"indirectFolderId\":\"8a42110d-0bf4-40be-8981-52017ceac3ae\",\"repositoryId\":\"e0b09e48-f1e1-40d9-9517-9aef703ad6b7\",\"function\":\"classification\",\"algorithm\":\"forest\",\"tool\":\"SAS\u00ae Visual Analytics\",\"toolVersion\":\"8.3.1\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"vagoba\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-19T17:10:23.066Z\",\"modifiedTimeStamp\":\"2019-04-19T17:10:23.066Z\",\"createdBy\":\"sorowl\",\"modifiedBy\":\"sorowl\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/4d87a39f-ebd5-4c2a-8670-266fd8b0a61f\",\"uri\":\"/modelRepository/models/4d87a39f-ebd5-4c2a-8670-266fd8b0a61f\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/4d87a39f-ebd5-4c2a-8670-266fd8b0a61f\",\"uri\":\"/modelRepository/models/4d87a39f-ebd5-4c2a-8670-266fd8b0a61f\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/4d87a39f-ebd5-4c2a-8670-266fd8b0a61f/contents\",\"uri\":\"/modelRepository/models/4d87a39f-ebd5-4c2a-8670-266fd8b0a61f/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/4d87a39f-ebd5-4c2a-8670-266fd8b0a61f/variables\",\"uri\":\"/modelRepository/models/4d87a39f-ebd5-4c2a-8670-266fd8b0a61f/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"4d87a39f-ebd5-4c2a-8670-266fd8b0a61f\",\"name\":\"sorowl fraud\",\"description\":\"None\",\"projectId\":\"081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"projectName\":\"Fraud\",\"projectVersionId\":\"18b774bd-2002-43e3-ac07-be3a2a8599a1\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"indirectFolderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"function\":\"\",\"algorithm\":\"\",\"tool\":\"\",\"toolVersion\":\"\",\"scoreCodeType\":\"ds2Package\",\"modeler\":\"\",\"externalModelId\":\"\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-03T19:26:10.458Z\",\"modifiedTimeStamp\":\"2019-04-24T20:39:36.412Z\",\"createdBy\":\"yongma\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/ebe3c48d-8cd8-4854-9264-2e72ccefdb86\",\"uri\":\"/modelRepository/models/ebe3c48d-8cd8-4854-9264-2e72ccefdb86\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/ebe3c48d-8cd8-4854-9264-2e72ccefdb86\",\"uri\":\"/modelRepository/models/ebe3c48d-8cd8-4854-9264-2e72ccefdb86\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/ebe3c48d-8cd8-4854-9264-2e72ccefdb86/contents\",\"uri\":\"/modelRepository/models/ebe3c48d-8cd8-4854-9264-2e72ccefdb86/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/ebe3c48d-8cd8-4854-9264-2e72ccefdb86/variables\",\"uri\":\"/modelRepository/models/ebe3c48d-8cd8-4854-9264-2e72ccefdb86/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"ebe3c48d-8cd8-4854-9264-2e72ccefdb86\",\"name\":\"test_diff_data_0330\",\"projectId\":\"861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"projectName\":\"Project 1\",\"projectVersionId\":\"89a7d034-f0ea-439e-b365-098d2a29fafb\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"indirectFolderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"function\":\"prediction\",\"algorithm\":\"logisticreg\",\"scoreCodeType\":\"dataStep\",\"modeler\":\"yongma\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"champion\",\"immutable\":false,\"modelVersionName\":\"3.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-06-13T12:52:36.275Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:36.275Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/347b9c43-7e63-4818-9d8a-196e82aa7b78\",\"uri\":\"/modelRepository/models/347b9c43-7e63-4818-9d8a-196e82aa7b78\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/347b9c43-7e63-4818-9d8a-196e82aa7b78\",\"uri\":\"/modelRepository/models/347b9c43-7e63-4818-9d8a-196e82aa7b78\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/347b9c43-7e63-4818-9d8a-196e82aa7b78/contents\",\"uri\":\"/modelRepository/models/347b9c43-7e63-4818-9d8a-196e82aa7b78/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/347b9c43-7e63-4818-9d8a-196e82aa7b78/variables\",\"uri\":\"/modelRepository/models/347b9c43-7e63-4818-9d8a-196e82aa7b78/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"347b9c43-7e63-4818-9d8a-196e82aa7b78\",\"name\":\"Astore Model\",\"description\":\"None\",\"projectId\":\"18c6f33a-be7a-47b3-b233-1efa58030db2\",\"projectName\":\"Test Project\",\"projectVersionId\":\"ae22da1a-f551-4e3e-a2f1-4237cd9ee0a8\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"indirectFolderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"function\":\"\",\"algorithm\":\"\",\"tool\":\"\",\"toolVersion\":\"\",\"scoreCodeType\":\"ds2Package\",\"modeler\":\"\",\"externalModelId\":\"\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-30T13:01:59.188Z\",\"modifiedTimeStamp\":\"2019-04-30T13:58:39.804Z\",\"createdBy\":\"jifwei\",\"modifiedBy\":\"jifwei\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/dcd7871c-cb1c-46b1-bd13-c70fa3ccb403\",\"uri\":\"/modelRepository/models/dcd7871c-cb1c-46b1-bd13-c70fa3ccb403\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/dcd7871c-cb1c-46b1-bd13-c70fa3ccb403\",\"uri\":\"/modelRepository/models/dcd7871c-cb1c-46b1-bd13-c70fa3ccb403\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/dcd7871c-cb1c-46b1-bd13-c70fa3ccb403/contents\",\"uri\":\"/modelRepository/models/dcd7871c-cb1c-46b1-bd13-c70fa3ccb403/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/dcd7871c-cb1c-46b1-bd13-c70fa3ccb403/variables\",\"uri\":\"/modelRepository/models/dcd7871c-cb1c-46b1-bd13-c70fa3ccb403/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"dcd7871c-cb1c-46b1-bd13-c70fa3ccb403\",\"name\":\"Gradient Boosting (Pipeline 2)\",\"description\":\"Gradient Boosting\",\"projectId\":\"b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"projectName\":\"TS_7612761894\",\"projectVersionId\":\"00067e0f-4c5a-4921-9fae-f7db7a982e18\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"indirectFolderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"function\":\"classification\",\"algorithm\":\"gradboost\",\"tool\":\"Model Studio\",\"toolVersion\":\"8.3\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"jifwei\",\"externalModelId\":\"68efbf74-f978-476e-97f9-d6e82aa36cfc\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"champion\",\"immutable\":false,\"modelVersionName\":\"2.1\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-05-03T19:43:34.944Z\",\"modifiedTimeStamp\":\"2019-05-03T19:43:34.944Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/3c3738fa-29bb-44e1-bed8-d163cddf5682\",\"uri\":\"/modelRepository/models/3c3738fa-29bb-44e1-bed8-d163cddf5682\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/3c3738fa-29bb-44e1-bed8-d163cddf5682\",\"uri\":\"/modelRepository/models/3c3738fa-29bb-44e1-bed8-d163cddf5682\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/3c3738fa-29bb-44e1-bed8-d163cddf5682/contents\",\"uri\":\"/modelRepository/models/3c3738fa-29bb-44e1-bed8-d163cddf5682/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/3c3738fa-29bb-44e1-bed8-d163cddf5682/variables\",\"uri\":\"/modelRepository/models/3c3738fa-29bb-44e1-bed8-d163cddf5682/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"3c3738fa-29bb-44e1-bed8-d163cddf5682\",\"name\":\"GB AStore\",\"description\":\"None\",\"projectId\":\"6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"projectName\":\"Credit Marketing\",\"projectVersionId\":\"e62d351a-1a92-4d79-a756-fad890e2cc7e\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"indirectFolderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"function\":\"\",\"algorithm\":\"\",\"tool\":\"\",\"toolVersion\":\"\",\"scoreCodeType\":\"ds2Package\",\"modeler\":\"\",\"externalModelId\":\"\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-05-03T21:49:49.343Z\",\"modifiedTimeStamp\":\"2019-05-03T21:49:49.343Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/7bc46526-87e7-4b34-813a-6af45423ba8b\",\"uri\":\"/modelRepository/models/7bc46526-87e7-4b34-813a-6af45423ba8b\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/7bc46526-87e7-4b34-813a-6af45423ba8b\",\"uri\":\"/modelRepository/models/7bc46526-87e7-4b34-813a-6af45423ba8b\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/7bc46526-87e7-4b34-813a-6af45423ba8b/contents\",\"uri\":\"/modelRepository/models/7bc46526-87e7-4b34-813a-6af45423ba8b/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/7bc46526-87e7-4b34-813a-6af45423ba8b/variables\",\"uri\":\"/modelRepository/models/7bc46526-87e7-4b34-813a-6af45423ba8b/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"7bc46526-87e7-4b34-813a-6af45423ba8b\",\"name\":\"Iris - Logistic\",\"description\":\"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n          intercept_scaling=1, max_iter=100, multi_class='warn',\\n          n_jobs=None, penalty='l2', random_state=None, solver='warn',\\n          tol=0.0001, verbose=0, warm_start=False)\",\"projectId\":\"6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"projectName\":\"Credit Marketing\",\"projectVersionId\":\"e62d351a-1a92-4d79-a756-fad890e2cc7e\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"indirectFolderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"function\":\"classifier\",\"algorithm\":\"LogisticRegression\",\"scoreCodeType\":\"Python\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-05-03T18:45:14.631Z\",\"modifiedTimeStamp\":\"2019-05-08T15:29:47.323Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/2fd06b4b-bf73-4efd-b6ef-dafc392b6dbf\",\"uri\":\"/modelRepository/models/2fd06b4b-bf73-4efd-b6ef-dafc392b6dbf\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/2fd06b4b-bf73-4efd-b6ef-dafc392b6dbf\",\"uri\":\"/modelRepository/models/2fd06b4b-bf73-4efd-b6ef-dafc392b6dbf\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/2fd06b4b-bf73-4efd-b6ef-dafc392b6dbf/contents\",\"uri\":\"/modelRepository/models/2fd06b4b-bf73-4efd-b6ef-dafc392b6dbf/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/2fd06b4b-bf73-4efd-b6ef-dafc392b6dbf/variables\",\"uri\":\"/modelRepository/models/2fd06b4b-bf73-4efd-b6ef-dafc392b6dbf/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"2fd06b4b-bf73-4efd-b6ef-dafc392b6dbf\",\"name\":\"Gradient Boosting (Pipeline 1)\",\"description\":\"Gradient Boosting\",\"projectId\":\"3af6af81-46a4-423d-babf-0a9508d066d1\",\"projectName\":\"Fish\",\"projectVersionId\":\"d25bb62e-0621-47d3-bffe-bcabc93b988b\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"indirectFolderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"function\":\"classification\",\"algorithm\":\"gradboost\",\"tool\":\"Model Studio\",\"toolVersion\":\"8.3\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"USERNAME\",\"externalModelId\":\"b4f3276d-ff4e-445a-8c92-a7b21d02211e\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":false,\"modelVersionName\":\"2.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]}],\"limit\":20,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:46 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/models?filter=eq(name,%20%22Scikit%20Model%22)"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:47",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:43.195Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:46.463Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"type\":\"application/vnd.sas.models.model.summary\"},{\"method\":\"GET\",\"rel\":\"scoreCode\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/code\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/code\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"type\":\"application/vnd.sas.models.model\",\"responseType\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\"},{\"method\":\"GET\",\"rel\":\"modelVersions\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/modelVersions\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/modelVersions\",\"type\":\"application/vnd.sas.collection\",\"responseItemType\":\"application/vnd.sas.models.version\"},{\"method\":\"POST\",\"rel\":\"addModelVersion\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/modelVersions\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/modelVersions\",\"type\":\"application/vnd.sas.models.model.version\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"POST\",\"rel\":\"setAsChampion\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion?modelId=5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion?modelId=5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"responseType\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"unsetAsChallenger\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/challengers?modelId=5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/challengers?modelId=5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"type\":\"application/vnd.sas.models.model\"}],\"version\":2,\"id\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"name\":\"Scikit Model\",\"description\":\"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n                   intercept_scaling=1, l1_ratio=None, max_iter=100,\\n                   multi_class='multinomial', n_jobs=None, penalty='l2',\\n                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,\\n                   warm_start=False)\",\"location\":\"/Model Repositories/Repository 1\",\"projectId\":\"18c6f33a-be7a-47b3-b233-1efa58030db2\",\"projectName\":\"Test Project\",\"projectVersionId\":\"ae22da1a-f551-4e3e-a2f1-4237cd9ee0a8\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"indirectFolderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"function\":\"Classification\",\"algorithm\":\"Logistic regression\",\"tool\":\"Python 3.6\",\"scoreCodeType\":\"ds2MultiType\",\"trainCodeType\":\"Python\",\"modeler\":\"USERNAME\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"challenger\",\"immutable\":false,\"properties\":[{\"name\":\"C\",\"value\":\"1.0\",\"type\":\"string\"},{\"name\":\"class_weight\",\"type\":\"string\"},{\"name\":\"dual\",\"value\":\"false\",\"type\":\"string\"},{\"name\":\"fit_intercept\",\"value\":\"true\",\"type\":\"string\"},{\"name\":\"intercept_scaling\",\"value\":\"1\",\"type\":\"string\"},{\"name\":\"l1_ratio\",\"type\":\"string\"},{\"name\":\"max_iter\",\"value\":\"100\",\"type\":\"string\"},{\"name\":\"multi_class\",\"value\":\"multinomial\",\"type\":\"string\"},{\"name\":\"n_jobs\",\"type\":\"string\"},{\"name\":\"penalty\",\"value\":\"l2\",\"type\":\"string\"},{\"name\":\"random_state\",\"type\":\"string\"},{\"name\":\"solver\",\"value\":\"lbfgs\",\"type\":\"string\"},{\"name\":\"tol\",\"value\":\"0.0001\",\"type\":\"string\"},{\"name\":\"verbose\",\"value\":\"0\",\"type\":\"string\"},{\"name\":\"warm_start\",\"value\":\"false\",\"type\":\"string\"}],\"inputVariables\":[{\"creationTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\"}],\"version\":2,\"id\":\"ec623079-6c43-4e8f-ab55-e7fed7848162\",\"name\":\"PetalLength\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\"}],\"version\":2,\"id\":\"4f388eac-098c-4e44-ac28-b1950b5f5834\",\"name\":\"PetalWidth\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\"}],\"version\":2,\"id\":\"647bcbf7-d375-429b-920b-8733c13c4e1b\",\"name\":\"SepalLength\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\"}],\"version\":2,\"id\":\"11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"name\":\"SepalWidth\",\"role\":\"input\",\"type\":\"decimal\"}],\"outputVariables\":[{\"creationTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\"}],\"version\":2,\"id\":\"b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"name\":\"var1\",\"role\":\"output\",\"type\":\"string\"}],\"modelVersions\":[],\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.model+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:47 GMT"
+          ],
+          "ETag": [
+            "\"jwuny8lb\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=98"
+          ],
+          "Last-Modified": [
+            "Thu, 13 Jun 2019 12:52:46 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:50",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"name\": \"Scikit Model\", \"notes\": \"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n                   intercept_scaling=1, l1_ratio=None, max_iter=100,\\n                   multi_class='multinomial', n_jobs=None, penalty='l2',\\n                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,\\n                   warm_start=False)\", \"modelContents\": [{\"modelName\": \"ScikitModel\", \"sourceUri\": \"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\", \"publishLevel\": \"model\"}], \"destinationName\": \"maslocal\"}"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "555"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.request.asynchronous+json"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/modelManagement/publish?force=False"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:50.643Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:50.765Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"120b90a2-7044-49e6-9a4a-56dc49918957\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-06-13T12:52:50.643Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:50.643Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"9604ca0a-6c94-48e4-9a6c-ca832ab17353\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"publishLevel\":\"model\",\"state\":\"running\",\"properties\":{\"masModules\":null},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:50 GMT"
+          ],
+          "ETag": [
+            "\"jwunybwt\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=97"
+          ],
+          "Last-Modified": [
+            "Thu, 13 Jun 2019 12:52:50 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelManagement/publish?force=False"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:50",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[],\"version\":1}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:50 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=96"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:51",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:50 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=95"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:52",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:52 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=94"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:53",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:52 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=93"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:54",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:54 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=92"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:54",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:54 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=91"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:55",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:55 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=90"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:56",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:55 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=89"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:57",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:57 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=88"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:57",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:57 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=87"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:58",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:58 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=86"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:59",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:58 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=85"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:59",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:59 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=84"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:01",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:01 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=83"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:01",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:01 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=82"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:02",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:02 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=81"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:03",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:02 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=80"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:03",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:03 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=79"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:04",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:03 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=78"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:05",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:05 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=77"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:05",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:05 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=76"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:06",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"PENDING==={links=[{method=GET, rel=up, href=/microanalyticScore/jobs, uri=/microanalyticScore/jobs, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.job}, {method=GET, rel=self, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, type=application/vnd.sas.microanalytic.job}, {method=GET, rel=source, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source, type=application/vnd.sas.microanalytic.module.source}, {method=GET, rel=submodules, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules, type=application/vnd.sas.collection, itemType=application/vnd.sas.microanalytic.submodule}, {method=DELETE, rel=delete, href=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc, uri=/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc}], version=1, createdBy=USERNAME, creationTimeStamp=2019-06-13T12:52:50.964Z, modifiedBy=USERNAME, modifiedTimeStamp=2019-06-13T12:52:50.964Z, id=cbf8344b-7c56-4fed-ac7b-c308972d48fc, moduleId=scikitmodel, state=pending, errors=[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:06 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=75"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:07",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:51.177Z\",\"modifiedTimeStamp\":\"2019-06-13T12:53:06.787Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"uri\":\"/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"2cf7eef0-66a4-45f1-b3de-1d5dc668e0dd\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"modelName\":\"ScikitModel\",\"log\":\"SUCCESS==={\\\"links\\\":[{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"up\\\",\\\"href\\\":\\\"/microanalyticScore/jobs\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs\\\",\\\"type\\\":\\\"application/vnd.sas.collection\\\",\\\"itemType\\\":\\\"application/vnd.sas.microanalytic.job\\\"},{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"self\\\",\\\"href\\\":\\\"/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc\\\",\\\"type\\\":\\\"application/vnd.sas.microanalytic.job\\\"},{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"source\\\",\\\"href\\\":\\\"/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/source\\\",\\\"type\\\":\\\"application/vnd.sas.microanalytic.module.source\\\"},{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"submodules\\\",\\\"href\\\":\\\"/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc/submodules\\\",\\\"type\\\":\\\"application/vnd.sas.collection\\\",\\\"itemType\\\":\\\"application/vnd.sas.microanalytic.submodule\\\"},{\\\"method\\\":\\\"DELETE\\\",\\\"rel\\\":\\\"delete\\\",\\\"href\\\":\\\"/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs/cbf8344b-7c56-4fed-ac7b-c308972d48fc\\\"},{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"module\\\",\\\"href\\\":\\\"/microanalyticScore/modules/scikitmodel\\\",\\\"uri\\\":\\\"/microanalyticScore/modules/scikitmodel\\\",\\\"type\\\":\\\"application/vnd.sas.microanalytic.module\\\"}],\\\"version\\\":1,\\\"createdBy\\\":\\\"USERNAME\\\",\\\"creationTimeStamp\\\":\\\"2019-06-13T12:52:50.964Z\\\",\\\"modifiedBy\\\":\\\"USERNAME\\\",\\\"modifiedTimeStamp\\\":\\\"2019-06-13T12:53:02.347Z\\\",\\\"id\\\":\\\"cbf8344b-7c56-4fed-ac7b-c308972d48fc\\\",\\\"moduleId\\\":\\\"scikitmodel\\\",\\\"state\\\":\\\"completed\\\",\\\"errors\\\":[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:06 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=74"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/120b90a2-7044-49e6-9a4a-56dc49918957/log"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:07",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/microanalyticScore/modules/scikitmodel"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"source\",\"href\":\"/microanalyticScore/modules/scikitmodel/source\",\"uri\":\"/microanalyticScore/modules/scikitmodel/source\",\"type\":\"application/vnd.sas.microanalytic.module.source\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/scikitmodel/submodules\",\"uri\":\"/microanalyticScore/modules/scikitmodel/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-06-13T12:53:02.223Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-06-13T12:53:02.223Z\",\"id\":\"scikitmodel\",\"name\":\"ScikitModel\",\"revision\":0,\"scope\":\"public\",\"language\":\"ds2\",\"stepIds\":[\"score\"],\"warnings\":[]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.microanalytic.module+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:06 GMT"
+          ],
+          "ETag": [
+            "\"jwunykr3\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=73"
+          ],
+          "Last-Modified": [
+            "Thu, 13 Jun 2019 12:53:02 GMT"
+          ],
+          "Location": [
+            "/microanalyticScore/modules/scikitmodel"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/microanalyticScore/modules/scikitmodel"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}

@@ -1,0 +1,1099 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2019-06-13T12:52:41",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "60"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read gelupdates SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey GLOBALPRESALES intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin EsriUsers AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install techoffice ApplicationAdministrators COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"b75d7ebb4af24de385ff453e6e2f9c7e\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:41 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:41",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/projects?filter=eq(name,%20%22Test%20Project%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects?start=0&limit=20\",\"uri\":\"/modelRepository/projects?start=0&limit=20\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.project.summary\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/modelRepository/projects\",\"uri\":\"/modelRepository/projects\",\"type\":\"application/vnd.sas.models.project\"}],\"name\":\"projects\",\"start\":0,\"count\":13,\"items\":[{\"creationTimeStamp\":\"2019-04-17T19:49:10.757Z\",\"modifiedTimeStamp\":\"2019-06-10T20:14:05.942Z\",\"createdBy\":\"sorowl\",\"modifiedBy\":\"sorowl\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/85188865-14b3-4569-93da-dfcb47e2abed\",\"uri\":\"/modelRepository/projects/85188865-14b3-4569-93da-dfcb47e2abed\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/85188865-14b3-4569-93da-dfcb47e2abed\",\"uri\":\"/modelRepository/projects/85188865-14b3-4569-93da-dfcb47e2abed\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/85188865-14b3-4569-93da-dfcb47e2abed\",\"uri\":\"/modelRepository/projects/85188865-14b3-4569-93da-dfcb47e2abed\"}],\"version\":2,\"id\":\"85188865-14b3-4569-93da-dfcb47e2abed\",\"name\":\"sorowl\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"function\":\"classification\",\"candidateChampionHonored\":false,\"trainTable\":\"cas-shared-default/Public/BANK_PRODUCT_OWNERSHIP\",\"targetVariable\":\"IMP_FEED\",\"targetEventValue\":\"1\",\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-03T19:25:49.146Z\",\"modifiedTimeStamp\":\"2019-04-03T19:25:49.671Z\",\"createdBy\":\"yongma\",\"modifiedBy\":\"yongma\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"uri\":\"/modelRepository/projects/861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"uri\":\"/modelRepository/projects/861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"uri\":\"/modelRepository/projects/861043a4-714e-44a2-ab3c-b6cc1f7ab43e\"}],\"version\":2,\"id\":\"861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"name\":\"Project 1\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-04T13:13:26.286Z\",\"modifiedTimeStamp\":\"2019-04-04T13:13:26.600Z\",\"createdBy\":\"jakoch\",\"modifiedBy\":\"jakoch\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/892b4ee5-96c3-4cd8-918b-f9571d26adac\",\"uri\":\"/modelRepository/projects/892b4ee5-96c3-4cd8-918b-f9571d26adac\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/892b4ee5-96c3-4cd8-918b-f9571d26adac\",\"uri\":\"/modelRepository/projects/892b4ee5-96c3-4cd8-918b-f9571d26adac\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/892b4ee5-96c3-4cd8-918b-f9571d26adac\",\"uri\":\"/modelRepository/projects/892b4ee5-96c3-4cd8-918b-f9571d26adac\"}],\"version\":2,\"id\":\"892b4ee5-96c3-4cd8-918b-f9571d26adac\",\"name\":\"sparktest\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"folderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"function\":\"classification\",\"externalProjectId\":\"142dced6-a374-4fad-b12c-5fcb63dfc4ab\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"retrainUri\":\"/dataMining/projects/142dced6-a374-4fad-b12c-5fcb63dfc4ab/retrainJobs?action=batch&dataUri={dataUri}\",\"retrainStatusUri\":\"/dataMining/projects/142dced6-a374-4fad-b12c-5fcb63dfc4ab/retrainJobs?retrainingState={retrainingState}\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-06-13T12:50:48.437Z\",\"modifiedTimeStamp\":\"2019-06-13T12:50:49.586Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"uri\":\"/modelRepository/projects/0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"uri\":\"/modelRepository/projects/0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"uri\":\"/modelRepository/projects/0d763b05-02d6-4e9c-9493-7e85db5c85e6\"}],\"version\":2,\"id\":\"0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"name\":\"SASCTL AStore Test Project\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-06-13T12:52:33.442Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:33.816Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\"}],\"version\":2,\"id\":\"18c6f33a-be7a-47b3-b233-1efa58030db2\",\"name\":\"Test Project\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-25T16:37:51.393Z\",\"modifiedTimeStamp\":\"2019-04-25T16:37:52.820Z\",\"createdBy\":\"jifwei\",\"modifiedBy\":\"jifwei\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"uri\":\"/modelRepository/projects/b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"uri\":\"/modelRepository/projects/b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"uri\":\"/modelRepository/projects/b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\"}],\"version\":2,\"id\":\"b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"name\":\"TS_7612761894\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"folderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"function\":\"classification\",\"externalProjectId\":\"55bd3566-b7a6-4168-96ea-eddc90d0a47e\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"retrainUri\":\"/dataMining/projects/55bd3566-b7a6-4168-96ea-eddc90d0a47e/retrainJobs?action=batch&dataUri={dataUri}\",\"retrainStatusUri\":\"/dataMining/projects/55bd3566-b7a6-4168-96ea-eddc90d0a47e/retrainJobs?retrainingState={retrainingState}\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-11T15:07:17.924Z\",\"modifiedTimeStamp\":\"2019-04-13T18:40:18.862Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/b9c0f05f-869e-4dbe-bafe-602a43fd299f\",\"uri\":\"/modelRepository/projects/b9c0f05f-869e-4dbe-bafe-602a43fd299f\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/b9c0f05f-869e-4dbe-bafe-602a43fd299f\",\"uri\":\"/modelRepository/projects/b9c0f05f-869e-4dbe-bafe-602a43fd299f\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/b9c0f05f-869e-4dbe-bafe-602a43fd299f\",\"uri\":\"/modelRepository/projects/b9c0f05f-869e-4dbe-bafe-602a43fd299f\"}],\"version\":2,\"id\":\"b9c0f05f-869e-4dbe-bafe-602a43fd299f\",\"name\":\"Insomnia Model Project\",\"description\":\"A test model project create through REST.\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 3\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-05-22T19:51:32.081Z\",\"modifiedTimeStamp\":\"2019-05-22T19:51:32.640Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/52b5fd58-d941-49cc-b318-11ad4246e236\",\"uri\":\"/modelRepository/projects/52b5fd58-d941-49cc-b318-11ad4246e236\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/52b5fd58-d941-49cc-b318-11ad4246e236\",\"uri\":\"/modelRepository/projects/52b5fd58-d941-49cc-b318-11ad4246e236\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/52b5fd58-d941-49cc-b318-11ad4246e236\",\"uri\":\"/modelRepository/projects/52b5fd58-d941-49cc-b318-11ad4246e236\"}],\"version\":2,\"id\":\"52b5fd58-d941-49cc-b318-11ad4246e236\",\"name\":\"Retail Demo\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"function\":\"prediction\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-15T15:31:46.465Z\",\"modifiedTimeStamp\":\"2019-04-15T15:31:47.530Z\",\"createdBy\":\"aucook\",\"modifiedBy\":\"aucook\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/570f6968-ed90-4784-b63e-fac01e056419\",\"uri\":\"/modelRepository/projects/570f6968-ed90-4784-b63e-fac01e056419\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/570f6968-ed90-4784-b63e-fac01e056419\",\"uri\":\"/modelRepository/projects/570f6968-ed90-4784-b63e-fac01e056419\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/570f6968-ed90-4784-b63e-fac01e056419\",\"uri\":\"/modelRepository/projects/570f6968-ed90-4784-b63e-fac01e056419\"}],\"version\":2,\"id\":\"570f6968-ed90-4784-b63e-fac01e056419\",\"name\":\"LendingClub\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"function\":\"Classification\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-19T15:32:45.935Z\",\"modifiedTimeStamp\":\"2019-04-19T15:32:46.309Z\",\"createdBy\":\"sorowl\",\"modifiedBy\":\"sorowl\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"uri\":\"/modelRepository/projects/081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"uri\":\"/modelRepository/projects/081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"uri\":\"/modelRepository/projects/081c81e3-7c6d-4616-9fe4-e3611f5d96b1\"}],\"version\":2,\"id\":\"081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"name\":\"Fraud\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-05-03T18:45:05.331Z\",\"modifiedTimeStamp\":\"2019-05-03T18:45:05.673Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/3af6af81-46a4-423d-babf-0a9508d066d1\",\"uri\":\"/modelRepository/projects/3af6af81-46a4-423d-babf-0a9508d066d1\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/3af6af81-46a4-423d-babf-0a9508d066d1\",\"uri\":\"/modelRepository/projects/3af6af81-46a4-423d-babf-0a9508d066d1\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/3af6af81-46a4-423d-babf-0a9508d066d1\",\"uri\":\"/modelRepository/projects/3af6af81-46a4-423d-babf-0a9508d066d1\"}],\"version\":2,\"id\":\"3af6af81-46a4-423d-babf-0a9508d066d1\",\"name\":\"Fish\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"folderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"function\":\"classification\",\"externalProjectId\":\"11651230-d4bb-4e9f-8b99-d83bc793aea7\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"retrainUri\":\"/dataMining/projects/11651230-d4bb-4e9f-8b99-d83bc793aea7/retrainJobs?action=batch&dataUri={dataUri}\",\"retrainStatusUri\":\"/dataMining/projects/11651230-d4bb-4e9f-8b99-d83bc793aea7/retrainJobs?retrainingState={retrainingState}\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-05-03T19:43:25.932Z\",\"modifiedTimeStamp\":\"2019-05-03T19:43:27.111Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"uri\":\"/modelRepository/projects/6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"uri\":\"/modelRepository/projects/6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"uri\":\"/modelRepository/projects/6ab078be-dc44-43de-ad4f-7fdddbea4272\"}],\"version\":2,\"id\":\"6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"name\":\"Credit Marketing\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-05-22T20:37:06.037Z\",\"modifiedTimeStamp\":\"2019-05-22T20:38:32.971Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"uri\":\"/modelRepository/projects/b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"uri\":\"/modelRepository/projects/b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"uri\":\"/modelRepository/projects/b6e8c7d6-0a97-443d-9c6b-456f007894b3\"}],\"version\":2,\"id\":\"b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"name\":\"Retail Demo (MS)\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"folderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"function\":\"prediction\",\"externalProjectId\":\"bfac6b58-d704-4256-a07c-8a9296853605\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"retrainUri\":\"/dataMining/projects/bfac6b58-d704-4256-a07c-8a9296853605/retrainJobs?action=batch&dataUri={dataUri}\",\"retrainStatusUri\":\"/dataMining/projects/bfac6b58-d704-4256-a07c-8a9296853605/retrainJobs?retrainingState={retrainingState}\",\"tags\":[],\"globalTags\":[]}],\"limit\":20,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:41 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/projects?filter=eq(name,%20%22Test%20Project%22)"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:41",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:33.442Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:33.816Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/projects\",\"uri\":\"/modelRepository/projects\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.project.summary\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"type\":\"application/vnd.sas.models.project.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"GET\",\"rel\":\"projectVersions\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/projectVersions\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/projectVersions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.project.version\"},{\"method\":\"GET\",\"rel\":\"projectModels\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/models\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/models\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.summary\"},{\"method\":\"GET\",\"rel\":\"projectVariables\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/variables\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable.summary\"},{\"method\":\"GET\",\"rel\":\"championModel\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"unsetChampion\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion\"},{\"method\":\"GET\",\"rel\":\"championScoreCodeJson\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"type\":\"text/vnd.sas.models.score.code.raw\"},{\"method\":\"GET\",\"rel\":\"championScoreCodeText\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"championDs2packageScoreCode\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"type\":\"text/vnd.sas.models.score.code.ds2package\"},{\"method\":\"GET\",\"rel\":\"championDs2ScoreCode\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"type\":\"text/vnd.sas.models.score.code.ds2\"},{\"method\":\"GET\",\"rel\":\"challengers\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/challengers\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/challengers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.summary\"},{\"method\":\"DELETE\",\"rel\":\"unsetChallengers\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/challengers\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/challengers\"},{\"method\":\"GET\",\"rel\":\"getProjectFiles\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/contents\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/contents\"}],\"version\":2,\"id\":\"18c6f33a-be7a-47b3-b233-1efa58030db2\",\"name\":\"Test Project\",\"location\":\"/Model Repositories/Repository 1\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"targetLevel\":\"\",\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.project+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:41 GMT"
+          ],
+          "ETag": [
+            "\"jwunxyu0\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=98"
+          ],
+          "Last-Modified": [
+            "Thu, 13 Jun 2019 12:52:33 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:42",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/repositories?filter=eq(name,%20%22Repository%201%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository\",\"uri\":\"/modelRepository\",\"type\":\"application/vnd.sas.api\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/repositories?start=0&limit=20\",\"uri\":\"/modelRepository/repositories?start=0&limit=20\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.repository.summary\"},{\"method\":\"POST\",\"rel\":\"createRepository\",\"href\":\"/modelRepository/repositories\",\"uri\":\"/modelRepository/repositories\",\"type\":\"application/vnd.sas.models.repository\",\"responseType\":\"application/vnd.sas.models.repository\"}],\"name\":\"repositories\",\"start\":0,\"count\":1,\"items\":[{\"creationTimeStamp\":\"2019-02-20T18:16:09.174Z\",\"modifiedTimeStamp\":\"2019-02-20T18:16:14.788Z\",\"createdBy\":\"sas.modelRepository\",\"modifiedBy\":\"sas.modelRepository\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"uri\":\"/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"type\":\"application/vnd.sas.models.repository\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"uri\":\"/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"uri\":\"/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"type\":\"application/vnd.sas.models.repository\"},{\"method\":\"GET\",\"rel\":\"folder\",\"href\":\"/folders/folders/eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"uri\":\"/folders/folders/eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"type\":\"application/vnd.sas.content.folder\"}],\"version\":2,\"id\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"name\":\"Repository 1\",\"description\":\"This is the default model repository.\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"defaultRepository\":true}],\"limit\":20,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:41 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=97"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/repositories?filter=eq(name,%20%22Repository%201%22)"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:42",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-02-20T18:16:09.174Z\",\"modifiedTimeStamp\":\"2019-02-20T18:16:14.788Z\",\"createdBy\":\"sas.modelRepository\",\"modifiedBy\":\"sas.modelRepository\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"uri\":\"/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"type\":\"application/vnd.sas.models.repository\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"uri\":\"/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"uri\":\"/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"type\":\"application/vnd.sas.models.repository\"},{\"method\":\"GET\",\"rel\":\"folder\",\"href\":\"/folders/folders/eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"uri\":\"/folders/folders/eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"type\":\"application/vnd.sas.content.folder\"}],\"version\":2,\"id\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"name\":\"Repository 1\",\"description\":\"This is the default model repository.\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"defaultRepository\":true}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.repository+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:41 GMT"
+          ],
+          "ETag": [
+            "\"jsdiqytg\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=96"
+          ],
+          "Last-Modified": [
+            "Wed, 20 Feb 2019 18:16:14 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/repositories/6cabbbe1-680d-413e-b2c8-a5b972fdd6d8"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:42",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/projects?filter=eq(name,%20%22Test%20Project%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects?start=0&limit=20\",\"uri\":\"/modelRepository/projects?start=0&limit=20\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.project.summary\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/modelRepository/projects\",\"uri\":\"/modelRepository/projects\",\"type\":\"application/vnd.sas.models.project\"}],\"name\":\"projects\",\"start\":0,\"count\":13,\"items\":[{\"creationTimeStamp\":\"2019-04-17T19:49:10.757Z\",\"modifiedTimeStamp\":\"2019-06-10T20:14:05.942Z\",\"createdBy\":\"sorowl\",\"modifiedBy\":\"sorowl\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/85188865-14b3-4569-93da-dfcb47e2abed\",\"uri\":\"/modelRepository/projects/85188865-14b3-4569-93da-dfcb47e2abed\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/85188865-14b3-4569-93da-dfcb47e2abed\",\"uri\":\"/modelRepository/projects/85188865-14b3-4569-93da-dfcb47e2abed\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/85188865-14b3-4569-93da-dfcb47e2abed\",\"uri\":\"/modelRepository/projects/85188865-14b3-4569-93da-dfcb47e2abed\"}],\"version\":2,\"id\":\"85188865-14b3-4569-93da-dfcb47e2abed\",\"name\":\"sorowl\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"function\":\"classification\",\"candidateChampionHonored\":false,\"trainTable\":\"cas-shared-default/Public/BANK_PRODUCT_OWNERSHIP\",\"targetVariable\":\"IMP_FEED\",\"targetEventValue\":\"1\",\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-03T19:25:49.146Z\",\"modifiedTimeStamp\":\"2019-04-03T19:25:49.671Z\",\"createdBy\":\"yongma\",\"modifiedBy\":\"yongma\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"uri\":\"/modelRepository/projects/861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"uri\":\"/modelRepository/projects/861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"uri\":\"/modelRepository/projects/861043a4-714e-44a2-ab3c-b6cc1f7ab43e\"}],\"version\":2,\"id\":\"861043a4-714e-44a2-ab3c-b6cc1f7ab43e\",\"name\":\"Project 1\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-04T13:13:26.286Z\",\"modifiedTimeStamp\":\"2019-04-04T13:13:26.600Z\",\"createdBy\":\"jakoch\",\"modifiedBy\":\"jakoch\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/892b4ee5-96c3-4cd8-918b-f9571d26adac\",\"uri\":\"/modelRepository/projects/892b4ee5-96c3-4cd8-918b-f9571d26adac\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/892b4ee5-96c3-4cd8-918b-f9571d26adac\",\"uri\":\"/modelRepository/projects/892b4ee5-96c3-4cd8-918b-f9571d26adac\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/892b4ee5-96c3-4cd8-918b-f9571d26adac\",\"uri\":\"/modelRepository/projects/892b4ee5-96c3-4cd8-918b-f9571d26adac\"}],\"version\":2,\"id\":\"892b4ee5-96c3-4cd8-918b-f9571d26adac\",\"name\":\"sparktest\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"folderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"function\":\"classification\",\"externalProjectId\":\"142dced6-a374-4fad-b12c-5fcb63dfc4ab\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"retrainUri\":\"/dataMining/projects/142dced6-a374-4fad-b12c-5fcb63dfc4ab/retrainJobs?action=batch&dataUri={dataUri}\",\"retrainStatusUri\":\"/dataMining/projects/142dced6-a374-4fad-b12c-5fcb63dfc4ab/retrainJobs?retrainingState={retrainingState}\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-06-13T12:50:48.437Z\",\"modifiedTimeStamp\":\"2019-06-13T12:50:49.586Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"uri\":\"/modelRepository/projects/0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"uri\":\"/modelRepository/projects/0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"uri\":\"/modelRepository/projects/0d763b05-02d6-4e9c-9493-7e85db5c85e6\"}],\"version\":2,\"id\":\"0d763b05-02d6-4e9c-9493-7e85db5c85e6\",\"name\":\"SASCTL AStore Test Project\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-06-13T12:52:33.442Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:33.816Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\"}],\"version\":2,\"id\":\"18c6f33a-be7a-47b3-b233-1efa58030db2\",\"name\":\"Test Project\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-25T16:37:51.393Z\",\"modifiedTimeStamp\":\"2019-04-25T16:37:52.820Z\",\"createdBy\":\"jifwei\",\"modifiedBy\":\"jifwei\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"uri\":\"/modelRepository/projects/b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"uri\":\"/modelRepository/projects/b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"uri\":\"/modelRepository/projects/b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\"}],\"version\":2,\"id\":\"b3d56ff2-6275-491b-91ce-c62ea1ad1bf2\",\"name\":\"TS_7612761894\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"folderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"function\":\"classification\",\"externalProjectId\":\"55bd3566-b7a6-4168-96ea-eddc90d0a47e\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"retrainUri\":\"/dataMining/projects/55bd3566-b7a6-4168-96ea-eddc90d0a47e/retrainJobs?action=batch&dataUri={dataUri}\",\"retrainStatusUri\":\"/dataMining/projects/55bd3566-b7a6-4168-96ea-eddc90d0a47e/retrainJobs?retrainingState={retrainingState}\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-11T15:07:17.924Z\",\"modifiedTimeStamp\":\"2019-04-13T18:40:18.862Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/b9c0f05f-869e-4dbe-bafe-602a43fd299f\",\"uri\":\"/modelRepository/projects/b9c0f05f-869e-4dbe-bafe-602a43fd299f\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/b9c0f05f-869e-4dbe-bafe-602a43fd299f\",\"uri\":\"/modelRepository/projects/b9c0f05f-869e-4dbe-bafe-602a43fd299f\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/b9c0f05f-869e-4dbe-bafe-602a43fd299f\",\"uri\":\"/modelRepository/projects/b9c0f05f-869e-4dbe-bafe-602a43fd299f\"}],\"version\":2,\"id\":\"b9c0f05f-869e-4dbe-bafe-602a43fd299f\",\"name\":\"Insomnia Model Project\",\"description\":\"A test model project create through REST.\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 3\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-05-22T19:51:32.081Z\",\"modifiedTimeStamp\":\"2019-05-22T19:51:32.640Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/52b5fd58-d941-49cc-b318-11ad4246e236\",\"uri\":\"/modelRepository/projects/52b5fd58-d941-49cc-b318-11ad4246e236\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/52b5fd58-d941-49cc-b318-11ad4246e236\",\"uri\":\"/modelRepository/projects/52b5fd58-d941-49cc-b318-11ad4246e236\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/52b5fd58-d941-49cc-b318-11ad4246e236\",\"uri\":\"/modelRepository/projects/52b5fd58-d941-49cc-b318-11ad4246e236\"}],\"version\":2,\"id\":\"52b5fd58-d941-49cc-b318-11ad4246e236\",\"name\":\"Retail Demo\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"function\":\"prediction\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-15T15:31:46.465Z\",\"modifiedTimeStamp\":\"2019-04-15T15:31:47.530Z\",\"createdBy\":\"aucook\",\"modifiedBy\":\"aucook\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/570f6968-ed90-4784-b63e-fac01e056419\",\"uri\":\"/modelRepository/projects/570f6968-ed90-4784-b63e-fac01e056419\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/570f6968-ed90-4784-b63e-fac01e056419\",\"uri\":\"/modelRepository/projects/570f6968-ed90-4784-b63e-fac01e056419\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/570f6968-ed90-4784-b63e-fac01e056419\",\"uri\":\"/modelRepository/projects/570f6968-ed90-4784-b63e-fac01e056419\"}],\"version\":2,\"id\":\"570f6968-ed90-4784-b63e-fac01e056419\",\"name\":\"LendingClub\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"function\":\"Classification\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-04-19T15:32:45.935Z\",\"modifiedTimeStamp\":\"2019-04-19T15:32:46.309Z\",\"createdBy\":\"sorowl\",\"modifiedBy\":\"sorowl\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"uri\":\"/modelRepository/projects/081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"uri\":\"/modelRepository/projects/081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"uri\":\"/modelRepository/projects/081c81e3-7c6d-4616-9fe4-e3611f5d96b1\"}],\"version\":2,\"id\":\"081c81e3-7c6d-4616-9fe4-e3611f5d96b1\",\"name\":\"Fraud\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-05-03T18:45:05.331Z\",\"modifiedTimeStamp\":\"2019-05-03T18:45:05.673Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/3af6af81-46a4-423d-babf-0a9508d066d1\",\"uri\":\"/modelRepository/projects/3af6af81-46a4-423d-babf-0a9508d066d1\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/3af6af81-46a4-423d-babf-0a9508d066d1\",\"uri\":\"/modelRepository/projects/3af6af81-46a4-423d-babf-0a9508d066d1\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/3af6af81-46a4-423d-babf-0a9508d066d1\",\"uri\":\"/modelRepository/projects/3af6af81-46a4-423d-babf-0a9508d066d1\"}],\"version\":2,\"id\":\"3af6af81-46a4-423d-babf-0a9508d066d1\",\"name\":\"Fish\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"folderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"function\":\"classification\",\"externalProjectId\":\"11651230-d4bb-4e9f-8b99-d83bc793aea7\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"retrainUri\":\"/dataMining/projects/11651230-d4bb-4e9f-8b99-d83bc793aea7/retrainJobs?action=batch&dataUri={dataUri}\",\"retrainStatusUri\":\"/dataMining/projects/11651230-d4bb-4e9f-8b99-d83bc793aea7/retrainJobs?retrainingState={retrainingState}\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-05-03T19:43:25.932Z\",\"modifiedTimeStamp\":\"2019-05-03T19:43:27.111Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"uri\":\"/modelRepository/projects/6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"uri\":\"/modelRepository/projects/6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"uri\":\"/modelRepository/projects/6ab078be-dc44-43de-ad4f-7fdddbea4272\"}],\"version\":2,\"id\":\"6ab078be-dc44-43de-ad4f-7fdddbea4272\",\"name\":\"Credit Marketing\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-05-22T20:37:06.037Z\",\"modifiedTimeStamp\":\"2019-05-22T20:38:32.971Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"uri\":\"/modelRepository/projects/b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"uri\":\"/modelRepository/projects/b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"uri\":\"/modelRepository/projects/b6e8c7d6-0a97-443d-9c6b-456f007894b3\"}],\"version\":2,\"id\":\"b6e8c7d6-0a97-443d-9c6b-456f007894b3\",\"name\":\"Retail Demo (MS)\",\"repositoryId\":\"f2e5a28a-9d48-47cb-98dd-865ed2576e4c\",\"folderId\":\"683b4062-895e-41cb-a63f-bf589a6c3a02\",\"function\":\"prediction\",\"externalProjectId\":\"bfac6b58-d704-4256-a07c-8a9296853605\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"retrainUri\":\"/dataMining/projects/bfac6b58-d704-4256-a07c-8a9296853605/retrainJobs?action=batch&dataUri={dataUri}\",\"retrainStatusUri\":\"/dataMining/projects/bfac6b58-d704-4256-a07c-8a9296853605/retrainJobs?retrainingState={retrainingState}\",\"tags\":[],\"globalTags\":[]}],\"limit\":20,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:41 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=95"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/projects?filter=eq(name,%20%22Test%20Project%22)"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:42",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-13T12:52:33.442Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:33.816Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/projects\",\"uri\":\"/modelRepository/projects\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.project.summary\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"type\":\"application/vnd.sas.models.project.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"GET\",\"rel\":\"projectVersions\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/projectVersions\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/projectVersions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.project.version\"},{\"method\":\"GET\",\"rel\":\"projectModels\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/models\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/models\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.summary\"},{\"method\":\"GET\",\"rel\":\"projectVariables\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/variables\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable.summary\"},{\"method\":\"GET\",\"rel\":\"championModel\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"unsetChampion\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion\"},{\"method\":\"GET\",\"rel\":\"championScoreCodeJson\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"type\":\"text/vnd.sas.models.score.code.raw\"},{\"method\":\"GET\",\"rel\":\"championScoreCodeText\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"championDs2packageScoreCode\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"type\":\"text/vnd.sas.models.score.code.ds2package\"},{\"method\":\"GET\",\"rel\":\"championDs2ScoreCode\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/champion/code\",\"type\":\"text/vnd.sas.models.score.code.ds2\"},{\"method\":\"GET\",\"rel\":\"challengers\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/challengers\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/challengers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.summary\"},{\"method\":\"DELETE\",\"rel\":\"unsetChallengers\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/challengers\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/challengers\"},{\"method\":\"GET\",\"rel\":\"getProjectFiles\",\"href\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/contents\",\"uri\":\"/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2/contents\"}],\"version\":2,\"id\":\"18c6f33a-be7a-47b3-b233-1efa58030db2\",\"name\":\"Test Project\",\"location\":\"/Model Repositories/Repository 1\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"candidateChampionHonored\":false,\"targetLevel\":\"\",\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.project+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:41 GMT"
+          ],
+          "ETag": [
+            "\"jwunxyu0\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=94"
+          ],
+          "Last-Modified": [
+            "Thu, 13 Jun 2019 12:52:33 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/projects/18c6f33a-be7a-47b3-b233-1efa58030db2"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:44",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"description\": \"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n                   intercept_scaling=1, l1_ratio=None, max_iter=100,\\n                   multi_class='multinomial', n_jobs=None, penalty='l2',\\n                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,\\n                   warm_start=False)\", \"algorithm\": \"Logistic regression\", \"scoreCodeType\": \"ds2MultiType\", \"trainCodeType\": \"Python\", \"function\": \"Classification\", \"tool\": \"Python 3.6\", \"properties\": [{\"name\": \"C\", \"value\": 1.0}, {\"name\": \"class_weight\", \"value\": null}, {\"name\": \"dual\", \"value\": false}, {\"name\": \"fit_intercept\", \"value\": true}, {\"name\": \"intercept_scaling\", \"value\": 1}, {\"name\": \"l1_ratio\", \"value\": null}, {\"name\": \"max_iter\", \"value\": 100}, {\"name\": \"multi_class\", \"value\": \"multinomial\"}, {\"name\": \"n_jobs\", \"value\": null}, {\"name\": \"penalty\", \"value\": \"l2\"}, {\"name\": \"random_state\", \"value\": null}, {\"name\": \"solver\", \"value\": \"lbfgs\"}, {\"name\": \"tol\", \"value\": 0.0001}, {\"name\": \"verbose\", \"value\": 0}, {\"name\": \"warm_start\", \"value\": false}], \"name\": \"Scikit Model\", \"inputVariables\": [{\"name\": \"SepalLength\", \"role\": \"Input\", \"type\": \"decimal\"}, {\"name\": \"SepalWidth\", \"role\": \"Input\", \"type\": \"decimal\"}, {\"name\": \"PetalLength\", \"role\": \"Input\", \"type\": \"decimal\"}, {\"name\": \"PetalWidth\", \"role\": \"Input\", \"type\": \"decimal\"}], \"outputVariables\": [{\"name\": \"var1\", \"role\": \"Output\", \"type\": \"string\"}], \"projectId\": \"18c6f33a-be7a-47b3-b233-1efa58030db2\", \"modeler\": \"USERNAME\", \"champion\": null, \"role\": \"Challenger\"}"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "1562"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.model+json"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/modelRepository/models"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[],\"name\":\"models\",\"start\":0,\"count\":1,\"items\":[{\"creationTimeStamp\":\"2019-06-13T12:52:43.195Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:43.195Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"type\":\"application/vnd.sas.models.model.summary\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"type\":\"application/vnd.sas.models.model\"}],\"version\":2,\"id\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"name\":\"Scikit Model\",\"description\":\"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n                   intercept_scaling=1, l1_ratio=None, max_iter=100,\\n                   multi_class='multinomial', n_jobs=None, penalty='l2',\\n                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,\\n                   warm_start=False)\",\"location\":\"/Model Repositories/Repository 1\",\"projectId\":\"18c6f33a-be7a-47b3-b233-1efa58030db2\",\"projectName\":\"Test Project\",\"projectVersionId\":\"ae22da1a-f551-4e3e-a2f1-4237cd9ee0a8\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"folderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"indirectFolderId\":\"eb66ccfa-0a62-474b-b7e0-ccfe68f7af71\",\"repositoryId\":\"6cabbbe1-680d-413e-b2c8-a5b972fdd6d8\",\"function\":\"Classification\",\"algorithm\":\"Logistic regression\",\"tool\":\"Python 3.6\",\"scoreCodeType\":\"ds2MultiType\",\"trainCodeType\":\"Python\",\"modeler\":\"USERNAME\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"challenger\",\"immutable\":false,\"properties\":[{\"name\":\"C\",\"value\":\"1.0\",\"type\":\"string\"},{\"name\":\"class_weight\",\"type\":\"string\"},{\"name\":\"dual\",\"value\":\"false\",\"type\":\"string\"},{\"name\":\"fit_intercept\",\"value\":\"true\",\"type\":\"string\"},{\"name\":\"intercept_scaling\",\"value\":\"1\",\"type\":\"string\"},{\"name\":\"l1_ratio\",\"type\":\"string\"},{\"name\":\"max_iter\",\"value\":\"100\",\"type\":\"string\"},{\"name\":\"multi_class\",\"value\":\"multinomial\",\"type\":\"string\"},{\"name\":\"n_jobs\",\"type\":\"string\"},{\"name\":\"penalty\",\"value\":\"l2\",\"type\":\"string\"},{\"name\":\"random_state\",\"type\":\"string\"},{\"name\":\"solver\",\"value\":\"lbfgs\",\"type\":\"string\"},{\"name\":\"tol\",\"value\":\"0.0001\",\"type\":\"string\"},{\"name\":\"verbose\",\"value\":\"0\",\"type\":\"string\"},{\"name\":\"warm_start\",\"value\":\"false\",\"type\":\"string\"}],\"inputVariables\":[{\"creationTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/647bcbf7-d375-429b-920b-8733c13c4e1b\"}],\"version\":2,\"id\":\"647bcbf7-d375-429b-920b-8733c13c4e1b\",\"name\":\"SepalLength\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/11fc20fb-8426-43ce-bf9b-eda2d3b008dc\"}],\"version\":2,\"id\":\"11fc20fb-8426-43ce-bf9b-eda2d3b008dc\",\"name\":\"SepalWidth\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/ec623079-6c43-4e8f-ab55-e7fed7848162\"}],\"version\":2,\"id\":\"ec623079-6c43-4e8f-ab55-e7fed7848162\",\"name\":\"PetalLength\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/4f388eac-098c-4e44-ac28-b1950b5f5834\"}],\"version\":2,\"id\":\"4f388eac-098c-4e44-ac28-b1950b5f5834\",\"name\":\"PetalWidth\",\"role\":\"input\",\"type\":\"decimal\"}],\"outputVariables\":[{\"creationTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:43.511Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/variables/b1038781-129b-4d56-9aca-8e8ff64e4a7b\"}],\"version\":2,\"id\":\"b1038781-129b-4d56-9aca-8e8ff64e4a7b\",\"name\":\"var1\",\"role\":\"output\",\"type\":\"string\"}],\"modelVersions\":[],\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]}],\"limit\":20,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.model+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:43 GMT"
+          ],
+          "ETag": [
+            "W/\"16ba17a3987\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=93"
+          ],
+          "Last-Modified": [
+            "Thu, 13 Jun 2019 12:52:44 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/models"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:45",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "--f9aa0f8a61f34e5bb1f996f31959dc98\r\nContent-Disposition: form-data; name=\"role\"\r\n\r\nPython Pickle\r\n--f9aa0f8a61f34e5bb1f996f31959dc98\r\nContent-Disposition: form-data; name=\"name\"\r\n\r\nmodel.pkl\r\n--f9aa0f8a61f34e5bb1f996f31959dc98\r\nContent-Disposition: form-data; name=\"model.pkl\"; filename=\"model.pkl\"\r\n\r\n\ufffd\u0003csklearn.linear_model.logistic\nLogisticRegression\nq\u0000)\ufffdq\u0001}q\u0002(X\u0007\u0000\u0000\u0000penaltyq\u0003X\u0002\u0000\u0000\u0000l2q\u0004X\u0004\u0000\u0000\u0000dualq\u0005\ufffdX\u0003\u0000\u0000\u0000tolq\u0006G?\u001a6\ufffd\ufffd\u001cC-X\u0001\u0000\u0000\u0000Cq\u0007G?\ufffd\u0000\u0000\u0000\u0000\u0000\u0000X\r\u0000\u0000\u0000fit_interceptq\b\ufffdX\u0011\u0000\u0000\u0000intercept_scalingq\tK\u0001X\f\u0000\u0000\u0000class_weightq\nNX\f\u0000\u0000\u0000random_stateq\u000bNX\u0006\u0000\u0000\u0000solverq\fX\u0005\u0000\u0000\u0000lbfgsq\rX\b\u0000\u0000\u0000max_iterq\u000eKdX\u000b\u0000\u0000\u0000multi_classq\u000fX\u000b\u0000\u0000\u0000multinomialq\u0010X\u0007\u0000\u0000\u0000verboseq\u0011K\u0000X\n\u0000\u0000\u0000warm_startq\u0012\ufffdX\u0006\u0000\u0000\u0000n_jobsq\u0013NX\b\u0000\u0000\u0000l1_ratioq\u0014NX\b\u0000\u0000\u0000classes_q\u0015cnumpy.core.multiarray\n_reconstruct\nq\u0016cnumpy\nndarray\nq\u0017K\u0000\ufffdq\u0018C\u0001bq\u0019\ufffdq\u001aRq\u001b(K\u0001K\u0003\ufffdq\u001ccnumpy\ndtype\nq\u001dX\u0002\u0000\u0000\u0000O8q\u001eK\u0000K\u0001\ufffdq\u001fRq (K\u0003X\u0001\u0000\u0000\u0000|q!NNNJ\ufffd\ufffd\ufffd\ufffdJ\ufffd\ufffd\ufffd\ufffdK?tq\"b\ufffd]q#(X\u0006\u0000\u0000\u0000setosaq$X\n\u0000\u0000\u0000versicolorq%X\t\u0000\u0000\u0000virginicaq&etq'bX\u0005\u0000\u0000\u0000coef_q(h\u0016h\u0017K\u0000\ufffdq)h\u0019\ufffdq*Rq+(K\u0001K\u0003K\u0004\ufffdq,h\u001dX\u0002\u0000\u0000\u0000f8q-K\u0000K\u0001\ufffdq.Rq/(K\u0003X\u0001\u0000\u0000\u0000<q0NNNJ\ufffd\ufffd\ufffd\ufffdJ\ufffd\ufffd\ufffd\ufffdK\u0000tq1b\ufffdC`\ufffd\ufffdw\ufffd\u0010\ufffd\u06bf\ufffdg\ufffd{\ufffd\ufffd\ufffd?jN\ufffd\ufffd!*\u0004\ufffdc`\u00158fY\ufffd\ufffd3\ufffd\ufffd\ufffd\u0001\ufffd?\ufffd\ufffd\ufffdH)\u053f\ufffd\u0014\ud99b\uddf8\u027fS3[\ufffd\ufffdT\ufffd\ufffdy\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd\ufffd)\u0015\u0011\ufffd\u4fec_cJ\ufffd\ufffd\u0005@\f}!S\ufffdA\u0000@q2tq3bX\n\u0000\u0000\u0000intercept_q4h\u0016h\u0017K\u0000\ufffdq5h\u0019\ufffdq6Rq7(K\u0001K\u0003\ufffdq8h/\ufffdC\u0018\ufffd`\ufffd\ufffd\b\ufffd#@VA\ufffdF\ufffd\ufffd\u0001@\ufffd\ufffdR\ufffd;\u001f(\ufffdq9tq:bX\u0007\u0000\u0000\u0000n_iter_q;h\u0016h\u0017K\u0000\ufffdq<h\u0019\ufffdq=Rq>(K\u0001K\u0001\ufffdq?h\u001dX\u0002\u0000\u0000\u0000i4q@K\u0000K\u0001\ufffdqARqB(K\u0003h0NNNJ\ufffd\ufffd\ufffd\ufffdJ\ufffd\ufffd\ufffd\ufffdK\u0000tqCb\ufffdC\u0004d\u0000\u0000\u0000qDtqEbX\u0010\u0000\u0000\u0000_sklearn_versionqFX\u0006\u0000\u0000\u00000.21.1qGub.\r\n--f9aa0f8a61f34e5bb1f996f31959dc98--\r\n"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "1326"
+          ],
+          "Content-Type": [
+            "multipart/form-data; boundary=f9aa0f8a61f34e5bb1f996f31959dc98"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[],\"name\":\"addModelContents\",\"count\":1,\"items\":[{\"creationTimeStamp\":\"2019-06-13T12:52:45.280Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:45.280Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd\",\"type\":\"application/vnd.sas.models.model.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd\",\"type\":\"application/vnd.sas.models.model.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd/content\",\"type\":\"application/octet-stream\"}],\"version\":2,\"id\":\"60b5ad92-3624-4256-a1f9-415281784bbd\",\"name\":\"model.pkl\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"role\":\"Python Pickle\",\"fileUri\":\"/files/files/216242e4-c2c4-468c-a579-7b07e7e61860\"}],\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.model.content+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:45 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=92"
+          ],
+          "Last-Modified": [
+            "Thu, 13 Jun 2019 12:52:45 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:45",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "--1a4fa9dfb13c44b511ea92e2e6deafbe\r\nContent-Disposition: form-data; name=\"role\"\r\n\r\nScore Code\r\n--1a4fa9dfb13c44b511ea92e2e6deafbe\r\nContent-Disposition: form-data; name=\"name\"\r\n\r\ndmcas_packagescorecode.sas\r\n--1a4fa9dfb13c44b511ea92e2e6deafbe\r\nContent-Disposition: form-data; name=\"dmcas_packagescorecode.sas\"; filename=\"dmcas_packagescorecode.sas\"\r\n\r\n    package _D6210D92B0E640CB8917DB64E4F0AEAB /inline;\n        dcl package pymas py;\n        dcl package logger logr('App.tk.MAS');\n        dcl varchar(4096) character set utf8 pycode;\n        dcl int revision;\n            method score(double SepalLength, double SepalWidth, double PetalLength, double PetalWidth, in_out char var1, in_out double rc, in_out char msg);\n                dcl double err;\n                if null(py) then do;\n                    py = _new_ pymas();\n\t\t\t\t\terr = py.appendSrcLine('import dill, base64');\n\t\t\t\t\terr = py.appendSrcLine('bytes = b\"gANjc2tsZWFybi5saW5lYXJfbW9kZWwubG9naXN0aWMKTG9naXN0aWNSZWdyZXNzaW9uCnEAKYFxAX1xAihYBwAAAHBlbmFsdHlxA1gCAAAAbDJxBFgEAAAAZHVhbHEFiVgDAAAAdG9scQZHPxo24uscQy1YAQAAAENxB0c/8AAAAAAAAFgNAAAAZml0X2ludGVyY2VwdHEIiFgRAAAAaW50ZXJjZXB0X3NjYWxpbmdxCUsBWAwAAABjbGFzc193ZWlnaHRxCk5YDAAAAHJhbmRvbV9zdGF0ZXELTlgGAAAAc29sdmVycQxYBQAAAGxiZmdzcQ1YCAAAAG1heF9pdGVycQ5LZFgLAAAAbXVsdGlfY2xhc3NxD1gLAAAAbXVsdGlub21pYWxxEFgHAAAAdmVyYm9zZXERSwBYCgAAAHdhcm1fc3RhcnRxEolYBgAAAG5fam9ic3ETTlgIAAAAbDFfcmF0aW9xFE5YCAAAAGNsYXNzZXNfcRVjZGlsbC5fZGlsbApfZ2V0X2F0dHIKcRZjZGlsbC5fZGlsbApfaW1wb3J0X21vZHVsZQpxF1gcAAAAbnVtcHkuY29yZS5fbXVsdGlhcnJheV91bWF0aHEYhXEZUnEaWAwAAABfcmVjb25zdHJ1Y3RxG4ZxHFJxHWNudW1weQpuZGFycmF5CnEeSwCFcR9DAWJxIIdxIVJxIihLAUsDhXEjY251bXB5CmR0eXBlCnEkWAIAAABPOHElSwBLAYdxJlJxJyhLA1gBAAAAfHEoTk5OSv////9K/////0s/dHEpYoldcSooWAYAAABzZXRvc2FxK1gKAAAAdmVyc2ljb2xvcnEsWAkAAAB2aXJnaW5pY2FxLWV0cS5iWAUAAABjb2VmX3EvaB1oHksAhXEwaCCHcTFScTIoSwFLA0sEhnEzaCRYAgAAAGY4cTRLAEsBh3E1UnE2KEsDWAEAAAA8cTdOTk5K/////0r/////SwB0cThiiUNgn4p3oxDY2r+RZ+x7tfXuP2pO9M4hKgTAY2AVOGZZ8b/AM7Cw2gHhP4juhM1IKdS/7hTxtre4yb9TM1vczFTuv+x5o/eSrry/3/ApFRHh5L+sX2NKrcUFQAx9IVPmQQBAcTl0cTpiWAoAAABpbnRlcmNlcHRfcTtoHWgeSwCFcTxoIIdxPVJxPihLAUsDhXE/aDaJQxigYJOSCK8jQFZB/kbMwAFA3+9SpDsfKMBxQHRxQWJYBwAAAG5faXRlcl9xQmgdaB5LAIVxQ2ggh3FEUnFFKEsBSwGFcUZoJFgCAAAAaTRxR0sASwGHcUhScUkoSwNoN05OTkr/////Sv////9LAHRxSmKJQwRkAAAAcUt0cUxiWBAAAABfc2tsZWFybl92ZXJzaW9ucU1YBgAAADAuMjEuMXFOdWIu\"');\n\t\t\t\t\terr = py.appendSrcLine('obj = dill.loads(base64.b64decode(bytes))');\n\t\t\t\t\terr = py.appendSrcLine('def wrapper(SepalLength, SepalWidth, PetalLength, PetalWidth):');\n\t\t\t\t\terr = py.appendSrcLine('    \"Output: var1, msg\"');\n\t\t\t\t\terr = py.appendSrcLine('    result = None');\n\t\t\t\t\terr = py.appendSrcLine('    try:');\n\t\t\t\t\terr = py.appendSrcLine('        msg = \"\"');\n\t\t\t\t\terr = py.appendSrcLine('        import numpy as np');\n\t\t\t\t\terr = py.appendSrcLine('        result = float(obj.predict(SepalLength,SepalWidth,PetalLength,PetalWidth))');\n\t\t\t\t\terr = py.appendSrcLine('    except Exception as e:');\n\t\t\t\t\terr = py.appendSrcLine('        msg = str(e)');\n\t\t\t\t\terr = py.appendSrcLine('        if result is None:');\n\t\t\t\t\terr = py.appendSrcLine('            result = tuple(None for i in range(1))');\n\t\t\t\t\terr = py.appendSrcLine('    if isinstance(result, tuple):');\n\t\t\t\t\terr = py.appendSrcLine('        return tuple(x for x in list(result) + [msg])');\n\t\t\t\t\terr = py.appendSrcLine('    else: ');\n\t\t\t\t\terr = py.appendSrcLine('        return result, msg');\n                    pycode = py.getSource();\n                    revision = py.publish( pycode, 'mypymodule' );\n                    err = py.useMethod('wrapper');\n                    if err then return;\n                end;\n\t\t\t\terr = py.setDouble('SepalLength', SepalLength);\n\t\t\t\terr = py.setDouble('SepalWidth', SepalWidth);\n\t\t\t\terr = py.setDouble('PetalLength', PetalLength);\n\t\t\t\terr = py.setDouble('PetalWidth', PetalWidth);\n\t\t\t\terr = py.execute();\n\t\t\t\tvar1 = py.getString('var1');\n\t\t\t\trc = err;\n\t\t\t\tmsg = py.getString('msg');\n            end;\n    endpackage;\r\n--1a4fa9dfb13c44b511ea92e2e6deafbe--\r\n"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "3992"
+          ],
+          "Content-Type": [
+            "multipart/form-data; boundary=1a4fa9dfb13c44b511ea92e2e6deafbe"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[],\"name\":\"addModelContents\",\"count\":1,\"items\":[{\"creationTimeStamp\":\"2019-06-13T12:52:45.899Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:45.899Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f\",\"type\":\"application/vnd.sas.models.model.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f\",\"type\":\"application/vnd.sas.models.model.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f/content\",\"type\":\"application/octet-stream\"}],\"version\":2,\"id\":\"34004d41-376e-46e5-b684-af1adeb5585f\",\"name\":\"dmcas_packagescorecode.sas\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"role\":\"Score Code\",\"fileUri\":\"/files/files/a8991094-d828-4321-bfdc-347b9ec95fa0\"}],\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.model.content+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:45 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=91"
+          ],
+          "Last-Modified": [
+            "Thu, 13 Jun 2019 12:52:45 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:46",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "--085651a6922b1561784f87aa781feecb\r\nContent-Disposition: form-data; name=\"role\"\r\n\r\nScore Code\r\n--085651a6922b1561784f87aa781feecb\r\nContent-Disposition: form-data; name=\"name\"\r\n\r\ndmcas_espscorecode.sas\r\n--085651a6922b1561784f87aa781feecb\r\nContent-Disposition: form-data; name=\"dmcas_espscorecode.sas\"; filename=\"dmcas_espscorecode.sas\"\r\n\r\ndata sasep.out;\n    package _D6210D92B0E640CB8917DB64E4F0AEAB /inline;\n        dcl package pymas py;\n        dcl package logger logr('App.tk.MAS');\n        dcl varchar(4096) character set utf8 pycode;\n        dcl int revision;\n            method score(double SepalLength, double SepalWidth, double PetalLength, double PetalWidth, in_out char var1, in_out double rc, in_out char msg);\n                dcl double err;\n                if null(py) then do;\n                    py = _new_ pymas();\n\t\t\t\t\terr = py.appendSrcLine('import dill, base64');\n\t\t\t\t\terr = py.appendSrcLine('bytes = b\"gANjc2tsZWFybi5saW5lYXJfbW9kZWwubG9naXN0aWMKTG9naXN0aWNSZWdyZXNzaW9uCnEAKYFxAX1xAihYBwAAAHBlbmFsdHlxA1gCAAAAbDJxBFgEAAAAZHVhbHEFiVgDAAAAdG9scQZHPxo24uscQy1YAQAAAENxB0c/8AAAAAAAAFgNAAAAZml0X2ludGVyY2VwdHEIiFgRAAAAaW50ZXJjZXB0X3NjYWxpbmdxCUsBWAwAAABjbGFzc193ZWlnaHRxCk5YDAAAAHJhbmRvbV9zdGF0ZXELTlgGAAAAc29sdmVycQxYBQAAAGxiZmdzcQ1YCAAAAG1heF9pdGVycQ5LZFgLAAAAbXVsdGlfY2xhc3NxD1gLAAAAbXVsdGlub21pYWxxEFgHAAAAdmVyYm9zZXERSwBYCgAAAHdhcm1fc3RhcnRxEolYBgAAAG5fam9ic3ETTlgIAAAAbDFfcmF0aW9xFE5YCAAAAGNsYXNzZXNfcRVjZGlsbC5fZGlsbApfZ2V0X2F0dHIKcRZjZGlsbC5fZGlsbApfaW1wb3J0X21vZHVsZQpxF1gcAAAAbnVtcHkuY29yZS5fbXVsdGlhcnJheV91bWF0aHEYhXEZUnEaWAwAAABfcmVjb25zdHJ1Y3RxG4ZxHFJxHWNudW1weQpuZGFycmF5CnEeSwCFcR9DAWJxIIdxIVJxIihLAUsDhXEjY251bXB5CmR0eXBlCnEkWAIAAABPOHElSwBLAYdxJlJxJyhLA1gBAAAAfHEoTk5OSv////9K/////0s/dHEpYoldcSooWAYAAABzZXRvc2FxK1gKAAAAdmVyc2ljb2xvcnEsWAkAAAB2aXJnaW5pY2FxLWV0cS5iWAUAAABjb2VmX3EvaB1oHksAhXEwaCCHcTFScTIoSwFLA0sEhnEzaCRYAgAAAGY4cTRLAEsBh3E1UnE2KEsDWAEAAAA8cTdOTk5K/////0r/////SwB0cThiiUNgn4p3oxDY2r+RZ+x7tfXuP2pO9M4hKgTAY2AVOGZZ8b/AM7Cw2gHhP4juhM1IKdS/7hTxtre4yb9TM1vczFTuv+x5o/eSrry/3/ApFRHh5L+sX2NKrcUFQAx9IVPmQQBAcTl0cTpiWAoAAABpbnRlcmNlcHRfcTtoHWgeSwCFcTxoIIdxPVJxPihLAUsDhXE/aDaJQxigYJOSCK8jQFZB/kbMwAFA3+9SpDsfKMBxQHRxQWJYBwAAAG5faXRlcl9xQmgdaB5LAIVxQ2ggh3FEUnFFKEsBSwGFcUZoJFgCAAAAaTRxR0sASwGHcUhScUkoSwNoN05OTkr/////Sv////9LAHRxSmKJQwRkAAAAcUt0cUxiWBAAAABfc2tsZWFybl92ZXJzaW9ucU1YBgAAADAuMjEuMXFOdWIu\"');\n\t\t\t\t\terr = py.appendSrcLine('obj = dill.loads(base64.b64decode(bytes))');\n\t\t\t\t\terr = py.appendSrcLine('def wrapper(SepalLength, SepalWidth, PetalLength, PetalWidth):');\n\t\t\t\t\terr = py.appendSrcLine('    \"Output: var1, msg\"');\n\t\t\t\t\terr = py.appendSrcLine('    result = None');\n\t\t\t\t\terr = py.appendSrcLine('    try:');\n\t\t\t\t\terr = py.appendSrcLine('        msg = \"\"');\n\t\t\t\t\terr = py.appendSrcLine('        import numpy as np');\n\t\t\t\t\terr = py.appendSrcLine('        result = float(obj.predict(SepalLength,SepalWidth,PetalLength,PetalWidth))');\n\t\t\t\t\terr = py.appendSrcLine('    except Exception as e:');\n\t\t\t\t\terr = py.appendSrcLine('        msg = str(e)');\n\t\t\t\t\terr = py.appendSrcLine('        if result is None:');\n\t\t\t\t\terr = py.appendSrcLine('            result = tuple(None for i in range(1))');\n\t\t\t\t\terr = py.appendSrcLine('    if isinstance(result, tuple):');\n\t\t\t\t\terr = py.appendSrcLine('        return tuple(x for x in list(result) + [msg])');\n\t\t\t\t\terr = py.appendSrcLine('    else: ');\n\t\t\t\t\terr = py.appendSrcLine('        return result, msg');\n                    pycode = py.getSource();\n                    revision = py.publish( pycode, 'mypymodule' );\n                    err = py.useMethod('wrapper');\n                    if err then return;\n                end;\n\t\t\t\terr = py.setDouble('SepalLength', SepalLength);\n\t\t\t\terr = py.setDouble('SepalWidth', SepalWidth);\n\t\t\t\terr = py.setDouble('PetalLength', PetalLength);\n\t\t\t\terr = py.setDouble('PetalWidth', PetalWidth);\n\t\t\t\terr = py.execute();\n\t\t\t\tvar1 = py.getString('var1');\n\t\t\t\trc = err;\n\t\t\t\tmsg = py.getString('msg');\n            end;\n    endpackage;\n   method run();\n      set SASEP.IN;\n   end;\n   method term();\n   end;\nenddata;\r\n--085651a6922b1561784f87aa781feecb--\r\n"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "4076"
+          ],
+          "Content-Type": [
+            "multipart/form-data; boundary=085651a6922b1561784f87aa781feecb"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[],\"name\":\"addModelContents\",\"count\":1,\"items\":[{\"creationTimeStamp\":\"2019-06-13T12:52:46.461Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:46.461Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237\",\"type\":\"application/vnd.sas.models.model.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237\",\"type\":\"application/vnd.sas.models.model.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237/content\",\"type\":\"application/octet-stream\"}],\"version\":2,\"id\":\"627c42d6-eca5-49b5-85a2-dddf69bc1237\",\"name\":\"dmcas_espscorecode.sas\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"role\":\"Score Code\",\"fileUri\":\"/files/files/0f6f19d2-15ca-4566-a255-0218acf43d2e\"}],\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.model.content+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:46 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=90"
+          ],
+          "Last-Modified": [
+            "Thu, 13 Jun 2019 12:52:46 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:52:46",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"type\":\"application/vnd.sas.models.model.content\"},{\"method\":\"POST\",\"rel\":\"addContent\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"type\":\"multipart/form-data\",\"responseType\":\"application/vnd.sas.models.model.content\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"type\":\"application/vnd.sas.models.model\"}],\"name\":\"contents\",\"count\":3,\"items\":[{\"creationTimeStamp\":\"2019-06-13T12:52:46.461Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:46.461Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237\",\"type\":\"application/vnd.sas.models.model.content\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237/content\",\"type\":\"text/vnd.sas.source.sas\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237/content\",\"type\":\"application/vnd.sas.models.model.content\"},{\"method\":\"PUT\",\"rel\":\"updateContentStream\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237/content\",\"type\":\"application/octet-stream\",\"responseType\":\"application/vnd.sas.models.model.content\"},{\"method\":\"PUT\",\"rel\":\"updateContentMultipart\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/627c42d6-eca5-49b5-85a2-dddf69bc1237/content\",\"type\":\"multipart/form-data\",\"responseType\":\"application/vnd.sas.models.model.content\"}],\"version\":2,\"id\":\"627c42d6-eca5-49b5-85a2-dddf69bc1237\",\"name\":\"dmcas_espscorecode.sas\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"role\":\"Score Code\",\"fileUri\":\"/files/files/0f6f19d2-15ca-4566-a255-0218acf43d2e\"},{\"creationTimeStamp\":\"2019-06-13T12:52:45.899Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:45.899Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f\",\"type\":\"application/vnd.sas.models.model.content\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f/content\",\"type\":\"text/vnd.sas.source.sas\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f/content\",\"type\":\"application/vnd.sas.models.model.content\"},{\"method\":\"PUT\",\"rel\":\"updateContentStream\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f/content\",\"type\":\"application/octet-stream\",\"responseType\":\"application/vnd.sas.models.model.content\"},{\"method\":\"PUT\",\"rel\":\"updateContentMultipart\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/34004d41-376e-46e5-b684-af1adeb5585f/content\",\"type\":\"multipart/form-data\",\"responseType\":\"application/vnd.sas.models.model.content\"}],\"version\":2,\"id\":\"34004d41-376e-46e5-b684-af1adeb5585f\",\"name\":\"dmcas_packagescorecode.sas\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"role\":\"Score Code\",\"fileUri\":\"/files/files/a8991094-d828-4321-bfdc-347b9ec95fa0\"},{\"creationTimeStamp\":\"2019-06-13T12:52:45.280Z\",\"modifiedTimeStamp\":\"2019-06-13T12:52:45.280Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd\",\"type\":\"application/vnd.sas.models.model.content\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd/content\",\"type\":\"application/vnd.sas.models.model.content\"},{\"method\":\"PUT\",\"rel\":\"updateContentStream\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd/content\",\"type\":\"application/octet-stream\",\"responseType\":\"application/vnd.sas.models.model.content\"},{\"method\":\"PUT\",\"rel\":\"updateContentMultipart\",\"href\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd/content\",\"uri\":\"/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents/60b5ad92-3624-4256-a1f9-415281784bbd/content\",\"type\":\"multipart/form-data\",\"responseType\":\"application/vnd.sas.models.model.content\"}],\"version\":2,\"id\":\"60b5ad92-3624-4256-a1f9-415281784bbd\",\"name\":\"model.pkl\",\"modelId\":\"5bc54ebe-9516-4311-a7f5-9c7fa4d35306\",\"role\":\"Python Pickle\",\"fileUri\":\"/files/files/216242e4-c2c4-468c-a579-7b07e7e61860\"}],\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:52:46 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=89"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/models/5bc54ebe-9516-4311-a7f5-9c7fa4d35306/contents"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}

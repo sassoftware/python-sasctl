@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+# encoding: utf-8
+#
+# Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+import re
+
+from six.moves.urllib.parse import urlsplit
+from betamax.matchers.path import PathMatcher
+
+class RedactedPathMatcher(PathMatcher):
+    """Matches requests identically to the default behavior except that CAS session ids in the path are ignored."""
+
+    name = 'redacted_path'
+
+    def _strip_session_id(self, path):
+        match = re.search(r'(?<=sessions/)[0-9a-f\-]*', path)
+        if match:
+            path = path.replace(match.group(0), '')
+        return path
+
+    def match(self, request, recorded_request):
+        request_path = self._strip_session_id(urlsplit(request.url).path)
+        recorded_path = self._strip_session_id(urlsplit(recorded_request['uri']).path)
+        return request_path == recorded_path
+

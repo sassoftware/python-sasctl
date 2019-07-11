@@ -1,0 +1,182 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2019-06-18T14:47:35",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "60"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read gelupdates SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey GLOBALPRESALES intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin EsriUsers AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install techoffice ApplicationAdministrators COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"3fdc862de7c64ccab1cafeb6427a0120\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Tue, 18 Jun 2019 14:47:35 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-06-18T14:47:35",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/files/files"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files?sortBy=name&start=0&limit=10\",\"uri\":\"/files/files?sortBy=name&start=0&limit=10\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"next\",\"href\":\"/files/files?sortBy=name&start=10&limit=10\",\"uri\":\"/files/files?sortBy=name&start=10&limit=10\",\"type\":\"application/vnd.sas.collection\"}],\"name\":\"files\",\"accept\":\"application/vnd.sas.file\",\"start\":0,\"count\":2662,\"items\":[{\"creationTimeStamp\":\"2019-05-03T18:47:47.478Z\",\"modifiedTimeStamp\":\"2019-05-03T18:47:47.586Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4\",\"parentUri\":\"/jobExecution/jobs/85a0e69d-c36b-49d5-b656-f37e6ceab0a0\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4\",\"uri\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4\",\"uri\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4\",\"uri\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4\",\"uri\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4\",\"uri\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4/content\",\"uri\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4/content\",\"uri\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4/copy\",\"uri\":\"/files/files/6b4048ab-76d7-4900-92d0-2ee8fc8b7ec4/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"#LN00008\",\"size\":5037,\"version\":2},{\"creationTimeStamp\":\"2019-05-17T13:03:01.823Z\",\"modifiedTimeStamp\":\"2019-05-17T13:03:01.972Z\",\"createdBy\":\"jifwei\",\"modifiedBy\":\"jifwei\",\"id\":\"86219138-3b2e-4666-8cb9-1f93f84d7b40\",\"parentUri\":\"/jobExecution/jobs/b617c0a6-5fcb-4f90-a798-e7be881e839c\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40\",\"uri\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40\",\"uri\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40\",\"uri\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40\",\"uri\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40\",\"uri\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40/content\",\"uri\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40/content\",\"uri\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40/copy\",\"uri\":\"/files/files/86219138-3b2e-4666-8cb9-1f93f84d7b40/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"#LN00008\",\"size\":3037,\"version\":2},{\"creationTimeStamp\":\"2019-04-18T15:30:50.757Z\",\"modifiedTimeStamp\":\"2019-04-18T15:30:52.457Z\",\"createdBy\":\"srghat\",\"modifiedBy\":\"srghat\",\"id\":\"fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1\",\"parentUri\":\"/analyticsComponents/components/5b52cada-5541-456d-83cb-cdb7d8322b28\",\"properties\":{},\"contentType\":\"application/vnd.sas.collection+json\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1\",\"uri\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1\",\"uri\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1\",\"uri\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1\",\"uri\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1\",\"uri\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1/content\",\"uri\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1/content\",\"type\":\"application/vnd.sas.collection+json\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1/content\",\"uri\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1/copy\",\"uri\":\"/files/files/fe2c91b9-c2e6-4ccd-9aee-97f9ab0919a1/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"002741E6-6BE5-1141-B921-E920B9CE3C3F.log\",\"size\":3082,\"version\":2},{\"creationTimeStamp\":\"2019-04-18T15:30:51.031Z\",\"modifiedTimeStamp\":\"2019-04-18T15:30:52.718Z\",\"createdBy\":\"srghat\",\"modifiedBy\":\"srghat\",\"id\":\"26ffb1a4-3d30-4700-af16-0625435fd6e5\",\"parentUri\":\"/analyticsComponents/components/5b52cada-5541-456d-83cb-cdb7d8322b28\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5\",\"uri\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5\",\"uri\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5\",\"uri\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5\",\"uri\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5\",\"uri\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5/content\",\"uri\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5/content\",\"uri\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5/copy\",\"uri\":\"/files/files/26ffb1a4-3d30-4700-af16-0625435fd6e5/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"002741E6-6BE5-1141-B921-E920B9CE3C3F.log.txt\",\"size\":2009,\"version\":2},{\"creationTimeStamp\":\"2019-04-17T18:05:07.544Z\",\"modifiedTimeStamp\":\"2019-04-17T18:05:13.785Z\",\"createdBy\":\"yongma\",\"modifiedBy\":\"yongma\",\"id\":\"dedb1807-2a01-40ac-9e25-5346318a0879\",\"parentUri\":\"/analyticsComponents/components/2720f3b7-6455-40f2-baa1-a343d3cd9a73\",\"properties\":{},\"contentType\":\"application/vnd.sas.collection+json\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879\",\"uri\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879\",\"uri\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879\",\"uri\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879\",\"uri\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879\",\"uri\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879/content\",\"uri\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879/content\",\"type\":\"application/vnd.sas.collection+json\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879/content\",\"uri\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879/copy\",\"uri\":\"/files/files/dedb1807-2a01-40ac-9e25-5346318a0879/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"00309937-5E74-B042-9BCC-59F66371C316.log\",\"size\":34681,\"version\":2},{\"creationTimeStamp\":\"2019-04-17T18:05:09.064Z\",\"modifiedTimeStamp\":\"2019-04-17T18:05:13.855Z\",\"createdBy\":\"yongma\",\"modifiedBy\":\"yongma\",\"id\":\"5c5bbd96-f440-46a3-852b-2e4299ba001f\",\"parentUri\":\"/analyticsComponents/components/2720f3b7-6455-40f2-baa1-a343d3cd9a73\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f\",\"uri\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f\",\"uri\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f\",\"uri\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f\",\"uri\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f\",\"uri\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f/content\",\"uri\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f/content\",\"uri\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f/copy\",\"uri\":\"/files/files/5c5bbd96-f440-46a3-852b-2e4299ba001f/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"00309937-5E74-B042-9BCC-59F66371C316.log.txt\",\"size\":20731,\"version\":2},{\"creationTimeStamp\":\"2019-04-17T17:32:34.271Z\",\"modifiedTimeStamp\":\"2019-04-17T17:32:35.473Z\",\"createdBy\":\"yongma\",\"modifiedBy\":\"yongma\",\"id\":\"37062fef-5ce2-4b42-bf4f-3295374dec5e\",\"parentUri\":\"/analyticsComponents/components/11c7bda2-9101-447f-a542-b06d7b08bdcc\",\"properties\":{},\"contentType\":\"application/vnd.sas.collection+json\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e\",\"uri\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e\",\"uri\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e\",\"uri\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e\",\"uri\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e\",\"uri\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e/content\",\"uri\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e/content\",\"type\":\"application/vnd.sas.collection+json\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e/content\",\"uri\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e/copy\",\"uri\":\"/files/files/37062fef-5ce2-4b42-bf4f-3295374dec5e/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"004387C1-FFF5-154D-B5B9-5B19B57C7AC1.log\",\"size\":3082,\"version\":2},{\"creationTimeStamp\":\"2019-04-17T17:32:34.531Z\",\"modifiedTimeStamp\":\"2019-04-17T17:32:35.553Z\",\"createdBy\":\"yongma\",\"modifiedBy\":\"yongma\",\"id\":\"171e8022-4128-4e59-8edf-e1ece85ff807\",\"parentUri\":\"/analyticsComponents/components/11c7bda2-9101-447f-a542-b06d7b08bdcc\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807\",\"uri\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807\",\"uri\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807\",\"uri\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807\",\"uri\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807\",\"uri\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807/content\",\"uri\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807/content\",\"uri\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807/copy\",\"uri\":\"/files/files/171e8022-4128-4e59-8edf-e1ece85ff807/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"004387C1-FFF5-154D-B5B9-5B19B57C7AC1.log.txt\",\"size\":2009,\"version\":2},{\"creationTimeStamp\":\"2019-04-11T16:21:25.627Z\",\"modifiedTimeStamp\":\"2019-04-11T16:21:25.807Z\",\"createdBy\":\"vagoba\",\"modifiedBy\":\"vagoba\",\"id\":\"42e3f3ec-0962-4df0-886f-d51ad6f0f29f\",\"parentUri\":\"/jobExecution/jobs/38d3b818-8f58-400f-bb0d-df14f0a55614\",\"properties\":{},\"contentType\":\"application/vnd.sas.collection+json\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f\",\"uri\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f\",\"uri\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f\",\"uri\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f\",\"uri\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f\",\"uri\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f/content\",\"uri\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f/content\",\"type\":\"application/vnd.sas.collection+json\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f/content\",\"uri\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f/copy\",\"uri\":\"/files/files/42e3f3ec-0962-4df0-886f-d51ad6f0f29f/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"0124339C-48CF-5341-A044-1AF7A73AC7F2.log\",\"size\":23889,\"version\":2},{\"creationTimeStamp\":\"2019-04-11T16:21:25.931Z\",\"modifiedTimeStamp\":\"2019-04-11T16:21:26.019Z\",\"createdBy\":\"vagoba\",\"modifiedBy\":\"vagoba\",\"id\":\"c03d6191-85fa-4638-ab80-b831b4756338\",\"parentUri\":\"/jobExecution/jobs/38d3b818-8f58-400f-bb0d-df14f0a55614\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338\",\"uri\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338\",\"uri\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338\",\"uri\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338\",\"uri\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338\",\"uri\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338/content\",\"uri\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338/content\",\"uri\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338/copy\",\"uri\":\"/files/files/c03d6191-85fa-4638-ab80-b831b4756338/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"0124339C-48CF-5341-A044-1AF7A73AC7F2.log.txt\",\"size\":13277,\"version\":2}],\"limit\":10,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Tue, 18 Jun 2019 14:47:35 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/files/files"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}
