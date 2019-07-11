@@ -25,15 +25,18 @@ jobs:
       python: 3.6
       install: pip install sphinx
       script: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
-    - stage: deploy
-      script: echo "deploying"
 
 
-#deploy:
-#  provider: pages
-#  skip_cleanup: true
-#  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
-#  keep_history: true
-#  on:
-#    branch: master
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep_history: true
+  on:
+    branch: master
+  before_deploy:
+      python: 3.6
+      install: pip install sphinx
+      script: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
+
 
