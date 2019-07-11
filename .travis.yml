@@ -5,12 +5,15 @@ python:
   - "3.5"
   - "3.6"
 
+stages:
+  - test
+  - deploy
+
 env:
   - PYTHONPATH=$PYTHONPATH:./src
 
 install:
   - pip install -r test_requirements.txt
-
 
 jobs:
   include:
