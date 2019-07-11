@@ -7,5 +7,6 @@ python:
   - "3.7"
 install:
   - pip install -r test_requirements.txt
+  - export PYTHONPATH=$PYTHONPATH:./src
 script:
   - pytest
