@@ -5,10 +5,10 @@ python:
   - "3.5"
   - "3.6"
 
-stages:
-  - test
-  - build
-  - deploy
+#stages:
+#  - test
+#  - build
+#  - deploy
 
 env:
   - PYTHONPATH=$PYTHONPATH:./src
@@ -21,26 +21,16 @@ script:
 
 jobs:
   include:
-    - stage: build
+    - stage: deploy documentation
       python: 3.6
       install: pip install sphinx
       script: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
-
-
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
-  keep_history: true
-  local_dir: ./doc/_build/html
-  on:
-    branch: master
-  before_deploy:
-      python: 3.6
-      install: pip install sphinx
-      script: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
-      script: ls -la ./doc
-      script: ls -la ./doc/_build
-      script: ls -la ./doc/_build/html
-
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_TOKEN
+        keep_history: true
+        local_dir: ./doc/_build/html
+        on:
+          branch: master
 
