@@ -24,7 +24,7 @@ jobs:
     - stage: deploy documentation
       python: 3.6
       install: pip install sphinx
-      script: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
+      script: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html ; touch ./doc/_build/html/.nojekyll
       deploy:
         provider: pages
         skip_cleanup: true
