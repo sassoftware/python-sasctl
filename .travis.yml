@@ -15,11 +15,11 @@ env:
 install:
   - pip install -r test_requirements.txt
 
+script:
+  - pytest
+
 jobs:
   include:
-    - stage: test
-    - script: pytest
-    - script: echo "testing complete"
     - stage: deploy
       script: echo "deploying"
 
