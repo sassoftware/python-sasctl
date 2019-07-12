@@ -20,7 +20,7 @@ script:
 
 jobs:
   include:
-    - stage: test coverage
+    - stage: upload test coverage
       install:
         - pip install codecov
       script:
@@ -42,7 +42,7 @@ jobs:
     - stage: test package deployment
       deploy:
         provider: pypi
-        server: https://test.pypi.org
+        server: https://test.pypi.org/legacy/
         user: jlwalke2
         password:
           secure: wTwws6xBoptSsNP4Yr5/W1yRfOLmrQynnyQGmAFAlr3t9Xkf56fNLPhLN54Q3zLP+au9pb8OzNqAu2fbwXuS/rj+M/Jqy8JLICeyivVN4UNnYfc4ICJYJUk6Y1w16brzJDtVO0WuGLsR6ENp6JBBzMglCfgjGIU3zYv/bSUz0NZudXJKl03pBNQA/EFEmjqcotkSwTLcRnuYjKZvoROsH4MAgHdVz28MpzeAFRTaqJZ/u3hV6aG3BAQIezSOyDuWB4iymgh+6svxgLyTmmCgdvaS+IVT5pKSKIyv22WG8HdGMJG6FAGsHbREdpSOx2Y7Sn1gM0+AJeKH0okxCB299B2/7zcO/T9vjqV6JH8fmM+Utm3oj5LLse8ckQnVeQDAZlUgsEs4hul5V2LkvUrKklO6yaJrUnUBTBHSe08axw/LxhFhYSBPc87VqlG1bjvberLOw3FB/5BaObYFOH2KOetNJ4cIscFQvNFBQ0ZP36qrmwwa4h4YlUIRRY9ZMivPFuuTevcloKer4423/HaTi7CZU26niBma9UuORdIbc2YDLRc/DIztGBaTp7ZwNXlFfVZ8jkXYHov4aU5xKoehPFLcko1Ltii9BpH8Rv1b7GW09G3QPpB9Mx3RuG9GFQgvkD6nZI/hpyXooBphklPzG88m6EmzfGsojJlDqoPExJs=
