@@ -43,6 +43,8 @@ jobs:
           tags: true
 
     - stage: test package deployment
+      script: # Cancel out default script
+        -
       deploy:
         provider: pypi
         server: https://test.pypi.org/legacy/
@@ -56,6 +58,8 @@ jobs:
           tags: true
 
     - stage: update GitHub releases
+      script: # Cancel out default script
+        -
       deploy:
         provider: releases
         api_key: $GITHUB_TOKEN
