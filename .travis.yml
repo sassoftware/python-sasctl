@@ -41,8 +41,7 @@ jobs:
         provider: releases
         skip_cleanup: true
         api_key: $GITHUB_TOKEN
-        files:
-          - ${TRAVIS_TAG}.zip
+        file: ${TRAVIS_TAG}.zip
         draft: true
         on:
           tags: true
