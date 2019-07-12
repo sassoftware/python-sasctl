@@ -1,5 +1,7 @@
 dist: xenial  # Currently required for Python 3.7
 language: python
+cache: pip
+
 python:
   - "2.7"
   - "3.4"
