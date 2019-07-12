@@ -29,7 +29,7 @@ jobs:
         - codecov
 
     - stage: deploy documentation
-      if: branch = master AND tag is true
+      if: tag is present
       python: 3.6
       install: pip install sphinx
       script:
@@ -50,7 +50,7 @@ jobs:
         draft: true
 
     - stage: test package deployment
-      if: branch = master AND tag is true
+      if: tag is present
       script: # Cancel out default script
         -
       deploy:
