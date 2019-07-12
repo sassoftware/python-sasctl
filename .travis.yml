@@ -59,10 +59,13 @@ jobs:
 
     - stage: update GitHub releases
       script: # Cancel out default script
-        -
+        - cd python-sasctl
+        - zip python-sasctl.zip
       deploy:
         provider: releases
         api_key: $GITHUB_TOKEN
+        file:
+          - python-sasctl.zip
         draft: true
         on:
           branch: master
