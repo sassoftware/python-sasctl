@@ -1,3 +1,7 @@
+<a href="https://www.python.org/">
+    <img src="https://img.shields.io/badge/Python-3+-blue.svg?&style=for-the-badge&colorA=254f73" alt="Python Version">
+</a>
+
 # sasctl
 
 ## Overview
@@ -38,8 +42,6 @@ pip install git+https://github.com/sassoftware/python-sasctl
   
 
 ## Getting Started
-
-Read the full documentation here: [http://xeno.glpages.sas.com/python-sasctl](http://xeno.glpages.sas.com/python-sasctl)
 
 Once the sasctl package has been installed and you have a SAS Viya server to connect to, 
 the first step is to establish a session:

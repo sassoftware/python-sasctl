@@ -34,7 +34,8 @@ def test_restobj():
 def test_repr():
     d = dict(a=1, b=2)
 
-    assert str(d) in repr(RestObj(d))
+    assert "'a': 1" in repr(RestObj(d))
+    assert "'b': 2" in repr(RestObj(d))
 
 
 def test_str():

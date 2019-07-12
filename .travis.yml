@@ -1,0 +1,79 @@
+dist: xenial  # Currently required for Python 3.7
+language: python
+cache: pip
+
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.7"
+# 3.6 handled during code coverage
+
+env:
+  - PYTHONPATH=$PYTHONPATH:./src
+
+install:
+  - pip install -r test_requirements.txt
+
+script:
+  - pytest
+
+jobs:
+  include:
+    - stage: upload codecov results
+      python: 3.6
+      install:
+        - pip install pytest pytest-cov codecov
+        - pip install -r test_requirements.txt
+      script:
+        - pytest --cov=./
+        - codecov
+
+    - stage: create release
+      if: tag is present
+      python: 3.6
+      install: pip install sphinx
+      script:
+        - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
+        - pushd ./doc/_build/html ; zip -r ../../../${TRAVIS_TAG}-doc.zip . ; popd
+      deploy:
+        provider: releases
+        skip_cleanup: true
+        api_key: $GITHUB_TOKEN
+        file: ${TRAVIS_TAG}-doc.zip
+        draft: true
+        on:
+          tags: true
+
+    - stage: upload documentation
+      if: tag is present
+      python: 3.6
+      install: pip install sphinx
+      script:
+        - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
+        - touch ./doc/_build/html/.nojekyll
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_TOKEN
+        keep_history: false
+        local_dir: ./doc/_build/html
+        on:
+          tags: true
+
+    - stage: deploy to pypi (test)
+      if: tag is present
+      script: # Cancel out default script
+        -
+      deploy:
+        provider: pypi
+        server: https://test.pypi.org/legacy/
+        user:
+          secure: uHXdHqYzzi/2Gc9/8kP4nBKAf2zgIOri1bHWnmgNoBNhWJuma4MWMuMUCzQU+QbrMvOiOm+EZRz1+rBXDOsqa7T+22OZRMBIUFfc3BG5ItYm8DXOUznWLy2/32yQngEohpYwnZuzvS3zUbVZ94a9m0qWjRi+4JHQhh8EKANeGbByBNwPBFh9ysbM8Vl7jiM0LUPinO1OtgPIiDqzP5Zm6Vxnhh7ZlR6wPUs87yPrHKBAUiZkXBNrVr4f/3cY+PrxRtvptVH5SmuApz3oJFl54XavJPYwVNlnEddk8KATpNIVtpq4E9arn/ptvacsiO2QmxxET7Sp3IJ6Uzl/nFDdYIg/yaID0zHBfViy/0pdC6P6aylTS4iqO33gNS4cp2wrNQe424v2YkgRkPNX5wxkCZtwtZsIUiPMLnD2RMTgQdfbDgF+yQ/WOwgDapcoa3HYHLajfNzzGF3bW4hLdc6w7xer/LyhGQ/FxUClg4TrfwXErQ6DU+BPl+MSZEKw3B3nxtEpsX6yzJkKcx4xmrHj9W/WJk5zicjGq7LH+zTJia6Yl4Rr/IMtgfUruZhqRwIT5pOTnDYnroFfZH6/TbpAhC33iGlmr5Td1Fmrrc56Isj7eQH6J1zhH8oy4ZkN2ZqcyT3KxQwDdE9lNJvUHhTZlAYvoO1QvvzS/4dTWPqNxKc=
+        password:
+          secure: wTwws6xBoptSsNP4Yr5/W1yRfOLmrQynnyQGmAFAlr3t9Xkf56fNLPhLN54Q3zLP+au9pb8OzNqAu2fbwXuS/rj+M/Jqy8JLICeyivVN4UNnYfc4ICJYJUk6Y1w16brzJDtVO0WuGLsR6ENp6JBBzMglCfgjGIU3zYv/bSUz0NZudXJKl03pBNQA/EFEmjqcotkSwTLcRnuYjKZvoROsH4MAgHdVz28MpzeAFRTaqJZ/u3hV6aG3BAQIezSOyDuWB4iymgh+6svxgLyTmmCgdvaS+IVT5pKSKIyv22WG8HdGMJG6FAGsHbREdpSOx2Y7Sn1gM0+AJeKH0okxCB299B2/7zcO/T9vjqV6JH8fmM+Utm3oj5LLse8ckQnVeQDAZlUgsEs4hul5V2LkvUrKklO6yaJrUnUBTBHSe08axw/LxhFhYSBPc87VqlG1bjvberLOw3FB/5BaObYFOH2KOetNJ4cIscFQvNFBQ0ZP36qrmwwa4h4YlUIRRY9ZMivPFuuTevcloKer4423/HaTi7CZU26niBma9UuORdIbc2YDLRc/DIztGBaTp7ZwNXlFfVZ8jkXYHov4aU5xKoehPFLcko1Ltii9BpH8Rv1b7GW09G3QPpB9Mx3RuG9GFQgvkD6nZI/hpyXooBphklPzG88m6EmzfGsojJlDqoPExJs=
+        distributions: sdist bdist_wheel
+        on:
+          tags: true
+
+
