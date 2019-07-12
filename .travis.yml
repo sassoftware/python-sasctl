@@ -23,6 +23,7 @@ jobs:
     - stage: upload test coverage
       install:
         - pip install pytest pytest-cov codecov
+        - pip install -r test_requirements.txt
       script:
         - pytest --cov=./
         - codecov
