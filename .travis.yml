@@ -29,24 +29,23 @@ jobs:
         - pytest --cov=./
         - codecov
 
-    - stage: deploy release
+    - stage: create release
       if: tag is present
       python: 3.6
       install: pip install sphinx
       script:
         - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
-        - pushd ./doc/_build/html ; zip -r ../../../${TRAVIS_TAG}.zip . ; popd
-        - ls -la .
+        - pushd ./doc/_build/html ; zip -r ../../../${TRAVIS_TAG}-doc.zip . ; popd
       deploy:
         provider: releases
         skip_cleanup: true
         api_key: $GITHUB_TOKEN
-        file: ${TRAVIS_TAG}.zip
+        file: ${TRAVIS_TAG}-doc.zip
         draft: true
         on:
           tags: true
 
-    - stage: deploy documentation
+    - stage: upload documentation
       if: tag is present
       python: 3.6
       install: pip install sphinx
