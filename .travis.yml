@@ -35,7 +35,8 @@ jobs:
       script:
         - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
         - touch ./doc/_build/html/.nojekyll
-        - pushd ./doc/_build/html ; zip -r ../../../doc .
+        - pushd ./doc/_build/html ; zip -r ../../../doc . ; popd
+        - ls -la .
       deploy:
         provider: pages
         skip_cleanup: true
