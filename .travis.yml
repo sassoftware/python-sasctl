@@ -32,4 +32,10 @@ jobs:
         local_dir: ./doc/_build/html
         on:
           branch: master
+    - stage: test package deployment
+      deploy:
+        provider: pypi
+        server: https://test.pypi.org
+        user: $TEST_PYPI_USER
+        password: $TEST_PYPI_PASSWORD
 
