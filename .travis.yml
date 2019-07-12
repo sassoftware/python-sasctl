@@ -6,8 +6,8 @@ python:
   - "2.7"
   - "3.4"
   - "3.5"
-  - "3.6"
   - "3.7"
+# 3.6 handled during code coverage
 
 env:
   - PYTHONPATH=$PYTHONPATH:./src
@@ -20,7 +20,8 @@ script:
 
 jobs:
   include:
-    - stage: upload test coverage
+    - stage: upload codecov results
+      python: 3.6
       install:
         - pip install pytest pytest-cov codecov
         - pip install -r test_requirements.txt
@@ -28,33 +29,34 @@ jobs:
         - pytest --cov=./
         - codecov
 
-    - stage: deploy documentation
+    - stage: deploy release
       if: tag is present
       python: 3.6
       install: pip install sphinx
       script:
         - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
         - touch ./doc/_build/html/.nojekyll
-        - pushd ./doc/_build/html ; zip -r ../../../doc . ; popd
+        - pushd ./doc/_build/html ; zip -r ../../../${TRAVIS_TAG} . ; popd
         - ls -la .
       deploy:
         provider: pages
         skip_cleanup: true
         github_token: $GITHUB_TOKEN
-        keep_history: true
+        keep_history: false
         local_dir: ./doc/_build/html
         on:
           tags: true
       deploy:
         provider: releases
+        skip_cleanup: true
         api_key: $GITHUB_TOKEN
         files:
-          - ./doc.zip
+          - doc.zip
         draft: true
         on:
           tags: true
 
-    - stage: test package deployment
+    - stage: deploy to PyPI (Test)
       if: tag is present
       script: # Cancel out default script
         -
