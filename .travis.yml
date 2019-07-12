@@ -20,6 +20,12 @@ script:
 
 jobs:
   include:
+    - stage: test coverage
+      install:
+        - pip install codecov
+      script:
+        - codecov
+
     - stage: deploy documentation
       python: 3.6
       install: pip install sphinx
@@ -32,6 +38,7 @@ jobs:
         local_dir: ./doc/_build/html
         on:
           branch: master
+
     - stage: test package deployment
       deploy:
         provider: pypi
