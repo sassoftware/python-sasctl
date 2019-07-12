@@ -35,9 +35,25 @@ jobs:
       install: pip install sphinx
       script:
         - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
-        - touch ./doc/_build/html/.nojekyll
-        - pushd ./doc/_build/html ; zip -r ../../../${TRAVIS_TAG} . ; popd
+        - pushd ./doc/_build/html ; zip -r ../../../${TRAVIS_TAG}.zip . ; popd
         - ls -la .
+      deploy:
+        provider: releases
+        skip_cleanup: true
+        api_key: $GITHUB_TOKEN
+        files:
+          - ${TRAVIS_TAG}.zip
+        draft: true
+        on:
+          tags: true
+
+    - stage: deploy documentation
+      if: tag is present
+      python: 3.6
+      install: pip install sphinx
+      script:
+        - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
+        - touch ./doc/_build/html/.nojekyll
       deploy:
         provider: pages
         skip_cleanup: true
@@ -46,17 +62,8 @@ jobs:
         local_dir: ./doc/_build/html
         on:
           tags: true
-      deploy:
-        provider: releases
-        skip_cleanup: true
-        api_key: $GITHUB_TOKEN
-        files:
-          - doc.zip
-        draft: true
-        on:
-          tags: true
 
-    - stage: deploy to PyPI (Test)
+    - stage: deploy to pypi (test)
       if: tag is present
       script: # Cancel out default script
         -

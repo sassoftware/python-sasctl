@@ -4,7 +4,7 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-__version__ = '0.9.6-alpha2'
+__version__ = '0.9.6-alpha3'
 __author__ = 'SAS'
 __credits__ = ['Lucas De Paula, Peter Tobac, Jon Walker']
 __license__ = 'Apache 2.0'
