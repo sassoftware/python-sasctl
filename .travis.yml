@@ -22,8 +22,9 @@ jobs:
   include:
     - stage: upload test coverage
       install:
-        - pip install codecov
+        - pip install pytest pytest-cov codecov
       script:
+        - pytest --cov=./
         - codecov
 
     - stage: deploy documentation
@@ -53,3 +54,11 @@ jobs:
           branch: master
           tags: true
 
+    - stage: update GitHub releases
+      deploy:
+        provider: releases
+        api_key: $GITHUB_TOKEN
+        draft: true
+        on:
+          branch: master
+          tags: true
