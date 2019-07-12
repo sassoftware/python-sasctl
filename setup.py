@@ -30,6 +30,7 @@ setup(
     long_description_content_type='text/markdown',
     version=read_dunder('version'),
     author=read_dunder('author'),
+    url='https://github.com/sassoftware/python-sasctl/',
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     install_requires=[
