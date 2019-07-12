@@ -38,4 +38,5 @@ jobs:
         server: https://test.pypi.org
         user: $TEST_PYPI_USER
         password: $TEST_PYPI_PASSWORD
+        distributions: sdist bdist_wheel
 
