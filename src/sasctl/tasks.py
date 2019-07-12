@@ -131,7 +131,7 @@ def register_model(model, name, project, repository=None, input=None, version='l
 
         # Generate PyMAS wrapper
         try:
-            mas_module = from_pickle(model_pkl, 'predict', input_types=input)
+            mas_module = from_pickle(model_pkl, 'predict', input_types=input, array_input=True)
             assert isinstance(mas_module, PyMAS)
 
             # Include score code files from ESP and MAS

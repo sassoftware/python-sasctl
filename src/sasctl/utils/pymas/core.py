@@ -8,27 +8,25 @@ from __future__ import print_function
 import base64
 from collections import OrderedDict
 import importlib
+import pickle
 import os
 import sys
 
-try:
-    import dill
-    from dill import load, loads, dumps, dump
-except ImportError:
-    dill = None
-    from pickle import load, loads, dumps, dump
+
 import six
 
-from .ds2 import DS2Method, DS2Thread, DS2Variable, DS2Package
+from .ds2 import DS2Thread, DS2Variable, DS2Package
 from .python import ds2_variables
 
 
-def build_wrapper_function(func, variables, array_input, return_msg=True):
+def build_wrapper_function(func, variables, array_input, setup=None,
+                           return_msg=True):
     """Wraps a function to ensure compatibility when called by PyMAS.
 
-    PyMAS has strict expectations regarding the format of any function called directly by PyMAS.
-    Isolating the desired function inside a wrapping function provides a simple way to ensure that functions
-    called by PyMAS are compliant.
+    PyMAS has strict expectations regarding the format of any function called
+    directly by PyMAS.  Isolating the desired function inside a wrapping
+    function provides a simple way to ensure that functions called by PyMAS
+    are compliant.
 
     Parameters
     ----------
@@ -36,6 +34,9 @@ def build_wrapper_function(func, variables, array_input, return_msg=True):
         Function name or an instance of Function which will be wrapped
     variables : list of DS2Variable
     array_input : bool
+        Whether `variables` should be combined into a single array before passing to `func`
+    setup : iterable
+        Python source code lines to be executed during package setup
     return_msg : bool
 
     Returns
@@ -45,36 +46,54 @@ def build_wrapper_function(func, variables, array_input, return_msg=True):
 
     Notes
     -----
-    The format for the `# Output: ` is very strict.  It must be exactly "# Output: <var>, <var>".  Any changes to
-    spelling, capitalization, punctuation, or spacing will result in an error when the DS2 code is executed.
+    The format for the `# Output: ` is very strict.  It must be exactly
+    "# Output: <var>, <var>".  Any changes to spelling, capitalization,
+    punctuation, or spacing will result in an error when the DS2 code is
+    executed.
 
     """
 
     input_names = [v.name for v in variables if not v.out]
     output_names = [v.name for v in variables if v.out]
-
     args = input_names
-
     func = func.__name__ if callable(func) else func
 
     # Statement to execute the function w/ provided parameters
     if array_input:
-        func_call = '{}(np.asarray({}).reshape((1,-1)))'.format(func, ','.join(args))
+        func_call = '{}(np.array([{}]).reshape((1, -1)))'.format(func, ','.join(args))
     else:
         func_call = '{}({})'.format(func, ','.join(args))
 
     # TODO: Verify that # of values returned by wrapped func matches length of output_names
     # TODO: cast all return types before returning (DS2 errors out if not exact match)
 
-    # NOTE: 'Output:' section is required.  All return variables must be listed separated by ', '
-    definition = ('def wrapper({}):'.format(', '.join(args)),
+    # NOTE: 'Output:' section is required.  All return variables must be listed
+    # separated by ', '
+
+    if setup:
+        header = ('try:', ) + \
+                 tuple('    ' + line for line in setup) + \
+                 ('    _compile_error = None',
+                  'except Exception as e:',
+                  '    _compile_error = e',
+                  '')
+    else:
+        header = ('', )
+
+    definition = header +\
+                 ('def wrapper({}):'.format(', '.join(args)),
                   '    "Output: {}"'.format(', '.join(output_names + ['msg']) if return_msg
                                             else ', '.join(output_names)),
                   '    result = None',
                   '    try:',
+                  '        global _compile_error',
+                  '        if _compile_error is not None:',
+                  '            raise _compile_error',
                   '        msg = ""' if return_msg else '',
                   '        import numpy as np',
-                  '        result = float({})'.format(func_call),
+                  '        result = {}'.format(func_call),
+                  '        if result.size == 1:',
+                  '            result = np.asscalar(result)',
                   '    except Exception as e:',
                   '        msg = str(e)' if return_msg else '',
                   '        if result is None:',
@@ -110,12 +129,14 @@ def from_inline(func, input_types=None, array_input=False, return_code=True, ret
 
     """
 
-    obj = dumps(func)
+    obj = pickle.dumps(func)
     return from_pickle(obj, None, input_types, array_input, return_code, return_message)
 
 
-def from_python_file(file, func_name=None, input_types=None, array_input=False, return_code=True, return_message=True):
-    """ Creates a PyMAS wrapper to execute a function defined in an external .py file.
+def from_python_file(file, func_name=None, input_types=None, array_input=False,
+                     return_code=True, return_message=True):
+    """Creates a PyMAS wrapper to execute a function defined in an
+    external .py file.
 
     Parameters
     ----------
@@ -127,7 +148,8 @@ def from_python_file(file, func_name=None, input_types=None, array_input=False, 
         The expected type for each input value of the target function.
         Can be ommitted if target function includes type hints.
     array_input : bool
-        Whether the function inputs should be treated as an array instead of individual parameters
+        Whether the function inputs should be treated as an array instead of
+        individual parameters
     return_code : bool
         Whether the DS2-generated return code should be included
     return_message : bool
@@ -156,29 +178,34 @@ def from_python_file(file, func_name=None, input_types=None, array_input=False, 
     target_func = getattr(module, func_name)
 
     if not callable(target_func):
-        raise RuntimeError("Could not find a valid function named {}".format(func_name))
+        raise RuntimeError("Could not find a valid function named %s"
+                           % func_name)
 
     with open(file, 'r') as f:
         code = [line.strip('\n') for line in f.readlines()]
 
-    return _build_pymas(target_func, None, input_types, array_input, return_code, return_message, code)
+    return _build_pymas(target_func, None, input_types, array_input,
+                        return_code, return_message, code)
 
 
-def from_pickle(file, func_name=None, input_types=None, array_input=False, return_code=True, return_message=True):
+def from_pickle(file, func_name=None, input_types=None, array_input=False,
+                return_code=True, return_message=True):
     """Create a deployable DS2 package from a Python pickle file.
 
     Parameters
     ----------
     file : str or bytes or file_like
-        Pickled object to use.  String is assumed to be a path to a picked file, file_like is assumed to be an open
-        file handle to a pickle object, and bytes is assumed to be the raw pickled bytes.
+        Pickled object to use.  String is assumed to be a path to a picked
+        file, file_like is assumed to be an open file handle to a pickle
+        object, and bytes is assumed to be the raw pickled bytes.
     func_name : str
         Name of the target function to call
     input_types : list of type, optional
         The expected type for each input value of the target function.
         Can be ommitted if target function includes type hints.
     array_input : bool
-        Whether the function inputs should be treated as an array instead of individual parameters
+        Whether the function inputs should be treated as an array instead of
+        individual parameters
     return_code : bool
         Whether the DS2-generated return code should be included
     return_message : bool
@@ -190,9 +217,9 @@ def from_pickle(file, func_name=None, input_types=None, array_input=False, retur
         Generated DS2 code which can be executed in a SAS scoring environment
 
     """
-
     try:
-        # In Python2 str could either be a path or the binary pickle data, so check if its a valid filepath too.
+        # In Python2 str could either be a path or the binary pickle data,
+        # so check if its a valid filepath too.
         is_file_path = isinstance(file, six.string_types) and os.path.isfile(file)
     except TypeError:
         is_file_path = False
@@ -200,29 +227,31 @@ def from_pickle(file, func_name=None, input_types=None, array_input=False, retur
     # Path to a pickle file
     if is_file_path:
         with open(file, 'rb') as f:
-            obj = load(f)
+            obj = pickle.load(f)
 
     # The actual pickled bytes
     elif isinstance(file, bytes):
-        obj = loads(file)
+        obj = pickle.loads(file)
     else:
-        obj = load(file)
+        obj = pickle.load(file)
 
     # Encode the pickled data so we can inline it in the DS2 package
-    pkl = base64.b64encode(dumps(obj))
+    pkl = base64.b64encode(pickle.dumps(obj))
 
-    package = 'dill' if dill else 'pickle'
+    code = ('import pickle, base64',
+            # Replace b' with " before embedding in DS2.
+            'bytes = {}'.format(pkl).replace("'", '"'),
+            'obj = pickle.loads(base64.b64decode(bytes))')
 
-    code = ('import %s, base64' % package,
-            'bytes = {}'.format(pkl).replace("'", '"'),         # Replace b' with " before embedding in DS2.
-            'obj = %s.loads(base64.b64decode(bytes))' % package)
-
-    return _build_pymas(obj, func_name, input_types, array_input, return_code, return_message, code)
+    return _build_pymas(obj, func_name, input_types, array_input, return_code,
+                        return_message, code)
 
 
-def _build_pymas(obj, func_name=None, input_types=None, array_input=False, return_code=True, return_message=True, code=[]):
+def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
+                 return_code=True, return_message=True, code=[]):
 
-    # If the object passed was a function, no need to search for target function
+    # If the object passed was a function, no need to search for
+    # target function
     if six.callable(obj) and (func_name is None or obj.__name__ == func_name):
         target_func = obj
     elif func_name is None:
@@ -231,19 +260,23 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False, retur
         target_func = getattr(obj, func_name)
 
     if not callable(target_func):
-        raise RuntimeError("Could not find a valid function named {}".format(func_name))
+        raise RuntimeError("Could not find a valid function named %s"
+                           % func_name)
 
     # Need to create DS2Variable instances to pass to PyMAS
     if hasattr(input_types, 'columns'):
-        # Assuming input is a DataFrame representing model inputs.  Use to get input variables
+        # Assuming input is a DataFrame representing model inputs.  Use to
+        # get input variables
         vars = ds2_variables(input_types)
 
-        # Run one observation through the model and use the result to determine output variables
+        # Run one observation through the model and use the result to
+        # determine output variables
         output = target_func(input_types.iloc[0, :].values.reshape((1, -1)))
         output_vars = ds2_variables(output, output_vars=True)
         vars.extend(output_vars)
     elif isinstance(input_types, type):
-        params = OrderedDict([(k, input_types) for k in target_func.__code__.co_varnames])
+        params = OrderedDict([(k, input_types)
+                              for k in target_func.__code__.co_varnames])
         vars = ds2_variables(params)
     elif isinstance(input_types, dict):
         vars = ds2_variables(input_types)
@@ -253,22 +286,16 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False, retur
 
     target_func = 'obj.' + target_func.__name__
 
-    # If all inputs should be passed as an array
-    if array_input:
-        first_input = vars[0]
-        array_type = first_input.type or 'double'
-        out_vars = [x for x in vars if x.out]
-        num_inputs = len(vars) - len(out_vars)
-        vars = [DS2Variable(first_input.name, array_type + '[{}]'.format(num_inputs), out=False)] + out_vars
-
     if not any([v for v in vars if v.out]):
         vars.append(DS2Variable(name='result', type='float', out=True))
 
-    return PyMAS(target_func, vars, code, return_code, return_message)
+    return PyMAS(target_func, vars, code, return_code, return_message,
+                 array_input=array_input)
 
 
 class PyMAS:
-    def __init__(self, target_function, variables, python_source, return_code=True, return_msg=True):
+    def __init__(self, target_function, variables, python_source,
+                 return_code=True, return_msg=True, **kwargs):
         """
 
         Parameters
@@ -282,27 +309,30 @@ class PyMAS:
             Whether the DS2-generated return code should be included
         return_msg : bool
             Whether the DS2-generated return message should be included
+        kwargs : any
+            Passed to :func:`build_wrapper_function`
 
         """
 
         self.target = target_function
 
         # Any input variable that should be treated as an array
-        array_input = any(v for v in variables if v.is_array)
+        # array_input = any(v for v in variables if v.is_array)
 
         # Python wrapper function will serve as entrypoint from DS2
         self.wrapper = build_wrapper_function(target_function, variables,
-                                              array_input, return_msg=return_msg).split('\n')
+                                              setup=python_source,
+                                              return_msg=return_msg,
+                                              **kwargs).split('\n')
 
         # Lines of Python code to be embedded in DS2
-        python_source = list(python_source) + list(self.wrapper)
+        python_source = list(self.wrapper)
 
         self.variables = variables
         self.return_code = return_code
         self.return_message = return_msg
 
-        self.package = DS2Package()
-        self.package.methods.append(DS2Method(variables, python_source))
+        self.package = DS2Package(variables, python_source, return_code, return_msg)
 
     def score_code(self, input_table=None, output_table=None, columns=None, dest='MAS'):
         """Generate DS2 score code
@@ -333,7 +363,7 @@ class PyMAS:
                 raise ValueError('Output table name `{}` is a reserved term.'.format(output_table))
 
         # Get package code
-        code = (str(self.package), )
+        code = tuple(self.package.code().split('\n'))
 
         if dest == 'ESP':
             code = ('data sasep.out;', ) + code + ('   method run();',
