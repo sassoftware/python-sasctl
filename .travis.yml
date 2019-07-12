@@ -20,6 +20,11 @@ script:
 
 jobs:
   include:
+    - stage: debug
+      script:
+        - echo ${TRAVIS_TAG}
+        - ls -la .
+
     - stage: upload test coverage
       install:
         - pip install pytest pytest-cov codecov
@@ -63,6 +68,7 @@ jobs:
         - zip python-sasctl.zip
       deploy:
         provider: releases
+        name: ${TRAVIS_TAG}
         api_key: $GITHUB_TOKEN
         file:
           - python-sasctl.zip
