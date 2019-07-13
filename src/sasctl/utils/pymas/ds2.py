@@ -11,7 +11,7 @@ from collections import namedtuple, OrderedDict
 import six
 
 
-class DS2Package():
+class DS2Package(object):
     def __init__(self, variables, code=None, return_code=True,
                  return_message=True, target=None):
         self._id = uuid.uuid4().hex.upper()
@@ -48,7 +48,7 @@ class DS2Package():
         return '\n'.join(code)
 
 
-class DS2BaseMethod():
+class DS2BaseMethod(object):
     def __init__(self, name, variables, body=None):
         self._name = name
         self.variables = variables
@@ -166,7 +166,7 @@ class DS2ScoreMethod(DS2BaseMethod):
                                              body=body_statements)
 
 
-class DS2Method():
+class DS2Method(object):
     def __init__(self, variables, code, target='wrapper'):
         self.variables = variables
         self._code = code
@@ -223,7 +223,7 @@ class DS2Method():
         return func
 
 
-class DS2Thread():
+class DS2Thread(object):
     def __init__(self, variables, table, column_names=None, return_code=True,
                  return_message=True, package=None):
         """
