@@ -194,8 +194,10 @@ endpackage;
     # Drop leading \n caused by multiline comment formatting
     result = p.score_code()
 
-    assert re.sub('bytes = b"[\w\d/\+]+"', 'bytes = b"X"', result) == \
-           target.lstrip('\n')
+    # Ignore byte string during comparison.  Pickle seems to change with
+    # time / Python versions
+    result = re.sub('bytes = b"[\w\d/\+]+"', 'bytes = b"X"', result)
+    assert result == target.lstrip('\n')
 
 
 def test_from_pickle_stream(train_data, pickle_stream):
