@@ -56,13 +56,13 @@ def test_create_performance_definition():
                 get_project.return_value['predictionVariable'] = 'predicted'
                 _ = mm.create_performance_definition('model', 'TestLibrary', 'TestData')
 
-            assert post.call_count == 1
+            post.assert_called_once()
             url, data = post.call_args
 
             assert PROJECT['id'] == data['json']['projectId']
             assert MODEL['id'] in data['json']['modelIds']
             assert 'TestLibrary' == data['json']['dataLibrary']
-            assert 'TestData' == data['json']['dataTable']
+            assert 'TestData' == data['json']['dataPrefix']
             assert 'cas-shared-default' == data['json']['casServerId']
             assert data['json']['name'] is not None
             assert data['json']['description'] is not None
