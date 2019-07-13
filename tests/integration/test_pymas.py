@@ -140,7 +140,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
             if rc then do;
                 rc = py.appendSrcLine('try:');
                 rc = py.appendSrcLine('    import pickle, base64');
-                rc = py.appendSrcLine('    bytes = b"X"');
+                rc = py.appendSrcLine('    bytes = "X"');
                 rc = py.appendSrcLine('    obj = pickle.loads(base64.b64decode(bytes))');
                 rc = py.appendSrcLine('    _compile_error = None');
                 rc = py.appendSrcLine('except Exception as e:');
@@ -196,7 +196,7 @@ endpackage;
 
     # Ignore byte string during comparison.  Pickle seems to change with
     # time / Python versions
-    result = re.sub('bytes = b"[\w\d/\+\=]+"', 'bytes = b"X"', result)
+    result = re.sub('bytes = .*', 'bytes = "X"\');', result)
     assert result == target.lstrip('\n')
 
 
