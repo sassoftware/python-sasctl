@@ -50,7 +50,49 @@ def publish_model(model, destination, name=None, force=False):
     return r
 
 
-def create_performance_definition(model, library_name, table_name, name=None, description=None, cas_server=None):
+def create_performance_definition(model, library_name, table_name, name=None, description=None, outputLibrary=None, cas_server=None):
+    """Create the performance task definition in the model project to monitor model performance.
+
+    Parameters
+    ----------
+    model : str or dict
+        The name or id of the model, or a dictionary representation of the model.
+    library_name : str
+        The library containing the input data, default is 'Public'.
+    table_name : str
+        The name used for the performance data.
+    name : str
+        The name of the performance task, default is 'Performance'.
+    description : str
+        The description of the performance task, default is 'Performance monitoring for model' + model.name.
+    cas_server : str
+        The CAS Server for the monitoring task, default is 'cas-shared-default'.
+    championMonitored : bool
+        Indicates to monitor the project champion model.
+    challengerMonitored : bool
+        Indicates to monitor challenger models.
+    includeAllData : bool
+        Indicates whether to run a performance job against all the data tables in a library.
+    scoreExecutionRequired : bool
+        Indicates whether the scoring task execution is required. This should be set 'False' if you have provided the scores and 'True' if not.
+    maxBins : int
+        The maximum bins number, default is 10.
+    resultLibrary : str
+        The performance output table library, default is 'ModelPerformanceData'.
+    traceOn : bool
+        Indicates whether to turn on tracing.
+    performanceResultSaved : bool
+        Indicates whether the performance results are saved.
+    loadPerformanceResult : bool
+        Indicates to load performance result data.
+
+
+    Returns
+    -------
+    str
+        Performance task definition schema in JSON format.
+
+    """
     from .model_repository import get_model, get_project
 
     model = get_model(model)
@@ -62,13 +104,21 @@ def create_performance_definition(model, library_name, table_name, name=None, de
             raise ValueError("Project %s must have the '%s' property set." % (project.name, required))
 
     request = {'projectId': project.id,
-               'modelIds': [model.id],
                'name': name or model.name + ' Performance',
+               'modelIds': [model.id],
+               'championMonitored': False,
+               'challengerMonitored': False,
+               'includeAllData': False,
+               'scoreExecutionRequired': False,
+               'maxBins': 10,
+               'resultLibrary': outputLibrary or 'ModelPerformanceData',
+               'traceOn': False,
+               'performanceResultSaved': True,
+               'dataLibrary': library_name or 'Public',
+               'loadPerformanceResult': False,
                'description': description or 'Performance definition for model ' + model.name,
                'casServerId': cas_server or 'cas-shared-default',
-               'resultLibrary': 'ModelPerformanceData',
-               'dataLibrary': library_name,
-               'dataTable': table_name
+               'dataPrefix': table_name
                }
 
     # If model doesn't specify input/output variables, try to pull from project definition
