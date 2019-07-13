@@ -196,7 +196,7 @@ endpackage;
 
     # Ignore byte string during comparison.  Pickle seems to change with
     # time / Python versions
-    result = re.sub('bytes = b"[\w\d/\+]+"', 'bytes = b"X"', result)
+    result = re.sub('bytes = b"[\w\d/\+\=]+"', 'bytes = b"X"', result)
     assert result == target.lstrip('\n')
 
 
