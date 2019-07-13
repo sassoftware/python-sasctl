@@ -62,7 +62,7 @@ def test_create_performance_definition():
             assert PROJECT['id'] == data['json']['projectId']
             assert MODEL['id'] in data['json']['modelIds']
             assert 'TestLibrary' == data['json']['dataLibrary']
-            assert 'TestData' == data['json']['dataTable']
+            assert 'TestData' == data['json']['dataPrefix']
             assert 'cas-shared-default' == data['json']['casServerId']
             assert data['json']['name'] is not None
             assert data['json']['description'] is not None

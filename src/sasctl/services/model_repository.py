@@ -4,6 +4,7 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import sys
 from sasctl.core import is_uuid, get, post, get_link, _build_crud_funcs, current_session
 
 
@@ -52,6 +53,18 @@ def get_model_link(model, rel, refresh=False):
 
 
 def get_astore(model):
+    """Get the ASTORE for a model registered int he model repository.
+
+    Parameters
+    ----------
+    model :  str or dict
+        The name or id of the model, or a dictionary representation of the model.
+
+    Returns
+    ----------
+    binary?
+
+    """
     # TODO: Download binary object?
 
     link = get_model_link(model, 'analyticStore', refresh=True)
@@ -61,7 +74,7 @@ def get_astore(model):
 
 
 def get_score_code(model):
-    """The score code for a model registered in the model repository.
+    """Get the score code for a model registered in the model repository.
 
     Parameters
     ----------
@@ -83,7 +96,7 @@ def get_score_code(model):
 
 
 def get_model_contents(model):
-    """The additional files and data associated with the model.
+    """Retrieve the additional files and data associated with the model.
 
     Parameters
     ----------
@@ -106,47 +119,61 @@ def get_model_contents(model):
 def create_model(model, project, description=None, modeler=None, function=None, algorithm=None, tool=None,
                  is_champion=False,
                  properties={}, **kwargs):
-    """
+    """Creates a model into a project or folder.
 
     Parameters
     ----------
-    model
-    project
+    model : str or dict
+        The name or id of the model, or a dictionary representation of the model.
+    project : str or dict
+        The name or id of the model project, or a dictionary representation of the model project.
     description : str, optional
+        The description of the model.
     modeler : str, optional
         Name of the user that created the model.  Current user name will be used if unspecified.
+    function : str, optional
+        The function of the model, valid values include: analytical, classification, cluster, forecasting, prediction, Text analytics, transformation.
+    algorithm : str, optional
+        The name of the model algorithm.
+    tool : str, optional
+        The name of the model tool, can be 'Python 2' or 'Python 3'.
+    scoreCodeType : str, optional
+        The score code type for the model.
+    trainTable : str, optional
+        The train data table.
+    classificationEventProbabilityVariableName : str, optional
+        The name of the event probability variable.
+    classificationTargetEventValue : str, optional
+        The target event value.
+    champion : bool, optional
+        Indicates whether the project has champion model or not.
+    role : str, optional
+        The role of the model, valid values include: plain, champion, challenger.
+    location : str, optional,
+        The location of this model.
+    targetVariable : str, optional
+        The name of the target variable.
+    suggestedChampion : bool
+        Indicates the model was suggested as the champion at import time.
+    retrainable : bool
+        Indicates whether the model can be retrained or not.
+    immutable : bool
+        Indicates whether the model can be changed or not.
+    modelVersionName : str, optional
+        The display name for the model version.
+    properties : array_like, optional (custom properties)
+        Custom model properties that can be set: name, value, type
 
-    function
-    algorithm
-    tool
-    modeler
-    scoreCodeType
-    trainTable
-    classificationEventProbabilityVariableName
-    classificationTargetEventValue
-    champion (T/F)
-    role
-    location
-    targetVariable
-    projectId, projectName, projectVersionId, projectVersionName???
-    suggestedChampion (T/F)
-    retrainable
-    immutable
-    modelVersionName
-    properties  (custom properties)
-        name
-        value
-        type
-    inputVariables
-        -
-    outputVariables
-        -
+    inputVariables : array_like, optional
+        Model input variables. By default, these are the same as the model project.
+    outputVariables : array_like, optional
+        Model output variables. By default, these are the same as the model project.
 
-    properties
-    kwargs
 
     Returns
     -------
+    str
+        The model schema returned in JSON format.
 
     """
 
@@ -177,6 +204,27 @@ def create_model(model, project, description=None, modeler=None, function=None, 
 
 
 def add_model_content(model, file, name=None, role=None):
+    """Add additional files to the model.
+
+    Parameters
+    ----------
+    model : str or dict
+        The name or id of the model, or a dictionary representation of the model.
+    file : str or bytes
+        A file related to the model, such as the model code.
+    name : str
+        Name of the file related to the model.
+    role : str
+        Role of the model file, such as 'Python pickle'.
+
+
+    Returns
+    -------
+    str
+        The model content schema.
+
+    """
+
     if is_uuid(model):
         id = model
     elif isinstance(model, dict) and 'id' in model:
@@ -211,6 +259,22 @@ def default_repository():
 
 
 def create_project(project, repository, **kwargs):
+    """Create a model project in the given model repository.
+
+    Parameters
+    ----------
+    project : str or dict
+        The name or id of the model project, or a dictionary representation of the project.
+    repository : str or dict
+        The name or id of the model repository, or a dictionary representation of the repository.
+
+    Returns
+    -------
+    RestObj
+
+    """
+
+
     if isinstance(project, str):
         project = {'name': project}
 
@@ -226,6 +290,25 @@ def create_project(project, repository, **kwargs):
 def import_model_from_zip(name, project, file, description=None, version='latest'):
     # TODO: Allow import into folder if no project is given
     # TODO: Create new version if model already exists
+    """Import a model and contents as a ZIP file into a model project.
+
+    Parameters
+    ----------
+    name : str or dict
+        The name of the model.
+    project : str or dict
+        The name or id of the model project, or a dictionary representation of the project.
+    description : str
+        The description of the model.
+    file : byte
+        The ZIP file containing the model and contents.
+
+    Returns
+    -------
+    ResponseObj
+        The API response after importing the model.
+
+    """
     project = get_project(project)
 
     if project is None:
@@ -244,5 +327,3 @@ def import_model_from_zip(name, project, file, description=None, version='latest
                 headers={'Content-Type': 'application/octet-stream'})
 
     return r
-
-
