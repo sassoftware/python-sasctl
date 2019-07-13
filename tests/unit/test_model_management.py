@@ -56,7 +56,7 @@ def test_create_performance_definition():
                 get_project.return_value['predictionVariable'] = 'predicted'
                 _ = mm.create_performance_definition('model', 'TestLibrary', 'TestData')
 
-            post.assert_called_once()
+            assert post.call_count == 1
             url, data = post.call_args
 
             assert PROJECT['id'] == data['json']['projectId']
