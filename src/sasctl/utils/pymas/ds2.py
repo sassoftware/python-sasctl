@@ -4,17 +4,27 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-from collections import namedtuple, OrderedDict
 import re
 import uuid
+from collections import namedtuple, OrderedDict
 
 import six
 
 
-class DS2Package():
-    def __init__(self):
+class DS2Package(object):
+    def __init__(self, variables, code=None, return_code=True,
+                 return_message=True, target=None):
         self._id = uuid.uuid4().hex.upper()
-        self.methods = []
+        self._python_code = code or []
+        code = code or []
+
+        self.methods = [DS2PyMASMethod(variables, code, return_code,
+                                       return_message, target)]
+
+        self._body = ("dcl package pymas py;",
+                      "dcl package logger logr('App.tk.MAS');",
+                      "dcl varchar(67108864) character set utf8 pycode;",
+                      "dcl int revision;")
 
     @property
     def id(self):
@@ -22,22 +32,141 @@ class DS2Package():
 
     @property
     def name(self):
-        return '_' + str(self.id)
+        # Max length in some SAS products in 32 characters
+        return ('_' + str(self.id))[:32]
 
-    def __str__(self):
-        code = ("    package {} /inline;".format(self.name),
-                "        dcl package pymas py;",
-                "        dcl package logger logr('App.tk.MAS');",
-                "        dcl varchar(4096) character set utf8 pycode;",
-                "        dcl int revision;")
+    def code(self):
+        code = ("package %s / overwrite=yes;" % self.name,) + \
+               tuple('    ' + line for line in self._body) + \
+               ('',)
 
-        code += tuple(m.code() for m in self.methods)
-        code += ("    endpackage;",)
+        for method in self.methods:
+            code += tuple('    ' + line for line in method.code().split('\n'))
+        code += ("endpackage;",
+                 '')
 
         return '\n'.join(code)
 
 
-class DS2Method():
+class DS2BaseMethod(object):
+    def __init__(self, name, variables, body=None):
+        self._name = name
+        self.variables = variables
+
+        if body is None:
+            self._body = []
+        elif isinstance(body, six.string_types):
+            self._body = body.split('\n')
+        else:
+            self._body = list(body)
+
+    @property
+    def name(self):
+        return self._name
+
+    def code(self):
+        vars = ',\n'.join(
+            ['    %s' % v.as_parameter() for v in self.variables])
+
+        # Don't spread signature over multiple lines if there are no variables
+        if len(vars) > 0:
+            func = ('method %s(' % self.name,
+                    vars,
+                    '    );',
+                    '')
+        else:
+            func = ('method %s();' % self.name,
+                    '')
+
+        if len(self._body) > 0:
+            func += tuple('    ' + line for line in self._body)
+
+        func += ('end;',
+                 '')
+
+        return '\n'.join(func)
+
+
+class DS2PyMASMethod(DS2BaseMethod):
+    def __init__(self, variables, python_code, return_code=True,
+                 return_message=True, target='wrapper'):
+
+        target = target or 'wrapper'
+        if isinstance(python_code, six.string_types):
+            python_code = python_code.split('\n')
+
+        self.public_variables = variables
+        self.private_variables = []
+
+        if return_code:
+            self.public_variables.append(DS2Variable('rc', 'int', True))
+        else:
+            self.private_variables.append(DS2Variable('rc', 'int', True))
+
+        if return_message:
+            self.public_variables.append(DS2Variable('msg', 'char', True))
+
+        body = [v.as_declaration() for v in
+                self.private_variables] \
+               + ["if null(py) then do;",
+                  "    py = _new_ pymas();",
+                  "    rc = py.useModule('mypymodule', 1);",
+                  "    if rc then do;"] \
+               + ["        rc = py.appendSrcLine('%s');" % l for l in
+                  python_code] \
+               + ["        pycode = py.getSource();",
+                  "        revision = py.publish(pycode, 'mypymodule');",
+                  "        if revision lt 1 then do;",
+                  "            logr.log('e', 'py.publish() failed.');",
+                  "            rc = -1;",
+                  "            return;",
+                  "        end;",
+                  "    end;",
+                  "    rc = py.useMethod('%s');" % target,
+                  "    if rc then return;",
+                  "end;"] \
+               + ['%s    if rc then return;' % v.pymas_statement() for v in
+                  self.public_variables if not v.out] \
+               + ['rc = py.execute();    if rc then return;'] \
+               + [v.pymas_statement() for v in self.public_variables
+                  if v.out and v.name != 'rc']
+
+        super(DS2PyMASMethod, self).__init__('score', variables,
+                                             body=body)
+
+
+class DS2ScoreMethod(DS2BaseMethod):
+    def __init__(self, variables, return_code=True, return_message=True,
+                 target='wrapper', ):
+        self._target = target
+
+        self.public_variables = variables
+        self.private_variables = []
+
+        if return_code:
+            self.public_variables.append(DS2Variable('rc', 'int', True))
+        else:
+            self.private_variables.append(DS2Variable('rc', 'int', True))
+
+        if return_message:
+            self.public_variables.append(DS2Variable('msg', 'char', True))
+        else:
+            self.private_variables.append(DS2Variable('msg', 'char', True))
+
+        body_statements = [v.as_declaration() for v in
+                           self.private_variables] + \
+                          [v.pymas_statement() + '    if rc then return;' for v
+                           in self.public_variables if
+                           not v.out] + \
+                          ['rc = py.execute();    if rc then return;'] + \
+                          [v.pymas_statement() for v in self.public_variables
+                           if v.out and v.name != 'rc']
+
+        super(DS2ScoreMethod, self).__init__('score', variables,
+                                             body=body_statements)
+
+
+class DS2Method(object):
     def __init__(self, variables, code, target='wrapper'):
         self.variables = variables
         self._code = code
@@ -59,10 +188,12 @@ class DS2Method():
 
         # Python code to be embedded passed to PyMAS
         code = [self._code] if isinstance(self._code, str) else self._code
-        code = ["\t\t\t\t\terr = py.appendSrcLine('{}');".format(line) for line in code]
+        code = ["\t\t\t\t\terr = py.appendSrcLine('{}');".format(line) for line
+                in code]
         code = '\n'.join(code)
 
-        set_statements = [v.pymas_statement() for v in self.variables if not v.out]
+        set_statements = [v.pymas_statement() for v in self.variables if
+                          not v.out]
         get_statements = [v.pymas_statement() for v in self.variables if v.out]
 
         if return_code:
@@ -70,7 +201,8 @@ class DS2Method():
         if return_message:
             get_statements += ["msg = py.getString('msg');"]
 
-        ds2_statements = set_statements + ['err = py.execute();'] + get_statements
+        ds2_statements = set_statements + [
+            'err = py.execute();'] + get_statements
         ds2_statements = '\n'.join(['\t\t\t\t' + s for s in ds2_statements])
 
         func = ('            method {}({});'.format(self.name, signature),
@@ -80,7 +212,8 @@ class DS2Method():
                 code,
                 '                    pycode = py.getSource();',
                 "                    revision = py.publish( pycode, 'mypymodule' );",
-                "                    err = py.useMethod('{}');".format(self.target),
+                "                    err = py.useMethod('{}');".format(
+                    self.target),
                 "                    if err then return;",
                 "                end;",
                 ds2_statements,
@@ -90,8 +223,9 @@ class DS2Method():
         return func
 
 
-class DS2Thread():
-    def __init__(self, variables, table, column_names=None, return_code=True, return_message=True, package=None):
+class DS2Thread(object):
+    def __init__(self, variables, table, column_names=None, return_code=True,
+                 return_message=True, package=None):
         """
         Args:
             variables:
@@ -126,19 +260,23 @@ class DS2Thread():
         # If passing column data into Python as an array, need extra assignment statements to set values
         if array_input and self.column_names is not None:
             array = next(filter(lambda v: v.is_array, self.variables))
-            var_assignments = ['{}[{}] = {};'.format(array.name, i + 1, self.column_names[i]) for i in
-                               range(min(array.size, len(self.column_names)))]
+            var_assignments = [
+                '{}[{}] = {};'.format(array.name, i + 1, self.column_names[i])
+                for i in
+                range(min(array.size, len(self.column_names)))]
             var_assignments = '\n'.join(var_assignments)
         else:
             var_assignments = ''
 
         # Declare output variables.  Input variables are assumed to be columns in the input table.
-        declarations = '\n'.join([v.as_declaration() for v in self.variables if v.out or v.is_array])
+        declarations = '\n'.join([v.as_declaration() for v in self.variables if
+                                  v.out or v.is_array])
 
         keep_vars = [v.name for v in self.variables] + extras
 
         code = ("        thread {} / inline;".format(self.name),
-                "            dcl package {} decisionPackage();".format(self.package.name),
+                "            dcl package {} decisionPackage();".format(
+                    self.package.name),
                 declarations,
                 '            dcl double "rc";',
                 "            dcl char(4096) character set utf8 msg;",
@@ -147,8 +285,9 @@ class DS2Thread():
                 "                dcl integer localRC;",
                 "                set {} ( );".format(self.table),
                 var_assignments,
-                "                decisionPackage.{}({});".format(self.package.methods[0].name,
-                                                                 ','.join(keep_vars)),
+                "                decisionPackage.{}({});".format(
+                    self.package.methods[0].name,
+                    ','.join(keep_vars)),
                 "                output;",
                 "            end;",
                 "        endthread;")
@@ -161,7 +300,8 @@ class DS2Thread():
 class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
     PY_TYPE_TO_DS2 = OrderedDict([('double64', 'double'),
                                   ('double32', 'double'),
-                                  ('double', 'double'),  # Terminates search if full string matches
+                                  ('double', 'double'),
+                                  # Terminates search if full string matches
                                   ('float64', 'double'),
                                   ('float32', 'double'),
                                   ('float', 'double'),
@@ -170,7 +310,8 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
                                   ('varchar', 'char'),
                                   ('integer64', 'integer'),
                                   ('integer32', 'integer'),
-                                  ('integer', 'integer'),  # Terminates search if full string matches
+                                  ('integer', 'integer'),
+                                  # Terminates search if full string matches
                                   ('int64', 'integer'),
                                   ('int32', 'integer'),
                                   ('int', 'integer')
@@ -185,7 +326,8 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
 
         # Convert Python types to DS2 types if necessary
         if 'type' in kwargs:
-            kwargs['type'] = DS2Variable._map_type(cls.PY_TYPE_TO_DS2, kwargs['type'])
+            kwargs['type'] = DS2Variable._map_type(cls.PY_TYPE_TO_DS2,
+                                                   kwargs['type'])
         elif len(args) > 1:
             args = list(args)
             args[1] = DS2Variable._map_type(cls.PY_TYPE_TO_DS2, args[1])
@@ -209,8 +351,8 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
         viya_type = self._map_type(self.DS2_TYPE_TO_VIYA, self.type)
         role = 'Output' if self.out else 'Input'
 
-        return OrderedDict([('name', self.name), ('role', role), ('type', viya_type)])
-
+        return OrderedDict(
+            [('name', self.name), ('role', role), ('type', viya_type)])
 
     def as_declaration(self):
         """DS2 variable declaration statement."""
@@ -219,14 +361,16 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
             return 'dcl {} {};'.format(self.type, self.name)
         else:
             # Type is an array
-            return 'dcl {} {}{};'.format(self.type[:match.start()], self.name, self.type[match.start():])
+            return 'dcl {} {}{};'.format(self.type[:match.start()], self.name,
+                                         self.type[match.start():])
 
     def as_parameter(self):
         """DS2 parameter syntax for method signatures."""
         match = re.search('\[\d+\]$', self.type)
         param = self.name
 
-        param = self.type + ' ' + param if match is None else self.type[:match.start():] + ' ' + param + '[*]'
+        param = self.type + ' ' + param if match is None else self.type[
+                                                              :match.start():] + ' ' + param + '[*]'
         param = 'in_out ' + param if self.out else param
 
         return param
@@ -256,40 +400,56 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
         if self.out:
             if self.type.startswith('double'):
                 if self.is_array:
-                    return "py.getDoubleArray('{}', {}, ret);".format(python_var_name, self.name)
+                    return "py.getDoubleArray('{}', {}, ret);".format(
+                        python_var_name, self.name)
                 else:
-                    return "{} = py.getDouble('{}');".format(self.name, python_var_name)
+                    return "{} = py.getDouble('{}');".format(self.name,
+                                                             python_var_name)
             elif self.type.startswith('char'):
                 if self.is_array:
-                    return "py.getStringArray('{}', {}, ret);".format(python_var_name, self.name)
+                    return "py.getStringArray('{}', {}, ret);".format(
+                        python_var_name, self.name)
                 else:
-                    return "{} = py.getString('{}');".format(self.name, python_var_name)
+                    return "{} = py.getString('{}');".format(self.name,
+                                                             python_var_name)
             elif self.type.startswith('integer'):
                 if self.is_array:
-                    return "py.getIntArray('{}', {}, ret);".format(python_var_name, self.name)
+                    return "py.getIntArray('{}', {}, ret);".format(
+                        python_var_name, self.name)
                 else:
-                    return "{} = py.getInt('{}');".format(self.name, python_var_name)
+                    return "{} = py.getInt('{}');".format(self.name,
+                                                          python_var_name)
             else:
-                raise ValueError("Can't generate a DS2 statement for type `{}`".format(self.type))
+                raise ValueError(
+                    "Can't generate a DS2 statement for type `{}`".format(
+                        self.type))
         else:
             if self.type.startswith('double'):
                 if self.is_array:
-                    return "err = py.setDoubleArray('{}', {});".format(python_var_name, self.name)
+                    return "rc = py.setDoubleArray('{}', {});".format(
+                        python_var_name, self.name)
                 else:
-                    return "err = py.setDouble('{}', {});".format(python_var_name, self.name)
+                    return "rc = py.setDouble('{}', {});".format(
+                        python_var_name, self.name)
             elif self.type.startswith('char'):
                 if self.is_array:
-                    return "err = py.setStringArray('{}', {});".format(python_var_name, self.name)
+                    return "rc = py.setStringArray('{}', {});".format(
+                        python_var_name, self.name)
                 else:
-                    return "err = py.setString('{}', {});".format(python_var_name, self.name)
+                    return "rc = py.setString('{}', {});".format(
+                        python_var_name, self.name)
             elif self.type.startswith('integer'):
                 if self.is_array:
-                    return "err = py.setIntArray('{}', {});".format(python_var_name, self.name)
+                    return "rc = py.setIntArray('{}', {});".format(
+                        python_var_name, self.name)
                 else:
-                    return "err = py.setInt('{}', {});".format(python_var_name, self.name)
+                    return "rc = py.setInt('{}', {});".format(python_var_name,
+                                                              self.name)
 
             else:
-                raise ValueError("Can't generate a DS2 statement for type `{}`".format(self.type))
+                raise ValueError(
+                    "Can't generate a DS2 statement for type `{}`".format(
+                        self.type))
 
     @property
     def is_array(self):

@@ -106,7 +106,8 @@ def parse_type_hints(func, skip_var='self'):
 
     """
 
-    params = OrderedDict([(k, None) for k in func.__code__.co_varnames  if k != skip_var])
+    params = OrderedDict([(k, None) for k in \
+                          getfullargspec(func).args if k != skip_var])
     logger.debug('Params: {}'.format(params))
 
     if getattr(func, '__annotations__', None):
