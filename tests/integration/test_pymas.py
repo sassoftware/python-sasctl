@@ -106,6 +106,7 @@ def test_from_inline():
 
 
 def test_from_pickle(train_data, pickle_file):
+    import re
     from sasctl.utils.pymas import PyMAS, from_pickle
 
     X, y = train_data
@@ -139,7 +140,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
             if rc then do;
                 rc = py.appendSrcLine('try:');
                 rc = py.appendSrcLine('    import pickle, base64');
-                rc = py.appendSrcLine('    bytes = b"gANjc2tsZWFybi5saW5lYXJfbW9kZWwubG9naXN0aWMKTG9naXN0aWNSZWdyZXNzaW9uCnEAKYFxAX1xAihYBwAAAHBlbmFsdHlxA1gCAAAAbDJxBFgEAAAAZHVhbHEFiVgDAAAAdG9scQZHPxo24uscQy1YAQAAAENxB0c/8AAAAAAAAFgNAAAAZml0X2ludGVyY2VwdHEIiFgRAAAAaW50ZXJjZXB0X3NjYWxpbmdxCUsBWAwAAABjbGFzc193ZWlnaHRxCk5YDAAAAHJhbmRvbV9zdGF0ZXELTlgGAAAAc29sdmVycQxYBQAAAGxiZmdzcQ1YCAAAAG1heF9pdGVycQ5LZFgLAAAAbXVsdGlfY2xhc3NxD1gLAAAAbXVsdGlub21pYWxxEFgHAAAAdmVyYm9zZXERSwBYCgAAAHdhcm1fc3RhcnRxEolYBgAAAG5fam9ic3ETSwFYCAAAAGNsYXNzZXNfcRRjbnVtcHkuY29yZS5tdWx0aWFycmF5Cl9yZWNvbnN0cnVjdApxFWNudW1weQpuZGFycmF5CnEWSwCFcRdDAWJxGIdxGVJxGihLAUsDhXEbY251bXB5CmR0eXBlCnEcWAIAAABPOHEdSwBLAYdxHlJxHyhLA1gBAAAAfHEgTk5OSv////9K/////0s/dHEhYoldcSIoWAYAAABzZXRvc2FxI1gKAAAAdmVyc2ljb2xvcnEkWAkAAAB2aXJnaW5pY2FxJWV0cSZiWAUAAABjb2VmX3EnaBVoFksAhXEoaBiHcSlScSooSwFLA0sEhnEraBxYAgAAAGY4cSxLAEsBh3EtUnEuKEsDWAEAAAA8cS9OTk5K/////0r/////SwB0cTBiiUNg7q0YrwEZ279NCwAVXMbuP7dX62b7JwTAIZOt8/Nf8b+SPbsd0xfhPx0uMT+6WdS/BvEkXs5Jyr/J0cJa2xHuvys0dzGSWry/RXRn9X6Z5L+wps1MmMwFQP59h9BwNABAcTF0cTJiWAoAAABpbnRlcmNlcHRfcTNoFWgWSwCFcTRoGIdxNVJxNihLAUsDhXE3aC6JQxjw3z6lNsMjQNZXvTklwQFAWTau838zKMBxOHRxOWJYBwAAAG5faXRlcl9xOmgVaBZLAIVxO2gYh3E8UnE9KEsBSwGFcT5oHFgCAAAAaTRxP0sASwGHcUBScUEoSwNoL05OTkr/////Sv////9LAHRxQmKJQwRfAAAAcUN0cURiWBAAAABfc2tsZWFybl92ZXJzaW9ucUVYBgAAADAuMTkuMXFGdWIu"');
+                rc = py.appendSrcLine('    bytes = b"X"');
                 rc = py.appendSrcLine('    obj = pickle.loads(base64.b64decode(bytes))');
                 rc = py.appendSrcLine('    _compile_error = None');
                 rc = py.appendSrcLine('except Exception as e:');
@@ -192,7 +193,9 @@ endpackage;
 
     # Drop leading \n caused by multiline comment formatting
     result = p.score_code()
-    assert target.lstrip('\n') == result
+
+    assert re.sub('bytes = b"[\w\d/\+]+"', 'bytes = b"X"', result) == \
+           target.lstrip('\n')
 
 
 def test_from_pickle_stream(train_data, pickle_stream):
