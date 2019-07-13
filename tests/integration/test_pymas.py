@@ -212,26 +212,28 @@ def test_from_python_file(python_file):
 
 @pytest.mark.usefixtures('session')
 def test_publish_and_execute(tmpdir):
-    from sasctl.utils.pymas import from_python_file
+    import pickle
+    from sasctl.utils.pymas import from_pickle
     from sasctl.services import microanalytic_score as mas
 
-    source = """
-def domath(a, b):
-    # type: float, float -> (float, float)
-    c = a * b
-    d = a / b
-    return c, d
-"""
+    sklearn = pytest.importorskip('sklearn')
+    from sklearn import datasets
+    from sklearn.linear_model import LinearRegression
+    pd = pytest.importorskip('pandas')
+    data = sklearn.datasets.load_boston()
+    X = pd.DataFrame(data.data, columns=data.feature_names)
+    y = pd.DataFrame(data.target, columns=['Price'])
 
-    f = tmpdir.join('source.py')
-    f.write(source)
-
-    p = from_python_file(str(f), 'domath')
+    lm = LinearRegression()
+    lm.fit(X, y)
+    pkl = pickle.dumps(lm)
+    p = from_pickle(pkl, 'predict', X, array_input=True)
 
     mas.create_module('sasctl_test', source=p.score_code(), language='ds2')
-    result = mas.execute_module_step('sasctl_test', 'score', a=10, b=0.5)
+    x1 = {k.lower(): v for k, v in X.iloc[0, :].items()}
+    result = mas.execute_module_step('sasctl_test', 'score', **x1)
 
     assert result['rc'] == 0
-    assert result['out1'] == 5
-    assert result['out2'] == 20
+    assert result['var1'] == 24
+    assert result['msg'] is None
 
