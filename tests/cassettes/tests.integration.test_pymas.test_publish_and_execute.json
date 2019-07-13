@@ -1,0 +1,384 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2019-07-13T01:13:21",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "60"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read gelupdates esvakmcriskconsumers SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS esvakmcorionriskconsumers USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap defsusers opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers esvakmcorionriskaccess bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin EsriUsers AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install techoffice ApplicationAdministrators COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"728788b11de8467e85f8330948913b26\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Sat, 13 Jul 2019 01:13:21 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-07-13T01:13:26",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"id\": \"sasctl_test\", \"type\": \"text/vnd.sas.source.ds2\", \"description\": null, \"source\": \"package _DAAFC03CA2B44ED38331ACAB749E808 / overwrite=yes;\\n    dcl package pymas py;\\n    dcl package logger logr('App.tk.MAS');\\n    dcl varchar(67108864) character set utf8 pycode;\\n    dcl int revision;\\n\\n    method score(\\n        double CRIM,\\n        double ZN,\\n        double INDUS,\\n        double CHAS,\\n        double NOX,\\n        double RM,\\n        double AGE,\\n        double DIS,\\n        double RAD,\\n        double TAX,\\n        double PTRATIO,\\n        double B,\\n        double LSTAT,\\n        in_out double var1,\\n        in_out integer rc,\\n        in_out char msg\\n        );\\n    \\n        if null(py) then do;\\n            py = _new_ pymas();\\n            rc = py.useModule('mypymodule', 1);\\n            if rc then do;\\n                rc = py.appendSrcLine('try:');\\n                rc = py.appendSrcLine('    import pickle, base64');\\n                rc = py.appendSrcLine('    bytes = b\\\"gANjc2tsZWFybi5saW5lYXJfbW9kZWwuYmFzZQpMaW5lYXJSZWdyZXNzaW9uCnEAKYFxAX1xAihYDQAAAGZpdF9pbnRlcmNlcHRxA4hYCQAAAG5vcm1hbGl6ZXEEiVgGAAAAY29weV9YcQWIWAYAAABuX2pvYnNxBksBWAUAAABjb2VmX3EHY251bXB5LmNvcmUubXVsdGlhcnJheQpfcmVjb25zdHJ1Y3QKcQhjbnVtcHkKbmRhcnJheQpxCUsAhXEKQwFicQuHcQxScQ0oSwFLAUsNhnEOY251bXB5CmR0eXBlCnEPWAIAAABmOHEQSwBLAYdxEVJxEihLA1gBAAAAPHETTk5OSv////9K/////0sAdHEUYolDaB9WhZOHb7u/ZnkkPR3Bpz/UQ0/6YlyVP2bemnosggVAKInt1rbLMcAxeNEOInAOQMoS/blcnEg/E2R9QbWc979dimEm2o/TPzssTNkgQIm/AV0qAMaC7r+vpMC3YTyDP/JWbmaf0OC/cRV0cRZiWAkAAABfcmVzaWR1ZXNxF2gIaAlLAIVxGGgLh3EZUnEaKEsBSwGFcRtoEolDCA9uR10jpMVAcRx0cR1iWAUAAAByYW5rX3EeSw1YCQAAAHNpbmd1bGFyX3EfaAhoCUsAhXEgaAuHcSFScSIoSwFLDYVxI2gSiUNoKGufjCrbrkCfoKewfcKbQBSWsv3pFoRABch6drHvdkCMOld3ueNjQP/zkABPrF1A8gVfHP+KVkA02YKa5FhRQKe89okhVERAPWCTaxxsOEDRDeNoVrMmQBHq3AFnCRZATWXcB1ne8z9xJHRxJWJYCgAAAGludGVyY2VwdF9xJmgIaAlLAIVxJ2gLh3EoUnEpKEsBSwGFcSpoEolDCCYO6HjcPkJAcSt0cSxiWBAAAABfc2tsZWFybl92ZXJzaW9ucS1YBgAAADAuMTkuMXEudWIu\\\"');\\n                rc = py.appendSrcLine('    obj = pickle.loads(base64.b64decode(bytes))');\\n                rc = py.appendSrcLine('    _compile_error = None');\\n                rc = py.appendSrcLine('except Exception as e:');\\n                rc = py.appendSrcLine('    _compile_error = e');\\n                rc = py.appendSrcLine('');\\n                rc = py.appendSrcLine('def wrapper(CRIM, ZN, INDUS, CHAS, NOX, RM, AGE, DIS, RAD, TAX, PTRATIO, B, LSTAT):');\\n                rc = py.appendSrcLine('    \\\"Output: var1, msg\\\"');\\n                rc = py.appendSrcLine('    result = None');\\n                rc = py.appendSrcLine('    try:');\\n                rc = py.appendSrcLine('        global _compile_error');\\n                rc = py.appendSrcLine('        if _compile_error is not None:');\\n                rc = py.appendSrcLine('            raise _compile_error');\\n                rc = py.appendSrcLine('        msg = \\\"\\\"');\\n                rc = py.appendSrcLine('        import numpy as np');\\n                rc = py.appendSrcLine('        result = obj.predict(np.array([CRIM,ZN,INDUS,CHAS,NOX,RM,AGE,DIS,RAD,TAX,PTRATIO,B,LSTAT]).reshape((1, -1)))');\\n                rc = py.appendSrcLine('        if result.size == 1:');\\n                rc = py.appendSrcLine('            result = np.asscalar(result)');\\n                rc = py.appendSrcLine('    except Exception as e:');\\n                rc = py.appendSrcLine('        msg = str(e)');\\n                rc = py.appendSrcLine('        if result is None:');\\n                rc = py.appendSrcLine('            result = tuple(None for i in range(1))');\\n                rc = py.appendSrcLine('    if isinstance(result, tuple):');\\n                rc = py.appendSrcLine('        return tuple(x for x in list(result) + [msg])');\\n                rc = py.appendSrcLine('    else: ');\\n                rc = py.appendSrcLine('        return result, msg');\\n                pycode = py.getSource();\\n                revision = py.publish(pycode, 'mypymodule');\\n                if revision lt 1 then do;\\n                    logr.log('e', 'py.publish() failed.');\\n                    rc = -1;\\n                    return;\\n                end;\\n            end;\\n            rc = py.useMethod('wrapper');\\n            if rc then return;\\n        end;\\n        rc = py.setDouble('CRIM', CRIM);    if rc then return;\\n        rc = py.setDouble('ZN', ZN);    if rc then return;\\n        rc = py.setDouble('INDUS', INDUS);    if rc then return;\\n        rc = py.setDouble('CHAS', CHAS);    if rc then return;\\n        rc = py.setDouble('NOX', NOX);    if rc then return;\\n        rc = py.setDouble('RM', RM);    if rc then return;\\n        rc = py.setDouble('AGE', AGE);    if rc then return;\\n        rc = py.setDouble('DIS', DIS);    if rc then return;\\n        rc = py.setDouble('RAD', RAD);    if rc then return;\\n        rc = py.setDouble('TAX', TAX);    if rc then return;\\n        rc = py.setDouble('PTRATIO', PTRATIO);    if rc then return;\\n        rc = py.setDouble('B', B);    if rc then return;\\n        rc = py.setDouble('LSTAT', LSTAT);    if rc then return;\\n        rc = py.execute();    if rc then return;\\n        var1 = py.getDouble('var1');\\n        msg = py.getString('msg');\\n    end;\\n    \\nendpackage;\\n\", \"scope\": \"public\"}"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "5285"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/microanalyticScore/modules"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/sasctl_test\",\"uri\":\"/microanalyticScore/modules/sasctl_test\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"source\",\"href\":\"/microanalyticScore/modules/sasctl_test/source\",\"uri\":\"/microanalyticScore/modules/sasctl_test/source\",\"type\":\"application/vnd.sas.microanalytic.module.source\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/sasctl_test/steps\",\"uri\":\"/microanalyticScore/modules/sasctl_test/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/sasctl_test/submodules\",\"uri\":\"/microanalyticScore/modules/sasctl_test/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/sasctl_test\",\"uri\":\"/microanalyticScore/modules/sasctl_test\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/sasctl_test\",\"uri\":\"/microanalyticScore/modules/sasctl_test\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-07-13T01:13:26.995Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-07-13T01:13:26.995Z\",\"id\":\"sasctl_test\",\"name\":\"_DAAFC03CA2B44ED38331ACAB749E808\",\"revision\":0,\"scope\":\"public\",\"language\":\"ds2\",\"stepIds\":[\"score\"],\"warnings\":[]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.microanalytic.module+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Sat, 13 Jul 2019 01:13:27 GMT"
+          ],
+          "ETag": [
+            "\"jy0u6ggj\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Last-Modified": [
+            "Sat, 13 Jul 2019 01:13:26 GMT"
+          ],
+          "Location": [
+            "/microanalyticScore/modules/sasctl_test"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/microanalyticScore/modules"
+      }
+    },
+    {
+      "recorded_at": "2019-07-13T01:13:27",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_test"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/sasctl_test\",\"uri\":\"/microanalyticScore/modules/sasctl_test\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"source\",\"href\":\"/microanalyticScore/modules/sasctl_test/source\",\"uri\":\"/microanalyticScore/modules/sasctl_test/source\",\"type\":\"application/vnd.sas.microanalytic.module.source\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/sasctl_test/steps\",\"uri\":\"/microanalyticScore/modules/sasctl_test/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/sasctl_test/submodules\",\"uri\":\"/microanalyticScore/modules/sasctl_test/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/sasctl_test\",\"uri\":\"/microanalyticScore/modules/sasctl_test\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/sasctl_test\",\"uri\":\"/microanalyticScore/modules/sasctl_test\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-07-13T01:13:26.995Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-07-13T01:13:26.995Z\",\"id\":\"sasctl_test\",\"name\":\"_DAAFC03CA2B44ED38331ACAB749E808\",\"revision\":0,\"scope\":\"public\",\"language\":\"ds2\",\"stepIds\":[\"score\"],\"warnings\":[]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.microanalytic.module+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Sat, 13 Jul 2019 01:13:27 GMT"
+          ],
+          "ETag": [
+            "\"jy0u6ggj\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=98"
+          ],
+          "Last-Modified": [
+            "Sat, 13 Jul 2019 01:13:26 GMT"
+          ],
+          "Location": [
+            "/microanalyticScore/modules/sasctl_test"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/microanalyticScore/modules/sasctl_test"
+      }
+    },
+    {
+      "recorded_at": "2019-07-13T01:13:27",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"inputs\": [{\"name\": \"crim\", \"value\": 0.00632}, {\"name\": \"zn\", \"value\": 18.0}, {\"name\": \"indus\", \"value\": 2.31}, {\"name\": \"chas\", \"value\": 0.0}, {\"name\": \"nox\", \"value\": 0.538}, {\"name\": \"rm\", \"value\": 6.575}, {\"name\": \"age\", \"value\": 65.2}, {\"name\": \"dis\", \"value\": 4.09}, {\"name\": \"rad\", \"value\": 1.0}, {\"name\": \"tax\", \"value\": 296.0}, {\"name\": \"ptratio\", \"value\": 15.3}, {\"name\": \"b\", \"value\": 396.9}, {\"name\": \"lstat\", \"value\": 4.98}]}"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "439"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_test/steps/score"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[],\"version\":2,\"moduleId\":\"sasctl_test\",\"stepId\":\"score\",\"executionState\":\"completed\",\"outputs\":[{\"name\":\"var1\",\"value\":24.0},{\"name\":\"rc\",\"value\":0},{\"name\":\"msg\"}]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.microanalytic.module.step.output+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Sat, 13 Jul 2019 01:13:27 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=97"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/microanalyticScore/modules/sasctl_test/steps/score"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}

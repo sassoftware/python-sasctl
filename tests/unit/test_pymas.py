@@ -6,8 +6,8 @@
 
 from collections import OrderedDict
 
-from six.moves import mock
 import pytest
+from six.moves import mock
 
 from sasctl.utils.pymas.core import build_wrapper_function, PyMAS
 from sasctl.utils.pymas.ds2 import DS2Variable
@@ -136,7 +136,7 @@ def test_ds2_double():
     assert False == var.is_array
     assert 'dcl double myvar;' == var.as_declaration()
     assert 'double myvar' == var.as_parameter()
-    assert "err = py.setDouble('myvar', myvar);" == var.pymas_statement()
+    assert "rc = py.setDouble('myvar', myvar);" == var.pymas_statement()
 
     # Output variable
     var = DS2Variable('myvar', 'double', True)
@@ -154,7 +154,7 @@ def test_ds2_char():
     assert False == var.is_array
     assert 'dcl char myvar;' == var.as_declaration()
     assert 'char myvar' == var.as_parameter()
-    assert "err = py.setString('myvar', myvar);" == var.pymas_statement()
+    assert "rc = py.setString('myvar', myvar);" == var.pymas_statement()
 
     # Output variable
     var = DS2Variable('myvar', 'string', True)
@@ -172,7 +172,7 @@ def test_ds2_int():
     assert False == var.is_array
     assert 'dcl integer myvar;' == var.as_declaration()
     assert 'integer myvar' == var.as_parameter()
-    assert "err = py.setInt('myvar', myvar);" == var.pymas_statement()
+    assert "rc = py.setInt('myvar', myvar);" == var.pymas_statement()
 
     # Output variable
     var = DS2Variable('myvar', 'integer', True)
@@ -246,7 +246,6 @@ def test_ds2_variables_numpy_input():
             DS2Variable('var2', 'double', False)] == ds2_variables(np.array([1., 2.]))
 
 
-
 def test_parse_type_hints_source():
     def bad_func(x1, x2):
         return x1 + x2
@@ -309,3 +308,199 @@ def test_type_hint_annotations():
     result = parse_type_hints(annotated_func)
     assert result == dict(x1=('int', False), x2=('int', False))
 
+
+def test_ds2_pymas_method():
+    """Test DS2 code generation for a method that uses PyMAS."""
+    from sasctl.utils.pymas.ds2 import DS2PyMASMethod, DS2Variable
+
+    source = """
+def domath(a, b):
+    "Output: c, d"
+    c = a * b
+    d = a / b
+    return c, d
+"""
+
+    target = """
+method score(
+    double a,
+    double b,
+    in_out double c,
+    in_out double d,
+    in_out integer rc
+    );
+
+    if null(py) then do;
+        py = _new_ pymas();
+        rc = py.useModule('mypymodule', 1);
+        if rc then do;
+            rc = py.appendSrcLine('def domath(a, b):');
+            rc = py.appendSrcLine('    "Output: c, d"');
+            rc = py.appendSrcLine('    c = a * b');
+            rc = py.appendSrcLine('    d = a / b');
+            rc = py.appendSrcLine('    return c, d');
+            pycode = py.getSource();
+            revision = py.publish(pycode, 'mypymodule');
+            if revision lt 1 then do;
+                logr.log('e', 'py.publish() failed.');
+                rc = -1;
+                return;
+            end;
+        end;
+        rc = py.useMethod('domath');
+        if rc then return;
+    end;
+    rc = py.setDouble('a', a);    if rc then return;
+    rc = py.setDouble('b', b);    if rc then return;
+    rc = py.execute();    if rc then return;
+    c = py.getDouble('c');
+    d = py.getDouble('d');
+end;
+"""
+    method = DS2PyMASMethod([
+        DS2Variable('a', 'double', False),
+        DS2Variable('b', 'double', False),
+        DS2Variable('c', 'double', True),
+        DS2Variable('d', 'double', True)
+    ],
+        source.strip('\n'),
+        return_code=True,
+        return_message=False,
+        target='domath')
+
+    result = method.code()
+    assert target.lstrip('\n') == result
+    assert '\t' not in result
+
+
+def test_ds2_base_method():
+    """Test DS2 code generation for a simple DS2 method."""
+    from sasctl.utils.pymas.ds2 import DS2BaseMethod, DS2Variable
+
+    # Generate a empty method
+    target = """
+method testmethod(
+    double a,
+    double b,
+    in_out double c,
+    in_out double d
+    );
+
+end;
+"""
+    method = DS2BaseMethod('testmethod',
+                           [
+                               DS2Variable('a', 'double', False),
+                               DS2Variable('b', 'double', False),
+                               DS2Variable('c', 'double', True),
+                               DS2Variable('d', 'double', True)
+                           ])
+
+    result = method.code()
+    assert target.lstrip('\n') == result
+    assert '\t' not in result
+
+
+    # Generate a method with an arbitrary body
+    target = """
+method testmethod(
+    double a,
+    double b,
+    in_out double c,
+    in_out double d
+    );
+
+    if parrot.is_dead:
+        return
+end;
+"""
+    method = DS2BaseMethod('testmethod',
+                           [
+                               DS2Variable('a', 'double', False),
+                               DS2Variable('b', 'double', False),
+                               DS2Variable('c', 'double', True),
+                               DS2Variable('d', 'double', True)
+                           ],
+                           [
+                               'if parrot.is_dead:',
+                               '    return'
+                           ])
+
+    result = method.code()
+    assert target.lstrip('\n') == result
+    assert '\t' not in result
+
+
+def test_ds2_package():
+    """Test code generation for a package with PyMAS."""
+    from sasctl.utils.pymas.ds2 import DS2Package, DS2Variable
+
+    target = """
+package _pyscore / overwrite=yes;
+    dcl package pymas py;
+    dcl package logger logr('App.tk.MAS');
+    dcl varchar(67108864) character set utf8 pycode;
+    dcl int revision;
+
+    method score(
+        double a,
+        double b,
+        in_out double c,
+        in_out double d,
+        in_out integer rc
+        );
+    
+        if null(py) then do;
+            py = _new_ pymas();
+            rc = py.useModule('mypymodule', 1);
+            if rc then do;
+                rc = py.appendSrcLine('def domath(a, b):');
+                rc = py.appendSrcLine('    "Output: c, d"');
+                rc = py.appendSrcLine('    c = a * b');
+                rc = py.appendSrcLine('    d = a / b');
+                rc = py.appendSrcLine('    return c, d');
+                pycode = py.getSource();
+                revision = py.publish(pycode, 'mypymodule');
+                if revision lt 1 then do;
+                    logr.log('e', 'py.publish() failed.');
+                    rc = -1;
+                    return;
+                end;
+            end;
+            rc = py.useMethod('domath');
+            if rc then return;
+        end;
+        rc = py.setDouble('a', a);    if rc then return;
+        rc = py.setDouble('b', b);    if rc then return;
+        rc = py.execute();    if rc then return;
+        c = py.getDouble('c');
+        d = py.getDouble('d');
+    end;
+    
+endpackage;
+"""
+
+    source = """
+def domath(a, b):
+    "Output: c, d"
+    c = a * b
+    d = a / b
+    return c, d
+"""
+
+    with mock.patch('uuid.uuid4') as mocked:
+        mocked.return_value.hex.upper.return_value = 'pyscore'
+        package = DS2Package(
+            [
+                DS2Variable('a', 'double', False),
+                DS2Variable('b', 'double', False),
+                DS2Variable('c', 'double', True),
+                DS2Variable('d', 'double', True),
+            ],
+            source.strip('\n'),
+            target='domath',
+            return_message=False)
+
+    result = package.code()
+    assert target.lstrip('\n') == result
+    assert '\t' not in result
