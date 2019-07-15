@@ -1,79 +1,69 @@
-dist: xenial  # Currently required for Python 3.7
+dist: xenial
 language: python
 cache: pip
-
 python:
-  - "2.7"
-  - "3.4"
-  - "3.5"
-  - "3.7"
-# 3.6 handled during code coverage
-
+- '2.7'
+- '3.4'
+- '3.5'
+- '3.7'
 env:
-  - PYTHONPATH=$PYTHONPATH:./src
-
+- PYTHONPATH=$PYTHONPATH:./src
 install:
-  - pip install -r test_requirements.txt
-
+- pip install -r test_requirements.txt
 script:
-  - pytest
-
+- pytest
 jobs:
   include:
-    - stage: upload codecov results
-      python: 3.6
-      install:
-        - pip install pytest pytest-cov codecov
-        - pip install -r test_requirements.txt
-      script:
-        - pytest --cov=./
-        - codecov
-
-    - stage: create release
-      if: tag is present
-      python: 3.6
-      install: pip install sphinx
-      script:
-        - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
-        - pushd ./doc/_build/html ; zip -r ../../../${TRAVIS_TAG}-doc.zip . ; popd
-      deploy:
-        provider: releases
-        skip_cleanup: true
-        api_key: $GITHUB_TOKEN
-        file: ${TRAVIS_TAG}-doc.zip
-        draft: true
-        on:
-          tags: true
-
-    - stage: upload documentation
-      if: tag is present
-      python: 3.6
-      install: pip install sphinx
-      script:
-        - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
-        - touch ./doc/_build/html/.nojekyll
-      deploy:
-        provider: pages
-        skip_cleanup: true
-        github_token: $GITHUB_TOKEN
-        keep_history: false
-        local_dir: ./doc/_build/html
-        on:
-          tags: true
-
-    - stage: deploy to pypi (test)
-      if: tag is present
-      script: # Cancel out default script
-        -
-      deploy:
-        provider: pypi
-        server: https://test.pypi.org/legacy/
-        user:
-          secure: uHXdHqYzzi/2Gc9/8kP4nBKAf2zgIOri1bHWnmgNoBNhWJuma4MWMuMUCzQU+QbrMvOiOm+EZRz1+rBXDOsqa7T+22OZRMBIUFfc3BG5ItYm8DXOUznWLy2/32yQngEohpYwnZuzvS3zUbVZ94a9m0qWjRi+4JHQhh8EKANeGbByBNwPBFh9ysbM8Vl7jiM0LUPinO1OtgPIiDqzP5Zm6Vxnhh7ZlR6wPUs87yPrHKBAUiZkXBNrVr4f/3cY+PrxRtvptVH5SmuApz3oJFl54XavJPYwVNlnEddk8KATpNIVtpq4E9arn/ptvacsiO2QmxxET7Sp3IJ6Uzl/nFDdYIg/yaID0zHBfViy/0pdC6P6aylTS4iqO33gNS4cp2wrNQe424v2YkgRkPNX5wxkCZtwtZsIUiPMLnD2RMTgQdfbDgF+yQ/WOwgDapcoa3HYHLajfNzzGF3bW4hLdc6w7xer/LyhGQ/FxUClg4TrfwXErQ6DU+BPl+MSZEKw3B3nxtEpsX6yzJkKcx4xmrHj9W/WJk5zicjGq7LH+zTJia6Yl4Rr/IMtgfUruZhqRwIT5pOTnDYnroFfZH6/TbpAhC33iGlmr5Td1Fmrrc56Isj7eQH6J1zhH8oy4ZkN2ZqcyT3KxQwDdE9lNJvUHhTZlAYvoO1QvvzS/4dTWPqNxKc=
-        password:
-          secure: wTwws6xBoptSsNP4Yr5/W1yRfOLmrQynnyQGmAFAlr3t9Xkf56fNLPhLN54Q3zLP+au9pb8OzNqAu2fbwXuS/rj+M/Jqy8JLICeyivVN4UNnYfc4ICJYJUk6Y1w16brzJDtVO0WuGLsR6ENp6JBBzMglCfgjGIU3zYv/bSUz0NZudXJKl03pBNQA/EFEmjqcotkSwTLcRnuYjKZvoROsH4MAgHdVz28MpzeAFRTaqJZ/u3hV6aG3BAQIezSOyDuWB4iymgh+6svxgLyTmmCgdvaS+IVT5pKSKIyv22WG8HdGMJG6FAGsHbREdpSOx2Y7Sn1gM0+AJeKH0okxCB299B2/7zcO/T9vjqV6JH8fmM+Utm3oj5LLse8ckQnVeQDAZlUgsEs4hul5V2LkvUrKklO6yaJrUnUBTBHSe08axw/LxhFhYSBPc87VqlG1bjvberLOw3FB/5BaObYFOH2KOetNJ4cIscFQvNFBQ0ZP36qrmwwa4h4YlUIRRY9ZMivPFuuTevcloKer4423/HaTi7CZU26niBma9UuORdIbc2YDLRc/DIztGBaTp7ZwNXlFfVZ8jkXYHov4aU5xKoehPFLcko1Ltii9BpH8Rv1b7GW09G3QPpB9Mx3RuG9GFQgvkD6nZI/hpyXooBphklPzG88m6EmzfGsojJlDqoPExJs=
-        distributions: sdist bdist_wheel
-        on:
-          tags: true
-
+  - stage: upload codecov results
+    python: 3.6
+    install:
+    - pip install pytest pytest-cov codecov
+    - pip install -r test_requirements.txt
+    script:
+    - pytest --cov=./
+    - codecov
+  - stage: create release
+    if: tag is present
+    python: 3.6
+    install: pip install sphinx
+    script:
+    - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
+    - pushd ./doc/_build/html ; zip -r ../../../${TRAVIS_TAG}-doc.zip . ; popd
+    deploy:
+      provider: releases
+      skip_cleanup: true
+      api_key: "$GITHUB_TOKEN"
+      file: "${TRAVIS_TAG}-doc.zip"
+      draft: true
+      on:
+        tags: true
+  - stage: upload documentation
+    if: tag is present
+    python: 3.6
+    install: pip install sphinx
+    script:
+    - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
+    - touch ./doc/_build/html/.nojekyll
+    deploy:
+      provider: pages
+      skip_cleanup: true
+      github_token: "$GITHUB_TOKEN"
+      keep_history: false
+      local_dir: "./doc/_build/html"
+      on:
+        tags: true
+  - stage: deploy to pypi (test)
+    if: tag is present
+    script:
+    - 
+    deploy:
+      provider: pypi
+      server: https://pypi.org/legacy/
+      user:
+        secure: P/OSEYASobwUXg/fmXva+fOSjg1exEavloTWp2gDGI/KJePD00DdR1QGwA3SUMozany0umTMPKDehHJotz0NaltcT6wYiITW1wxvwpKIz3vyqcpntxQzTAgqSfsPygdvt1zLKq09EuxDBDfTdlNp7F6nw+0E2gyg4/jG950zMfLbGB1s80uUiCuNEuuKTQY+6BMNguBlkHlfgh1ETFv05OR0W1vGIFOgwWLSFvIqFWTNQynk0uRjrQneSzGViqpWE3O/nVI22ri9xwHzawwvUcCtyozCpPeTTMZ7dflyYrWcqIj/D0Hz0zITXPUkBye244kXKp5oy0zV4uDSoBbpljRBo+tRSBIuFHta5iBFTcLCaWn03y+enxV2CwgFsGS4TjPSoXMO4LMcVmkwzWFwUQDym1wH3gYhG7z04YkFmJA7OvQUdtZg5qIUEhaJ94v/sQUB2QaFqoG71bpcvLxpHiT/lMYjkoaaPOeGeYtk4b5XQt7q3RU51HOM1nVD9JrYcraS6o+Ufv8O58l9oRJjxF0eks5wEBd/Yef5eqYeOrXCJlHTQYaVD50+XT4dyqxYn8cfx2J41HzkbfQchjk7Kd3vuvrY9Ove3DS6A/FtH+00cW0J0jzxqt84xYtBBUspyzTG2A0HEaHd5kuD178RpDzce2EbD7rrLDbabMmTPq8=
+      password:
+        secure: k74kID3TJ1ujvJzsvkHHOTZoE/IuM2s5rpiJj/PfYwgMJKjZ6r/w/oxCGMUlgCcjz1pEjL5aF2REAa789DgbZ2tN9zepN2wPtWSFR02LeeQ7KiwhjXHSiP5momn7QE4j1aKkgv4DpAbWW/pEDh2lxZY513FfxnSXlYr0LoJ2j2pzOH3x3tBx7R1nGBqVEFHfCZkll9KXZAGL15eWHi+dODsmWIfQXSaSJp8XJCIlvQoyvNUX36Hrn6saB1vVHiNkGqojVfTFzb3ZfocHenaZFWYeUWLbgZr0gJKbXeYEkMViuUDxbuGI4tq+46cTnbhTcoQTtRasowaN3htQMPxHTJMFz5D4tobTILwtc57d3Zdl3Za9k2xTa9z3GRO6V0XMOWQtIoExW/Dox/2g2v+l0X+zueldiVLQT4HwFVe/kdteIUcQXKMjBKrgwsOeV1Ib8baDpqh03QK+rDMFlQ90v+icHc/GVazY2Rg+rCPe7d3QXEjGwamk6zWft/NLajgPB5e+XS43Q/k4CbYG8oxesrflzgiVmosUS8TaKZ95EU7aFuCTcMAfNXWzlf6tSDszLaXP5oTywTrxThO4eHknplrSRW/vY58lD+GI+b2iY9D9peaLkxx7B3uZ1099FAq+vqh9EHI7xu7vZDbUKCwaP5GUsE7acpHRqHruwpXIWL8=
+      distributions: sdist bdist_wheel
+      on:
+        tags: true
 
