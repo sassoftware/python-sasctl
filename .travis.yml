@@ -58,7 +58,6 @@ jobs:
     - 
     deploy:
       provider: pypi
-      server: https://pypi.org/legacy/
       user:
         secure: P/OSEYASobwUXg/fmXva+fOSjg1exEavloTWp2gDGI/KJePD00DdR1QGwA3SUMozany0umTMPKDehHJotz0NaltcT6wYiITW1wxvwpKIz3vyqcpntxQzTAgqSfsPygdvt1zLKq09EuxDBDfTdlNp7F6nw+0E2gyg4/jG950zMfLbGB1s80uUiCuNEuuKTQY+6BMNguBlkHlfgh1ETFv05OR0W1vGIFOgwWLSFvIqFWTNQynk0uRjrQneSzGViqpWE3O/nVI22ri9xwHzawwvUcCtyozCpPeTTMZ7dflyYrWcqIj/D0Hz0zITXPUkBye244kXKp5oy0zV4uDSoBbpljRBo+tRSBIuFHta5iBFTcLCaWn03y+enxV2CwgFsGS4TjPSoXMO4LMcVmkwzWFwUQDym1wH3gYhG7z04YkFmJA7OvQUdtZg5qIUEhaJ94v/sQUB2QaFqoG71bpcvLxpHiT/lMYjkoaaPOeGeYtk4b5XQt7q3RU51HOM1nVD9JrYcraS6o+Ufv8O58l9oRJjxF0eks5wEBd/Yef5eqYeOrXCJlHTQYaVD50+XT4dyqxYn8cfx2J41HzkbfQchjk7Kd3vuvrY9Ove3DS6A/FtH+00cW0J0jzxqt84xYtBBUspyzTG2A0HEaHd5kuD178RpDzce2EbD7rrLDbabMmTPq8=
       password:
