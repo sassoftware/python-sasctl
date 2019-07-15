@@ -12,3 +12,7 @@ __all__ = ['files',
            'model_repository',
            'projects'
            ]
+
+from .._services.model_repository import ModelRepository
+
+model_repository = ModelRepository()

@@ -93,10 +93,10 @@ def create_performance_definition(model, library_name, table_name, name=None, de
         Performance task definition schema in JSON format.
 
     """
-    from .model_repository import get_model, get_project
+    from ..services import model_repository as mr
 
-    model = get_model(model)
-    project = get_project(model.projectId)
+    model = mr.get_model(model)
+    project = mr.get_project(model.projectId)
 
     # Performance data cannot be captured unless certain project properties have been configured.
     for required in ['targetVariable', 'targetLevel', 'predictionVariable']:

@@ -6,7 +6,7 @@
 
 from six.moves import mock
 
-import sasctl.services.model_repository as mr
+from sasctl.services import model_repository as mr
 
 
 def test_create_model():
