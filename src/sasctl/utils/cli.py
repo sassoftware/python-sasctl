@@ -9,7 +9,6 @@ import inspect
 import logging
 import os
 import pkgutil
-import re
 import warnings
 from collections import namedtuple, defaultdict
 from importlib import import_module
@@ -131,6 +130,12 @@ def _find_services(module='sasctl'):
             obj = getattr(module, obj)
             if hasattr(obj, '_cli_command') and hasattr(obj, '_cli_service'):
                 services[obj._cli_service][obj._cli_command] = obj
+
+            elif type(obj).__module__.startswith('sasctl._services'):
+                for atr in dir(obj):
+                    atr = getattr(obj, atr)
+                    if hasattr(atr, '_cli_command') and hasattr(atr, '_cli_service'):
+                        services[atr._cli_service][atr._cli_command] = atr
 
         # recurse into submodules
         submodules = pkgutil.iter_modules(getattr(module, '__path__', []))
