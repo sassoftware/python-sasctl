@@ -55,7 +55,8 @@ class TestModels:
         from sasctl import RestObj
 
         # Register model and ensure attributes are set correctly
-        model = register_model(astore, ASTORE_MODEL_NAME, project=PROJECT_NAME, force=True)
+        model = register_model(astore, ASTORE_MODEL_NAME,
+                               project=PROJECT_NAME, force=True)
         assert isinstance(model, RestObj)
         assert ASTORE_MODEL_NAME == model.name
 

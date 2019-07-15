@@ -13,7 +13,8 @@ import sys
 import warnings
 
 from .utils.pymas import from_pickle, PyMAS
-from sasctl.services import model_management as mm, model_publish as mp, model_repository as mr
+from sasctl.services import model_management as mm, model_publish as mp, \
+    model_repository as mr
 from . import utils
 from .core import get, get_link, RestObj
 
