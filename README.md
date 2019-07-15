@@ -13,7 +13,7 @@
     <img src="https://img.shields.io/badge/Python-3+-blue.svg" alt="Python Version">
   </a>
 
-   <img src="https://travis-ci.com/jlwalke2/python-sasctl.svg?branch=master">
+   <img src="https://travis-ci.com/sassoftware/python-sasctl.svg?branch=master">
   
 </div>
 
