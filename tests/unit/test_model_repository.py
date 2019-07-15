@@ -35,8 +35,8 @@ def test_create_model():
 
     # Passed params should be set correctly
     target = copy.deepcopy(TARGET)
-    with mock.patch('sasctl.services.model_repository.get_project') as get_project:
-        with mock.patch('sasctl.services.model_repository.post') as post:
+    with mock.patch('sasctl._services.model_repository.ModelRepository.get_project') as get_project:
+        with mock.patch('sasctl._services.model_repository.ModelRepository.post') as post:
             get_project.return_value = {'id': PROJECT_ID}
             _ = mr.create_model(MODEL_NAME,
                                 PROJECT_NAME,
@@ -64,8 +64,8 @@ def test_create_model():
     # Model dict w/ parameters already specified should be allowed
     # Explicit overrides should be respected.
     target = copy.deepcopy(TARGET)
-    with mock.patch('sasctl.services.model_repository.get_project') as get_project:
-        with mock.patch('sasctl.services.model_repository.post') as post:
+    with mock.patch('sasctl._services.model_repository.ModelRepository.get_project') as get_project:
+        with mock.patch('sasctl._services.model_repository.ModelRepository.post') as post:
             get_project.return_value = {'id': PROJECT_ID}
             _ = mr.create_model(copy.deepcopy(target), PROJECT_NAME, description='Updated Model')
             target['description'] = 'Updated Model'
