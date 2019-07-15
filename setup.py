@@ -23,6 +23,7 @@ def get_file(filename):
     with open(filename, 'r') as f:
         return f.read()
 
+
 setup(
     name='sasctl',
     description='SAS Viya REST Client',
@@ -31,8 +32,14 @@ setup(
     version=read_dunder('version'),
     author=read_dunder('author'),
     url='https://github.com/sassoftware/python-sasctl/',
+    project_urls={
+        'Bug Tracker': 'https://github.com/sassoftware/python-sasctl/issues',
+        'Documentation': 'https://sassoftware.github.io/python-sasctl/',
+        'Source Code': 'https://github.com/sassoftware/python-sasctl'
+    },
     packages=find_packages(where="src"),
     package_dir={"": "src"},
+    python_requires='>=2.7',
     install_requires=[
         'requests',
         'six >= 1.11'
@@ -46,5 +53,22 @@ setup(
                 'winkerberos ; platform_system == "Windows"'],
     },
     entry_points = {'console_scripts': ['sasctl = sasctl.utils.cli:main']},
-    python_requires='>=2.7'
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'License :: OSI Approved :: Apache Software License',
+        'Environment :: Console',
+        'Intended Audience :: Science/Research',
+        'Intended Audience :: Developers',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Topic :: Software Development',
+        'Topic :: Scientific/Engineering',
+        'Operating System :: OS Independent'
+    ]
 )
