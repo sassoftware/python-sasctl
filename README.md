@@ -50,7 +50,7 @@ pip install -r requirements.txt
 ### Installation
 
 ```
-pip install git+https://github.com/sassoftware/python-sasctl
+pip install sasctl
 ```
   
 
