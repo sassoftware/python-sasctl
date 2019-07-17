@@ -26,6 +26,8 @@ files = _instantiate('sasctl._services.files.Files')
 folders = _instantiate('sasctl._services.folders.Folders')
 microanalytic_score = _instantiate(
     'sasctl._services.microanalytic_store.MicroAnalyticScore')
+model_management = _instantiate(
+    'sasctl._services.model_management.ModelManagement')
 model_repository = _instantiate(
     'sasctl._services.model_repository.ModelRepository')
 

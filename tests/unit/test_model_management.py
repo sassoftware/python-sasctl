@@ -8,6 +8,7 @@ import pytest
 from six.moves import mock
 
 from sasctl import RestObj
+
 import sasctl.services.model_management as mm
 
 
