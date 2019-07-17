@@ -13,9 +13,12 @@
     <img src="https://img.shields.io/badge/Python-3+-blue.svg" alt="Python Version">
   </a>
 
-   <img src="https://travis-ci.com/jlwalke2/python-sasctl.svg?branch=master">
+   <img src="https://travis-ci.com/sassoftware/python-sasctl.svg?branch=master">
   
 </div>
+
+
+###### Full documentation:  https://sassoftware.github.io/python-sasctl
 
 ## Overview
 
@@ -39,19 +42,19 @@ If not already present, these packages will be downloaded and installed automati
 
 The following additional packages are recommended for full functionality:
 - swat
-- kerberos / winkerberos
+- kerberos
 
-
-All required and recommended packages are listed in `requirements.txt` and can be installed easily with 
-```
-pip install -r requirements.txt
-```
 
 ### Installation
 
 ```
-pip install git+https://github.com/sassoftware/python-sasctl
+pip install sasctl
 ```
+
+Functionality that depends on additional packages can be installed using the following:
+ - `pip install sasctl[swat]`
+ - `pip install sasctl[kerberos]`
+ - `pip install sasctl[all]`
   
 
 ## Getting Started
