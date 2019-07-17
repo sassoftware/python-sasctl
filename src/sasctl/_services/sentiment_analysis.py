@@ -7,7 +7,7 @@
 import six
 
 from .service import Service
-from ..core import post, uri_as_str, _build_is_available_func
+from ..core import uri_as_str
 
 class SentimentAnalysis(Service):
     """The Sentiment Analysis API is used to perform sentiment analysis on

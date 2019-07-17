@@ -6,7 +6,6 @@
 
 from .service import Service
 
-from sasctl.core import _build_crud_funcs, post
 
 class Projects(Service):
     _SERVICE_ROOT = '/projects'
