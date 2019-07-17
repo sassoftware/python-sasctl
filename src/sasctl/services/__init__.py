@@ -15,6 +15,8 @@ __all__ = ['files',
 
 from .._services.model_repository import ModelRepository
 from .._services.cas_management import CASManagement
+from .._services.concepts import Concepts
 
 model_repository = ModelRepository()
 cas_management = CASManagement()
+concepts = Concepts()
