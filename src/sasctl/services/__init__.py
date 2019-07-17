@@ -14,7 +14,7 @@ __all__ = ['files',
            ]
 
 def _instantiate(name):
-    module_name, class_name = name.rsplit('.', maxsplit=1)
+    module_name, class_name = name.rsplit('.', 1)
     module = __import__(module_name, fromlist=[''])
     cls = module.__dict__[class_name]
     return cls()
