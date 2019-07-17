@@ -17,8 +17,10 @@ from .._services.model_repository import ModelRepository
 from .._services.cas_management import CASManagement
 from .._services.concepts import Concepts
 from .._services.data_sources import DataSources
+from .._services.files import Files
 
 model_repository = ModelRepository()
 cas_management = CASManagement()
 concepts = Concepts()
 data_sources = DataSources()
+files = Files()
