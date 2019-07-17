@@ -32,4 +32,6 @@ model_publish = _instantiate(
     'sasctl._services.model_publish.ModelPublish')
 model_repository = _instantiate(
     'sasctl._services.model_repository.ModelRepository')
+projects = _instantiate('sasctl._services.projects.Projects')
+
 
