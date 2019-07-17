@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from .service import Service
-from ..core import current_session, get
+
 
 class CASManagement(Service):
     """The CAS Management service provides the ability to manage and perform
