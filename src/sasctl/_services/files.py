@@ -7,9 +7,9 @@
 import os
 import six
 
+from .. import services
 from .service import Service
 from sasctl.utils.cli import sasctl_command
-from ..services import folders
 
 
 class Files(Service):
@@ -67,7 +67,7 @@ class Files(Service):
         params = {}
 
         if folder is not None:
-            _folder = folders.get_folder(folder)
+            _folder = services.folders.get_folder(folder)
 
             if _folder is None:
                 raise ValueError("Folder '%s' could not be found." % folder)

@@ -189,6 +189,9 @@ def _build_parser(services):
             cmd_parser = service_subparser.add_parser(command, help=_get_func_description(func))
 
             for arg in func._cli_arguments():
+                if arg.name in ('self', 'cls'):
+                    continue
+
                 if arg.required:
                     cmd_parser.add_argument(arg.name, help=arg.doc)
                 else:
