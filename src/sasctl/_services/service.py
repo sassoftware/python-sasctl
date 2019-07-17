@@ -11,9 +11,9 @@ from ..core import sasctl_command, HTTPError
 class Service(object):
     _SERVICE_ROOT = None
 
-    is_uuid = core.is_uuid
-    get_link = core.get_link
-    request_link = core.request_link
+    is_uuid = staticmethod(core.is_uuid)
+    get_link = staticmethod(core.get_link)
+    request_link = staticmethod(core.request_link)
 
     @classmethod
     def is_available(cls):
@@ -24,8 +24,19 @@ class Service(object):
         bool
 
         """
-        response = cls.head('/')
+        response = cls.head('/', raw=True)
         return response.status_code == 200
+
+    @classmethod
+    def info(cls):
+        """Version and build information for the service.
+
+        Returns
+        -------
+        RestObj
+
+        """
+        return cls.get('/apiMeta')
 
     @classmethod
     def request(cls, verb, path, session=None, raw=False, **kwargs):
@@ -44,6 +55,10 @@ class Service(object):
         if 400 <= response.status_code <= 599:
             raise HTTPError(response.url, response.status_code,
                             response.text, response.headers, None)
+
+        if raw:
+            return response
+        
         try:
             if raw:
                 return response.json()
@@ -265,4 +280,34 @@ class Service(object):
 
         return [classmethod(f) for f in
                 (list_items, get_item, update_item, delete_item)]
+
+    def _get_rel(self, item, rel, func=None, filter=None, *args):
+        """Get `item` and request a link.
+
+        Parameters
+        ----------
+        item : str or dict
+        rel : str
+        func : function, optional
+            Callable that takes (item, *args) and returns a RestObj of `item`
+        filter : str, optional
+
+        args : any
+            Passed to `func`
+
+        Returns
+        -------
+        list
+
+        """
+        if func is not None:
+            obj = func(item, *args)
+
+        if obj is None:
+            return
+
+        params = 'filter={}'.format(filter) if filter is not None else {}
+
+        resources = self.request_link(obj, rel, params=params)
+        return resources if isinstance(resources, list) else [resources]
 

@@ -865,4 +865,3 @@ def _build_is_available_func(service_root):
     return is_available
 
 
-

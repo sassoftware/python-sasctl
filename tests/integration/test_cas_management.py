@@ -16,7 +16,8 @@ pytestmark = pytest.mark.usefixtures('session')
 def test_is_available():
     assert cm.is_available()
 
-    with mock.patch('sasctl.core.Session.head') as mocked:
+    with mock.patch('sasctl._services.cas_management.CASManagement.head') as \
+            mocked:
         mocked.return_value.status_code = 404
         assert not cm.is_available()
 
