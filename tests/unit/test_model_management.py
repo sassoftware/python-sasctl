@@ -8,8 +8,7 @@ import pytest
 from six.moves import mock
 
 from sasctl import RestObj
-
-import sasctl.services.model_management as mm
+from sasctl.services import model_management as mm
 
 
 def test_create_performance_definition():
