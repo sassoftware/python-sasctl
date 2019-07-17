@@ -4,9 +4,6 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-"""Categorizes natural language text documents according to a prebuilt or
-user-defined model.
-"""
 
 import six
 
@@ -14,6 +11,10 @@ from .service import Service
 from ..core import uri_as_str
 
 class TextCategorization(Service):
+    """Categorizes natural language text documents according to a prebuilt or
+    user-defined model.
+    """
+
     _SERVICE_ROOT = '/categorization'
 
     def categorize(self,
