@@ -18,7 +18,7 @@
 </div>
 
 
-###### Full documentation:  https://sassoftware.github.io/python-sasctl/index.html
+###### Full documentation:  https://sassoftware.github.io/python-sasctl
 
 ## Overview
 
