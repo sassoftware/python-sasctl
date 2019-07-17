@@ -8,8 +8,6 @@ from .service import Service
 
 from .. import services
 
-from sasctl.services.model_publish import _publish_name
-
 
 class ModelManagement(Service):
     """The Model Management API provides basic resources for monitoring
@@ -42,7 +40,8 @@ class ModelManagement(Service):
             "notes": model_obj.get('description'),
             "modelContents": [
                 {
-                    "modelName": _publish_name(model_obj.get('name')),
+                    "modelName": services.model_publish._publish_name(
+                        model_obj.get('name')),
                     "sourceUri": model_uri.get('uri'),
                     "publishLevel": "model"
                 }

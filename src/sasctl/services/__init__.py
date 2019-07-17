@@ -28,6 +28,8 @@ microanalytic_score = _instantiate(
     'sasctl._services.microanalytic_store.MicroAnalyticScore')
 model_management = _instantiate(
     'sasctl._services.model_management.ModelManagement')
+model_publish = _instantiate(
+    'sasctl._services.model_publish.ModelPublish')
 model_repository = _instantiate(
     'sasctl._services.model_repository.ModelRepository')
 
