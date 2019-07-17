@@ -6,8 +6,6 @@
 
 from .service import Service
 
-from .. import services
-
 
 class ModelManagement(Service):
     """The Model Management API provides basic resources for monitoring
@@ -23,13 +21,19 @@ class ModelManagement(Service):
 
     # TODO:  set ds2MultiType
     def publish_model(self, model, destination, name=None, force=False):
-        model_obj = services.model_repository.get_model(model)
+        from .model_repository import ModelRepository
+        from .model_publish import ModelPublish
+
+        mr = ModelRepository()
+        mp = ModelPublish()
+
+        model_obj = mr.get_model(model)
 
         if model_obj is None:
             model_name = model.name if hasattr(model, 'name') else str(model)
             raise ValueError("Model '{}' was not found.".format(model_name))
 
-        model_uri = services.model_repository.get_model_link(model_obj, 'self')
+        model_uri = mr.get_model_link(model_obj, 'self')
 
         # TODO: Verify allowed formats by destination type.
         # As of 19w04 MAS throws HTTP 500 if name is in invalid format.
@@ -40,7 +44,7 @@ class ModelManagement(Service):
             "notes": model_obj.get('description'),
             "modelContents": [
                 {
-                    "modelName": services.model_publish._publish_name(
+                    "modelName": mp._publish_name(
                         model_obj.get('name')),
                     "sourceUri": model_uri.get('uri'),
                     "publishLevel": "model"
@@ -108,8 +112,12 @@ class ModelManagement(Service):
             Performance task definition schema in JSON format.
 
         """
-        model = services.model_repository.get_model(model)
-        project = services.model_repository.get_project(model.projectId)
+        from .model_repository import ModelRepository
+
+        mr = ModelRepository()
+
+        model = mr.get_model(model)
+        project = mr.get_project(model.projectId)
 
         # Performance data cannot be captured unless certain project properties
         # have been configured.

@@ -155,7 +155,10 @@ class Service(object):
             params = 'filter={}'.format(filter) if filter is not None else {}
 
             results = cls.get(path, params=params)
-            return results if isinstance(results, list) else [results]
+            if results is None:
+                return []
+            else:
+                return results if isinstance(results, list) else [results]
 
         @sasctl_command('get')
         def get_item(cls, item, refresh=False):

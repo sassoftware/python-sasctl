@@ -6,9 +6,7 @@
 
 import re
 
-from .. import services
 from .service import Service
-from sasctl.core import get, post
 
 
 class ModelPublish(Service):

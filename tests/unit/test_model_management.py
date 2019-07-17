@@ -22,9 +22,12 @@ def test_create_performance_definition():
     with mock.patch('sasctl.core.requests.Session.request'):
         current_session('example.com', USER, 'password')
 
-    with mock.patch('sasctl.services.model_repository.get_model') as get_model:
-        with mock.patch('sasctl.services.model_repository.get_project') as get_project:
-            with mock.patch('sasctl.services.model_management.post') as post:
+    with mock.patch('sasctl._services.model_repository.ModelRepository'
+                    '.get_model') as get_model:
+        with mock.patch('sasctl._services.model_repository.ModelRepository'
+                        '.get_project') as get_project:
+            with mock.patch('sasctl._services.model_management.ModelManagement'
+                            '.post') as post:
                 get_model.return_value = MODEL
 
                 with pytest.raises(ValueError):
