@@ -13,7 +13,10 @@ __all__ = ['files',
            'projects'
            ]
 
+
 def _instantiate(name):
+    # Instantiate and return the specified class without cluttering up the
+    # module with numerous imports.
     module_name, class_name = name.rsplit('.', 1)
     module = __import__(module_name, fromlist=[''])
     cls = module.__dict__[class_name]
@@ -35,5 +38,8 @@ model_repository = _instantiate(
 projects = _instantiate('sasctl._services.projects.Projects')
 sentiment_analysis = _instantiate(
     'sasctl._services.sentiment_analysis.SentimentAnalysis')
+text_categorization = _instantiate(
+    'sasctl._services.text_categorization.TextCategorization')
+text_parsing = _instantiate('sasctl._services.text_parsing.TextParsing')
 
 
