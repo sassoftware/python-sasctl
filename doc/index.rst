@@ -389,11 +389,10 @@ And finally, the :doc:`tox <tox:index>` module is used to ensure that **sasctl**
 Python versions.
 
 
+Release History
+---------------
 
+.. toctree::
 
-Release Notes
--------------
+   releases
 
-
-
-.. _`examples folder`: ../../examples
