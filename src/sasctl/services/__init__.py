@@ -14,20 +14,18 @@ __all__ = ['files',
            ]
 
 def _instantiate(name):
-    pass
+    module_name, class_name = name.rsplit('.', maxsplit=1)
+    module = __import__(module_name, fromlist=[''])
+    cls = module.__dict__[class_name]
+    return cls()
 
-from .._services.model_repository import ModelRepository
-from .._services.cas_management import CASManagement
-from .._services.concepts import Concepts
-from .._services.data_sources import DataSources
-from .._services.files import Files
-from .._services.folders import Folders
+cas_management = _instantiate('sasctl._services.cas_management.CASManagement')
+concepts = _instantiate('sasctl._services.concepts.Concepts')
+data_sources = _instantiate('sasctl._services.data_sources.DataSources')
+files = _instantiate('sasctl._services.files.Files')
+folders = _instantiate('sasctl._services.folders.Folders')
+microanalytic_score = _instantiate(
+    'sasctl._services.microanalytic_store.MicroAnalyticScore')
+model_repository = _instantiate(
+    'sasctl._services.model_repository.ModelRepository')
 
-model_repository = ModelRepository()
-cas_management = CASManagement()
-concepts = Concepts()
-data_sources = DataSources()
-files = Files()
-folders = Folders()
-
-del Folders

@@ -15,6 +15,10 @@ class Service(object):
     get_link = staticmethod(core.get_link)
     request_link = staticmethod(core.request_link)
 
+    @property
+    def _SERVICE_ROOT(self):
+        raise NotImplementedError()
+
     @classmethod
     def is_available(cls):
         """Checks if the service is currently available.
@@ -58,7 +62,7 @@ class Service(object):
 
         if raw:
             return response
-        
+
         try:
             if raw:
                 return response.json()
