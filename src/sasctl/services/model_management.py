@@ -17,15 +17,15 @@ update_performance_definition, delete_performance_definition = \
 
 # TODO:  set ds2MultiType
 def publish_model(model, destination, name=None, force=False):
-    from .model_repository import get_model, get_model_link
+    from ..services import model_repository as mr
 
-    model_obj = get_model(model)
+    model_obj = mr.get_model(model)
 
     if model_obj is None:
         model_name = model.name if hasattr(model, 'name') else str(model)
         raise ValueError("Model '{}' was not found.".format(model_name))
 
-    model_uri = get_model_link(model_obj, 'self')
+    model_uri = mr.get_model_link(model_obj, 'self')
 
     # TODO: Verify allowed formats by destination type.
     # As of 19w04 MAS throws HTTP 500 if name is in invalid format.

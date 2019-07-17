@@ -83,8 +83,8 @@ class TestModels:
             assert 1 == len([v for v in model.inputVariables + model.outputVariables if v.get('name') == col])
 
         # Ensure model files were created
-        from sasctl.services.model_repository import get_model_contents
-        files = get_model_contents(model)
+        from sasctl.services import model_repository as mr
+        files = mr.get_model_contents(model)
         filenames = [f.name for f in files]
         assert 'model.pkl' in filenames
         assert 'dmcas_espscorecode.sas' in filenames
@@ -92,9 +92,9 @@ class TestModels:
 
     def test_publish_sklearn(self):
         from sasctl.tasks import publish_model
-        from sasctl.services.model_repository import get_model
+        from sasctl.services import model_repository as mr
 
-        model = get_model(SCIKIT_MODEL_NAME, PROJECT_NAME)
+        model = mr.get_model(SCIKIT_MODEL_NAME, PROJECT_NAME)
         p = publish_model(model, 'maslocal', max_retries=100)
         assert 'score' in p.stepIds
 

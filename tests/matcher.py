@@ -10,7 +10,9 @@ from six.moves.urllib.parse import urlsplit
 from betamax.matchers.path import PathMatcher
 
 class RedactedPathMatcher(PathMatcher):
-    """Matches requests identically to the default behavior except that CAS session ids in the path are ignored."""
+    """Matches requests identically to the default behavior except that CAS s
+    ession ids in the path are ignored.
+    """
 
     name = 'redacted_path'
 

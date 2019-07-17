@@ -1,5 +1,11 @@
+#!/usr/bin/env python
+# encoding: utf-8
+#
+# Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+
 from .service import Service
-from..core import current_session, get
+from ..core import current_session, get
 
 FUNCTIONS = {'Analytical', 'Classification', 'Clustering', 'Forecasting',
              'Prediction', 'Text categorization', 'Text extraction',
@@ -10,19 +16,16 @@ class ModelRepository(Service):
     """The Model Repository API provides support for registering, organizing,
     and managing models within a common model repository."""
 
-    _SERVICE_ROOT = '/model_repository'
+    _SERVICE_ROOT = '/modelRepository'
 
-    def __init__(self):
-        ModelRepository.list_repositories, ModelRepository.get_repository, \
-        ModelRepository.update_repository, \
-            ModelRepository.delete_repository = ModelRepository._crud_funcs('/repositories',
-                                                      'repository')
+    list_repositories, get_repository, update_repository, \
+        delete_repository = Service._crud_funcs('/repositories', 'repository')
 
-        ModelRepository.list_projects, ModelRepository.get_project, ModelRepository.update_project, \
-        ModelRepository.delete_project = ModelRepository._crud_funcs('/projects', 'project')
+    list_projects, get_project, update_project, \
+        delete_project = Service._crud_funcs('/projects', 'project')
 
-        ModelRepository.list_models, ModelRepository.get_model, ModelRepository.update_model, \
-            ModelRepository.delete_model = ModelRepository._crud_funcs('/models', 'model')
+    list_models, get_model, update_model, \
+        delete_model = Service._crud_funcs('/models', 'model')
 
     @classmethod
     def get_astore(cls, model):
@@ -94,7 +97,8 @@ class ModelRepository(Service):
         if link is not None:
             scorecode_uri = link.get('href')
             return get(scorecode_uri,
-                       headers={'Accept': 'text/vnd.sas.models.score.code.ds2package'})
+                       headers={
+                           'Accept': 'text/vnd.sas.models.score.code.ds2package'})
 
     @classmethod
     def get_model_contents(cls, model):
@@ -115,7 +119,8 @@ class ModelRepository(Service):
         link = cls.get_model_link(model, 'contents', refresh=True)
 
         if link is not None:
-            return get(link.get('href'), headers={'Accept': link.get('itemType', '*/*')})
+            return get(link.get('href'),
+                       headers={'Accept': link.get('itemType', '*/*')})
 
     @classmethod
     def create_model(cls, model, project, description=None, modeler=None,
@@ -202,12 +207,14 @@ class ModelRepository(Service):
         model['algorithm'] = algorithm or model.get('algorithm')
         model['tool'] = tool or model.get('tool')
         model['champion'] = is_champion or model.get('champion')
-        model['role'] = 'Champion' if model.get('champion', False) else 'Challenger'
+        model['role'] = 'Champion' if model.get('champion',
+                                                False) else 'Challenger'
         model['description'] = description or model.get('description')
-        model.setdefault('properties', [{'name': k, 'value': v} for k, v in properties.items()])
+        model.setdefault('properties', [{'name': k, 'value': v} for k, v in
+                                        properties.items()])
 
-    # TODO: add kwargs (pop)
-    #     model.update(kwargs)
+        # TODO: add kwargs (pop)
+        #     model.update(kwargs)
         return cls.post('/models', json=model, headers={
             'Content-Type': 'application/vnd.sas.models.model+json'})
 
@@ -259,9 +266,9 @@ class ModelRepository(Service):
 
         """
 
-        repo = cls.get_repository('Repository 1')   # Default in 19w04
+        repo = cls.get_repository('Repository 1')  # Default in 19w04
         if repo is None:
-            repo = cls.get_repository('Public')     # Default in 19w21
+            repo = cls.get_repository('Public')  # Default in 19w21
         if repo is None:
             repo = cls.list_repositories()[0]
 
@@ -284,7 +291,6 @@ class ModelRepository(Service):
 
         """
 
-
         if isinstance(project, str):
             project = {'name': project}
 
@@ -295,8 +301,8 @@ class ModelRepository(Service):
 
         project.update(kwargs)
         return cls.post('/projects', json=project,
-                        headers={'Content-Type': 'application/vnd.sas.models.project+json'})
-
+                        headers={
+                            'Content-Type': 'application/vnd.sas.models.project+json'})
 
     @classmethod
     def import_model_from_zip(cls, name, project, file, description=None,
@@ -335,7 +341,7 @@ class ModelRepository(Service):
         params = '&'.join(['{}={}'.format(k, v) for k, v in params.items()])
 
         r = cls.post('/models#octetStream',
-                    data=file.read(),
-                    params=params,
-                    headers={'Content-Type': 'application/octet-stream'})
+                     data=file.read(),
+                     params=params,
+                     headers={'Content-Type': 'application/octet-stream'})
         return r
