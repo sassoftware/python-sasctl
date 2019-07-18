@@ -242,6 +242,11 @@ def publish_model(model, destination, code=None, max_retries=60, **kwargs):
 
     module = get(module_url)
 
+    if 'application/vnd.sas.microanalytic.module' in module._headers[
+        'content-type']:
+        # Bind Python methods to the module instance that will execute the
+        # corresponding MAS module step.
+        from sasctl.services import microanalytic_score as mas
+        return mas.define_steps(module)
     return module
-
 

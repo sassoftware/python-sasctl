@@ -55,7 +55,9 @@ class TestModels:
         from sasctl import RestObj
 
         # Register model and ensure attributes are set correctly
-        model = register_model(astore, ASTORE_MODEL_NAME, project=PROJECT_NAME, force=True)
+        model = register_model(astore, ASTORE_MODEL_NAME,
+                               project=PROJECT_NAME,
+                               force=True)
         assert isinstance(model, RestObj)
         assert ASTORE_MODEL_NAME == model.name
 
@@ -66,7 +68,10 @@ class TestModels:
         sk_model, train_df = sklearn_model
 
         # Register model and ensure attributes are set correctly
-        model = register_model(sk_model, SCIKIT_MODEL_NAME, project=PROJECT_NAME, input=train_df, force=True)
+        model = register_model(sk_model, SCIKIT_MODEL_NAME,
+                               project=PROJECT_NAME,
+                               input=train_df,
+                               force=True)
         assert isinstance(model, RestObj)
         assert SCIKIT_MODEL_NAME == model.name
         assert 'Classification' == model.function
@@ -74,12 +79,14 @@ class TestModels:
         assert 'Python' == model.trainCodeType
         assert 'ds2MultiType' == model.scoreCodeType
 
-        # Don't compare to sys.version since cassettes used may have been created by a different version
+        # Don't compare to sys.version since cassettes used may have been
+        # created by a different version
         assert re.match('Python \d\.\d', model.tool)
 
         # Ensure input & output metadata was set
         for col in train_df.columns:
-            assert 1 == len([v for v in model.inputVariables + model.outputVariables if v.get('name') == col])
+            assert 1 == len([v for v in model.inputVariables
+                             + model.outputVariables if v.get('name') == col])
 
         # Ensure model files were created
         from sasctl.services.model_repository import get_model_contents
@@ -95,7 +102,12 @@ class TestModels:
 
         model = get_model(SCIKIT_MODEL_NAME, PROJECT_NAME)
         p = publish_model(model, 'maslocal', max_retries=100)
+
+        # Score step should have been defined in the module
         assert 'score' in p.stepIds
+
+        # MAS module should automatically have methods bound
+        assert callable(p.score)
 
     def test_score_sklearn(self):
         from sasctl.services import microanalytic_score as mas
