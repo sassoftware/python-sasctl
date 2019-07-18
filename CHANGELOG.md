@@ -4,6 +4,7 @@ Unreleased
 **Improvements**
  - public_model task also defines methods mapped to MAS module steps when publishing to MAS.
  - SSL verification can be disable with `SSLREQCERT` environment variable.
+ - Added `execute_performance_task`
 
 **Changes**
  - Updated method signature for `create_performance_definition` in Model Manager.

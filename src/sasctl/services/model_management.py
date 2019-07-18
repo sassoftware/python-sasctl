@@ -162,3 +162,23 @@ def create_performance_definition(model,
         request['outputVariables'] = [v.get('name') for v in project.get('variables', []) if v.get('role') == 'output']
 
     return post(SERVICE_ROOT + '/performanceTasks', json=request, headers={'Content-Type': 'application/vnd.sas.models.performance.task+json'})
+
+
+def execute_performance_definition(definition):
+    """Launches a job to run a performance definition.
+
+    Parameters
+    ----------
+    definition : str or dict
+        The id or dictionary representation of a performance definition.
+
+    Returns
+    -------
+    RestObj
+        The executing job
+
+    """
+    definition = get_performance_definition(definition)
+
+    return post(SERVICE_ROOT + '/performanceTasks/%s' % definition.id)
+
