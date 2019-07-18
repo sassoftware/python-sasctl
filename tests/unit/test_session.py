@@ -6,6 +6,7 @@
 
 import json
 import logging
+import os
 
 import pytest
 from six.moves import mock
@@ -198,6 +199,39 @@ def test_ssl_context():
     assert os.environ['CAS_CLIENT_SSL_CA_LIST'] == os.environ[
         'REQUESTS_CA_BUNDLE']
     assert not isinstance(s.get_adapter('https://'), SSLContextAdapter)
+
+
+def test_verify_ssl():
+
+    with mock.patch('sasctl.core.Session.get_token', return_value='token'):
+        # Should verify SSL by default
+        s = Session('hostname', 'username', 'password')
+        assert s.verify == True
+
+        # Specify true with no issues
+        s = Session('hostname', 'username', 'password', verify_ssl=True)
+        assert s.verify == True
+
+        # Explicitly disable SSL verification
+        s = Session('hostname', 'username', 'password', verify_ssl=False)
+        assert s.verify == False
+
+        # Reuse SWAT env variable, if specified
+        os.environ['SSLREQCERT'] = 'NO'
+        s = Session('hostname', 'username', 'password')
+        assert s.verify == False
+
+        os.environ['SSLREQCERT'] = 'no'
+        s = Session('hostname', 'username', 'password')
+        assert s.verify == False
+
+        os.environ['SSLREQCERT'] = 'false'
+        s = Session('hostname', 'username', 'password')
+        assert s.verify == False
+
+        # Explicit should take precedence over environment variables
+        s = Session('hostname', 'username', 'password', verify_ssl=True)
+        assert s.verify == True
 
 
 def test_kerberos():

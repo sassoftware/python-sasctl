@@ -208,8 +208,12 @@ class Session(requests.Session):
 
     """
     def __init__(self, host, user=None, password=None, authinfo=None,
-                 protocol=None, port=None, verify_ssl=True):
+                 protocol=None, port=None, verify_ssl=None):
         super(Session, self).__init__()
+
+        if verify_ssl is None:
+            verify_ssl = os.environ.get('SSLREQCERT', 'yes')
+            verify_ssl = str(verify_ssl).lower() not in ('no', 'false')
 
         self._id = uuid4().hex
         self.message_log = logger.getChild('session.%s' % self._id)
