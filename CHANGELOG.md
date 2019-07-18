@@ -6,7 +6,7 @@ Unreleased
  - SSL verification can be disable with `SSLREQCERT` environment variable.
 
 **Changes**
- Updated method signature for `create_performance_definition` in Model Manager.
+ - Updated method signature for `create_performance_definition` in Model Manager.
 
 **Bugfixes**
  - register_model task no longer adds `rc` and `msg` variables from MAS to the project variables.
