@@ -50,7 +50,21 @@ def publish_model(model, destination, name=None, force=False):
     return r
 
 
-def create_performance_definition(model, library_name, table_name, name=None, description=None, outputLibrary=None, cas_server=None):
+def create_performance_definition(model,
+                                  library_name,
+                                  table_prefix,
+                                  name=None,
+                                  description=None,
+                                  monitor_champion=False,
+                                  monitor_challenger=False,
+                                  max_bins=None,
+                                  scoring_required=False,
+                                  all_data=False,
+                                  save_output=True,
+                                  output_library=None,
+                                  autoload_output=False,
+                                  cas_server=None,
+                                  trace=False):
     """Create the performance task definition in the model project to monitor model performance.
 
     Parameters
@@ -59,66 +73,84 @@ def create_performance_definition(model, library_name, table_name, name=None, de
         The name or id of the model, or a dictionary representation of the model.
     library_name : str
         The library containing the input data, default is 'Public'.
-    table_name : str
+    table_prefix : str
         The name used for the performance data.
     name : str
-        The name of the performance task, default is 'Performance'.
+        The name of the performance task.
     description : str
-        The description of the performance task, default is 'Performance monitoring for model' + model.name.
+        The description of the performance task, default is 'Performance
+        monitoring for model' + model.name.
+    monitor_champion : bool
+        Indicates to monitor the project champion model.
+    monitor_challenger : bool
+        Indicates to monitor challenger models.
+    max_bins : int
+        The maximum bins number, Must be >= 2.  Defaults to 10.
+    scoring_required : bool
+        Whether model scoring must be performed on the input data before
+        performance results can be computed.  Should be `False` if target
+        values are included in the `table_prefix` tables.
+    all_data : bool
+        Whether to run the performance job against all matching data tables
+        in `library_name` or just the new tables.  Defaults to `False`.
+    save_output : bool
+        Whether to save the computed results to a table in `output_library`.
+        Defaults to True.
+    output_library : str
+        Name of a CASLIB where computed results should be saved.  Defaults to
+        'ModelPerformanceData'.
+    autoload_output : bool
+        Whether computed results should automatically be re-loaded
+        after a CAS server restart.
     cas_server : str
         The CAS Server for the monitoring task, default is 'cas-shared-default'.
-    championMonitored : bool
-        Indicates to monitor the project champion model.
-    challengerMonitored : bool
-        Indicates to monitor challenger models.
-    includeAllData : bool
-        Indicates whether to run a performance job against all the data tables in a library.
-    scoreExecutionRequired : bool
-        Indicates whether the scoring task execution is required. This should be set 'False' if you have provided the scores and 'True' if not.
-    maxBins : int
-        The maximum bins number, default is 10.
-    resultLibrary : str
-        The performance output table library, default is 'ModelPerformanceData'.
-    traceOn : bool
-        Indicates whether to turn on tracing.
-    performanceResultSaved : bool
-        Indicates whether the performance results are saved.
-    loadPerformanceResult : bool
-        Indicates to load performance result data.
-
+    trace : bool
+        Whether to enable trace messages in the SAS job log when
+        executing the performance definition.
 
     Returns
     -------
-    str
-        Performance task definition schema in JSON format.
+    RestObj
+        The performance task definition schema
 
     """
     from .model_repository import get_model, get_project
 
+    if '_' in table_prefix:
+        raise ValueError("Parameter 'table_prefix' cannot contain underscores."
+                         " Received a value of '%s'.") % table_prefix
+
+    max_bins = 10 if max_bins is None else int(max_bins)
+    if int(max_bins) < 2:
+        raise ValueError("Parameter 'max_bins' must be at least 2.  "
+                         "Received a value of '%s'." % max_bins)
+
     model = get_model(model)
     project = get_project(model.projectId)
 
-    # Performance data cannot be captured unless certain project properties have been configured.
+    # Performance data cannot be captured unless certain project properties
+    # have been configured.
     for required in ['targetVariable', 'targetLevel', 'predictionVariable']:
         if getattr(project, required, None) is None:
-            raise ValueError("Project %s must have the '%s' property set." % (project.name, required))
+            raise ValueError("Project %s must have the '%s' property set."
+                             % (project.name, required))
 
     request = {'projectId': project.id,
                'name': name or model.name + ' Performance',
                'modelIds': [model.id],
-               'championMonitored': False,
-               'challengerMonitored': False,
-               'includeAllData': False,
-               'scoreExecutionRequired': False,
-               'maxBins': 10,
-               'resultLibrary': outputLibrary or 'ModelPerformanceData',
-               'traceOn': False,
-               'performanceResultSaved': True,
+               'championMonitored': monitor_champion,
+               'challengerMonitored': monitor_challenger,
+               'maxBins': max_bins,
+               'resultLibrary': output_library or 'ModelPerformanceData',
+               'includeAllData': all_data,
+               'scoreExecutionRequired': scoring_required,
+               'performanceResultSaved': save_output,
+               'loadPerformanceResult': autoload_output,
                'dataLibrary': library_name or 'Public',
-               'loadPerformanceResult': False,
                'description': description or 'Performance definition for model ' + model.name,
                'casServerId': cas_server or 'cas-shared-default',
-               'dataPrefix': table_name
+               'dataPrefix': table_prefix,
+               'traceOn': trace
                }
 
     # If model doesn't specify input/output variables, try to pull from project definition
