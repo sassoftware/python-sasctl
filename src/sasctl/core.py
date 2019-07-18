@@ -207,10 +207,16 @@ class Session(requests.Session):
     filters
 
     """
-    def __init__(self, host, user=None, password=None, authinfo=None,
-                 protocol=None, port=None, verify_ssl=None):
+    def __init__(self, host,
+                 user=None,
+                 password=None,
+                 authinfo=None,
+                 protocol=None,
+                 port=None,
+                 verify_ssl=None):
         super(Session, self).__init__()
 
+        # Determine whether or not server SSL certificates should be verified.
         if verify_ssl is None:
             verify_ssl = os.environ.get('SSLREQCERT', 'yes')
             verify_ssl = str(verify_ssl).lower() not in ('no', 'false')
@@ -220,9 +226,10 @@ class Session(requests.Session):
 
         # If certificate path has already been set for SWAT package, make
         # Requests module reuse it.
-        if 'CAS_CLIENT_SSL_CA_LIST' in os.environ:
-            os.environ['REQUESTS_CA_BUNDLE'] = os.environ[
-                'CAS_CLIENT_SSL_CA_LIST']
+        for k in ['SSLCALISTLOC', 'CAS_CLIENT_SSL_CA_LIST']:
+            if k in os.environ:
+                os.environ['REQUESTS_CA_BUNDLE'] = os.environ[k]
+                break
 
         # If certificate path hasn't been specified in either environment
         # variable, replace the default adapter with one that will use the

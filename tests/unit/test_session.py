@@ -176,8 +176,7 @@ def test_ssl_context():
     import os
     from sasctl.core import SSLContextAdapter
 
-    if 'CAS_CLIENT_SSL_CA_LIST' in os.environ: del os.environ[
-        'CAS_CLIENT_SSL_CA_LIST']
+    if 'CAS_CLIENT_SSL_CA_LIST' in os.environ: del os.environ['CAS_CLIENT_SSL_CA_LIST']
     if 'REQUESTS_CA_BUNDLE' in os.environ: del os.environ['REQUESTS_CA_BUNDLE']
 
     # Should default to SSLContextAdapter if no certificate paths are set
@@ -196,9 +195,24 @@ def test_ssl_context():
     os.environ['CAS_CLIENT_SSL_CA_LIST'] = 'path_for_swat'
     with mock.patch('sasctl.core.Session.get_token', return_value='token'):
         s = Session('hostname', 'username', 'password')
-    assert os.environ['CAS_CLIENT_SSL_CA_LIST'] == os.environ[
-        'REQUESTS_CA_BUNDLE']
+    assert os.environ['CAS_CLIENT_SSL_CA_LIST'] == os.environ['REQUESTS_CA_BUNDLE']
     assert not isinstance(s.get_adapter('https://'), SSLContextAdapter)
+
+    # Cleanup
+    del os.environ['CAS_CLIENT_SSL_CA_LIST']
+    del os.environ['REQUESTS_CA_BUNDLE']
+
+    # If SWAT env variable is set, it should override the Requests variable
+    os.environ['SSLCALISTLOC'] = 'path_for_swat'
+    with mock.patch('sasctl.core.Session.get_token', return_value='token'):
+        s = Session('hostname', 'username', 'password')
+    assert os.environ['SSLCALISTLOC'] == os.environ['REQUESTS_CA_BUNDLE']
+    assert 'CAS_CLIENT_SSL_CA_LIST' not in os.environ
+    assert not isinstance(s.get_adapter('https://'), SSLContextAdapter)
+
+    # Cleanup
+    del os.environ['SSLCALISTLOC']
+    del os.environ['REQUESTS_CA_BUNDLE']
 
 
 def test_verify_ssl():

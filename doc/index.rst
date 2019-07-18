@@ -273,6 +273,11 @@ Environment Variables
 .. envvar:: CAS_CLIENT_SSL_CA_LIST
 
 Client-side path to a certificate file containing :abbr:`CA (Certificate Authority)` certificates to be trusted.  Used by the :mod:`swat` module.  This
+will take precedence over :envvar:`SSLCALISTLOC` and :envvar:`REQUESTS_CA_BUNDLE`.
+
+.. envvar:: SSLCALISTLOC
+
+Client-side path to a certificate file containing :abbr:`CA (Certificate Authority)` certificates to be trusted.  Used by the :mod:`swat` module.  This
 will take precedence over :envvar:`REQUESTS_CA_BUNDLE`.
 
 .. envvar:: REQUESTS_CA_BUNDLE
