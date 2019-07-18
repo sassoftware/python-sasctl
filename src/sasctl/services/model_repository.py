@@ -116,23 +116,28 @@ def get_model_contents(model):
         return get(link.get('href'), headers={'Accept': link.get('itemType', '*/*')})
 
 
-def create_model(model, project, description=None, modeler=None, function=None, algorithm=None, tool=None,
-                 is_champion=False,
-                 properties={}, **kwargs):
+def create_model(model, project, description=None, modeler=None, function=None,
+                 algorithm=None, tool=None, is_champion=False, properties={},
+                 **kwargs):
     """Creates a model into a project or folder.
 
     Parameters
     ----------
     model : str or dict
-        The name or id of the model, or a dictionary representation of the model.
+        The name or id of the model, or a dictionary representation of the
+        model.
     project : str or dict
-        The name or id of the model project, or a dictionary representation of the model project.
+        The name or id of the model project, or a dictionary representation of
+        the model project.
     description : str, optional
         The description of the model.
     modeler : str, optional
-        Name of the user that created the model.  Current user name will be used if unspecified.
+        Name of the user that created the model.  Current user name will be
+        used if unspecified.
     function : str, optional
-        The function of the model, valid values include: analytical, classification, cluster, forecasting, prediction, Text analytics, transformation.
+        The function of the model, valid values include: analytical,
+        classification, cluster, forecasting, prediction, Text analytics,
+        transformation.
     algorithm : str, optional
         The name of the model algorithm.
     tool : str, optional
@@ -148,7 +153,8 @@ def create_model(model, project, description=None, modeler=None, function=None, 
     champion : bool, optional
         Indicates whether the project has champion model or not.
     role : str, optional
-        The role of the model, valid values include: plain, champion, challenger.
+        The role of the model, valid values include: plain, champion,
+        challenger.
     location : str, optional,
         The location of this model.
     targetVariable : str, optional
@@ -165,10 +171,11 @@ def create_model(model, project, description=None, modeler=None, function=None, 
         Custom model properties that can be set: name, value, type
 
     inputVariables : array_like, optional
-        Model input variables. By default, these are the same as the model project.
+        Model input variables. By default, these are the same as the model
+        project.
     outputVariables : array_like, optional
-        Model output variables. By default, these are the same as the model project.
-
+        Model output variables. By default, these are the same as the model
+        project.
 
     Returns
     -------

@@ -119,7 +119,8 @@ def register_model(model, name, project, repository=None, input=None, version='l
         model = mr.import_model_from_zip(name, project, zipfile, version=version)
         return model
 
-    # If the model is an scikit-learn model, generate the model dictionary from it and pickle the model for storage
+    # If the model is an scikit-learn model, generate the model dictionary
+    # from it and pickle the model for storage
     elif all(hasattr(model, attr) for attr in ['_estimator_type', 'get_params']):
         # Pickle the model so we can store it
         model_pkl = pickle.dumps(model)
@@ -135,15 +136,26 @@ def register_model(model, name, project, repository=None, input=None, version='l
             assert isinstance(mas_module, PyMAS)
 
             # Include score code files from ESP and MAS
-            files.append({'name': 'dmcas_packagescorecode.sas', 'file': mas_module.score_code(), 'role': 'Score Code'})
-            files.append({'name': 'dmcas_espscorecode.sas', 'file': mas_module.score_code(dest='ESP'), 'role': 'Score Code'})
+            files.append({'name': 'dmcas_packagescorecode.sas',
+                          'file': mas_module.score_code(),
+                          'role': 'Score Code'})
+            files.append({'name': 'dmcas_espscorecode.sas',
+                          'file': mas_module.score_code(dest='ESP'),
+                          'role': 'Score Code'})
 
-            model['inputVariables'] = [var.as_model_metadata() for var in mas_module.variables if not var.out]
-            model['outputVariables'] = [var.as_model_metadata() for var in mas_module.variables if var.out]
+            model['inputVariables'] = [var.as_model_metadata()
+                                       for var in mas_module.variables
+                                       if not var.out]
+
+            model['outputVariables'] = [var.as_model_metadata()
+                                        for var in mas_module.variables
+                                        if var.out
+                                        and var.name not in ('rc', 'msg')]
         except ValueError:
-            # PyMAS creation failed, most likely because input data wasn't provided
-            warnings.warn('Unable to determine input/output variables.  Model variables will not be specified.')
-
+            # PyMAS creation failed, most likely because input data wasn't
+            # provided
+            warnings.warn('Unable to determine input/output variables. '
+                          ' Model variables will not be specified.')
     else:
         # Otherwise, the model better be a dictionary of metadata
         assert isinstance(model, dict)
@@ -151,7 +163,9 @@ def register_model(model, name, project, repository=None, input=None, version='l
     if create_project:
         vars = model.get('inputVariables', []) + model.get('outputVariables', [])
         target_level = 'Interval' if model.get('function') == 'Regression' else None
-        project = mr.create_project(project, repository, variables=vars, targetLevel=target_level)
+        project = mr.create_project(project, repository,
+                                    variables=vars,
+                                    targetLevel=target_level)
 
     model = mr.create_model(model, project)
 
