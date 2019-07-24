@@ -35,6 +35,9 @@ def test_score_code():
     mas_code = p.score_code()
     esp_code = p.score_code(dest='esp')
 
+    assert mas_code.lower().startswith('package _')
+    assert esp_code.lower().startswith('data sasep.out;')
+
     with pytest.raises(ValueError):
         cas_code = p.score_code(dest='cas')
 
