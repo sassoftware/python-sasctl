@@ -233,8 +233,13 @@ class Session(requests.Session):
         # If certificate path hasn't been specified in either environment
         # variable, replace the default adapter with one that will use the
         # machine's default SSL _settings.
-        if 'REQUESTS_CA_BUNDLE' not in os.environ and verify_ssl:
-            self.mount('https://', SSLContextAdapter())
+        if 'REQUESTS_CA_BUNDLE' not in os.environ:
+            if verify_ssl:
+                self.mount('https://', SSLContextAdapter())
+            else:
+                # Every request will generate an InsecureRequestWarning
+                from urllib3.exceptions import InsecureRequestWarning
+                warnings.simplefilter('default', InsecureRequestWarning)
 
         self.filters = DEFAULT_FILTERS
 
@@ -541,21 +546,12 @@ class Session(requests.Session):
         self._old_session = _session
         _session = self
 
-        # Reduce verbosity of warnings.  By default, HTTP warnings on thrown on every request
-        self._filter_context = warnings.catch_warnings()
-        self._filter_context.__enter__()
-        from urllib3.exceptions import HTTPWarning
-        warnings.simplefilter('once', HTTPWarning)
-
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         # Restore previous current session
         global _session
         _session = self._old_session
-
-        # Restore warning levels
-        self._filter_context.__exit__()
 
         super(Session, self).__exit__()
 

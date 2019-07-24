@@ -6,10 +6,11 @@ Unreleased
    Imports of services in the format `import sasctl.services.model_management as mm` must be
    changed to `from sasctl.services import model_management as mm`.
  - `host` and `user` parameters of `Session` renamed to `hostname` and `username` to align with SWAT.
+ - Only `InsecureRequestWarning` is suppred instead of all `HTTPWarning`
  
  **Improvements**
  - Added `copy_analytic_store` method to `model_repository` service
- - `AuthenticationError` returned instead of `HTTPError` if session authentication fails. 
+ - `AuthenticationError` returned instead of `HTTPError` if session authentication fails.
 
 
 v0.9.7 (2019-07-18)
