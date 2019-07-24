@@ -1,0 +1,1517 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2019-07-04T19:34:40",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "60"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read gelupdates esvakmcriskconsumers SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS esvakmcorionriskconsumers USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap defsusers opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers esvakmcorionriskaccess bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin EsriUsers AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install techoffice ApplicationAdministrators COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"1b5e68a57442479796fe9d7b6fb22ff0\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:39 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:40",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/casManagement/servers?filter=eq(name,%20%22cas-shared-default%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/\",\"uri\":\"/casManagement/\",\"type\":\"application/vnd.sas.api\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers?filter=eq(name,%20%22cas-shared-default%22)&excludeItemLinks=false&start=0&limit=10\",\"uri\":\"/casManagement/servers?filter=eq(name,%20%22cas-shared-default%22)&excludeItemLinks=false&start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.server\"},{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/casManagement/servers\",\"uri\":\"/casManagement/servers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.server\"}],\"name\":\"servers\",\"accept\":\"application/vnd.sas.cas.server\",\"start\":0,\"count\":1,\"items\":[{\"version\":2,\"name\":\"cas-shared-default\",\"description\":\"controller\",\"host\":\"fsds-viya19w04-primary-controller.fsl.sashq-d.openstack.sas.com\",\"port\":5570,\"restPort\":8777,\"restProtocol\":\"https\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers\",\"uri\":\"/casManagement/servers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.server\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default\",\"uri\":\"/casManagement/servers/cas-shared-default\",\"type\":\"application/vnd.sas.cas.server\"},{\"method\":\"GET\",\"rel\":\"connection\",\"href\":\"/casManagement/servers/cas-shared-default/connection\",\"uri\":\"/casManagement/servers/cas-shared-default/connection\",\"type\":\"application/vnd.sas.cas.server.connection\"},{\"method\":\"GET\",\"rel\":\"state\",\"href\":\"/casManagement/servers/cas-shared-default/state\",\"uri\":\"/casManagement/servers/cas-shared-default/state\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/state\",\"uri\":\"/casManagement/servers/cas-shared-default/state\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"nodes\",\"href\":\"/casManagement/servers/cas-shared-default/nodes\",\"uri\":\"/casManagement/servers/cas-shared-default/nodes\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.server.node\"},{\"method\":\"GET\",\"rel\":\"metrics\",\"href\":\"/casManagement/servers/cas-shared-default/metrics\",\"uri\":\"/casManagement/servers/cas-shared-default/metrics\",\"type\":\"application/vnd.sas.cas.server.metrics\"},{\"method\":\"GET\",\"rel\":\"sessions\",\"href\":\"/casManagement/servers/cas-shared-default/sessions\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"POST\",\"rel\":\"createSession\",\"href\":\"/casManagement/servers/cas-shared-default/sessions\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions\",\"type\":\"application/vnd.sas.cas.session\",\"responseType\":\"application/vnd.sas.cas.session\"},{\"method\":\"GET\",\"rel\":\"caslibs\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.caslib\"},{\"method\":\"GET\",\"rel\":\"stopLists\",\"href\":\"/casManagement/servers/cas-shared-default/stopLists\",\"uri\":\"/casManagement/servers/cas-shared-default/stopLists\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.server.stop.list\"},{\"method\":\"GET\",\"rel\":\"casProxy\",\"href\":\"/casProxy/servers/cas-shared-default/cas\",\"uri\":\"/casProxy/servers/cas-shared-default/cas\",\"type\":\"application/json\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"}],\"tags\":[\"controller\",\"primary\",\"restProtocol=https\",\"appServerEnabled=true\",\"rootLibPath=/opt/sas/viya/config/data/cas/default\",\"ssl\"]}],\"limit\":10,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:40 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/casManagement/servers?filter=eq(name,%20%22cas-shared-default%22)"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:40",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/casManagement/servers/cas-shared-default"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"version\":2,\"name\":\"cas-shared-default\",\"description\":\"controller\",\"host\":\"fsds-viya19w04-primary-controller.fsl.sashq-d.openstack.sas.com\",\"port\":5570,\"restPort\":8777,\"restProtocol\":\"https\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers\",\"uri\":\"/casManagement/servers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.server\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default\",\"uri\":\"/casManagement/servers/cas-shared-default\",\"type\":\"application/vnd.sas.cas.server\"},{\"method\":\"GET\",\"rel\":\"connection\",\"href\":\"/casManagement/servers/cas-shared-default/connection\",\"uri\":\"/casManagement/servers/cas-shared-default/connection\",\"type\":\"application/vnd.sas.cas.server.connection\"},{\"method\":\"GET\",\"rel\":\"state\",\"href\":\"/casManagement/servers/cas-shared-default/state\",\"uri\":\"/casManagement/servers/cas-shared-default/state\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/state\",\"uri\":\"/casManagement/servers/cas-shared-default/state\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"nodes\",\"href\":\"/casManagement/servers/cas-shared-default/nodes\",\"uri\":\"/casManagement/servers/cas-shared-default/nodes\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.server.node\"},{\"method\":\"GET\",\"rel\":\"metrics\",\"href\":\"/casManagement/servers/cas-shared-default/metrics\",\"uri\":\"/casManagement/servers/cas-shared-default/metrics\",\"type\":\"application/vnd.sas.cas.server.metrics\"},{\"method\":\"GET\",\"rel\":\"sessions\",\"href\":\"/casManagement/servers/cas-shared-default/sessions\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"POST\",\"rel\":\"createSession\",\"href\":\"/casManagement/servers/cas-shared-default/sessions\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions\",\"type\":\"application/vnd.sas.cas.session\",\"responseType\":\"application/vnd.sas.cas.session\"},{\"method\":\"GET\",\"rel\":\"caslibs\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.caslib\"},{\"method\":\"GET\",\"rel\":\"stopLists\",\"href\":\"/casManagement/servers/cas-shared-default/stopLists\",\"uri\":\"/casManagement/servers/cas-shared-default/stopLists\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.server.stop.list\"},{\"method\":\"GET\",\"rel\":\"casProxy\",\"href\":\"/casProxy/servers/cas-shared-default/cas\",\"uri\":\"/casProxy/servers/cas-shared-default/cas\",\"type\":\"application/json\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"}],\"tags\":[\"controller\",\"primary\",\"restProtocol=https\",\"appServerEnabled=true\",\"rootLibPath=/opt/sas/viya/config/data/cas/default\",\"ssl\"]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:40 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=98"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/casManagement/servers/cas-shared-default"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:41",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs?filter=eq($primary,name,%20%22Public%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default/\",\"uri\":\"/casManagement/servers/cas-shared-default/\",\"type\":\"application/vnd.sas.cas.server\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs?filter=eq($primary,name,%20%22Public%22)&includeHidden=false&excludeItemLinks=false&start=0&limit=10\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs?filter=eq($primary,name,%20%22Public%22)&includeHidden=false&excludeItemLinks=false&start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.caslib\"},{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.caslib\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs\",\"type\":\"application/vnd.sas.cas.caslib\"}],\"name\":\"caslibs\",\"accept\":\"application/vnd.sas.cas.caslib\",\"start\":0,\"count\":1,\"items\":[{\"version\":2,\"name\":\"Public\",\"type\":\"PATH\",\"description\":\"Shared and writeable caslib, accessible to all users.\",\"scope\":\"global\",\"path\":\"/opt/sas/viya/config/data/cas/default/public/\",\"hidden\":false,\"attributes\":{\"active\":false,\"personal\":false,\"subDirs\":false},\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.caslib\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Public\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Public\",\"type\":\"application/vnd.sas.cas.caslib\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Public\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Public\",\"type\":\"application/vnd.sas.cas.caslib\",\"responseType\":\"application/vnd.sas.cas.caslib\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Public\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Public\"},{\"method\":\"GET\",\"rel\":\"tables\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Public/tables\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Public/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.table\"},{\"method\":\"GET\",\"rel\":\"sources\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Public/sources\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Public/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.source.table\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Public\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Public\",\"type\":\"application/vnd.sas.data.source\"}],\"transient\":false}],\"limit\":10,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:41 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=97"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs?filter=eq($primary,name,%20%22Public%22)"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:43",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"caslibUri\": \"/casManagement/servers/cas-shared-default/caslibs/Public\", \"documents\": [\"Oh yes, the, uh, the Norwegian Blue. What's wrong with it?\", \"I'll tell you what's wrong with it, my lad. He's dead, that's what's wrong with it!\", \"No, no, he's uh,...he's resting.\", \"Look, matey, I know a dead parrot when I see one, and I'm looking at one right now.\", \"No no he's not dead, he's, he's resting! Remarkable bird, the Norwegian Blue, isn't it? Beautiful plumage!\", \"The plumage don't enter into it. It's stone dead.\"], \"version\": 1, \"language\": \"en\", \"enableFacts\": false}"
+        },
+        "headers": {
+          "Accept": [
+            "application/vnd.sas.text.concepts.job+json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "577"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.text.concepts.job.request.documents+json"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/concepts/jobs"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"version\":1,\"language\":\"en\",\"matchType\":\"all\",\"enableFacts\":false,\"inputUri\":\"/casManagement/servers/cas-shared-default/caslibs/Public/tables/USERNAME-efeec402-eb31-4755-ad97-e051d1a4a62d\",\"documentIdVariable\":\"id\",\"textVariable\":\"text\",\"id\":\"885a1904-5cf8-45fd-afd4-065188e52602\",\"state\":\"pending\",\"creationTimeStamp\":\"2019-07-04T19:34:43.597Z\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602\",\"uri\":\"/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602\",\"type\":\"application/vnd.sas.text.concepts.job\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602\",\"uri\":\"/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602\"},{\"method\":\"GET\",\"rel\":\"state\",\"href\":\"/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state\",\"uri\":\"/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"log\",\"href\":\"/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/log\",\"uri\":\"/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/log\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"cancel\",\"href\":\"/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state?value=canceled\",\"uri\":\"/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state?value=canceled\",\"responseType\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"caslib\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Public\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Public\",\"type\":\"application/vnd.sas.cas.caslib\"}]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.text.concepts.job+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:42 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=96"
+          ],
+          "Location": [
+            "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 202,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:43",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "running"
+        },
+        "headers": {
+          "Accept-Charset": [
+            "big5, big5-hkscs, cesu-8, euc-jp, euc-kr, gb18030, gb2312, gbk, ibm-thai, ibm00858, ibm01140, ibm01141, ibm01142, ibm01143, ibm01144, ibm01145, ibm01146, ibm01147, ibm01148, ibm01149, ibm037, ibm1026, ibm1047, ibm273, ibm277, ibm278, ibm280, ibm284, ibm285, ibm290, ibm297, ibm420, ibm424, ibm437, ibm500, ibm775, ibm850, ibm852, ibm855, ibm857, ibm860, ibm861, ibm862, ibm863, ibm864, ibm865, ibm866, ibm868, ibm869, ibm870, ibm871, ibm918, iso-2022-cn, iso-2022-jp, iso-2022-jp-2, iso-2022-kr, iso-8859-1, iso-8859-13, iso-8859-15, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, jis_x0201, jis_x0212-1990, koi8-r, koi8-u, shift_jis, tis-620, us-ascii, utf-16, utf-16be, utf-16le, utf-32, utf-32be, utf-32le, utf-8, windows-1250, windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, windows-1258, windows-31j, x-big5-hkscs-2001, x-big5-solaris, x-compound_text, x-euc-jp-linux, x-euc-tw, x-eucjp-open, x-ibm1006, x-ibm1025, x-ibm1046, x-ibm1097, x-ibm1098, x-ibm1112, x-ibm1122, x-ibm1123, x-ibm1124, x-ibm1166, x-ibm1364, x-ibm1381, x-ibm1383, x-ibm300, x-ibm33722, x-ibm737, x-ibm833, x-ibm834, x-ibm856, x-ibm874, x-ibm875, x-ibm921, x-ibm922, x-ibm930, x-ibm933, x-ibm935, x-ibm937, x-ibm939, x-ibm942, x-ibm942c, x-ibm943, x-ibm943c, x-ibm948, x-ibm949, x-ibm949c, x-ibm950, x-ibm964, x-ibm970, x-iscii91, x-iso-2022-cn-cns, x-iso-2022-cn-gb, x-iso-8859-11, x-jis0208, x-jisautodetect, x-johab, x-macarabic, x-maccentraleurope, x-maccroatian, x-maccyrillic, x-macdingbat, x-macgreek, x-machebrew, x-maciceland, x-macroman, x-macromania, x-macsymbol, x-macthai, x-macturkish, x-macukraine, x-ms932_0213, x-ms950-hkscs, x-ms950-hkscs-xp, x-mswin-936, x-pck, x-sjis_0213, x-utf-16le-bom, x-utf-32be-bom, x-utf-32le-bom, x-windows-50220, x-windows-50221, x-windows-874, x-windows-949, x-windows-950, x-windows-iso2022jp"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "7"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain;charset=ISO-8859-1"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:43 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=95"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:44",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "running"
+        },
+        "headers": {
+          "Accept-Charset": [
+            "big5, big5-hkscs, cesu-8, euc-jp, euc-kr, gb18030, gb2312, gbk, ibm-thai, ibm00858, ibm01140, ibm01141, ibm01142, ibm01143, ibm01144, ibm01145, ibm01146, ibm01147, ibm01148, ibm01149, ibm037, ibm1026, ibm1047, ibm273, ibm277, ibm278, ibm280, ibm284, ibm285, ibm290, ibm297, ibm420, ibm424, ibm437, ibm500, ibm775, ibm850, ibm852, ibm855, ibm857, ibm860, ibm861, ibm862, ibm863, ibm864, ibm865, ibm866, ibm868, ibm869, ibm870, ibm871, ibm918, iso-2022-cn, iso-2022-jp, iso-2022-jp-2, iso-2022-kr, iso-8859-1, iso-8859-13, iso-8859-15, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, jis_x0201, jis_x0212-1990, koi8-r, koi8-u, shift_jis, tis-620, us-ascii, utf-16, utf-16be, utf-16le, utf-32, utf-32be, utf-32le, utf-8, windows-1250, windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, windows-1258, windows-31j, x-big5-hkscs-2001, x-big5-solaris, x-compound_text, x-euc-jp-linux, x-euc-tw, x-eucjp-open, x-ibm1006, x-ibm1025, x-ibm1046, x-ibm1097, x-ibm1098, x-ibm1112, x-ibm1122, x-ibm1123, x-ibm1124, x-ibm1166, x-ibm1364, x-ibm1381, x-ibm1383, x-ibm300, x-ibm33722, x-ibm737, x-ibm833, x-ibm834, x-ibm856, x-ibm874, x-ibm875, x-ibm921, x-ibm922, x-ibm930, x-ibm933, x-ibm935, x-ibm937, x-ibm939, x-ibm942, x-ibm942c, x-ibm943, x-ibm943c, x-ibm948, x-ibm949, x-ibm949c, x-ibm950, x-ibm964, x-ibm970, x-iscii91, x-iso-2022-cn-cns, x-iso-2022-cn-gb, x-iso-8859-11, x-jis0208, x-jisautodetect, x-johab, x-macarabic, x-maccentraleurope, x-maccroatian, x-maccyrillic, x-macdingbat, x-macgreek, x-machebrew, x-maciceland, x-macroman, x-macromania, x-macsymbol, x-macthai, x-macturkish, x-macukraine, x-ms932_0213, x-ms950-hkscs, x-ms950-hkscs-xp, x-mswin-936, x-pck, x-sjis_0213, x-utf-16le-bom, x-utf-32be-bom, x-utf-32le-bom, x-windows-50220, x-windows-50221, x-windows-874, x-windows-949, x-windows-950, x-windows-iso2022jp"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "7"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain;charset=ISO-8859-1"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:44 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=94"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:46",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "running"
+        },
+        "headers": {
+          "Accept-Charset": [
+            "big5, big5-hkscs, cesu-8, euc-jp, euc-kr, gb18030, gb2312, gbk, ibm-thai, ibm00858, ibm01140, ibm01141, ibm01142, ibm01143, ibm01144, ibm01145, ibm01146, ibm01147, ibm01148, ibm01149, ibm037, ibm1026, ibm1047, ibm273, ibm277, ibm278, ibm280, ibm284, ibm285, ibm290, ibm297, ibm420, ibm424, ibm437, ibm500, ibm775, ibm850, ibm852, ibm855, ibm857, ibm860, ibm861, ibm862, ibm863, ibm864, ibm865, ibm866, ibm868, ibm869, ibm870, ibm871, ibm918, iso-2022-cn, iso-2022-jp, iso-2022-jp-2, iso-2022-kr, iso-8859-1, iso-8859-13, iso-8859-15, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, jis_x0201, jis_x0212-1990, koi8-r, koi8-u, shift_jis, tis-620, us-ascii, utf-16, utf-16be, utf-16le, utf-32, utf-32be, utf-32le, utf-8, windows-1250, windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, windows-1258, windows-31j, x-big5-hkscs-2001, x-big5-solaris, x-compound_text, x-euc-jp-linux, x-euc-tw, x-eucjp-open, x-ibm1006, x-ibm1025, x-ibm1046, x-ibm1097, x-ibm1098, x-ibm1112, x-ibm1122, x-ibm1123, x-ibm1124, x-ibm1166, x-ibm1364, x-ibm1381, x-ibm1383, x-ibm300, x-ibm33722, x-ibm737, x-ibm833, x-ibm834, x-ibm856, x-ibm874, x-ibm875, x-ibm921, x-ibm922, x-ibm930, x-ibm933, x-ibm935, x-ibm937, x-ibm939, x-ibm942, x-ibm942c, x-ibm943, x-ibm943c, x-ibm948, x-ibm949, x-ibm949c, x-ibm950, x-ibm964, x-ibm970, x-iscii91, x-iso-2022-cn-cns, x-iso-2022-cn-gb, x-iso-8859-11, x-jis0208, x-jisautodetect, x-johab, x-macarabic, x-maccentraleurope, x-maccroatian, x-maccyrillic, x-macdingbat, x-macgreek, x-machebrew, x-maciceland, x-macroman, x-macromania, x-macsymbol, x-macthai, x-macturkish, x-macukraine, x-ms932_0213, x-ms950-hkscs, x-ms950-hkscs-xp, x-mswin-936, x-pck, x-sjis_0213, x-utf-16le-bom, x-utf-32be-bom, x-utf-32le-bom, x-windows-50220, x-windows-50221, x-windows-874, x-windows-949, x-windows-950, x-windows-iso2022jp"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "7"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain;charset=ISO-8859-1"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:45 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=93"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:47",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "running"
+        },
+        "headers": {
+          "Accept-Charset": [
+            "big5, big5-hkscs, cesu-8, euc-jp, euc-kr, gb18030, gb2312, gbk, ibm-thai, ibm00858, ibm01140, ibm01141, ibm01142, ibm01143, ibm01144, ibm01145, ibm01146, ibm01147, ibm01148, ibm01149, ibm037, ibm1026, ibm1047, ibm273, ibm277, ibm278, ibm280, ibm284, ibm285, ibm290, ibm297, ibm420, ibm424, ibm437, ibm500, ibm775, ibm850, ibm852, ibm855, ibm857, ibm860, ibm861, ibm862, ibm863, ibm864, ibm865, ibm866, ibm868, ibm869, ibm870, ibm871, ibm918, iso-2022-cn, iso-2022-jp, iso-2022-jp-2, iso-2022-kr, iso-8859-1, iso-8859-13, iso-8859-15, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, jis_x0201, jis_x0212-1990, koi8-r, koi8-u, shift_jis, tis-620, us-ascii, utf-16, utf-16be, utf-16le, utf-32, utf-32be, utf-32le, utf-8, windows-1250, windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, windows-1258, windows-31j, x-big5-hkscs-2001, x-big5-solaris, x-compound_text, x-euc-jp-linux, x-euc-tw, x-eucjp-open, x-ibm1006, x-ibm1025, x-ibm1046, x-ibm1097, x-ibm1098, x-ibm1112, x-ibm1122, x-ibm1123, x-ibm1124, x-ibm1166, x-ibm1364, x-ibm1381, x-ibm1383, x-ibm300, x-ibm33722, x-ibm737, x-ibm833, x-ibm834, x-ibm856, x-ibm874, x-ibm875, x-ibm921, x-ibm922, x-ibm930, x-ibm933, x-ibm935, x-ibm937, x-ibm939, x-ibm942, x-ibm942c, x-ibm943, x-ibm943c, x-ibm948, x-ibm949, x-ibm949c, x-ibm950, x-ibm964, x-ibm970, x-iscii91, x-iso-2022-cn-cns, x-iso-2022-cn-gb, x-iso-8859-11, x-jis0208, x-jisautodetect, x-johab, x-macarabic, x-maccentraleurope, x-maccroatian, x-maccyrillic, x-macdingbat, x-macgreek, x-machebrew, x-maciceland, x-macroman, x-macromania, x-macsymbol, x-macthai, x-macturkish, x-macukraine, x-ms932_0213, x-ms950-hkscs, x-ms950-hkscs-xp, x-mswin-936, x-pck, x-sjis_0213, x-utf-16le-bom, x-utf-32be-bom, x-utf-32le-bom, x-windows-50220, x-windows-50221, x-windows-874, x-windows-949, x-windows-950, x-windows-iso2022jp"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "7"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain;charset=ISO-8859-1"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:47 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=92"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:48",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "running"
+        },
+        "headers": {
+          "Accept-Charset": [
+            "big5, big5-hkscs, cesu-8, euc-jp, euc-kr, gb18030, gb2312, gbk, ibm-thai, ibm00858, ibm01140, ibm01141, ibm01142, ibm01143, ibm01144, ibm01145, ibm01146, ibm01147, ibm01148, ibm01149, ibm037, ibm1026, ibm1047, ibm273, ibm277, ibm278, ibm280, ibm284, ibm285, ibm290, ibm297, ibm420, ibm424, ibm437, ibm500, ibm775, ibm850, ibm852, ibm855, ibm857, ibm860, ibm861, ibm862, ibm863, ibm864, ibm865, ibm866, ibm868, ibm869, ibm870, ibm871, ibm918, iso-2022-cn, iso-2022-jp, iso-2022-jp-2, iso-2022-kr, iso-8859-1, iso-8859-13, iso-8859-15, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, jis_x0201, jis_x0212-1990, koi8-r, koi8-u, shift_jis, tis-620, us-ascii, utf-16, utf-16be, utf-16le, utf-32, utf-32be, utf-32le, utf-8, windows-1250, windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, windows-1258, windows-31j, x-big5-hkscs-2001, x-big5-solaris, x-compound_text, x-euc-jp-linux, x-euc-tw, x-eucjp-open, x-ibm1006, x-ibm1025, x-ibm1046, x-ibm1097, x-ibm1098, x-ibm1112, x-ibm1122, x-ibm1123, x-ibm1124, x-ibm1166, x-ibm1364, x-ibm1381, x-ibm1383, x-ibm300, x-ibm33722, x-ibm737, x-ibm833, x-ibm834, x-ibm856, x-ibm874, x-ibm875, x-ibm921, x-ibm922, x-ibm930, x-ibm933, x-ibm935, x-ibm937, x-ibm939, x-ibm942, x-ibm942c, x-ibm943, x-ibm943c, x-ibm948, x-ibm949, x-ibm949c, x-ibm950, x-ibm964, x-ibm970, x-iscii91, x-iso-2022-cn-cns, x-iso-2022-cn-gb, x-iso-8859-11, x-jis0208, x-jisautodetect, x-johab, x-macarabic, x-maccentraleurope, x-maccroatian, x-maccyrillic, x-macdingbat, x-macgreek, x-machebrew, x-maciceland, x-macroman, x-macromania, x-macsymbol, x-macthai, x-macturkish, x-macukraine, x-ms932_0213, x-ms950-hkscs, x-ms950-hkscs-xp, x-mswin-936, x-pck, x-sjis_0213, x-utf-16le-bom, x-utf-32be-bom, x-utf-32le-bom, x-windows-50220, x-windows-50221, x-windows-874, x-windows-949, x-windows-950, x-windows-iso2022jp"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "7"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain;charset=ISO-8859-1"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:48 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=91"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:49",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "running"
+        },
+        "headers": {
+          "Accept-Charset": [
+            "big5, big5-hkscs, cesu-8, euc-jp, euc-kr, gb18030, gb2312, gbk, ibm-thai, ibm00858, ibm01140, ibm01141, ibm01142, ibm01143, ibm01144, ibm01145, ibm01146, ibm01147, ibm01148, ibm01149, ibm037, ibm1026, ibm1047, ibm273, ibm277, ibm278, ibm280, ibm284, ibm285, ibm290, ibm297, ibm420, ibm424, ibm437, ibm500, ibm775, ibm850, ibm852, ibm855, ibm857, ibm860, ibm861, ibm862, ibm863, ibm864, ibm865, ibm866, ibm868, ibm869, ibm870, ibm871, ibm918, iso-2022-cn, iso-2022-jp, iso-2022-jp-2, iso-2022-kr, iso-8859-1, iso-8859-13, iso-8859-15, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, jis_x0201, jis_x0212-1990, koi8-r, koi8-u, shift_jis, tis-620, us-ascii, utf-16, utf-16be, utf-16le, utf-32, utf-32be, utf-32le, utf-8, windows-1250, windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, windows-1258, windows-31j, x-big5-hkscs-2001, x-big5-solaris, x-compound_text, x-euc-jp-linux, x-euc-tw, x-eucjp-open, x-ibm1006, x-ibm1025, x-ibm1046, x-ibm1097, x-ibm1098, x-ibm1112, x-ibm1122, x-ibm1123, x-ibm1124, x-ibm1166, x-ibm1364, x-ibm1381, x-ibm1383, x-ibm300, x-ibm33722, x-ibm737, x-ibm833, x-ibm834, x-ibm856, x-ibm874, x-ibm875, x-ibm921, x-ibm922, x-ibm930, x-ibm933, x-ibm935, x-ibm937, x-ibm939, x-ibm942, x-ibm942c, x-ibm943, x-ibm943c, x-ibm948, x-ibm949, x-ibm949c, x-ibm950, x-ibm964, x-ibm970, x-iscii91, x-iso-2022-cn-cns, x-iso-2022-cn-gb, x-iso-8859-11, x-jis0208, x-jisautodetect, x-johab, x-macarabic, x-maccentraleurope, x-maccroatian, x-maccyrillic, x-macdingbat, x-macgreek, x-machebrew, x-maciceland, x-macroman, x-macromania, x-macsymbol, x-macthai, x-macturkish, x-macukraine, x-ms932_0213, x-ms950-hkscs, x-ms950-hkscs-xp, x-mswin-936, x-pck, x-sjis_0213, x-utf-16le-bom, x-utf-32be-bom, x-utf-32le-bom, x-windows-50220, x-windows-50221, x-windows-874, x-windows-949, x-windows-950, x-windows-iso2022jp"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "7"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain;charset=ISO-8859-1"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:49 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=90"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:50",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "running"
+        },
+        "headers": {
+          "Accept-Charset": [
+            "big5, big5-hkscs, cesu-8, euc-jp, euc-kr, gb18030, gb2312, gbk, ibm-thai, ibm00858, ibm01140, ibm01141, ibm01142, ibm01143, ibm01144, ibm01145, ibm01146, ibm01147, ibm01148, ibm01149, ibm037, ibm1026, ibm1047, ibm273, ibm277, ibm278, ibm280, ibm284, ibm285, ibm290, ibm297, ibm420, ibm424, ibm437, ibm500, ibm775, ibm850, ibm852, ibm855, ibm857, ibm860, ibm861, ibm862, ibm863, ibm864, ibm865, ibm866, ibm868, ibm869, ibm870, ibm871, ibm918, iso-2022-cn, iso-2022-jp, iso-2022-jp-2, iso-2022-kr, iso-8859-1, iso-8859-13, iso-8859-15, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, jis_x0201, jis_x0212-1990, koi8-r, koi8-u, shift_jis, tis-620, us-ascii, utf-16, utf-16be, utf-16le, utf-32, utf-32be, utf-32le, utf-8, windows-1250, windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, windows-1258, windows-31j, x-big5-hkscs-2001, x-big5-solaris, x-compound_text, x-euc-jp-linux, x-euc-tw, x-eucjp-open, x-ibm1006, x-ibm1025, x-ibm1046, x-ibm1097, x-ibm1098, x-ibm1112, x-ibm1122, x-ibm1123, x-ibm1124, x-ibm1166, x-ibm1364, x-ibm1381, x-ibm1383, x-ibm300, x-ibm33722, x-ibm737, x-ibm833, x-ibm834, x-ibm856, x-ibm874, x-ibm875, x-ibm921, x-ibm922, x-ibm930, x-ibm933, x-ibm935, x-ibm937, x-ibm939, x-ibm942, x-ibm942c, x-ibm943, x-ibm943c, x-ibm948, x-ibm949, x-ibm949c, x-ibm950, x-ibm964, x-ibm970, x-iscii91, x-iso-2022-cn-cns, x-iso-2022-cn-gb, x-iso-8859-11, x-jis0208, x-jisautodetect, x-johab, x-macarabic, x-maccentraleurope, x-maccroatian, x-maccyrillic, x-macdingbat, x-macgreek, x-machebrew, x-maciceland, x-macroman, x-macromania, x-macsymbol, x-macthai, x-macturkish, x-macukraine, x-ms932_0213, x-ms950-hkscs, x-ms950-hkscs-xp, x-mswin-936, x-pck, x-sjis_0213, x-utf-16le-bom, x-utf-32be-bom, x-utf-32le-bom, x-windows-50220, x-windows-50221, x-windows-874, x-windows-949, x-windows-950, x-windows-iso2022jp"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "7"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain;charset=ISO-8859-1"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:50 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=89"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:51",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "running"
+        },
+        "headers": {
+          "Accept-Charset": [
+            "big5, big5-hkscs, cesu-8, euc-jp, euc-kr, gb18030, gb2312, gbk, ibm-thai, ibm00858, ibm01140, ibm01141, ibm01142, ibm01143, ibm01144, ibm01145, ibm01146, ibm01147, ibm01148, ibm01149, ibm037, ibm1026, ibm1047, ibm273, ibm277, ibm278, ibm280, ibm284, ibm285, ibm290, ibm297, ibm420, ibm424, ibm437, ibm500, ibm775, ibm850, ibm852, ibm855, ibm857, ibm860, ibm861, ibm862, ibm863, ibm864, ibm865, ibm866, ibm868, ibm869, ibm870, ibm871, ibm918, iso-2022-cn, iso-2022-jp, iso-2022-jp-2, iso-2022-kr, iso-8859-1, iso-8859-13, iso-8859-15, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, jis_x0201, jis_x0212-1990, koi8-r, koi8-u, shift_jis, tis-620, us-ascii, utf-16, utf-16be, utf-16le, utf-32, utf-32be, utf-32le, utf-8, windows-1250, windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, windows-1258, windows-31j, x-big5-hkscs-2001, x-big5-solaris, x-compound_text, x-euc-jp-linux, x-euc-tw, x-eucjp-open, x-ibm1006, x-ibm1025, x-ibm1046, x-ibm1097, x-ibm1098, x-ibm1112, x-ibm1122, x-ibm1123, x-ibm1124, x-ibm1166, x-ibm1364, x-ibm1381, x-ibm1383, x-ibm300, x-ibm33722, x-ibm737, x-ibm833, x-ibm834, x-ibm856, x-ibm874, x-ibm875, x-ibm921, x-ibm922, x-ibm930, x-ibm933, x-ibm935, x-ibm937, x-ibm939, x-ibm942, x-ibm942c, x-ibm943, x-ibm943c, x-ibm948, x-ibm949, x-ibm949c, x-ibm950, x-ibm964, x-ibm970, x-iscii91, x-iso-2022-cn-cns, x-iso-2022-cn-gb, x-iso-8859-11, x-jis0208, x-jisautodetect, x-johab, x-macarabic, x-maccentraleurope, x-maccroatian, x-maccyrillic, x-macdingbat, x-macgreek, x-machebrew, x-maciceland, x-macroman, x-macromania, x-macsymbol, x-macthai, x-macturkish, x-macukraine, x-ms932_0213, x-ms950-hkscs, x-ms950-hkscs-xp, x-mswin-936, x-pck, x-sjis_0213, x-utf-16le-bom, x-utf-32be-bom, x-utf-32le-bom, x-windows-50220, x-windows-50221, x-windows-874, x-windows-949, x-windows-950, x-windows-iso2022jp"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "7"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain;charset=ISO-8859-1"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:51 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=88"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:52",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "running"
+        },
+        "headers": {
+          "Accept-Charset": [
+            "big5, big5-hkscs, cesu-8, euc-jp, euc-kr, gb18030, gb2312, gbk, ibm-thai, ibm00858, ibm01140, ibm01141, ibm01142, ibm01143, ibm01144, ibm01145, ibm01146, ibm01147, ibm01148, ibm01149, ibm037, ibm1026, ibm1047, ibm273, ibm277, ibm278, ibm280, ibm284, ibm285, ibm290, ibm297, ibm420, ibm424, ibm437, ibm500, ibm775, ibm850, ibm852, ibm855, ibm857, ibm860, ibm861, ibm862, ibm863, ibm864, ibm865, ibm866, ibm868, ibm869, ibm870, ibm871, ibm918, iso-2022-cn, iso-2022-jp, iso-2022-jp-2, iso-2022-kr, iso-8859-1, iso-8859-13, iso-8859-15, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, jis_x0201, jis_x0212-1990, koi8-r, koi8-u, shift_jis, tis-620, us-ascii, utf-16, utf-16be, utf-16le, utf-32, utf-32be, utf-32le, utf-8, windows-1250, windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, windows-1258, windows-31j, x-big5-hkscs-2001, x-big5-solaris, x-compound_text, x-euc-jp-linux, x-euc-tw, x-eucjp-open, x-ibm1006, x-ibm1025, x-ibm1046, x-ibm1097, x-ibm1098, x-ibm1112, x-ibm1122, x-ibm1123, x-ibm1124, x-ibm1166, x-ibm1364, x-ibm1381, x-ibm1383, x-ibm300, x-ibm33722, x-ibm737, x-ibm833, x-ibm834, x-ibm856, x-ibm874, x-ibm875, x-ibm921, x-ibm922, x-ibm930, x-ibm933, x-ibm935, x-ibm937, x-ibm939, x-ibm942, x-ibm942c, x-ibm943, x-ibm943c, x-ibm948, x-ibm949, x-ibm949c, x-ibm950, x-ibm964, x-ibm970, x-iscii91, x-iso-2022-cn-cns, x-iso-2022-cn-gb, x-iso-8859-11, x-jis0208, x-jisautodetect, x-johab, x-macarabic, x-maccentraleurope, x-maccroatian, x-maccyrillic, x-macdingbat, x-macgreek, x-machebrew, x-maciceland, x-macroman, x-macromania, x-macsymbol, x-macthai, x-macturkish, x-macukraine, x-ms932_0213, x-ms950-hkscs, x-ms950-hkscs-xp, x-mswin-936, x-pck, x-sjis_0213, x-utf-16le-bom, x-utf-32be-bom, x-utf-32le-bom, x-windows-50220, x-windows-50221, x-windows-874, x-windows-949, x-windows-950, x-windows-iso2022jp"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "7"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain;charset=ISO-8859-1"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:52 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=87"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:53",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "running"
+        },
+        "headers": {
+          "Accept-Charset": [
+            "big5, big5-hkscs, cesu-8, euc-jp, euc-kr, gb18030, gb2312, gbk, ibm-thai, ibm00858, ibm01140, ibm01141, ibm01142, ibm01143, ibm01144, ibm01145, ibm01146, ibm01147, ibm01148, ibm01149, ibm037, ibm1026, ibm1047, ibm273, ibm277, ibm278, ibm280, ibm284, ibm285, ibm290, ibm297, ibm420, ibm424, ibm437, ibm500, ibm775, ibm850, ibm852, ibm855, ibm857, ibm860, ibm861, ibm862, ibm863, ibm864, ibm865, ibm866, ibm868, ibm869, ibm870, ibm871, ibm918, iso-2022-cn, iso-2022-jp, iso-2022-jp-2, iso-2022-kr, iso-8859-1, iso-8859-13, iso-8859-15, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, jis_x0201, jis_x0212-1990, koi8-r, koi8-u, shift_jis, tis-620, us-ascii, utf-16, utf-16be, utf-16le, utf-32, utf-32be, utf-32le, utf-8, windows-1250, windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, windows-1258, windows-31j, x-big5-hkscs-2001, x-big5-solaris, x-compound_text, x-euc-jp-linux, x-euc-tw, x-eucjp-open, x-ibm1006, x-ibm1025, x-ibm1046, x-ibm1097, x-ibm1098, x-ibm1112, x-ibm1122, x-ibm1123, x-ibm1124, x-ibm1166, x-ibm1364, x-ibm1381, x-ibm1383, x-ibm300, x-ibm33722, x-ibm737, x-ibm833, x-ibm834, x-ibm856, x-ibm874, x-ibm875, x-ibm921, x-ibm922, x-ibm930, x-ibm933, x-ibm935, x-ibm937, x-ibm939, x-ibm942, x-ibm942c, x-ibm943, x-ibm943c, x-ibm948, x-ibm949, x-ibm949c, x-ibm950, x-ibm964, x-ibm970, x-iscii91, x-iso-2022-cn-cns, x-iso-2022-cn-gb, x-iso-8859-11, x-jis0208, x-jisautodetect, x-johab, x-macarabic, x-maccentraleurope, x-maccroatian, x-maccyrillic, x-macdingbat, x-macgreek, x-machebrew, x-maciceland, x-macroman, x-macromania, x-macsymbol, x-macthai, x-macturkish, x-macukraine, x-ms932_0213, x-ms950-hkscs, x-ms950-hkscs-xp, x-mswin-936, x-pck, x-sjis_0213, x-utf-16le-bom, x-utf-32be-bom, x-utf-32le-bom, x-windows-50220, x-windows-50221, x-windows-874, x-windows-949, x-windows-950, x-windows-iso2022jp"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "7"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain;charset=ISO-8859-1"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:53 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=86"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:54",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "completed"
+        },
+        "headers": {
+          "Accept-Charset": [
+            "big5, big5-hkscs, cesu-8, euc-jp, euc-kr, gb18030, gb2312, gbk, ibm-thai, ibm00858, ibm01140, ibm01141, ibm01142, ibm01143, ibm01144, ibm01145, ibm01146, ibm01147, ibm01148, ibm01149, ibm037, ibm1026, ibm1047, ibm273, ibm277, ibm278, ibm280, ibm284, ibm285, ibm290, ibm297, ibm420, ibm424, ibm437, ibm500, ibm775, ibm850, ibm852, ibm855, ibm857, ibm860, ibm861, ibm862, ibm863, ibm864, ibm865, ibm866, ibm868, ibm869, ibm870, ibm871, ibm918, iso-2022-cn, iso-2022-jp, iso-2022-jp-2, iso-2022-kr, iso-8859-1, iso-8859-13, iso-8859-15, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, jis_x0201, jis_x0212-1990, koi8-r, koi8-u, shift_jis, tis-620, us-ascii, utf-16, utf-16be, utf-16le, utf-32, utf-32be, utf-32le, utf-8, windows-1250, windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, windows-1258, windows-31j, x-big5-hkscs-2001, x-big5-solaris, x-compound_text, x-euc-jp-linux, x-euc-tw, x-eucjp-open, x-ibm1006, x-ibm1025, x-ibm1046, x-ibm1097, x-ibm1098, x-ibm1112, x-ibm1122, x-ibm1123, x-ibm1124, x-ibm1166, x-ibm1364, x-ibm1381, x-ibm1383, x-ibm300, x-ibm33722, x-ibm737, x-ibm833, x-ibm834, x-ibm856, x-ibm874, x-ibm875, x-ibm921, x-ibm922, x-ibm930, x-ibm933, x-ibm935, x-ibm937, x-ibm939, x-ibm942, x-ibm942c, x-ibm943, x-ibm943c, x-ibm948, x-ibm949, x-ibm949c, x-ibm950, x-ibm964, x-ibm970, x-iscii91, x-iso-2022-cn-cns, x-iso-2022-cn-gb, x-iso-8859-11, x-jis0208, x-jisautodetect, x-johab, x-macarabic, x-maccentraleurope, x-maccroatian, x-maccyrillic, x-macdingbat, x-macgreek, x-machebrew, x-maciceland, x-macroman, x-macromania, x-macsymbol, x-macthai, x-macturkish, x-macukraine, x-ms932_0213, x-ms950-hkscs, x-ms950-hkscs-xp, x-mswin-936, x-pck, x-sjis_0213, x-utf-16le-bom, x-utf-32be-bom, x-utf-32le-bom, x-windows-50220, x-windows-50221, x-windows-874, x-windows-949, x-windows-950, x-windows-iso2022jp"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "9"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain;charset=ISO-8859-1"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:54 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=85"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      }
+    },
+    {
+      "recorded_at": "2019-07-04T19:34:54",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "completed"
+        },
+        "headers": {
+          "Accept-Charset": [
+            "big5, big5-hkscs, cesu-8, euc-jp, euc-kr, gb18030, gb2312, gbk, ibm-thai, ibm00858, ibm01140, ibm01141, ibm01142, ibm01143, ibm01144, ibm01145, ibm01146, ibm01147, ibm01148, ibm01149, ibm037, ibm1026, ibm1047, ibm273, ibm277, ibm278, ibm280, ibm284, ibm285, ibm290, ibm297, ibm420, ibm424, ibm437, ibm500, ibm775, ibm850, ibm852, ibm855, ibm857, ibm860, ibm861, ibm862, ibm863, ibm864, ibm865, ibm866, ibm868, ibm869, ibm870, ibm871, ibm918, iso-2022-cn, iso-2022-jp, iso-2022-jp-2, iso-2022-kr, iso-8859-1, iso-8859-13, iso-8859-15, iso-8859-2, iso-8859-3, iso-8859-4, iso-8859-5, iso-8859-6, iso-8859-7, iso-8859-8, iso-8859-9, jis_x0201, jis_x0212-1990, koi8-r, koi8-u, shift_jis, tis-620, us-ascii, utf-16, utf-16be, utf-16le, utf-32, utf-32be, utf-32le, utf-8, windows-1250, windows-1251, windows-1252, windows-1253, windows-1254, windows-1255, windows-1256, windows-1257, windows-1258, windows-31j, x-big5-hkscs-2001, x-big5-solaris, x-compound_text, x-euc-jp-linux, x-euc-tw, x-eucjp-open, x-ibm1006, x-ibm1025, x-ibm1046, x-ibm1097, x-ibm1098, x-ibm1112, x-ibm1122, x-ibm1123, x-ibm1124, x-ibm1166, x-ibm1364, x-ibm1381, x-ibm1383, x-ibm300, x-ibm33722, x-ibm737, x-ibm833, x-ibm834, x-ibm856, x-ibm874, x-ibm875, x-ibm921, x-ibm922, x-ibm930, x-ibm933, x-ibm935, x-ibm937, x-ibm939, x-ibm942, x-ibm942c, x-ibm943, x-ibm943c, x-ibm948, x-ibm949, x-ibm949c, x-ibm950, x-ibm964, x-ibm970, x-iscii91, x-iso-2022-cn-cns, x-iso-2022-cn-gb, x-iso-8859-11, x-jis0208, x-jisautodetect, x-johab, x-macarabic, x-maccentraleurope, x-maccroatian, x-maccyrillic, x-macdingbat, x-macgreek, x-machebrew, x-maciceland, x-macroman, x-macromania, x-macsymbol, x-macthai, x-macturkish, x-macukraine, x-ms932_0213, x-ms950-hkscs, x-ms950-hkscs-xp, x-mswin-936, x-pck, x-sjis_0213, x-utf-16le-bom, x-utf-32be-bom, x-utf-32le-bom, x-windows-50220, x-windows-50221, x-windows-874, x-windows-949, x-windows-950, x-windows-iso2022jp"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "9"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain;charset=ISO-8859-1"
+          ],
+          "Date": [
+            "Thu, 04 Jul 2019 19:34:54 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=84"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/concepts/jobs/885a1904-5cf8-45fd-afd4-065188e52602/state"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}

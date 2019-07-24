@@ -1,0 +1,378 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2019-06-13T12:53:07",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "60"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read gelupdates SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey GLOBALPRESALES intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin EsriUsers AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install techoffice ApplicationAdministrators COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"6cee8a31e792409d8cc7b37739a40ca6\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:06 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:07",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/microanalyticScore/modules/scikitmodel"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"source\",\"href\":\"/microanalyticScore/modules/scikitmodel/source\",\"uri\":\"/microanalyticScore/modules/scikitmodel/source\",\"type\":\"application/vnd.sas.microanalytic.module.source\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/scikitmodel/submodules\",\"uri\":\"/microanalyticScore/modules/scikitmodel/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-06-13T12:53:02.223Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-06-13T12:53:02.223Z\",\"id\":\"scikitmodel\",\"name\":\"ScikitModel\",\"revision\":0,\"scope\":\"public\",\"language\":\"ds2\",\"stepIds\":[\"score\"],\"warnings\":[]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.microanalytic.module+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:07 GMT"
+          ],
+          "ETag": [
+            "\"jwunykr3\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Last-Modified": [
+            "Thu, 13 Jun 2019 12:53:02 GMT"
+          ],
+          "Location": [
+            "/microanalyticScore/modules/scikitmodel"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/microanalyticScore/modules/scikitmodel"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:07",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/microanalyticScore/modules/scikitmodel/steps/score"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"type\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"POST\",\"rel\":\"execute\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.microanalytic.module.step.output\"},{\"method\":\"POST\",\"rel\":\"validateStepInput\",\"href\":\"/microanalyticScore/commons/validations/modules/scikitmodel/steps/score\",\"uri\":\"/microanalyticScore/commons/validations/modules/scikitmodel/steps/score\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.validation\"}],\"version\":1,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-06-13T12:53:02.223Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-06-13T12:53:02.223Z\",\"id\":\"score\",\"moduleId\":\"scikitmodel\",\"inputs\":[{\"name\":\"sepallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"sepalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0}],\"outputs\":[{\"name\":\"var1\",\"type\":\"string\",\"dim\":0,\"size\":0},{\"name\":\"rc\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"msg\",\"type\":\"string\",\"dim\":0,\"size\":0}]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.microanalytic.module.step+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:07 GMT"
+          ],
+          "ETag": [
+            "\"jwunykr3\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=98"
+          ],
+          "Last-Modified": [
+            "Thu, 13 Jun 2019 12:53:02 GMT"
+          ],
+          "Location": [
+            "/microanalyticScore/modules/scikitmodel/steps/score"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/microanalyticScore/modules/scikitmodel/steps/score"
+      }
+    },
+    {
+      "recorded_at": "2019-06-13T12:53:08",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"inputs\": [{\"name\": \"sepallength\", \"value\": 2}, {\"name\": \"sepalwidth\", \"value\": 1}, {\"name\": \"petallength\", \"value\": 3}, {\"name\": \"petalwidth\", \"value\": 4}]}"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "158"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "python-requests/2.21.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/microanalyticScore/modules/scikitmodel/steps/score"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[],\"version\":2,\"moduleId\":\"scikitmodel\",\"stepId\":\"score\",\"executionState\":\"completed\",\"outputs\":[{\"name\":\"var1\"},{\"name\":\"rc\"},{\"name\":\"msg\"}]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.microanalytic.module.step.output+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Thu, 13 Jun 2019 12:53:07 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=97"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/microanalyticScore/modules/scikitmodel/steps/score"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}

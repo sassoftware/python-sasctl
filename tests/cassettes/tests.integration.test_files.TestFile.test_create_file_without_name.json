@@ -1,0 +1,200 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2019-06-18T14:47:37",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "60"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read gelupdates SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey GLOBALPRESALES intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin EsriUsers AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install techoffice ApplicationAdministrators COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"2e0c6d59c88b47e7bb57cebd57846657\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Tue, 18 Jun 2019 14:47:37 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-06-18T14:47:37",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "--6162636465666768696a6b6c6d6e6f70\r\nContent-Disposition: form-data; name=\"dummy_file\"; filename=\"dummy_file\"\r\n\r\nSome test file content.\r\n--6162636465666768696a6b6c6d6e6f70--\r\n"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "175"
+          ],
+          "Content-Type": [
+            "multipart/form-data; boundary=49d181886b470998d5257b04765a1818"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/files/files#multipartUpload"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-06-18T14:47:37.523Z\",\"modifiedTimeStamp\":\"2019-06-18T14:47:37.523Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"918954d7-fea9-4bf2-a0c3-fdf57459ab19\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19\",\"uri\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19\",\"uri\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19\",\"uri\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19\",\"uri\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19\",\"uri\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19/content\",\"uri\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19/content\",\"uri\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19/copy\",\"uri\":\"/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"dummy_file\",\"size\":23,\"version\":2}"
+        },
+        "headers": {
+          "Accept-Ranges": [
+            "bytes"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.file+json; version=1;charset=UTF-8"
+          ],
+          "Date": [
+            "Tue, 18 Jun 2019 14:47:36 GMT"
+          ],
+          "ETag": [
+            "\"jx1x973n\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Last-Modified": [
+            "Tue, 18 Jun 2019 14:47:37 GMT"
+          ],
+          "Location": [
+            "/files/files/918954d7-fea9-4bf2-a0c3-fdf57459ab19"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/files/files#multipartUpload"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}

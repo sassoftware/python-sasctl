@@ -1,0 +1,182 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2019-06-26T19:04:12",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "60"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read gelupdates SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey GLOBALPRESALES intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap defsusers opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin EsriUsers AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install techoffice ApplicationAdministrators COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"343b812706c6452394b07dfc63a61b5f\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Wed, 26 Jun 2019 19:04:12 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-06-26T19:04:13",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.18.4"
+          ]
+        },
+        "method": "HEAD",
+        "uri": "https://hostname.com/dataSources/"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": ""
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Wed, 26 Jun 2019 19:04:13 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataSources/"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}

@@ -1,0 +1,11 @@
+pytest >= 4.4.1
+betamax >= 0.8.1
+betamax_serializers >= 0.2.0
+mock; python_version < '3.3'
+sklearn
+pandas
+swat
+sphinx == 1.8
+tox
+kerberos ; platform_system != "Windows"
+winkerberos ; platform_system == "Windows"
