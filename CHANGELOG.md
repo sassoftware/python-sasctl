@@ -1,6 +1,12 @@
 
 Unreleased
 ----------
+
+ - 
+
+
+v1.0.0 (2019-07-24)
+-------------------
  **Changed**
  - services are now classes instead of modules.
    Imports of services in the format `import sasctl.services.model_management as mm` must be
