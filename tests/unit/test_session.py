@@ -218,7 +218,6 @@ def test_ssl_context():
 
 
 def test_verify_ssl():
-
     with mock.patch('sasctl.core.Session.get_token', return_value='token'):
         # Should verify SSL by default
         s = Session('hostname', 'username', 'password')
@@ -261,3 +260,13 @@ def test_kerberos():
 
         s = Session('hostname', 'username@REALM')
         assert s.auth.token == 'token'
+
+def test_authentication_failure():
+    from sasctl.core import AuthenticationError
+
+    with mock.patch('sasctl.core.Session.request') as request:
+        request.return_value.status_code = 401
+
+        with pytest.raises(AuthenticationError):
+            Session('hostname', 'username', 'password')
+

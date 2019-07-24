@@ -484,11 +484,29 @@ class Session(requests.Session):
                                       data=data,
                                       headers=headers,
                                       auth=('sas.ec', ''))
-        r.raise_for_status()
+
+        if r.status_code == 401:
+            raise AuthenticationError("Authentication failed for user '%s'." % username)
+        else:
+            r.raise_for_status()
 
         return r.json().get('access_token')
 
     def get_token(self):
+        """Authenticates with the session host and retrieves an
+        authorization token for use by subsequent requests.
+
+        Returns
+        -------
+        str
+            a bearer token for :class:`HTTPBearerAuth`
+
+        Raises
+        ------
+        AuthenticationError
+            authentication with the host failed
+
+        """
         username = self._settings['username']
         password = self._settings['password']
 
@@ -887,4 +905,7 @@ class SasctlError(Exception):
     pass
 
 class TimeoutError(SasctlError):
+    pass
+
+class AuthenticationError(SasctlError):
     pass

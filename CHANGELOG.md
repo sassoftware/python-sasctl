@@ -9,6 +9,7 @@ Unreleased
  
  **Improvements**
  - Added `copy_analytic_store` method to `model_repository` service
+ - `AuthenticationError` returned instead of `HTTPError` if session authentication fails. 
 
 
 v0.9.7 (2019-07-18)
