@@ -10,7 +10,9 @@ from six.moves.urllib.parse import urlsplit
 from betamax.matchers.path import PathMatcher
 
 class RedactedPathMatcher(PathMatcher):
-    """Matches requests identically to the default behavior except that CAS session ids in the path are ignored."""
+    """Matches requests identically to the default behavior except that CAS s
+    ession ids in the path are ignored.
+    """
 
     name = 'redacted_path'
 
@@ -25,3 +27,31 @@ class RedactedPathMatcher(PathMatcher):
         recorded_path = self._strip_session_id(urlsplit(recorded_request['uri']).path)
         return request_path == recorded_path
 
+
+
+from betamax import util, BaseMatcher
+import difflib
+import logging
+log = logging.getLogger('sasctl.betamax')
+
+
+class PartialBodyMatcher(BaseMatcher):
+    # Matches based on the body of the request
+    name = 'partial_body'
+
+    def match(self, request, recorded_request):
+        recorded_request = util.deserialize_prepared_request(recorded_request)
+
+        request_body = b''
+        if request.body:
+            request_body = util.coerce_content(request.body)
+
+        recorded_body = b''
+        if recorded_request.body:
+            recorded_body = util.coerce_content(recorded_request.body)
+
+        if recorded_body != request_body:
+            diff = difflib.context_diff(recorded_body, request_body)
+            log.debug('** Cassette Differences: **\n' + '\n'.join(diff))
+
+        return recorded_body == request_body

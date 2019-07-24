@@ -13,9 +13,10 @@ import sys
 import warnings
 
 from .utils.pymas import from_pickle, PyMAS
-from sasctl.services import model_management as mm, model_publish as mp, model_repository as mr
+from sasctl.services import model_management as mm, model_publish as mp, \
+    model_repository as mr
 from . import utils
-from .core import get, get_link, RestObj
+from .core import get, get_link, request_link, RestObj
 
 logger = logging.getLogger(__name__)
 
@@ -206,9 +207,8 @@ def publish_model(model, destination, code=None, max_retries=60, **kwargs):
 
     See Also
     --------
-    :func:`sasctl.services.model_management.publish_model`
-    :func:`sasctl.services.model_publish.publish_model`
-
+    :meth:`model_management.publish_model <.ModelManagement.publish_model>`
+    :meth:`model_publish.publish_model <.ModelPublish.publish_model>`
     """
 
     # Submit a publishing request
@@ -219,25 +219,12 @@ def publish_model(model, destination, code=None, max_retries=60, **kwargs):
 
     # A successfully submitted request doesn't mean a successfully published model.
     # Response for publish request includes link to check publish log
-    log_url = get_link(publish_req, 'publishingLog').get('href')
-    msg, retries = None, 0
-
-    while msg is None and retries < max_retries:
-        logger.debug('Attempting to get publish log.')
-        # Get the actual log message
-        log = get(log_url)
-        msg = log.get('log')
-        if msg is None or msg.upper().startswith('PENDING==='):
-            msg = None
-            time.sleep(0.5)
-        retries += 1
-
-    if msg is None:
-        raise RuntimeError('Timeout while attempting to retrieve publish log.')
-    elif not msg.upper().startswith('SUCCESS==='):
-        raise Exception(msg)
-
-    msg = msg.lstrip('SUCCESS===')
+    job = mr._monitor_job(publish_req)
+    # log = mr._monitor_job(request_link(publish_req, 'publishingLog'),
+    #                       'self',
+    #                       lambda x: x.get('log', '').upper().startswith('SUCCESS==='))
+    log = request_link(job, 'publishingLog')
+    msg = log.get('log').lstrip('SUCCESS===')
 
     # As of Viya 3.4 MAS converts module names to lower case.
     # Since we can't rely on the request module name being preserved, try to parse the URL out of the response

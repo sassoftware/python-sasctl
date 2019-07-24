@@ -25,7 +25,14 @@ class TestAStoreModel:
 
         assert self.model_name == model.name
 
+    def test_copy_astore(self):
+        job = mr.copy_analytic_store(self.model_name)
+
+        assert job.state == 'pending'
+
     def test_model_publish(self):
+
+
         pytest.xfail('Import job pends forever.  Waiting on Support Track #7612766673')
         module = publish_model(self.model_name, 'maslocal', max_retries=60)
         self.module_name = module.name

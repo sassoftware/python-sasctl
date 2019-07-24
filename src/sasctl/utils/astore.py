@@ -40,7 +40,7 @@ def create_package_from_astore(table):
     model_properties = _get_model_properties(result)
     input_vars = [get_variable_properties(var) for var in result.InputVariables.itertuples()]
     output_vars = [get_variable_properties(var) for var in result.OutputVariables.itertuples()]
-    astore_filename = '_' + uuid.uuid4().hex[:25]
+    astore_filename = '_' + uuid.uuid4().hex[:25].upper()
 
     # Copy the ASTORE table to the ModelStore.
     table.save(name=astore_filename, caslib='ModelStore', replace=True)

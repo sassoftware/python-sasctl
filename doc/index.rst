@@ -170,7 +170,14 @@ Common Uses
 
 Registering a model built with SWAT.
 
+.. literalinclude:: ../examples/astore_model.py
+   :caption: examples/astore_model.py
+   :lines: 7-
+
+Registering a model built with sci-kit learn.
+
 .. literalinclude:: ../examples/sklearn_model.py
+   :caption: examples/sklearn_model.py
    :lines: 7-
 
 
