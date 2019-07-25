@@ -379,7 +379,8 @@ class Session(requests.Session):
                 raise RuntimeError(
                     "SSL handshake failed.  The 'REQUESTS_CA_BUNDLE' "
                     "environment variable should contain the path to the CA "
-                    "certificate.")
+                    "certificate.  Alternatively, set verify_ssl=False to "
+                    "disable certificate verification.")
             else:
                 raise e
 
