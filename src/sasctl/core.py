@@ -33,7 +33,8 @@ except ImportError:
     except ImportError:
         kerberos = None
 
-from sasctl.utils.cli import sasctl_command
+from .utils.cli import sasctl_command
+from . import exceptions
 
 logger = logging.getLogger(__name__)
 
@@ -491,7 +492,7 @@ class Session(requests.Session):
                                       auth=('sas.ec', ''))
 
         if r.status_code == 401:
-            raise AuthenticationError("Authentication failed for user '%s'." % username)
+            raise exceptions.AuthenticationError(username)
         else:
             r.raise_for_status()
 
@@ -901,7 +902,4 @@ class SasctlError(Exception):
     pass
 
 class TimeoutError(SasctlError):
-    pass
-
-class AuthenticationError(SasctlError):
     pass

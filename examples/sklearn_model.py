@@ -37,7 +37,8 @@ with Session('hostname', 'username', 'password'):
     module = publish_model(model_name, 'maslocal')
 
     # Select the first row of training data
-    x = {k.lower(): v for k, v in X.iloc[0, :].items()}
+    x = X.iloc[0, :]
 
     # Call the published module and score the record
     result = module.score(**x)
+    print(result)

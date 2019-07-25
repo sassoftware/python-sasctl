@@ -8,4 +8,3 @@ swat
 sphinx == 1.8
 tox
 kerberos ; platform_system != "Windows"
-winkerberos ; platform_system == "Windows"

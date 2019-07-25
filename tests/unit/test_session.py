@@ -262,7 +262,7 @@ def test_kerberos():
         assert s.auth.token == 'token'
 
 def test_authentication_failure():
-    from sasctl.core import AuthenticationError
+    from sasctl.exceptions import AuthenticationError
 
     with mock.patch('sasctl.core.Session.request') as request:
         request.return_value.status_code = 401

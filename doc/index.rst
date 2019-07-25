@@ -45,11 +45,11 @@ Installation
 
 For basic functionality::
 
-    pip install git+https://gitlab.sas.com/xeno/python-sasctl
+    pip install sasctl
 
 For full functionality::
 
-    pip install git+https://gitlab.sas.com/xeno/python-sasctl#egg=sasctl[all]
+    pip install sasctl[all]
 
 Quickstart
 ----------

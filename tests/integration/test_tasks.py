@@ -115,7 +115,5 @@ class TestModels:
         m = mas.get_module(SCIKIT_MODEL_NAME.replace(' ', ''))
         m = mas.define_steps(m)
         r = m.score(sepalwidth=1, sepallength=2, petallength=3, petalwidth=4)
-        assert isinstance(r, tuple)
-        pytest.xfail('PyMAS integration not yet working.')
-        assert r['rc'] is None
+        assert r == 'virginica'
 

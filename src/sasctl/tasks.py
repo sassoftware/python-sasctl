@@ -220,9 +220,10 @@ def publish_model(model, destination, code=None, max_retries=60, **kwargs):
     # A successfully submitted request doesn't mean a successfully published model.
     # Response for publish request includes link to check publish log
     job = mr._monitor_job(publish_req)
-    # log = mr._monitor_job(request_link(publish_req, 'publishingLog'),
-    #                       'self',
-    #                       lambda x: x.get('log', '').upper().startswith('SUCCESS==='))
+
+    if job.state.lower() == 'failed':
+        pass
+
     log = request_link(job, 'publishingLog')
     msg = log.get('log').lstrip('SUCCESS===')
 

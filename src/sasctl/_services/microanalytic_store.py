@@ -129,23 +129,63 @@ class MicroAnalyticScore(Service):
         return r
 
     def define_steps(self, module):
+        """Defines python methods on a module that automatically call the
+        corresponding MAS steps.
+
+        Parameters
+        ----------
+        module : str or dict
+            Name, id, or dictionary representation of a module
+
+        Returns
+        -------
+        module
+
+        """
         import types
 
         module = self.get_module(module)
 
+        # Define a method for each step of the module
         for id in module.get('stepIds', []):
             step = self.get_module_step(module, id)
 
-            name = '_{}_{}'.format(module.name, step.id)
+            # Method should have an argument for each parameter of the step
             arguments = [k['name'] for k in step.inputs]
             arg_types = [k['type'] for k in step.inputs]
+
+            # Format call to execute_module_step()
             call_params = ['{}={}'.format(i, i) for i in arguments]
+
+            # Set type hints for the function
             type_string = '    # type: ({})'.format(', '.join(arg_types))
 
-            code = ('def {}({}):'.format(name, ', '.join(arguments)),
+            # Method signature
+            signature = 'def _%s_%s(%s, **kwargs):' % (module.name,
+            step.id,
+                                                       ', '.join(a for a
+                                                                    in arguments))
+            # MAS always lower-cases variable names
+            # Since the original Python variables may have a different case,
+            # allow kwargs to be used to input alternative caps
+            arg_checks = ['for k in kwargs.keys():']
+            for arg in arguments:
+                arg_checks.append("    if k.lower() == '%s':" % arg.lower())
+                arg_checks.append("        %s = kwargs[k]" % arg)
+                arg_checks.append("        continue")
+
+            # Full method source code
+            # Drops 'rc' and 'msg' from return values
+            code = (signature,
                     type_string,
-                    '    """docstring"""',
-                    '    return execute_module_step(module, step, return_dict=False, {})'.format(', '.join(call_params))
+                    '    """Execute step %s of module %s."""' % (step, module),
+                    '\n'.join(['    %s' % a for a in arg_checks]),
+                    '    r = execute_module_step(module, step, {})'.format(', '.join(call_params)),
+                    '    r.pop("rc", None)',
+                    '    r.pop("msg", None)',
+                    '    if len(r) == 1:',
+                    '        return r.popitem()[1]',
+                    '    return tuple(v for v in r.values())'
                     )
 
             code = '\n'.join(code)
@@ -156,7 +196,9 @@ class MicroAnalyticScore(Service):
                         'module': module,
                         'step': step})
 
-            func = types.FunctionType(compiled.co_consts[0], env)
+            func = types.FunctionType(compiled.co_consts[0],
+                                      env,
+                                      argdefs=tuple(None for x in arguments))
 
             setattr(module, step.id, func)
 
