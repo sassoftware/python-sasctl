@@ -13,9 +13,10 @@ import sys
 import warnings
 
 from .utils.pymas import from_pickle, PyMAS
-from sasctl.services import model_management as mm, model_publish as mp, model_repository as mr
+from sasctl.services import model_management as mm, model_publish as mp, \
+    model_repository as mr
 from . import utils
-from .core import get, get_link, RestObj
+from .core import get, get_link, request_link, RestObj
 
 logger = logging.getLogger(__name__)
 
@@ -119,7 +120,8 @@ def register_model(model, name, project, repository=None, input=None, version='l
         model = mr.import_model_from_zip(name, project, zipfile, version=version)
         return model
 
-    # If the model is an scikit-learn model, generate the model dictionary from it and pickle the model for storage
+    # If the model is an scikit-learn model, generate the model dictionary
+    # from it and pickle the model for storage
     elif all(hasattr(model, attr) for attr in ['_estimator_type', 'get_params']):
         # Pickle the model so we can store it
         model_pkl = pickle.dumps(model)
@@ -135,15 +137,26 @@ def register_model(model, name, project, repository=None, input=None, version='l
             assert isinstance(mas_module, PyMAS)
 
             # Include score code files from ESP and MAS
-            files.append({'name': 'dmcas_packagescorecode.sas', 'file': mas_module.score_code(), 'role': 'Score Code'})
-            files.append({'name': 'dmcas_espscorecode.sas', 'file': mas_module.score_code(dest='ESP'), 'role': 'Score Code'})
+            files.append({'name': 'dmcas_packagescorecode.sas',
+                          'file': mas_module.score_code(),
+                          'role': 'Score Code'})
+            files.append({'name': 'dmcas_espscorecode.sas',
+                          'file': mas_module.score_code(dest='ESP'),
+                          'role': 'Score Code'})
 
-            model['inputVariables'] = [var.as_model_metadata() for var in mas_module.variables if not var.out]
-            model['outputVariables'] = [var.as_model_metadata() for var in mas_module.variables if var.out]
+            model['inputVariables'] = [var.as_model_metadata()
+                                       for var in mas_module.variables
+                                       if not var.out]
+
+            model['outputVariables'] = [var.as_model_metadata()
+                                        for var in mas_module.variables
+                                        if var.out
+                                        and var.name not in ('rc', 'msg')]
         except ValueError:
-            # PyMAS creation failed, most likely because input data wasn't provided
-            warnings.warn('Unable to determine input/output variables.  Model variables will not be specified.')
-
+            # PyMAS creation failed, most likely because input data wasn't
+            # provided
+            warnings.warn('Unable to determine input/output variables. '
+                          ' Model variables will not be specified.')
     else:
         # Otherwise, the model better be a dictionary of metadata
         assert isinstance(model, dict)
@@ -151,7 +164,9 @@ def register_model(model, name, project, repository=None, input=None, version='l
     if create_project:
         vars = model.get('inputVariables', []) + model.get('outputVariables', [])
         target_level = 'Interval' if model.get('function') == 'Regression' else None
-        project = mr.create_project(project, repository, variables=vars, targetLevel=target_level)
+        project = mr.create_project(project, repository,
+                                    variables=vars,
+                                    targetLevel=target_level)
 
     model = mr.create_model(model, project)
 
@@ -192,9 +207,8 @@ def publish_model(model, destination, code=None, max_retries=60, **kwargs):
 
     See Also
     --------
-    :func:`sasctl.services.model_management.publish_model`
-    :func:`sasctl.services.model_publish.publish_model`
-
+    :meth:`model_management.publish_model <.ModelManagement.publish_model>`
+    :meth:`model_publish.publish_model <.ModelPublish.publish_model>`
     """
 
     # Submit a publishing request
@@ -205,25 +219,13 @@ def publish_model(model, destination, code=None, max_retries=60, **kwargs):
 
     # A successfully submitted request doesn't mean a successfully published model.
     # Response for publish request includes link to check publish log
-    log_url = get_link(publish_req, 'publishingLog').get('href')
-    msg, retries = None, 0
+    job = mr._monitor_job(publish_req)
 
-    while msg is None and retries < max_retries:
-        logger.debug('Attempting to get publish log.')
-        # Get the actual log message
-        log = get(log_url)
-        msg = log.get('log')
-        if msg is None or msg.upper().startswith('PENDING==='):
-            msg = None
-            time.sleep(0.5)
-        retries += 1
+    if job.state.lower() == 'failed':
+        pass
 
-    if msg is None:
-        raise RuntimeError('Timeout while attempting to retrieve publish log.')
-    elif not msg.upper().startswith('SUCCESS==='):
-        raise Exception(msg)
-
-    msg = msg.lstrip('SUCCESS===')
+    log = request_link(job, 'publishingLog')
+    msg = log.get('log').lstrip('SUCCESS===')
 
     # As of Viya 3.4 MAS converts module names to lower case.
     # Since we can't rely on the request module name being preserved, try to parse the URL out of the response
@@ -242,6 +244,11 @@ def publish_model(model, destination, code=None, max_retries=60, **kwargs):
 
     module = get(module_url)
 
+    if 'application/vnd.sas.microanalytic.module' in module._headers[
+        'content-type']:
+        # Bind Python methods to the module instance that will execute the
+        # corresponding MAS module step.
+        from sasctl.services import microanalytic_score as mas
+        return mas.define_steps(module)
     return module
-
 

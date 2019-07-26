@@ -23,7 +23,8 @@ six.add_move(six.MovedModule('mock', 'mock', 'unittest.mock'))
 
 
 def redact(interaction, cassette):
-    """Remove sensitive or environment-specific information from cassettes before they are saved.
+    """Remove sensitive or environment-specific information from cassettes
+    before they are saved.
 
     Parameters
     ----------
@@ -35,12 +36,8 @@ def redact(interaction, cassette):
 
     """
 
-    url = interaction.data['request']['uri']
-    host = urlsplit(url).netloc
-    if Placeholder(placeholder='hostname.com', replace=host) not in cassette.placeholders:
-        cassette.placeholders.append(Placeholder(placeholder='hostname.com', replace=host))
-
-    # Server name in Origin header may differ from hostname that was sent the request.
+    # Server name in Origin header may differ from hostname that was sent the
+    # request.
     for origin in interaction.data['response']['headers'].get('Origin', []):
         host = urlsplit(origin).netloc
         if host != '' and Placeholder(placeholder='hostname.com', replace=host) not in cassette.placeholders:
@@ -49,11 +46,9 @@ def redact(interaction, cassette):
     def add_placeholder(pattern, string, placeholder, group):
         if isinstance(string, bytes):
             pattern = pattern.encode('utf-8')
-            # placeholder = placeholder.encode('utf-8')
 
         match = re.search(pattern, string)
         if match:
-            # old_text = match.group(group).encode('utf-8') if isinstance(string, bytes) else match.group(group)
             old_text = match.group(group)
             cassette.placeholders.append(Placeholder(placeholder=placeholder, replace=old_text))
 
@@ -72,31 +67,49 @@ def redact(interaction, cassette):
 betamax.Betamax.register_serializer(pretty_json.PrettyJSONSerializer)
 betamax.Betamax.register_request_matcher(RedactedPathMatcher)
 
+from .matcher import PartialBodyMatcher
+betamax.Betamax.register_request_matcher(PartialBodyMatcher)
+
 with betamax.Betamax.configure() as config:
-    config.define_cassette_placeholder('USERNAME', os.environ.get('SASCTL_USER_NAME', 'dummyuser'))
     config.cassette_library_dir = "tests/cassettes"
     config.default_cassette_options['record_mode'] = 'once'
-    # config.default_cassette_options['match_requests_on'] = ['method', 'path', 'query']
-    config.default_cassette_options['match_requests_on'] = ['method', 'redacted_path', 'query']
+    config.default_cassette_options['match_requests_on'] = ['method',
+                                                            'redacted_path',
+                                                            # 'partial_body',
+                                                            'query']
     config.before_record(callback=redact)
     config.before_playback(callback=redact)
 
 
-# Use the SASCTL_TEST_SERVERS variable to specify one or more servers that will be used for recording test cases
+# Use the SASCTL_TEST_SERVERS variable to specify one or more servers that will
+# be used for recording test cases
 os.environ.setdefault('SASCTL_TEST_SERVERS', 'sasctl.example.com')
 hostnames = [host.strip() for host in os.environ['SASCTL_TEST_SERVERS'].split(',')]
 
 # Set dummy credentials if none were provided.
-# Credentials don't matter if rerunning Betamax cassettes, but new recordings will fail.
+# Credentials don't matter if rerunning Betamax cassettes, but new recordings
+# will fail.
 os.environ.setdefault('SASCTL_SERVER_NAME', hostnames[0])
 os.environ.setdefault('SASCTL_USER_NAME', 'dummyuser')
 os.environ.setdefault('SASCTL_PASSWORD', 'dummypass')
+os.environ.setdefault('SSLREQCERT', 'no')
+
+with betamax.Betamax.configure() as config:
+    for hostname in hostnames:
+        config.define_cassette_placeholder('hostname.com', hostname)
+
+    config.define_cassette_placeholder('hostname.com',
+                                       os.environ['SASCTL_SERVER_NAME'])
+    config.define_cassette_placeholder('USERNAME',
+                                       os.environ['SASCTL_USER_NAME'])
+    config.define_cassette_placeholder('*****',
+                                       os.environ['SASCTL_PASSWORD'])
 
 
 @pytest.fixture(scope='session', params=hostnames)
 def credentials(request):
-    auth = {'host': request.param,
-            'user': os.environ['SASCTL_USER_NAME'],
+    auth = {'hostname': request.param,
+            'username': os.environ['SASCTL_USER_NAME'],
             'password': os.environ['SASCTL_PASSWORD'],
             'verify_ssl': False
             }
@@ -204,8 +217,9 @@ def cas_session(request, credentials):
         # Inject the session being recorded into the CAS connection
         with mock.patch('swat.cas.rest.connection.requests.Session') as mocked:
             mocked.return_value = recorded_session
-            with swat.CAS('https://{}/cas-shared-default-http/'.format(credentials['host']),
-                          username=credentials['user'],
+            with swat.CAS('https://{}/cas-shared-default-http/'.format(
+                    credentials['hostname']),
+                          username=credentials['username'],
                           password=credentials['password']) as s:
 
                 # Strip out the session id from requests & responses.

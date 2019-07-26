@@ -6,6 +6,7 @@
 
 import json
 import logging
+import os
 
 import pytest
 from six.moves import mock
@@ -22,11 +23,11 @@ def test_new_session(missing_packages):
     with missing_packages('swat'):
         with mock.patch('sasctl.core.Session.get_token'):
             s = Session(HOST, USERNAME, PASSWORD)
-        assert USERNAME == s.user
-        assert HOST == s.settings['domain']
-        assert 'https' == s.settings['protocol']
-        assert USERNAME == s.settings['username']
-        assert PASSWORD == s.settings['password']
+        assert USERNAME == s.username
+        assert HOST == s._settings['domain']
+        assert 'https' == s._settings['protocol']
+        assert USERNAME == s._settings['username']
+        assert PASSWORD == s._settings['password']
 
     # Tests don't reset global variables (_session) so explicitly cleanup
     current_session(None)
@@ -55,16 +56,16 @@ def test_current_session():
     with mock.patch('sasctl.core.Session.get_token'):
         s4 = Session('example.com', 'user4', 'password')
     current_session(s4)
-    assert 'user4' == current_session().user
+    assert 'user4' == current_session().username
 
     with mock.patch('sasctl.core.Session.get_token'):
         with Session('example.com', 'user5', 'password') as s5:
             with Session('example.com', 'user6', 'password') as s6:
                 assert current_session() == s6
                 assert current_session() != s5
-                assert current_session().user == 'user6'
-            assert current_session().user == 'user5'
-        assert current_session().user == 'user4'
+                assert current_session().username == 'user6'
+            assert current_session().username == 'user5'
+        assert current_session().username == 'user4'
 
 
 def test_swat_connection_reuse():
@@ -91,33 +92,33 @@ def test_swat_connection_reuse():
     with mock.patch('sasctl.core.Session.get_token'):
         with Session(mock_cas) as s:
             # Should reuse port # from SWAT connection
-            # Should query CAS to find the HTTP connection settings
-            assert HOST == s.settings['domain']
-            assert PORT == s.settings['port']
-            assert PROTOCOL == s.settings['protocol']
-            assert USERNAME == s.settings['username']
-            assert PASSWORD == s.settings['password']
+            # Should query CAS to find the HTTP connection _settings
+            assert HOST == s._settings['domain']
+            assert PORT == s._settings['port']
+            assert PROTOCOL == s._settings['protocol']
+            assert USERNAME == s._settings['username']
+            assert PASSWORD == s._settings['password']
             assert '{}://{}:{}/test'.format(PROTOCOL, HOST,
                                             PORT) == s._build_url('/test')
 
-        with Session(HOST, user=USERNAME, password=PASSWORD, protocol=PROTOCOL,
+        with Session(HOST, username=USERNAME, password=PASSWORD, protocol=PROTOCOL,
                      port=PORT) as s:
-            assert HOST == s.settings['domain']
-            assert PORT == s.settings['port']
-            assert PROTOCOL == s.settings['protocol']
-            assert USERNAME == s.settings['username']
-            assert PASSWORD == s.settings['password']
+            assert HOST == s._settings['domain']
+            assert PORT == s._settings['port']
+            assert PROTOCOL == s._settings['protocol']
+            assert USERNAME == s._settings['username']
+            assert PASSWORD == s._settings['password']
             assert '{}://{}:{}/test'.format(PROTOCOL, HOST,
                                             PORT) == s._build_url('/test')
 
-        with Session(HOST, user=USERNAME, password=PASSWORD,
+        with Session(HOST, username=USERNAME, password=PASSWORD,
                      protocol=PROTOCOL) as s:
-            assert HOST == s.settings['domain']
-            assert s.settings[
+            assert HOST == s._settings['domain']
+            assert s._settings[
                        'port'] is None  # Let Requests determine default port
-            assert PROTOCOL == s.settings['protocol']
-            assert USERNAME == s.settings['username']
-            assert PASSWORD == s.settings['password']
+            assert PROTOCOL == s._settings['protocol']
+            assert USERNAME == s._settings['username']
+            assert PASSWORD == s._settings['password']
             assert '{}://{}/test'.format(PROTOCOL, HOST) == s._build_url(
                 '/test')
 
@@ -175,9 +176,10 @@ def test_ssl_context():
     import os
     from sasctl.core import SSLContextAdapter
 
-    if 'CAS_CLIENT_SSL_CA_LIST' in os.environ: del os.environ[
-        'CAS_CLIENT_SSL_CA_LIST']
+    # Cleanup any env vars currently set
+    if 'CAS_CLIENT_SSL_CA_LIST' in os.environ: del os.environ['CAS_CLIENT_SSL_CA_LIST']
     if 'REQUESTS_CA_BUNDLE' in os.environ: del os.environ['REQUESTS_CA_BUNDLE']
+    if 'SSLREQCERT' in os.environ: del os.environ['SSLREQCERT']
 
     # Should default to SSLContextAdapter if no certificate paths are set
     with mock.patch('sasctl.core.Session.get_token', return_value='token'):
@@ -195,9 +197,56 @@ def test_ssl_context():
     os.environ['CAS_CLIENT_SSL_CA_LIST'] = 'path_for_swat'
     with mock.patch('sasctl.core.Session.get_token', return_value='token'):
         s = Session('hostname', 'username', 'password')
-    assert os.environ['CAS_CLIENT_SSL_CA_LIST'] == os.environ[
-        'REQUESTS_CA_BUNDLE']
+    assert os.environ['CAS_CLIENT_SSL_CA_LIST'] == os.environ['REQUESTS_CA_BUNDLE']
     assert not isinstance(s.get_adapter('https://'), SSLContextAdapter)
+
+    # Cleanup
+    del os.environ['CAS_CLIENT_SSL_CA_LIST']
+    del os.environ['REQUESTS_CA_BUNDLE']
+
+    # If SWAT env variable is set, it should override the Requests variable
+    os.environ['SSLCALISTLOC'] = 'path_for_swat'
+    with mock.patch('sasctl.core.Session.get_token', return_value='token'):
+        s = Session('hostname', 'username', 'password')
+    assert os.environ['SSLCALISTLOC'] == os.environ['REQUESTS_CA_BUNDLE']
+    assert 'CAS_CLIENT_SSL_CA_LIST' not in os.environ
+    assert not isinstance(s.get_adapter('https://'), SSLContextAdapter)
+
+    # Cleanup
+    del os.environ['SSLCALISTLOC']
+    del os.environ['REQUESTS_CA_BUNDLE']
+
+
+def test_verify_ssl():
+    with mock.patch('sasctl.core.Session.get_token', return_value='token'):
+        # Should verify SSL by default
+        s = Session('hostname', 'username', 'password')
+        assert s.verify == True
+
+        # Specify true with no issues
+        s = Session('hostname', 'username', 'password', verify_ssl=True)
+        assert s.verify == True
+
+        # Explicitly disable SSL verification
+        s = Session('hostname', 'username', 'password', verify_ssl=False)
+        assert s.verify == False
+
+        # Reuse SWAT env variable, if specified
+        os.environ['SSLREQCERT'] = 'NO'
+        s = Session('hostname', 'username', 'password')
+        assert s.verify == False
+
+        os.environ['SSLREQCERT'] = 'no'
+        s = Session('hostname', 'username', 'password')
+        assert s.verify == False
+
+        os.environ['SSLREQCERT'] = 'false'
+        s = Session('hostname', 'username', 'password')
+        assert s.verify == False
+
+        # Explicit should take precedence over environment variables
+        s = Session('hostname', 'username', 'password', verify_ssl=True)
+        assert s.verify == True
 
 
 def test_kerberos():
@@ -211,3 +260,13 @@ def test_kerberos():
 
         s = Session('hostname', 'username@REALM')
         assert s.auth.token == 'token'
+
+def test_authentication_failure():
+    from sasctl.exceptions import AuthenticationError
+
+    with mock.patch('sasctl.core.Session.request') as request:
+        request.return_value.status_code = 401
+
+        with pytest.raises(AuthenticationError):
+            Session('hostname', 'username', 'password')
+

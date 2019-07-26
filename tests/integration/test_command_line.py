@@ -24,3 +24,14 @@ def test_secure_connection():
 
     r = main(['folders', 'get', 'dummy_folder'])
     assert r is None
+
+
+def test_command_without_args(capsys):
+    """Verify that a simple command works."""
+
+    main(['folders', 'list'])
+
+    captured = capsys.readouterr()
+    assert 'Application Data' in captured.out
+    assert 'Model Repositories' in captured.out
+

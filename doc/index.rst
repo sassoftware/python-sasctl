@@ -45,11 +45,11 @@ Installation
 
 For basic functionality::
 
-    pip install git+https://gitlab.sas.com/xeno/python-sasctl
+    pip install sasctl
 
 For full functionality::
 
-    pip install git+https://gitlab.sas.com/xeno/python-sasctl#egg=sasctl[all]
+    pip install sasctl[all]
 
 Quickstart
 ----------
@@ -80,7 +80,8 @@ A slightly more low-level way to interact with the environment is to use the ser
 methods directly::
 
     >>> from pprint import pprint
-    >>> from sasctl import Session, folders
+    >>> from sasctl import Session
+    >>> from sasctl.services import folders
 
     >>> with Session(host, username, password):
     ...    folders = folders.list_folders()
@@ -102,10 +103,10 @@ The most basic way to interact with the server is simply to call REST functions
 directly, though in general, this is not recommended.::
 
     >>> from pprint import pprint
-    >>> from sasctl import Session, get
+    >>> from sasctl import Session
 
-    >>> with Session(host, username, password):
-    ...    folders = get('/folders')
+    >>> with Session(host, username, password) as s:
+    ...    folders = s.get('/folders')
     ...    pprint(folders)
 
     {'links': [{'href': '/folders/folders',
@@ -170,7 +171,14 @@ Common Uses
 
 Registering a model built with SWAT.
 
+.. literalinclude:: ../examples/astore_model.py
+   :caption: examples/astore_model.py
+   :lines: 7-
+
+Registering a model built with sci-kit learn.
+
 .. literalinclude:: ../examples/sklearn_model.py
+   :caption: examples/sklearn_model.py
    :lines: 7-
 
 
@@ -229,6 +237,9 @@ The final method for supplying credentials is also simple and straight-forward: 
  - :envvar:`SASCTL_USER_NAME`
  - :envvar:`SASCTL_PASSWORD`
 
+
+
+
 SSL Certificates
 ++++++++++++++++
 
@@ -241,6 +252,13 @@ to accomplish this behavior:
 
  - :envvar:`CAS_CLIENT_SSL_CA_LIST`
  - :envvar:`REQUESTS_CA_BUNDLE`
+
+In addition, it is possible to disable SSL ceritificate validation entirely, although this should be used with caution.
+When instantiating a :class:`.Session` instance you can set the `verify_ssl` parameter to False::
+
+   >>> s = Session(hostname, username, verify_ssl=False)
+
+If you're using **sasctl** from the command line, or want to disable SSL validation for all sessions, you can use the following :envvar:`SSLREQCERT` environment variable.
 
 
 Logging
@@ -273,11 +291,20 @@ Environment Variables
 .. envvar:: CAS_CLIENT_SSL_CA_LIST
 
 Client-side path to a certificate file containing :abbr:`CA (Certificate Authority)` certificates to be trusted.  Used by the :mod:`swat` module.  This
+will take precedence over :envvar:`SSLCALISTLOC` and :envvar:`REQUESTS_CA_BUNDLE`.
+
+.. envvar:: SSLCALISTLOC
+
+Client-side path to a certificate file containing :abbr:`CA (Certificate Authority)` certificates to be trusted.  Used by the :mod:`swat` module.  This
 will take precedence over :envvar:`REQUESTS_CA_BUNDLE`.
 
 .. envvar:: REQUESTS_CA_BUNDLE
 
 Client-side path to a certificate file containing :abbr:`CA (Certificate Authority)` certificates to be trusted.  Used by the :mod:`requests` module.
+
+.. envvar:: SSLREQCERT
+
+Disables validation of SSL certificates when set to `no` or `false`
 
 .. envvar:: SASCTL_SERVER_NAME
 

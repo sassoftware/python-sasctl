@@ -33,7 +33,8 @@ except ImportError:
     except ImportError:
         kerberos = None
 
-from sasctl.utils.cli import sasctl_command
+from .utils.cli import sasctl_command
+from . import exceptions
 
 logger = logging.getLogger(__name__)
 
@@ -165,13 +166,16 @@ class RestObj(dict):
 class SSLContextAdapter(HTTPAdapter):
     """HTTPAdapter that uses the default SSL context on the machine."""
 
-    def init_poolmanager(self, connections, maxsize, block=DEFAULT_POOLBLOCK,
-                         **pool_kwargs):
+    def __init__(self, *args, assert_hostname=True, **kwargs):
+        self.assert_hostname = assert_hostname
+        requests.adapters.HTTPAdapter.__init__(self, *args, **kwargs)
+
+    def init_poolmanager(self, *args, **kwargs):
         context = ssl.create_default_context()
-        pool_kwargs['ssl_context'] = context
-        return super(SSLContextAdapter, self).init_poolmanager(connections,
-                                                               maxsize, block,
-                                                               **pool_kwargs)
+        context.check_hostname = self.assert_hostname
+        kwargs['ssl_context'] = context
+        kwargs['assert_hostname'] = self.assert_hostname
+        return super(SSLContextAdapter, self).init_poolmanager(*args, **kwargs)
 
 
 class Session(requests.Session):
@@ -179,9 +183,9 @@ class Session(requests.Session):
 
     Parameters
     ----------
-    host : str or swat.CAS
+    hostname : str or swat.CAS
         Name of the server to connect to or an established swat.CAS session.
-    user : str, optional
+    username : str, optional
         Username for authentication.  Not required if `host` is a CAS
         connection or if Kerberos is used.  If using Kerberos and an explicit
         username is desired, maybe be a string in 'user@REALM' format.
@@ -203,28 +207,50 @@ class Session(requests.Session):
     Attributes
     ----------
     message_log
-    settings
     filters
 
     """
-    def __init__(self, host, user=None, password=None, authinfo=None,
-                 protocol=None, port=None, verify_ssl=True):
+    def __init__(self, hostname,
+                 username=None,
+                 password=None,
+                 authinfo=None,
+                 protocol=None,
+                 port=None,
+                 verify_ssl=None):
         super(Session, self).__init__()
+
+        # Determine whether or not server SSL certificates should be verified.
+        if verify_ssl is None:
+            verify_ssl = os.environ.get('SSLREQCERT', 'yes')
+            verify_ssl = str(verify_ssl).lower() not in ('no', 'false')
 
         self._id = uuid4().hex
         self.message_log = logger.getChild('session.%s' % self._id)
 
         # If certificate path has already been set for SWAT package, make
         # Requests module reuse it.
-        if 'CAS_CLIENT_SSL_CA_LIST' in os.environ:
-            os.environ['REQUESTS_CA_BUNDLE'] = os.environ[
-                'CAS_CLIENT_SSL_CA_LIST']
+        for k in ['SSLCALISTLOC', 'CAS_CLIENT_SSL_CA_LIST']:
+            if k in os.environ:
+                os.environ['REQUESTS_CA_BUNDLE'] = os.environ[k]
+                break
 
         # If certificate path hasn't been specified in either environment
         # variable, replace the default adapter with one that will use the
-        # machine's default SSL settings.
-        if 'REQUESTS_CA_BUNDLE' not in os.environ and verify_ssl:
-            self.mount('https://', SSLContextAdapter())
+        # machine's default SSL _settings.
+        if 'REQUESTS_CA_BUNDLE' not in os.environ:
+            if verify_ssl:
+                # Skip hostname verification if IP address specified instead
+                # of DNS name.  Prevents error from urllib3
+                from urllib3.util.ssl_ import is_ipaddress
+                verify_hostname = not is_ipaddress(hostname)
+                adapter = SSLContextAdapter(assert_hostname=verify_hostname)
+
+                self.mount('https://', adapter)
+
+            else:
+                # Every request will generate an InsecureRequestWarning
+                from urllib3.exceptions import InsecureRequestWarning
+                warnings.simplefilter('default', InsecureRequestWarning)
 
         self.filters = DEFAULT_FILTERS
 
@@ -232,58 +258,62 @@ class Session(requests.Session):
         self._old_session = None
 
         # Reuse an existing CAS connection if possible
-        if swat and isinstance(host, swat.CAS):
-            if isinstance(host._sw_connection,
+        if swat and isinstance(hostname, swat.CAS):
+            if isinstance(hostname._sw_connection,
                           swat.cas.rest.connection.REST_CASConnection):
                 import base64
 
                 # Use the httpAddress action to retieve information about REST endpoints
-                httpAddress = host.get_action('builtins.httpAddress')
+                httpAddress = hostname.get_action('builtins.httpAddress')
                 address = httpAddress()
-
                 domain = address.virtualHost
+                # httpAddress action may return virtualHost = ''
+                # if this happens, try the CAS host
+                if not domain:
+                    domain = hostname._sw_connection._current_hostname
                 protocol = address.protocol
                 port = address.port
 
-                # protocol = host._protocol
-                auth = host._sw_connection._auth.decode('utf-8').replace(
+                # protocol = hostname._protocol
+                auth = hostname._sw_connection._auth.decode('utf-8').replace(
                     'Basic ', '')
-                user, password = base64.b64decode(auth).decode('utf-8').split(
+                username, password = base64.b64decode(auth).decode('utf-8').split(
                     ':')
-                # domain = host._hostname
+                # domain = hostname._hostname
             else:
                 raise ValueError(
                     "A 'swat.CAS' session can only be reused when it's connected via the REST APIs.")
         else:
-            domain = str(host)
+            domain = str(hostname)
 
-        self.settings = {'protocol': protocol or 'https',
+        self._settings = {'protocol': protocol or 'https',
                          'domain': domain,
                          'port': port,
-                         'username': user,
+                         'username': username,
                          'password': password
-                         }
+                          }
 
-        if self.settings['password'] is None:
+        if self._settings['password'] is None:
             # Try to get credentials from .authinfo or .netrc files.
             # If no file path was specified, the default locations will
             # be checked.
             if 'swat' in sys.modules:
-                auth = swat.utils.authinfo.query_authinfo(domain, user=user,
+                auth = swat.utils.authinfo.query_authinfo(domain, user=username,
                                                           path=authinfo)
-                self.settings['username'], self.settings[
-                    'password'] = auth.get('user'), auth.get('password')
+                self._settings['username'], self._settings[
+                    'password'] = auth.get('username'), auth.get('password')
 
             # Not able to load credentials using SWAT.  Try Netrc.
-            # TODO: IF a user was specified, verify that the credentials found
-            #       are for that user.
-            if self.settings['password'] is None:
+            # TODO: IF a username was specified, verify that the credentials found
+            #       are for that username.
+            if self._settings['password'] is None:
                 try:
                     parser = netrc.netrc(authinfo)
                     values = parser.authenticators(domain)
                     if values:
-                        self.settings['username'], _, self.settings[
-                            'password'] = values
+                        self._settings['username'], \
+                        _, \
+                        self._settings['password'] = values
                 except (OSError, IOError):
                     pass  # netrc throws if $HOME is not set
 
@@ -301,8 +331,8 @@ class Session(requests.Session):
         return handler
 
     @property
-    def user(self):
-        return self.settings.get('username')
+    def username(self):
+        return self._settings.get('username')
 
     def send(self, request, **kwargs):
         if self.message_log.isEnabledFor(logging.DEBUG):
@@ -359,7 +389,8 @@ class Session(requests.Session):
                 raise RuntimeError(
                     "SSL handshake failed.  The 'REQUESTS_CA_BUNDLE' "
                     "environment variable should contain the path to the CA "
-                    "certificate.")
+                    "certificate.  Alternatively, set verify_ssl=False to "
+                    "disable certificate verification.")
             else:
                 raise e
 
@@ -384,11 +415,11 @@ class Session(requests.Session):
             raise RuntimeError("Kerberos package not found.  Run 'pip "
                                "install sasctl[kerberos]' to install.")
 
-        user = self.settings.get('username')
+        user = self._settings.get('username')
         # realm = user.rsplit('@', maxsplit=1)[-1] if '@' in user else None
         client_id = 'sas.tkmtrb'
         flags = kerberos.GSS_C_MUTUAL_FLAG | kerberos.GSS_C_SEQUENCE_FLAG
-        service = 'HTTP@%s' % self.settings['domain']
+        service = 'HTTP@%s' % self._settings['domain']
 
         logger.info('Attempting Kerberos authentication to %s as %s'
                     % (service, user))
@@ -433,7 +464,7 @@ class Session(requests.Session):
 
         # Drop @REALM from username and store
         if username is not None:
-            self.settings['username'] = username.rsplit('@', maxsplit=1)[0]
+            self._settings['username'] = username.rsplit('@', maxsplit=1)[0]
 
 
 
@@ -457,8 +488,8 @@ class Session(requests.Session):
 
     def _get_token_with_password(self):
         """Authenticate with a username and password."""
-        username = self.settings['username']
-        password = self.settings['password']
+        username = self._settings['username']
+        password = self._settings['password']
         url = self._build_url('/SASLogon/oauth/token')
 
         data = 'grant_type=password&username={}&password={}'.format(username,
@@ -470,13 +501,31 @@ class Session(requests.Session):
                                       data=data,
                                       headers=headers,
                                       auth=('sas.ec', ''))
-        r.raise_for_status()
+
+        if r.status_code == 401:
+            raise exceptions.AuthenticationError(username)
+        else:
+            r.raise_for_status()
 
         return r.json().get('access_token')
 
     def get_token(self):
-        username = self.settings['username']
-        password = self.settings['password']
+        """Authenticates with the session host and retrieves an
+        authorization token for use by subsequent requests.
+
+        Returns
+        -------
+        str
+            a bearer token for :class:`HTTPBearerAuth`
+
+        Raises
+        ------
+        AuthenticationError
+            authentication with the host failed
+
+        """
+        username = self._settings['username']
+        password = self._settings['password']
 
         if username is None or password is None:
             return self._get_token_with_kerberos()
@@ -487,14 +536,14 @@ class Session(requests.Session):
         """Build a complete URL from a path by substituting in session parameters."""
         components = urlsplit(url)
 
-        domain = components.netloc or self.settings['domain']
+        domain = components.netloc or self._settings['domain']
 
         # Add port if a non-standard port was specified
-        if self.settings['port'] is not None and ':' not in domain:
-            domain = '{}:{}'.format(domain, self.settings['port'])
+        if self._settings['port'] is not None and ':' not in domain:
+            domain = '{}:{}'.format(domain, self._settings['port'])
 
         return urlunsplit([
-            components.scheme or self.settings['protocol'],
+            components.scheme or self._settings['protocol'],
             domain,
             components.path,
             components.query,
@@ -509,21 +558,12 @@ class Session(requests.Session):
         self._old_session = _session
         _session = self
 
-        # Reduce verbosity of warnings.  By default, HTTP warnings on thrown on every request
-        self._filter_context = warnings.catch_warnings()
-        self._filter_context.__enter__()
-        from urllib3.exceptions import HTTPWarning
-        warnings.simplefilter('once', HTTPWarning)
-
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         # Restore previous current session
         global _session
         _session = self._old_session
-
-        # Restore warning levels
-        self._filter_context.__exit__()
 
         super(Session, self).__exit__()
 
@@ -628,6 +668,10 @@ def request_link(obj, rel, **kwargs):
 
     """
     link = get_link(obj, rel)
+
+    if link is None:
+        raise ValueError("Link '%s' not found in object %s." % (rel, obj))
+
 
     return request(link['method'], link['href'], **kwargs)
 
@@ -863,3 +907,10 @@ def _build_is_available_func(service_root):
         response = current_session().head(service_root + '/')
         return response.status_code == 200
     return is_available
+
+
+class SasctlError(Exception):
+    pass
+
+class TimeoutError(SasctlError):
+    pass

@@ -10,12 +10,13 @@ from sasctl import Session
 from sasctl.tasks import register_model, publish_model
 from sasctl.services import microanalytic_score as mas
 
-s = swat.CAS('example.com', username='username', password='*****')
+s = swat.CAS('hostname', 'username', 'password')
 s.loadactionset('decisionTree')
 
 tbl = s.CASTable('iris')
 tbl.decisiontree.gbtreetrain(target='Species',
-                             inputs=['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth'],
+                             inputs=['SepalLength', 'SepalWidth',
+                                     'PetalLength', 'PetalWidth'],
                              savestate='gradboost_astore')
 
 astore = s.CASTable('gradboost_astore')

@@ -8,7 +8,7 @@ import pytest
 from six.moves import mock
 
 from sasctl import RestObj
-import sasctl.services.model_management as mm
+from sasctl.services import model_management as mm
 
 
 def test_create_performance_definition():
@@ -22,9 +22,12 @@ def test_create_performance_definition():
     with mock.patch('sasctl.core.requests.Session.request'):
         current_session('example.com', USER, 'password')
 
-    with mock.patch('sasctl.services.model_repository.get_model') as get_model:
-        with mock.patch('sasctl.services.model_repository.get_project') as get_project:
-            with mock.patch('sasctl.services.model_management.post') as post:
+    with mock.patch('sasctl._services.model_repository.ModelRepository'
+                    '.get_model') as get_model:
+        with mock.patch('sasctl._services.model_repository.ModelRepository'
+                        '.get_project') as get_project:
+            with mock.patch('sasctl._services.model_management.ModelManagement'
+                            '.post') as post:
                 get_model.return_value = MODEL
 
                 with pytest.raises(ValueError):
@@ -54,7 +57,11 @@ def test_create_performance_definition():
                 get_project.return_value['targetVariable'] = 'target'
                 get_project.return_value['targetLevel'] = 'interval'
                 get_project.return_value['predictionVariable'] = 'predicted'
-                _ = mm.create_performance_definition('model', 'TestLibrary', 'TestData')
+                _ = mm.create_performance_definition('model', 'TestLibrary',
+                                                     'TestData',
+                                                     max_bins=3,
+                                                     monitor_challenger=True,
+                                                     monitor_champion=True)
 
             assert post.call_count == 1
             url, data = post.call_args
@@ -66,3 +73,13 @@ def test_create_performance_definition():
             assert 'cas-shared-default' == data['json']['casServerId']
             assert data['json']['name'] is not None
             assert data['json']['description'] is not None
+            assert data['json']['maxBins'] == 3
+            assert data['json']['championMonitored'] == True
+            assert data['json']['challengerMonitored'] == True
+
+    def test_table_prefix_format():
+        with pytest.raises(ValueError):
+            # Underscores should not be allowed
+            _ = mm.create_performance_definition('model',
+                                                 'TestLibrary',
+                                                 'invalid_name')
