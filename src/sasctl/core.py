@@ -166,13 +166,16 @@ class RestObj(dict):
 class SSLContextAdapter(HTTPAdapter):
     """HTTPAdapter that uses the default SSL context on the machine."""
 
-    def init_poolmanager(self, connections, maxsize, block=DEFAULT_POOLBLOCK,
-                         **pool_kwargs):
+    def __init__(self, *args, assert_hostname=True, **kwargs):
+        self.assert_hostname = assert_hostname
+        requests.adapters.HTTPAdapter.__init__(self, *args, **kwargs)
+
+    def init_poolmanager(self, *args, **kwargs):
         context = ssl.create_default_context()
-        pool_kwargs['ssl_context'] = context
-        return super(SSLContextAdapter, self).init_poolmanager(connections,
-                                                               maxsize, block,
-                                                               **pool_kwargs)
+        context.check_hostname = self.assert_hostname
+        kwargs['ssl_context'] = context
+        kwargs['assert_hostname'] = self.assert_hostname
+        return super(SSLContextAdapter, self).init_poolmanager(*args, **kwargs)
 
 
 class Session(requests.Session):
@@ -236,7 +239,14 @@ class Session(requests.Session):
         # machine's default SSL _settings.
         if 'REQUESTS_CA_BUNDLE' not in os.environ:
             if verify_ssl:
-                self.mount('https://', SSLContextAdapter())
+                # Skip hostname verification if IP address specified instead
+                # of DNS name.  Prevents error from urllib3
+                from urllib3.util.ssl_ import is_ipaddress
+                verify_hostname = not is_ipaddress(hostname)
+                adapter = SSLContextAdapter(assert_hostname=verify_hostname)
+
+                self.mount('https://', adapter)
+
             else:
                 # Every request will generate an InsecureRequestWarning
                 from urllib3.exceptions import InsecureRequestWarning
