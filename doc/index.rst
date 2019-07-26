@@ -80,7 +80,8 @@ A slightly more low-level way to interact with the environment is to use the ser
 methods directly::
 
     >>> from pprint import pprint
-    >>> from sasctl import Session, folders
+    >>> from sasctl import Session
+    >>> from sasctl.services import folders
 
     >>> with Session(host, username, password):
     ...    folders = folders.list_folders()
@@ -102,10 +103,10 @@ The most basic way to interact with the server is simply to call REST functions
 directly, though in general, this is not recommended.::
 
     >>> from pprint import pprint
-    >>> from sasctl import Session, get
+    >>> from sasctl import Session
 
-    >>> with Session(host, username, password):
-    ...    folders = get('/folders')
+    >>> with Session(host, username, password) as s:
+    ...    folders = s.get('/folders')
     ...    pprint(folders)
 
     {'links': [{'href': '/folders/folders',
