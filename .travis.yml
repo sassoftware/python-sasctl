@@ -26,6 +26,8 @@ matrix:
       env: TOXENV=py35-tests
     - python: 3.6
       env: TOXENV=py36-tests
+    - python: 3.6
+      env: TOXENV=doc,doc-linkcheck
 
 
 install:
@@ -37,16 +39,6 @@ install:
 script:
   - tox
 
-jobs:
-  include:
-  - stage: upload codecov results
-    python: 3.6
-    install:
-    - pip install pytest pytest-cov codecov
-    - pip install -r test_requirements.txt
-    script:
-    - pytest --cov=./
-    - codecov
 
 ##dist: xenial
 #language: python
