@@ -13,9 +13,11 @@ matrix:
       env: TOXENV=flake8
 
     - stage: tests
-    - python: 2.7
+    - name: Python 2.7 Unit Tests
+      python: 2.7
       env: TOXENV=py27-tests
-    - python: 3.0
+    - name: Python 3.0 Unit Tests
+      python: 3.0
       env: TOXENV=py30-tests
     - python: 3.1
       env: TOXENV=py31-tests
