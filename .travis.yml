@@ -9,6 +9,17 @@ matrix:
     - python: 3.0
       env: TOXENV=py30-tests
 
+
+install:
+  - pip install tox
+
+#env:
+#  - TOX_SKIP_MISSING_INTERPRETERS="False";
+
+script:
+  - tox
+
+
 ##dist: xenial
 #language: python
 #cache: pip
