@@ -38,6 +38,10 @@ matrix:
       python: 3.6
       env: TOXENV=doc,doc-linkcheck
 
+  allow_failures:
+    - env: TOXENV=flake8
+
+
 install:
   - pip install tox
 
