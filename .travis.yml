@@ -26,13 +26,14 @@ matrix:
       env: TOXENV=py35-tests
     - python: 3.6
       env: TOXENV=py36-tests
-    - python: 3.6
-      env: TOXENV=doc,doc-linkcheck
 
     - stage: upload codecov results
       python: 3.6
-      install: pip install pytest pytest-cov codecov
-      script: codecov
+      env: TOXENV=codecov
+
+    - stage: build documentation
+      python: 3.6
+      env: TOXENV=doc,doc-linkcheck
 
 install:
   - pip install tox
