@@ -166,8 +166,8 @@ class RestObj(dict):
 class SSLContextAdapter(HTTPAdapter):
     """HTTPAdapter that uses the default SSL context on the machine."""
 
-    def __init__(self, *args, assert_hostname=True, **kwargs):
-        self.assert_hostname = assert_hostname
+    def __init__(self, *args, **kwargs):
+        self.assert_hostname = kwargs.pop('assert_hostname', True)
         requests.adapters.HTTPAdapter.__init__(self, *args, **kwargs)
 
     def init_poolmanager(self, *args, **kwargs):
