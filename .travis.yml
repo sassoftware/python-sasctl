@@ -8,8 +8,11 @@ branches:
 
 matrix:
   include:
-    - python: 3.6
+    - stage: flake8
+      python: 3.6
       env: TOXENV=flake8
+
+    - stage: tests
     - python: 2.7
       env: TOXENV=py27-tests
     - python: 3.0
