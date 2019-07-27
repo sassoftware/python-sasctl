@@ -11,14 +11,11 @@ matrix:
     - stage: flake8
       python: 3.6
       env: TOXENV=flake8
-      allow_failures: true
 
     - stage: tests
-    - name: Python 2.7 Unit Tests
-      python: 2.7
+    - python: 2.7
       env: TOXENV=py27-tests
-    - name: Python 3.0 Unit Tests
-      python: 3.0
+    - python: 3.0
       env: TOXENV=py30-tests
     - python: 3.1
       env: TOXENV=py31-tests
@@ -49,6 +46,9 @@ install:
 
 script:
   - tox
+
+
+allow_failures: flake8
 
 
 
