@@ -3,11 +3,7 @@
 
 language: python
 
-os:
-  - linux
-  - osx
-  - windows
-
+dist: precise
 
 branches:
   only:
@@ -20,7 +16,7 @@ matrix:
       python: 3.6
       env: TOXENV=flake8
 
-    - stage: tests
+    - stage: test
     - python: 2.7
       env: TOXENV=py27-tests
     - python: 3.0
