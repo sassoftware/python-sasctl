@@ -33,6 +33,9 @@ matrix:
       env: TOXENV=py35-tests
     - python: 3.6
       env: TOXENV=py36-tests
+    - python: 3.7
+      dist: xenial
+      env: TOXENV=py36-tests
 
     - stage: upload codecov results
       python: 3.6
