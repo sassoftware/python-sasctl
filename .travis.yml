@@ -4,6 +4,7 @@
 language: python
 
 #dist: precise
+dist: trusty
 
 branches:
   only:
