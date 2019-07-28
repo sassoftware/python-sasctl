@@ -20,9 +20,8 @@ def read_dunder(name):
 
 
 def get_file(filename):
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), filename)
-
-    with open(path, 'r') as f:
+    print(os.path.abspath(__file__))
+    with open(filename, 'r') as f:
         return f.read()
 
 
