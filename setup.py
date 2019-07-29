@@ -26,6 +26,7 @@ def get_file(filename):
     print('joined: %s' % os.path.join(folder, __file__))
     for file in os.listdir(os.path.dirname(folder)):
         print('file: %s' % file)
+    assert False
 
     with open(filename, 'r') as f:
         return f.read()
