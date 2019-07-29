@@ -20,7 +20,10 @@ def read_dunder(name):
 
 
 def get_file(filename):
-    print(os.path.abspath(__file__))
+    print('abspath: %s' % os.path.abspath(__file__))
+    print('joined: %s' % os.path.join(os.path.abspath(__file__), filename))
+    for file in os.listdir(os.path.dirname(__file__)):
+        print('file: %s' % file)
     with open(filename, 'r') as f:
         return f.read()
 
