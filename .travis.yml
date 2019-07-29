@@ -21,16 +21,16 @@ matrix:
     - python: 2.7
       env: TOXENV=py27-tests
     - python: 3.0
-      dist: precise
+      dist: trusty
       env: TOXENV=py30-tests
     - python: 3.1
-      dist: precise
+      dist: trusty
       env: TOXENV=py31-tests
     - python: 3.2
-      dist: precise
+      dist: trusty
       env: TOXENV=py32-tests
     - python: 3.3
-      dist: precise
+      dist: trusty
       env: TOXENV=py33-tests
     - python: 3.4
       env: TOXENV=py34-tests
