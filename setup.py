@@ -23,8 +23,8 @@ def get_file(filename):
     print('abspath: %s' % os.path.abspath(__file__))
     print('dirname: %s' % os.path.dirname(os.path.abspath(__file__)))
     folder = os.path.dirname(os.path.abspath(__file__))
-    print('joined: %s' % os.path.join(folder, __file__))
-    for file in os.listdir(os.path.dirname(folder)):
+    print('joined: %s' % os.path.join(folder, filename))
+    for file in os.listdir(folder):
         print('file: %s' % file)
     assert False
 
