@@ -32,11 +32,11 @@ matrix:
 #    - python: 3.3
 #      dist: trusty
 #      env: TOXENV=py33-tests
-#    - python: 3.4
-#      env: TOXENV=py34-tests
-#      dist: trusty
-    - python: 3.5
-      env: TOXENV=py35-tests
+    - python: 3.4
+      env: TOXENV=py34-tests
+      dist: trusty
+#    - python: 3.5
+#      env: TOXENV=py35-tests
 #    - python: 3.6
 #      env: TOXENV=py36-tests
 #    - python: 3.7

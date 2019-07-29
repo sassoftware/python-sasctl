@@ -30,7 +30,7 @@ def get_file(filename):
     filename = os.path.join(folder, filename)
     print('filename: %s' % filename)
 
-    assert False
+    # assert False
     with open(filename, 'r') as f:
         return f.read()
 
