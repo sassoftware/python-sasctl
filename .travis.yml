@@ -20,9 +20,9 @@ matrix:
 #    - stage: test
 #    - python: 2.7
 #      env: TOXENV=py27-tests
-    - python: 3.0
-      dist: trusty
-      env: TOXENV=py30-tests
+#    - python: 3.0
+#      dist: trusty
+#      env: TOXENV=py30-tests
 #    - python: 3.1
 #      dist: trusty
 #      env: TOXENV=py31-tests
@@ -32,8 +32,8 @@ matrix:
 #    - python: 3.3
 #      dist: trusty
 #      env: TOXENV=py33-tests
-#    - python: 3.4
-#      env: TOXENV=py34-tests
+    - python: 3.4
+      env: TOXENV=py34-tests
 #    - python: 3.5
 #      env: TOXENV=py35-tests
 #    - python: 3.6
