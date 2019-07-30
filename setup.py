@@ -30,7 +30,7 @@ def get_file(filename):
     filename = os.path.join(folder, filename)
     print('filename: %s' % filename)
 
-    assert False
+    # assert False
     with open(filename, 'r') as f:
         return f.read()
 
@@ -39,6 +39,7 @@ setup(
     name='sasctl',
 
     include_package_data=True,
+    exclude_package_data={'': ['README.md']},
 
     description='SAS Viya REST Client',
     long_description=get_file('README.md'),
