@@ -19,19 +19,18 @@ env:
 stages:
   - flake8
   - test
-  - name: build documentation
-    if branch = master
   - name: create release
-    if: branch = master AND tag IS present
+    if: tag is present
 
 
 matrix:
+
   allow_failures:
     - env: TOXENV=flake8
 
   include:
     - python: 2.7
-      env: TOXENV=py27-tests TOX_SKIP_MISSING_INTERPRETERS=False
+      env: TOXENV=py27-tests
     - python: 3.4
       dist: trusty
       env: TOXENV=py34-tests
