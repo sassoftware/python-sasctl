@@ -22,7 +22,7 @@ def read_dunder(name):
 def get_file(filename):
     print('abspath: %s' % os.path.abspath(__file__))
     print('dirname: %s' % os.path.dirname(os.path.abspath(__file__)))
-    folder = os.path.dirname(os.path.abspath(__file__))
+    folder = os.path.abspath(os.path.dirname(__file__))
     print('joined: %s' % os.path.join(folder, filename))
     for file in os.listdir(folder):
         print('file: %s' % file)
@@ -37,10 +37,10 @@ def get_file(filename):
 
 setup(
     name='sasctl',
+
+    include_package_data=True,
+
     description='SAS Viya REST Client',
-    package_data = {
-        '': ['*.md']
-    },
     long_description=get_file('README.md'),
     long_description_content_type='text/markdown',
     version=read_dunder('version'),
