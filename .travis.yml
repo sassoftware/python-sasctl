@@ -19,8 +19,11 @@ env:
 stages:
   - flake8
   - test
+  - docs
+    name: build documentation
+    if branch = master
   - name: create release
-    if: tag is present
+    if: branch = master AND tag IS present
 
 
 matrix:
@@ -30,7 +33,7 @@ matrix:
 
   include:
     - python: 2.7
-      env: TOXENV=py27-tests
+      env: TOXENV=py27-tests TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.4
       dist: trusty
       env: TOXENV=py34-tests
