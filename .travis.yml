@@ -11,8 +11,16 @@ branches:
   only:
     - master
 
+env:
+  global:
+    - TOX_SKIP_MISSING_INTERPRETERS=False
+
 
 matrix:
+
+  allow_failures:
+    - env: TOXENV=flake8
+
   include:
     - stage: flake8
       dist: xenial
@@ -59,18 +67,12 @@ matrix:
           tags: true
 
 
-  allow_failures:
-    - env: TOXENV=flake8
-
-
 install:
   - pip install tox
 
-#env:
-#  - TOX_SKIP_MISSING_INTERPRETERS=False
 
 script:
-  - env $TOXENV TOX_SKIP_MISSING_INTERPRETERS=False tox
+  - tox
 
 
 
