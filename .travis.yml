@@ -13,11 +13,11 @@ branches:
 
 matrix:
   include:
-#    - stage: flake8
-#      python: 3.6
-#      env: TOXENV=flake8
-#
-#    - stage: test
+    - stage: flake8
+      python: 3.6
+      env: TOXENV=flake8
+
+    - stage: test
 #    - python: 2.7
 #      env: TOXENV=py27-tests
 #    - python: 3.0
@@ -35,26 +35,26 @@ matrix:
     - python: 3.4
       env: TOXENV=py34-tests
       dist: trusty
-#    - python: 3.5
-#      env: TOXENV=py35-tests
-#    - python: 3.6
-#      env: TOXENV=py36-tests
-#    - python: 3.7
-#      dist: xenial
-#      env: TOXENV=py37-tests
-#
-#    - stage: upload codecov results
-#      python: 3.6
-#      env: TOXENV=codecov
-#
-#    - stage: build documentation
-#      python: 3.6
-#      env: TOXENV=doc,doc-linkcheck
-#
-#  allow_failures:
-#    - env: TOXENV=flake8
-#
-#
+    - python: 3.5
+      env: TOXENV=py35-tests
+    - python: 3.6
+      env: TOXENV=py36-tests
+    - python: 3.7
+      dist: xenial
+      env: TOXENV=py37-tests
+
+    - stage: upload codecov results
+      python: 3.6
+      env: TOXENV=codecov
+
+    - stage: build documentation
+      python: 3.6
+      env: TOXENV=doc,doc-linkcheck
+
+  allow_failures:
+    - env: TOXENV=flake8
+
+
 install:
   - pip install tox
 
