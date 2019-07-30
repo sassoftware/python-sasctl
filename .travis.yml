@@ -5,8 +5,8 @@ language: python
 
 #dist: precise
 #dist: trusty
-#dist: xenial
-#
+dist: xenial
+
 #branches:
 #  only:
 #    - master
