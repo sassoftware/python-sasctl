@@ -27,7 +27,6 @@ stages:
 
 
 matrix:
-
   allow_failures:
     - env: TOXENV=flake8
 
