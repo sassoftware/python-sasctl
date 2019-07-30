@@ -38,9 +38,10 @@ def get_file(filename):
 setup(
     name='sasctl',
 
-    include_package_data=True,
-    exclude_package_data={'': ['README.md']},
+    # include_package_data=True,
+    # exclude_package_data={'': ['README.md']},
 
+    license='Apache v2.0',
     description='SAS Viya REST Client',
     long_description=get_file('README.md'),
     long_description_content_type='text/markdown',
