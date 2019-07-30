@@ -12,8 +12,15 @@ branches:
     - master
 
 env:
-  global:
+  matrix:
     - TOX_SKIP_MISSING_INTERPRETERS=False
+
+
+stages:
+  - flake8
+  - test
+  - name: create release
+    if: tag is present
 
 
 matrix:
@@ -22,12 +29,6 @@ matrix:
     - env: TOXENV=flake8
 
   include:
-    - stage: flake8
-      dist: xenial
-      python: 3.6
-      env: TOXENV=flake8
-
-    - stage: test
     - python: 2.7
       env: TOXENV=py27-tests
     - python: 3.4
@@ -43,6 +44,11 @@ matrix:
       dist: xenial
       env: TOXENV=py37-tests
 
+    - stage: flake8
+      dist: xenial
+      python: 3.6
+      env: TOXENV=flake8
+
     - stage: upload codecov results
       python: 3.6
       env: TOXENV=codecov
@@ -52,6 +58,7 @@ matrix:
       env: TOXENV=doc,doc-linkcheck
 
     - stage: create release
+      if: tag is present
       python: 3.6
       install: pip install sphinx
       script:
@@ -63,8 +70,8 @@ matrix:
         api_key: "$GITHUB_TOKEN"
         file: "${TRAVIS_TAG}-doc.zip"
         draft: true
-        on:
-          tags: true
+#        on:
+#          tags: true
 
 
 install:
