@@ -38,7 +38,8 @@ def get_file(filename):
 setup(
     name='sasctl',
 
-    # include_package_data=True,
+    include_package_data=True,
+    package_data={'': ['README.md']},
     # exclude_package_data={'': ['README.md']},
 
     license='Apache v2.0',
