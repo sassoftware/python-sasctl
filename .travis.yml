@@ -5,20 +5,18 @@ language: python
 
 #dist: precise
 #dist: trusty
-dist: xenial
-
-branches:
-  only:
-    - master
-
-env:
-  matrix:
-    - TOX_SKIP_MISSING_INTERPRETERS=False
+#dist: xenial
+#
+#branches:
+#  only:
+#    - master
 
 
 stages:
   - flake8
   - test
+  - upload codecov results
+  - build documentation
   - name: create release
     if: tag is present
 
@@ -30,22 +28,18 @@ matrix:
 
   include:
     - python: 2.7
-      env: TOXENV=py27-tests
+      env: TOXENV=py27-tests TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.4
       dist: trusty
-      env: TOXENV=py34-tests
+      env: TOXENV=py34-tests TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.5
-      dist: xenial
-      env: TOXENV=py35-tests
+      env: TOXENV=py35-tests TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.6
-      dist: xenial
-      env: TOXENV=py36-tests
+      env: TOXENV=py36-tests TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.7
-      dist: xenial
-      env: TOXENV=py37-tests
+      env: TOXENV=py37-tests TOX_SKIP_MISSING_INTERPRETERS=False
 
     - stage: flake8
-      dist: xenial
       python: 3.6
       env: TOXENV=flake8
 
@@ -55,7 +49,7 @@ matrix:
 
     - stage: build documentation
       python: 3.6
-      env: TOXENV=doc,doc-linkcheck
+      env: TOXENV=doc,doc-linkcheck TOX_SKIP_MISSING_INTERPRETERS=False
 
     - stage: create release
       python: 3.6
