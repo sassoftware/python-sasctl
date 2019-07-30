@@ -51,14 +51,13 @@ matrix:
 
     - stage: upload codecov results
       python: 3.6
-      env: TOXENV=codecov
+      env: TOXENV=codecov TOX_SKIP_MISSING_INTERPRETERS=False
 
     - stage: build documentation
       python: 3.6
       env: TOXENV=doc,doc-linkcheck
 
     - stage: create release
-      if: tag is present
       python: 3.6
       install: pip install sphinx
       script:
