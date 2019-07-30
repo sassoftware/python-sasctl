@@ -43,6 +43,23 @@ matrix:
       python: 3.6
       env: TOXENV=doc,doc-linkcheck
 
+
+    - stage: create release
+      python: 3.6
+      install: pip install sphinx
+      script:
+      - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
+      - pushd ./doc/_build/html ; zip -r ../../../${TRAVIS_TAG}-doc.zip . ; popd
+      deploy:
+        provider: releases
+        skip_cleanup: true
+        api_key: "$GITHUB_TOKEN"
+        file: "${TRAVIS_TAG}-doc.zip"
+        draft: true
+        on:
+          tags: true
+
+
   allow_failures:
     - env: TOXENV=flake8
 
@@ -50,14 +67,11 @@ matrix:
 install:
   - pip install tox
 
-##env:
-##  - TOX_SKIP_MISSING_INTERPRETERS="False";
-#
+env:
+  - TOX_SKIP_MISSING_INTERPRETERS=False
+
 script:
   - tox
-
-
-allow_failures: flake8
 
 
 
@@ -88,7 +102,7 @@ allow_failures: flake8
 #    - pip install -r test_requirements.txt
 #    script:
 #    - pytest --cov=./
-#    - codecov
+###    - codecov
 #  - stage: create release
 #    if: tag is present
 #    python: 3.6
