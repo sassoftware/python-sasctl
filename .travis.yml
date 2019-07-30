@@ -19,8 +19,7 @@ env:
 stages:
   - flake8
   - test
-  - docs
-    name: build documentation
+  - name: build documentation
     if branch = master
   - name: create release
     if: branch = master AND tag IS present
