@@ -43,7 +43,6 @@ matrix:
       python: 3.6
       env: TOXENV=doc,doc-linkcheck
 
-
     - stage: create release
       python: 3.6
       install: pip install sphinx
@@ -67,11 +66,11 @@ matrix:
 install:
   - pip install tox
 
-env:
-  - TOX_SKIP_MISSING_INTERPRETERS=False
+#env:
+#  - TOX_SKIP_MISSING_INTERPRETERS=False
 
 script:
-  - tox
+  - env $TOXENV TOX_SKIP_MISSING_INTERPRETERS=False tox
 
 
 
