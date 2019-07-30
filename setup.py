@@ -20,15 +20,15 @@ def read_dunder(name):
 
 
 def get_file(filename):
-    print('abspath: %s' % os.path.abspath(__file__))
-    print('dirname: %s' % os.path.dirname(os.path.abspath(__file__)))
-    folder = os.path.abspath(os.path.dirname(__file__))
-    print('joined: %s' % os.path.join(folder, filename))
-    for file in os.listdir(folder):
-        print('file: %s' % file)
-
-    filename = os.path.join(folder, filename)
-    print('filename: %s' % filename)
+    # print('abspath: %s' % os.path.abspath(__file__))
+    # print('dirname: %s' % os.path.dirname(os.path.abspath(__file__)))
+    # folder = os.path.abspath(os.path.dirname(__file__))
+    # print('joined: %s' % os.path.join(folder, filename))
+    # for file in os.listdir(folder):
+    #     print('file: %s' % file)
+    #
+    # filename = os.path.join(folder, filename)
+    # print('filename: %s' % filename)
 
     # assert False
     with open(filename, 'r') as f:
@@ -37,10 +37,7 @@ def get_file(filename):
 
 setup(
     name='sasctl',
-
     include_package_data=True,
-    exclude_package_data={'': ['README.md']},
-
     license='Apache v2.0',
     description='SAS Viya REST Client',
     long_description=get_file('README.md'),
