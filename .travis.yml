@@ -33,11 +33,13 @@ matrix:
 #      dist: trusty
 #      env: TOXENV=py33-tests
     - python: 3.4
-      env: TOXENV=py34-tests
       dist: trusty
+      env: TOXENV=py34-tests
     - python: 3.5
+      dist: xenial
       env: TOXENV=py35-tests
     - python: 3.6
+      dist: xenial
       env: TOXENV=py36-tests
     - python: 3.7
       dist: xenial
