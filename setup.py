@@ -38,6 +38,9 @@ def get_file(filename):
 setup(
     name='sasctl',
     description='SAS Viya REST Client',
+    package_data = {
+        '': ['README.md']
+    },
     long_description=get_file('README.md'),
     long_description_content_type='text/markdown',
     version=read_dunder('version'),
