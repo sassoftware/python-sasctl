@@ -3,20 +3,12 @@
 
 language: python
 
-#dist: precise
-#dist: trusty
 dist: xenial
-
-#branches:
-#  only:
-#    - master
 
 
 stages:
   - flake8
   - test
-  - upload codecov results
-  - build documentation
   - name: create release
     if: tag is present
 
@@ -43,20 +35,13 @@ matrix:
       python: 3.6
       env: TOXENV=py36-flake8
 
-#    - stage: upload codecov results
-#      python: 3.6
-#      env: TOXENV=codecov TOX_SKIP_MISSING_INTERPRETERS=False
-
     - stage: build documentation
       python: 3.6
-      env: TOXENV=py36-doc TOX_SKIP_MISSING_INTERPRETERS=False
+
 
     - stage: create release
       python: 3.6
-      install: pip install sphinx
-      script:
-      - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
-      - pushd ./doc/_build/html ; zip -r ../../../${TRAVIS_TAG}-doc.zip . ; popd
+      env: TOXENV=py36-doc TOX_SKIP_MISSING_INTERPRETERS=False
       deploy:
         provider: releases
         skip_cleanup: true
