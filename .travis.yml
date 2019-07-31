@@ -35,7 +35,7 @@ matrix:
     - python: 3.5
       env: TOXENV=py35-tests TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.6
-      env: TOXENV=py36-tests TOX_SKIP_MISSING_INTERPRETERS=False
+      env: TOXENV=py36-tests, py36-codecov TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.7
       env: TOXENV=py37-tests TOX_SKIP_MISSING_INTERPRETERS=False
 
@@ -43,9 +43,9 @@ matrix:
       python: 3.6
       env: TOXENV=flake8
 
-    - stage: upload codecov results
-      python: 3.6
-      env: TOXENV=codecov TOX_SKIP_MISSING_INTERPRETERS=False
+#    - stage: upload codecov results
+#      python: 3.6
+#      env: TOXENV=codecov TOX_SKIP_MISSING_INTERPRETERS=False
 
     - stage: build documentation
       python: 3.6
