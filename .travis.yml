@@ -27,17 +27,13 @@ matrix:
     - python: 3.5
       env: TOXENV=py35-tests TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.6
-      env: TOXENV=py36-tests,py36-codecov TOX_SKIP_MISSING_INTERPRETERS=False
+      env: TOXENV=py36-tests-codecov TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.7
       env: TOXENV=py37-tests TOX_SKIP_MISSING_INTERPRETERS=False
 
     - stage: flake8
       python: 3.6
       env: TOXENV=py36-flake8
-
-    - stage: build documentation
-      python: 3.6
-
 
     - stage: create release
       python: 3.6
@@ -48,8 +44,8 @@ matrix:
         api_key: "$GITHUB_TOKEN"
         file: "${TRAVIS_TAG}-doc.zip"
         draft: true
-#        on:
-#          tags: true
+        on:
+          tags: true
 
 
 install:
