@@ -52,7 +52,7 @@ jobs:
       local_dir: "./doc/_build/html"
       on:
         tags: true
-  - stage: deploy to pypi (test)
+  - stage: deploy to pypi
     if: tag is present
     script:
     - 
