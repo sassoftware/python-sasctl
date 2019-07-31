@@ -334,6 +334,11 @@ class Session(requests.Session):
     def username(self):
         return self._settings.get('username')
 
+    @property
+    def hostname(self):
+        return self._settings.get('domain')
+
+
     def send(self, request, **kwargs):
         if self.message_log.isEnabledFor(logging.DEBUG):
             r = copy.deepcopy(request)
@@ -567,6 +572,14 @@ class Session(requests.Session):
 
         super(Session, self).__exit__()
 
+    def __str__(self):
+        return ("{class_}(hostname='{hostname}', username='{username}', "
+                "protocol='{protocol}', verify_ssl={verify})".format(
+            class_=type(self).__name__,
+            hostname=self.hostname,
+            username=self.username,
+            protocol=self._settings.get('protocol'),
+            verify=self.verify))
 
 def is_uuid(id):
     try:

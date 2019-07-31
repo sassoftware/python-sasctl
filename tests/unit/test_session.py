@@ -24,7 +24,7 @@ def test_new_session(missing_packages):
         with mock.patch('sasctl.core.Session.get_token'):
             s = Session(HOST, USERNAME, PASSWORD)
         assert USERNAME == s.username
-        assert HOST == s._settings['domain']
+        assert HOST == s.hostname
         assert 'https' == s._settings['protocol']
         assert USERNAME == s._settings['username']
         assert PASSWORD == s._settings['password']
@@ -270,3 +270,16 @@ def test_authentication_failure():
         with pytest.raises(AuthenticationError):
             Session('hostname', 'username', 'password')
 
+
+def test_str():
+    import os
+
+    # Remove any environment variables disabling SSL verification
+    _ = os.environ.pop('SSLREQCERT')
+
+    with mock.patch('sasctl.core.Session.get_token', return_value='token'):
+
+        s = Session('hostname', 'username', 'password')
+
+        assert str(s) == "Session(hostname='hostname', username='username', " \
+                         "protocol='https', verify_ssl=True)"
