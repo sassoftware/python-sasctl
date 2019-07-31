@@ -49,7 +49,7 @@ matrix:
 
     - stage: build documentation
       python: 3.6
-      env: TOXENV=py36-doc,py36-doc-linkcheck TOX_SKIP_MISSING_INTERPRETERS=False
+      env: TOXENV=py36-doc TOX_SKIP_MISSING_INTERPRETERS=False
 
     - stage: create release
       python: 3.6
