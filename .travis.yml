@@ -38,6 +38,9 @@ matrix:
     - stage: create release
       python: 3.6
       env: TOXENV=py36-doc TOX_SKIP_MISSING_INTERPRETERS=False
+      script:
+        - tox
+        - pushd ./doc/_build/html ; zip -r ../../../${TRAVIS_TAG}-doc.zip . ; popd
       deploy:
         provider: releases
         skip_cleanup: true
