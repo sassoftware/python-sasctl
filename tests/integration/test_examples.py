@@ -40,3 +40,18 @@ def test_sklearn_model(session):
         code = f.read().replace('from sasctl import Session, register_model',
                                 'from sasctl import register_model')
         six.exec_(code)
+
+
+def test_full_lifecycle(session):
+    """Ensure the sklearn_model.py example executes successfully."""
+
+    # Mock up Session() to return the Betamax-recorded session
+    def Session(*args, **kwargs):
+        return session
+
+    with open('examples/full_lifecycle.py') as f:
+        # Remove import of Session to ensure mock function will be used
+        # instead.
+        code = f.read().replace('from sasctl import Session', '')
+
+        six.exec_(code)

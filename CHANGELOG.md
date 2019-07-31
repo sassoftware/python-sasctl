@@ -1,6 +1,10 @@
 
 Unreleased
 ----------
+- 
+
+v1.0.1 (2019-07-31)
+-------------------
 **Changed**
  - Exceptions moved from `sasctl.core` to `sasctl.exceptions`
  - `SWATCASActionError` raised if ASTORE cannot be saved during model registration.
