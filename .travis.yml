@@ -24,7 +24,7 @@ stages:
 matrix:
 
   allow_failures:
-    - env: TOXENV=flake8
+    - env: TOXENV=py36-flake8
 
   include:
     - python: 2.7
@@ -41,7 +41,7 @@ matrix:
 
     - stage: flake8
       python: 3.6
-      env: TOXENV=flake8
+      env: TOXENV=py36-flake8
 
 #    - stage: upload codecov results
 #      python: 3.6
@@ -49,7 +49,7 @@ matrix:
 
     - stage: build documentation
       python: 3.6
-      env: TOXENV=doc,doc-linkcheck TOX_SKIP_MISSING_INTERPRETERS=False
+      env: TOXENV=py36-doc,py36-doc-linkcheck TOX_SKIP_MISSING_INTERPRETERS=False
 
     - stage: create release
       python: 3.6
