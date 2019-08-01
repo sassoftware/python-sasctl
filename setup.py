@@ -31,12 +31,14 @@ setup(
     long_description_content_type='text/markdown',
     version=read_dunder('version'),
     author=read_dunder('author'),
+    license='Apache v2.0',
     url='https://github.com/sassoftware/python-sasctl/',
     project_urls={
         'Bug Tracker': 'https://github.com/sassoftware/python-sasctl/issues',
         'Documentation': 'https://sassoftware.github.io/python-sasctl/',
         'Source Code': 'https://github.com/sassoftware/python-sasctl'
     },
+    include_package_data=True,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     python_requires='>=2.7',
