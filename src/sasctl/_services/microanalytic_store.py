@@ -6,6 +6,7 @@
 
 """A stateless, memory-resident, high-performance program execution service."""
 
+import re
 from collections import OrderedDict
 
 from .service import Service
@@ -37,7 +38,10 @@ class MicroAnalyticScore(Service):
         not currently use IDs that are actually UUIDs.
 
         """
-        return True
+        # Anything that consists of only numbers, lowercase letters,
+        # and underscores, and does not start with a number, looks like a
+        # MAS id.
+        return re.match('^[_a-z][_a-z0-9]+$', id) is not None
 
     list_modules, get_module, update_module, \
         delete_module = Service._crud_funcs('/modules', 'module')
