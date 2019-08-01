@@ -8,6 +8,7 @@ import time
 
 from .. import core
 from ..core import sasctl_command, HTTPError
+from ..exceptions import JobTimeoutError
 
 
 class Service(object):
@@ -362,4 +363,4 @@ class Service(object):
         if completed(job):
             return job
         else:
-            raise core.TimeoutError('Timeout while waiting on job %s' % job)
+            raise JobTimeoutError('Timeout while waiting on job %s' % job)

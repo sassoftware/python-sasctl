@@ -920,10 +920,3 @@ def _build_is_available_func(service_root):
         response = current_session().head(service_root + '/')
         return response.status_code == 200
     return is_available
-
-
-class SasctlError(Exception):
-    pass
-
-class TimeoutError(SasctlError):
-    pass
