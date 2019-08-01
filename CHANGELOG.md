@@ -1,7 +1,9 @@
 
 Unreleased
 ----------
-- 
+ **Improvements**
+- Added `update_module` and `delete_module` methods to MAS service.
+ 
 
 v1.0.1 (2019-07-31)
 -------------------

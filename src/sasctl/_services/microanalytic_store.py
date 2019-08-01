@@ -4,59 +4,106 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+"""A stateless, memory-resident, high-performance program execution service."""
+
 from collections import OrderedDict
 
 from .service import Service
-from sasctl.core import HTTPError
 
 
 class MicroAnalyticScore(Service):
-    """A stateless, memory-resident, high-performance program execution
-    service.
+    """Micro Analytic Service (MAS) client."""
 
-    """
     _SERVICE_ROOT = '/microanalyticScore'
 
-    def list_modules(self, filter=None):
-        params = 'filter={}'.format(filter) if filter is not None else {}
+    @classmethod
+    def is_uuid(cls, id):
+        """Check if the ID appears to be a valid MAS id.
 
-        return self.get('/modules', params=params)
+        Indicates whether `id` appears to be a correctly formatted ID.  Does
+        **not** check whether a module with `id` actually exists.
 
-    def get_module(self, module):
-        if isinstance(module, dict) and all([k in module for k in ('id', 'name')]):
-            return module
+        Parameters
+        ----------
+        id : str
 
-        try:
-            # MAS module IDs appear to just be the lower case name.
-            # Try to find by ID first
-            return self.get('/modules/{}'.format(str(
-                module).lower()))
-        except HTTPError as e:
-            if e.code == 404:
-                pass
-            else:
-                raise e
+        Returns
+        -------
+        bool
 
-        # Wasn't able to find by id, try searching by name
-        results = self.list_modules(filter='eq(name, "{}")'.format(module))
+        Notes
+        -----
+        Overrides the :meth:`Service.is_uuid` method since MAS modules do
+        not currently use IDs that are actually UUIDs.
 
-        # Not sure why, but as of 19w04 the filter doesn't seem to work.
-        for result in results:
-            if result['name'] == str(module):
-                return result
+        """
+        return True
+
+    list_modules, get_module, update_module, \
+        delete_module = Service._crud_funcs('/modules', 'module')
 
     def get_module_step(self, module, step):
+        """Details of a single step in a given module.
+
+        Parameters
+        ----------
+        module : str or dict
+            Name, id, or dictionary representation of a module
+        step : str
+            Name of the step
+
+        Returns
+        -------
+        RestObj
+
+        """
         module = self.get_module(module)
 
         r = self.get('/modules/{}/steps/{}'.format(module.id, step))
         return r
 
     def list_module_steps(self, module):
+        """List all steps defined for a module.
+
+        Parameters
+        ----------
+        module : str or dict
+            Name, id, or dictionary representation of a module
+
+        Returns
+        -------
+        list
+            List of :class:`.RestObj` instances representing each step.
+
+        """
         module = self.get_module(module)
 
-        return self.get('/modules/{}/steps'.format(module.id))
+        steps = self.get('/modules/{}/steps'.format(module.id))
+        return steps if isinstance(steps, list) else [steps]
 
     def execute_module_step(self, module, step, return_dict=True, **kwargs):
+        """Call a module step with the given parameters.
+
+        Parameters
+        ----------
+        module : str or dict
+            Name, id, or dictionary representation of a module
+        step : str
+            Name of the step
+        return_dict : bool, optional
+            Whether the results should be returned as a dictionary instead
+            of a tuple
+        kwargs : any
+            Passed as arguments to the module step
+
+        Returns
+        -------
+        any
+            Results of the step execution.  Returned as a dictionary if
+            `return_dict` is True, otherwise returned as a tuple if more
+            than one value is returned, otherwise the single value.
+
+        """
         module_name = module.name if hasattr(module, 'name') else str(module)
         module = self.get_module(module)
 
@@ -92,7 +139,7 @@ class MicroAnalyticScore(Service):
 
     def create_module(self, name=None, description=None, source=None,
                       language='python', scope='public'):
-        """
+        """Create a new module in MAS.
 
         Parameters
         ----------
@@ -104,9 +151,9 @@ class MicroAnalyticScore(Service):
 
         Returns
         -------
+        RestObj
 
         """
-
         if source is None:
             raise ValueError('The `source` parameter is required.')
         else:
@@ -117,7 +164,8 @@ class MicroAnalyticScore(Service):
         elif language == 'ds2':
             t = 'text/vnd.sas.source.ds2'
         else:
-            raise ValueError('Unrecognized source code language `%s`.' % language)
+            raise ValueError('Unrecognized source code language `%s`.'
+                             % language)
 
         data = {'id': name,
                 'type': t,
@@ -129,7 +177,9 @@ class MicroAnalyticScore(Service):
         return r
 
     def define_steps(self, module):
-        """Defines python methods on a module that automatically call the
+        """Map MAS steps to Python methods.
+
+        Defines python methods on a module that automatically call the
         corresponding MAS steps.
 
         Parameters
@@ -161,10 +211,11 @@ class MicroAnalyticScore(Service):
             type_string = '    # type: ({})'.format(', '.join(arg_types))
 
             # Method signature
-            signature = 'def _%s_%s(%s, **kwargs):' % (module.name,
-            step.id,
-                                                       ', '.join(a for a
-                                                                    in arguments))
+            signature = 'def _%s_%s(%s, **kwargs):' \
+                        % (module.name,
+                           step.id,
+                           ', '.join(a for a in arguments))
+
             # MAS always lower-cases variable names
             # Since the original Python variables may have a different case,
             # allow kwargs to be used to input alternative caps
@@ -180,7 +231,8 @@ class MicroAnalyticScore(Service):
                     type_string,
                     '    """Execute step %s of module %s."""' % (step, module),
                     '\n'.join(['    %s' % a for a in arg_checks]),
-                    '    r = execute_module_step(module, step, {})'.format(', '.join(call_params)),
+                    '    r = execute_module_step(module, step, {})'.format(
+                        ', '.join(call_params)),
                     '    r.pop("rc", None)',
                     '    r.pop("msg", None)',
                     '    if len(r) == 1:',
