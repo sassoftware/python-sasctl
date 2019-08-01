@@ -89,7 +89,8 @@ A slightly more low-level way to interact with the environment is to use
 the service methods directly:
 ```
 >>> from pprint import pprint
->>> from sasctl import Session, folders
+>>> from sasctl import Session
+>>> from sasctl.services import folders
 
 >>> with Session(host, username, password):
 ...    folders = folders.list_folders()
@@ -150,7 +151,8 @@ complete examples see the [examples](examples) folder.
 
 Show models currently in Model Manager:
 ```
->>> from sasctl import Session, model_repository
+>>> from sasctl import Session
+>>> from sasctl.services import model_repository
 
 >>> with Session(host, username, password):
 ...    models = model_repository.list_models()
