@@ -1,5 +1,0 @@
-requests
-six >= 1.11
-swat
-kerberos ; platform_system != "Windows"
-winkerberos ; platform_system == "Windows"
