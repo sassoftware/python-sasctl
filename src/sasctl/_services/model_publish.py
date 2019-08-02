@@ -9,7 +9,7 @@
 import re
 
 from .service import Service
-from .. import services
+from .model_repository import ModelRepository
 
 
 class ModelPublish(Service):
@@ -20,6 +20,7 @@ class ModelPublish(Service):
     """
 
     _SERVICE_ROOT = '/modelPublish'
+    _model_repository = ModelRepository()
 
     @staticmethod
     def _publish_name(name):
@@ -86,14 +87,14 @@ class ModelPublish(Service):
             '': ''
         }
 
-        model = services.model_repository.get_model(model)
-        model_uri = services.model_repository.get_model_link(model, 'cls')
+        model = cls._model_repository.get_model(model)
+        model_uri = cls._model_repository.get_model_link(model, 'cls')
 
         # Get score code from registry if no code specified
         if code is None:
-            code_link = services.model_repository.get_model_link(model,
-                                                                 'scoreCode',
-                                                                 True)
+            code_link = cls._model_repository.get_model_link(model,
+                                                             'scoreCode',
+                                                             True)
             if code_link:
                 code = cls.get(code_link['href'])
 
