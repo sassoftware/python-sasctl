@@ -4,24 +4,32 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+"""Enables publishing objects such as models to various destinations."""
+
 import re
 
 from .service import Service
+from .. import services
 
 
 class ModelPublish(Service):
-    """The Model Publish API provides support for publishing objects (such as
-    models) to CAS, Hadoop, SAS Micro Analytic Service, or Teradata.
+    """Enables publishing objects such as models to various destinations.
+
+    The service provides methods for managing publish destinations like CAS,
+    Hadoop, Teradata, or SAS Micro Analytic Service
     """
+
     _SERVICE_ROOT = '/modelPublish'
 
     @staticmethod
     def _publish_name(name):
         """Create a valid module name from an input string.
 
-        Model Publishing only permits names that adhere to the following restrictions:
+        Model Publishing only permits names that adhere to the following
+        restrictions:
             - Name must start with a letter or an underscore.
-            - Name may not contain any spaces or special characters other than underscore.
+            - Name may not contain any spaces or special characters other than
+              underscore.
 
         Parameters
         ----------
@@ -30,8 +38,8 @@ class ModelPublish(Service):
         Returns
         -------
         str
-        """
 
+        """
         # Remove all non-word characters
         name = re.sub(r'[^\w]', '', str(name))
 
@@ -41,15 +49,37 @@ class ModelPublish(Service):
 
         return name
 
-    def list_models(self):
-        return self.get('/models').get('items', [])
+    @classmethod
+    def list_models(cls):
+        return cls.get('/models').get('items', [])
 
-    def list_destinations(self):
-        return self.get('/destinations').get('items', [])
+    list_destinations, get_destination, update_destination, \
+        delete_destination = Service._crud_funcs('/destinations',
+                                                 'destination')
 
-    def publish_model(self, model, destination, name=None, code=None,
+    @classmethod
+    def publish_model(cls, model, destination, name=None, code=None,
                       notes=None):
+        """
 
+        Parameters
+        ----------
+        model : str or dict
+            The name or id of the model, or a dictionary representation of
+            the model.
+        destination : str or dict
+            The name or id of the publishing destination, or a dictionary
+            representation of the destination
+        name : str, optional
+            Name of the published model.  Defaults to the model name.
+        code : str, optional
+            The code to be published.
+        notes
+
+        Returns
+        -------
+
+        """
         code_types = {
             'ds2package': 'ds2',
             'datastep': 'datastep',
@@ -57,7 +87,7 @@ class ModelPublish(Service):
         }
 
         model = services.model_repository.get_model(model)
-        model_uri = services.model_repository.get_model_link(model, 'self')
+        model_uri = services.model_repository.get_model_link(model, 'cls')
 
         # Get score code from registry if no code specified
         if code is None:
@@ -65,7 +95,7 @@ class ModelPublish(Service):
                                                                  'scoreCode',
                                                                  True)
             if code_link:
-                code = get(code_link['href'])
+                code = cls.get(code_link['href'])
 
         request = dict(
             name=name or model.get('name'),
@@ -84,7 +114,6 @@ class ModelPublish(Service):
         }
 
         request['modelContents'] = [modelContents]
-        return self.post('/models', json=request, headers={
-            'Content-Type': 'application/vnd.sas.models.publishing.request+json'})
-
-
+        return cls.post('/models', json=request, headers={
+            'Content-Type':
+                'application/vnd.sas.models.publishing.request+json'})

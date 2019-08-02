@@ -4,19 +4,21 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+"""Commonly used tasks in the analytics life cycle."""
+
 import json
 import logging
 import pickle
 import re
-import time
 import sys
 import warnings
 
-from .utils.pymas import from_pickle, PyMAS
-from sasctl.services import model_management as mm, model_publish as mp, \
-    model_repository as mr
 from . import utils
-from .core import get, get_link, request_link, RestObj
+from .core import RestObj, get, get_link, request_link
+from .services import model_management as mm, model_publish as mp, \
+    model_repository as mr
+from .utils.pymas import PyMAS, from_pickle
+
 
 logger = logging.getLogger(__name__)
 
@@ -40,35 +42,42 @@ def _sklearn_to_dict(model):
         scoreCodeType='ds2MultiType',
         trainCodeType='Python',
         function=mappings.get(model._estimator_type, model._estimator_type),
-        tool='Python {}.{}'.format(sys.version_info.major, sys.version_info.minor),
-        properties=[{'name': k, 'value': v} for k, v in model.get_params().items()]
+        tool='Python %s.%s'
+             % (sys.version_info.major, sys.version_info.minor),
+        properties=[{'name': k, 'value': v}
+                    for k, v in model.get_params().items()]
     )
 
     return result
 
 
-def register_model(model, name, project, repository=None, input=None, version='latest', files=None, force=False):
+def register_model(model, name, project, repository=None, input=None,
+                   version='latest', files=None, force=False):
     """Register a model in the model repository.
 
     Parameters
     ----------
     model : swat.CASTable or sklearn.BaseEstimator
-        The model to register.  If an instance of ``swat.CASTable`` the table is assumed to hold an ASTORE, which will
-        be downloaded and used to construct the model to register.  If a scikit-learn estimator, the model will be
-        pickled and uploaded to the registry and score code will be generated for publishing the model to MAS.
+        The model to register.  If an instance of ``swat.CASTable`` the table
+        is assumed to hold an ASTORE, which will be downloaded and used to
+        construct the model to register.  If a scikit-learn estimator, the
+        model will be pickled and uploaded to the registry and score code will
+        be generated for publishing the model to MAS.
     name : str
         Designated name for the model in the repository.
     project : str or dict
-        The name or id of the project, or a dictionary representation of the project.
+        The name or id of the project, or a dictionary representation of
+        the project.
     repository : str or dict, optional
-        The name or id of the repository, or a dictionary representation of the repository.  If omitted, the default
-        repository will be used.
+        The name or id of the repository, or a dictionary representation of
+        the repository.  If omitted, the default repository will be used.
     input
     version : {'new', 'latest', int}, optional
         Version number of the project in which the model should be created.
     files :
     force : bool, optional
-        Create dependencies such as projects and repositories if they do not already exist.
+        Create dependencies such as projects and repositories if they do not
+        already exist.
 
     Returns
     -------
@@ -77,17 +86,15 @@ def register_model(model, name, project, repository=None, input=None, version='l
 
     Notes
     -----
-    If the specified model is a CAS table the model data and metadata will be written to a temporary zip file and then
-    imported using model_repository.import_model_from_zip.
+    If the specified model is a CAS table the model data and metadata will be
+    written to a temporary zip file and then imported using
+    model_repository.import_model_from_zip.
 
-    If the specified model is from the Scikit-Learn package, the model will be created using
-    model_repository.create_model and any additional files will be uploaded as content.
-
-    Examples
-    --------
+    If the specified model is from the Scikit-Learn package, the model will be
+    created using model_repository.create_model and any additional files will
+    be uploaded as content.
 
     """
-
     # TODO: Create new version if model already exists
     # TODO: Allow file info to be specified
     # TODO: Performance stats
@@ -103,7 +110,10 @@ def register_model(model, name, project, repository=None, input=None, version='l
     if p is None and not create_project:
         raise ValueError("Project '{}' not found".format(project))
 
-    repository = mr.default_repository() if repository is None else mr.get_repository(repository)
+    if repository is None:
+        repository = mr.default_repository()
+    else:
+        repository = mr.get_repository(repository)
 
     # Unable to find or create the repo.
     if repository is None:
@@ -182,7 +192,8 @@ def register_model(model, name, project, repository=None, input=None, version='l
     return model
 
 
-def publish_model(model, destination, code=None, max_retries=60, **kwargs):
+def publish_model(model, destination, code=None, max_retries=60,
+                  replace=False, **kwargs):
     """Publish a model to a configured publishing destination.
 
     Parameters
@@ -192,6 +203,9 @@ def publish_model(model, destination, code=None, max_retries=60, **kwargs):
     destination : str
     code : optional
     max_retries : int, optional
+    replace : bool, optional
+        Whether to overwrite the model if it already exists in
+        the `destination`
     kwargs : optional
         additional arguments will be passed to the underlying publish functions.
 
@@ -200,8 +214,9 @@ def publish_model(model, destination, code=None, max_retries=60, **kwargs):
 
     Notes
     -----
-    If no code is specified, the model is assumed to be already registered in the model repository and Model Manager's
-    publishing functionality will be used.
+    If no code is specified, the model is assumed to be already registered in
+    the model repository and Model Manager's publishing functionality will be
+    used.
 
     Otherwise, the model publishing API will be used.
 
@@ -209,8 +224,8 @@ def publish_model(model, destination, code=None, max_retries=60, **kwargs):
     --------
     :meth:`model_management.publish_model <.ModelManagement.publish_model>`
     :meth:`model_publish.publish_model <.ModelPublish.publish_model>`
-    """
 
+    """
     # Submit a publishing request
     if code is None:
         publish_req = mm.publish_model(model, destination, **kwargs)
