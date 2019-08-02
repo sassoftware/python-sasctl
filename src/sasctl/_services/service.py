@@ -4,19 +4,28 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+"""Base functionality for all services."""
+
+import logging
 import time
 
+from deprecated.sphinx import versionadded
+
 from .. import core
-from ..core import sasctl_command, HTTPError
+from ..core import HTTPError, sasctl_command
 from ..exceptions import JobTimeoutError
 
 
 class Service(object):
+    """Base class for all services.  Should not be used directly."""
+
     _SERVICE_ROOT = None
 
     is_uuid = staticmethod(core.is_uuid)
     get_link = staticmethod(core.get_link)
     request_link = staticmethod(core.request_link)
+
+    log = logging.getLogger(__name__)
 
     @property
     def _SERVICE_ROOT(self):
@@ -24,7 +33,7 @@ class Service(object):
 
     @classmethod
     def is_available(cls):
-        """Checks if the service is currently available.
+        """Check if the service is currently available.
 
         Returns
         -------
@@ -47,6 +56,22 @@ class Service(object):
 
     @classmethod
     def request(cls, verb, path, session=None, raw=False, **kwargs):
+        """Make an HTTP request with a session.
+
+        Parameters
+        ----------
+        verb : str
+        path : str
+        session : Session, optional
+            Defaults to `current_session()`.
+        raw : bool
+            Whether to return the raw `Response` object.  Defaults to False.
+        kwargs : any
+
+        Returns
+        -------
+
+        """
         session = session or core.current_session()
 
         if session is None:
@@ -234,7 +259,6 @@ class Service(object):
             None
 
             """
-
             headers = getattr(item, '_headers', None)
             if headers is None or headers.get('etag') is None:
                 raise ValueError(
@@ -263,10 +287,15 @@ class Service(object):
             None
 
             """
+            item_name = str(item)
 
             # Try to find the item if the id can't be found
             if not (isinstance(item, dict) and 'id' in item):
                 item = get_item(cls, item)
+                if item is None:
+                    cls.log.info("Object '%s' not found.  Skipping delete."
+                                 % item_name)
+                    return
 
             if isinstance(item, dict) and 'id' in item:
                 item = item['id']
