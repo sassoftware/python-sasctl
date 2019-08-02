@@ -149,6 +149,7 @@ def session(request, credentials):
         # Betamax from being reset.
         with mock.patch('sasctl.core.requests.Session.__init__'):
             recorded_session.__init__(**credentials)
+            current_session(recorded_session)
         yield recorded_session
         recorder.stop()
         current_session(None)
