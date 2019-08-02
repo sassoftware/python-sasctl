@@ -236,6 +236,11 @@ def publish_model(model, destination, code=None, max_retries=60,
     # Response for publish request includes link to check publish log
     job = mr._monitor_job(publish_req)
 
+    # Wait for status
+    # If job failed & overwrite -> check type of destination
+    # delete model from destination
+    # publish again
+
     if job.state.lower() == 'failed':
         pass
 
@@ -243,8 +248,8 @@ def publish_model(model, destination, code=None, max_retries=60,
     msg = log.get('log').lstrip('SUCCESS===')
 
     # As of Viya 3.4 MAS converts module names to lower case.
-    # Since we can't rely on the request module name being preserved, try to parse the URL out of the response
-    # so we can retrieve the created module.
+    # Since we can't rely on the request module name being preserved, try to
+    # parse the URL out of the response so we can retrieve the created module.
     try:
         details = json.loads(msg)
 

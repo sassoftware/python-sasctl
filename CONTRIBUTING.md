@@ -31,15 +31,13 @@ integration testing without requiring a running SAS Viya environment, the
 [Betamax](https://pypi.org/project/betamax/) package is used to record and
 replay network interactions.
 
-In addition, [Tox](https://tox.readthedocs.io) is used to test 
-compatibility with different Python version.
+In addition, [Tox](https://tox.readthedocs.io) is used to automating development tasks
+such as testing, linting, and building documentation.
 
 All packages required for development and testing are listed in
-[test_requirements.txt](test_requirements.txt) and can be easily installed with
-```
-pip install -r test_requirements.txt
-``` 
-
+[tox.ini](tox.ini), but it should be unecessary to install these manually.  Running `tox`
+from the project root directory will automatically build virtual environments for all
+Python interpreters found on the system and then install the required packages in those environments.
 
 Before a pull request will be accepted:
 - contributions must pass existing regression tests located in tests/

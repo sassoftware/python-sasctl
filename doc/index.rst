@@ -33,11 +33,7 @@ If not already present, these packages will be downloaded and install automatica
 The following additional packages are recommended for full functionality:
 
 - swat
-
-
-All required and recommended packages are listed in `requirements.txt` and can be installed easily with::
-
-    pip install -r requirements.txt
+- kerberos
 
 
 Installation
@@ -47,9 +43,13 @@ For basic functionality::
 
     pip install sasctl
 
-For full functionality::
 
+Functionality that depends on additional packages can be installed using the following::
+
+    pip install sasctl[swat]
+    pip install sasctl[kerberos]
     pip install sasctl[all]
+
 
 Quickstart
 ----------
@@ -370,11 +370,11 @@ the copyright to your contribution, this simply gives us permission to use and r
 part of the project.
 
 1. Fork the repository
-#. Ensure you're environment has the necessary packages:
+#. Run all unit and integration tests and ensure they pass.  This can be easily accomplished by running the following:
 
-  :command:`pip install -r test_requirements.txt`
+  :command:`tox`
 
-3. Run all unit and integration tests and ensure they pass.  If any tests fail, you should investigate and correct the failure *before* making any changes.
+3. If any tests fail, you should investigate and correct the failure *before* making any changes.
 #. Make your code changes
 #. Include new tests that validate your changes
 #. Rerun all unit and integration tests and ensure they pass.
