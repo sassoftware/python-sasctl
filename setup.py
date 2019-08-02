@@ -44,7 +44,8 @@ setup(
     python_requires='>=2.7',
     install_requires=[
         'requests',
-        'six >= 1.11'
+        'six >= 1.11',
+        'deprecated'
     ],
     extras_require = {
         'swat': ['swat'],
