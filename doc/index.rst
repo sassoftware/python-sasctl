@@ -29,6 +29,7 @@ If not already present, these packages will be downloaded and install automatica
 
 - requests
 - six
+- deprecated
 
 The following additional packages are recommended for full functionality:
 
@@ -387,6 +388,21 @@ All code submissions must meet the following requirements before the pull reques
  - Adherence to the :pep:`8` style guide
 
 .. _`numpydoc`: https://numpydoc.readthedocs.io/en/latest/format.html
+
+
+Useful tox commands
+++++++++++++
+flake8
+pytest
+
+tox
+tox -e pyXX-flake8  # Linting/style checker
+tox -e pyXX-flake8 src/sasctl/...
+tox -e pyXX-tests
+tox -e pyXX-doc
+tox -e pyXX-tests -- python
+
+
 
 .. _testing:
 
