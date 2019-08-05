@@ -39,7 +39,6 @@ sasctl requires the following Python packages be installed.
 If not already present, these packages will be downloaded and installed automatically.  
 - requests
 - six
-- deprecated
 
 The following additional packages are recommended for full functionality:
 - swat

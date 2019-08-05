@@ -29,7 +29,6 @@ If not already present, these packages will be downloaded and install automatica
 
 - requests
 - six
-- deprecated
 
 The following additional packages are recommended for full functionality:
 

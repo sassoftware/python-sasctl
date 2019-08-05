@@ -9,8 +9,6 @@
 import logging
 import time
 
-from deprecated.sphinx import versionadded
-
 from .. import core
 from ..core import HTTPError, sasctl_command
 from ..exceptions import JobTimeoutError
