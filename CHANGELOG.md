@@ -4,8 +4,12 @@ Unreleased
  **Improvements**
 - Added `update_module` and `delete_module` methods to MAS service.
 
+**Changed**
+- Added `replace` parameter to `sasctl.tasks.publish_model` 
+
 **Bugfixes**
 - Renamed `microanalytic_store` service to `microanalytic_score` 
+
 
 v1.0.1 (2019-07-31)
 -------------------

@@ -31,7 +31,7 @@ integration testing without requiring a running SAS Viya environment, the
 [Betamax](https://pypi.org/project/betamax/) package is used to record and
 replay network interactions.
 
-In addition, [Tox](https://tox.readthedocs.io) is used to automating development tasks
+In addition, [Tox](https://tox.readthedocs.io) is used to automate common development tasks
 such as testing, linting, and building documentation.
 
 All packages required for development and testing are listed in

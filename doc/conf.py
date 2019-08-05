@@ -54,7 +54,8 @@ intersphinx_mapping = {'python': ('https://docs.python.org/3', None),
                        'betamax': ('https://betamax.readthedocs.io/en/latest/', None),
                        'requests': (
                            'https://2.python-requests.org/en/master/', None),
-                       'tox': ('https://tox.readthedocs.io/en/latest/', None)}
+                       'tox': ('https://tox.readthedocs.io/en/latest/', None),
+                       'flake8': ('http://flake8.pycqa.org/en/latest/', None)}
 
 todo_include_todos = True
 
