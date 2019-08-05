@@ -33,11 +33,7 @@ If not already present, these packages will be downloaded and install automatica
 The following additional packages are recommended for full functionality:
 
 - swat
-
-
-All required and recommended packages are listed in `requirements.txt` and can be installed easily with::
-
-    pip install -r requirements.txt
+- kerberos
 
 
 Installation
@@ -47,9 +43,13 @@ For basic functionality::
 
     pip install sasctl
 
-For full functionality::
 
+Functionality that depends on additional packages can be installed using the following::
+
+    pip install sasctl[swat]
+    pip install sasctl[kerberos]
     pip install sasctl[all]
+
 
 Quickstart
 ----------
@@ -347,7 +347,8 @@ simple code examples that demonstrate how to use various features are always wel
 
 
 All documentation is contained in the :file:`doc/` directory of the source repository and is written in `reStructuredText`_.
-The .rst files are then processed by `Sphinx`_ to produce the final documentation.
+The .rst files are then processed by `Sphinx`_ to produce the final documentation.  See the :ref:`tox_commands` section for
+details on how to build the final documentation.
 
 .. _`reStructuredText`: http://docutils.sourceforge.net/rst.html
 .. _`Sphinx`: http://www.sphinx-doc.org/en/master/
@@ -370,11 +371,13 @@ the copyright to your contribution, this simply gives us permission to use and r
 part of the project.
 
 1. Fork the repository
-#. Ensure you're environment has the necessary packages:
+#. Run all unit and integration tests and ensure they pass.  This can be easily accomplished by running the following:
 
-  :command:`pip install -r test_requirements.txt`
+  :command:`tox`
 
-3. Run all unit and integration tests and ensure they pass.  If any tests fail, you should investigate and correct the failure *before* making any changes.
+  See :ref:`tox_commands` for more information on using Tox.
+
+3. If any tests fail, you should investigate and correct the failure *before* making any changes.
 #. Make your code changes
 #. Include new tests that validate your changes
 #. Rerun all unit and integration tests and ensure they pass.
@@ -387,6 +390,8 @@ All code submissions must meet the following requirements before the pull reques
  - Adherence to the :pep:`8` style guide
 
 .. _`numpydoc`: https://numpydoc.readthedocs.io/en/latest/format.html
+
+
 
 .. _testing:
 
@@ -414,6 +419,63 @@ once.
 
 And finally, the :doc:`tox <tox:index>` module is used to ensure that **sasctl** will install and work correctly on all supported
 Python versions.
+
+
+.. _tox_commands:
+
+Useful Tox Commands
++++++++++++++++++++
+:mod:`tox`  is used to automate common development tasks such as testing, linting, and building documentation.
+Running :program:`tox` from the project root directory will automatically build virtual environments for all Python interpreters
+found on the system and then install the required packages necessary to perform a given task.  The simplest way to run Tox is:
+
+.. code::
+
+   $ tox
+
+This will run the :mod:`flake8` linter followed by :mod:`pytest` to test the code against all Python runtimes
+found on the machine.  One of the great features of Tox is the ability to run specific tasks by specifying the environment to run.
+A few useful environments are listed below, where **XX** indicates a Python version present in your development environment,
+such as '27' or '36'.
+
+#.
+   .. code::
+
+      $ tox -e pyXX-flake8
+
+   Runs the flake8 linter against all **sasctl** source code.
+
+#.
+   .. code::
+
+      $ tox -e pyXX-flake8 src/sasctl/tasks.py
+
+   Runs the flake8 linter against a specific file.
+
+#.
+   .. code::
+
+      $ tox -e pyXX-tests
+
+   Runs all tests using the specified Python interpreter.
+
+#.
+   .. code::
+
+      $ tox -e pyXX-doc
+
+   Builds the documentation.
+
+#.
+   .. code::
+
+      $ tox -e pyXX-tests -- python
+
+   Starts a Python REPL in an environment with **sasctl** already installed.
+
+For additional information on configuring and using Tox, see the official :doc:`documentation <tox:index>` or Sean Hammond's excellent `tutorial`_.
+
+.. _`tutorial`: https://seanh.cc/post/tox-tutorial/
 
 
 Release History

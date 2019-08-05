@@ -109,6 +109,26 @@ class TestModels:
         # MAS module should automatically have methods bound
         assert callable(p.score)
 
+    def test_publish_sklearn_again(self):
+        from sasctl.tasks import publish_model
+        from sasctl.services import model_repository as mr
+
+        model = mr.get_model(SCIKIT_MODEL_NAME, PROJECT_NAME)
+
+        # Should not be able to republish the model by default
+        with pytest.raises(RuntimeError):
+            publish_model(model, 'maslocal', max_retries=100)
+
+        # Publish should succeed with replace flag
+        p = publish_model(model, 'maslocal', max_retries=100, replace=True)
+
+        # Score step should have been defined in the module
+        assert 'score' in p.stepIds
+
+        # MAS module should automatically have methods bound
+        assert callable(p.score)
+
+
     def test_score_sklearn(self):
         from sasctl.services import microanalytic_score as mas
 

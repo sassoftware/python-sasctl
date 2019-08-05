@@ -14,6 +14,25 @@ from six.moves import mock
 from sasctl import Session, current_session
 
 
+def test_session_from_url():
+    """Ensure domains in the format http(s)://hostname.com are handled."""
+
+    # Initial session should automatically become the default
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('http://example.com', 'user', 'password')
+    assert s.hostname == 'example.com'
+    assert s._settings['protocol'] == 'http'
+
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('http://example.com', 'user', 'password', protocol='https')
+    assert s.hostname == 'example.com'
+    assert s._settings['protocol'] == 'https'
+
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('https://example.com', 'user', 'password', protocol='http')
+    assert s.hostname == 'example.com'
+    assert s._settings['protocol'] == 'http'
+
 def test_new_session(missing_packages):
     HOST = 'example.com'
     USERNAME = 'user'

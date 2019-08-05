@@ -4,19 +4,22 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+"""Commonly used tasks in the analytics life cycle."""
+
 import json
 import logging
 import pickle
 import re
-import time
 import sys
 import warnings
 
-from .utils.pymas import from_pickle, PyMAS
-from sasctl.services import model_management as mm, model_publish as mp, \
-    model_repository as mr
 from . import utils
-from .core import get, get_link, request_link, RestObj
+from .core import RestObj, get, get_link, request_link
+from .services import model_management as mm
+from .services import model_publish as mp
+from .services import model_repository as mr
+from .utils.pymas import PyMAS, from_pickle
+
 
 logger = logging.getLogger(__name__)
 
@@ -40,35 +43,42 @@ def _sklearn_to_dict(model):
         scoreCodeType='ds2MultiType',
         trainCodeType='Python',
         function=mappings.get(model._estimator_type, model._estimator_type),
-        tool='Python {}.{}'.format(sys.version_info.major, sys.version_info.minor),
-        properties=[{'name': k, 'value': v} for k, v in model.get_params().items()]
+        tool='Python %s.%s'
+             % (sys.version_info.major, sys.version_info.minor),
+        properties=[{'name': k, 'value': v}
+                    for k, v in model.get_params().items()]
     )
 
     return result
 
 
-def register_model(model, name, project, repository=None, input=None, version='latest', files=None, force=False):
+def register_model(model, name, project, repository=None, input=None,
+                   version='latest', files=None, force=False):
     """Register a model in the model repository.
 
     Parameters
     ----------
     model : swat.CASTable or sklearn.BaseEstimator
-        The model to register.  If an instance of ``swat.CASTable`` the table is assumed to hold an ASTORE, which will
-        be downloaded and used to construct the model to register.  If a scikit-learn estimator, the model will be
-        pickled and uploaded to the registry and score code will be generated for publishing the model to MAS.
+        The model to register.  If an instance of ``swat.CASTable`` the table
+        is assumed to hold an ASTORE, which will be downloaded and used to
+        construct the model to register.  If a scikit-learn estimator, the
+        model will be pickled and uploaded to the registry and score code will
+        be generated for publishing the model to MAS.
     name : str
         Designated name for the model in the repository.
     project : str or dict
-        The name or id of the project, or a dictionary representation of the project.
+        The name or id of the project, or a dictionary representation of
+        the project.
     repository : str or dict, optional
-        The name or id of the repository, or a dictionary representation of the repository.  If omitted, the default
-        repository will be used.
+        The name or id of the repository, or a dictionary representation of
+        the repository.  If omitted, the default repository will be used.
     input
     version : {'new', 'latest', int}, optional
         Version number of the project in which the model should be created.
     files :
     force : bool, optional
-        Create dependencies such as projects and repositories if they do not already exist.
+        Create dependencies such as projects and repositories if they do not
+        already exist.
 
     Returns
     -------
@@ -77,17 +87,15 @@ def register_model(model, name, project, repository=None, input=None, version='l
 
     Notes
     -----
-    If the specified model is a CAS table the model data and metadata will be written to a temporary zip file and then
-    imported using model_repository.import_model_from_zip.
+    If the specified model is a CAS table the model data and metadata will be
+    written to a temporary zip file and then imported using
+    model_repository.import_model_from_zip.
 
-    If the specified model is from the Scikit-Learn package, the model will be created using
-    model_repository.create_model and any additional files will be uploaded as content.
-
-    Examples
-    --------
+    If the specified model is from the Scikit-Learn package, the model will be
+    created using model_repository.create_model and any additional files will
+    be uploaded as content.
 
     """
-
     # TODO: Create new version if model already exists
     # TODO: Allow file info to be specified
     # TODO: Performance stats
@@ -103,7 +111,10 @@ def register_model(model, name, project, repository=None, input=None, version='l
     if p is None and not create_project:
         raise ValueError("Project '{}' not found".format(project))
 
-    repository = mr.default_repository() if repository is None else mr.get_repository(repository)
+    if repository is None:
+        repository = mr.default_repository()
+    else:
+        repository = mr.get_repository(repository)
 
     # Unable to find or create the repo.
     if repository is None:
@@ -117,15 +128,19 @@ def register_model(model, name, project, repository=None, input=None, version='l
         if create_project:
             project = mr.create_project(project, repository)
 
-        model = mr.import_model_from_zip(name, project, zipfile, version=version)
+        model = mr.import_model_from_zip(name, project, zipfile,
+                                         version=version)
         return model
 
     # If the model is an scikit-learn model, generate the model dictionary
     # from it and pickle the model for storage
-    elif all(hasattr(model, attr) for attr in ['_estimator_type', 'get_params']):
+    elif all(hasattr(model, attr) for attr
+             in ['_estimator_type', 'get_params']):
         # Pickle the model so we can store it
         model_pkl = pickle.dumps(model)
-        files.append({'name': 'model.pkl', 'file': model_pkl, 'role': 'Python Pickle'})
+        files.append({'name': 'model.pkl',
+                      'file': model_pkl,
+                      'role': 'Python Pickle'})
 
         # Extract model properties
         model = _sklearn_to_dict(model)
@@ -133,7 +148,8 @@ def register_model(model, name, project, repository=None, input=None, version='l
 
         # Generate PyMAS wrapper
         try:
-            mas_module = from_pickle(model_pkl, 'predict', input_types=input, array_input=True)
+            mas_module = from_pickle(model_pkl, 'predict',
+                                     input_types=input, array_input=True)
             assert isinstance(mas_module, PyMAS)
 
             # Include score code files from ESP and MAS
@@ -148,10 +164,9 @@ def register_model(model, name, project, repository=None, input=None, version='l
                                        for var in mas_module.variables
                                        if not var.out]
 
-            model['outputVariables'] = [var.as_model_metadata()
-                                        for var in mas_module.variables
-                                        if var.out
-                                        and var.name not in ('rc', 'msg')]
+            model['outputVariables'] = \
+                [var.as_model_metadata() for var in mas_module.variables
+                 if var.out and var.name not in ('rc', 'msg')]
         except ValueError:
             # PyMAS creation failed, most likely because input data wasn't
             # provided
@@ -162,8 +177,14 @@ def register_model(model, name, project, repository=None, input=None, version='l
         assert isinstance(model, dict)
 
     if create_project:
-        vars = model.get('inputVariables', []) + model.get('outputVariables', [])
-        target_level = 'Interval' if model.get('function') == 'Regression' else None
+        vars = model.get('inputVariables', [])
+        vars += model.get('outputVariables', [])
+
+        if model.get('function') == 'Regression':
+            target_level = 'Interval'
+        else:
+            target_level = None
+
         project = mr.create_project(project, repository,
                                     variables=vars,
                                     targetLevel=target_level)
@@ -182,26 +203,35 @@ def register_model(model, name, project, repository=None, input=None, version='l
     return model
 
 
-def publish_model(model, destination, code=None, max_retries=60, **kwargs):
+def publish_model(model, destination, code=None, max_retries=60,
+                  replace=False, **kwargs):
     """Publish a model to a configured publishing destination.
 
     Parameters
     ----------
     model : str or dict
-        The name or id of the model, or a dictionary representation of the model.
+        The name or id of the model, or a dictionary representation of
+        the model.
     destination : str
     code : optional
     max_retries : int, optional
+    replace : bool, optional
+        Whether to overwrite the model if it already exists in
+        the `destination`
     kwargs : optional
-        additional arguments will be passed to the underlying publish functions.
+        additional arguments will be passed to the underlying publish
+        functions.
 
     Returns
     -------
+    RestObj
+        The published model
 
     Notes
     -----
-    If no code is specified, the model is assumed to be already registered in the model repository and Model Manager's
-    publishing functionality will be used.
+    If no code is specified, the model is assumed to be already registered in
+    the model repository and Model Manager's publishing functionality will be
+    used.
 
     Otherwise, the model publishing API will be used.
 
@@ -209,27 +239,56 @@ def publish_model(model, destination, code=None, max_retries=60, **kwargs):
     --------
     :meth:`model_management.publish_model <.ModelManagement.publish_model>`
     :meth:`model_publish.publish_model <.ModelPublish.publish_model>`
+
+
+    .. versionchanged:: 1.1.0
+       Added `replace` option.
+
     """
+    def submit_request():
+        # Submit a publishing request
+        if code is None:
+            publish_req = mm.publish_model(model, destination, **kwargs)
+        else:
+            publish_req = mp.publish_model(model, destination,
+                                           code=code, **kwargs)
 
-    # Submit a publishing request
-    if code is None:
-        publish_req = mm.publish_model(model, destination, **kwargs)
-    else:
-        publish_req = mp.publish_model(model, destination, code=code, **kwargs)
+        # A successfully submitted request doesn't mean a successfully
+        # published model.  Response for publish request includes link to
+        # check publish log
+        job = mr._monitor_job(publish_req, max_retries=max_retries)
+        return job
 
-    # A successfully submitted request doesn't mean a successfully published model.
-    # Response for publish request includes link to check publish log
-    job = mr._monitor_job(publish_req)
+    # Submit and wait for status
+    job = submit_request()
 
+    # If MAS publish failed and replace=True, attempt to delete the module
+    # and republish
+    if job.state.lower() == 'failed' and replace and \
+            job.destination.destinationType == 'microAnalyticService':
+            from .services import microanalytic_score as mas
+            mas.delete_module(job.publishName)
+
+            # Resubmit the request
+            job = submit_request()
+
+    # Raise exception if still failing
     if job.state.lower() == 'failed':
-        pass
+        log = request_link(job, 'publishingLog')
+        raise RuntimeError("Failed to publish model '%s': %s"
+                           % (model, log.log))
+
+    # Raise exception if unknown status received
+    elif job.state.lower() != 'completed':
+        raise RuntimeError("Model publishing job in an unknown state: '%s'"
+                           % job.state.lower())
 
     log = request_link(job, 'publishingLog')
     msg = log.get('log').lstrip('SUCCESS===')
 
     # As of Viya 3.4 MAS converts module names to lower case.
-    # Since we can't rely on the request module name being preserved, try to parse the URL out of the response
-    # so we can retrieve the created module.
+    # Since we can't rely on the request module name being preserved, try to
+    # parse the URL out of the response so we can retrieve the created module.
     try:
         details = json.loads(msg)
 
@@ -251,4 +310,3 @@ def publish_model(model, destination, code=None, max_retries=60, **kwargs):
         from sasctl.services import microanalytic_score as mas
         return mas.define_steps(module)
     return module
-
