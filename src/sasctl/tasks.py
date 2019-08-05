@@ -13,8 +13,6 @@ import re
 import sys
 import warnings
 
-from deprecated.sphinx import versionchanged
-
 from . import utils
 from .core import RestObj, get, get_link, request_link
 from .services import model_management as mm
@@ -130,15 +128,19 @@ def register_model(model, name, project, repository=None, input=None,
         if create_project:
             project = mr.create_project(project, repository)
 
-        model = mr.import_model_from_zip(name, project, zipfile, version=version)
+        model = mr.import_model_from_zip(name, project, zipfile,
+                                         version=version)
         return model
 
     # If the model is an scikit-learn model, generate the model dictionary
     # from it and pickle the model for storage
-    elif all(hasattr(model, attr) for attr in ['_estimator_type', 'get_params']):
+    elif all(hasattr(model, attr) for attr
+             in ['_estimator_type', 'get_params']):
         # Pickle the model so we can store it
         model_pkl = pickle.dumps(model)
-        files.append({'name': 'model.pkl', 'file': model_pkl, 'role': 'Python Pickle'})
+        files.append({'name': 'model.pkl',
+                      'file': model_pkl,
+                      'role': 'Python Pickle'})
 
         # Extract model properties
         model = _sklearn_to_dict(model)
@@ -146,7 +148,8 @@ def register_model(model, name, project, repository=None, input=None,
 
         # Generate PyMAS wrapper
         try:
-            mas_module = from_pickle(model_pkl, 'predict', input_types=input, array_input=True)
+            mas_module = from_pickle(model_pkl, 'predict',
+                                     input_types=input, array_input=True)
             assert isinstance(mas_module, PyMAS)
 
             # Include score code files from ESP and MAS
@@ -161,10 +164,9 @@ def register_model(model, name, project, repository=None, input=None,
                                        for var in mas_module.variables
                                        if not var.out]
 
-            model['outputVariables'] = [var.as_model_metadata()
-                                        for var in mas_module.variables
-                                        if var.out
-                                        and var.name not in ('rc', 'msg')]
+            model['outputVariables'] = \
+                [var.as_model_metadata() for var in mas_module.variables
+                 if var.out and var.name not in ('rc', 'msg')]
         except ValueError:
             # PyMAS creation failed, most likely because input data wasn't
             # provided
@@ -175,8 +177,14 @@ def register_model(model, name, project, repository=None, input=None,
         assert isinstance(model, dict)
 
     if create_project:
-        vars = model.get('inputVariables', []) + model.get('outputVariables', [])
-        target_level = 'Interval' if model.get('function') == 'Regression' else None
+        vars = model.get('inputVariables', [])
+        vars += model.get('outputVariables', [])
+
+        if model.get('function') == 'Regression':
+            target_level = 'Interval'
+        else:
+            target_level = None
+
         project = mr.create_project(project, repository,
                                     variables=vars,
                                     targetLevel=target_level)
@@ -202,7 +210,8 @@ def publish_model(model, destination, code=None, max_retries=60,
     Parameters
     ----------
     model : str or dict
-        The name or id of the model, or a dictionary representation of the model.
+        The name or id of the model, or a dictionary representation of
+        the model.
     destination : str
     code : optional
     max_retries : int, optional
@@ -210,7 +219,8 @@ def publish_model(model, destination, code=None, max_retries=60,
         Whether to overwrite the model if it already exists in
         the `destination`
     kwargs : optional
-        additional arguments will be passed to the underlying publish functions.
+        additional arguments will be passed to the underlying publish
+        functions.
 
     Returns
     -------
@@ -300,4 +310,3 @@ def publish_model(model, destination, code=None, max_retries=60,
         from sasctl.services import microanalytic_score as mas
         return mas.define_steps(module)
     return module
-
