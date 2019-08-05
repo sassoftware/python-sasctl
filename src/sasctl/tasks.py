@@ -13,10 +13,13 @@ import re
 import sys
 import warnings
 
+from deprecated.sphinx import versionchanged
+
 from . import utils
 from .core import RestObj, get, get_link, request_link
-from .services import model_management as mm, model_publish as mp, \
-    model_repository as mr
+from .services import model_management as mm
+from .services import model_publish as mp
+from .services import model_repository as mr
 from .utils.pymas import PyMAS, from_pickle
 
 
@@ -211,6 +214,8 @@ def publish_model(model, destination, code=None, max_retries=60,
 
     Returns
     -------
+    RestObj
+        The published model
 
     Notes
     -----
@@ -225,24 +230,48 @@ def publish_model(model, destination, code=None, max_retries=60,
     :meth:`model_management.publish_model <.ModelManagement.publish_model>`
     :meth:`model_publish.publish_model <.ModelPublish.publish_model>`
 
+
+    .. versionchanged:: 1.1.0
+       Added `replace` option.
+
     """
-    # Submit a publishing request
-    if code is None:
-        publish_req = mm.publish_model(model, destination, **kwargs)
-    else:
-        publish_req = mp.publish_model(model, destination, code=code, **kwargs)
+    def submit_request():
+        # Submit a publishing request
+        if code is None:
+            publish_req = mm.publish_model(model, destination, **kwargs)
+        else:
+            publish_req = mp.publish_model(model, destination,
+                                           code=code, **kwargs)
 
-    # A successfully submitted request doesn't mean a successfully published model.
-    # Response for publish request includes link to check publish log
-    job = mr._monitor_job(publish_req)
+        # A successfully submitted request doesn't mean a successfully
+        # published model.  Response for publish request includes link to
+        # check publish log
+        job = mr._monitor_job(publish_req, max_retries=max_retries)
+        return job
 
-    # Wait for status
-    # If job failed & overwrite -> check type of destination
-    # delete model from destination
-    # publish again
+    # Submit and wait for status
+    job = submit_request()
 
+    # If MAS publish failed and replace=True, attempt to delete the module
+    # and republish
+    if job.state.lower() == 'failed' and replace and \
+            job.destination.destinationType == 'microAnalyticService':
+            from .services import microanalytic_score as mas
+            mas.delete_module(job.publishName)
+
+            # Resubmit the request
+            job = submit_request()
+
+    # Raise exception if still failing
     if job.state.lower() == 'failed':
-        pass
+        log = request_link(job, 'publishingLog')
+        raise RuntimeError("Failed to publish model '%s': %s"
+                           % (model, log.log))
+
+    # Raise exception if unknown status received
+    elif job.state.lower() != 'completed':
+        raise RuntimeError("Model publishing job in an unknown state: '%s'"
+                           % job.state.lower())
 
     log = request_link(job, 'publishingLog')
     msg = log.get('log').lstrip('SUCCESS===')
