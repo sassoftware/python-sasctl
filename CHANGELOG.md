@@ -6,6 +6,7 @@ Unreleased
 
 **Changed**
 - Added `replace` parameter to `sasctl.tasks.publish_model` 
+- `Session` hostname's can now be specified in HTTP format: 'http://example.com'.
 
 **Bugfixes**
 - Renamed `microanalytic_store` service to `microanalytic_score` 

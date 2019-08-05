@@ -16,7 +16,7 @@ import warnings
 from uuid import UUID, uuid4
 
 import requests, requests.exceptions
-from requests.adapters import HTTPAdapter, DEFAULT_POOLBLOCK
+from requests.adapters import HTTPAdapter
 from six.moves.urllib.parse import urlsplit, urlunsplit
 from six.moves.urllib.error import HTTPError
 
@@ -263,7 +263,8 @@ class Session(requests.Session):
                           swat.cas.rest.connection.REST_CASConnection):
                 import base64
 
-                # Use the httpAddress action to retieve information about REST endpoints
+                # Use the httpAddress action to retieve information about
+                # REST endpoints
                 httpAddress = hostname.get_action('builtins.httpAddress')
                 address = httpAddress()
                 domain = address.virtualHost
@@ -273,18 +274,21 @@ class Session(requests.Session):
                     domain = hostname._sw_connection._current_hostname
                 protocol = address.protocol
                 port = address.port
-
-                # protocol = hostname._protocol
                 auth = hostname._sw_connection._auth.decode('utf-8').replace(
                     'Basic ', '')
-                username, password = base64.b64decode(auth).decode('utf-8').split(
-                    ':')
-                # domain = hostname._hostname
+                username, password = base64.b64decode(auth).decode(
+                    'utf-8').split(':')
             else:
-                raise ValueError(
-                    "A 'swat.CAS' session can only be reused when it's connected via the REST APIs.")
+                raise ValueError("A 'swat.CAS' session can only be reused "
+                                 "when it's connected via the REST APIs.")
         else:
-            domain = str(hostname)
+            url = urlsplit(hostname)
+
+            # Extract http/https from domain name if present and protocl not
+            # explicitly given
+            protocol = protocol or url.scheme
+
+            domain = url.hostname or str(hostname)
 
         self._settings = {'protocol': protocol or 'https',
                          'domain': domain,
