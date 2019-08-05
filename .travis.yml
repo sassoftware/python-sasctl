@@ -53,6 +53,8 @@ matrix:
         api_key: "$GITHUB_TOKEN"
         file: "${TRAVIS_TAG}-doc.zip"
         draft: true
+        on:
+          tags: true
 
 
     - stage: upload documentation
