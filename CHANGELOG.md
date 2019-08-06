@@ -2,7 +2,14 @@
 Unreleased
 ----------
 
-- 
+ - 
+
+ 
+v1.1.1 (2019-8-6)
+-----------------
+**Bugfixes**
+- Fixed an issue where usernames were not parsed correctly from .authinfo files, resulting in failed logins. 
+
 
 v1.1.0 (2019-8-5)
 -----------------

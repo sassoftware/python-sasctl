@@ -33,6 +33,49 @@ def test_session_from_url():
     assert s.hostname == 'example.com'
     assert s._settings['protocol'] == 'http'
 
+
+def test_from_authinfo(tmpdir_factory):
+    filename = str(tmpdir_factory.mktemp('tmp').join('authinfo'))
+
+    HOSTNAME = 'example.com'
+    USERNAME = 'BlackKnight'
+    PASSWORD = 'iaminvincible!'
+
+    with open(filename, 'w') as f:
+        f.write('machine %s login %s password %s'
+                % (HOSTNAME, USERNAME, PASSWORD))
+
+    # Get username & password from matching hostname
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('http://example.com', authinfo=filename)
+    assert s.hostname == HOSTNAME
+    assert s.username == USERNAME
+    assert s._settings['password'] == PASSWORD
+
+
+    with open(filename, 'w') as f:
+        f.write('host %s user %s password %s'
+                % (HOSTNAME, USERNAME, PASSWORD))
+
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('http://example.com', authinfo=filename)
+    assert s.hostname == HOSTNAME
+    assert s.username == USERNAME
+    assert s._settings['password'] == PASSWORD
+
+    with open(filename, 'w') as f:
+        f.write('host %s user %s password %s\n'
+                % (HOSTNAME, 'Arthur', 'kingofthebrittons'))
+        f.write('host %s user %s password %s\n'
+                % (HOSTNAME, USERNAME, PASSWORD))
+
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('http://example.com', username=USERNAME, authinfo=filename)
+    assert s.hostname == HOSTNAME
+    assert s.username == USERNAME
+    assert s._settings['password'] == PASSWORD
+
+
 def test_new_session(missing_packages):
     HOST = 'example.com'
     USERNAME = 'user'
