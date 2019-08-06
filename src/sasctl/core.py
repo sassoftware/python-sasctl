@@ -304,8 +304,8 @@ class Session(requests.Session):
             if 'swat' in sys.modules:
                 auth = swat.utils.authinfo.query_authinfo(domain, user=username,
                                                           path=authinfo)
-                self._settings['username'], self._settings[
-                    'password'] = auth.get('username'), auth.get('password')
+                self._settings['username'] = auth.get('user')
+                self._settings['password'] = auth.get('password')
 
             # Not able to load credentials using SWAT.  Try Netrc.
             # TODO: IF a username was specified, verify that the credentials found
