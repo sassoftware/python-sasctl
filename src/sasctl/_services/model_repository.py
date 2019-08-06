@@ -126,7 +126,9 @@ class ModelRepository(Service):
     @classmethod
     def create_model(cls, model, project, description=None, modeler=None,
                      function=None, algorithm=None, tool=None,
-                     is_champion=False, properties={}, **kwargs):
+                     is_champion=False, properties={},
+                     version=None,
+                     **kwargs):
         """Creates a model into a project or folder.
 
         Parameters
@@ -177,13 +179,17 @@ class ModelRepository(Service):
             The display name for the model version.
         properties : array_like, optional (custom properties)
             Custom model properties that can be set: name, value, type
-
         inputVariables : array_like, optional
             Model input variables. By default, these are the same as the model
             project.
         outputVariables : array_like, optional
             Model output variables. By default, these are the same as the model
              project.
+         version : str or int
+            Whether to create a new version of the model or update an
+            existing version.  May be a specific numbered version to
+            replace, 'latest' to update the most recent version, or 'new' to
+            add a new version.  Defaults to 'new'
 
         Returns
         -------
@@ -191,6 +197,13 @@ class ModelRepository(Service):
             The model schema returned in JSON format.
 
         """
+        version = version or 'new'
+
+        # Check if the model already exists
+        model_obj = cls.get_model(model)
+
+        is_new_model = model_obj == None
+
         if isinstance(model, str):
             model = {'name': model}
 
@@ -209,15 +222,16 @@ class ModelRepository(Service):
         model['tool'] = tool or model.get('tool')
         model['champion'] = is_champion or model.get('champion')
         model['role'] = 'Champion' if model.get('champion',
-                                                False) else 'Challenger'
+                                                False) else None
         model['description'] = description or model.get('description')
         model.setdefault('properties', [{'name': k, 'value': v} for k, v in
                                         properties.items()])
 
         # TODO: add kwargs (pop)
         #     model.update(kwargs)
-        return cls.post('/models', json=model, headers={
-            'Content-Type': 'application/vnd.sas.models.model+json'})
+        if is_new_model:
+            return cls.post('/models', json=model, headers={
+                'Content-Type': 'application/vnd.sas.models.model+json'})
 
     @classmethod
     def add_model_content(cls, model, file, name=None, role=None):
