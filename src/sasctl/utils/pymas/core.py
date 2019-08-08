@@ -373,20 +373,16 @@ class PyMAS:
                                                    '   end;',
                                                    'enddata;')
         elif dest == 'CAS':
-            if input_table is None:
-                raise ValueError('An input table must be specified when executing the code in CAS.')
-
-            output_table = output_table or input_table + '_pymas'
             thread = DS2Thread(self.variables, input_table, column_names=columns, return_message=self.return_message,
                                package=self.package)
 
             code += (str(thread),
-                     '    data {} (overwrite=yes);'.format(output_table),
-                     '    dcl thread {} t;'.format(thread.name),
-                     '    method run();',
-                     '       set from t;',
-                     '       output {} ;'.format(output_table),
-                     '    end;',
-                     '  enddata;')
+                     'data SASEP.out;',
+                     '  dcl thread {} t;'.format(thread.name),
+                     '  method run();',
+                     '    set from t;',
+                     '    output;',
+                     '  end;',
+                     'enddata;')
 
         return '\n'.join(code)
