@@ -6,8 +6,8 @@
 
 __version__ = '1.1.1'
 __author__ = 'SAS'
-__credits__ = ['Yi Jian Ching, Lucas De Paula, Peter Tobac, Chris Toth, Jon '
-               'Walker']
+__credits__ = ['Yi Jian Ching, Lucas De Paula, James Kochuba, Peter Tobac, '
+               'Chris Toth, Jon Walker']
 __license__ = 'Apache 2.0'
 __copyright__ = 'Copyright © 2019, SAS Institute Inc., ' \
                 'Cary, NC, USA.  All Rights Reserved.'

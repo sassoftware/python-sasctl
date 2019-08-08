@@ -1,8 +1,8 @@
 
 Unreleased
 ----------
-
- - 
+**Bugfixes**
+ - Fixed DS2 score code for CAS that was generated when registering a Python model.
 
  
 v1.1.1 (2019-8-6)
