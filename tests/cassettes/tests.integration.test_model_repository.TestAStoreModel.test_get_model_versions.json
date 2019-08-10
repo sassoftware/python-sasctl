@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2019-08-10T00:04:59",
+      "recorded_at": "2019-08-10T00:03:19",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -36,7 +36,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read esvakmcriskconsumers SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us esvakmcorionconsultforecastconsumers intcawebcertreq ANALYSIS esvakmcorionriskconsumers USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers SIMSEdit midena rdtcaccess uscompresales Safari_list DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap defsusers opsglobalorion salessupportcredittech DomainEmployees AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers esvakmcorionriskaccess bareosdeploy KSA_mail_list revegyusercommunity EsriUsers uaa.admin clients.admin AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter SalesXchange EMINERS sas92_install ApplicationAdministrators techoffice COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS birdrace KSA_ADGroup ITatSAS HADOOP-L democenterusers RE_PYTHON clients.write scim.write\",\"jti\":\"578d8609244a4f7bbc348bbc4e30c8a9\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read esvakmcriskconsumers SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us esvakmcorionconsultforecastconsumers intcawebcertreq ANALYSIS esvakmcorionriskconsumers USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers SIMSEdit midena rdtcaccess uscompresales Safari_list DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap defsusers opsglobalorion salessupportcredittech DomainEmployees AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers esvakmcorionriskaccess bareosdeploy KSA_mail_list revegyusercommunity EsriUsers uaa.admin clients.admin AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter SalesXchange EMINERS sas92_install ApplicationAdministrators techoffice COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS birdrace KSA_ADGroup ITatSAS HADOOP-L democenterusers RE_PYTHON clients.write scim.write\",\"jti\":\"0e885ab158b9488895d17c565c2ff130\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -50,7 +50,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Sat, 10 Aug 2019 00:04:59 GMT"
+            "Sat, 10 Aug 2019 00:03:19 GMT"
           ],
           "Expires": [
             "0"
@@ -92,7 +92,7 @@
       }
     },
     {
-      "recorded_at": "2019-08-10T00:04:59",
+      "recorded_at": "2019-08-10T00:03:19",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -137,7 +137,7 @@
             "application/vnd.sas.collection+json;charset=UTF-8"
           ],
           "Date": [
-            "Sat, 10 Aug 2019 00:04:59 GMT"
+            "Sat, 10 Aug 2019 00:03:19 GMT"
           ],
           "Expires": [
             "0"
@@ -178,7 +178,7 @@
       }
     },
     {
-      "recorded_at": "2019-08-10T00:05:00",
+      "recorded_at": "2019-08-10T00:03:20",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -223,7 +223,7 @@
             "application/vnd.sas.models.model+json;charset=UTF-8"
           ],
           "Date": [
-            "Sat, 10 Aug 2019 00:05:00 GMT"
+            "Sat, 10 Aug 2019 00:03:19 GMT"
           ],
           "ETag": [
             "\"jz4s03ew\""
@@ -270,7 +270,7 @@
       }
     },
     {
-      "recorded_at": "2019-08-10T00:05:10",
+      "recorded_at": "2019-08-10T00:03:21",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -289,20 +289,17 @@
           "Connection": [
             "keep-alive"
           ],
-          "Content-Length": [
-            "0"
-          ],
           "User-Agent": [
             "python-requests/2.22.0"
           ]
         },
-        "method": "PUT",
-        "uri": "https://hostname.com/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/analyticStore"
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/analyticStore\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/analyticStore\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99\"}],\"name\":\"items\",\"items\":[{\"name\":\"_445D428FD0E44E73815147133\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~ModelStore/tables/_445D428FD0E44E73815147133\",\"key\":\"1AC590F35BF2F1CE2F1CCD7ABC4440EED655F18F\",\"caslib\":\"ModelStore\",\"location\":\"file:///models/astores/viya/_445D428FD0E44E73815147133.astore\",\"host\":\"fsds-viya19w04-viya\",\"fullPath\":\"/opt/sas/viya/config/data/modelsvr/astore/_445D428FD0E44E73815147133.astore\",\"state\":\"pending\",\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/analyticStore/_445D428FD0E44E73815147133\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/analyticStore/_445D428FD0E44E73815147133\"},{\"method\":\"PUT\",\"rel\":\"copy\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/analyticStore/_445D428FD0E44E73815147133\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/analyticStore/_445D428FD0E44E73815147133\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/analyticStore\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/analyticStore\"},{\"method\":\"GET\",\"rel\":\"model\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99\"}]}],\"version\":2}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions\",\"type\":\"application/vnd.sas.models.model.version\"}],\"name\":\"modelVersions\",\"count\":2,\"items\":[{\"creationTimeStamp\":\"2019-08-10T00:03:12.012Z\",\"modifiedTimeStamp\":\"2019-08-10T00:03:12.012Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions/608dfb9e-834b-425d-a563-926bbe93c93d\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions/608dfb9e-834b-425d-a563-926bbe93c93d\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions/608dfb9e-834b-425d-a563-926bbe93c93d\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions/608dfb9e-834b-425d-a563-926bbe93c93d/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content\"}],\"version\":2,\"id\":\"608dfb9e-834b-425d-a563-926bbe93c93d\",\"name\":\"AStore Model\",\"description\":\"None\",\"projectId\":\"5aa5a399-ea06-4b1a-9a34-08effa19b558\",\"projectName\":\"SASCTL AStore Test Project\",\"projectVersionId\":\"62c3fdb6-c779-457b-8c10-36b9bcfa8ca4\",\"projectVersionName\":\"Version 3\",\"projectVersionNum\":\"3.0\",\"function\":\"\",\"algorithm\":\"\",\"tool\":\"\",\"toolVersion\":\"\",\"scoreCodeType\":\"ds2Package\",\"trainCodeType\":\"\",\"modeler\":\"\",\"externalModelId\":\"\",\"trainTable\":\"\",\"eventProbVar\":\"\",\"targetEvent\":\"\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":true,\"inputVariables\":[{\"version\":2,\"name\":\"PetalLength\",\"role\":\"input\",\"type\":\"decimal\",\"length\":8},{\"version\":2,\"name\":\"PetalWidth\",\"role\":\"input\",\"type\":\"decimal\",\"length\":8},{\"version\":2,\"name\":\"SepalLength\",\"role\":\"input\",\"type\":\"decimal\",\"length\":8},{\"version\":2,\"name\":\"SepalWidth\",\"role\":\"input\",\"type\":\"decimal\",\"length\":8},{\"version\":2,\"name\":\"Species\",\"role\":\"input\",\"type\":\"decimal\",\"length\":8}],\"outputVariables\":[{\"version\":2,\"name\":\"P_Species\",\"role\":\"output\",\"type\":\"decimal\",\"length\":8},{\"version\":2,\"name\":\"_WARN_\",\"role\":\"output\",\"type\":\"string\",\"length\":4}],\"modelVersionName\":\"1.0\",\"retrainable\":false,\"targetVariable\":\"\",\"externalUrl\":\"\",\"inputVarType\":\"score\",\"tags\":[],\"globalTags\":[],\"modelLastModifiedBy\":\"USERNAME\",\"modelLastModifiedTimeStamp\":\"2019-08-10T00:03:01.795Z\",\"modelCreatedBy\":\"USERNAME\",\"modelCreationTimeStamp\":\"2019-08-10T00:03:01.795Z\"},{\"creationTimeStamp\":\"2019-08-10T00:03:16.342Z\",\"modifiedTimeStamp\":\"2019-08-10T00:03:16.342Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions/9469a2f1-f28f-4fca-9551-585e432e6d1e\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions/9469a2f1-f28f-4fca-9551-585e432e6d1e\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions/9469a2f1-f28f-4fca-9551-585e432e6d1e\",\"uri\":\"/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions/9469a2f1-f28f-4fca-9551-585e432e6d1e/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content\"}],\"version\":2,\"id\":\"9469a2f1-f28f-4fca-9551-585e432e6d1e\",\"name\":\"AStore Model\",\"description\":\"None\",\"projectId\":\"5aa5a399-ea06-4b1a-9a34-08effa19b558\",\"projectName\":\"SASCTL AStore Test Project\",\"projectVersionId\":\"62c3fdb6-c779-457b-8c10-36b9bcfa8ca4\",\"projectVersionName\":\"Version 3\",\"projectVersionNum\":\"3.0\",\"function\":\"\",\"algorithm\":\"\",\"tool\":\"\",\"toolVersion\":\"\",\"scoreCodeType\":\"ds2Package\",\"trainCodeType\":\"\",\"modeler\":\"\",\"externalModelId\":\"\",\"trainTable\":\"\",\"eventProbVar\":\"\",\"targetEvent\":\"\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"plain\",\"immutable\":true,\"inputVariables\":[{\"version\":2,\"name\":\"PetalLength\",\"role\":\"input\",\"type\":\"decimal\",\"length\":8},{\"version\":2,\"name\":\"PetalWidth\",\"role\":\"input\",\"type\":\"decimal\",\"length\":8},{\"version\":2,\"name\":\"SepalLength\",\"role\":\"input\",\"type\":\"decimal\",\"length\":8},{\"version\":2,\"name\":\"SepalWidth\",\"role\":\"input\",\"type\":\"decimal\",\"length\":8},{\"version\":2,\"name\":\"Species\",\"role\":\"input\",\"type\":\"decimal\",\"length\":8}],\"outputVariables\":[{\"version\":2,\"name\":\"P_Species\",\"role\":\"output\",\"type\":\"decimal\",\"length\":8},{\"version\":2,\"name\":\"_WARN_\",\"role\":\"output\",\"type\":\"string\",\"length\":4}],\"modelVersionName\":\"2.0\",\"retrainable\":false,\"targetVariable\":\"\",\"externalUrl\":\"\",\"inputVarType\":\"score\",\"tags\":[],\"globalTags\":[],\"modelLastModifiedBy\":\"USERNAME\",\"modelLastModifiedTimeStamp\":\"2019-08-10T00:03:13.502Z\",\"modelCreatedBy\":\"USERNAME\",\"modelCreationTimeStamp\":\"2019-08-10T00:03:01.795Z\"}],\"version\":2}"
         },
         "headers": {
           "Cache-Control": [
@@ -315,10 +312,10 @@
             "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
           ],
           "Content-Type": [
-            "application/json;charset=UTF-8"
+            "application/vnd.sas.collection+json;charset=UTF-8"
           ],
           "Date": [
-            "Sat, 10 Aug 2019 00:05:10 GMT"
+            "Sat, 10 Aug 2019 00:03:21 GMT"
           ],
           "Expires": [
             "0"
@@ -352,10 +349,10 @@
           ]
         },
         "status": {
-          "code": 202,
+          "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/analyticStore"
+        "url": "https://hostname.com/modelRepository/models/bebb9be8-2f10-4391-9ce3-c723490b2c99/modelVersions"
       }
     }
   ],

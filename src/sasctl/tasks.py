@@ -53,7 +53,7 @@ def _sklearn_to_dict(model):
 
 
 def register_model(model, name, project, repository=None, input=None,
-                   version='latest', files=None, force=False):
+                   version=None, files=None, force=False):
     """Register a model in the model repository.
 
     Parameters
@@ -134,7 +134,7 @@ def register_model(model, name, project, repository=None, input=None,
         else:
             raise ValueError("Unrecognized version '%s'." % version)
 
-
+    #
 
         # TODO: get ID of correct model version
     # if version != new, get existing model

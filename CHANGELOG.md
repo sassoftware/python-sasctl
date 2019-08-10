@@ -1,8 +1,11 @@
 
 Unreleased
 ----------
+**Improvements**
+- Added `create_model_version` and `list_model_versions` to `model_repository`
 
- - 
+**Bugfixes**
+- Fixed an issue where `model_repository` did not find models by name once pagination limits were reached. 
 
  
 v1.1.1 (2019-8-6)

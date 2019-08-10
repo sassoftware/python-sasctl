@@ -29,24 +29,39 @@ def test_create_model():
               'algorithm': 'Dummy Algorithm',
               'tool': 'pytest',
               'champion': True,
-              'role': 'Champion',
+              'role': 'champion',
+              'immutable': True,
+              'retrainable': True,
+              'scoreCodeType': None,
+              'targetVariable': None,
+              'trainTable': None,
+              'classificationEventProbabilityVariableName': None,
+              'classificationTargetEventValue': None,
+              'location': None,
               'properties': [{'name': 'custom1', 'value': 123},
-                             {'name': 'custom2', 'value': 'somevalue'}]}
+                             {'name': 'custom2', 'value': 'somevalue'}],
+              'inputVariables': [],
+              'outputVariables': [],
+              'version': '2'}
 
     # Passed params should be set correctly
     target = copy.deepcopy(TARGET)
     with mock.patch('sasctl._services.model_repository.ModelRepository.get_project') as get_project:
-        with mock.patch('sasctl._services.model_repository.ModelRepository.post') as post:
-            get_project.return_value = {'id': PROJECT_ID}
-            _ = mr.create_model(MODEL_NAME,
-                                PROJECT_NAME,
-                                description=target['description'],
-                                function=target['function'],
-                                algorithm=target['algorithm'],
-                                tool=target['tool'],
-                                is_champion=target['champion'],
-                                properties=dict(custom1=123, custom2='somevalue'))
-            assert post.call_count == 1
+        with mock.patch('sasctl._services.model_repository.ModelRepository''.get_model') as get_model:
+            with mock.patch('sasctl._services.model_repository.ModelRepository.post') as post:
+                get_project.return_value = {'id': PROJECT_ID}
+                get_model.return_value = None
+                _ = mr.create_model(MODEL_NAME,
+                                    PROJECT_NAME,
+                                    description=target['description'],
+                                    function=target['function'],
+                                    algorithm=target['algorithm'],
+                                    tool=target['tool'],
+                                    is_champion=True,
+                                    is_immutable=True,
+                                    is_retrainable=True,
+                                    properties=dict(custom1=123, custom2='somevalue'))
+                assert post.call_count == 1
             url, data = post.call_args
 
             # dict isn't guaranteed to preserve order
@@ -65,9 +80,11 @@ def test_create_model():
     # Explicit overrides should be respected.
     target = copy.deepcopy(TARGET)
     with mock.patch('sasctl._services.model_repository.ModelRepository.get_project') as get_project:
-        with mock.patch('sasctl._services.model_repository.ModelRepository.post') as post:
-            get_project.return_value = {'id': PROJECT_ID}
-            _ = mr.create_model(copy.deepcopy(target), PROJECT_NAME, description='Updated Model')
+        with mock.patch('sasctl._services.model_repository.ModelRepository''.get_model') as get_model:
+            with mock.patch('sasctl._services.model_repository.ModelRepository.post') as post:
+                get_project.return_value = {'id': PROJECT_ID}
+                get_model.return_value = None
+                _ = mr.create_model(copy.deepcopy(target), PROJECT_NAME, description='Updated Model')
             target['description'] = 'Updated Model'
             assert post.call_count == 1
             url, data = post.call_args
