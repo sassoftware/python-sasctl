@@ -113,7 +113,7 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelRepository/models?filter=eq(name,%20%22Scikit%20Model%22)"
+        "uri": "https://hostname.com/modelRepository/models?properties=(name,%20Scikit%20Model)"
       },
       "response": {
         "body": {
