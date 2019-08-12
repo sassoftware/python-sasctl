@@ -93,7 +93,7 @@ class TestModels:
         files = mr.get_model_contents(model)
         filenames = [f.name for f in files]
         assert 'model.pkl' in filenames
-        assert 'dmcas_espscorecode.sas' in filenames
+        assert 'dmcas_epscorecode.sas' in filenames
         assert 'dmcas_packagescorecode.sas' in filenames
 
     def test_publish_sklearn(self):

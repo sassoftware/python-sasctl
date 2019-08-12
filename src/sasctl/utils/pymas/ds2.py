@@ -252,9 +252,6 @@ class DS2Thread(object):
         return 'pyMasThread'
 
     def __str__(self):
-        extras = ['"rc"'] if self.return_code else []
-        extras += ['"msg"'] if self.return_message else []
-
         array_input = any([v.is_array for v in self.variables if not v.out])
 
         # If passing column data into Python as an array, need extra assignment statements to set values
@@ -272,25 +269,18 @@ class DS2Thread(object):
         declarations = '\n'.join([v.as_declaration() for v in self.variables if
                                   v.out or v.is_array])
 
-        keep_vars = [v.name for v in self.variables] + extras
+        keep_vars = [v.name for v in self.variables]
 
-        code = ("        thread {} / inline;".format(self.name),
-                "            dcl package {} decisionPackage();".format(
-                    self.package.name),
+        code = ("thread {} / inline;".format(self.name),
+                "  dcl package {} pythonPackage();".format(self.package.name),
                 declarations,
-                '            dcl double "rc";',
-                "            dcl char(4096) character set utf8 msg;",
-                # "            keep {};".format(' '.join(keep_vars)),
-                "            method run();",
-                "                dcl integer localRC;",
-                "                set {} ( );".format(self.table),
+                "  method run();",
+                "    set SASEP.in;",
                 var_assignments,
-                "                decisionPackage.{}({});".format(
-                    self.package.methods[0].name,
-                    ','.join(keep_vars)),
-                "                output;",
-                "            end;",
-                "        endthread;")
+                "    pythonPackage.{}({});".format(self.package.methods[0].name,','.join(keep_vars)),
+                "    output;",
+                "  end;",
+                "endthread;")
 
         code = '\n'.join(code)
 
