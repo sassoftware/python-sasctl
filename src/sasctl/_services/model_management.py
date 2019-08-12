@@ -20,7 +20,7 @@ class ModelManagement(Service):
                             'performance tasks')
 
     # TODO:  set ds2MultiType
-    def publish_model(self, model, destination, name=None, force=False):
+    def publish_model(self, model, destination, name=None, force=False, casEndPoint=False):
         """
 
         Parameters
@@ -69,7 +69,11 @@ class ModelManagement(Service):
         # Publishes a model that has already been registered in the model
         # repository.
         # Unlike model_publish service, does not require Code to be specified.
-        r = self.post('/publish', json=request, params=dict(force=force),
+        if casEndPoint:
+             r = self.post('/publish', json=request, params=dict(force=force,reloadModelTable=True),
+                      headers={'Content-Type': 'application/vnd.sas.models.publishing.request.asynchronous+json'})
+        else:
+             r = self.post('/publish', json=request, params=dict(force=force),
                       headers={'Content-Type': 'application/vnd.sas.models.publishing.request.asynchronous+json'})
         return r
 
