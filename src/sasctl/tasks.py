@@ -25,27 +25,43 @@ logger = logging.getLogger(__name__)
 
 
 def _sklearn_to_dict(model):
+    # As of Viya 3.4 model registration fails if character fields are longer
+    # than 1024 characters
+    DESC_MAXLEN = 1024
+
+    # As of Viya 3.4 model registration fails if user-defined properties are
+    # longer than 512 characters.
+    PROP_MAXLEN = 512
+
     # Convert Scikit-learn values to built-in Model Manager values
     mappings = {'LogisticRegression': 'Logistic regression',
                 'LinearRegression': 'Linear regression',
                 'SVC': 'Support vector machine',
                 'GradientBoostingClassifier': 'Gradient boosting',
+                'XGBClassifier': 'Gradient boosting',
+                'XGBRegressor': 'Gradient boosting',
                 'RandomForestClassifier': 'Forest',
                 'DecisionTreeClassifier': 'Decision tree',
                 'DecisionTreeRegressor': 'Decision tree',
                 'classifier': 'Classification',
                 'regressor': 'Prediction'}
 
+    if hasattr(model, '_final_estimator'):
+        estimator = type(model._final_estimator)
+    else:
+        estimator = type(model)
+
     # Can tell if multi-class .multi_class
     result = dict(
-        description=str(model),
-        algorithm=mappings.get(type(model).__name__, type(model).__name__),
+        description=str(model)[:DESC_MAXLEN],
+        algorithm=mappings.get(estimator.__name__, estimator.__name__),
         scoreCodeType='ds2MultiType',
         trainCodeType='Python',
         function=mappings.get(model._estimator_type, model._estimator_type),
         tool='Python %s.%s'
              % (sys.version_info.major, sys.version_info.minor),
-        properties=[{'name': k, 'value': v}
+        properties=[{'name': str(k)[:PROP_MAXLEN],
+                     'value': str(v)[:PROP_MAXLEN]}
                     for k, v in model.get_params().items()]
     )
 
@@ -156,9 +172,6 @@ def register_model(model, name, project, repository=None, input=None,
             files.append({'name': 'dmcas_packagescorecode.sas',
                           'file': mas_module.score_code(),
                           'role': 'Score Code'})
-            files.append({'name': 'dmcas_espscorecode.sas',
-                          'file': mas_module.score_code(dest='ESP'),
-                          'role': 'Score Code'})
             files.append({'name': 'dmcas_epscorecode.sas',
                           'file': mas_module.score_code(dest='CAS'),
                           'role': 'score'})
@@ -251,7 +264,8 @@ def publish_model(model, destination, code=None, max_retries=60,
     def submit_request():
         # Submit a publishing request
         if code is None:
-            publish_req = mm.publish_model(model, destination, force=replace, **kwargs)
+            publish_req = mm.publish_model(model, destination,
+                                           force=replace, **kwargs)
         else:
             publish_req = mp.publish_model(model, destination,
                                            code=code, **kwargs)
@@ -265,7 +279,9 @@ def publish_model(model, destination, code=None, max_retries=60,
     # Submit and wait for status
     job = submit_request()
 
-    if job.state.lower() == 'completed' and job.destination.destinationType != 'microAnalyticService':
+    # If model was successfully published and it isn't a MAS module, we're done
+    if job.state.lower() == 'completed' \
+            and job.destination.destinationType != 'microAnalyticService':
             return request_link(job,'self')
 
     # If MAS publish failed and replace=True, attempt to delete the module

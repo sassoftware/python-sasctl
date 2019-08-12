@@ -21,6 +21,19 @@ class ModelManagement(Service):
 
     # TODO:  set ds2MultiType
     def publish_model(self, model, destination, name=None, force=False):
+        """
+
+        Parameters
+        ----------
+        model
+        destination
+        name
+        force
+
+        Returns
+        -------
+
+        """
         from .model_repository import ModelRepository
         from .model_publish import ModelPublish
 

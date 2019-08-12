@@ -345,7 +345,7 @@ class PyMAS:
             The name of the table where execution results will be written
         columns : list of str
             Names of the columns from `table` that will be passed to `func`
-        dest : str {'MAS', 'ESP', 'CAS'}
+        dest : str {'MAS', 'EP', 'CAS'}
 
         Returns
         -------
@@ -365,7 +365,7 @@ class PyMAS:
         # Get package code
         code = tuple(self.package.code().split('\n'))
 
-        if dest == 'ESP':
+        if dest == 'EP':
             code = ('data sasep.out;', ) + code + ('   method run();',
                                                    '      set SASEP.IN;',
                                                    '   end;',
