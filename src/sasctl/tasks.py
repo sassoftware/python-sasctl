@@ -219,7 +219,10 @@ def register_model(model, name, project, repository=None, input=None,
     return model
 
 
-def publish_model(model, destination, code=None, max_retries=60,
+def publish_model(model,
+                  destination,
+                  code=None,
+                  max_retries=60,
                   replace=False, **kwargs):
     """Publish a model to a configured publishing destination.
 
@@ -264,13 +267,15 @@ def publish_model(model, destination, code=None, max_retries=60,
     def submit_request():
         # Submit a publishing request
         if code is None:
-            destType=mp.get_destination(destination).destinationType
-            if destType == "cas":
+            dest_obj = mp.get_destination(destination)
+
+            if dest_obj and dest_obj.destinationType == "cas":
                 publish_req = mm.publish_model(model, destination,
-                                           force=replace, casEndPoint=True, **kwargs)
+                                               force=replace,
+                                               reload_model_table=True)
             else:
                 publish_req = mm.publish_model(model, destination,
-                                           force=replace, **kwargs)
+                                               force=replace)
         else:
             publish_req = mp.publish_model(model, destination,
                                            code=code, **kwargs)

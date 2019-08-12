@@ -20,7 +20,12 @@ class ModelManagement(Service):
                             'performance tasks')
 
     # TODO:  set ds2MultiType
-    def publish_model(self, model, destination, name=None, force=False, casEndPoint=False):
+    def publish_model(self,
+                      model,
+                      destination,
+                      name=None,
+                      force=False,
+                      reload_model_table=False):
         """
 
         Parameters
@@ -28,7 +33,12 @@ class ModelManagement(Service):
         model
         destination
         name
-        force
+        force : bool, optional
+            Whether to overwrite the model if it already exists in the
+            publishing `destination`.
+        reload_model_table : bool, optional
+            Whether the model table in CAS should be reloaded.  Defaults to
+            False.
 
         Returns
         -------
@@ -50,7 +60,8 @@ class ModelManagement(Service):
 
         # TODO: Verify allowed formats by destination type.
         # As of 19w04 MAS throws HTTP 500 if name is in invalid format.
-        model_name = name or '{}_{}'.format(model_obj['name'].replace(' ', ''), model_obj['id']).replace('-', '')
+        model_name = name or '{}_{}'.format(model_obj['name'].replace(' ', ''),
+                                            model_obj['id']).replace('-', '')
 
         request = {
             "name": model_obj.get('name'),
@@ -69,12 +80,12 @@ class ModelManagement(Service):
         # Publishes a model that has already been registered in the model
         # repository.
         # Unlike model_publish service, does not require Code to be specified.
-        if casEndPoint:
-             r = self.post('/publish', json=request, params=dict(force=force,reloadModelTable=True),
-                      headers={'Content-Type': 'application/vnd.sas.models.publishing.request.asynchronous+json'})
-        else:
-             r = self.post('/publish', json=request, params=dict(force=force),
-                      headers={'Content-Type': 'application/vnd.sas.models.publishing.request.asynchronous+json'})
+        r = self.post('/publish',
+                      json=request,
+                      params=dict(force=force,
+                                  reloadModelTable=reload_model_table),
+                      headers={'Content-Type':
+                                   'application/vnd.sas.models.publishing.request.asynchronous+json'})
         return r
 
     def create_performance_definition(self,
