@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2019-07-25T20:12:03",
+      "recorded_at": "2019-08-12T18:54:55",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -36,7 +36,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"4c91093d5b24423ea58e713df2e0c396\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"e24e85b24d8f4b5096835538a617d5f4\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -50,7 +50,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:02 GMT"
+            "Mon, 12 Aug 2019 18:54:55 GMT"
           ],
           "Expires": [
             "0"
@@ -89,7 +89,7 @@
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:03",
+      "recorded_at": "2019-08-12T18:54:55",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -118,7 +118,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models?start=0&limit=20\",\"uri\":\"/modelRepository/models?start=0&limit=20\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.summary\"},{\"method\":\"POST\",\"rel\":\"createModel\",\"href\":\"/modelRepository/models\",\"uri\":\"/modelRepository/models\",\"type\":\"application/vnd.sas.models.model\",\"responseType\":\"application/vnd.sas.models.model\"}],\"name\":\"models\",\"start\":0,\"count\":1,\"items\":[{\"creationTimeStamp\":\"2019-07-25T20:12:00.822Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:02.609Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/contents\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"name\":\"Scikit Model\",\"description\":\"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n                   intercept_scaling=1, l1_ratio=None, max_iter=100,\\n                   multi_class='multinomial', n_jobs=None, penalty='l2',\\n                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,\\n                   warm_start=False)\",\"projectId\":\"7197501a-efc0-4936-b36a-bcd867e1f1d4\",\"projectName\":\"Test Project\",\"projectVersionId\":\"26eeb625-ae8a-4a60-bef6-12ba4fb72718\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"indirectFolderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"function\":\"Classification\",\"algorithm\":\"Logistic regression\",\"tool\":\"Python 3.6\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"USERNAME\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"challenger\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]}],\"limit\":20,\"version\":2}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models?start=0&limit=20\",\"uri\":\"/modelRepository/models?start=0&limit=20\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.summary\"},{\"method\":\"POST\",\"rel\":\"createModel\",\"href\":\"/modelRepository/models\",\"uri\":\"/modelRepository/models\",\"type\":\"application/vnd.sas.models.model\",\"responseType\":\"application/vnd.sas.models.model\"}],\"name\":\"models\",\"start\":0,\"count\":4,\"items\":[{\"creationTimeStamp\":\"2019-08-12T18:52:17.328Z\",\"modifiedTimeStamp\":\"2019-08-12T18:52:29.449Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/82710bd8-f22b-4e9c-888c-2196956b8ff5\",\"uri\":\"/modelRepository/models/82710bd8-f22b-4e9c-888c-2196956b8ff5\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/82710bd8-f22b-4e9c-888c-2196956b8ff5\",\"uri\":\"/modelRepository/models/82710bd8-f22b-4e9c-888c-2196956b8ff5\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/82710bd8-f22b-4e9c-888c-2196956b8ff5/contents\",\"uri\":\"/modelRepository/models/82710bd8-f22b-4e9c-888c-2196956b8ff5/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/82710bd8-f22b-4e9c-888c-2196956b8ff5/variables\",\"uri\":\"/modelRepository/models/82710bd8-f22b-4e9c-888c-2196956b8ff5/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"82710bd8-f22b-4e9c-888c-2196956b8ff5\",\"name\":\"Boston Regression\",\"description\":\"LinearRegression(copy_X=True, fit_intercept=True, n_jobs=None, normalize=False)\",\"projectId\":\"2d2799a0-2bcf-459a-8822-4f8bfe840a39\",\"projectName\":\"Boston Housing\",\"projectVersionId\":\"f8fbae8f-8cf0-4ce3-873e-584da7982e3e\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"indirectFolderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"function\":\"Prediction\",\"algorithm\":\"Linear regression\",\"tool\":\"Python 3.6\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"USERNAME\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"challenger\",\"immutable\":false,\"modelVersionName\":\"2.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-08-12T18:52:06.974Z\",\"modifiedTimeStamp\":\"2019-08-12T18:52:16.108Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/8ba31b02-f140-41f9-ba3c-e6a16abc32f0\",\"uri\":\"/modelRepository/models/8ba31b02-f140-41f9-ba3c-e6a16abc32f0\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/8ba31b02-f140-41f9-ba3c-e6a16abc32f0\",\"uri\":\"/modelRepository/models/8ba31b02-f140-41f9-ba3c-e6a16abc32f0\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/8ba31b02-f140-41f9-ba3c-e6a16abc32f0/contents\",\"uri\":\"/modelRepository/models/8ba31b02-f140-41f9-ba3c-e6a16abc32f0/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/8ba31b02-f140-41f9-ba3c-e6a16abc32f0/variables\",\"uri\":\"/modelRepository/models/8ba31b02-f140-41f9-ba3c-e6a16abc32f0/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"8ba31b02-f140-41f9-ba3c-e6a16abc32f0\",\"name\":\"Iris Regression\",\"description\":\"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n                   intercept_scaling=1, l1_ratio=None, max_iter=100,\\n                   multi_class='warn', n_jobs=None, penalty='l2',\\n                   random_state=None, solver='warn', tol=0.0001, verbose=0,\\n                   warm_start=False)\",\"projectId\":\"33cf818b-5b95-4c06-a921-3de08fdda6cf\",\"projectName\":\"Iris\",\"projectVersionId\":\"e2bba180-b3aa-4f21-8ebc-eb89f5c0910d\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"indirectFolderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"function\":\"Classification\",\"algorithm\":\"Logistic regression\",\"tool\":\"Python 3.6\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"USERNAME\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"challenger\",\"immutable\":false,\"modelVersionName\":\"2.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-08-12T18:52:26.160Z\",\"modifiedTimeStamp\":\"2019-08-12T18:52:40.909Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/a236165a-f86d-4818-9bbd-36f7c2cdfb88\",\"uri\":\"/modelRepository/models/a236165a-f86d-4818-9bbd-36f7c2cdfb88\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/a236165a-f86d-4818-9bbd-36f7c2cdfb88\",\"uri\":\"/modelRepository/models/a236165a-f86d-4818-9bbd-36f7c2cdfb88\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/a236165a-f86d-4818-9bbd-36f7c2cdfb88/contents\",\"uri\":\"/modelRepository/models/a236165a-f86d-4818-9bbd-36f7c2cdfb88/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/a236165a-f86d-4818-9bbd-36f7c2cdfb88/variables\",\"uri\":\"/modelRepository/models/a236165a-f86d-4818-9bbd-36f7c2cdfb88/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"a236165a-f86d-4818-9bbd-36f7c2cdfb88\",\"name\":\"Decision Tree\",\"description\":\"DecisionTreeRegressor(criterion='mse', max_depth=None, max_features=None,\\n                      max_leaf_nodes=None, min_impurity_decrease=0.0,\\n                      min_impurity_split=None, min_samples_leaf=1,\\n                      min_samples_split=2, min_weight_fraction_leaf=0.0,\\n                      presort=False, random_state=None, splitter='best')\",\"projectId\":\"2d2799a0-2bcf-459a-8822-4f8bfe840a39\",\"projectName\":\"Boston Housing\",\"projectVersionId\":\"f8fbae8f-8cf0-4ce3-873e-584da7982e3e\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"indirectFolderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"function\":\"Prediction\",\"algorithm\":\"Decision tree\",\"tool\":\"Python 3.6\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"USERNAME\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"challenger\",\"immutable\":false,\"modelVersionName\":\"2.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-08-12T18:52:46.477Z\",\"modifiedTimeStamp\":\"2019-08-12T18:52:47.997Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/contents\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"}],\"version\":2,\"id\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"name\":\"Scikit Model\",\"description\":\"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n                   intercept_scaling=1, l1_ratio=None, max_iter=100,\\n                   multi_class='multinomial', n_jobs=None, penalty='l2',\\n                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,\\n                   warm_start=False)\",\"projectId\":\"d04c8fc6-c7ee-4d09-9d8c-2cf7bdfb1d53\",\"projectName\":\"Test Project\",\"projectVersionId\":\"f4630fc5-38ed-4ef4-a8ec-8ead7cde6556\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"indirectFolderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"function\":\"Classification\",\"algorithm\":\"Logistic regression\",\"tool\":\"Python 3.6\",\"scoreCodeType\":\"ds2MultiType\",\"modeler\":\"USERNAME\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"challenger\",\"immutable\":false,\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]}],\"limit\":20,\"version\":2}"
         },
         "headers": {
           "Cache-Control": [
@@ -134,7 +134,7 @@
             "application/vnd.sas.collection+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:02 GMT"
+            "Mon, 12 Aug 2019 18:54:55 GMT"
           ],
           "Expires": [
             "0"
@@ -172,7 +172,7 @@
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:03",
+      "recorded_at": "2019-08-12T18:54:55",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -196,12 +196,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5"
+        "uri": "https://hostname.com/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:00.822Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:02.609Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"type\":\"application/vnd.sas.models.model.summary\"},{\"method\":\"GET\",\"rel\":\"scoreCode\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/code\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/code\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/contents\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"type\":\"application/vnd.sas.models.model\",\"responseType\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\"},{\"method\":\"GET\",\"rel\":\"modelVersions\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/modelVersions\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/modelVersions\",\"type\":\"application/vnd.sas.collection\",\"responseItemType\":\"application/vnd.sas.models.version\"},{\"method\":\"POST\",\"rel\":\"addModelVersion\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/modelVersions\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/modelVersions\",\"type\":\"application/vnd.sas.models.model.version\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"POST\",\"rel\":\"setAsChampion\",\"href\":\"/modelRepository/projects/7197501a-efc0-4936-b36a-bcd867e1f1d4/champion?modelId=5a646904-7364-4425-9b25-85243df2c7e5\",\"uri\":\"/modelRepository/projects/7197501a-efc0-4936-b36a-bcd867e1f1d4/champion?modelId=5a646904-7364-4425-9b25-85243df2c7e5\",\"responseType\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"unsetAsChallenger\",\"href\":\"/modelRepository/projects/7197501a-efc0-4936-b36a-bcd867e1f1d4/challengers?modelId=5a646904-7364-4425-9b25-85243df2c7e5\",\"uri\":\"/modelRepository/projects/7197501a-efc0-4936-b36a-bcd867e1f1d4/challengers?modelId=5a646904-7364-4425-9b25-85243df2c7e5\",\"type\":\"application/vnd.sas.models.model\"}],\"version\":2,\"id\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"name\":\"Scikit Model\",\"description\":\"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n                   intercept_scaling=1, l1_ratio=None, max_iter=100,\\n                   multi_class='multinomial', n_jobs=None, penalty='l2',\\n                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,\\n                   warm_start=False)\",\"location\":\"/Model Repositories/Public\",\"projectId\":\"7197501a-efc0-4936-b36a-bcd867e1f1d4\",\"projectName\":\"Test Project\",\"projectVersionId\":\"26eeb625-ae8a-4a60-bef6-12ba4fb72718\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"indirectFolderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"function\":\"Classification\",\"algorithm\":\"Logistic regression\",\"tool\":\"Python 3.6\",\"scoreCodeType\":\"ds2MultiType\",\"trainCodeType\":\"Python\",\"modeler\":\"USERNAME\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"challenger\",\"immutable\":false,\"properties\":[{\"name\":\"C\",\"value\":\"1.0\",\"type\":\"string\"},{\"name\":\"class_weight\",\"type\":\"string\"},{\"name\":\"dual\",\"value\":\"false\",\"type\":\"string\"},{\"name\":\"fit_intercept\",\"value\":\"true\",\"type\":\"string\"},{\"name\":\"intercept_scaling\",\"value\":\"1\",\"type\":\"string\"},{\"name\":\"l1_ratio\",\"type\":\"string\"},{\"name\":\"max_iter\",\"value\":\"100\",\"type\":\"string\"},{\"name\":\"multi_class\",\"value\":\"multinomial\",\"type\":\"string\"},{\"name\":\"n_jobs\",\"type\":\"string\"},{\"name\":\"penalty\",\"value\":\"l2\",\"type\":\"string\"},{\"name\":\"random_state\",\"type\":\"string\"},{\"name\":\"solver\",\"value\":\"lbfgs\",\"type\":\"string\"},{\"name\":\"tol\",\"value\":\"0.0001\",\"type\":\"string\"},{\"name\":\"verbose\",\"value\":\"0\",\"type\":\"string\"},{\"name\":\"warm_start\",\"value\":\"false\",\"type\":\"string\"}],\"inputVariables\":[{\"creationTimeStamp\":\"2019-07-25T20:12:01.012Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:01.012Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/7624bd17-70ad-4610-8b7f-a6485b9f7c0a\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/7624bd17-70ad-4610-8b7f-a6485b9f7c0a\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/7624bd17-70ad-4610-8b7f-a6485b9f7c0a\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/7624bd17-70ad-4610-8b7f-a6485b9f7c0a\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/7624bd17-70ad-4610-8b7f-a6485b9f7c0a\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/7624bd17-70ad-4610-8b7f-a6485b9f7c0a\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/7624bd17-70ad-4610-8b7f-a6485b9f7c0a\"}],\"version\":2,\"id\":\"7624bd17-70ad-4610-8b7f-a6485b9f7c0a\",\"name\":\"PetalLength\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-07-25T20:12:01.013Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:01.013Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/9923ffa3-ec76-4703-a2cb-526e49aaa990\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/9923ffa3-ec76-4703-a2cb-526e49aaa990\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/9923ffa3-ec76-4703-a2cb-526e49aaa990\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/9923ffa3-ec76-4703-a2cb-526e49aaa990\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/9923ffa3-ec76-4703-a2cb-526e49aaa990\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/9923ffa3-ec76-4703-a2cb-526e49aaa990\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/9923ffa3-ec76-4703-a2cb-526e49aaa990\"}],\"version\":2,\"id\":\"9923ffa3-ec76-4703-a2cb-526e49aaa990\",\"name\":\"PetalWidth\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-07-25T20:12:01.012Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:01.012Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/5561d549-973f-4529-9e5f-a53a2cf33619\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/5561d549-973f-4529-9e5f-a53a2cf33619\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/5561d549-973f-4529-9e5f-a53a2cf33619\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/5561d549-973f-4529-9e5f-a53a2cf33619\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/5561d549-973f-4529-9e5f-a53a2cf33619\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/5561d549-973f-4529-9e5f-a53a2cf33619\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/5561d549-973f-4529-9e5f-a53a2cf33619\"}],\"version\":2,\"id\":\"5561d549-973f-4529-9e5f-a53a2cf33619\",\"name\":\"SepalLength\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-07-25T20:12:01.012Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:01.012Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/ccaacc7c-70e0-4ae9-bb76-ad8fa318b4b3\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/ccaacc7c-70e0-4ae9-bb76-ad8fa318b4b3\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/ccaacc7c-70e0-4ae9-bb76-ad8fa318b4b3\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/ccaacc7c-70e0-4ae9-bb76-ad8fa318b4b3\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/ccaacc7c-70e0-4ae9-bb76-ad8fa318b4b3\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/ccaacc7c-70e0-4ae9-bb76-ad8fa318b4b3\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/ccaacc7c-70e0-4ae9-bb76-ad8fa318b4b3\"}],\"version\":2,\"id\":\"ccaacc7c-70e0-4ae9-bb76-ad8fa318b4b3\",\"name\":\"SepalWidth\",\"role\":\"input\",\"type\":\"decimal\"}],\"outputVariables\":[{\"creationTimeStamp\":\"2019-07-25T20:12:01.013Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:01.013Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/bf9644c4-affa-4ed1-9f42-095de02fbf2b\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/bf9644c4-affa-4ed1-9f42-095de02fbf2b\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/bf9644c4-affa-4ed1-9f42-095de02fbf2b\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/bf9644c4-affa-4ed1-9f42-095de02fbf2b\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/bf9644c4-affa-4ed1-9f42-095de02fbf2b\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/bf9644c4-affa-4ed1-9f42-095de02fbf2b\",\"uri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5/variables/bf9644c4-affa-4ed1-9f42-095de02fbf2b\"}],\"version\":2,\"id\":\"bf9644c4-affa-4ed1-9f42-095de02fbf2b\",\"name\":\"var1\",\"role\":\"output\",\"type\":\"string\"}],\"modelVersions\":[],\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:52:46.477Z\",\"modifiedTimeStamp\":\"2019-08-12T18:52:47.997Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"type\":\"application/vnd.sas.models.model\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"type\":\"application/vnd.sas.models.model.summary\"},{\"method\":\"GET\",\"rel\":\"scoreCode\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/code\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/code\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"contents\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/contents\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/contents\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.model.content.summary\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"type\":\"application/vnd.sas.models.model\",\"responseType\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\"},{\"method\":\"GET\",\"rel\":\"modelVersions\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/modelVersions\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/modelVersions\",\"type\":\"application/vnd.sas.collection\",\"responseItemType\":\"application/vnd.sas.models.version\"},{\"method\":\"POST\",\"rel\":\"addModelVersion\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/modelVersions\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/modelVersions\",\"type\":\"application/vnd.sas.models.model.version\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"POST\",\"rel\":\"setAsChampion\",\"href\":\"/modelRepository/projects/d04c8fc6-c7ee-4d09-9d8c-2cf7bdfb1d53/champion?modelId=edd02b97-f374-4106-b9bc-fef389d703fc\",\"uri\":\"/modelRepository/projects/d04c8fc6-c7ee-4d09-9d8c-2cf7bdfb1d53/champion?modelId=edd02b97-f374-4106-b9bc-fef389d703fc\",\"responseType\":\"application/vnd.sas.models.model\"},{\"method\":\"DELETE\",\"rel\":\"unsetAsChallenger\",\"href\":\"/modelRepository/projects/d04c8fc6-c7ee-4d09-9d8c-2cf7bdfb1d53/challengers?modelId=edd02b97-f374-4106-b9bc-fef389d703fc\",\"uri\":\"/modelRepository/projects/d04c8fc6-c7ee-4d09-9d8c-2cf7bdfb1d53/challengers?modelId=edd02b97-f374-4106-b9bc-fef389d703fc\",\"type\":\"application/vnd.sas.models.model\"}],\"version\":2,\"id\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"name\":\"Scikit Model\",\"description\":\"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n                   intercept_scaling=1, l1_ratio=None, max_iter=100,\\n                   multi_class='multinomial', n_jobs=None, penalty='l2',\\n                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,\\n                   warm_start=False)\",\"location\":\"/Model Repositories/Public\",\"projectId\":\"d04c8fc6-c7ee-4d09-9d8c-2cf7bdfb1d53\",\"projectName\":\"Test Project\",\"projectVersionId\":\"f4630fc5-38ed-4ef4-a8ec-8ead7cde6556\",\"projectVersionName\":\"Version 1\",\"projectVersionNum\":\"1.0\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"indirectFolderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"function\":\"Classification\",\"algorithm\":\"Logistic regression\",\"tool\":\"Python 3.6\",\"scoreCodeType\":\"ds2MultiType\",\"trainCodeType\":\"Python\",\"modeler\":\"USERNAME\",\"suggestedChampion\":false,\"candidateChampion\":false,\"role\":\"challenger\",\"immutable\":false,\"properties\":[{\"name\":\"C\",\"value\":\"1.0\",\"type\":\"string\"},{\"name\":\"class_weight\",\"value\":\"None\",\"type\":\"string\"},{\"name\":\"dual\",\"value\":\"False\",\"type\":\"string\"},{\"name\":\"fit_intercept\",\"value\":\"True\",\"type\":\"string\"},{\"name\":\"intercept_scaling\",\"value\":\"1\",\"type\":\"string\"},{\"name\":\"l1_ratio\",\"value\":\"None\",\"type\":\"string\"},{\"name\":\"max_iter\",\"value\":\"100\",\"type\":\"string\"},{\"name\":\"multi_class\",\"value\":\"multinomial\",\"type\":\"string\"},{\"name\":\"n_jobs\",\"value\":\"None\",\"type\":\"string\"},{\"name\":\"penalty\",\"value\":\"l2\",\"type\":\"string\"},{\"name\":\"random_state\",\"value\":\"None\",\"type\":\"string\"},{\"name\":\"solver\",\"value\":\"lbfgs\",\"type\":\"string\"},{\"name\":\"tol\",\"value\":\"0.0001\",\"type\":\"string\"},{\"name\":\"verbose\",\"value\":\"0\",\"type\":\"string\"},{\"name\":\"warm_start\",\"value\":\"False\",\"type\":\"string\"}],\"inputVariables\":[{\"creationTimeStamp\":\"2019-08-12T18:52:46.629Z\",\"modifiedTimeStamp\":\"2019-08-12T18:52:46.629Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/a6e47bbe-4107-4460-aac4-7b2d2807b140\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/a6e47bbe-4107-4460-aac4-7b2d2807b140\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/a6e47bbe-4107-4460-aac4-7b2d2807b140\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/a6e47bbe-4107-4460-aac4-7b2d2807b140\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/a6e47bbe-4107-4460-aac4-7b2d2807b140\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/a6e47bbe-4107-4460-aac4-7b2d2807b140\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/a6e47bbe-4107-4460-aac4-7b2d2807b140\"}],\"version\":2,\"id\":\"a6e47bbe-4107-4460-aac4-7b2d2807b140\",\"name\":\"PetalLength\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-08-12T18:52:46.629Z\",\"modifiedTimeStamp\":\"2019-08-12T18:52:46.629Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/c1da12b5-b5cd-41fb-89eb-c2c3950f282d\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/c1da12b5-b5cd-41fb-89eb-c2c3950f282d\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/c1da12b5-b5cd-41fb-89eb-c2c3950f282d\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/c1da12b5-b5cd-41fb-89eb-c2c3950f282d\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/c1da12b5-b5cd-41fb-89eb-c2c3950f282d\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/c1da12b5-b5cd-41fb-89eb-c2c3950f282d\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/c1da12b5-b5cd-41fb-89eb-c2c3950f282d\"}],\"version\":2,\"id\":\"c1da12b5-b5cd-41fb-89eb-c2c3950f282d\",\"name\":\"PetalWidth\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-08-12T18:52:46.629Z\",\"modifiedTimeStamp\":\"2019-08-12T18:52:46.629Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/28e35915-a28e-4d6b-8bf4-ee858da75e6d\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/28e35915-a28e-4d6b-8bf4-ee858da75e6d\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/28e35915-a28e-4d6b-8bf4-ee858da75e6d\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/28e35915-a28e-4d6b-8bf4-ee858da75e6d\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/28e35915-a28e-4d6b-8bf4-ee858da75e6d\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/28e35915-a28e-4d6b-8bf4-ee858da75e6d\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/28e35915-a28e-4d6b-8bf4-ee858da75e6d\"}],\"version\":2,\"id\":\"28e35915-a28e-4d6b-8bf4-ee858da75e6d\",\"name\":\"SepalLength\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-08-12T18:52:46.629Z\",\"modifiedTimeStamp\":\"2019-08-12T18:52:46.629Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/69064dc9-e41f-4209-88e7-298cba535c8e\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/69064dc9-e41f-4209-88e7-298cba535c8e\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/69064dc9-e41f-4209-88e7-298cba535c8e\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/69064dc9-e41f-4209-88e7-298cba535c8e\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/69064dc9-e41f-4209-88e7-298cba535c8e\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/69064dc9-e41f-4209-88e7-298cba535c8e\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/69064dc9-e41f-4209-88e7-298cba535c8e\"}],\"version\":2,\"id\":\"69064dc9-e41f-4209-88e7-298cba535c8e\",\"name\":\"SepalWidth\",\"role\":\"input\",\"type\":\"decimal\"},{\"creationTimeStamp\":\"2019-08-12T18:52:46.629Z\",\"modifiedTimeStamp\":\"2019-08-12T18:52:46.629Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/f0a0aa7a-dc85-4a05-bb0d-a5da7b2971ad\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/f0a0aa7a-dc85-4a05-bb0d-a5da7b2971ad\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/f0a0aa7a-dc85-4a05-bb0d-a5da7b2971ad\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/f0a0aa7a-dc85-4a05-bb0d-a5da7b2971ad\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/f0a0aa7a-dc85-4a05-bb0d-a5da7b2971ad\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/f0a0aa7a-dc85-4a05-bb0d-a5da7b2971ad\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/f0a0aa7a-dc85-4a05-bb0d-a5da7b2971ad\"}],\"version\":2,\"id\":\"f0a0aa7a-dc85-4a05-bb0d-a5da7b2971ad\",\"name\":\"var1\",\"role\":\"input\",\"type\":\"string\"}],\"outputVariables\":[{\"creationTimeStamp\":\"2019-08-12T18:52:46.629Z\",\"modifiedTimeStamp\":\"2019-08-12T18:52:46.629Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/7a039d1c-078f-4fe9-b393-f8b8c04e9409\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.variable\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/7a039d1c-078f-4fe9-b393-f8b8c04e9409\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/7a039d1c-078f-4fe9-b393-f8b8c04e9409\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/7a039d1c-078f-4fe9-b393-f8b8c04e9409\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/7a039d1c-078f-4fe9-b393-f8b8c04e9409\",\"type\":\"application/vnd.sas.models.variable\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/7a039d1c-078f-4fe9-b393-f8b8c04e9409\",\"uri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc/variables/7a039d1c-078f-4fe9-b393-f8b8c04e9409\"}],\"version\":2,\"id\":\"7a039d1c-078f-4fe9-b393-f8b8c04e9409\",\"name\":\"var1\",\"role\":\"output\",\"type\":\"string\"}],\"modelVersions\":[],\"modelVersionName\":\"1.0\",\"retrainable\":false,\"tags\":[],\"globalTags\":[]}"
         },
         "headers": {
           "Cache-Control": [
@@ -217,10 +217,10 @@
             "application/vnd.sas.models.model+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:03 GMT"
+            "Mon, 12 Aug 2019 18:54:55 GMT"
           ],
           "ETag": [
-            "\"jyj44x4h\""
+            "\"jz8r8cfx\""
           ],
           "Expires": [
             "0"
@@ -229,7 +229,7 @@
             "timeout=5, max=98"
           ],
           "Last-Modified": [
-            "Thu, 25 Jul 2019 20:12:02 GMT"
+            "Mon, 12 Aug 2019 18:52:47 GMT"
           ],
           "Pragma": [
             "no-cache"
@@ -257,15 +257,187 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5"
+        "url": "https://hostname.com/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:04",
+      "recorded_at": "2019-08-12T18:54:55",
       "request": {
         "body": {
           "encoding": "utf-8",
-          "string": "{\"name\": \"Scikit Model\", \"notes\": \"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n                   intercept_scaling=1, l1_ratio=None, max_iter=100,\\n                   multi_class='multinomial', n_jobs=None, penalty='l2',\\n                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,\\n                   warm_start=False)\", \"modelContents\": [{\"modelName\": \"ScikitModel\", \"sourceUri\": \"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\", \"publishLevel\": \"model\"}], \"destinationName\": \"maslocal\"}"
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/destinations?filter=eq(name,%20%22maslocal%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations?start=0&limit=100\",\"uri\":\"/modelPublish/destinations?start=0&limit=100\",\"type\":\"application/vnd.sas.collection+json\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish\",\"uri\":\"/modelPublish\",\"type\":\"application/vnd.sas.api\"},{\"method\":\"GET\",\"rel\":\"destinations\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"responseType\":\"application/vnd.sas.collection+json\"},{\"method\":\"POST\",\"rel\":\"createDestination\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination\",\"responseType\":\"application/vnd.sas.models.publishing.destination+json\"},{\"method\":\"POST\",\"rel\":\"destinationCAS\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.cas\",\"responseType\":\"application/vnd.sas.models.publishing.destination.cas+json\"},{\"method\":\"POST\",\"rel\":\"destinationTeradata\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.teradata\",\"responseType\":\"application/vnd.sas.models.publishing.destination.teradata+json\"},{\"method\":\"POST\",\"rel\":\"destinationHadoop\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.hadoop\",\"responseType\":\"application/vnd.sas.models.publishing.destination.hadoop+json\"}],\"name\":\"items\",\"start\":0,\"count\":1,\"items\":[{\"creationTimeStamp\":\"2019-05-24T21:38:55.230Z\",\"modifiedTimeStamp\":\"2019-05-24T21:38:55.230Z\",\"createdBy\":\"sas.microanalyticScore\",\"modifiedBy\":\"sas.microanalyticScore\",\"id\":\"a4471f13-126a-4506-9742-43e57b221396\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations/maslocal\",\"uri\":\"/modelPublish/destinations/maslocal\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/destinations/maslocal\",\"uri\":\"/modelPublish/destinations/maslocal\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelPublish/destinations/maslocal\",\"uri\":\"/modelPublish/destinations/maslocal\"}],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"}],\"limit\":100,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Mon, 12 Aug 2019 18:54:56 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=97"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/destinations?filter=eq(name,%20%22maslocal%22)"
+      }
+    },
+    {
+      "recorded_at": "2019-08-12T18:54:56",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/destinations/maslocal"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-05-24T21:38:55.230Z\",\"modifiedTimeStamp\":\"2019-05-24T21:38:55.230Z\",\"createdBy\":\"sas.microanalyticScore\",\"modifiedBy\":\"sas.microanalyticScore\",\"id\":\"a4471f13-126a-4506-9742-43e57b221396\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations/maslocal\",\"uri\":\"/modelPublish/destinations/maslocal\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/destinations/maslocal\",\"uri\":\"/modelPublish/destinations/maslocal\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelPublish/destinations/maslocal\",\"uri\":\"/modelPublish/destinations/maslocal\"}],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.destination+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Mon, 12 Aug 2019 18:54:56 GMT"
+          ],
+          "ETag": [
+            "\"jw2lxtvi\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=96"
+          ],
+          "Last-Modified": [
+            "Fri, 24 May 2019 21:38:55 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/destinations/maslocal"
+      }
+    },
+    {
+      "recorded_at": "2019-08-12T18:54:56",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"name\": \"Scikit Model\", \"notes\": \"LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\\n                   intercept_scaling=1, l1_ratio=None, max_iter=100,\\n                   multi_class='multinomial', n_jobs=None, penalty='l2',\\n                   random_state=None, solver='lbfgs', tol=0.0001, verbose=0,\\n                   warm_start=False)\", \"modelContents\": [{\"modelName\": \"ScikitModel\", \"sourceUri\": \"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\", \"publishLevel\": \"model\"}], \"destinationName\": \"maslocal\"}"
         },
         "headers": {
           "Accept": [
@@ -291,12 +463,12 @@
           ]
         },
         "method": "POST",
-        "uri": "https://hostname.com/modelManagement/publish?force=False"
+        "uri": "https://hostname.com/modelManagement/publish?force=False&reloadModelTable=False"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.749Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"running\",\"properties\":{\"masModules\":null},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.149Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"running\",\"properties\":{\"masModules\":null},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -312,19 +484,19 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:04 GMT"
+            "Mon, 12 Aug 2019 18:54:57 GMT"
           ],
           "ETag": [
-            "\"jyj44yrx\""
+            "\"jz8rb43h\""
           ],
           "Expires": [
             "0"
           ],
           "Keep-Alive": [
-            "timeout=5, max=97"
+            "timeout=5, max=95"
           ],
           "Last-Modified": [
-            "Thu, 25 Jul 2019 20:12:04 GMT"
+            "Mon, 12 Aug 2019 18:54:57 GMT"
           ],
           "Pragma": [
             "no-cache"
@@ -352,11 +524,11 @@
           "code": 201,
           "message": ""
         },
-        "url": "https://hostname.com/modelManagement/publish?force=False"
+        "url": "https://hostname.com/modelManagement/publish?force=False&reloadModelTable=False"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:05",
+      "recorded_at": "2019-08-12T18:54:57",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -380,12 +552,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -401,173 +573,7 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:04 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=96"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
-      }
-    },
-    {
-      "recorded_at": "2019-07-25T20:12:05",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
-          ],
-          "Date": [
-            "Thu, 25 Jul 2019 20:12:05 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=95"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
-      }
-    },
-    {
-      "recorded_at": "2019-07-25T20:12:06",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
-          ],
-          "Date": [
-            "Thu, 25 Jul 2019 20:12:05 GMT"
+            "Mon, 12 Aug 2019 18:54:57 GMT"
           ],
           "Expires": [
             "0"
@@ -601,11 +607,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:07",
+      "recorded_at": "2019-08-12T18:54:58",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -629,12 +635,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -650,7 +656,7 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:07 GMT"
+            "Mon, 12 Aug 2019 18:54:58 GMT"
           ],
           "Expires": [
             "0"
@@ -684,11 +690,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:07",
+      "recorded_at": "2019-08-12T18:54:58",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -712,12 +718,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -733,7 +739,7 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:07 GMT"
+            "Mon, 12 Aug 2019 18:54:58 GMT"
           ],
           "Expires": [
             "0"
@@ -767,11 +773,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:08",
+      "recorded_at": "2019-08-12T18:54:59",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -795,12 +801,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -816,7 +822,7 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:08 GMT"
+            "Mon, 12 Aug 2019 18:54:59 GMT"
           ],
           "Expires": [
             "0"
@@ -850,11 +856,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:08",
+      "recorded_at": "2019-08-12T18:54:59",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -878,12 +884,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -899,7 +905,7 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:08 GMT"
+            "Mon, 12 Aug 2019 18:54:59 GMT"
           ],
           "Expires": [
             "0"
@@ -933,11 +939,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:09",
+      "recorded_at": "2019-08-12T18:55:00",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -961,12 +967,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -982,7 +988,7 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:09 GMT"
+            "Mon, 12 Aug 2019 18:55:00 GMT"
           ],
           "Expires": [
             "0"
@@ -1016,11 +1022,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:09",
+      "recorded_at": "2019-08-12T18:55:00",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -1044,12 +1050,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -1065,7 +1071,7 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:09 GMT"
+            "Mon, 12 Aug 2019 18:55:00 GMT"
           ],
           "Expires": [
             "0"
@@ -1099,11 +1105,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:10",
+      "recorded_at": "2019-08-12T18:55:01",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -1127,12 +1133,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -1148,7 +1154,7 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:10 GMT"
+            "Mon, 12 Aug 2019 18:55:01 GMT"
           ],
           "Expires": [
             "0"
@@ -1182,11 +1188,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:11",
+      "recorded_at": "2019-08-12T18:55:01",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -1210,12 +1216,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -1231,7 +1237,7 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:10 GMT"
+            "Mon, 12 Aug 2019 18:55:01 GMT"
           ],
           "Expires": [
             "0"
@@ -1265,11 +1271,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:11",
+      "recorded_at": "2019-08-12T18:55:02",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -1293,12 +1299,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -1314,7 +1320,7 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:11 GMT"
+            "Mon, 12 Aug 2019 18:55:02 GMT"
           ],
           "Expires": [
             "0"
@@ -1348,11 +1354,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:12",
+      "recorded_at": "2019-08-12T18:55:03",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -1376,92 +1382,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "close"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
-          ],
-          "Date": [
-            "Thu, 25 Jul 2019 20:12:11 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
-      }
-    },
-    {
-      "recorded_at": "2019-07-25T20:12:13",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.590Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.761Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:04.591Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"6defbcc6-cf85-456c-ae60-5c8e2dcb0f1f\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/5a646904-7364-4425-9b25-85243df2c7e5\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"publishLevel\":\"model\",\"state\":\"completed\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\",\"uri\":\"/microanalyticScore/modules/scikitmodel\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -1477,13 +1403,13 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:13 GMT"
+            "Mon, 12 Aug 2019 18:55:02 GMT"
           ],
           "Expires": [
             "0"
           ],
           "Keep-Alive": [
-            "timeout=5, max=100"
+            "timeout=5, max=84"
           ],
           "Pragma": [
             "no-cache"
@@ -1511,11 +1437,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc"
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:13",
+      "recorded_at": "2019-08-12T18:55:03",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -1539,12 +1465,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log"
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-07-25T20:12:04.806Z\",\"modifiedTimeStamp\":\"2019-07-25T20:12:13.022Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"uri\":\"/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"0b657a83-22f7-4bdf-afec-bc52900182a6\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"5a646904-7364-4425-9b25-85243df2c7e5\",\"modelName\":\"ScikitModel\",\"log\":\"SUCCESS==={\\\"links\\\":[{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"up\\\",\\\"href\\\":\\\"/microanalyticScore/jobs\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs\\\",\\\"type\\\":\\\"application/vnd.sas.collection\\\",\\\"itemType\\\":\\\"application/vnd.sas.microanalytic.job\\\"},{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"self\\\",\\\"href\\\":\\\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\\\",\\\"type\\\":\\\"application/vnd.sas.microanalytic.job\\\"},{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"source\\\",\\\"href\\\":\\\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918/source\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918/source\\\",\\\"type\\\":\\\"application/vnd.sas.microanalytic.module.source\\\"},{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"submodules\\\",\\\"href\\\":\\\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918/submodules\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918/submodules\\\",\\\"type\\\":\\\"application/vnd.sas.collection\\\",\\\"itemType\\\":\\\"application/vnd.sas.microanalytic.submodule\\\"},{\\\"method\\\":\\\"DELETE\\\",\\\"rel\\\":\\\"delete\\\",\\\"href\\\":\\\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs/285c2501-f602-40bf-868c-97885475f918\\\"},{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"module\\\",\\\"href\\\":\\\"/microanalyticScore/modules/scikitmodel\\\",\\\"uri\\\":\\\"/microanalyticScore/modules/scikitmodel\\\",\\\"type\\\":\\\"application/vnd.sas.microanalytic.module\\\"}],\\\"version\\\":1,\\\"createdBy\\\":\\\"USERNAME\\\",\\\"creationTimeStamp\\\":\\\"2019-07-25T20:12:04.692Z\\\",\\\"modifiedBy\\\":\\\"USERNAME\\\",\\\"modifiedTimeStamp\\\":\\\"2019-07-25T20:12:12.312Z\\\",\\\"id\\\":\\\"285c2501-f602-40bf-868c-97885475f918\\\",\\\"moduleId\\\":\\\"scikitmodel\\\",\\\"state\\\":\\\"completed\\\",\\\"errors\\\":[]}\"}"
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -1560,13 +1486,13 @@
             "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:13 GMT"
+            "Mon, 12 Aug 2019 18:55:03 GMT"
           ],
           "Expires": [
             "0"
           ],
           "Keep-Alive": [
-            "timeout=5, max=99"
+            "timeout=5, max=83"
           ],
           "Pragma": [
             "no-cache"
@@ -1594,11 +1520,592 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/modelPublish/models/2dbf4ffa-b961-4a31-93b8-7e1adc45e7dc/log"
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:13",
+      "recorded_at": "2019-08-12T18:55:04",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Mon, 12 Aug 2019 18:55:03 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=82"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
+      }
+    },
+    {
+      "recorded_at": "2019-08-12T18:55:04",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Mon, 12 Aug 2019 18:55:04 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=81"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
+      }
+    },
+    {
+      "recorded_at": "2019-08-12T18:55:05",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Mon, 12 Aug 2019 18:55:04 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=80"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
+      }
+    },
+    {
+      "recorded_at": "2019-08-12T18:55:05",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Mon, 12 Aug 2019 18:55:05 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=79"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
+      }
+    },
+    {
+      "recorded_at": "2019-08-12T18:55:06",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"pending\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Mon, 12 Aug 2019 18:55:05 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=78"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
+      }
+    },
+    {
+      "recorded_at": "2019-08-12T18:55:06",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.151Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"publishName\":\"ScikitModel\",\"publishType\":\"mas\",\"verified\":false,\"destinationName\":\"maslocal\",\"destination\":{\"creationTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"modifiedTimeStamp\":\"2019-08-12T18:54:57.117Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4496c777-5cbe-48c0-ab17-25598979ebf0\",\"links\":[],\"version\":1,\"name\":\"maslocal\",\"description\":\"The default publishing destination for the Micro Analytic Score service.\",\"destinationType\":\"microAnalyticService\"},\"principalId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"codeType\":\"ds2\",\"analyticStoreUri\":[],\"sourceUri\":\"/modelRepository/models/edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"publishLevel\":\"model\",\"state\":\"completed\",\"properties\":{\"masModules\":[{\"modelName\":\"ScikitModel\",\"jobUri\":\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\",\"uri\":\"/microanalyticScore/modules/scikitmodel\"}]},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models\",\"uri\":\"/modelPublish/models\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"publishingLog\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"name\":\"ScikitModel\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Mon, 12 Aug 2019 18:55:07 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=77"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9"
+      }
+    },
+    {
+      "recorded_at": "2019-08-12T18:55:07",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2019-08-12T18:54:57.210Z\",\"modifiedTimeStamp\":\"2019-08-12T18:55:07.154Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9\",\"type\":\"application/vnd.sas.models.publishing.publish\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"uri\":\"/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log\",\"type\":\"application/json\"}],\"version\":1,\"id\":\"6737f6d3-bbab-42ed-a2c7-352a4da20577\",\"publishName\":\"Scikit Model\",\"destinationName\":\"maslocal\",\"modelId\":\"edd02b97-f374-4106-b9bc-fef389d703fc\",\"modelName\":\"ScikitModel\",\"log\":\"SUCCESS==={\\\"links\\\":[{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"up\\\",\\\"href\\\":\\\"/microanalyticScore/jobs\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs\\\",\\\"type\\\":\\\"application/vnd.sas.collection\\\",\\\"itemType\\\":\\\"application/vnd.sas.microanalytic.job\\\"},{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"self\\\",\\\"href\\\":\\\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\\\",\\\"type\\\":\\\"application/vnd.sas.microanalytic.job\\\"},{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"source\\\",\\\"href\\\":\\\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5/source\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5/source\\\",\\\"type\\\":\\\"application/vnd.sas.microanalytic.module.source\\\"},{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"submodules\\\",\\\"href\\\":\\\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5/submodules\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5/submodules\\\",\\\"type\\\":\\\"application/vnd.sas.collection\\\",\\\"itemType\\\":\\\"application/vnd.sas.microanalytic.submodule\\\"},{\\\"method\\\":\\\"DELETE\\\",\\\"rel\\\":\\\"delete\\\",\\\"href\\\":\\\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\\\",\\\"uri\\\":\\\"/microanalyticScore/jobs/f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\\\"},{\\\"method\\\":\\\"GET\\\",\\\"rel\\\":\\\"module\\\",\\\"href\\\":\\\"/microanalyticScore/modules/scikitmodel\\\",\\\"uri\\\":\\\"/microanalyticScore/modules/scikitmodel\\\",\\\"type\\\":\\\"application/vnd.sas.microanalytic.module\\\"}],\\\"version\\\":1,\\\"createdBy\\\":\\\"USERNAME\\\",\\\"creationTimeStamp\\\":\\\"2019-08-12T18:54:57.154Z\\\",\\\"modifiedBy\\\":\\\"USERNAME\\\",\\\"modifiedTimeStamp\\\":\\\"2019-08-12T18:55:06.606Z\\\",\\\"id\\\":\\\"f9c80c17-33b7-46b1-a5ab-46fd87bac0b5\\\",\\\"moduleId\\\":\\\"scikitmodel\\\",\\\"state\\\":\\\"completed\\\",\\\"errors\\\":[]}\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.publish+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Mon, 12 Aug 2019 18:55:07 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=76"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelPublish/models/068bd6de-e922-45cb-a8e4-0557f6ab2fa9/log"
+      }
+    },
+    {
+      "recorded_at": "2019-08-12T18:55:07",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -1627,7 +2134,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"source\",\"href\":\"/microanalyticScore/modules/scikitmodel/source\",\"uri\":\"/microanalyticScore/modules/scikitmodel/source\",\"type\":\"application/vnd.sas.microanalytic.module.source\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/scikitmodel/submodules\",\"uri\":\"/microanalyticScore/modules/scikitmodel/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-07-25T20:12:12.295Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-07-25T20:12:12.295Z\",\"id\":\"scikitmodel\",\"name\":\"ScikitModel\",\"revision\":0,\"scope\":\"public\",\"language\":\"ds2\",\"stepIds\":[\"score\"],\"warnings\":[]}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"source\",\"href\":\"/microanalyticScore/modules/scikitmodel/source\",\"uri\":\"/microanalyticScore/modules/scikitmodel/source\",\"type\":\"application/vnd.sas.microanalytic.module.source\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/scikitmodel/submodules\",\"uri\":\"/microanalyticScore/modules/scikitmodel/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-08-12T18:55:06.598Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-08-12T18:55:06.598Z\",\"id\":\"scikitmodel\",\"name\":\"ScikitModel\",\"revision\":0,\"scope\":\"public\",\"language\":\"ds2\",\"stepIds\":[\"score\"],\"warnings\":[]}"
         },
         "headers": {
           "Cache-Control": [
@@ -1643,19 +2150,19 @@
             "application/vnd.sas.microanalytic.module+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:12 GMT"
+            "Mon, 12 Aug 2019 18:55:07 GMT"
           ],
           "ETag": [
-            "\"jyj454lj\""
+            "\"jz8rbbdy\""
           ],
           "Expires": [
             "0"
           ],
           "Keep-Alive": [
-            "timeout=5, max=98"
+            "timeout=5, max=75"
           ],
           "Last-Modified": [
-            "Thu, 25 Jul 2019 20:12:12 GMT"
+            "Mon, 12 Aug 2019 18:55:06 GMT"
           ],
           "Location": [
             "/microanalyticScore/modules/scikitmodel"
@@ -1690,7 +2197,7 @@
       }
     },
     {
-      "recorded_at": "2019-07-25T20:12:13",
+      "recorded_at": "2019-08-12T18:55:07",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -1719,7 +2226,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"type\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"POST\",\"rel\":\"execute\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.microanalytic.module.step.output\"},{\"method\":\"POST\",\"rel\":\"validateStepInput\",\"href\":\"/microanalyticScore/commons/validations/modules/scikitmodel/steps/score\",\"uri\":\"/microanalyticScore/commons/validations/modules/scikitmodel/steps/score\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.validation\"}],\"version\":1,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-07-25T20:12:12.295Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-07-25T20:12:12.295Z\",\"id\":\"score\",\"moduleId\":\"scikitmodel\",\"inputs\":[{\"name\":\"sepallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"sepalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0}],\"outputs\":[{\"name\":\"var1\",\"type\":\"string\",\"dim\":0,\"size\":0},{\"name\":\"rc\",\"type\":\"integer\",\"dim\":0,\"size\":0},{\"name\":\"msg\",\"type\":\"string\",\"dim\":0,\"size\":0}]}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"type\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"POST\",\"rel\":\"execute\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.microanalytic.module.step.output\"},{\"method\":\"POST\",\"rel\":\"validateStepInput\",\"href\":\"/microanalyticScore/commons/validations/modules/scikitmodel/steps/score\",\"uri\":\"/microanalyticScore/commons/validations/modules/scikitmodel/steps/score\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.validation\"}],\"version\":1,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-08-12T18:55:06.598Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-08-12T18:55:06.598Z\",\"id\":\"score\",\"moduleId\":\"scikitmodel\",\"inputs\":[{\"name\":\"sepallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"sepalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0}],\"outputs\":[{\"name\":\"var1\",\"type\":\"string\",\"dim\":0,\"size\":0},{\"name\":\"rc\",\"type\":\"integer\",\"dim\":0,\"size\":0},{\"name\":\"msg\",\"type\":\"string\",\"dim\":0,\"size\":0}]}"
         },
         "headers": {
           "Cache-Control": [
@@ -1735,19 +2242,19 @@
             "application/vnd.sas.microanalytic.module.step+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 25 Jul 2019 20:12:12 GMT"
+            "Mon, 12 Aug 2019 18:55:07 GMT"
           ],
           "ETag": [
-            "\"jyj454lj\""
+            "\"jz8rbbdy\""
           ],
           "Expires": [
             "0"
           ],
           "Keep-Alive": [
-            "timeout=5, max=97"
+            "timeout=5, max=74"
           ],
           "Last-Modified": [
-            "Thu, 25 Jul 2019 20:12:12 GMT"
+            "Mon, 12 Aug 2019 18:55:06 GMT"
           ],
           "Location": [
             "/microanalyticScore/modules/scikitmodel/steps/score"

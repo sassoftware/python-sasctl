@@ -7,7 +7,17 @@ Unreleased
 
 **Bugfixes**
 - Fixed an issue where `model_repository` did not find models by name once pagination limits were reached. 
-
+ 
+v1.1.2 (2019-8-12)
+-----------------
+**Improvements**
+ - CAS model table automatically reloaded on `publish_model` task.
+ 
+**Bugfixes**
+ - Fixed DS2 score code for CAS that was generated when registering a Python model.
+ - `PyMAS.score_code(dest='ESP')` corrected to `dest='EP'`
+ - Fixed an issue where long user-defined properties prevented model registration.
+ 
  
 v1.1.1 (2019-8-6)
 -----------------
