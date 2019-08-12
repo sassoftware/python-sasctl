@@ -156,9 +156,6 @@ def register_model(model, name, project, repository=None, input=None,
             files.append({'name': 'dmcas_packagescorecode.sas',
                           'file': mas_module.score_code(),
                           'role': 'Score Code'})
-            files.append({'name': 'dmcas_espscorecode.sas',
-                          'file': mas_module.score_code(dest='ESP'),
-                          'role': 'Score Code'})
             files.append({'name': 'dmcas_epscorecode.sas',
                           'file': mas_module.score_code(dest='CAS'),
                           'role': 'score'})
