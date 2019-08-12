@@ -3,7 +3,8 @@ Unreleased
 ----------
 **Bugfixes**
  - Fixed DS2 score code for CAS that was generated when registering a Python model.
-
+ - `PyMAS.score_code(dest='ESP')` corrected to `dest='EP'`
+ 
  
 v1.1.1 (2019-8-6)
 -----------------

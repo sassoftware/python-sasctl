@@ -248,7 +248,7 @@ def publish_model(model, destination, code=None, max_retries=60,
     def submit_request():
         # Submit a publishing request
         if code is None:
-            publish_req = mm.publish_model(model, destination, force=replace, **kwargs)
+            publish_req = mm.publish_model(model, destination, **kwargs)
         else:
             publish_req = mp.publish_model(model, destination,
                                            code=code, **kwargs)
@@ -262,7 +262,9 @@ def publish_model(model, destination, code=None, max_retries=60,
     # Submit and wait for status
     job = submit_request()
 
-    if job.state.lower() == 'completed' and job.destination.destinationType != 'microAnalyticService':
+    # If model was successfully published and it isn't a MAS module, we're done
+    if job.state.lower() == 'completed' \
+            and job.destination.destinationType != 'microAnalyticService':
             return request_link(job,'self')
 
     # If MAS publish failed and replace=True, attempt to delete the module
