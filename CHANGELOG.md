@@ -4,7 +4,7 @@ Unreleased
 
  - 
  
-v1.1.2 (2019-8-6)
+v1.1.2 (2019-8-12)
 -----------------
 **Improvements**
  - CAS model table automatically reloaded on `publish_model` task.
