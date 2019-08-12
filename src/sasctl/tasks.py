@@ -264,7 +264,8 @@ def publish_model(model, destination, code=None, max_retries=60,
     def submit_request():
         # Submit a publishing request
         if code is None:
-            publish_req = mm.publish_model(model, destination, **kwargs)
+            publish_req = mm.publish_model(model, destination,
+                                           force=replace, **kwargs)
         else:
             publish_req = mp.publish_model(model, destination,
                                            code=code, **kwargs)
