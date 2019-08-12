@@ -28,7 +28,12 @@ def create_package_from_astore(table):
     sess.loadactionset('astore')
 
     result = sess.astore.describe(rstore=table, epcode=True)
-    astore = sess.astore.download(rstore=table).blob
+    astore = sess.astore.download(rstore=table)
+    if not hasattr(astore, "blob"):
+        raise ValueError("Failed to download binary data for ASTORE '%s'."
+                         % astore)
+    astore = astore.blob
+
     astore = bytes(astore)      # Convert from SWAT blob type
 
     # Raise error if describe action fails

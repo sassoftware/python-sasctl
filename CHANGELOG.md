@@ -3,6 +3,7 @@ Unreleased
 ----------
 **Improvements**
 - Added `create_model_version` and `list_model_versions` to `model_repository`
+- Added an explicit `ValueError` when attempting to register an ASTORE that can't be downloaded.
 
 **Bugfixes**
 - Fixed an issue where `model_repository` did not find models by name once pagination limits were reached. 
