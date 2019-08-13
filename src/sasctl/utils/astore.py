@@ -37,6 +37,7 @@ def create_package_from_astore(table):
 
     astore_key = result.Key.Key[0].strip()
     ds2 = _generate_package_code(result)
+    ds2_cas = _generate_package_code(result,indb=True)
     model_properties = _get_model_properties(result)
     input_vars = [get_variable_properties(var) for var in result.InputVariables.itertuples()]
     output_vars = [get_variable_properties(var) for var in result.OutputVariables.itertuples()]
@@ -48,7 +49,8 @@ def create_package_from_astore(table):
         table.save(name=astore_filename, caslib='ModelStore', replace=True)
 
     file_metadata = [{'role': 'analyticStore', 'name': ''},
-                     {'role': 'score', 'name': 'dmcas_packagescorecode.sas'}]
+                     {'role': '', 'name': 'dmcas_packagescorecode.sas'},
+                     {'role': 'score', 'name': 'dmcas_epscorecode.sas'}]
 
     astore_metadata = [{'name': astore_filename,
                         'caslib': 'ModelStore',
@@ -68,6 +70,10 @@ def create_package_from_astore(table):
         filename = os.path.join(folder, 'dmcas_packagescorecode.sas')
         with open(filename, 'w') as f:
             f.write('\n'.join(ds2))
+
+        filename = os.path.join(folder, 'dmcas_epscorecode.sas')
+        with open(filename, 'w') as f:
+            f.write('\n'.join(ds2_cas))
 
         filename = os.path.join(folder, astore_filename)
         with open(filename, 'wb') as f:
@@ -125,7 +131,7 @@ def _get_model_properties(result):
         "tool": "",
         "toolVersion": "",
         "targetVariable": "",
-        "scoreCodeType": "ds2Package",
+        "scoreCodeType": "ds2MultiType",
         "externalModelId": "",
         "function": "",
         "eventProbVar": "",
@@ -137,13 +143,17 @@ def _get_model_properties(result):
     }
 
 
-def _generate_package_code(result):
+def _generate_package_code(result,indb=False):
     """Generates package-style DS2 code from EP-style DS2 code."""
 
     id = '_' + uuid.uuid4().hex  # Random ID for package
     key = result.Key.Key[0]
 
-    header = ('package ds2score / overwrite=yes;',
+    if indb:
+        header = ('data SASEP.out;',
+              '    dcl package score {}();'.format(id))
+    else:
+        header = ('package ds2score / overwrite=yes;',
               '    dcl package score {}();'.format(id))
 
     dcl_lines = []
@@ -180,12 +190,24 @@ def _generate_package_code(result):
                     '   );')
     score_method += tuple('       this."{}" = "{}";'.format(var, var) for var in result.InputVariables.Name)
     score_method += (' ',
-                     '       {}.scorerecord();'.format(id),
+                     '       {}.scoreRecord();'.format(id),
                      ' ')
     score_method += tuple('       "{}" = this."{}";'.format(var, var) for var in result.InputVariables.Name)
 
-    footer = ('    end;',
+    if indb:
+        footer = ('    ',
+              '   method run();',
+              '      set SASEP.in;',
+              '      {}.scoreRecord();'.format(id),
+              '   end;',
+              '   method term();',
+              '   end;',
+              'enddata;')
+    else:
+        footer = ('    end;',
               'endpackage;')
-
-    return header + tuple(dcl_lines) + init_method + score_method + footer
+    if indb:
+        return header + tuple(dcl_lines) + init_method + footer
+    else:
+        return header + tuple(dcl_lines) + init_method + score_method + footer
 
