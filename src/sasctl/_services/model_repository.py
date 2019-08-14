@@ -14,6 +14,12 @@ FUNCTIONS = {'Analytical', 'Classification', 'Clustering', 'Forecasting',
              'Text sentiment', 'Text topics', 'Sentiment'}
 
 
+def _get_filter(x):
+    # Model Repository filtering is done using the properties= query parameter
+    # instead of the default filter= parameter (as of Viya 3.4).
+    # Define a custom function for building out the filter
+    return dict(properties='(name, %s)' % x)
+
 class ModelRepository(Service):
     """Implements the Model Repository REST API.
 
@@ -30,15 +36,16 @@ class ModelRepository(Service):
     _SERVICE_ROOT = '/modelRepository'
 
     list_repositories, get_repository, update_repository, \
-        delete_repository = Service._crud_funcs('/repositories', 'repository')
+        delete_repository = Service._crud_funcs('/repositories', 'repository',
+                                                get_filter=_get_filter)
 
     list_projects, get_project, update_project, \
-        delete_project = Service._crud_funcs('/projects', 'project')
+        delete_project = Service._crud_funcs('/projects', 'project',
+                                             get_filter=_get_filter)
 
     list_models, get_model, update_model, \
         delete_model = Service._crud_funcs('/models', 'model',
-                                           get_filter=lambda x: dict(
-                                               properties='(name, %s)' % x))
+                                           get_filter=_get_filter)
 
     @classmethod
     def get_astore(cls, model):
