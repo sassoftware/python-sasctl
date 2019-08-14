@@ -11,26 +11,43 @@ from sasctl.services import folders
 
 pytestmark = pytest.mark.usefixtures('session')
 
-FOLDER_NAME = 'Test Folder'
-
-def test_list_folders():
-    all_folders = folders.list_folders()
-    assert all(isinstance(f, RestObj) for f in all_folders)
 
 
-def test_get_folder():
-    folder = folders.get_folder('Resources')
-    assert isinstance(folder, RestObj)
-    assert 'Resources' == folder.name
+@pytest.mark.incremental
+class TestFolders:
+    FOLDER_NAME = 'Test Folder'
 
+    def test_list_folders(self):
+        all_folders = folders.list_folders()
+        assert all(isinstance(f, RestObj) for f in all_folders)
 
-def test_create_folder():
-    folder = folders.create_folder(FOLDER_NAME)
-    assert isinstance(folder, RestObj)
-    assert FOLDER_NAME == folder.name
+    def test_get_folder(self):
+        folder = folders.get_folder('Resources')
+        assert isinstance(folder, RestObj)
+        assert 'Resources' == folder.name
 
+    def test_create_folder(self):
+        folder = folders.create_folder(self.FOLDER_NAME)
+        assert isinstance(folder, RestObj)
+        assert self.FOLDER_NAME == folder.name
 
-def test_delete_folder():
-    folders.delete_folder(FOLDER_NAME)
-    folder = folders.get_folder(FOLDER_NAME)
-    assert folder is None
+    def test_get_folder(self):
+        folder = folders.get_folder(self.FOLDER_NAME)
+        assert isinstance(folder, RestObj)
+        assert folder.name == self.FOLDER_NAME
+
+    def test_list_with_pagination(self):
+        some_folders = folders.list_folders(limit=2)
+        assert isinstance(some_folders, list)
+        assert len(some_folders) <= 2
+        assert all(isinstance(f, RestObj) for f in some_folders)
+
+        other_folders = folders.list_folders(start=2, limit=3)
+        assert isinstance(other_folders, list)
+        assert len(other_folders) <= 3
+        assert all(f not in some_folders for f in other_folders)
+
+    def test_delete_folder(self):
+        folders.delete_folder(self.FOLDER_NAME)
+        folder = folders.get_folder(self.FOLDER_NAME)
+        assert folder is None

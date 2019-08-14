@@ -188,12 +188,16 @@ class Service(object):
                 return dict(filter='eq(name, "%s")' % item)
 
         @sasctl_command('list')
-        def list_items(cls, filter=None, **kwargs):
+        def list_items(cls, filter=None, start=None, limit=None, **kwargs):
             """List all {items} available in the environment.
 
             Parameters
             ----------
             filter : str, optional
+            start : int, optional
+                Zero-based index of the first item to return.  Defaults to 0.
+            limit : int, optional
+                The maximum number of items to return.  Defaults to 20.
 
             Returns
             -------
@@ -209,7 +213,12 @@ class Service(object):
             """
             if filter is not None:
                 kwargs['filter'] = filter
-            params = '&'.join(['%s=%s' % (k, quote(v, safe='/(),"'))
+            if start is not None:
+                kwargs['start'] = int(start)
+            if limit is not None:
+                kwargs['limit'] = int(limit)
+
+            params = '&'.join(['%s=%s' % (k, quote(str(v), safe='/(),"'))
                                for k, v in six.iteritems(kwargs)])
 
             results = cls.get(path, params=params)
