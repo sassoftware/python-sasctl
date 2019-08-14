@@ -2,6 +2,11 @@
 Unreleased
 ----------
 
+- 
+
+v1.1.3 (2019-8-14)
+-----------------
+
  **Bugfixes**
  - Fixed problem causing `register_model` task to include output variables in the input variables list.
  
