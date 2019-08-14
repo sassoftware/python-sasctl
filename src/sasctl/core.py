@@ -327,6 +327,37 @@ class Session(requests.Session):
         if current_session() is None:
             current_session(self)
 
+    def add_logger(self, handler, level=None):
+        """Log session requests and responses.
+
+        Parameters
+        ----------
+        handler : logging.Handler
+            A Handler instance to use for logging the requests and responses.
+        level : int, optional
+            The logging level to assign to the handler.  Ignored if handler's
+            logging level is already set.  Defaults to DEBUG.
+
+        Returns
+        -------
+        handler
+
+
+        .. versionadded:: 1.2.0
+
+        """
+        level = level or logging.DEBUG
+
+        if handler.level == logging.NOTSET:
+            handler.setLevel(level)
+
+        self.message_log.addHandler(handler)
+
+        if self.message_log.level == logging.NOTSET:
+            self.message_log.setLevel(handler.level)
+
+        return handler
+
     def add_stderr_logger(self, level=None):
         """Log session requests and responses to stderr.
 
@@ -340,13 +371,7 @@ class Session(requests.Session):
         logging.StreamHandler
 
         """
-        level = level or logging.DEBUG
-
-        handler = logging.StreamHandler()
-        handler.setLevel(level=level)
-        self.message_log.addHandler(handler)
-        self.message_log.setLevel(level)
-        return handler
+        return self.add_logger(logging.StreamHandler(), level)
 
     @property
     def username(self):
