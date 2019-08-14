@@ -327,7 +327,21 @@ class Session(requests.Session):
         if current_session() is None:
             current_session(self)
 
-    def add_stderr_logger(self, level=logging.INFO):
+    def add_stderr_logger(self, level=None):
+        """Log session requests and responses to stderr.
+
+        Parameters
+        ----------
+        level : int, optional
+            The logging level of the handler.  Defaults to logging.DEBUG
+
+        Returns
+        -------
+        logging.StreamHandler
+
+        """
+        level = level or logging.DEBUG
+
         handler = logging.StreamHandler()
         handler.setLevel(level=level)
         self.message_log.addHandler(handler)

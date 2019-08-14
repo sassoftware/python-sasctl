@@ -6,6 +6,9 @@ Unreleased
 - Added an explicit `ValueError` when attempting to register an ASTORE that can't be downloaded.
 - Added `start` and `limit` pagination parameters to all default `list_*` service methods.
 
+**Changes**
+- `Session.add_stderr_logger` default logging level changed to `DEBUG`.
+
 **Bugfixes**
 - Fixed an issue where `model_repository` did not find models by name once pagination limits were reached. 
  
