@@ -193,7 +193,7 @@ def register_model(model, name, project, repository=None, input=None,
         assert isinstance(model, dict)
 
     if create_project:
-        vars = model.get('inputVariables', [])
+        vars = model.get('inputVariables', []).copy()
         vars += model.get('outputVariables', [])
 
         if model.get('function') == 'Regression':
