@@ -10,8 +10,8 @@ Unreleased
 - `Session.add_stderr_logger` default logging level changed to `DEBUG`.
 
 **Bugfixes**
-- Fixed an issue where `model_repository` did not find models by name once pagination limits were reached. 
-- 
+- Fixed an issue where `model_repository` did not find models, projects, or repositories by name once pagination limits were reached. 
+
 
 v1.1.3 (2019-8-14)
 -----------------
