@@ -228,8 +228,11 @@ def register_model(model, name, project, repository=None, input=None,
         except ValueError:
             # PyMAS creation failed, most likely because input data wasn't
             # provided
+            logger.exception('Unable to inspect model %s', model)
+
             warnings.warn('Unable to determine input/output variables. '
-                          ' Model variables will not be specified.')
+                          ' Model variables will not be specified and some '
+                          'model functionality may not be available.')
     else:
         # Otherwise, the model better be a dictionary of metadata
         assert isinstance(model, dict)
