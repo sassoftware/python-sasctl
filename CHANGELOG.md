@@ -2,12 +2,14 @@
 Unreleased
 ----------
 
-- 
+**Bugfixes**
+ - The `register_model` task now generates dmcas_epscorecode.sas files for ASTORE models.
+  
 
 v1.1.3 (2019-8-14)
 -----------------
 
- **Bugfixes**
+**Bugfixes**
  - Fixed problem causing `register_model` task to include output variables in the input variables list.
  
  
