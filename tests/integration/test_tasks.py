@@ -79,6 +79,10 @@ class TestModels:
         assert 'Python' == model.trainCodeType
         assert 'ds2MultiType' == model.scoreCodeType
 
+        assert len(model.inputVariables) == 4
+        assert len(model.outputVariables) == 1
+
+
         # Don't compare to sys.version since cassettes used may have been
         # created by a different version
         assert re.match('Python \d\.\d', model.tool)
