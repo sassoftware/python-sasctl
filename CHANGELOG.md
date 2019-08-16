@@ -5,6 +5,7 @@ Unreleased
 - Added `create_model_version` and `list_model_versions` to `model_repository`
 - Added an explicit `ValueError` when attempting to register an ASTORE that can't be downloaded.
 - Added `start` and `limit` pagination parameters to all default `list_*` service methods.
+- Added `create_destination`, `create_cas_destination` and `create_mas_destination` methods for `model_publish` service.
 
 **Changes**
 - `Session.add_stderr_logger` default logging level changed to `DEBUG`.
