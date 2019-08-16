@@ -19,8 +19,22 @@ except ImportError:
 
 
 def create_package_from_astore(table):
+    """Create an importable model package from an ASTORE.
+    Parameters
+    ----------
+    table : swat.CASTable
+        The CAS table containing the ASTORE.
+    Returns
+    -------
+    BytesIO
+        A byte stream representing a ZIP archive which can be imported.
+    See Also
+    --------
+    :meth:`model_repository.import_model_from_zip <.ModelRepository.import_model_from_zip>`
+    """
     if swat is None:
-        raise RuntimeError("The 'swat' package is required to work with ASTORE models.")
+        raise RuntimeError("The 'swat' package is required to work with "
+                           "ASTORE models.")
 
     assert isinstance(table, swat.CASTable)
 
@@ -36,11 +50,13 @@ def create_package_from_astore(table):
         raise RuntimeError(result)
 
     astore_key = result.Key.Key[0].strip()
-    ds2 = _generate_package_code(result)
-    ds2_cas = _generate_package_code(result,indb=True)
+    ep_ds2 = result.epcode
+    package_ds2 = _generate_package_code(result)
     model_properties = _get_model_properties(result)
-    input_vars = [get_variable_properties(var) for var in result.InputVariables.itertuples()]
-    output_vars = [get_variable_properties(var) for var in result.OutputVariables.itertuples()]
+    input_vars = [get_variable_properties(var)
+                  for var in result.InputVariables.itertuples()]
+    output_vars = [get_variable_properties(var)
+                   for var in result.OutputVariables.itertuples()]
     astore_filename = '_' + uuid.uuid4().hex[:25].upper()
 
     # Copy the ASTORE table to the ModelStore.
@@ -49,8 +65,7 @@ def create_package_from_astore(table):
         table.save(name=astore_filename, caslib='ModelStore', replace=True)
 
     file_metadata = [{'role': 'analyticStore', 'name': ''},
-                     {'role': '', 'name': 'dmcas_packagescorecode.sas'},
-                     {'role': 'score', 'name': 'dmcas_epscorecode.sas'}]
+                     {'role': 'score', 'name': 'dmcas_packagescorecode.sas'}]
 
     astore_metadata = [{'name': astore_filename,
                         'caslib': 'ModelStore',
@@ -69,11 +84,11 @@ def create_package_from_astore(table):
 
         filename = os.path.join(folder, 'dmcas_packagescorecode.sas')
         with open(filename, 'w') as f:
-            f.write('\n'.join(ds2))
+            f.write('\n'.join(package_ds2))
 
         filename = os.path.join(folder, 'dmcas_epscorecode.sas')
         with open(filename, 'w') as f:
-            f.write('\n'.join(ds2_cas))
+            f.write(ep_ds2)
 
         filename = os.path.join(folder, astore_filename)
         with open(filename, 'wb') as f:
@@ -136,24 +151,20 @@ def _get_model_properties(result):
         "function": "",
         "eventProbVar": "",
         "modeler": "",
-        "name": "CustomerLifetimeValueScore",
+        "name": "",
         "targetEvent": "",
         "targetLevel": "",
         "algorithm": ""
     }
 
 
-def _generate_package_code(result,indb=False):
+def _generate_package_code(result):
     """Generates package-style DS2 code from EP-style DS2 code."""
 
     id = '_' + uuid.uuid4().hex  # Random ID for package
     key = result.Key.Key[0]
 
-    if indb:
-        header = ('data SASEP.out;',
-              '    dcl package score {}();'.format(id))
-    else:
-        header = ('package ds2score / overwrite=yes;',
+    header = ('package ds2score / overwrite=yes;',
               '    dcl package score {}();'.format(id))
 
     dcl_lines = []
@@ -190,24 +201,11 @@ def _generate_package_code(result,indb=False):
                     '   );')
     score_method += tuple('       this."{}" = "{}";'.format(var, var) for var in result.InputVariables.Name)
     score_method += (' ',
-                     '       {}.scoreRecord();'.format(id),
+                     '       {}.scorerecord();'.format(id),
                      ' ')
     score_method += tuple('       "{}" = this."{}";'.format(var, var) for var in result.InputVariables.Name)
 
-    if indb:
-        footer = ('    ',
-              '   method run();',
-              '      set SASEP.in;',
-              '      {}.scoreRecord();'.format(id),
-              '   end;',
-              '   method term();',
-              '   end;',
-              'enddata;')
-    else:
-        footer = ('    end;',
+    footer = ('    end;',
               'endpackage;')
-    if indb:
-        return header + tuple(dcl_lines) + init_method + footer
-    else:
-        return header + tuple(dcl_lines) + init_method + score_method + footer
 
+    return header + tuple(dcl_lines) + init_method + score_method + footer
