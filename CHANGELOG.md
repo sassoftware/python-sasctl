@@ -1,6 +1,11 @@
 
 Unreleased
 ----------
+ - 
+ 
+
+v1.2.0 (2019-8-16)
+------------------
 **Improvements**
 - Added `create_model_version` and `list_model_versions` to `model_repository`
 - Added an explicit `ValueError` when attempting to register an ASTORE that can't be downloaded.
@@ -22,7 +27,7 @@ v1.1.4 (2019-8-16)
 
 v1.1.3 (2019-8-14)
 -----------------
- **Bugfixes**
+**Bugfixes**
  - Fixed problem causing `register_model` task to include output variables in the input variables list.
  
  
