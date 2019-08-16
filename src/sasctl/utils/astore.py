@@ -19,8 +19,26 @@ except ImportError:
 
 
 def create_package_from_astore(table):
+    """Create an importable model package from an ASTORE.
+
+    Parameters
+    ----------
+    table : swat.CASTable
+        The CAS table containing the ASTORE.
+
+    Returns
+    -------
+    BytesIO
+        A byte stream representing a ZIP archive which can be imported.
+
+    See Also
+    --------
+    :meth:`model_repository.import_model_from_zip <.ModelRepository.import_model_from_zip>`
+
+    """
     if swat is None:
-        raise RuntimeError("The 'swat' package is required to work with ASTORE models.")
+        raise RuntimeError("The 'swat' package is required to work with "
+                           "ASTORE models.")
 
     assert isinstance(table, swat.CASTable)
 
@@ -41,10 +59,13 @@ def create_package_from_astore(table):
         raise RuntimeError(result)
 
     astore_key = result.Key.Key[0].strip()
-    ds2 = _generate_package_code(result)
+    ep_ds2 = result.epcode
+    package_ds2 = _generate_package_code(result)
     model_properties = _get_model_properties(result)
-    input_vars = [get_variable_properties(var) for var in result.InputVariables.itertuples()]
-    output_vars = [get_variable_properties(var) for var in result.OutputVariables.itertuples()]
+    input_vars = [get_variable_properties(var)
+                  for var in result.InputVariables.itertuples()]
+    output_vars = [get_variable_properties(var)
+                   for var in result.OutputVariables.itertuples()]
     astore_filename = '_' + uuid.uuid4().hex[:25].upper()
 
     # Copy the ASTORE table to the ModelStore.
@@ -72,7 +93,11 @@ def create_package_from_astore(table):
 
         filename = os.path.join(folder, 'dmcas_packagescorecode.sas')
         with open(filename, 'w') as f:
-            f.write('\n'.join(ds2))
+            f.write('\n'.join(package_ds2))
+
+        filename = os.path.join(folder, 'dmcas_epscorecode.sas')
+        with open(filename, 'w') as f:
+            f.write(ep_ds2)
 
         filename = os.path.join(folder, astore_filename)
         with open(filename, 'wb') as f:
@@ -130,12 +155,12 @@ def _get_model_properties(result):
         "tool": "",
         "toolVersion": "",
         "targetVariable": "",
-        "scoreCodeType": "ds2Package",
+        "scoreCodeType": "ds2MultiType",
         "externalModelId": "",
         "function": "",
         "eventProbVar": "",
         "modeler": "",
-        "name": "CustomerLifetimeValueScore",
+        "name": "",
         "targetEvent": "",
         "targetLevel": "",
         "algorithm": ""

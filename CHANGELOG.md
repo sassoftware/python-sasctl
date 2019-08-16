@@ -14,9 +14,14 @@ Unreleased
 - Fixed an issue where `model_repository` did not find models, projects, or repositories by name once pagination limits were reached. 
 
 
+v1.1.4 (2019-8-16)
+-----------------
+**Bugfixes**
+ - The `register_model` task now generates dmcas_epscorecode.sas files for ASTORE models.
+  
+
 v1.1.3 (2019-8-14)
 -----------------
-
  **Bugfixes**
  - Fixed problem causing `register_model` task to include output variables in the input variables list.
  
