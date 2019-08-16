@@ -8,8 +8,8 @@
 
 import re
 
-from .service import Service
 from .model_repository import ModelRepository
+from .service import Service
 
 
 class ModelPublish(Service):
@@ -59,9 +59,13 @@ class ModelPublish(Service):
                                                  'destination')
 
     @classmethod
-    def publish_model(cls, model, destination, name=None, code=None,
+    def publish_model(cls,
+                      model,
+                      destination,
+                      name=None,
+                      code=None,
                       notes=None):
-        """
+        """Publish a model to an existing publishing destination.
 
         Parameters
         ----------
@@ -118,3 +122,150 @@ class ModelPublish(Service):
         return cls.post('/models', json=request, headers={
             'Content-Type':
                 'application/vnd.sas.models.publishing.request+json'})
+
+    @classmethod
+    def create_cas_destination(cls, name,
+                               library,
+                               table,
+                               server=None,
+                               description=None):
+        """Define a new CAS publishing destination.
+
+        Parameters
+        ----------
+        name : str
+            Name of the publishing destination.
+        library : str
+            The CAS library in which `table` will be stored.
+        table : str
+            Name of the CAS table in which models will be stored.
+        server : str, optional
+            Name of the CAS server.  Defaults to 'cas-shared-default'.
+        description : str, optional
+            Description of the publishing destination.
+
+        Returns
+        -------
+        RestObj
+
+        """
+        server = server or 'cas-shared-default'
+
+        return cls.create_destination(name, cas_server=server,
+                                      cas_library=library, cas_table=table,
+                                      type_='cas', description=description)
+
+    @classmethod
+    def create_mas_destination(cls, name, uri, description=None):
+        """Define a new Micro Analytic Server (MAS) publishing destination.
+
+        Parameters
+        ----------
+        name : str
+            Name of the publishing destination.
+        uri : str
+            The base URI that contains the host, the protocol, and optionally
+            the port, which addresses the remote SAS Micro Analytic Service to
+            use.  Example: http://spam.com
+        description : str, optional
+            Description of the publishing destination.
+
+        Returns
+        -------
+        RestObj
+
+        """
+        return cls.create_destination(name, mas_uri=uri, type_='mas',
+                                      description=description)
+
+    @classmethod
+    def create_destination(cls,
+                           name,
+                           type_,
+                           cas_server=None,
+                           cas_library=None,
+                           cas_table=None,
+                           description=None,
+                           mas_uri=None,
+                           hdfs_dir=None,
+                           conf_dir=None,
+                           user=None,
+                           database_library=None):
+        """Define a new publishing destination.
+
+        Parameters
+        ----------
+        name : str
+            Name of the publishing destination.
+        type_ : {'cas', 'mas', 'hadoop', 'teradata'}
+            Type of publishing definition being created
+        cas_server : str, optional
+            Name of the CAS server.  Defaults to 'cas-shared-default'.
+            Required if `type_` is 'cas', otherwise ignored.
+        cas_library : str, optional
+            The CAS library in which `cas_table` will be stored.  Required if
+            `type_` is 'cas', otherwise ignored.
+        cas_table : str, optional
+            Name of the CAS table in which models will be stored.  Required
+            if `type_` is 'cas', otherwise ignored.
+        description : str, optional
+            Description of the publishing destination.
+        mas_uri : str, optional
+            Required if `type_` is 'mas', otherwise ignored.
+        hdfs_dir : str, optional
+            Required if `type_` is 'hadoop', otherwise ignored.
+        conf_dir : str, optional
+            Required if `type_` is 'hadoop', otherwise ignored.
+        user : str, optional
+            Required if `type_` is 'hadoop', otherwise ignored.
+        database_library : str, optional
+            Required if `type_` is 'teradata', otherwise ignored.
+
+        Returns
+        -------
+        RestObj
+
+        """
+        type_ = str(type_).lower()
+        assert type_ in ('cas', 'microanalyticservice', 'mas',
+                         'teradata', 'hadoop')
+
+        # As of Viya 3.4 capitalization matters.
+        if type_ in ('microanalyticservice', 'mas'):
+            type_ = 'microAnalyticService'
+
+        request = {'name': str(name),
+                   'destinationType': type_,
+                   'casServerName': cas_server,
+                   'casLibrary': cas_library,
+                   'description': description,
+                   'destinationTable': cas_table,
+                   'databaseCasLibrary': database_library,
+                   'user': user,
+                   'hdfsDirectory': hdfs_dir,
+                   'configurationDirectory': conf_dir,
+                   'masUri': mas_uri
+                   }
+
+        drop_list = {
+            'cas':
+                ('databaseCasLibrary', 'user', 'hdfsDirectory', 'masUri',
+                 'configurationDirectory'),
+            'microAnalyticService':
+                ('casServerName', 'casLibrary', 'destinationTable', 'user',
+                 'databaseCasLibrary', 'hdfsDirectory',
+                 'configurationDirectory'),
+            'hadoop':
+                ('casServerName', 'casLibrary', 'destinationTable',
+                 'databaseCasLibrary', 'masUri'),
+            'teradata':
+                ('casServerName', 'casLibrary', 'destinationTable', 'user',
+                 'hdfsDirectory', 'masUri', 'configurationDirectory')
+        }
+
+        for k in drop_list[request['destinationType']]:
+            request.pop(k, None)
+
+        return cls.post('/destinations', json=request, headers={
+            'Content-Type':
+                'application/vnd.sas.models.publishing.destination+json'})

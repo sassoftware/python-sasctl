@@ -69,7 +69,7 @@ def _sklearn_to_dict(model):
 
 
 def register_model(model, name, project, repository=None, input=None,
-                   version='latest', files=None, force=False):
+                   version=None, files=None, force=False):
     """Register a model in the model repository.
 
     Parameters
@@ -91,7 +91,8 @@ def register_model(model, name, project, repository=None, input=None,
     input
     version : {'new', 'latest', int}, optional
         Version number of the project in which the model should be created.
-    files :
+        Defaults to 'new'.
+    files : list
     force : bool, optional
         Create dependencies such as projects and repositories if they do not
         already exist.
@@ -116,6 +117,46 @@ def register_model(model, name, project, repository=None, input=None,
     # TODO: Allow file info to be specified
     # TODO: Performance stats
 
+    # If version not specified, default to creating a new version
+    version = version or 'new'
+
+    # If replacing an existing version, make sure the model version exists
+    if str(version).lower() != 'new':
+        model_obj = mr.get_model(name)
+        if model_obj is None:
+            raise ValueError("Unable to update version '%s' of model '%s%.  "
+                             "Model not found." % (version, name))
+        model_versions = request_link(model_obj, 'modelVersions')
+        assert isinstance(model_versions, list)
+
+        # Use 'new' to create a new version if one doesn't exist yet.
+        if len(model_versions) == 0:
+            raise ValueError("No existing version of model '%s' to update."
+                             % name)
+
+        # Help function for extracting version number of REST response
+        def get_version(x):
+            return float(x.get('modelVersionName', 0))
+
+        if str(version).isnumeric():
+            match = [x for x in model_versions if float(version) ==
+                     get_version(x)]
+            assert len(match) <= 1
+
+            match = match[0] if len(match) else None
+        elif str(version).lower() == 'latest':
+            # Sort by version number and get first
+            match = sorted(model_versions, key=get_version)[0]
+        else:
+            raise ValueError("Unrecognized version '%s'." % version)
+
+    #
+
+        # TODO: get ID of correct model version
+    # if version != new, get existing model
+    # get model (modelVersions) rel
+    # -> returns list w/ id, modelVersionName, etc
+
     files = files or []
 
     # Find the project if it already exists
@@ -127,6 +168,7 @@ def register_model(model, name, project, repository=None, input=None,
     if p is None and not create_project:
         raise ValueError("Project '{}' not found".format(project))
 
+    # Use default repository if not specified
     if repository is None:
         repository = mr.default_repository()
     else:
@@ -186,8 +228,11 @@ def register_model(model, name, project, repository=None, input=None,
         except ValueError:
             # PyMAS creation failed, most likely because input data wasn't
             # provided
+            logger.exception('Unable to inspect model %s', model)
+
             warnings.warn('Unable to determine input/output variables. '
-                          ' Model variables will not be specified.')
+                          ' Model variables will not be specified and some '
+                          'model functionality may not be available.')
     else:
         # Otherwise, the model better be a dictionary of metadata
         assert isinstance(model, dict)
