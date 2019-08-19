@@ -88,7 +88,13 @@ def register_model(model, name, project, repository=None, input=None,
     repository : str or dict, optional
         The name or id of the repository, or a dictionary representation of
         the repository.  If omitted, the default repository will be used.
-    input
+    input : DataFrame, type, list of type, or dict of str: type, optional
+        The expected type for each input value of the target function.
+        Can be omitted if target function includes type hints.  If a DataFrame
+        is provided, the columns will be inspected to determine type information.
+        If a single type is provided, all columns will be assumed to be that type,
+        otherwise a list of column types or a dictionary of column_name: type
+        may be provided.
     version : {'new', 'latest', int}, optional
         Version number of the project in which the model should be created.
         Defaults to 'new'.
