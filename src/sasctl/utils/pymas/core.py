@@ -200,9 +200,13 @@ def from_pickle(file, func_name=None, input_types=None, array_input=False,
         object, and bytes is assumed to be the raw pickled bytes.
     func_name : str
         Name of the target function to call
-    input_types : list of type, optional
+    input_types : DataFrame, type, list of type, or dict of str: type, optional
         The expected type for each input value of the target function.
-        Can be ommitted if target function includes type hints.
+        Can be omitted if target function includes type hints.  If a DataFrame
+        is provided, the columns will be inspected to determine type information.
+        If a single type is provided, all columns will be assumed to be that type,
+        otherwise a list of column types or a dictionary of column_name: type
+        may be provided.
     array_input : bool
         Whether the function inputs should be treated as an array instead of
         individual parameters
@@ -271,7 +275,8 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
 
         # Run one observation through the model and use the result to
         # determine output variables
-        output = target_func(input_types.iloc[0, :].values.reshape((1, -1)))
+        output = target_func(input_types.head(1))
+        # output = target_func(input_types.iloc[0, :].values.reshape((1, -1)))
         output_vars = ds2_variables(output, output_vars=True)
         vars.extend(output_vars)
     elif isinstance(input_types, type):

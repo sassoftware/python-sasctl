@@ -1,19 +1,32 @@
 
 Unreleased
 ----------
-
  - 
  
+
+v1.2.0 (2019-8-16)
+------------------
+**Improvements**
+- Added `create_model_version` and `list_model_versions` to `model_repository`
+- Added an explicit `ValueError` when attempting to register an ASTORE that can't be downloaded.
+- Added `start` and `limit` pagination parameters to all default `list_*` service methods.
+- Added `create_destination`, `create_cas_destination` and `create_mas_destination` methods for `model_publish` service.
+
+**Changes**
+- `Session.add_stderr_logger` default logging level changed to `DEBUG`.
+
+**Bugfixes**
+- Fixed an issue where `model_repository` did not find models, projects, or repositories by name once pagination limits were reached. 
+
+
 v1.1.4 (2019-8-16)
 -----------------
-
 **Bugfixes**
  - The `register_model` task now generates dmcas_epscorecode.sas files for ASTORE models.
   
 
 v1.1.3 (2019-8-14)
 -----------------
-
 **Bugfixes**
  - Fixed problem causing `register_model` task to include output variables in the input variables list.
  

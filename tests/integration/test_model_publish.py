@@ -20,8 +20,26 @@ class TestModelPublish:
         assert isinstance(destinations, list)
         assert any(d.name == 'maslocal' for d in destinations)
 
-    def test_get_publish_destionation(self):
+    def test_get_publish_destination(self):
         dest = mp.get_destination('maslocal')
 
         assert dest.name == 'maslocal'
         assert dest.destinationType == 'microAnalyticService'
+
+    def test_create_cas_destination(self):
+        dest = mp.create_cas_destination('caslocal', 'Public', 'sasctl_models',
+                                         description='Test CAS publish destination from sasctl.')
+
+        assert dest.name == 'caslocal'
+        assert dest.destinationType == 'cas'
+        assert dest.casLibrary == 'Public'
+        assert dest.casServerName == 'cas-shared-default'
+        assert dest.destinationTable == 'sasctl_models'
+        assert dest.description == 'Test CAS publish destination from sasctl.'
+
+    def test_create_mas_destination(self):
+        dest = mp.create_mas_destination('maslocal2', 'localhost')
+
+        assert dest.name == 'maslocal2'
+        assert dest.destinationType == 'microAnalyticService'
+        assert 'description' not in dest

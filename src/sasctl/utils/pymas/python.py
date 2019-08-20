@@ -51,8 +51,14 @@ def ds2_variables(input, output_vars=False):
         types = input
     elif hasattr(input, 'columns') and hasattr(input, 'dtypes'):
         # Pandas DataFrame
-        types = OrderedDict([(col, (input[col].dtype.name.replace('object', 'char'), False)) for col in input.columns])
-        # types = {col: (input[col].dtype.name.replace('object', 'char'), False) for col in input.columns}
+        types = OrderedDict()
+        for col in input.columns:
+            if input[col].dtype.name == 'object':
+                types[col] = ('char', False)
+            elif input[col].dtype.name == 'category':
+                types[col] = ('char', False)
+            else:
+                types[col] = (input[col].dtype.name, False)
     elif hasattr(input, 'dtype'):
         # Numpy array?  No column names, but we can at least create dummy vars of the correct type
         types = OrderedDict([('var{}'.format(i),
