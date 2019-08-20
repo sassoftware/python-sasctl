@@ -187,7 +187,7 @@ def register_model(model, name, project, repository=None, input=None,
     # If model is a CASTable then assume it holds an ASTORE model.
     # Import these via a ZIP file.
     if 'swat.cas.table.CASTable' in str(type(model)):
-        zipfile = utils.create_package_from_astore(model)
+        zipfile = utils.create_package(model)
 
         if create_project:
             project = mr.create_project(project, repository)
