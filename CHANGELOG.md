@@ -2,6 +2,12 @@
 Unreleased
 ----------
  - 
+
+v1.2.1 (2019-8-20)
+------------------
+ **Improvements**
+ - Added the ability for `register_model` to correctly handle CAS tables containing data step
+ score code.
  
 
 v1.2.0 (2019-8-16)
