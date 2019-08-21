@@ -3,9 +3,15 @@ Unreleased
 ----------
  - 
 
+v1.2.2 (2019-8-21)
+------------------
+**Bugfixes**
+ - `register_model` task should now correctly identify columns when registering a Sci-kit pipeline.
+ 
+
 v1.2.1 (2019-8-20)
 ------------------
- **Improvements**
+**Improvements**
  - Added the ability for `register_model` to correctly handle CAS tables containing data step
  score code.
  

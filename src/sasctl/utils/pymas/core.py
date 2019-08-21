@@ -276,7 +276,6 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
         # Run one observation through the model and use the result to
         # determine output variables
         output = target_func(input_types.head(1))
-        # output = target_func(input_types.iloc[0, :].values.reshape((1, -1)))
         output_vars = ds2_variables(output, output_vars=True)
         vars.extend(output_vars)
     elif isinstance(input_types, type):
