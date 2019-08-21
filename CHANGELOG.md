@@ -1,7 +1,8 @@
 
 Unreleased
 ----------
- - 
+**Bugfixes**
+ - Convert NaN values to null (None) when calling `microanalytic_score.execute_module_step`.
 
 v1.2.2 (2019-8-21)
 ------------------
