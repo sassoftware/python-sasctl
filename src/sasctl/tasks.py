@@ -390,6 +390,8 @@ def publish_model(model,
 
 
 def save_performance(model):
+    # TODO: Implement & document
+
     model_obj = mr.get_model(model)
 
     from .services import model_management as mm
