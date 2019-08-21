@@ -518,9 +518,9 @@ def test_bugfix_27():
     pd = pytest.importorskip('pandas')
 
     df = pd.read_csv(io.StringIO('\n'.join([
-        'BAD,LOAN,MORTDUE,VALUE,REASON,JOB,YOJ,DEROG,DELINQ,CLAGE,NINQ,CLNO,DEBTINC',
-        '0,1.0,1100.0,25860.0,39025.0,HomeImp,Other,10.5,0.0,0.0,94.36666667,1.0,9.0,',
-        '1,1.0,1300.0,70053.0,68400.0,HomeImp,Other,7.0,0.0,2.0,121.8333333,0.0,14.0,'
+        u'BAD,LOAN,MORTDUE,VALUE,REASON,JOB,YOJ,DEROG,DELINQ,CLAGE,NINQ,CLNO,DEBTINC',
+        u'0,1.0,1100.0,25860.0,39025.0,HomeImp,Other,10.5,0.0,0.0,94.36666667,1.0,9.0,',
+        u'1,1.0,1300.0,70053.0,68400.0,HomeImp,Other,7.0,0.0,2.0,121.8333333,0.0,14.0,'
     ])))
 
     with mock.patch('sasctl._services.microanalytic_score.MicroAnalyticScore.get_module') as get_module:
