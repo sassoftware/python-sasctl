@@ -1,8 +1,12 @@
 
 Unreleased
 ----------
+**Changes**
+ - `put` request will take an `item` parameter that's used to automatically populate headers for updates.  
+
 **Bugfixes**
  - Convert NaN values to null (None) when calling `microanalytic_score.execute_module_step`.
+
 
 v1.2.2 (2019-8-21)
 ------------------
