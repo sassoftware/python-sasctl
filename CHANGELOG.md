@@ -1,6 +1,10 @@
 
 Unreleased
 ----------
+ - 
+ 
+v1.2.3 (2019-8-23)
+------------------
 **Changes**
  - `put` request will take an `item` parameter that's used to automatically populate headers for updates.  
 
