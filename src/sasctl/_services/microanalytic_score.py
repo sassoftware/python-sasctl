@@ -8,6 +8,9 @@
 
 import re
 from collections import OrderedDict
+from math import isnan
+
+import six
 
 from .service import Service
 
@@ -116,7 +119,26 @@ class MicroAnalyticScore(Service):
         module = module.id
         step = step.id if hasattr(step, 'id') else step
 
-        body = {'inputs': [{'name': k, 'value': v} for k, v in kwargs.items()]}
+        # Make sure all inputs are JSON serializable
+        # Common types such as numpy.int64 and numpy.float64 are NOT serializable
+        for k in kwargs.keys():
+            type_name = type(kwargs[k]).__name__
+            if type_name == 'float64':
+                kwargs[k] = float(kwargs[k])
+            elif type_name == 'int64':
+                kwargs[k] = int(kwargs[k])
+
+        body = {'inputs': [{'name': k, 'value': v}
+                           for k, v in six.iteritems(kwargs)]}
+
+        # Convert NaN to None (null) before calling MAS
+        for input in body['inputs']:
+            try:
+                if isnan(input['value']):
+                    input['value']  = None
+            except TypeError:
+                pass
+
         r = self.post('/modules/{}/steps/{}'.format(module, step), json=body)
 
         # Convert list of name/value pair dictionaries to single dict

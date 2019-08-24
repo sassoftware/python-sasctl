@@ -3,6 +3,27 @@ Unreleased
 ----------
  - 
  
+v1.2.3 (2019-8-23)
+------------------
+**Changes**
+ - `put` request will take an `item` parameter that's used to automatically populate headers for updates.  
+
+**Bugfixes**
+ - Convert NaN values to null (None) when calling `microanalytic_score.execute_module_step`.
+
+
+v1.2.2 (2019-8-21)
+------------------
+**Bugfixes**
+ - `register_model` task should now correctly identify columns when registering a Sci-kit pipeline.
+ 
+
+v1.2.1 (2019-8-20)
+------------------
+**Improvements**
+ - Added the ability for `register_model` to correctly handle CAS tables containing data step
+ score code.
+ 
 
 v1.2.0 (2019-8-16)
 ------------------
