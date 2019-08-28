@@ -1,7 +1,10 @@
 
 Unreleased
 ----------
- - 
+**Changes**
+ - `register_model` task automatically captures installed Python packages.
+ - Improved API documentation
+ 
  
 v1.2.3 (2019-8-23)
 ------------------
