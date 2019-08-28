@@ -25,4 +25,4 @@ def installed_packages():
             freeze = None
 
     if freeze is not None:
-        return freeze.freeze()
+        return list(freeze.freeze())

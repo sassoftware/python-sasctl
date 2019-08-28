@@ -19,6 +19,7 @@ from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
 from .utils.pymas import PyMAS, from_pickle
+from .utils.misc import installed_packages
 
 
 logger = logging.getLogger(__name__)
@@ -118,6 +119,9 @@ def register_model(model, name, project, repository=None, input=None,
     created using model_repository.create_model and any additional files will
     be uploaded as content.
 
+    .. versionchanged:: v1.3
+        Create requirements.txt with installed packages.
+
     """
     # TODO: Create new version if model already exists
     # TODO: Allow file info to be specified
@@ -176,12 +180,14 @@ def register_model(model, name, project, repository=None, input=None,
 
     # Use default repository if not specified
     if repository is None:
-        repository = mr.default_repository()
+        repo_obj = mr.default_repository()
     else:
-        repository = mr.get_repository(repository)
+        repo_obj = mr.get_repository(repository)
 
     # Unable to find or create the repo.
-    if repository is None:
+    if repo_obj is None and repository is None:
+        raise ValueError("Unable to find a default repository")
+    elif repo_obj is None:
         raise ValueError("Unable to find repository '{}'".format(repository))
 
     # If model is a CASTable then assume it holds an ASTORE model.
@@ -190,7 +196,7 @@ def register_model(model, name, project, repository=None, input=None,
         zipfile = utils.create_package(model)
 
         if create_project:
-            project = mr.create_project(project, repository)
+            project = mr.create_project(project, repo_obj)
 
         model = mr.import_model_from_zip(name, project, zipfile,
                                          version=version)
@@ -209,6 +215,23 @@ def register_model(model, name, project, repository=None, input=None,
         # Extract model properties
         model = _sklearn_to_dict(model)
         model['name'] = name
+
+        # Get package versions in environment
+        packages = installed_packages()
+        if packages is not None:
+            model.setdefault('properties', [])
+
+            # Define a custom property to capture each package version
+            for p in packages:
+                n, v = p.split('==')
+                model['properties'].append({
+                    'name': 'env_%s' % n,
+                    'value': v
+                })
+
+            # Generate and upload a requirements.txt file
+            files.append({'name': 'requirements.txt',
+                          'file': '\n'.join(packages)})
 
         # Generate PyMAS wrapper
         try:
@@ -252,7 +275,7 @@ def register_model(model, name, project, repository=None, input=None,
         else:
             target_level = None
 
-        project = mr.create_project(project, repository,
+        project = mr.create_project(project, repo_obj,
                                     variables=vars,
                                     targetLevel=target_level)
 
@@ -372,15 +395,7 @@ def publish_model(model,
     # As of Viya 3.4 MAS converts module names to lower case.
     # Since we can't rely on the request module name being preserved, try to
     # parse the URL out of the response so we can retrieve the created module.
-    try:
-        details = json.loads(msg)
-
-        module_url = get_link(details, 'module')
-        module_url = module_url.get('href')
-    except json.JSONDecodeError:
-        match = re.search(r'(?:rel=module, href=(.*?),)', msg)
-        module_url = match.group(1) if match else None
-
+    module_url = _parse_module_url(msg)
     if module_url is None:
         raise Exception('Unable to retrieve module URL from publish log.')
 
@@ -426,3 +441,15 @@ Note: When you select both User provides scored data and Use a library that cont
     """
     pass
 
+
+def _parse_module_url(msg):
+    try:
+        details = json.loads(msg)
+
+        module_url = get_link(details, 'module')
+        module_url = module_url.get('href')
+    except json.JSONDecodeError:
+        match = re.search(r'(?:rel=module, href=(.*?),)', msg)
+        module_url = match.group(1) if match else None
+
+    return module_url
