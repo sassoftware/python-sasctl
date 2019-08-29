@@ -8,13 +8,14 @@
 
 import json
 import logging
+import math
 import pickle
 import re
 import sys
 import warnings
 
 from . import utils
-from .core import RestObj, get, get_link, request_link
+from .core import RestObj, current_session, get, get_link, request_link
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
@@ -410,18 +411,78 @@ def publish_model(model,
     return module
 
 
-def save_performance(model):
-    # TODO: Implement & document
+def save_performance(data, model, label):
+
+    from .services import model_management as mm
+    try:
+        import swat
+    except ImportError:
+        raise RuntimeError("The 'swat' package is required to save model "
+                           "performance data.")
 
     model_obj = mr.get_model(model)
 
-    from .services import model_management as mm
+    if model_obj is None:
+        raise ValueError('Model %s was not found.', model)
 
-    perf_def = mm.get_performance_definition(model_obj)
-    # model,
-    # table
-    #   score?
-    #  determine name
+    project = mr.get_project(model_obj.projectId)
+
+    if project.get('function', '').lower() not in ('prediction', 'classification'):
+        raise ValueError("Performance monitoring is currently supported for "
+                         "regression and binary classification projects.  "
+                         "Received project with '%s' function.  Should be "
+                         "'Prediction' or 'Classification'.",
+                         project.get('function'))
+    # elif project.get('targetLevel', '').lower() not in ():
+    #     raise ValueError()
+    # elif project.get('targetLevel', ''):
+    #     raise ValueError()
+    # elif project.get('predictionVariable', ''):
+    #     raise ValueError()
+
+    perf_def = None
+    for p in mm.list_performance_definitions():
+        if model_obj.id in p.modelIds:
+            perf_def = p
+            break
+
+    if perf_def is None:
+        raise ValueError("Unable to find a performance definition for model "
+                         "'%s'" % model)
+
+    cas_id = perf_def['casServerId']
+    caslib = perf_def['dataLibrary']
+    table_prefix = perf_def['dataPrefix']
+
+    sess = current_session()
+    url = '{}://{}/{}-http/'.format(sess._settings['protocol'],
+                                    sess.hostname,
+                                    cas_id)
+
+    regex = r'{}_(\d)_*_{}'.format(table_prefix,
+                                  model_obj.id)
+    with swat.CAS(url,
+                  username=sess.username,
+                  password=sess._settings['password']) as s:
+        all_tables = s.table.tableinfo(caslib=caslib).TableInfo
+        perf_tables = all_tables.Name.str.extract(regex,
+                                                  flags=re.IGNORECASE,
+                                                  expand=False)
+
+        last_seq = perf_tables.dropna().astype(int).max()
+        next_seq = 1 if math.isnan(last_seq) else last_seq + 1
+
+        table_name = '{prefix}_{sequence}_{label}_{model}'.format(
+            prefix=table_prefix,
+            sequence=next_seq,
+            label=label,
+            model=model_obj.id
+        )
+
+        s.upload(data, casout=dict(name=table_name, caslib=caslib))
+        print(s)
+
+
 
     # does perf definition already exist?
     # get def and determine naming convention
@@ -429,6 +490,7 @@ def save_performance(model):
     # determine table name
     # upload data
     # optionally run definition
+
 
     """
     Use one of the following formats for the name of the data table that you use as a data source, or for the name of the data tables that are located in the selected library.
