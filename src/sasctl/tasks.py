@@ -411,14 +411,36 @@ def publish_model(model,
     return module
 
 
-def save_performance(data, model, label):
+def update_performance(data, model, label, exec=True):
+    """Upload data for calculating model performance metrics
 
+    Parameters
+    ----------
+    data : Dataframe
+    model : str or dict
+        The name or id of the model, or a dictionary representation of
+        the model.
+    label : str
+        The time period the data is from.  Should be unique and will be
+        displayed on performance charts.  Examples: 'Q1', '2019', 'APR2019'.
+    exec : bool, optional
+        Whether to execute the performance definition with the new data
+
+    Returns
+    -------
+    CASTable
+        The CAS table containing the performance data.
+
+    """
     from .services import model_management as mm
     try:
         import swat
     except ImportError:
         raise RuntimeError("The 'swat' package is required to save model "
                            "performance data.")
+
+    # Default to true
+    exec = True if exec is None else exec
 
     model_obj = mr.get_model(model)
 
@@ -433,13 +455,17 @@ def save_performance(data, model, label):
                          "Received project with '%s' function.  Should be "
                          "'Prediction' or 'Classification'.",
                          project.get('function'))
-    # elif project.get('targetLevel', '').lower() not in ():
-    #     raise ValueError()
-    # elif project.get('targetLevel', ''):
-    #     raise ValueError()
-    # elif project.get('predictionVariable', ''):
-    #     raise ValueError()
+    elif project.get('targetLevel', '').lower() not in ('interval', 'binary'):
+        raise ValueError("Performance monitoring is currently supported for "
+                         "regression and binary classification projects.  "
+                         "Received project with '%s' target level.  Should be "
+                         "'Interval' or 'Binary'.", project.get('targetLevel'))
+    elif project.get('predictionVariable', '') == '':
+        raise ValueError("Project '%s' does not have a prediction variable "
+                         "specified." % project)
 
+    # Find the performance definition for the model
+    # As of Viya 3.4, no way to search by model or project
     perf_def = None
     for p in mm.list_performance_definitions():
         if model_obj.id in p.modelIds:
@@ -450,27 +476,57 @@ def save_performance(data, model, label):
         raise ValueError("Unable to find a performance definition for model "
                          "'%s'" % model)
 
+    # Check where performance datasets should be uploaded
     cas_id = perf_def['casServerId']
     caslib = perf_def['dataLibrary']
     table_prefix = perf_def['dataPrefix']
+
+    # All input variables must be present
+    missing_cols = [col for col in perf_def.inputVariables if
+                    col not in data.columns]
+    if len(missing_cols):
+        raise ValueError("The following columns were expected but not found in "
+                         "the data set: %s" % ', '.join(missing_cols))
+
+    # If CAS is not executing the model then the output variables must also be
+    # provided
+    if not perf_def.scoreExecutionRequired:
+        missing_cols = [col for col in perf_def.outputVariables if
+                        col not in data.columns]
+        if len(missing_cols):
+            raise ValueError(
+                "The following columns were expected but not found in the data "
+                "set: %s" % ', '.join(missing_cols))
 
     sess = current_session()
     url = '{}://{}/{}-http/'.format(sess._settings['protocol'],
                                     sess.hostname,
                                     cas_id)
-
     regex = r'{}_(\d)_*_{}'.format(table_prefix,
                                   model_obj.id)
+
+    # Upload the performance data to CAS
     with swat.CAS(url,
                   username=sess.username,
                   password=sess._settings['password']) as s:
-        all_tables = s.table.tableinfo(caslib=caslib).TableInfo
-        perf_tables = all_tables.Name.str.extract(regex,
-                                                  flags=re.IGNORECASE,
-                                                  expand=False)
 
-        last_seq = perf_tables.dropna().astype(int).max()
-        next_seq = 1 if math.isnan(last_seq) else last_seq + 1
+        s.setsessopt(messagelevel='warning')
+
+        with swat.options(exception_on_severity=2):
+            caslib_info = s.table.tableinfo(caslib=caslib)
+
+        all_tables = getattr(caslib_info, 'TableInfo', None)
+        if all_tables is not None:
+            # Find tables with similar names
+            perf_tables = all_tables.Name.str.extract(regex,
+                                                      flags=re.IGNORECASE,
+                                                      expand=False)
+
+            # Get last-used sequence number
+            last_seq = perf_tables.dropna().astype(int).max()
+            next_seq = 1 if math.isnan(last_seq) else last_seq + 1
+        else:
+            next_seq = 1
 
         table_name = '{prefix}_{sequence}_{label}_{model}'.format(
             prefix=table_prefix,
@@ -479,18 +535,17 @@ def save_performance(data, model, label):
             model=model_obj.id
         )
 
-        s.upload(data, casout=dict(name=table_name, caslib=caslib))
-        print(s)
+        with swat.options(exception_on_severity=2):
+            # Table must be promoted so performance jobs can access.
+            tbl = s.upload(data, casout=dict(name=table_name,
+                                                caslib=caslib,
+                                                promote=True)).casTable
 
+    # Execute the definition if requested
+    if exec:
+        mm.execute_performance_definition(perf_def)
 
-
-    # does perf definition already exist?
-    # get def and determine naming convention
-    # get CAS connection?
-    # determine table name
-    # upload data
-    # optionally run definition
-
+    return tbl
 
     """
     Use one of the following formats for the name of the data table that you use as a data source, or for the name of the data tables that are located in the selected library.

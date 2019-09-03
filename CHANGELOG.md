@@ -1,6 +1,9 @@
 
 Unreleased
 ----------
+**Improvements**
+ - Added `update_performance` task for easily uploading performance information for a model. 
+ 
 **Changes**
  - `register_model` task automatically captures installed Python packages.
  - Improved API documentation
