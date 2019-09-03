@@ -156,7 +156,7 @@ class ModelManagement(Service):
         """
         from .model_repository import ModelRepository
 
-        if '_' in table_prefix:
+        if not scoring_required and '_' in table_prefix:
             raise ValueError(
                 "Parameter 'table_prefix' cannot contain underscores."
                 " Received a value of '%s'.") % table_prefix

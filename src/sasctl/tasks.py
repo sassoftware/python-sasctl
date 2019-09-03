@@ -547,17 +547,6 @@ def update_performance(data, model, label, exec=True):
 
     return tbl
 
-    """
-    Use one of the following formats for the name of the data table that you use as a data source, or for the name of the data tables that are located in the selected library.
-
-    prefix_sequenceNumber_timeLabel
-    prefix_sequenceNumber_timeLabel_modelUUID
-    prefix_sequenceNumber_timeLabel_modelUUID_modelRole
-
-Note: When you select both User provides scored data and Use a library that contains tables with a specified prefix, your data table names must contain the UUID of the model. Valid values for the model role are “champion” or “challenger”. 
-    """
-    pass
-
 
 def _parse_module_url(msg):
     try:
