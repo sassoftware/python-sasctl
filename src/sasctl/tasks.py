@@ -411,8 +411,13 @@ def publish_model(model,
     return module
 
 
-def update_performance(data, model, label, exec=True):
-    """Upload data for calculating model performance metrics
+def update_performance(data, model, label, refresh=True):
+    """Upload data for calculating model performance metrics.
+
+    Model performance and data distributions can be tracked over time by
+    designating one or more tables that contain input data and target values.
+    Performance metrics can be updated by uploading a data set for a new time
+    period and executing the performance definition.
 
     Parameters
     ----------
@@ -423,13 +428,18 @@ def update_performance(data, model, label, exec=True):
     label : str
         The time period the data is from.  Should be unique and will be
         displayed on performance charts.  Examples: 'Q1', '2019', 'APR2019'.
-    exec : bool, optional
-        Whether to execute the performance definition with the new data
+    refresh : bool, optional
+        Whether to execute the performance definition and refresh results with
+        the new data.
 
     Returns
     -------
     CASTable
         The CAS table containing the performance data.
+
+    See Also
+    --------
+     :meth:`model_management.create_performance_definition <.ModelManagement.create_performance_definition>`
 
     """
     from .services import model_management as mm
@@ -440,7 +450,7 @@ def update_performance(data, model, label, exec=True):
                            "performance data.")
 
     # Default to true
-    exec = True if exec is None else exec
+    refresh = True if refresh is None else refresh
 
     model_obj = mr.get_model(model)
 
@@ -542,7 +552,7 @@ def update_performance(data, model, label, exec=True):
                                                 promote=True)).casTable
 
     # Execute the definition if requested
-    if exec:
+    if refresh:
         mm.execute_performance_definition(perf_def)
 
     return tbl
