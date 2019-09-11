@@ -5,94 +5,6 @@
       "request": {
         "body": {
           "encoding": "utf-8",
-          "string": "grant_type=password&username=USERNAME&password=*****"
-        },
-        "headers": {
-          "Accept": [
-            "application/json"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Basic [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "Content-Length": [
-            "54"
-          ],
-          "Content-Type": [
-            "application/x-www-form-urlencoded"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "POST",
-        "uri": "https://hostname.com/SASLogon/oauth/token"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"7b06d9938e3c4fefb96ee597309cfe98\"}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate",
-            "no-store"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Type": [
-            "application/json;charset=UTF-8"
-          ],
-          "Date": [
-            "Thu, 15 Aug 2019 00:19:46 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
-          ],
-          "Pragma": [
-            "no-cache",
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "DENY"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/SASLogon/oauth/token"
-      }
-    },
-    {
-      "recorded_at": "2019-08-15T00:19:44",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
           "string": ""
         },
         "headers": {
@@ -169,6 +81,602 @@
           "message": ""
         },
         "url": "https://hostname.com/modelRepository/projects?properties=(name,%20SASCTL%20Basic%20Test%20Project)"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T13:43:11",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/projects?properties=(name,%20SASCTL%20Basic%20Test%20Project)&limit=1000000"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects?start=0&limit=1000000\",\"uri\":\"/modelRepository/projects?start=0&limit=1000000\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.project.summary\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/modelRepository/projects\",\"uri\":\"/modelRepository/projects\",\"type\":\"application/vnd.sas.models.project\"}],\"name\":\"projects\",\"start\":0,\"count\":3,\"items\":[{\"creationTimeStamp\":\"2019-09-06T13:42:07.484Z\",\"modifiedTimeStamp\":\"2019-09-06T13:42:07.704Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/4bc26f6f-7613-4079-ab8e-4953e0b87e11\",\"uri\":\"/modelRepository/projects/4bc26f6f-7613-4079-ab8e-4953e0b87e11\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/4bc26f6f-7613-4079-ab8e-4953e0b87e11\",\"uri\":\"/modelRepository/projects/4bc26f6f-7613-4079-ab8e-4953e0b87e11\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/4bc26f6f-7613-4079-ab8e-4953e0b87e11\",\"uri\":\"/modelRepository/projects/4bc26f6f-7613-4079-ab8e-4953e0b87e11\"}],\"version\":2,\"id\":\"4bc26f6f-7613-4079-ab8e-4953e0b87e11\",\"name\":\"Iris\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-09-06T13:42:13.482Z\",\"modifiedTimeStamp\":\"2019-09-06T13:42:15.820Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\",\"uri\":\"/modelRepository/projects/e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\",\"uri\":\"/modelRepository/projects/e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\",\"uri\":\"/modelRepository/projects/e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\"}],\"version\":2,\"id\":\"e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\",\"name\":\"Boston Housing\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"function\":\"prediction\",\"candidateChampionHonored\":false,\"targetVariable\":\"Price\",\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-09-06T13:43:02.796Z\",\"modifiedTimeStamp\":\"2019-09-06T13:43:03.518Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/97aa59f3-4eef-4da8-80d7-447b8bfd4204\",\"uri\":\"/modelRepository/projects/97aa59f3-4eef-4da8-80d7-447b8bfd4204\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/97aa59f3-4eef-4da8-80d7-447b8bfd4204\",\"uri\":\"/modelRepository/projects/97aa59f3-4eef-4da8-80d7-447b8bfd4204\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/97aa59f3-4eef-4da8-80d7-447b8bfd4204\",\"uri\":\"/modelRepository/projects/97aa59f3-4eef-4da8-80d7-447b8bfd4204\"}],\"version\":2,\"id\":\"97aa59f3-4eef-4da8-80d7-447b8bfd4204\",\"name\":\"SASCTL AStore Test Project\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 2\",\"tags\":[],\"globalTags\":[]}],\"limit\":1000000,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 13:43:14 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/projects?properties=(name,%20SASCTL%20Basic%20Test%20Project)&limit=1000000"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T13:47:24",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "54"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"192d24eb7cdc40319109e40ee1b7ad1a\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 13:47:27 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T13:47:24",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/projects?properties=(name,%20SASCTL%20Basic%20Test%20Project)&limit=10000"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects?start=0&limit=10000\",\"uri\":\"/modelRepository/projects?start=0&limit=10000\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.project.summary\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/modelRepository/projects\",\"uri\":\"/modelRepository/projects\",\"type\":\"application/vnd.sas.models.project\"}],\"name\":\"projects\",\"start\":0,\"count\":4,\"items\":[{\"creationTimeStamp\":\"2019-09-06T13:43:39.125Z\",\"modifiedTimeStamp\":\"2019-09-06T13:43:39.836Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/5e11a5ea-9582-4a5c-9b17-e7a4af5d2ed1\",\"uri\":\"/modelRepository/projects/5e11a5ea-9582-4a5c-9b17-e7a4af5d2ed1\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/5e11a5ea-9582-4a5c-9b17-e7a4af5d2ed1\",\"uri\":\"/modelRepository/projects/5e11a5ea-9582-4a5c-9b17-e7a4af5d2ed1\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/5e11a5ea-9582-4a5c-9b17-e7a4af5d2ed1\",\"uri\":\"/modelRepository/projects/5e11a5ea-9582-4a5c-9b17-e7a4af5d2ed1\"}],\"version\":2,\"id\":\"5e11a5ea-9582-4a5c-9b17-e7a4af5d2ed1\",\"name\":\"Test Project\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 2\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-09-06T13:43:02.796Z\",\"modifiedTimeStamp\":\"2019-09-06T13:47:23.080Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/97aa59f3-4eef-4da8-80d7-447b8bfd4204\",\"uri\":\"/modelRepository/projects/97aa59f3-4eef-4da8-80d7-447b8bfd4204\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/97aa59f3-4eef-4da8-80d7-447b8bfd4204\",\"uri\":\"/modelRepository/projects/97aa59f3-4eef-4da8-80d7-447b8bfd4204\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/97aa59f3-4eef-4da8-80d7-447b8bfd4204\",\"uri\":\"/modelRepository/projects/97aa59f3-4eef-4da8-80d7-447b8bfd4204\"}],\"version\":2,\"id\":\"97aa59f3-4eef-4da8-80d7-447b8bfd4204\",\"name\":\"SASCTL AStore Test Project\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 3\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-09-06T13:42:07.484Z\",\"modifiedTimeStamp\":\"2019-09-06T13:42:07.704Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/4bc26f6f-7613-4079-ab8e-4953e0b87e11\",\"uri\":\"/modelRepository/projects/4bc26f6f-7613-4079-ab8e-4953e0b87e11\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/4bc26f6f-7613-4079-ab8e-4953e0b87e11\",\"uri\":\"/modelRepository/projects/4bc26f6f-7613-4079-ab8e-4953e0b87e11\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/4bc26f6f-7613-4079-ab8e-4953e0b87e11\",\"uri\":\"/modelRepository/projects/4bc26f6f-7613-4079-ab8e-4953e0b87e11\"}],\"version\":2,\"id\":\"4bc26f6f-7613-4079-ab8e-4953e0b87e11\",\"name\":\"Iris\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-09-06T13:42:13.482Z\",\"modifiedTimeStamp\":\"2019-09-06T13:42:15.820Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\",\"uri\":\"/modelRepository/projects/e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\",\"uri\":\"/modelRepository/projects/e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\",\"uri\":\"/modelRepository/projects/e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\"}],\"version\":2,\"id\":\"e48cd6a7-6a1c-4178-ac9d-d86496fb8ebe\",\"name\":\"Boston Housing\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"function\":\"prediction\",\"candidateChampionHonored\":false,\"targetVariable\":\"Price\",\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]}],\"limit\":10000,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 13:47:27 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/projects?properties=(name,%20SASCTL%20Basic%20Test%20Project)&limit=10000"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:14:48",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "54"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"d2c9619976224d4488ca9521f0289148\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:14:52 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:14:48",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/projects?properties=(name,%20SASCTL%20Basic%20Test%20Project)&limit=10000"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects?start=0&limit=10000\",\"uri\":\"/modelRepository/projects?start=0&limit=10000\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.project.summary\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/modelRepository/projects\",\"uri\":\"/modelRepository/projects\",\"type\":\"application/vnd.sas.models.project\"}],\"name\":\"projects\",\"start\":0,\"count\":3,\"items\":[{\"creationTimeStamp\":\"2019-09-06T14:14:09.615Z\",\"modifiedTimeStamp\":\"2019-09-06T14:14:09.746Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/46fd7649-2c56-4ac7-8cf1-47798a813443\",\"uri\":\"/modelRepository/projects/46fd7649-2c56-4ac7-8cf1-47798a813443\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/46fd7649-2c56-4ac7-8cf1-47798a813443\",\"uri\":\"/modelRepository/projects/46fd7649-2c56-4ac7-8cf1-47798a813443\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/46fd7649-2c56-4ac7-8cf1-47798a813443\",\"uri\":\"/modelRepository/projects/46fd7649-2c56-4ac7-8cf1-47798a813443\"}],\"version\":2,\"id\":\"46fd7649-2c56-4ac7-8cf1-47798a813443\",\"name\":\"Iris\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-09-06T14:14:14.490Z\",\"modifiedTimeStamp\":\"2019-09-06T14:14:16.415Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/338570ff-30f9-41af-bf41-7be5f5221598\",\"uri\":\"/modelRepository/projects/338570ff-30f9-41af-bf41-7be5f5221598\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/338570ff-30f9-41af-bf41-7be5f5221598\",\"uri\":\"/modelRepository/projects/338570ff-30f9-41af-bf41-7be5f5221598\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/338570ff-30f9-41af-bf41-7be5f5221598\",\"uri\":\"/modelRepository/projects/338570ff-30f9-41af-bf41-7be5f5221598\"}],\"version\":2,\"id\":\"338570ff-30f9-41af-bf41-7be5f5221598\",\"name\":\"Boston Housing\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"function\":\"prediction\",\"candidateChampionHonored\":false,\"targetVariable\":\"Price\",\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-09-06T14:10:39.735Z\",\"modifiedTimeStamp\":\"2019-09-06T14:14:42.919Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/1e925c7f-0207-4bef-b7ec-d2dbe13f7909\",\"uri\":\"/modelRepository/projects/1e925c7f-0207-4bef-b7ec-d2dbe13f7909\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/1e925c7f-0207-4bef-b7ec-d2dbe13f7909\",\"uri\":\"/modelRepository/projects/1e925c7f-0207-4bef-b7ec-d2dbe13f7909\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/1e925c7f-0207-4bef-b7ec-d2dbe13f7909\",\"uri\":\"/modelRepository/projects/1e925c7f-0207-4bef-b7ec-d2dbe13f7909\"}],\"version\":2,\"id\":\"1e925c7f-0207-4bef-b7ec-d2dbe13f7909\",\"name\":\"SASCTL AStore Test Project\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 3\",\"tags\":[],\"globalTags\":[]}],\"limit\":10000,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:14:52 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/projects?properties=(name,%20SASCTL%20Basic%20Test%20Project)&limit=10000"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:58",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "54"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"3caea5ca3b7346be9dfa1bbfeb683557\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:24:02 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:58",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelRepository/projects?properties=(name,%20SASCTL%20Basic%20Test%20Project)&limit=10000"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects?start=0&limit=10000\",\"uri\":\"/modelRepository/projects?start=0&limit=10000\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.project.summary\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/modelRepository/projects\",\"uri\":\"/modelRepository/projects\",\"type\":\"application/vnd.sas.models.project\"}],\"name\":\"projects\",\"start\":0,\"count\":3,\"items\":[{\"creationTimeStamp\":\"2019-09-06T14:22:21.312Z\",\"modifiedTimeStamp\":\"2019-09-06T14:22:21.455Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/851f4c57-19d4-4d47-907e-8be7008e0c21\",\"uri\":\"/modelRepository/projects/851f4c57-19d4-4d47-907e-8be7008e0c21\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/851f4c57-19d4-4d47-907e-8be7008e0c21\",\"uri\":\"/modelRepository/projects/851f4c57-19d4-4d47-907e-8be7008e0c21\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/851f4c57-19d4-4d47-907e-8be7008e0c21\",\"uri\":\"/modelRepository/projects/851f4c57-19d4-4d47-907e-8be7008e0c21\"}],\"version\":2,\"id\":\"851f4c57-19d4-4d47-907e-8be7008e0c21\",\"name\":\"Iris\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-09-06T14:22:27.095Z\",\"modifiedTimeStamp\":\"2019-09-06T14:22:28.963Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/30488458-2812-4902-9a0c-4058341bc59b\",\"uri\":\"/modelRepository/projects/30488458-2812-4902-9a0c-4058341bc59b\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/30488458-2812-4902-9a0c-4058341bc59b\",\"uri\":\"/modelRepository/projects/30488458-2812-4902-9a0c-4058341bc59b\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/30488458-2812-4902-9a0c-4058341bc59b\",\"uri\":\"/modelRepository/projects/30488458-2812-4902-9a0c-4058341bc59b\"}],\"version\":2,\"id\":\"30488458-2812-4902-9a0c-4058341bc59b\",\"name\":\"Boston Housing\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"function\":\"prediction\",\"candidateChampionHonored\":false,\"targetVariable\":\"Price\",\"challengerModels\":[],\"latestVersion\":\"Version 1\",\"tags\":[],\"globalTags\":[]},{\"creationTimeStamp\":\"2019-09-06T14:23:54.059Z\",\"modifiedTimeStamp\":\"2019-09-06T14:23:54.679Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelRepository/projects/50429981-e46f-4326-b4fd-cc8b117340ed\",\"uri\":\"/modelRepository/projects/50429981-e46f-4326-b4fd-cc8b117340ed\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelRepository/projects/50429981-e46f-4326-b4fd-cc8b117340ed\",\"uri\":\"/modelRepository/projects/50429981-e46f-4326-b4fd-cc8b117340ed\",\"type\":\"application/vnd.sas.models.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelRepository/projects/50429981-e46f-4326-b4fd-cc8b117340ed\",\"uri\":\"/modelRepository/projects/50429981-e46f-4326-b4fd-cc8b117340ed\"}],\"version\":2,\"id\":\"50429981-e46f-4326-b4fd-cc8b117340ed\",\"name\":\"SASCTL AStore Test Project\",\"repositoryId\":\"5eed7522-d60b-4018-a3eb-3bf31f4c4679\",\"folderId\":\"1c0f9216-001e-43d4-9f49-3e9aef6af36f\",\"candidateChampionHonored\":false,\"challengerModels\":[],\"latestVersion\":\"Version 2\",\"tags\":[],\"globalTags\":[]}],\"limit\":10000,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:24:02 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/modelRepository/projects?properties=(name,%20SASCTL%20Basic%20Test%20Project)&limit=10000"
       }
     }
   ],

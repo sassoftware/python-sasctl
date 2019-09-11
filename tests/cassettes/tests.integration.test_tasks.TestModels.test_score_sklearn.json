@@ -113,7 +113,7 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/microanalyticScore/modules?filter=eq(name,%20%22ScikitModel%22)"
+        "uri": "https://hostname.com/microanalyticScore/modules?filter=eq(name,%20%22ScikitModel%22)&limit=10000"
       },
       "response": {
         "body": {

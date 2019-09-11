@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2019-08-14T10:55:38",
+      "recorded_at": "2019-09-06T13:47:01",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -36,7 +36,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"f0e3a3eb59e64da2af4cbd031a189218\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"277ea77f61aa443fb2c10f9ddceb0363\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -50,7 +50,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Wed, 14 Aug 2019 10:55:38 GMT"
+            "Fri, 06 Sep 2019 13:47:05 GMT"
           ],
           "Expires": [
             "0"
@@ -89,7 +89,7 @@
       }
     },
     {
-      "recorded_at": "2019-08-14T10:55:48",
+      "recorded_at": "2019-09-06T13:47:01",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -118,7 +118,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders?start=0&limit=2\",\"uri\":\"/folders/folders?start=0&limit=2\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createFolder\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"next\",\"href\":\"/folders/folders?start=2&limit=2\",\"uri\":\"/folders/folders?start=2&limit=2\",\"type\":\"application/vnd.sas.collection\"}],\"name\":\"folders\",\"accept\":\"application/vnd.sas.content.folder\",\"start\":0,\"count\":88,\"items\":[{\"creationTimeStamp\":\"2019-05-24T21:33:48.826Z\",\"modifiedTimeStamp\":\"2019-05-31T17:58:18.248Z\",\"createdBy\":\"anonymousUser\",\"modifiedBy\":\"sasboot\",\"id\":\"9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"name\":\"Public\",\"description\":\"Public folder for general access.\",\"type\":\"folder\",\"memberCount\":4,\"properties\":{\"allowMove\":\"false\",\"uuid\":\"935842da-9ba0-479c-99e3-6a4e489322fc\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71?recursive=true\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1},{\"creationTimeStamp\":\"2019-05-24T21:29:01.801Z\",\"modifiedTimeStamp\":\"2019-05-24T21:29:02.688Z\",\"createdBy\":\"sas.textAnalytics\",\"modifiedBy\":\"sas.textAnalytics\",\"id\":\"70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"name\":\"sas.textAnalytics\",\"parentFolderUri\":\"/folders/folders/267370c3-0c46-4904-a697-e0dcb00b1b7d\",\"description\":\"The user folder for sas.textAnalytics\",\"type\":\"userFolder\",\"memberCount\":1,\"properties\":{\"allowMove\":\"false\",\"hidden\":\"true\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/267370c3-0c46-4904-a697-e0dcb00b1b7d\",\"uri\":\"/folders/folders/267370c3-0c46-4904-a697-e0dcb00b1b7d\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b?recursive=true\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1}],\"limit\":2,\"version\":2}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders?start=0&limit=2\",\"uri\":\"/folders/folders?start=0&limit=2\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createFolder\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"next\",\"href\":\"/folders/folders?start=2&limit=2\",\"uri\":\"/folders/folders?start=2&limit=2\",\"type\":\"application/vnd.sas.collection\"}],\"name\":\"folders\",\"accept\":\"application/vnd.sas.content.folder\",\"start\":0,\"count\":181,\"items\":[{\"creationTimeStamp\":\"2019-05-24T21:33:48.826Z\",\"modifiedTimeStamp\":\"2019-08-12T23:12:20.809Z\",\"createdBy\":\"anonymousUser\",\"modifiedBy\":\"USERNAME\",\"id\":\"9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"name\":\"Public\",\"description\":\"Public folder for general access.\",\"type\":\"folder\",\"memberCount\":6,\"properties\":{\"allowMove\":\"false\",\"uuid\":\"935842da-9ba0-479c-99e3-6a4e489322fc\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71?recursive=true\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1},{\"creationTimeStamp\":\"2019-08-20T20:32:37.315Z\",\"modifiedTimeStamp\":\"2019-08-20T20:32:38.170Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"aa271d1e-5fa9-4498-9396-8a672acb4627\",\"name\":\"VA_BAD_Report 1_1566333157198\",\"parentFolderUri\":\"/folders/folders/72414d18-2721-42a3-adb5-4424f3acb0cf\",\"type\":\"folder\",\"memberCount\":1,\"iconUri\":\"sas-icon://modelRepository/Folder\",\"properties\":{\"mmType\":\"mmModel\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/72414d18-2721-42a3-adb5-4424f3acb0cf\",\"uri\":\"/folders/folders/72414d18-2721-42a3-adb5-4424f3acb0cf\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateRename\",\"href\":\"/folders/commons/validations/folders/72414d18-2721-42a3-adb5-4424f3acb0cf/members/df4459c9-9df6-47bb-91b1-fddb449c8b8a/name?value={newname}&type=folder\",\"uri\":\"/folders/commons/validations/folders/72414d18-2721-42a3-adb5-4424f3acb0cf/members/df4459c9-9df6-47bb-91b1-fddb449c8b8a/name?value={newname}&type=folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627?recursive=true\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1}],\"limit\":2,\"version\":2}"
         },
         "headers": {
           "Cache-Control": [
@@ -134,13 +134,13 @@
             "application/vnd.sas.collection+json;charset=UTF-8"
           ],
           "Date": [
-            "Wed, 14 Aug 2019 10:55:48 GMT"
+            "Fri, 06 Sep 2019 13:47:04 GMT"
           ],
           "Expires": [
             "0"
           ],
           "Keep-Alive": [
-            "timeout=5, max=100"
+            "timeout=5, max=99"
           ],
           "Pragma": [
             "no-cache"
@@ -172,7 +172,7 @@
       }
     },
     {
-      "recorded_at": "2019-08-14T10:55:48",
+      "recorded_at": "2019-09-06T13:47:01",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -201,7 +201,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders?start=2&limit=3\",\"uri\":\"/folders/folders?start=2&limit=3\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createFolder\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"first\",\"href\":\"/folders/folders?start=0&limit=3\",\"uri\":\"/folders/folders?start=0&limit=3\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"next\",\"href\":\"/folders/folders?start=5&limit=3\",\"uri\":\"/folders/folders?start=5&limit=3\",\"type\":\"application/vnd.sas.collection\"}],\"name\":\"folders\",\"accept\":\"application/vnd.sas.content.folder\",\"start\":2,\"count\":88,\"items\":[{\"creationTimeStamp\":\"2019-05-24T21:29:02.657Z\",\"modifiedTimeStamp\":\"2019-05-24T21:29:06.210Z\",\"createdBy\":\"sas.textAnalytics\",\"modifiedBy\":\"sas.textAnalytics\",\"id\":\"a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"name\":\"Application Data\",\"parentFolderUri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"description\":\"Application data folder for sas.textAnalytics\",\"type\":\"applicationDataFolder\",\"memberCount\":1,\"properties\":{\"allowMove\":\"false\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f?recursive=true\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1},{\"creationTimeStamp\":\"2019-05-24T21:38:24.284Z\",\"modifiedTimeStamp\":\"2019-05-24T21:38:24.958Z\",\"createdBy\":\"sas.dataMiningModels\",\"modifiedBy\":\"sas.dataMiningModels\",\"id\":\"a8508a9f-ff18-48dc-b8d1-896fd299a998\",\"name\":\"Application Data\",\"parentFolderUri\":\"/folders/folders/8e87ad6f-7e89-4003-9651-e3e105950edc\",\"description\":\"Application data folder for sas.dataMiningModels\",\"type\":\"applicationDataFolder\",\"memberCount\":1,\"properties\":{\"allowMove\":\"false\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998\",\"uri\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/8e87ad6f-7e89-4003-9651-e3e105950edc\",\"uri\":\"/folders/folders/8e87ad6f-7e89-4003-9651-e3e105950edc\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998\",\"uri\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998?recursive=true\",\"uri\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998/members\",\"uri\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998/members\",\"uri\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998\",\"uri\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998\",\"uri\":\"/folders/folders/a8508a9f-ff18-48dc-b8d1-896fd299a998\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1},{\"creationTimeStamp\":\"2019-05-24T21:29:06.100Z\",\"modifiedTimeStamp\":\"2019-05-24T21:30:17.733Z\",\"createdBy\":\"sas.textAnalytics\",\"modifiedBy\":\"sas.textAnalytics\",\"id\":\"c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"name\":\"analytics-bootstrap\",\"parentFolderUri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"description\":\"A folder for application-defined analytics resources\",\"type\":\"folder\",\"memberCount\":17,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"uri\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateRename\",\"href\":\"/folders/commons/validations/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members/e0e773a7-855e-4eeb-af65-d735c08dacf0/name?value={newname}&type=folder\",\"uri\":\"/folders/commons/validations/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members/e0e773a7-855e-4eeb-af65-d735c08dacf0/name?value={newname}&type=folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"uri\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"uri\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7?recursive=true\",\"uri\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7/members\",\"uri\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7/members\",\"uri\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"uri\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"uri\":\"/folders/folders/c280667d-760a-465f-8c26-fe4a4f48f4c7\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1}],\"limit\":3,\"version\":2}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders?start=2&limit=3\",\"uri\":\"/folders/folders?start=2&limit=3\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createFolder\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"first\",\"href\":\"/folders/folders?start=0&limit=3\",\"uri\":\"/folders/folders?start=0&limit=3\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"next\",\"href\":\"/folders/folders?start=5&limit=3\",\"uri\":\"/folders/folders?start=5&limit=3\",\"type\":\"application/vnd.sas.collection\"}],\"name\":\"folders\",\"accept\":\"application/vnd.sas.content.folder\",\"start\":2,\"count\":181,\"items\":[{\"creationTimeStamp\":\"2019-05-24T21:47:12.545Z\",\"modifiedTimeStamp\":\"2019-08-12T20:43:10.268Z\",\"createdBy\":\"sas.modelRepository\",\"modifiedBy\":\"USERNAME\",\"id\":\"c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"name\":\"Model Repositories\",\"type\":\"folder\",\"memberCount\":3,\"iconUri\":\"sas-icon://modelRepository/RootFolder\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateRename\",\"href\":\"/folders/commons/validations/folders/@root/members/@new/name?value={newname}&type=folder\",\"uri\":\"/folders/commons/validations/folders/@root/members/@new/name?value={newname}&type=folder\",\"type\":\"application/vnd.sas.validation\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3?recursive=true\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1},{\"creationTimeStamp\":\"2019-05-24T21:29:01.801Z\",\"modifiedTimeStamp\":\"2019-05-24T21:29:02.688Z\",\"createdBy\":\"sas.textAnalytics\",\"modifiedBy\":\"sas.textAnalytics\",\"id\":\"70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"name\":\"sas.textAnalytics\",\"parentFolderUri\":\"/folders/folders/267370c3-0c46-4904-a697-e0dcb00b1b7d\",\"description\":\"The user folder for sas.textAnalytics\",\"type\":\"userFolder\",\"memberCount\":1,\"properties\":{\"allowMove\":\"false\",\"hidden\":\"true\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/267370c3-0c46-4904-a697-e0dcb00b1b7d\",\"uri\":\"/folders/folders/267370c3-0c46-4904-a697-e0dcb00b1b7d\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b?recursive=true\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1},{\"creationTimeStamp\":\"2019-05-24T21:29:02.657Z\",\"modifiedTimeStamp\":\"2019-05-24T21:29:06.210Z\",\"createdBy\":\"sas.textAnalytics\",\"modifiedBy\":\"sas.textAnalytics\",\"id\":\"a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"name\":\"Application Data\",\"parentFolderUri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"description\":\"Application data folder for sas.textAnalytics\",\"type\":\"applicationDataFolder\",\"memberCount\":1,\"properties\":{\"allowMove\":\"false\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f?recursive=true\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1}],\"limit\":3,\"version\":2}"
         },
         "headers": {
           "Cache-Control": [
@@ -217,13 +217,521 @@
             "application/vnd.sas.collection+json;charset=UTF-8"
           ],
           "Date": [
-            "Wed, 14 Aug 2019 10:55:48 GMT"
+            "Fri, 06 Sep 2019 13:47:04 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=98"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/folders/folders?start=2&limit=3"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:14:20",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "54"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"1a164f992b4942bba3ee99863fb908b1\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:14:24 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:14:20",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/folders/folders?limit=2"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders?start=0&limit=2\",\"uri\":\"/folders/folders?start=0&limit=2\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createFolder\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"next\",\"href\":\"/folders/folders?start=2&limit=2\",\"uri\":\"/folders/folders?start=2&limit=2\",\"type\":\"application/vnd.sas.collection\"}],\"name\":\"folders\",\"accept\":\"application/vnd.sas.content.folder\",\"start\":0,\"count\":175,\"items\":[{\"creationTimeStamp\":\"2019-05-24T21:33:48.826Z\",\"modifiedTimeStamp\":\"2019-08-12T23:12:20.809Z\",\"createdBy\":\"anonymousUser\",\"modifiedBy\":\"USERNAME\",\"id\":\"9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"name\":\"Public\",\"description\":\"Public folder for general access.\",\"type\":\"folder\",\"memberCount\":6,\"properties\":{\"allowMove\":\"false\",\"uuid\":\"935842da-9ba0-479c-99e3-6a4e489322fc\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71?recursive=true\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1},{\"creationTimeStamp\":\"2019-08-20T20:32:37.315Z\",\"modifiedTimeStamp\":\"2019-08-20T20:32:38.170Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"aa271d1e-5fa9-4498-9396-8a672acb4627\",\"name\":\"VA_BAD_Report 1_1566333157198\",\"parentFolderUri\":\"/folders/folders/72414d18-2721-42a3-adb5-4424f3acb0cf\",\"type\":\"folder\",\"memberCount\":1,\"iconUri\":\"sas-icon://modelRepository/Folder\",\"properties\":{\"mmType\":\"mmModel\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/72414d18-2721-42a3-adb5-4424f3acb0cf\",\"uri\":\"/folders/folders/72414d18-2721-42a3-adb5-4424f3acb0cf\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateRename\",\"href\":\"/folders/commons/validations/folders/72414d18-2721-42a3-adb5-4424f3acb0cf/members/df4459c9-9df6-47bb-91b1-fddb449c8b8a/name?value={newname}&type=folder\",\"uri\":\"/folders/commons/validations/folders/72414d18-2721-42a3-adb5-4424f3acb0cf/members/df4459c9-9df6-47bb-91b1-fddb449c8b8a/name?value={newname}&type=folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627?recursive=true\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1}],\"limit\":2,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:14:23 GMT"
           ],
           "Expires": [
             "0"
           ],
           "Keep-Alive": [
             "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/folders/folders?limit=2"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:14:20",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/folders/folders?start=2&limit=3"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders?start=2&limit=3\",\"uri\":\"/folders/folders?start=2&limit=3\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createFolder\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"first\",\"href\":\"/folders/folders?start=0&limit=3\",\"uri\":\"/folders/folders?start=0&limit=3\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"next\",\"href\":\"/folders/folders?start=5&limit=3\",\"uri\":\"/folders/folders?start=5&limit=3\",\"type\":\"application/vnd.sas.collection\"}],\"name\":\"folders\",\"accept\":\"application/vnd.sas.content.folder\",\"start\":2,\"count\":175,\"items\":[{\"creationTimeStamp\":\"2019-05-24T21:47:12.545Z\",\"modifiedTimeStamp\":\"2019-08-12T20:43:10.268Z\",\"createdBy\":\"sas.modelRepository\",\"modifiedBy\":\"USERNAME\",\"id\":\"c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"name\":\"Model Repositories\",\"type\":\"folder\",\"memberCount\":3,\"iconUri\":\"sas-icon://modelRepository/RootFolder\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateRename\",\"href\":\"/folders/commons/validations/folders/@root/members/@new/name?value={newname}&type=folder\",\"uri\":\"/folders/commons/validations/folders/@root/members/@new/name?value={newname}&type=folder\",\"type\":\"application/vnd.sas.validation\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3?recursive=true\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1},{\"creationTimeStamp\":\"2019-05-24T21:29:01.801Z\",\"modifiedTimeStamp\":\"2019-05-24T21:29:02.688Z\",\"createdBy\":\"sas.textAnalytics\",\"modifiedBy\":\"sas.textAnalytics\",\"id\":\"70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"name\":\"sas.textAnalytics\",\"parentFolderUri\":\"/folders/folders/267370c3-0c46-4904-a697-e0dcb00b1b7d\",\"description\":\"The user folder for sas.textAnalytics\",\"type\":\"userFolder\",\"memberCount\":1,\"properties\":{\"allowMove\":\"false\",\"hidden\":\"true\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/267370c3-0c46-4904-a697-e0dcb00b1b7d\",\"uri\":\"/folders/folders/267370c3-0c46-4904-a697-e0dcb00b1b7d\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b?recursive=true\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1},{\"creationTimeStamp\":\"2019-05-24T21:29:02.657Z\",\"modifiedTimeStamp\":\"2019-05-24T21:29:06.210Z\",\"createdBy\":\"sas.textAnalytics\",\"modifiedBy\":\"sas.textAnalytics\",\"id\":\"a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"name\":\"Application Data\",\"parentFolderUri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"description\":\"Application data folder for sas.textAnalytics\",\"type\":\"applicationDataFolder\",\"memberCount\":1,\"properties\":{\"allowMove\":\"false\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f?recursive=true\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1}],\"limit\":3,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:14:23 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=98"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/folders/folders?start=2&limit=3"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:33",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "54"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"e39e53b63a9b4125b06c84070e654ac3\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:36 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:33",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/folders/folders?limit=2"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders?start=0&limit=2\",\"uri\":\"/folders/folders?start=0&limit=2\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createFolder\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"next\",\"href\":\"/folders/folders?start=2&limit=2\",\"uri\":\"/folders/folders?start=2&limit=2\",\"type\":\"application/vnd.sas.collection\"}],\"name\":\"folders\",\"accept\":\"application/vnd.sas.content.folder\",\"start\":0,\"count\":172,\"items\":[{\"creationTimeStamp\":\"2019-05-24T21:33:48.826Z\",\"modifiedTimeStamp\":\"2019-08-12T23:12:20.809Z\",\"createdBy\":\"anonymousUser\",\"modifiedBy\":\"USERNAME\",\"id\":\"9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"name\":\"Public\",\"description\":\"Public folder for general access.\",\"type\":\"folder\",\"memberCount\":6,\"properties\":{\"allowMove\":\"false\",\"uuid\":\"935842da-9ba0-479c-99e3-6a4e489322fc\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71?recursive=true\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"uri\":\"/folders/folders/9fb20b2c-90b7-49d7-95e6-f6367844fe71\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1},{\"creationTimeStamp\":\"2019-08-20T20:32:37.315Z\",\"modifiedTimeStamp\":\"2019-08-20T20:32:38.170Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"aa271d1e-5fa9-4498-9396-8a672acb4627\",\"name\":\"VA_BAD_Report 1_1566333157198\",\"parentFolderUri\":\"/folders/folders/72414d18-2721-42a3-adb5-4424f3acb0cf\",\"type\":\"folder\",\"memberCount\":1,\"iconUri\":\"sas-icon://modelRepository/Folder\",\"properties\":{\"mmType\":\"mmModel\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/72414d18-2721-42a3-adb5-4424f3acb0cf\",\"uri\":\"/folders/folders/72414d18-2721-42a3-adb5-4424f3acb0cf\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateRename\",\"href\":\"/folders/commons/validations/folders/72414d18-2721-42a3-adb5-4424f3acb0cf/members/df4459c9-9df6-47bb-91b1-fddb449c8b8a/name?value={newname}&type=folder\",\"uri\":\"/folders/commons/validations/folders/72414d18-2721-42a3-adb5-4424f3acb0cf/members/df4459c9-9df6-47bb-91b1-fddb449c8b8a/name?value={newname}&type=folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627?recursive=true\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"uri\":\"/folders/folders/aa271d1e-5fa9-4498-9396-8a672acb4627\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1}],\"limit\":2,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:36 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/folders/folders?limit=2"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:33",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/folders/folders?start=2&limit=3"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders?start=2&limit=3\",\"uri\":\"/folders/folders?start=2&limit=3\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createFolder\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"first\",\"href\":\"/folders/folders?start=0&limit=3\",\"uri\":\"/folders/folders?start=0&limit=3\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"next\",\"href\":\"/folders/folders?start=5&limit=3\",\"uri\":\"/folders/folders?start=5&limit=3\",\"type\":\"application/vnd.sas.collection\"}],\"name\":\"folders\",\"accept\":\"application/vnd.sas.content.folder\",\"start\":2,\"count\":172,\"items\":[{\"creationTimeStamp\":\"2019-05-24T21:47:12.545Z\",\"modifiedTimeStamp\":\"2019-08-12T20:43:10.268Z\",\"createdBy\":\"sas.modelRepository\",\"modifiedBy\":\"USERNAME\",\"id\":\"c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"name\":\"Model Repositories\",\"type\":\"folder\",\"memberCount\":3,\"iconUri\":\"sas-icon://modelRepository/RootFolder\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateRename\",\"href\":\"/folders/commons/validations/folders/@root/members/@new/name?value={newname}&type=folder\",\"uri\":\"/folders/commons/validations/folders/@root/members/@new/name?value={newname}&type=folder\",\"type\":\"application/vnd.sas.validation\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.content.folder\",\"responseType\":\"application/vnd.sas.content.folder\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3?recursive=true\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"uri\":\"/folders/folders/c3c4330a-06eb-494d-b51c-14e2381c94c3\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1},{\"creationTimeStamp\":\"2019-05-24T21:29:01.801Z\",\"modifiedTimeStamp\":\"2019-05-24T21:29:02.688Z\",\"createdBy\":\"sas.textAnalytics\",\"modifiedBy\":\"sas.textAnalytics\",\"id\":\"70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"name\":\"sas.textAnalytics\",\"parentFolderUri\":\"/folders/folders/267370c3-0c46-4904-a697-e0dcb00b1b7d\",\"description\":\"The user folder for sas.textAnalytics\",\"type\":\"userFolder\",\"memberCount\":1,\"properties\":{\"allowMove\":\"false\",\"hidden\":\"true\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/267370c3-0c46-4904-a697-e0dcb00b1b7d\",\"uri\":\"/folders/folders/267370c3-0c46-4904-a697-e0dcb00b1b7d\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b?recursive=true\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1},{\"creationTimeStamp\":\"2019-05-24T21:29:02.657Z\",\"modifiedTimeStamp\":\"2019-05-24T21:29:06.210Z\",\"createdBy\":\"sas.textAnalytics\",\"modifiedBy\":\"sas.textAnalytics\",\"id\":\"a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"name\":\"Application Data\",\"parentFolderUri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"description\":\"Application data folder for sas.textAnalytics\",\"type\":\"applicationDataFolder\",\"memberCount\":1,\"properties\":{\"allowMove\":\"false\"},\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"uri\":\"/folders/folders/70b14bb9-edec-4604-8b0a-d980cf480d2b\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"PUT\",\"rel\":\"validateNewMemberName\",\"href\":\"/folders/commons/validations/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members/@new/name?value={newname}&type={newtype}\",\"uri\":\"/folders/commons/validations/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members/@new/name?value={newname}&type={newtype}\"},{\"method\":\"GET\",\"rel\":\"ancestors\",\"href\":\"/folders/ancestors?childUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/ancestors?childUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder.ancestor\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\"},{\"method\":\"DELETE\",\"rel\":\"deleteRecursively\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f?recursive=true\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f?recursive=true\"},{\"method\":\"GET\",\"rel\":\"members\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"addMember\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f/members\",\"type\":\"application/vnd.sas.content.folder.member\"},{\"method\":\"POST\",\"rel\":\"createChild\",\"href\":\"/folders/folders?parentFolderUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders?parentFolderUri=/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"transferExport\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"responseType\":\"application/vnd.sas.transfer.object\"},{\"method\":\"PUT\",\"rel\":\"transferImportUpdate\",\"href\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"uri\":\"/folders/folders/a69a92ef-c93c-49fb-8f4c-7e1aac234d9f\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"},{\"method\":\"POST\",\"rel\":\"transferImport\",\"href\":\"/folders/folders\",\"uri\":\"/folders/folders\",\"type\":\"application/vnd.sas.transfer.object\",\"responseType\":\"application/vnd.sas.summary\"}],\"version\":1}],\"limit\":3,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:36 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=98"
           ],
           "Pragma": [
             "no-cache"
