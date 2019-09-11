@@ -5,6 +5,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import pytest
+from six.moves import mock
+
+from sasctl.core import RestObj
 
 
 def test_sklearn_metadata():
@@ -43,7 +46,6 @@ def test_sklearn_metadata():
 
 
 def test_parse_module_url():
-    from sasctl.core import RestObj
     from sasctl.tasks import _parse_module_url
 
     body = RestObj({'createdBy': 'sasdemo',
@@ -70,3 +72,29 @@ def test_parse_module_url():
 
     msg = body.get('log').lstrip('SUCßCESS===')
     assert _parse_module_url(msg) == '/microanalyticScore/modules/decisiontree'
+
+
+def test_save_performance_project_types():
+    from sasctl.tasks import update_performance
+
+    with mock.patch('sasctl._services.model_repository.ModelRepository''.get_model') as model:
+        with mock.patch('sasctl._services.model_repository.ModelRepository.get_project') as project:
+            model.return_value = RestObj(name='fakemodel', projectId=1)
+
+            # Function is required
+            with pytest.raises(ValueError):
+                project.return_value = {}
+                update_performance(None, None, None)
+
+            # Target Level is required
+            with pytest.raises(ValueError):
+                project.return_value = {'function': 'Prediction'}
+                update_performance(None, None, None)
+
+            # Prediction variable required
+            with pytest.raises(ValueError):
+                project.return_value = {'function': 'Prediction',
+                                        'targetLevel': 'Binary'}
+                update_performance(None, None, None)
+
+    # Check projects w/ invalid properties

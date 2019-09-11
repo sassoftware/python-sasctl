@@ -6,6 +6,7 @@ Unreleased
  
 **Changes**
  - `register_model` task automatically captures installed Python packages.
+ - All `list_xxx` methods return all matching items unless a `limit` parameter is specified.
  - Improved API documentation
  
  

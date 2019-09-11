@@ -70,9 +70,18 @@ betamax.Betamax.register_request_matcher(RedactedPathMatcher)
 from .matcher import PartialBodyMatcher
 betamax.Betamax.register_request_matcher(PartialBodyMatcher)
 
+# Replay cassettes only by default
+# Can be overridden as necessary to update cassettes
+# See https://betamax.readthedocs.io/en/latest/record_modes.html for details.
+os.environ.setdefault('SASCTL_RECORD_MODE', 'once')
+if os.environ['SASCTL_RECORD_MODE'] \
+        not in ('once', 'new_episodes', 'all', 'none'):
+    os.environ['SASCTL_RECORD_MODE'] = 'once'
+
 with betamax.Betamax.configure() as config:
     config.cassette_library_dir = "tests/cassettes"
-    config.default_cassette_options['record_mode'] = 'once'
+    config.default_cassette_options['record_mode'] = os.environ[
+        'SASCTL_RECORD_MODE']
     config.default_cassette_options['match_requests_on'] = ['method',
                                                             'redacted_path',
                                                             # 'partial_body',
@@ -206,7 +215,6 @@ def cas_session(request, credentials):
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
         cassette_name = _casette_name(request, parametrized=False) + '_swat'
-
 
     # Must have an existing Session for Betamax to record
     recorded_session = requests.Session()

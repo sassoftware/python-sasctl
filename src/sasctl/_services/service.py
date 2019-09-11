@@ -217,6 +217,10 @@ class Service(object):
                 kwargs['start'] = int(start)
             if limit is not None:
                 kwargs['limit'] = int(limit)
+            else:
+                # Until search is more precise, try to pull all results
+                # Needed until transparent pagination is implemented.
+                kwargs['limit'] = int(1e4)
 
             params = '&'.join(['%s=%s' % (k, quote(str(v), safe='/(),"'))
                                for k, v in six.iteritems(kwargs)])

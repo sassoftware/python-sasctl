@@ -27,10 +27,10 @@ class TestModelPublish:
         assert dest.destinationType == 'microAnalyticService'
 
     def test_create_cas_destination(self):
-        dest = mp.create_cas_destination('caslocal', 'Public', 'sasctl_models',
+        dest = mp.create_cas_destination('sasctlcas', 'Public', 'sasctl_models',
                                          description='Test CAS publish destination from sasctl.')
 
-        assert dest.name == 'caslocal'
+        assert dest.name == 'sasctlcas'
         assert dest.destinationType == 'cas'
         assert dest.casLibrary == 'Public'
         assert dest.casServerName == 'cas-shared-default'
@@ -38,8 +38,8 @@ class TestModelPublish:
         assert dest.description == 'Test CAS publish destination from sasctl.'
 
     def test_create_mas_destination(self):
-        dest = mp.create_mas_destination('maslocal2', 'localhost')
+        dest = mp.create_mas_destination('sasctlmas', 'localhost')
 
-        assert dest.name == 'maslocal2'
+        assert dest.name == 'sasctlmas'
         assert dest.destinationType == 'microAnalyticService'
         assert 'description' not in dest
