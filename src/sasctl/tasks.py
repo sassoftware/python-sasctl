@@ -161,8 +161,6 @@ def register_model(model, name, project, repository=None, input=None,
         else:
             raise ValueError("Unrecognized version '%s'." % version)
 
-    #
-
         # TODO: get ID of correct model version
     # if version != new, get existing model
     # get model (modelVersions) rel
@@ -512,7 +510,7 @@ def update_performance(data, model, label, refresh=True):
     url = '{}://{}/{}-http/'.format(sess._settings['protocol'],
                                     sess.hostname,
                                     cas_id)
-    regex = r'{}_(\d)_*_{}'.format(table_prefix,
+    regex = r'{}_(\d)_.*_{}'.format(table_prefix,
                                   model_obj.id)
 
     # Upload the performance data to CAS
