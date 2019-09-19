@@ -6,7 +6,6 @@
 
 from .service import Service
 
-
 class ModelManagement(Service):
     """The Model Management API provides basic resources for monitoring
     performance, comparing models, and running workflow processes.
@@ -231,4 +230,105 @@ class ModelManagement(Service):
         definition = self.get_performance_definition(definition)
 
         return self.post('/performanceTasks/%s' % definition.id)
+
+    def list_model_workflow_definition(self):
+        """List all enabled Workflow Processes to execute on Model Project.
+
+        Returns
+        -------
+        RestObj
+            The list of workflows
+
+        """
+        from .workflow import Workflow
+        wf = Workflow()
+
+        return wf.list_workflow_enableddefinitions()
+
+    def list_model_workflow_prompt(self, workflowName):
+        """List prompt Workflow Processes Definitions.
+
+        Parameters
+        ----------
+        workflowName : str
+            Name or ID of an enabled workflow to retrieve inputs
+
+        Returns
+        -------
+        list
+            The list of prompts for specific workflow
+    
+        """
+        from .workflow import Workflow
+        wf = Workflow()
+        
+        return wf.list_workflow_prompt(workflowName)
+
+
+    def list_model_workflow_executed(self, projectName):
+        """List prompt Workflow Processes Definitions.
+
+        Parameters
+        ----------
+        projectName : str
+            Name of the Project list executed workflow
+
+
+        Returns
+        -------
+        RestObj
+            List of workflows associated to project
+
+        """
+        from .model_repository import ModelRepository
+        mr = ModelRepository()
+
+        project = mr.get_project(projectName)
+
+        return self.get('/workflowProcesses?filter=eq(associations.solutionObjectId,%22'+project['id']+'%22)')
+
+
+    def execute_model_workflow_definition(self, projectName, workflowName, input=None):
+        """Runs specific Workflow Processes Definitions.
+
+        Parameters
+        ----------
+        projectName : str
+            Name of the Project that will execute workflow
+        workflowName : str
+            Name or ID of an enabled workflow to execute
+        input : dict, optional
+            Input values for the workflow for initial workflow prompt
+
+        Returns
+        -------
+        RestObj
+            The executing workflow
+            
+        """
+        from .model_repository import ModelRepository
+        from .workflow import Workflow
+        mr = ModelRepository()
+        wf = Workflow()
+        
+        project = mr.get_project(projectName)
+
+        workflow = wf.run_workflow_definition(workflowName, input=input)
+        
+        #Associations running workflow to model project, note workflow has to be running
+        # THINK ABOUT: do we do a check on status of the workflow to determine if it is still running before associating?
+        
+        input={"processName":workflow['name'],"processId":workflow['id'],"objectType":"MM_Project",
+               "solutionObjectName":projectName,"solutionObjectId":project['id'],
+               "solutionObjectUri":"/modelRepository/projects/"+project['id'],
+               "solutionObjectMediaType":"application/vnd.sas.models.project+json"}
+        
+        #Note, you can get a HTTP Error 404: {"errorCode":74052,"message":"The workflow process for id <> cannot be found.
+        #                                    Associations can only be made to running processes.","details":["correlator:
+        #                                    e62c5562-2b11-45db-bcb7-933200cb0f0a","traceId: 3118c0fb1eb9702d","path:
+        #                                    /modelManagement/workflowAssociations"],"links":[],"version":2,"httpStatusCode":404} 
+        # Which is fine and expected like the Visual Experience.
+        return self.post('/workflowAssociations', json=input,
+                     headers={'Content-Type': 'application/vnd.sas.workflow.object.association+json'})
+
 
