@@ -632,9 +632,24 @@ def is_uuid(id):
         return False
 
 
-def get(*args, **kwargs):
+def get(path, **kwargs):
+    """Send a GET request.
+
+    Parameters
+    ----------
+    path : str
+        The path portion of the URL.
+    kwargs : any
+        Passed to `request`.
+
+    Returns
+    -------
+    RestObj or None
+        The results or None if the resource was not found.
+
+    """
     try:
-        return request('get', *args, **kwargs)
+        return request('get', path, **kwargs)
     except HTTPError as e:
         if e.code == 404:
             return None  # Resource not found
@@ -642,20 +657,90 @@ def get(*args, **kwargs):
             raise e
 
 
-def head(*args, **kwargs):
-    return request('head', *args, **kwargs)
+def head(path, **kwargs):
+    """Send a HEAD request.
+
+    Parameters
+    ----------
+    path : str
+        The path portion of the URL.
+    kwargs : any
+        Passed to `request`.
+
+    Returns
+    -------
+    RestObj
+
+    """
+    return request('head', path, **kwargs)
 
 
-def post(*args, **kwargs):
-    return request('post', *args, **kwargs)
+def post(path, **kwargs):
+    """Send a POST request.
+
+    Parameters
+    ----------
+    path : str
+        The path portion of the URL.
+    kwargs : any
+        Passed to `request`.
+
+    Returns
+    -------
+    RestObj
+
+    """
+    return request('post', path, **kwargs)
 
 
-def put(*args, **kwargs):
-    return request('put', *args, **kwargs)
+def put(path, item=None, **kwargs):
+    """Send a PUT request.
+
+    Parameters
+    ----------
+    path : str
+        The path portion of the URL.
+    item : RestObj, optional
+        A existing object to PUT.  If provided, ETag and Content-Type headers
+        will automatically be specified.
+    kwargs : any
+        Passed to `request`.
+
+    Returns
+    -------
+    RestObj
+
+    """
+    # If call is in the format put(url, RestObj), automatically fill in header
+    # information
+    if item is not None and isinstance(item, RestObj):
+        get_headers = getattr(item, '_headers', None)
+        if get_headers is not None:
+            # Update the headers param if it was specified
+            headers = kwargs.pop('headers', {})
+            headers.setdefault('If-Match', get_headers.get('etag'))
+            headers.setdefault('Content-Type', get_headers.get('content-type'))
+            return request('put', path, json=item, headers=headers)
+
+    return request('put', path, **kwargs)
 
 
-def delete(*args, **kwargs):
-    return request('delete', *args, **kwargs)
+def delete(path, **kwargs):
+    """Send a DELETE request.
+
+    Parameters
+    ----------
+    path : str
+        The path portion of the URL.
+    kwargs : any
+        Passed to `request`.
+
+    Returns
+    -------
+    RestObj
+
+    """
+    return request('delete', path, **kwargs)
 
 
 def request(verb, path, session=None, raw=False, **kwargs):

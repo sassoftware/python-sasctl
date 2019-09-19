@@ -111,3 +111,53 @@ def test_update_item():
     assert ('put', '/widget/12345') == request.call_args[0]
     assert target == resp
 
+
+def test_put_restobj():
+    from sasctl.core import put, RestObj
+
+    url = "/jobDefinitions/definitions/717331fa-f650-4e31-b9e2-6e6d49f66bf9"
+    obj = RestObj({
+        '_headers': {'etag': 123, 'content-type': 'spam'}
+    })
+
+    # Base case
+    with mock.patch('sasctl.core.request') as req:
+        put(url, obj)
+
+    assert req.called
+    args = req.call_args[0]
+    kwargs = req.call_args[1]
+
+    assert args == ('put', url)
+    assert kwargs['json'] == obj
+    assert kwargs['headers']['If-Match'] == 123
+    assert kwargs['headers']['Content-Type'] == 'spam'
+
+    # Should merge with explicit headers
+    with mock.patch('sasctl.core.request') as req:
+        put(url, obj, headers={'encoding': 'spammy'})
+
+    assert req.called
+    args = req.call_args[0]
+    kwargs = req.call_args[1]
+
+    assert args == ('put', url)
+    assert kwargs['json'] == obj
+    assert kwargs['headers']['If-Match'] == 123
+    assert kwargs['headers']['Content-Type'] == 'spam'
+    assert kwargs['headers']['encoding'] == 'spammy'
+
+    # Should not overwrite explicit headers
+    with mock.patch('sasctl.core.request') as req:
+        put(url, obj, headers={'Content-Type': 'notspam',
+                               'encoding': 'spammy'})
+
+    assert req.called
+    args = req.call_args[0]
+    kwargs = req.call_args[1]
+
+    assert args == ('put', url)
+    assert kwargs['json'] == obj
+    assert kwargs['headers']['If-Match'] == 123
+    assert kwargs['headers']['Content-Type'] == 'notspam'
+    assert kwargs['headers']['encoding'] == 'spammy'

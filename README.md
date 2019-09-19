@@ -81,7 +81,7 @@ which can handle all necessary communication with the SAS Viya server:
 
 >>> with Session('example.com', authinfo=<authinfo file>):
 ...    model = lm.LogisticRegression()
-...    register_model('Sklearn Model', model, 'My Project')
+...    register_model(model, 'Sklearn Model', 'My Project')
 ```
 
 
@@ -165,7 +165,7 @@ Register a pure Python model in Model Manager:
 
 >>> with Session(host, authinfo=<authinfo file>):
 ...    model = lm.LogisticRegression()
-...    register_model('Sklearn Model', model, 'My Project')
+...    register_model(model, 'Sklearn Model', 'My Project')
 ```
 
 Register a CAS model in Model Manager:

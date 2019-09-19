@@ -4,6 +4,6 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-from .astore import create_package_from_astore
+from .astore import create_package, create_package_from_astore
 
 
