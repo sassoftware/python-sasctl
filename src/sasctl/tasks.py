@@ -101,6 +101,9 @@ def register_model(model, name, project, repository=None, input=None,
         Version number of the project in which the model should be created.
         Defaults to 'new'.
     files : list
+        A list of dictionaries of the form {'name': filename, 'file': filecontent}.
+        An optional 'role' key is supported for designating a file as score code,
+        astore, etc.
     force : bool, optional
         Create dependencies such as projects and repositories if they do not
         already exist.
@@ -125,8 +128,6 @@ def register_model(model, name, project, repository=None, input=None,
 
     """
     # TODO: Create new version if model already exists
-    # TODO: Allow file info to be specified
-    # TODO: Performance stats
 
     # If version not specified, default to creating a new version
     version = version or 'new'
@@ -268,6 +269,30 @@ def register_model(model, name, project, repository=None, input=None,
     if create_project:
         vars = model.get('inputVariables', [])[:]
         vars += model.get('outputVariables', [])
+
+        # Project Functions:
+        # Analytical
+        # Classification
+        # Clustering
+        # Forecasting
+        # Prediction
+        # Text Analytics
+        # Transformation
+
+        # Target Levels:
+        # Binary
+        # Nominal
+        # Ordinal
+        # Interval
+
+        # project = mr.get_project(model.projectId)
+        # # Update project properties
+        # project['function'] = 'prediction'
+        # project['targetLevel'] = 'interval'
+        # project['targetVariable'] = 'Price'
+        # project['predictionVariable'] = 'var1'
+        # project = mr.update_project(project)
+
 
         if model.get('function') == 'Regression':
             target_level = 'Interval'
@@ -438,6 +463,8 @@ def update_performance(data, model, label, refresh=True):
     See Also
     --------
      :meth:`model_management.create_performance_definition <.ModelManagement.create_performance_definition>`
+
+    .. versionadded:: v1.3
 
     """
     from .services import model_management as mm
