@@ -792,6 +792,9 @@ def get_link(obj, rel):
                 return links[0]
             elif len(links) > 1:
                 return links
+    elif isinstance(obj, dict) and 'rel' in obj and obj['rel'] == rel:
+        # Object is already a link, just return it
+        return obj
 
 
 def request_link(obj, rel, **kwargs):
@@ -812,7 +815,6 @@ def request_link(obj, rel, **kwargs):
 
     if link is None:
         raise ValueError("Link '%s' not found in object %s." % (rel, obj))
-
 
     return request(link['method'], link['href'], **kwargs)
 
