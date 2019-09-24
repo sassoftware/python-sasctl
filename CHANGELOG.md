@@ -10,6 +10,11 @@ Unreleased
  - Improved API documentation
  
  
+v1.2.4 (2019-9-20)
+------------------
+**Bugfixes**
+ - `model_repository.get_model_contents` no longer raises an HTTP 406 error.
+ 
 v1.2.3 (2019-8-23)
 ------------------
 **Changes**

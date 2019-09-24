@@ -143,9 +143,7 @@ class ModelRepository(Service):
         """
         link = cls.get_model_link(model, 'contents', refresh=True)
 
-        if link is not None:
-            return get(link.get('href'),
-                       headers={'Accept': link.get('itemType', '*/*')})
+        return cls.request_link(link, 'contents')
 
     @classmethod
     def create_model(cls, model, project,
