@@ -101,75 +101,24 @@ def create_package_from_astore(table):
     :meth:`model_repository.import_model_from_zip <.ModelRepository.import_model_from_zip>`
 
     """
-    if swat is None:
-        raise RuntimeError("The 'swat' package is required to work with "
-                           "ASTORE models.")
+    files = _create_files_from_astore(table)
 
-    assert isinstance(table, swat.CASTable)
-
-    sess = table.session.get_connection()
-    sess.loadactionset('astore')
-
-    result = sess.astore.describe(rstore=table, epcode=True)
-    astore = sess.astore.download(rstore=table)
-    if not hasattr(astore, "blob"):
-        raise ValueError("Failed to download binary data for ASTORE '%s'."
-                         % astore)
-    astore = astore.blob
-
-    astore = bytes(astore)      # Convert from SWAT blob type
-
-    # Raise error if describe action fails
-    if result.status_code != 0:
-        raise RuntimeError(result)
-
-    astore_key = result.Key.Key[0].strip()
-    ep_ds2 = result.epcode
-    package_ds2 = _generate_package_code(result)
-    model_properties = _get_model_properties(result)
-    input_vars = [get_variable_properties(var)
-                  for var in result.InputVariables.itertuples()]
-    output_vars = [get_variable_properties(var)
-                   for var in result.OutputVariables.itertuples()]
-    astore_filename = '_' + uuid.uuid4().hex[:25].upper()
-
-    # Copy the ASTORE table to the ModelStore.
-    # Raise an error if the action fails
-    with swat.options(exception_on_severity=2):
-        table.save(name=astore_filename, caslib='ModelStore', replace=True)
-
-    file_metadata = [{'role': 'analyticStore', 'name': ''},
-                     {'role': 'score', 'name': 'dmcas_packagescorecode.sas'}]
-
-    astore_metadata = [{'name': astore_filename,
-                        'caslib': 'ModelStore',
-                        'uri': '/dataTables/dataSources/cas~fs~cas-shared-default~fs~ModelStore/tables/{}'.format(astore_filename),
-                        'key': astore_key}]
-
-    zip_file = _build_zip_from_files({
-        'dmcas_packagescorecode.sas': '\n'.join(package_ds2),
-        'dmcas_epscorecode.sas': ep_ds2,
-        astore_filename: astore,
-        'ModelProperties.json': model_properties,
-        'fileMetadata.json': file_metadata,
-        'AstoreMetadata.json': astore_metadata,
-        'inputVar.json': input_vars,
-        'outputVar.json': output_vars
-    })
-
-    return zip_file
-
+    return _build_zip_from_files(files)
 
 
 def _create_files_from_astore(table):
-    """Generate files for
+    """Generate files for importing a model from an ASTORE.
 
     Parameters
     ----------
-    table
+    table : swat.CASTable
+        The CAS table containing the ASTORE.
+
 
     Returns
     -------
+    dict
+        Dictionary of filename: content pairs.
 
     """
     if swat is None:
