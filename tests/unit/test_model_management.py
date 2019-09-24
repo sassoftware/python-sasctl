@@ -83,3 +83,19 @@ def test_create_performance_definition():
             _ = mm.create_performance_definition('model',
                                                  'TestLibrary',
                                                  'invalid_name')
+
+def test_execute_model_workflow_definition_invalidworkflow():
+
+    PROJECT = RestObj({'name': 'Test Project', 'id': '98765'})
+    WORKFLOWS = [{'name': 'Test W', 'id': '12345'},{'name': 'TestW2', 'id': '98765', 'prompts': [{'id': '98765', 'variableName': 'projectId', 'variableType': 'string'}]}]
+
+    with mock.patch('sasctl._services.workflow.Workflow'
+                    '.list_workflow_enableddefinitions') as list_workflow_enableddefinitions:
+        with mock.patch('sasctl._services.model_repository.ModelRepository'
+                        '.get_project') as get_project:
+            list_workflow_enableddefinitions.return_value = WORKFLOWS
+            get_project.return_value = PROJECT
+            with pytest.raises(ValueError):
+                # Project missing 
+                _ = mm.execute_model_workflow_definition('TestLibrary','badworkflow')
+
