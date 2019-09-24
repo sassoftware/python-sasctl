@@ -75,7 +75,7 @@ def test_parse_module_url():
 
 
 def test_save_performance_project_types():
-    from sasctl.tasks import update_performance
+    from sasctl.tasks import update_model_performance
 
     with mock.patch('sasctl._services.model_repository.ModelRepository''.get_model') as model:
         with mock.patch('sasctl._services.model_repository.ModelRepository.get_project') as project:
@@ -84,17 +84,17 @@ def test_save_performance_project_types():
             # Function is required
             with pytest.raises(ValueError):
                 project.return_value = {}
-                update_performance(None, None, None)
+                update_model_performance(None, None, None)
 
             # Target Level is required
             with pytest.raises(ValueError):
                 project.return_value = {'function': 'Prediction'}
-                update_performance(None, None, None)
+                update_model_performance(None, None, None)
 
             # Prediction variable required
             with pytest.raises(ValueError):
                 project.return_value = {'function': 'Prediction',
                                         'targetLevel': 'Binary'}
-                update_performance(None, None, None)
+                update_model_performance(None, None, None)
 
     # Check projects w/ invalid properties

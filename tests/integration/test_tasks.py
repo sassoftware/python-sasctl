@@ -19,13 +19,10 @@ PROJECT_NAME = 'Test Project'
 
 
 @pytest.fixture
-def sklearn_model():
-    """Returns a simple Scikit-Learn model """
+def sklearn_logistic_model():
+    """A Scikit-Learn logistic regression fit to Iris data set."""
 
-    try:
-        import pandas as pd
-    except ImportError:
-        pytest.skip('Package `pandas` not found.')
+    pd = pytest.importorskip('pandas')
 
     try:
         from sklearn import datasets
@@ -48,6 +45,27 @@ def sklearn_model():
     return model, iris.iloc[:, 0:4]
 
 
+@pytest.fixture
+def sklearn_linear_model():
+    """A Scikit-Learn linear regression fit to Boston housing data."""
+
+    pd = pytest.importorskip('pandas')
+    datasets = pytest.importorskip('sklearn.datasets')
+    linear_model = pytest.importorskip('sklearn.linear_model')
+
+    data = datasets.load_boston()
+    X = pd.DataFrame(data.data, columns=data.feature_names)
+    y = pd.DataFrame(data.target, columns=['Price'])
+
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore')
+        lm = linear_model.LinearRegression()
+        lm.fit(X, y)
+
+    return lm, X, y
+
+
+
 @pytest.mark.incremental
 class TestModels:
     def test_register_astore(self, astore):
@@ -61,11 +79,11 @@ class TestModels:
         assert isinstance(model, RestObj)
         assert ASTORE_MODEL_NAME == model.name
 
-    def test_register_sklearn(self, sklearn_model):
+    def test_register_sklearn(self, sklearn_logistic_model):
         from sasctl.tasks import register_model
         from sasctl import RestObj
 
-        sk_model, train_df = sklearn_model
+        sk_model, train_df = sklearn_logistic_model
 
         # Register model and ensure attributes are set correctly
         model = register_model(sk_model, SCIKIT_MODEL_NAME,
@@ -132,7 +150,6 @@ class TestModels:
         # MAS module should automatically have methods bound
         assert callable(p.score)
 
-
     def test_score_sklearn(self):
         from sasctl.services import microanalytic_score as mas
 
@@ -140,4 +157,83 @@ class TestModels:
         m = mas.define_steps(m)
         r = m.score(sepalwidth=1, sepallength=2, petallength=3, petalwidth=4)
         assert r == 'virginica'
+
+
+@pytest.mark.incremental
+class TestSklearnLinearModel:
+    MODEL_NAME = 'Scikit Linear Model'
+    PROJECT_NAME = 'Boston Housing'
+
+    def test_register_model(self, sklearn_linear_model):
+        from sasctl.tasks import register_model
+        from sasctl import RestObj
+
+        sk_model, X, y = sklearn_linear_model
+
+        # Register model and ensure attributes are set correctly
+        model = register_model(sk_model,
+                               self.MODEL_NAME,
+                               project=self.PROJECT_NAME,
+                               input=X,
+                               force=True)
+
+        assert isinstance(model, RestObj)
+        assert self.MODEL_NAME == model.name
+        assert 'Prediction' == model.function
+        assert 'Linear regression' == model.algorithm
+        assert 'Python' == model.trainCodeType
+        assert 'ds2MultiType' == model.scoreCodeType
+
+        assert len(model.inputVariables) == 13
+        assert len(model.outputVariables) == 1
+
+        # Don't compare to sys.version since cassettes used may have been
+        # created by a different version
+        assert re.match('Python \d\.\d', model.tool)
+
+        # Ensure input & output metadata was set
+        for col in X.columns:
+            assert 1 == len([v for v in model.inputVariables
+                             + model.outputVariables if v.get('name') == col])
+
+        # Ensure model files were created
+        from sasctl.services import model_repository as mr
+        files = mr.get_model_contents(model)
+        filenames = [f.name for f in files]
+        assert 'model.pkl' in filenames
+        assert 'dmcas_epscorecode.sas' in filenames
+        assert 'dmcas_packagescorecode.sas' in filenames
+
+    def test_create_performance_definition(self, sklearn_linear_model):
+        from sasctl.services import model_repository as mr
+        from sasctl.services import model_management as mm
+
+        lm, X, y = sklearn_linear_model
+
+        project = mr.get_project(self.PROJECT_NAME)
+        # Update project properties
+        project['function'] = 'prediction'
+        project['targetLevel'] = 'interval'
+        project['targetVariable'] = 'Price'
+        project['predictionVariable'] = 'var1'
+        project = mr.update_project(project)
+
+        mm.create_performance_definition(self.MODEL_NAME, 'Public', 'boston')
+
+    def test_update_model_performance(self, sklearn_linear_model, cas_session):
+        from six.moves import mock
+        from sasctl.tasks import update_model_performance
+
+        lm, X, y = sklearn_linear_model
+
+        # Score & set output var
+        train_df = X.copy()
+        train_df['var1'] = lm.predict(X)
+        train_df['Price'] = y
+
+        with mock.patch('swat.CAS') as CAS:
+            for period in ('q12019', 'q22019', 'q32019', 'q42019'):
+                sample = train_df.sample(frac=0.1)
+                update_model_performance(sample, self.MODEL_NAME, period)
+
 

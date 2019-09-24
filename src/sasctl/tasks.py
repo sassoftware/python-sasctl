@@ -434,7 +434,7 @@ def publish_model(model,
     return module
 
 
-def update_performance(data, model, label, refresh=True):
+def update_model_performance(data, model, label, refresh=True):
     """Upload data for calculating model performance metrics.
 
     Model performance and data distributions can be tracked over time by
