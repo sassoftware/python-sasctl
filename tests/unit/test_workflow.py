@@ -17,11 +17,12 @@ def test_list_workflow_prompt_invalidworkflow():
     wf = workflow.Workflow()
 
     with mock.patch('sasctl._services.workflow.Workflow'
-                    '.list_workflow_enableddefinitions') as list_workflow_enableddefinitions:
-        list_workflow_enableddefinitions.return_value = WORKFLOWS
+                    '.list_definitions') as list_definitions:
+        list_definitions.return_value = WORKFLOWS
         with pytest.raises(ValueError):
             # Project missing 
             _ = wf.list_workflow_prompt('bad')
+
 
 def test_list_workflow_prompt_workflownoprompt():
 
@@ -29,8 +30,8 @@ def test_list_workflow_prompt_workflownoprompt():
     wf = workflow.Workflow()
 
     with mock.patch('sasctl._services.workflow.Workflow'
-                    '.list_workflow_enableddefinitions') as list_workflow_enableddefinitions:
-        list_workflow_enableddefinitions.return_value = WORKFLOWS
+                    '.list_definitions') as list_definitions:
+        list_definitions.return_value = WORKFLOWS
 
         #Testing no prompts on workflow with name
         testresult = wf.list_workflow_prompt('Test W')
@@ -43,21 +44,19 @@ def test_list_workflow_prompt_workflownoprompt():
         assert testresult is None
 
 
-
 def test_list_workflow_prompt_workflowprompt():
 
     WORKFLOWS = [{'name': 'Test W', 'id': '12345'},{'name': 'TestW2', 'id': '98765', 'prompts': [{'id': '98765', 'variableName': 'projectId', 'variableType': 'string'}]}]
     wf = workflow.Workflow()
 
     with mock.patch('sasctl._services.workflow.Workflow'
-                    '.list_workflow_enableddefinitions') as list_workflow_enableddefinitions:
-        list_workflow_enableddefinitions.return_value = WORKFLOWS
+                    '.list_definitions') as list_definitions:
+        list_definitions.return_value = WORKFLOWS
 
         #Testing workflow with id and prompts
         testresult = wf.list_workflow_prompt('TestW2')
         print(testresult)
         assert testresult is not None
-
 
         #Testing workflow with id and prompts
         testresult = wf.list_workflow_prompt('98765')

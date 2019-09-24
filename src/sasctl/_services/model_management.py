@@ -243,7 +243,7 @@ class ModelManagement(Service):
         from .workflow import Workflow
         wf = Workflow()
 
-        return wf.list_workflow_enableddefinitions()
+        return wf.list_enabled_definitions()
 
     def list_model_workflow_prompt(self, workflowName):
         """List prompt Workflow Processes Definitions.
@@ -308,6 +308,7 @@ class ModelManagement(Service):
         """
         from .model_repository import ModelRepository
         from .workflow import Workflow
+
         mr = ModelRepository()
         wf = Workflow()
         
@@ -317,18 +318,22 @@ class ModelManagement(Service):
         
         #Associations running workflow to model project, note workflow has to be running
         # THINK ABOUT: do we do a check on status of the workflow to determine if it is still running before associating?
-        
-        input={"processName":workflow['name'],"processId":workflow['id'],"objectType":"MM_Project",
-               "solutionObjectName":projectName,"solutionObjectId":project['id'],
-               "solutionObjectUri":"/modelRepository/projects/"+project['id'],
-               "solutionObjectMediaType":"application/vnd.sas.models.project+json"}
+
+        input = {"processName": workflow['name'],
+                 "processId": workflow['id'],
+                 "objectType": "MM_Project",
+                 "solutionObjectName": projectName,
+                 "solutionObjectId": project['id'],
+                 "solutionObjectUri": "/modelRepository/projects/" + project['id'],
+                 "solutionObjectMediaType": "application/vnd.sas.models.project+json"}
         
         #Note, you can get a HTTP Error 404: {"errorCode":74052,"message":"The workflow process for id <> cannot be found.
         #                                    Associations can only be made to running processes.","details":["correlator:
         #                                    e62c5562-2b11-45db-bcb7-933200cb0f0a","traceId: 3118c0fb1eb9702d","path:
         #                                    /modelManagement/workflowAssociations"],"links":[],"version":2,"httpStatusCode":404} 
         # Which is fine and expected like the Visual Experience.
-        return self.post('/workflowAssociations', json=input,
-                     headers={'Content-Type': 'application/vnd.sas.workflow.object.association+json'})
+        return self.post('/workflowAssociations',
+                         json=input,
+                         headers={'Content-Type': 'application/vnd.sas.workflow.object.association+json'})
 
 

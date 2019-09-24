@@ -90,7 +90,7 @@ def test_execute_model_workflow_definition_invalidworkflow():
     WORKFLOWS = [{'name': 'Test W', 'id': '12345'},{'name': 'TestW2', 'id': '98765', 'prompts': [{'id': '98765', 'variableName': 'projectId', 'variableType': 'string'}]}]
 
     with mock.patch('sasctl._services.workflow.Workflow'
-                    '.list_workflow_enableddefinitions') as list_workflow_enableddefinitions:
+                    '.list_enabled_definitions') as list_workflow_enableddefinitions:
         with mock.patch('sasctl._services.model_repository.ModelRepository'
                         '.get_project') as get_project:
             list_workflow_enableddefinitions.return_value = WORKFLOWS
