@@ -270,38 +270,27 @@ def register_model(model, name, project, repository=None, input=None,
         vars = model.get('inputVariables', [])[:]
         vars += model.get('outputVariables', [])
 
-        # Project Functions:
-        # Analytical
-        # Classification
-        # Clustering
-        # Forecasting
-        # Prediction
-        # Text Analytics
-        # Transformation
+        function = model.get('function', '').lower()
+        algorithm = model.get('algorithm', '').lower()
 
-        # Target Levels:
-        # Binary
-        # Nominal
-        # Ordinal
-        # Interval
-
-        # project = mr.get_project(model.projectId)
-        # # Update project properties
-        # project['function'] = 'prediction'
-        # project['targetLevel'] = 'interval'
-        # project['targetVariable'] = 'Price'
-        # project['predictionVariable'] = 'var1'
-        # project = mr.update_project(project)
-
-
-        if model.get('function') == 'Regression':
+        if function == 'classification' and 'logistic' in algorithm:
+            target_level = 'Binary'
+        elif function == 'prediction' and 'regression' in algorithm:
             target_level = 'Interval'
         else:
             target_level = None
 
+        if len(model.get('outputVariables', [])) == 1:
+            var = model['outputVariables'][0]
+            prediction_variable = var['name']
+        else:
+            prediction_variable = None
+
         project = mr.create_project(project, repo_obj,
                                     variables=vars,
-                                    targetLevel=target_level)
+                                    function=model.get('function'),
+                                    targetLevel=target_level,
+                                    predictionVariable=prediction_variable)
 
     model = mr.create_model(model, project)
 
