@@ -1,1 +1,1 @@
-from .gboost import XgbParser, LightgbmParser, PmmlParser
+from .ensembles import XgbParser, LightgbmParser, PmmlParser, ForestParser
