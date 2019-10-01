@@ -67,6 +67,7 @@ class LightgbmParser(EnsembleParser):
         self.out_transform = "1 / (1 + exp(-{0}))"
 
         self._tree_parser = LightgbmTreeParser()
+        self._tree_parser._features = self._features
 
 
     def _iter_trees(self):

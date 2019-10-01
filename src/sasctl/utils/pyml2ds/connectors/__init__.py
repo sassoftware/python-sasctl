@@ -1,1 +1,1 @@
-from .ensembles import XgbParser, LightgbmParser, PmmlParser, ForestParser
+from .ensembles import XgbParser, LightgbmParser, PmmlParser

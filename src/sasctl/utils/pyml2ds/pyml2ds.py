@@ -20,16 +20,11 @@ try:
 except ImportError:
     lightgbm = None
 
-try:
-    from sklearn.ensemble import RandomForestClassifier
-except ImportError:
-    RandomForestClassifier = None
-
 from .connectors import XgbParser, LightgbmParser, PmmlParser, ForestParser
 
 
 def _check_type(model):
-    comp_types = ["xgboost.sklearn.XGBModel", "lightgbm.LGBMModel", "lightgbm.basic.Booster", "sklearn.ensemble.RandomForestClassifier", "GBM.pmml file"]
+    comp_types = ["xgboost.sklearn.XGBModel", "lightgbm.LGBMModel", "lightgbm.basic.Booster", "GBM.pmml file"]
 
     parser = None
     if xgboost and isinstance(model, xgboost.sklearn.XGBModel):
@@ -43,8 +38,6 @@ def _check_type(model):
         parser = LightgbmParser(model)
     elif etree and isinstance(model, etree._ElementTree):
         parser = PmmlParser(model.getroot())
-    elif RandomForestClassifier and isinstance(model, RandomForestClassifier):
-        parser = ForestParser(model)
     else:
         raise RuntimeError("Unknown booster type: %s. Compatible types are: %s. Check if corresponding library is installed." % type(model).__name__)
 
