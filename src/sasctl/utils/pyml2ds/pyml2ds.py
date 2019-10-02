@@ -1,9 +1,5 @@
 import sys
-
-try:
-    from lxml import etree
-except ImportError:
-    etree = None
+import xml.etree.ElementTree as etree
 
 try:
     import pickle
@@ -36,7 +32,7 @@ def _check_type(model):
         parser = LightgbmParser(model.booster_)
     elif lightgbm and isinstance(model, lightgbm.basic.Booster):
         parser = LightgbmParser(model)
-    elif etree and isinstance(model, etree._ElementTree):
+    elif etree and isinstance(model, etree.ElementTree):
         parser = PmmlParser(model.getroot())
     else:
         raise RuntimeError("Unknown booster type: %s. Compatible types are: %s. Check if corresponding library is installed." % type(model).__name__)
@@ -60,8 +56,6 @@ def pyml2ds(inFile, outFile, outVarName="P_TARGET", test=False):
     # Load model file
     ext = ".pmml"
     if inFile[-len(ext):] == ext:
-        if etree is None:
-            raise RuntimeError("Found pmml file but lxml is not installed. Lxml is needed to parse xml files.") 
         model = etree.parse(inFile)
     else:
         with open(inFile, 'rb') as mf:

@@ -1,9 +1,4 @@
-try:
-    from lxml import objectify
-except ImportError:
-    objectify = None
-
-from sasctl.utils.pyml2ds.basic.tree import TreeParser
+from pyml2ds.basic.tree import TreeParser
 from .core import EnsembleParser
 
 
@@ -69,9 +64,6 @@ class PmmlParser(EnsembleParser):
             i = elem.tag.find('}')
             if i >= 0:
                 elem.tag = elem.tag[i+1:]
-        if objectify is None:
-            raise RuntimeError("Lxml is not installed. Lxml is needed to parse xml files.") 
-        objectify.deannotate(tree_root, cleanup_namespaces=True)
         
         self._forest = tree_root.find('MiningModel/Segmentation')[0].find('MiningModel')
         
