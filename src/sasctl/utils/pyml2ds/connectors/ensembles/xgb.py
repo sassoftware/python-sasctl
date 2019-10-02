@@ -1,5 +1,5 @@
 import json
-from pyml2ds.basic import TreeParser
+from sasctl.utils.pyml2ds.basic.tree import TreeParser
 from .core import EnsembleParser
 
 
