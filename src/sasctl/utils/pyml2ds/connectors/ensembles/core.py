@@ -33,12 +33,12 @@ class EnsembleParser:
     f : file object
         Open file for writing output SAS code.
     """
-    def translate(self, f):
+    def translate(self, f, test=False):
         for booster_id, tree in self._iter_trees():
             f.write("/* Parsing tree {}*/\n".format(booster_id))
             
             self._tree_parser.init(tree, booster_id)
-            self._tree_parser.parse_node(f)
+            self._tree_parser.parse_node(f, test=test)
             
             f.write("\n")
         

@@ -20,7 +20,7 @@ def test_xgb2ds(tmpdir):
     OUT_SAS = os.path.join(str(tmpdir), 'xgb.sas')
     EXPECTED_SAS = os.path.join(DATA_PATH, 'xgb.sas')
 
-    pyml2ds(IN_PKL, OUT_SAS)
+    pyml2ds(IN_PKL, OUT_SAS, test=True)
     result = open(OUT_SAS, 'rb').read()
     expected = open(EXPECTED_SAS, 'rb').read()
     assert result == expected
@@ -31,7 +31,7 @@ def test_lgb2ds(tmpdir):
     OUT_SAS = os.path.join(str(tmpdir), 'lgb.sas')
     EXPECTED_SAS = os.path.join(DATA_PATH, 'lgb.sas')
 
-    pyml2ds(IN_PKL, OUT_SAS)
+    pyml2ds(IN_PKL, OUT_SAS, test=True)
     result = open(OUT_SAS, 'rb').read()
     expected = open(EXPECTED_SAS, 'rb').read()
     assert result == expected
@@ -42,7 +42,7 @@ def test_gbm2ds(tmpdir):
     OUT_SAS = os.path.join(str(tmpdir), 'gbm.sas')
     EXPECTED_SAS = os.path.join(DATA_PATH, 'gbm.sas')
 
-    pyml2ds(IN_PKL, OUT_SAS)
+    pyml2ds(IN_PKL, OUT_SAS, test=True)
     result = open(OUT_SAS, 'rb').read()
     expected = open(EXPECTED_SAS, 'rb').read()
     assert result == expected

@@ -56,7 +56,7 @@ outFile : str
 outVarName : str (optional)
     Output variable name.
 """
-def pyml2ds(inFile, outFile, outVarName="P_TARGET"):
+def pyml2ds(inFile, outFile, outVarName="P_TARGET", test=False):
     # Load model file
     ext = ".pmml"
     if inFile[-len(ext):] == ext:
@@ -70,4 +70,4 @@ def pyml2ds(inFile, outFile, outVarName="P_TARGET"):
     parser = _check_type(model)
     parser.out_var_name = outVarName
     with open(outFile, "w") as f:
-        parser.translate(f)
+        parser.translate(f, test=test)
