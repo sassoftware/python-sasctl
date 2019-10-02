@@ -20,7 +20,7 @@ try:
 except ImportError:
     lightgbm = None
 
-from .connectors import XgbParser, LightgbmParser, PmmlParser, ForestParser
+from .connectors import XgbParser, LightgbmParser, PmmlParser
 
 
 def _check_type(model):
