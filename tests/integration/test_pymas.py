@@ -64,6 +64,35 @@ def sklearn_model(train_data):
 
 
 @pytest.fixture
+def sklearn_pipeline(train_data):
+    from sklearn.pipeline import Pipeline
+    from sklearn.ensemble import GradientBoostingClassifier
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.impute import SimpleImputer
+    from sklearn.compose import ColumnTransformer
+
+    X, y = train_data
+
+    numeric_transformer = Pipeline([
+        ('imputer', SimpleImputer(strategy='median')),
+        ('scaler', StandardScaler())
+    ])
+
+    preprocessor = ColumnTransformer([
+        ('num', numeric_transformer, X.columns)
+    ])
+
+    pipe = Pipeline([
+        ('preprocess', preprocessor),
+        ('classifier', GradientBoostingClassifier())
+    ])
+
+    pipe.fit(X, y)
+
+    return pipe
+
+
+@pytest.fixture
 def pickle_file(tmpdir_factory, sklearn_model):
     """Returns the path to a file containing a pickled Scikit-Learn model """
     import os
@@ -214,6 +243,17 @@ def test_from_python_file(python_file):
     p = from_python_file(python_file, func_name='predict')
     assert isinstance(p, PyMAS)
 
+
+def test_with_sklearn_pipeline(train_data, sklearn_pipeline):
+    from sasctl.utils.pymas import PyMAS, from_pickle
+
+    X, y = train_data
+    p = from_pickle(pickle.dumps(sklearn_pipeline),
+                    func_name='predict',
+                    input_types=X)
+
+    assert isinstance(p, PyMAS)
+    assert len(p.variables) > 4  # 4 input features in Iris data set
 
 @pytest.mark.usefixtures('session')
 def test_publish_and_execute(tmpdir):

@@ -79,6 +79,10 @@ class TestModels:
         assert 'Python' == model.trainCodeType
         assert 'ds2MultiType' == model.scoreCodeType
 
+        assert len(model.inputVariables) == 4
+        assert len(model.outputVariables) == 1
+
+
         # Don't compare to sys.version since cassettes used may have been
         # created by a different version
         assert re.match('Python \d\.\d', model.tool)
@@ -93,7 +97,7 @@ class TestModels:
         files = mr.get_model_contents(model)
         filenames = [f.name for f in files]
         assert 'model.pkl' in filenames
-        assert 'dmcas_espscorecode.sas' in filenames
+        assert 'dmcas_epscorecode.sas' in filenames
         assert 'dmcas_packagescorecode.sas' in filenames
 
     def test_publish_sklearn(self):
@@ -108,6 +112,26 @@ class TestModels:
 
         # MAS module should automatically have methods bound
         assert callable(p.score)
+
+    def test_publish_sklearn_again(self):
+        from sasctl.tasks import publish_model
+        from sasctl.services import model_repository as mr
+
+        model = mr.get_model(SCIKIT_MODEL_NAME, PROJECT_NAME)
+
+        # Should not be able to republish the model by default
+        with pytest.raises(RuntimeError):
+            publish_model(model, 'maslocal', max_retries=100)
+
+        # Publish should succeed with replace flag
+        p = publish_model(model, 'maslocal', max_retries=100, replace=True)
+
+        # Score step should have been defined in the module
+        assert 'score' in p.stepIds
+
+        # MAS module should automatically have methods bound
+        assert callable(p.score)
+
 
     def test_score_sklearn(self):
         from sasctl.services import microanalytic_score as mas

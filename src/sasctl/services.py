@@ -19,7 +19,7 @@ data_sources = _instantiate('sasctl._services.data_sources.DataSources')
 files = _instantiate('sasctl._services.files.Files')
 folders = _instantiate('sasctl._services.folders.Folders')
 microanalytic_score = _instantiate(
-    'sasctl._services.microanalytic_store.MicroAnalyticScore')
+    'sasctl._services.microanalytic_score.MicroAnalyticScore')
 model_management = _instantiate(
     'sasctl._services.model_management.ModelManagement')
 model_publish = _instantiate(

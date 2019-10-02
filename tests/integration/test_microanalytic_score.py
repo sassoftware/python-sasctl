@@ -11,18 +11,47 @@ from sasctl.services import microanalytic_score as mas
 pytestmark = pytest.mark.usefixtures('session')
 
 
-def test_publish_python_module():
-    source = '\n'.join(("def myfunction(var1, var2):",
-                        "    'Output: out1, out2'",
-                        "    out1 = var1 + 5",
-                        "    out2 = var2.upper()",
-                        "    return out1, out2"))
+@pytest.mark.incremental
+class TestMicroAnalyticScore:
+    MODULE_NAME = 'sasctl_testmethod'
 
-    r = mas.create_module(source=source, name='sasctl_testmethod')
-    assert 'sasctl_testmethod' == r.id
-    assert 'public' == r.scope
+    def test_create_python_module(self):
+        source = '\n'.join(("def myfunction(var1, var2):",
+                            "    'Output: out1, out2'",
+                            "    out1 = var1 + 5",
+                            "    out2 = var2.upper()",
+                            "    return out1, out2"))
 
-def test_call_python_module_steps():
-    r = mas.define_steps('sasctl_testmethod')
-    assert (6, 'TEST') == r.myfunction(1, 'test')
+        r = mas.create_module(source=source, name=self.MODULE_NAME)
+        assert self.MODULE_NAME == r.id
+        assert 'public' == r.scope
+
+    def test_call_python_module_steps(self):
+        r = mas.define_steps(self.MODULE_NAME)
+        assert (6, 'TEST') == r.myfunction(1, 'test')
+
+    def test_list_modules(self):
+        all_modules = mas.list_modules()
+
+        assert isinstance(all_modules, list)
+        assert len(all_modules) > 0
+        assert any(x.id == self.MODULE_NAME for x in all_modules)
+
+    def test_get_module(self):
+        module = mas.get_module(self.MODULE_NAME)
+
+        assert module.id == self.MODULE_NAME
+
+    def test_list_module_steps(self):
+        steps = mas.list_module_steps(self.MODULE_NAME)
+
+        assert isinstance(steps, list)
+        assert any(s.id == 'myfunction' for s in steps)
+
+    def test_delete_module(self):
+        assert mas.get_module(self.MODULE_NAME) is not None
+
+        mas.delete_module(self.MODULE_NAME)
+
+        assert mas.get_module(self.MODULE_NAME) is None
 

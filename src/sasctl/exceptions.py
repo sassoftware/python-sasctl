@@ -13,3 +13,5 @@ class AuthenticationError(ValueError):
         super(AuthenticationError, self).__init__(msg, *args, **kwargs)
 
 
+class JobTimeoutError(RuntimeError):
+    pass

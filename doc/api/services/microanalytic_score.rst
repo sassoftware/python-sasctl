@@ -1,7 +1,7 @@
-sasctl.services.microanalytic\_store
+sasctl.services.microanalytic\_score
 ====================================
 
-.. automodule:: sasctl._services.microanalytic_store
+.. automodule:: sasctl._services.microanalytic_score
     :members:
     :undoc-members:
     :show-inheritance:

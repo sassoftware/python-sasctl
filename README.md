@@ -10,7 +10,7 @@
   </a>
         
   <a href="https://www.python.org/">
-    <img src="https://img.shields.io/badge/Python-2.7%20%7C%203%2B-blue.svg" alt="Python Version">
+    <img src="https://img.shields.io/badge/Python-2.7%20%7C%203.4%2B-blue.svg" alt="Python Version">
   </a>
 
    <img src="https://travis-ci.com/sassoftware/python-sasctl.svg?branch=master">
@@ -81,7 +81,7 @@ which can handle all necessary communication with the SAS Viya server:
 
 >>> with Session('example.com', authinfo=<authinfo file>):
 ...    model = lm.LogisticRegression()
-...    register_model('Sklearn Model', model, 'My Project')
+...    register_model(model, 'Sklearn Model', 'My Project')
 ```
 
 
@@ -89,7 +89,8 @@ A slightly more low-level way to interact with the environment is to use
 the service methods directly:
 ```
 >>> from pprint import pprint
->>> from sasctl import Session, folders
+>>> from sasctl import Session
+>>> from sasctl.services import folders
 
 >>> with Session(host, username, password):
 ...    folders = folders.list_folders()
@@ -150,7 +151,8 @@ complete examples see the [examples](examples) folder.
 
 Show models currently in Model Manager:
 ```
->>> from sasctl import Session, model_repository
+>>> from sasctl import Session
+>>> from sasctl.services import model_repository
 
 >>> with Session(host, username, password):
 ...    models = model_repository.list_models()
@@ -163,7 +165,7 @@ Register a pure Python model in Model Manager:
 
 >>> with Session(host, authinfo=<authinfo file>):
 ...    model = lm.LogisticRegression()
-...    register_model('Sklearn Model', model, 'My Project')
+...    register_model(model, 'Sklearn Model', 'My Project')
 ```
 
 Register a CAS model in Model Manager:

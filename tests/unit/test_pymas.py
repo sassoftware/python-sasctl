@@ -33,13 +33,10 @@ def test_score_code():
     assert isinstance(p, PyMAS)
 
     mas_code = p.score_code()
-    esp_code = p.score_code(dest='esp')
+    esp_code = p.score_code(dest='ep')
 
     assert mas_code.lower().startswith('package _')
     assert esp_code.lower().startswith('data sasep.out;')
-
-    with pytest.raises(ValueError):
-        cas_code = p.score_code(dest='cas')
 
     cas_code = p.score_code('in_table', 'out_table', ['in1', 'in2'], dest='cas')
 
@@ -507,3 +504,42 @@ def domath(a, b):
     result = package.code()
     assert target.lstrip('\n') == result
     assert '\t' not in result
+
+
+def test_bugfix_27():
+    """NaN values should be converted to null before being sent to MAS
+
+    https://github.com/sassoftware/python-sasctl/issues/27
+    """
+
+    import io
+    from sasctl.core import RestObj
+    from sasctl.services import microanalytic_score as mas
+    pd = pytest.importorskip('pandas')
+
+    df = pd.read_csv(io.StringIO('\n'.join([
+        u'BAD,LOAN,MORTDUE,VALUE,REASON,JOB,YOJ,DEROG,DELINQ,CLAGE,NINQ,CLNO,DEBTINC',
+        u'0,1.0,1100.0,25860.0,39025.0,HomeImp,Other,10.5,0.0,0.0,94.36666667,1.0,9.0,',
+        u'1,1.0,1300.0,70053.0,68400.0,HomeImp,Other,7.0,0.0,2.0,121.8333333,0.0,14.0,'
+    ])))
+
+    with mock.patch('sasctl._services.microanalytic_score.MicroAnalyticScore.get_module') as get_module:
+        get_module.return_value = RestObj({
+            'name': 'Mock Module',
+            'id': 'mockmodule'
+        })
+        with mock.patch('sasctl._services.microanalytic_score.MicroAnalyticScore.post') as post:
+            x = df.iloc[0, :]
+            mas.execute_module_step('module', 'step', **x)
+
+    # Ensure we're passing NaN to execute_module_step
+    assert pd.isna(x['DEBTINC'])
+
+    # Make sure the value has been converted to None before being serialized to JSON.
+    # This ensures that the JSON value will be null.
+    json = post.call_args[1]['json']
+    inputs = json['inputs']
+    debtinc = [i for i in inputs if i['name'] == 'DEBTINC'].pop()
+    assert debtinc['value'] is None
+
+

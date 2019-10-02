@@ -4,18 +4,29 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+"""Base functionality for all services."""
+
+import logging
 import time
 
+import six
+from six.moves.urllib_parse import quote
+
 from .. import core
-from ..core import sasctl_command, HTTPError
+from ..core import HTTPError, sasctl_command
+from ..exceptions import JobTimeoutError
 
 
 class Service(object):
+    """Base class for all services.  Should not be used directly."""
+
     _SERVICE_ROOT = None
 
     is_uuid = staticmethod(core.is_uuid)
     get_link = staticmethod(core.get_link)
     request_link = staticmethod(core.request_link)
+
+    log = logging.getLogger(__name__)
 
     @property
     def _SERVICE_ROOT(self):
@@ -23,7 +34,7 @@ class Service(object):
 
     @classmethod
     def is_available(cls):
-        """Checks if the service is currently available.
+        """Check if the service is currently available.
 
         Returns
         -------
@@ -46,6 +57,25 @@ class Service(object):
 
     @classmethod
     def request(cls, verb, path, session=None, raw=False, **kwargs):
+        """Send an HTTP request with a session.
+
+        Parameters
+        ----------
+        verb : str
+            A valid HTTP request verb.
+        path : str
+            Path portion of URL to request.  Assumed to be relative to
+            `_SERVICE_ROOT`.
+        session : Session, optional
+            Defaults to `current_session()`.
+        raw : bool
+            Whether to return the raw `Response` object.  Defaults to False.
+        kwargs : any
+
+        Returns
+        -------
+
+        """
         session = session or core.current_session()
 
         if session is None:
@@ -75,13 +105,14 @@ class Service(object):
                 # May not be returned on all responses (e.g. listing
                 # multiple objects)
                 if isinstance(obj, core.RestObj):
-                    setattr(obj, '_headers', response.headers)
+                    obj._headers = response.headers
                 return obj
         except ValueError:
             return response.text
 
     @classmethod
     def get(self, *args, **kwargs):
+        """Send a GET request."""
         try:
             return self.request('get', *args, **kwargs)
         except HTTPError as e:
@@ -92,25 +123,34 @@ class Service(object):
 
     @classmethod
     def head(cls, *args, **kwargs):
+        """Send a HEAD request."""
         return cls.request('head', *args, **kwargs)
 
     @classmethod
     def post(cls, *args, **kwargs):
+        """Send a POST request."""
         return cls.request('post', *args, **kwargs)
 
     @classmethod
     def put(cls, *args, **kwargs):
+        """Send a PUT request."""
         return cls.request('put', *args, **kwargs)
 
     @classmethod
     def delete(cls, *args, **kwargs):
+        """Send a DELETE request."""
         return cls.request('delete', *args, **kwargs)
 
     @staticmethod
-    def _crud_funcs(path, single_term=None, plural_term=None,
-                    service_name=None):
-        """Utility method for defining simple functions to perform CRUD
-        operations on a REST endpoint.
+    def _crud_funcs(path,
+                    single_term=None,
+                    plural_term=None,
+                    service_name=None,
+                    get_filter=None):
+        """Utility method for defining CRUD functions.
+
+        Can be used to define simple functions that perform CRUD operations
+        on a REST endpoint.
 
         Parameters
         ----------
@@ -125,6 +165,10 @@ class Service(object):
         service_name : str
             Name of the service under which the command will be listed in
             the `sasctl` CLI.  Defaults to `plural_term`.
+        get_filter : callable, optional
+            A function that accepts an `item` and returns a dictionary
+            representing quary parameters to be added to the request for
+            filtering.  Defaults to filter=eq(name, item.name).
 
         Returns
         -------
@@ -138,13 +182,22 @@ class Service(object):
         >>> list_spam, get_spam, update_spam, delete_spam = _build_crud_funcs('/spam')
 
         """
+        # Set a default filter
+        if get_filter is None:
+            def get_filter(item):
+                return dict(filter='eq(name, "%s")' % item)
+
         @sasctl_command('list')
-        def list_items(cls, filter=None):
+        def list_items(cls, filter=None, start=None, limit=None, **kwargs):
             """List all {items} available in the environment.
 
             Parameters
             ----------
             filter : str, optional
+            start : int, optional
+                Zero-based index of the first item to return.  Defaults to 0.
+            limit : int, optional
+                The maximum number of items to return.  Defaults to 20.
 
             Returns
             -------
@@ -158,7 +211,15 @@ class Service(object):
             .. _filtering: https://developer.sas.com/reference/filtering/
 
             """
-            params = 'filter={}'.format(filter) if filter is not None else {}
+            if filter is not None:
+                kwargs['filter'] = filter
+            if start is not None:
+                kwargs['start'] = int(start)
+            if limit is not None:
+                kwargs['limit'] = int(limit)
+
+            params = '&'.join(['%s=%s' % (k, quote(str(v), safe='/(),"'))
+                               for k, v in six.iteritems(kwargs)])
 
             results = cls.get(path, params=params)
             if results is None:
@@ -168,7 +229,7 @@ class Service(object):
 
         @sasctl_command('get')
         def get_item(cls, item, refresh=False):
-            """Returns a {item} instance.
+            """Return a {item} instance.
 
             Parameters
             ----------
@@ -189,7 +250,6 @@ class Service(object):
             calls when data is already available on the client.
 
             """
-
             # If the input already appears to be the requested object just
             # return it, unless a refresh of the data was explicitly requested.
             if isinstance(item, dict) and all(
@@ -202,9 +262,9 @@ class Service(object):
             if cls.is_uuid(item):
                 return cls.get(path + '/{id}'.format(id=item))
             else:
-                results = list_items(cls, filter='eq(name, "{}")'.format(item))
+                results = list_items(cls, **get_filter(item))
 
-                # Not sure why, but as of 19w04 the filter doesn't seem to work.
+                # Not sure why, but as of 19w04 the filter doesn't seem to work
                 for result in results:
                     if result['name'] == str(item):
                         # Make a request for the specific object so that ETag
@@ -222,7 +282,7 @@ class Service(object):
 
         @sasctl_command('update')
         def update_item(cls, item):
-            """Updates a {item} instance.
+            """Update a {item} instance.
 
             Parameters
             ----------
@@ -233,7 +293,6 @@ class Service(object):
             None
 
             """
-
             headers = getattr(item, '_headers', None)
             if headers is None or headers.get('etag') is None:
                 raise ValueError(
@@ -251,7 +310,7 @@ class Service(object):
 
         @sasctl_command('delete')
         def delete_item(cls, item):
-            """Deletes a {item} instance.
+            """Delete a {item} instance.
 
             Parameters
             ----------
@@ -262,10 +321,15 @@ class Service(object):
             None
 
             """
+            item_name = str(item)
 
             # Try to find the item if the id can't be found
             if not (isinstance(item, dict) and 'id' in item):
                 item = get_item(cls, item)
+                if item is None:
+                    cls.log.info("Object '%s' not found.  Skipping delete."
+                                 % item_name)
+                    return
 
             if isinstance(item, dict) and 'id' in item:
                 item = item['id']
@@ -362,4 +426,4 @@ class Service(object):
         if completed(job):
             return job
         else:
-            raise core.TimeoutError('Timeout while waiting on job %s' % job)
+            raise JobTimeoutError('Timeout while waiting on job %s' % job)

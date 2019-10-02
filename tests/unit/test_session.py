@@ -14,6 +14,68 @@ from six.moves import mock
 from sasctl import Session, current_session
 
 
+def test_session_from_url():
+    """Ensure domains in the format http(s)://hostname.com are handled."""
+
+    # Initial session should automatically become the default
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('http://example.com', 'user', 'password')
+    assert s.hostname == 'example.com'
+    assert s._settings['protocol'] == 'http'
+
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('http://example.com', 'user', 'password', protocol='https')
+    assert s.hostname == 'example.com'
+    assert s._settings['protocol'] == 'https'
+
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('https://example.com', 'user', 'password', protocol='http')
+    assert s.hostname == 'example.com'
+    assert s._settings['protocol'] == 'http'
+
+
+def test_from_authinfo(tmpdir_factory):
+    filename = str(tmpdir_factory.mktemp('tmp').join('authinfo'))
+
+    HOSTNAME = 'example.com'
+    USERNAME = 'BlackKnight'
+    PASSWORD = 'iaminvincible!'
+
+    with open(filename, 'w') as f:
+        f.write('machine %s login %s password %s'
+                % (HOSTNAME, USERNAME, PASSWORD))
+
+    # Get username & password from matching hostname
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('http://example.com', authinfo=filename)
+    assert s.hostname == HOSTNAME
+    assert s.username == USERNAME
+    assert s._settings['password'] == PASSWORD
+
+
+    with open(filename, 'w') as f:
+        f.write('host %s user %s password %s'
+                % (HOSTNAME, USERNAME, PASSWORD))
+
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('http://example.com', authinfo=filename)
+    assert s.hostname == HOSTNAME
+    assert s.username == USERNAME
+    assert s._settings['password'] == PASSWORD
+
+    with open(filename, 'w') as f:
+        f.write('host %s user %s password %s\n'
+                % (HOSTNAME, 'Arthur', 'kingofthebrittons'))
+        f.write('host %s user %s password %s\n'
+                % (HOSTNAME, USERNAME, PASSWORD))
+
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('http://example.com', username=USERNAME, authinfo=filename)
+    assert s.hostname == HOSTNAME
+    assert s.username == USERNAME
+    assert s._settings['password'] == PASSWORD
+
+
 def test_new_session(missing_packages):
     HOST = 'example.com'
     USERNAME = 'user'
@@ -24,7 +86,7 @@ def test_new_session(missing_packages):
         with mock.patch('sasctl.core.Session.get_token'):
             s = Session(HOST, USERNAME, PASSWORD)
         assert USERNAME == s.username
-        assert HOST == s._settings['domain']
+        assert HOST == s.hostname
         assert 'https' == s._settings['protocol']
         assert USERNAME == s._settings['username']
         assert PASSWORD == s._settings['password']
@@ -270,3 +332,16 @@ def test_authentication_failure():
         with pytest.raises(AuthenticationError):
             Session('hostname', 'username', 'password')
 
+
+def test_str():
+    import os
+
+    # Remove any environment variables disabling SSL verification
+    _ = os.environ.pop('SSLREQCERT')
+
+    with mock.patch('sasctl.core.Session.get_token', return_value='token'):
+
+        s = Session('hostname', 'username', 'password')
+
+        assert str(s) == "Session(hostname='hostname', username='username', " \
+                         "protocol='https', verify_ssl=True)"

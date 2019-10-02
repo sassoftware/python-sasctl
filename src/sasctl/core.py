@@ -16,7 +16,7 @@ import warnings
 from uuid import UUID, uuid4
 
 import requests, requests.exceptions
-from requests.adapters import HTTPAdapter, DEFAULT_POOLBLOCK
+from requests.adapters import HTTPAdapter
 from six.moves.urllib.parse import urlsplit, urlunsplit
 from six.moves.urllib.error import HTTPError
 
@@ -263,7 +263,8 @@ class Session(requests.Session):
                           swat.cas.rest.connection.REST_CASConnection):
                 import base64
 
-                # Use the httpAddress action to retieve information about REST endpoints
+                # Use the httpAddress action to retieve information about
+                # REST endpoints
                 httpAddress = hostname.get_action('builtins.httpAddress')
                 address = httpAddress()
                 domain = address.virtualHost
@@ -273,18 +274,21 @@ class Session(requests.Session):
                     domain = hostname._sw_connection._current_hostname
                 protocol = address.protocol
                 port = address.port
-
-                # protocol = hostname._protocol
                 auth = hostname._sw_connection._auth.decode('utf-8').replace(
                     'Basic ', '')
-                username, password = base64.b64decode(auth).decode('utf-8').split(
-                    ':')
-                # domain = hostname._hostname
+                username, password = base64.b64decode(auth).decode(
+                    'utf-8').split(':')
             else:
-                raise ValueError(
-                    "A 'swat.CAS' session can only be reused when it's connected via the REST APIs.")
+                raise ValueError("A 'swat.CAS' session can only be reused "
+                                 "when it's connected via the REST APIs.")
         else:
-            domain = str(hostname)
+            url = urlsplit(hostname)
+
+            # Extract http/https from domain name if present and protocl not
+            # explicitly given
+            protocol = protocol or url.scheme
+
+            domain = url.hostname or str(hostname)
 
         self._settings = {'protocol': protocol or 'https',
                          'domain': domain,
@@ -300,8 +304,8 @@ class Session(requests.Session):
             if 'swat' in sys.modules:
                 auth = swat.utils.authinfo.query_authinfo(domain, user=username,
                                                           path=authinfo)
-                self._settings['username'], self._settings[
-                    'password'] = auth.get('username'), auth.get('password')
+                self._settings['username'] = auth.get('user')
+                self._settings['password'] = auth.get('password')
 
             # Not able to load credentials using SWAT.  Try Netrc.
             # TODO: IF a username was specified, verify that the credentials found
@@ -323,16 +327,60 @@ class Session(requests.Session):
         if current_session() is None:
             current_session(self)
 
-    def add_stderr_logger(self, level=logging.INFO):
-        handler = logging.StreamHandler()
-        handler.setLevel(level=level)
+    def add_logger(self, handler, level=None):
+        """Log session requests and responses.
+
+        Parameters
+        ----------
+        handler : logging.Handler
+            A Handler instance to use for logging the requests and responses.
+        level : int, optional
+            The logging level to assign to the handler.  Ignored if handler's
+            logging level is already set.  Defaults to DEBUG.
+
+        Returns
+        -------
+        handler
+
+
+        .. versionadded:: 1.2.0
+
+        """
+        level = level or logging.DEBUG
+
+        if handler.level == logging.NOTSET:
+            handler.setLevel(level)
+
         self.message_log.addHandler(handler)
-        self.message_log.setLevel(level)
+
+        if self.message_log.level == logging.NOTSET:
+            self.message_log.setLevel(handler.level)
+
         return handler
+
+    def add_stderr_logger(self, level=None):
+        """Log session requests and responses to stderr.
+
+        Parameters
+        ----------
+        level : int, optional
+            The logging level of the handler.  Defaults to logging.DEBUG
+
+        Returns
+        -------
+        logging.StreamHandler
+
+        """
+        return self.add_logger(logging.StreamHandler(), level)
 
     @property
     def username(self):
         return self._settings.get('username')
+
+    @property
+    def hostname(self):
+        return self._settings.get('domain')
+
 
     def send(self, request, **kwargs):
         if self.message_log.isEnabledFor(logging.DEBUG):
@@ -567,6 +615,14 @@ class Session(requests.Session):
 
         super(Session, self).__exit__()
 
+    def __str__(self):
+        return ("{class_}(hostname='{hostname}', username='{username}', "
+                "protocol='{protocol}', verify_ssl={verify})".format(
+            class_=type(self).__name__,
+            hostname=self.hostname,
+            username=self.username,
+            protocol=self._settings.get('protocol'),
+            verify=self.verify))
 
 def is_uuid(id):
     try:
@@ -576,9 +632,24 @@ def is_uuid(id):
         return False
 
 
-def get(*args, **kwargs):
+def get(path, **kwargs):
+    """Send a GET request.
+
+    Parameters
+    ----------
+    path : str
+        The path portion of the URL.
+    kwargs : any
+        Passed to `request`.
+
+    Returns
+    -------
+    RestObj or None
+        The results or None if the resource was not found.
+
+    """
     try:
-        return request('get', *args, **kwargs)
+        return request('get', path, **kwargs)
     except HTTPError as e:
         if e.code == 404:
             return None  # Resource not found
@@ -586,20 +657,90 @@ def get(*args, **kwargs):
             raise e
 
 
-def head(*args, **kwargs):
-    return request('head', *args, **kwargs)
+def head(path, **kwargs):
+    """Send a HEAD request.
+
+    Parameters
+    ----------
+    path : str
+        The path portion of the URL.
+    kwargs : any
+        Passed to `request`.
+
+    Returns
+    -------
+    RestObj
+
+    """
+    return request('head', path, **kwargs)
 
 
-def post(*args, **kwargs):
-    return request('post', *args, **kwargs)
+def post(path, **kwargs):
+    """Send a POST request.
+
+    Parameters
+    ----------
+    path : str
+        The path portion of the URL.
+    kwargs : any
+        Passed to `request`.
+
+    Returns
+    -------
+    RestObj
+
+    """
+    return request('post', path, **kwargs)
 
 
-def put(*args, **kwargs):
-    return request('put', *args, **kwargs)
+def put(path, item=None, **kwargs):
+    """Send a PUT request.
+
+    Parameters
+    ----------
+    path : str
+        The path portion of the URL.
+    item : RestObj, optional
+        A existing object to PUT.  If provided, ETag and Content-Type headers
+        will automatically be specified.
+    kwargs : any
+        Passed to `request`.
+
+    Returns
+    -------
+    RestObj
+
+    """
+    # If call is in the format put(url, RestObj), automatically fill in header
+    # information
+    if item is not None and isinstance(item, RestObj):
+        get_headers = getattr(item, '_headers', None)
+        if get_headers is not None:
+            # Update the headers param if it was specified
+            headers = kwargs.pop('headers', {})
+            headers.setdefault('If-Match', get_headers.get('etag'))
+            headers.setdefault('Content-Type', get_headers.get('content-type'))
+            return request('put', path, json=item, headers=headers)
+
+    return request('put', path, **kwargs)
 
 
-def delete(*args, **kwargs):
-    return request('delete', *args, **kwargs)
+def delete(path, **kwargs):
+    """Send a DELETE request.
+
+    Parameters
+    ----------
+    path : str
+        The path portion of the URL.
+    kwargs : any
+        Passed to `request`.
+
+    Returns
+    -------
+    RestObj
+
+    """
+    return request('delete', path, **kwargs)
 
 
 def request(verb, path, session=None, raw=False, **kwargs):
@@ -651,6 +792,9 @@ def get_link(obj, rel):
                 return links[0]
             elif len(links) > 1:
                 return links
+    elif isinstance(obj, dict) and 'rel' in obj and obj['rel'] == rel:
+        # Object is already a link, just return it
+        return obj
 
 
 def request_link(obj, rel, **kwargs):
@@ -671,7 +815,6 @@ def request_link(obj, rel, **kwargs):
 
     if link is None:
         raise ValueError("Link '%s' not found in object %s." % (rel, obj))
-
 
     return request(link['method'], link['href'], **kwargs)
 
@@ -907,10 +1050,3 @@ def _build_is_available_func(service_root):
         response = current_session().head(service_root + '/')
         return response.status_code == 200
     return is_available
-
-
-class SasctlError(Exception):
-    pass
-
-class TimeoutError(SasctlError):
-    pass

@@ -21,6 +21,7 @@
 .ipynb_checkpoints
 .tags
 *.iml
+_scratch
 
 ## Python files
 # setup.py working directory
@@ -61,3 +62,4 @@ Thumbs.db
 doc/build
 doc/source/generated
 doc/_build
+doc/.doctrees

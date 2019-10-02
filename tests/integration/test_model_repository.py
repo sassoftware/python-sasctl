@@ -21,17 +21,45 @@ class TestAStoreModel:
     model_name = 'AStore Model'
 
     def test_model_import(self, astore):
+        """Import a model from an ASTORE"""
         model = register_model(astore, self.model_name, self.project_name, force=True)
 
         assert self.model_name == model.name
 
+    def test_get_model_contents(self):
+        # Resolves https://github.com/sassoftware/python-sasctl/issues/33
+        content = mr.get_model_contents(self.model_name)
+
+        assert isinstance(content, list)
+        assert 'AstoreMetadata.json' in [str(c) for c in content]
+        assert 'ModelProperties.json' in [str(c) for c in content]
+        assert 'inputVar.json' in [str(c) for c in content]
+        assert 'outputVar.json' in [str(c) for c in content]
+
+    def test_create_model_version(self):
+        r = mr.create_model_version(self.model_name)
+        assert r.modelVersionName == '2.0'
+
+        r = mr.create_model_version(self.model_name, minor=True)
+        assert r.modelVersionName == '2.1'
+
+    def test_get_model_versions(self):
+        versions = mr.list_model_versions(self.model_name)
+        assert isinstance(versions, list)
+
+        # NOTE: the current version (2.1) is NOT included
+        assert len(versions) == 2
+        assert any(v.modelVersionName == '1.0' for v in versions)
+        assert any(v.modelVersionName == '2.0' for v in versions)
+
     def test_copy_astore(self):
+        """Copy the ASTORE to filesystem for MAS"""
         job = mr.copy_analytic_store(self.model_name)
 
         assert job.state == 'pending'
 
     def test_model_publish(self):
-
+        """Publish the imported model to MAS"""
 
         pytest.xfail('Import job pends forever.  Waiting on Support Track #7612766673')
         module = publish_model(self.model_name, 'maslocal', max_retries=60)
@@ -100,7 +128,7 @@ class TestBasicModel:
         model_count = len(models)
 
         # Create a new model
-        model = mr.create_model(self.model_name, self.project_name, force=True)
+        model = mr.create_model(self.model_name, self.project_name)
         assert isinstance(model, RestObj)
         assert model.name == self.model_name
 
