@@ -16,6 +16,8 @@ DATA_PATH = os.path.join(dirname(dirname(__file__)), 'pyml2ds_data')
 
 
 def test_xgb2ds(tmpdir):
+    pytest.importorskip('xgboost')
+
     IN_PKL = os.path.join(DATA_PATH, 'xgb.pkl')
     OUT_SAS = os.path.join(str(tmpdir), 'xgb.sas')
     EXPECTED_SAS = os.path.join(DATA_PATH, 'xgb.sas')
@@ -27,6 +29,8 @@ def test_xgb2ds(tmpdir):
 
 
 def test_lgb2ds(tmpdir):
+    pytest.importorskip('lightgbm')
+
     IN_PKL = os.path.join(DATA_PATH, 'lgb.pkl')
     OUT_SAS = os.path.join(str(tmpdir), 'lgb.sas')
     EXPECTED_SAS = os.path.join(DATA_PATH, 'lgb.sas')

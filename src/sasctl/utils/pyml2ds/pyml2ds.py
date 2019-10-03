@@ -1,4 +1,3 @@
-import sys
 import xml.etree.ElementTree as etree
 
 try:
@@ -16,16 +15,18 @@ try:
 except ImportError:
     lightgbm = None
 
-from .connectors import XgbParser, LightgbmParser, PmmlParser
+from .connectors import LightgbmParser, PmmlParser, XgbParser
 
 
 def _check_type(model):
-    comp_types = ["xgboost.sklearn.XGBModel", "lightgbm.LGBMModel", "lightgbm.basic.Booster", "GBM.pmml file"]
+    comp_types = ["xgboost.sklearn.XGBModel", "lightgbm.LGBMModel",
+                  "lightgbm.basic.Booster", "GBM.pmml file"]
 
-    parser = None
     if xgboost and isinstance(model, xgboost.sklearn.XGBModel):
         if model.booster not in ['gbtree', 'dart']:
-            raise RuntimeError("Model is xgboost. Unsupported booster type: %s. Supported types are: %s" % (model.booster, ', '.join(comp_types)))
+            raise RuntimeError("Model is xgboost. Unsupported booster type: %s."
+                               " Supported types are: %s"
+                               % (model.booster, ', '.join(comp_types)))
 
         parser = XgbParser(model.get_booster(), model.objective)
     elif lightgbm and isinstance(model, lightgbm.LGBMModel):
@@ -35,33 +36,37 @@ def _check_type(model):
     elif etree and isinstance(model, etree.ElementTree):
         parser = PmmlParser(model.getroot())
     else:
-        raise RuntimeError("Unknown booster type: %s. Compatible types are: %s. Check if corresponding library is installed." % type(model).__name__)
+        raise RuntimeError("Unknown booster type: %s. Compatible types are: %s."
+                           " Check if corresponding library is installed."
+                           % type(model).__name__)
 
     return parser
 
 
-"""Translates gradient boosting model and writes SAS scoring code to file.
-Supported models are: xgboost, lightgbm and pmml gradient boosting.
+def pyml2ds(in_file, out_file, out_var_name="P_TARGET", test=False):
+    """Translate a gradient boosting model and write SAS scoring code to file.
 
-Attributes
-----------
-inFile : str
-    Path to file to be translated.
-outFile : str
-    Path to output file with SAS code.
-outVarName : str (optional)
-    Output variable name.
-"""
-def pyml2ds(inFile, outFile, outVarName="P_TARGET", test=False):
+    Supported models are: xgboost, lightgbm and pmml gradient boosting.
+
+    Parameters
+    ----------
+    in_file : str
+        Path to file to be translated.
+    out_file : str
+        Path to output file with SAS code.
+    out_var_name : str (optional)
+        Output variable name.
+
+    """
     # Load model file
     ext = ".pmml"
-    if inFile[-len(ext):] == ext:
-        model = etree.parse(inFile)
+    if in_file[-len(ext):] == ext:
+        model = etree.parse(in_file)
     else:
-        with open(inFile, 'rb') as mf:
+        with open(in_file, 'rb') as mf:
             model = pickle.load(mf)
 
     parser = _check_type(model)
-    parser.out_var_name = outVarName
-    with open(outFile, "w") as f:
+    parser.out_var_name = out_var_name
+    with open(out_file, "w") as f:
         parser.translate(f, test=test)
