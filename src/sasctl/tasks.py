@@ -292,6 +292,12 @@ def register_model(model, name, project, repository=None, input=None,
                                     targetLevel=target_level,
                                     predictionVariable=prediction_variable)
 
+        # As of Viya 3.4 the 'predictionVariable' parameter is not set during
+        # project creation.  Update the project if necessary.
+        if project.get('predictionVariable') != prediction_variable:
+            project['predictionVariable'] = prediction_variable
+            mr.update_project(project)
+
     model = mr.create_model(model, project)
 
     assert isinstance(model, RestObj)
