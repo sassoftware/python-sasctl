@@ -10,6 +10,7 @@ import json
 import logging
 import math
 import pickle
+import os
 import re
 import sys
 import warnings
@@ -535,6 +536,14 @@ def update_model_performance(data, model, label, refresh=True):
     regex = r'{}_(\d)_.*_{}'.format(table_prefix,
                                   model_obj.id)
 
+    # Save the current setting before overwriting
+    orig_sslreqcert = os.environ.get('SSLREQCERT')
+
+    # If SSL connections to microservices are not being verified, don't attempt
+    # to verify connections to CAS - most likely certs are not in place.
+    if not sess.verify:
+        os.environ['SSLREQCERT'] = 'no'
+
     # Upload the performance data to CAS
     with swat.CAS(url,
                   username=sess.username,
@@ -570,6 +579,10 @@ def update_model_performance(data, model, label, refresh=True):
             tbl = s.upload(data, casout=dict(name=table_name,
                                                 caslib=caslib,
                                                 promote=True)).casTable
+
+    # Restore the original value
+    if orig_sslreqcert is not None:
+        os.environ['SSLREQCERT'] = orig_sslreqcert
 
     # Execute the definition if requested
     if refresh:
