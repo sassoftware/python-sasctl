@@ -1,7 +1,6 @@
 import abc
 import sys
 import unicodedata
-from builtins import str
 
 import six
 
@@ -93,7 +92,7 @@ class TreeParser:
         else:
             # On Python < 3.0.0
             if type(input) == str:
-                input = str(input, 'ISO-8859-1')
+                input = six.text_type(input, 'ISO-8859-1')
             output = unicodedata.normalize('NFKD', input).encode('ASCII', 'ignore')
 
         return output
