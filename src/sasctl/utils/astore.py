@@ -101,12 +101,12 @@ def create_package_from_astore(table):
     :meth:`model_repository.import_model_from_zip <.ModelRepository.import_model_from_zip>`
 
     """
-    files = _create_files_from_astore(table)
+    files = create_files_from_astore(table)
 
     return _build_zip_from_files(files)
 
 
-def _create_files_from_astore(table):
+def create_files_from_astore(table):
     """Generate files for importing a model from an ASTORE.
 
     Parameters
