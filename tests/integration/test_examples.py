@@ -45,6 +45,8 @@ def test_sklearn_model(session):
 def test_full_lifecycle(session):
     """Ensure the sklearn_model.py example executes successfully."""
 
+    pytest.xfail('Need to record & replay CAS connections.')
+
     # Mock up Session() to return the Betamax-recorded session
     def Session(*args, **kwargs):
         return session
