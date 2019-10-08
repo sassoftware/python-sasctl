@@ -29,7 +29,7 @@ class EnsembleParser:
         return "treeValue = sum({});\n".format(', '.join(
             ["treeValue%d" % i for i in range(booster_count)]))
 
-    def translate(self, f, test=False):
+    def translate(self, f):
         """Translate a gradient boosting model and write SAS scoring code to a file.
 
         Attributes
@@ -42,7 +42,7 @@ class EnsembleParser:
             f.write("/* Parsing tree {}*/\n".format(booster_id))
 
             self._tree_parser.init(tree, booster_id)
-            self._tree_parser.parse_node(f, test=test)
+            self._tree_parser.parse_node(f)
             
             f.write("\n")
 

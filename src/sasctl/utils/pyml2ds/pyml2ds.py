@@ -38,12 +38,12 @@ def _check_type(model):
     else:
         raise RuntimeError("Unknown booster type: %s. Compatible types are: %s."
                            " Check if corresponding library is installed."
-                           % type(model).__name__)
+                           % (type(model).__name__, ', '.join(comp_types)))
 
     return parser
 
 
-def pyml2ds(in_file, out_file, out_var_name="P_TARGET", test=False):
+def pyml2ds(in_file, out_file, out_var_name="P_TARGET"):
     """Translate a gradient boosting model and write SAS scoring code to file.
 
     Supported models are: xgboost, lightgbm and pmml gradient boosting.
@@ -69,4 +69,4 @@ def pyml2ds(in_file, out_file, out_var_name="P_TARGET", test=False):
     parser = _check_type(model)
     parser.out_var_name = out_var_name
     with open(out_file, "w") as f:
-        parser.translate(f, test=test)
+        parser.translate(f)

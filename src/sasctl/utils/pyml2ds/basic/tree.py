@@ -97,7 +97,7 @@ class TreeParser:
 
         return output
 
-    def parse_node(self, f, node=None, test=False):
+    def parse_node(self, f, node=None):
         """Recursively parse tree node and write generated SAS code to file.
 
         Attributes
@@ -108,8 +108,6 @@ class TreeParser:
             Tree node to process.
 
         """
-        if test:
-            self.test = True
 
         pnode = self._node
         if node is not None:
@@ -128,8 +126,6 @@ class TreeParser:
             var = self._remove_diacritic(var)
 
             split_value = self._split_value()
-            if self.test:
-                split_value = int(float(split_value))
 
             cond = ""
             if self._go_left():
@@ -151,8 +147,6 @@ class TreeParser:
             f.write(self._get_indent() + "end;\n")
         else:
             leaf_value = self._leaf_value()
-            if self.test:
-                leaf_value = int(float(leaf_value))
 
             f.write(self._get_indent() + "treeValue%s = %s;\n"
                     % (self._tree_id, leaf_value))
