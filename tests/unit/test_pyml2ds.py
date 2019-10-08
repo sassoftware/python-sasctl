@@ -109,3 +109,73 @@ def test_gbm2ds(tmpdir):
     assert result == expected
 
 
+def test_path_input(tmpdir_factory):
+    """pyml2ds should accept a file path (str) as input."""
+    import pickle
+    from sasctl.utils.pyml2ds import pyml2ds
+
+    # The target "model" to use
+    target = {'msg': 'hello world'}
+
+    # Pickle the "model" to a file
+    temp_dir = tmpdir_factory.mktemp('pyml2ds')
+    in_file = str(temp_dir.join('model.pkl'))
+    out_file = str(temp_dir.join('model.sas'))
+    with open(in_file, 'wb') as f:
+        pickle.dump(target, f)
+
+    with mock.patch('sasctl.utils.pyml2ds.core._check_type') as check:
+        check.translate.return_value = 'translated'
+        pyml2ds(in_file, out_file)
+
+    # Verify _check_type should have been called with the "model"
+    assert check.call_count == 1
+    assert check.call_args[0][0] == target
+
+
+def test_file_input():
+    """pyml2ds should accept a file-like obj as input."""
+    import io
+    import pickle
+    from sasctl.utils.pyml2ds import pyml2ds
+
+    # The target "model" to use
+    target = {'msg': 'hello world'}
+
+    # Pickle the "model" to a file-like object
+    in_file = io.BytesIO(pickle.dumps(target))
+    out_file = 'model.sas'
+
+    with mock.patch('sasctl.utils.pyml2ds.core._check_type') as check:
+        check.translate.return_value = 'translated'
+        pyml2ds(in_file, out_file)
+
+    # Verify _check_type should have been called with the "model"
+    assert check.call_count == 1
+    assert check.call_args[0][0] == target
+
+def test_pickle_input():
+    """pyml2ds should accept a binary pickle string as input."""
+    import pickle
+    from sasctl.utils.pyml2ds import pyml2ds
+
+    # The target "model" to use
+    target = {'msg': 'hello world'}
+
+    # Pickle the "model" to a file-like object
+    in_file = pickle.dumps(target)
+    out_file = 'model.sas'
+
+    with mock.patch('sasctl.utils.pyml2ds.core._check_type') as check:
+        check.translate.return_value = 'translated'
+        pyml2ds(in_file, out_file)
+
+    # Verify _check_type should have been called with the "model"
+    assert check.call_count == 1
+    assert check.call_args[0][0] == target
+
+
+
+
+
+

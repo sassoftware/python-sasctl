@@ -1,10 +1,8 @@
+import os
+import pickle
 import xml.etree.ElementTree as etree
 
-try:
-    import pickle
-except ImportError:
-    pickle = None
-
+import six
 try:
     import xgboost
 except ImportError:
@@ -50,22 +48,42 @@ def pyml2ds(in_file, out_file, out_var_name="P_TARGET"):
 
     Parameters
     ----------
-    in_file : str
-        Path to file to be translated.
+    in_file : str or bytes or file-like
+        Pickled object to translate.  String is assumed to be a path to a picked
+        file, file-like is assumed to be an open file handle to a pickle
+        object, and bytes is assumed to be the raw pickled bytes.
     out_file : str
         Path to output file with SAS code.
     out_var_name : str (optional)
         Output variable name.
 
     """
-    # Load model file
-    ext = ".pmml"
-    if in_file[-len(ext):] == ext:
-        model = etree.parse(in_file)
-    else:
-        with open(in_file, 'rb') as mf:
-            model = pickle.load(mf)
 
+    try:
+        # In Python2 str could either be a path or the binary pickle data,
+        # so check if its a valid filepath too.
+        is_file_path = isinstance(in_file, six.string_types) and os.path.isfile(in_file)
+    except TypeError:
+        is_file_path = False
+
+    # Path to a PMML or pickle file
+    if is_file_path:
+        # Parse PMML files
+        if os.path.splitext(in_file)[-1] == '.pmml':
+            model = etree.parse(in_file)
+        else:
+            # Read pickled files
+            with open(in_file, 'rb') as f:
+                model = pickle.load(f)
+
+    elif isinstance(in_file, bytes):
+        # Assume byte string is the actual pickled bytes
+        model = pickle.loads(in_file)
+    else:
+        # Assume a file object containing the pickled object
+        model = pickle.load(in_file)
+
+    # Verify model is a valid type
     parser = _check_type(model)
     parser.out_var_name = out_var_name
     with open(out_file, "w") as f:
