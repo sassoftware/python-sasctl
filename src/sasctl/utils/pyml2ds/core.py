@@ -13,6 +13,7 @@ try:
 except ImportError:
     lightgbm = None
 
+from sasctl.utils.decorators import experimental
 from .connectors import LightgbmParser, PmmlParser, XgbParser
 
 
@@ -41,6 +42,7 @@ def _check_type(model):
     return parser
 
 
+@experimental
 def pyml2ds(in_file, out_file, out_var_name="P_TARGET"):
     """Translate a gradient boosting model and write SAS scoring code to file.
 
