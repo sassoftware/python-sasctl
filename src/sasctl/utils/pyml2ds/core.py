@@ -94,9 +94,9 @@ def pyml2ds(in_file, out_var_name="P_TARGET"):
 
     # Parser is currently written to expect a file input
     # Until refactored, use StringIO to collect the text in memory
-    with six.StringIO() as f:
-        parser.translate(f)
+    f = six.StringIO()
+    parser.translate(f)
 
-        # Return contents of "file"
-        f.seek(0)
-        return f.read()
+    # Return contents of "file"
+    f.seek(0)
+    return f.read()
