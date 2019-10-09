@@ -29,11 +29,15 @@ def _insert_docstring_text(func, text):
 
     docstring = docstring.strip()
 
-    text = ('',
-            text,
-            '')
+    # Sphinx formatting requires 2 blank lines after a numpydoc section or one
+    # blank line after another Sphinx directive.
+    if docstring.split('\n')[-1].startswith('.. '):
+        # Last line is another Sphinx directive
+        gap = '\n\n'
+    else:
+        gap = '\n\n\n'
 
-    return docstring + '\n'.join(text)
+    return docstring + gap + text + '\n'
 
 
 def deprecated(reason=None, version=None, removed_in=None):
