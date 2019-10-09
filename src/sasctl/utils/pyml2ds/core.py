@@ -1,4 +1,3 @@
-import io
 import os
 import pickle
 import xml.etree.ElementTree as etree
@@ -95,7 +94,7 @@ def pyml2ds(in_file, out_var_name="P_TARGET"):
 
     # Parser is currently written to expect a file input
     # Until refactored, use StringIO to collect the text in memory
-    with io.StringIO() as f:
+    with six.StringIO() as f:
         parser.translate(f)
 
         # Return contents of "file"
