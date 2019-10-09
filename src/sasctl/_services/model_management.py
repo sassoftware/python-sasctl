@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from .service import Service
+from ..utils.decorators import experimental
 
 class ModelManagement(Service):
     """The Model Management API provides basic resources for monitoring
@@ -19,7 +20,8 @@ class ModelManagement(Service):
                             'performance tasks')
 
     # TODO:  set ds2MultiType
-    def publish_model(self,
+    @classmethod
+    def publish_model(cls,
                       model,
                       destination,
                       name=None,
@@ -79,15 +81,16 @@ class ModelManagement(Service):
         # Publishes a model that has already been registered in the model
         # repository.
         # Unlike model_publish service, does not require Code to be specified.
-        r = self.post('/publish',
-                      json=request,
-                      params=dict(force=force,
+        r = cls.post('/publish',
+                     json=request,
+                     params=dict(force=force,
                                   reloadModelTable=reload_model_table),
-                      headers={'Content-Type':
+                     headers={'Content-Type':
                                    'application/vnd.sas.models.publishing.request.asynchronous+json'})
         return r
 
-    def create_performance_definition(self,
+    @classmethod
+    def create_performance_definition(cls,
                                       model,
                                       library_name,
                                       table_prefix,
@@ -209,11 +212,12 @@ class ModelManagement(Service):
                                           project.get('variables', []) if
                                           v.get('role') == 'output']
 
-        return self.post('/performanceTasks', json=request,
-                     headers={
+        return cls.post('/performanceTasks', json=request,
+                        headers={
             'Content-Type': 'application/vnd.sas.models.performance.task+json'})
 
-    def execute_performance_definition(self, definition):
+    @classmethod
+    def execute_performance_definition(cls, definition):
         """Launches a job to run a performance definition.
 
         Parameters
@@ -227,11 +231,13 @@ class ModelManagement(Service):
             The executing job
 
         """
-        definition = self.get_performance_definition(definition)
+        definition = cls.get_performance_definition(definition)
 
-        return self.post('/performanceTasks/%s' % definition.id)
+        return cls.post('/performanceTasks/%s' % definition.id)
 
-    def list_model_workflow_definition(self):
+    @classmethod
+    @experimental
+    def list_model_workflow_definition(cls):
         """List all enabled Workflow Processes to execute on Model Project.
 
         Returns
@@ -245,7 +251,9 @@ class ModelManagement(Service):
 
         return wf.list_enabled_definitions()
 
-    def list_model_workflow_prompt(self, workflowName):
+    @classmethod
+    @experimental
+    def list_model_workflow_prompt(cls, workflowName):
         """List prompt Workflow Processes Definitions.
 
         Parameters
@@ -264,15 +272,15 @@ class ModelManagement(Service):
         
         return wf.list_workflow_prompt(workflowName)
 
-
-    def list_model_workflow_executed(self, projectName):
+    @classmethod
+    @experimental
+    def list_model_workflow_executed(cls, projectName):
         """List prompt Workflow Processes Definitions.
 
         Parameters
         ----------
         projectName : str
             Name of the Project list executed workflow
-
 
         Returns
         -------
@@ -285,17 +293,18 @@ class ModelManagement(Service):
 
         project = mr.get_project(projectName)
 
-        return self.get('/workflowProcesses?filter=eq(associations.solutionObjectId,%22'+project['id']+'%22)')
+        return cls.get('/workflowProcesses?filter=eq(associations.solutionObjectId,%22' + project['id'] + '%22)')
 
-
-    def execute_model_workflow_definition(self, projectName, workflowName, input=None):
+    @classmethod
+    @experimental
+    def execute_model_workflow_definition(cls, project_name, workflow_name, input=None):
         """Runs specific Workflow Processes Definitions.
 
         Parameters
         ----------
-        projectName : str
+        project_name : str
             Name of the Project that will execute workflow
-        workflowName : str
+        workflow_name : str
             Name or ID of an enabled workflow to execute
         input : dict, optional
             Input values for the workflow for initial workflow prompt
@@ -312,17 +321,17 @@ class ModelManagement(Service):
         mr = ModelRepository()
         wf = Workflow()
         
-        project = mr.get_project(projectName)
+        project = mr.get_project(project_name)
 
-        workflow = wf.run_workflow_definition(workflowName, input=input)
+        workflow = wf.run_workflow_definition(workflow_name, input=input)
         
-        #Associations running workflow to model project, note workflow has to be running
+        # Associations running workflow to model project, note workflow has to be running
         # THINK ABOUT: do we do a check on status of the workflow to determine if it is still running before associating?
 
         input = {"processName": workflow['name'],
                  "processId": workflow['id'],
                  "objectType": "MM_Project",
-                 "solutionObjectName": projectName,
+                 "solutionObjectName": project_name,
                  "solutionObjectId": project['id'],
                  "solutionObjectUri": "/modelRepository/projects/" + project['id'],
                  "solutionObjectMediaType": "application/vnd.sas.models.project+json"}
@@ -332,8 +341,8 @@ class ModelManagement(Service):
         #                                    e62c5562-2b11-45db-bcb7-933200cb0f0a","traceId: 3118c0fb1eb9702d","path:
         #                                    /modelManagement/workflowAssociations"],"links":[],"version":2,"httpStatusCode":404} 
         # Which is fine and expected like the Visual Experience.
-        return self.post('/workflowAssociations',
-                         json=input,
-                         headers={'Content-Type': 'application/vnd.sas.workflow.object.association+json'})
+        return cls.post('/workflowAssociations',
+                        json=input,
+                        headers={'Content-Type': 'application/vnd.sas.workflow.object.association+json'})
 
 
