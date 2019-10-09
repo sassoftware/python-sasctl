@@ -1,3 +1,4 @@
+import io
 import os
 import pickle
 import xml.etree.ElementTree as etree
@@ -43,7 +44,7 @@ def _check_type(model):
 
 
 @experimental
-def pyml2ds(in_file, out_file, out_var_name="P_TARGET"):
+def pyml2ds(in_file, out_var_name="P_TARGET"):
     """Translate a gradient boosting model and write SAS scoring code to file.
 
     Supported models are: xgboost, lightgbm and pmml gradient boosting.
@@ -54,10 +55,13 @@ def pyml2ds(in_file, out_file, out_var_name="P_TARGET"):
         Pickled object to translate.  String is assumed to be a path to a picked
         file, file-like is assumed to be an open file handle to a pickle
         object, and bytes is assumed to be the raw pickled bytes.
-    out_file : str
-        Path to output file with SAS code.
     out_var_name : str (optional)
         Output variable name.
+
+    Returns
+    -------
+    str
+        A SAS Data Step program implementing the model.
 
     """
 
@@ -88,5 +92,12 @@ def pyml2ds(in_file, out_file, out_var_name="P_TARGET"):
     # Verify model is a valid type
     parser = _check_type(model)
     parser.out_var_name = out_var_name
-    with open(out_file, "w") as f:
+
+    # Parser is currently written to expect a file input
+    # Until refactored, use StringIO to collect the text in memory
+    with io.StringIO() as f:
         parser.translate(f)
+
+        # Return contents of "file"
+        f.seek(0)
+        return f.read()

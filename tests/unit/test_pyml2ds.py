@@ -17,11 +17,10 @@ dirname = os.path.dirname
 DATA_PATH = os.path.join(dirname(dirname(__file__)), 'pyml2ds_data')
 
 
-def test_xgb2ds(tmpdir):
+def test_xgb2ds():
     pytest.importorskip('xgboost')
 
     IN_PKL = os.path.join(DATA_PATH, 'xgb.pkl')
-    OUT_SAS = os.path.join(str(tmpdir), 'xgb.sas')
     EXPECTED_SAS = os.path.join(DATA_PATH, 'xgb.sas')
 
     from sasctl.utils.pyml2ds.connectors.ensembles.xgb import XgbTreeParser
@@ -41,18 +40,16 @@ def test_xgb2ds(tmpdir):
 
     with mock.patch('sasctl.utils.pyml2ds.connectors.ensembles.xgb.XgbTreeParser') as parser:
         parser.return_value = test_parser
-        pyml2ds(IN_PKL, OUT_SAS)
+        result = pyml2ds(IN_PKL)
 
-    result = open(OUT_SAS, 'rb').read()
-    expected = open(EXPECTED_SAS, 'rb').read()
+    expected = open(EXPECTED_SAS, 'r').read()
     assert result == expected
 
 
-def test_lgb2ds(tmpdir):
+def test_lgb2ds():
     pytest.importorskip('lightgbm')
 
     IN_PKL = os.path.join(DATA_PATH, 'lgb.pkl')
-    OUT_SAS = os.path.join(str(tmpdir), 'lgb.sas')
     EXPECTED_SAS = os.path.join(DATA_PATH, 'lgb.sas')
 
     from sasctl.utils.pyml2ds.connectors.ensembles.lgb import LightgbmTreeParser
@@ -72,17 +69,14 @@ def test_lgb2ds(tmpdir):
 
     with mock.patch('sasctl.utils.pyml2ds.connectors.ensembles.lgb.LightgbmTreeParser') as parser:
         parser.return_value = test_parser
-        pyml2ds(IN_PKL, OUT_SAS)
+        result = pyml2ds(IN_PKL)
 
-
-    result = open(OUT_SAS, 'rb').read()
-    expected = open(EXPECTED_SAS, 'rb').read()
+    expected = open(EXPECTED_SAS, 'r').read()
     assert result == expected
 
 
-def test_gbm2ds(tmpdir):
+def test_gbm2ds():
     IN_PKL = os.path.join(DATA_PATH, 'gbm.pmml')
-    OUT_SAS = os.path.join(str(tmpdir), 'gbm.sas')
     EXPECTED_SAS = os.path.join(DATA_PATH, 'gbm.sas')
 
     from sasctl.utils.pyml2ds.connectors.ensembles.pmml import PmmlTreeParser
@@ -102,10 +96,9 @@ def test_gbm2ds(tmpdir):
 
     with mock.patch('sasctl.utils.pyml2ds.connectors.ensembles.pmml.PmmlTreeParser') as parser:
         parser.return_value = test_parser
-        pyml2ds(IN_PKL, OUT_SAS)
+        result = pyml2ds(IN_PKL)
 
-    result = open(OUT_SAS, 'rb').read()
-    expected = open(EXPECTED_SAS, 'rb').read()
+    expected = open(EXPECTED_SAS, 'r').read()
     assert result == expected
 
 
