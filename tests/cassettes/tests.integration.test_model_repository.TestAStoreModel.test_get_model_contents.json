@@ -116,7 +116,7 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/modelRepository/models?properties=(name,%20AStore%20Model)"
+        "uri": "https://hostname.com/modelRepository/models?properties=(name,%20AStore%20Model)&limit=10000"
       },
       "response": {
         "body": {

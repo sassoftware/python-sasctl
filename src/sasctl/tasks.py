@@ -8,17 +8,20 @@
 
 import json
 import logging
+import math
 import pickle
+import os
 import re
 import sys
 import warnings
 
 from . import utils
-from .core import RestObj, get, get_link, request_link
+from .core import RestObj, current_session, get, get_link, request_link
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
 from .utils.pymas import PyMAS, from_pickle
+from .utils.misc import installed_packages
 
 
 logger = logging.getLogger(__name__)
@@ -99,6 +102,9 @@ def register_model(model, name, project, repository=None, input=None,
         Version number of the project in which the model should be created.
         Defaults to 'new'.
     files : list
+        A list of dictionaries of the form {'name': filename, 'file': filecontent}.
+        An optional 'role' key is supported for designating a file as score code,
+        astore, etc.
     force : bool, optional
         Create dependencies such as projects and repositories if they do not
         already exist.
@@ -118,10 +124,11 @@ def register_model(model, name, project, repository=None, input=None,
     created using model_repository.create_model and any additional files will
     be uploaded as content.
 
+    .. versionchanged:: v1.3
+        Create requirements.txt with installed packages.
+
     """
     # TODO: Create new version if model already exists
-    # TODO: Allow file info to be specified
-    # TODO: Performance stats
 
     # If version not specified, default to creating a new version
     version = version or 'new'
@@ -156,8 +163,6 @@ def register_model(model, name, project, repository=None, input=None,
         else:
             raise ValueError("Unrecognized version '%s'." % version)
 
-    #
-
         # TODO: get ID of correct model version
     # if version != new, get existing model
     # get model (modelVersions) rel
@@ -176,12 +181,14 @@ def register_model(model, name, project, repository=None, input=None,
 
     # Use default repository if not specified
     if repository is None:
-        repository = mr.default_repository()
+        repo_obj = mr.default_repository()
     else:
-        repository = mr.get_repository(repository)
+        repo_obj = mr.get_repository(repository)
 
     # Unable to find or create the repo.
-    if repository is None:
+    if repo_obj is None and repository is None:
+        raise ValueError("Unable to find a default repository")
+    elif repo_obj is None:
         raise ValueError("Unable to find repository '{}'".format(repository))
 
     # If model is a CASTable then assume it holds an ASTORE model.
@@ -190,7 +197,7 @@ def register_model(model, name, project, repository=None, input=None,
         zipfile = utils.create_package(model)
 
         if create_project:
-            project = mr.create_project(project, repository)
+            project = mr.create_project(project, repo_obj)
 
         model = mr.import_model_from_zip(name, project, zipfile,
                                          version=version)
@@ -209,6 +216,23 @@ def register_model(model, name, project, repository=None, input=None,
         # Extract model properties
         model = _sklearn_to_dict(model)
         model['name'] = name
+
+        # Get package versions in environment
+        packages = installed_packages()
+        if packages is not None:
+            model.setdefault('properties', [])
+
+            # Define a custom property to capture each package version
+            for p in packages:
+                n, v = p.split('==')
+                model['properties'].append({
+                    'name': 'env_%s' % n,
+                    'value': v
+                })
+
+            # Generate and upload a requirements.txt file
+            files.append({'name': 'requirements.txt',
+                          'file': '\n'.join(packages)})
 
         # Generate PyMAS wrapper
         try:
@@ -247,14 +271,33 @@ def register_model(model, name, project, repository=None, input=None,
         vars = model.get('inputVariables', [])[:]
         vars += model.get('outputVariables', [])
 
-        if model.get('function') == 'Regression':
+        function = model.get('function', '').lower()
+        algorithm = model.get('algorithm', '').lower()
+
+        if function == 'classification' and 'logistic' in algorithm:
+            target_level = 'Binary'
+        elif function == 'prediction' and 'regression' in algorithm:
             target_level = 'Interval'
         else:
             target_level = None
 
-        project = mr.create_project(project, repository,
+        if len(model.get('outputVariables', [])) == 1:
+            var = model['outputVariables'][0]
+            prediction_variable = var['name']
+        else:
+            prediction_variable = None
+
+        project = mr.create_project(project, repo_obj,
                                     variables=vars,
-                                    targetLevel=target_level)
+                                    function=model.get('function'),
+                                    targetLevel=target_level,
+                                    predictionVariable=prediction_variable)
+
+        # As of Viya 3.4 the 'predictionVariable' parameter is not set during
+        # project creation.  Update the project if necessary.
+        if project.get('predictionVariable') != prediction_variable:
+            project['predictionVariable'] = prediction_variable
+            mr.update_project(project)
 
     model = mr.create_model(model, project)
 
@@ -372,15 +415,7 @@ def publish_model(model,
     # As of Viya 3.4 MAS converts module names to lower case.
     # Since we can't rely on the request module name being preserved, try to
     # parse the URL out of the response so we can retrieve the created module.
-    try:
-        details = json.loads(msg)
-
-        module_url = get_link(details, 'module')
-        module_url = module_url.get('href')
-    except json.JSONDecodeError:
-        match = re.search(r'(?:rel=module, href=(.*?),)', msg)
-        module_url = match.group(1) if match else None
-
+    module_url = _parse_module_url(msg)
     if module_url is None:
         raise Exception('Unable to retrieve module URL from publish log.')
 
@@ -393,3 +428,177 @@ def publish_model(model,
         from sasctl.services import microanalytic_score as mas
         return mas.define_steps(module)
     return module
+
+
+def update_model_performance(data, model, label, refresh=True):
+    """Upload data for calculating model performance metrics.
+
+    Model performance and data distributions can be tracked over time by
+    designating one or more tables that contain input data and target values.
+    Performance metrics can be updated by uploading a data set for a new time
+    period and executing the performance definition.
+
+    Parameters
+    ----------
+    data : Dataframe
+    model : str or dict
+        The name or id of the model, or a dictionary representation of
+        the model.
+    label : str
+        The time period the data is from.  Should be unique and will be
+        displayed on performance charts.  Examples: 'Q1', '2019', 'APR2019'.
+    refresh : bool, optional
+        Whether to execute the performance definition and refresh results with
+        the new data.
+
+    Returns
+    -------
+    CASTable
+        The CAS table containing the performance data.
+
+    See Also
+    --------
+     :meth:`model_management.create_performance_definition <.ModelManagement.create_performance_definition>`
+
+    .. versionadded:: v1.3
+
+    """
+    from .services import model_management as mm
+    try:
+        import swat
+    except ImportError:
+        raise RuntimeError("The 'swat' package is required to save model "
+                           "performance data.")
+
+    # Default to true
+    refresh = True if refresh is None else refresh
+
+    model_obj = mr.get_model(model)
+
+    if model_obj is None:
+        raise ValueError('Model %s was not found.', model)
+
+    project = mr.get_project(model_obj.projectId)
+
+    if project.get('function', '').lower() not in ('prediction', 'classification'):
+        raise ValueError("Performance monitoring is currently supported for "
+                         "regression and binary classification projects.  "
+                         "Received project with '%s' function.  Should be "
+                         "'Prediction' or 'Classification'.",
+                         project.get('function'))
+    elif project.get('targetLevel', '').lower() not in ('interval', 'binary'):
+        raise ValueError("Performance monitoring is currently supported for "
+                         "regression and binary classification projects.  "
+                         "Received project with '%s' target level.  Should be "
+                         "'Interval' or 'Binary'.", project.get('targetLevel'))
+    elif project.get('predictionVariable', '') == '':
+        raise ValueError("Project '%s' does not have a prediction variable "
+                         "specified." % project)
+
+    # Find the performance definition for the model
+    # As of Viya 3.4, no way to search by model or project
+    perf_def = None
+    for p in mm.list_performance_definitions():
+        if model_obj.id in p.modelIds:
+            perf_def = p
+            break
+
+    if perf_def is None:
+        raise ValueError("Unable to find a performance definition for model "
+                         "'%s'" % model)
+
+    # Check where performance datasets should be uploaded
+    cas_id = perf_def['casServerId']
+    caslib = perf_def['dataLibrary']
+    table_prefix = perf_def['dataPrefix']
+
+    # All input variables must be present
+    missing_cols = [col for col in perf_def.inputVariables if
+                    col not in data.columns]
+    if len(missing_cols):
+        raise ValueError("The following columns were expected but not found in "
+                         "the data set: %s" % ', '.join(missing_cols))
+
+    # If CAS is not executing the model then the output variables must also be
+    # provided
+    if not perf_def.scoreExecutionRequired:
+        missing_cols = [col for col in perf_def.outputVariables if
+                        col not in data.columns]
+        if len(missing_cols):
+            raise ValueError(
+                "The following columns were expected but not found in the data "
+                "set: %s" % ', '.join(missing_cols))
+
+    sess = current_session()
+    url = '{}://{}/{}-http/'.format(sess._settings['protocol'],
+                                    sess.hostname,
+                                    cas_id)
+    regex = r'{}_(\d)_.*_{}'.format(table_prefix,
+                                  model_obj.id)
+
+    # Save the current setting before overwriting
+    orig_sslreqcert = os.environ.get('SSLREQCERT')
+
+    # If SSL connections to microservices are not being verified, don't attempt
+    # to verify connections to CAS - most likely certs are not in place.
+    if not sess.verify:
+        os.environ['SSLREQCERT'] = 'no'
+
+    # Upload the performance data to CAS
+    with swat.CAS(url,
+                  username=sess.username,
+                  password=sess._settings['password']) as s:
+
+        s.setsessopt(messagelevel='warning')
+
+        with swat.options(exception_on_severity=2):
+            caslib_info = s.table.tableinfo(caslib=caslib)
+
+        all_tables = getattr(caslib_info, 'TableInfo', None)
+        if all_tables is not None:
+            # Find tables with similar names
+            perf_tables = all_tables.Name.str.extract(regex,
+                                                      flags=re.IGNORECASE,
+                                                      expand=False)
+
+            # Get last-used sequence number
+            last_seq = perf_tables.dropna().astype(int).max()
+            next_seq = 1 if math.isnan(last_seq) else last_seq + 1
+        else:
+            next_seq = 1
+
+        table_name = '{prefix}_{sequence}_{label}_{model}'.format(
+            prefix=table_prefix,
+            sequence=next_seq,
+            label=label,
+            model=model_obj.id
+        )
+
+        with swat.options(exception_on_severity=2):
+            # Table must be promoted so performance jobs can access.
+            tbl = s.upload(data, casout=dict(name=table_name,
+                                                caslib=caslib,
+                                                promote=True)).casTable
+
+    # Restore the original value
+    if orig_sslreqcert is not None:
+        os.environ['SSLREQCERT'] = orig_sslreqcert
+
+    # Execute the definition if requested
+    if refresh:
+        mm.execute_performance_definition(perf_def)
+
+    return tbl
+
+
+def _parse_module_url(msg):
+    try:
+        details = json.loads(msg)
+
+        module_url = get_link(details, 'module')
+        module_url = module_url.get('href')
+    except json.JSONDecodeError:
+        match = re.search(r'(?:rel=module, href=(.*?),)', msg)
+        module_url = match.group(1) if match else None
+
+    return module_url

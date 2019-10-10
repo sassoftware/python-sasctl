@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2019-08-16T16:59:52",
+      "recorded_at": "2019-09-06T18:01:40",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -36,7 +36,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"2056c99c8bab4bc28bba7febd8ccaf88\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"21b88e1f6b60457183092274145dbe76\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -50,7 +50,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Fri, 16 Aug 2019 16:59:52 GMT"
+            "Fri, 06 Sep 2019 18:01:44 GMT"
           ],
           "Expires": [
             "0"
@@ -89,11 +89,11 @@
       }
     },
     {
-      "recorded_at": "2019-08-16T16:59:52",
+      "recorded_at": "2019-09-06T18:01:40",
       "request": {
         "body": {
           "encoding": "utf-8",
-          "string": "{\"name\": \"caslocal\", \"destinationType\": \"cas\", \"casServerName\": \"cas-shared-default\", \"casLibrary\": \"Public\", \"description\": \"Test CAS publish destination from sasctl.\", \"destinationTable\": \"sasctl_models\"}"
+          "string": "{\"name\": \"sasctlcas\", \"destinationType\": \"cas\", \"casServerName\": \"cas-shared-default\", \"casLibrary\": \"Public\", \"description\": \"Test CAS publish destination from sasctl.\", \"destinationTable\": \"sasctl_models\"}"
         },
         "headers": {
           "Accept": [
@@ -109,7 +109,7 @@
             "keep-alive"
           ],
           "Content-Length": [
-            "206"
+            "207"
           ],
           "Content-Type": [
             "application/vnd.sas.models.publishing.destination+json"
@@ -124,7 +124,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-08-16T16:59:52.735Z\",\"modifiedTimeStamp\":\"2019-08-16T16:59:52.735Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"94140311-6993-4c65-9bf4-a48a1f64291c\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations/caslocal\",\"uri\":\"/modelPublish/destinations/caslocal\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/destinations/caslocal\",\"uri\":\"/modelPublish/destinations/caslocal\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelPublish/destinations/caslocal\",\"uri\":\"/modelPublish/destinations/caslocal\"}],\"version\":1,\"name\":\"caslocal\",\"description\":\"Test CAS publish destination from sasctl.\",\"destinationType\":\"cas\",\"destinationTable\":\"sasctl_models\",\"casServerName\":\"cas-shared-default\",\"casLibrary\":\"Public\"}"
+          "string": "{\"creationTimeStamp\":\"2019-09-06T18:01:44.310Z\",\"modifiedTimeStamp\":\"2019-09-06T18:01:44.310Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"21044d79-9637-4fda-b76c-297753422a30\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\"}],\"version\":1,\"name\":\"sasctlcas\",\"description\":\"Test CAS publish destination from sasctl.\",\"destinationType\":\"cas\",\"destinationTable\":\"sasctl_models\",\"casServerName\":\"cas-shared-default\",\"casLibrary\":\"Public\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -140,7 +140,7 @@
             "application/vnd.sas.models.publishing.destination+json;charset=UTF-8"
           ],
           "Date": [
-            "Fri, 16 Aug 2019 16:59:52 GMT"
+            "Fri, 06 Sep 2019 18:01:44 GMT"
           ],
           "Expires": [
             "0"
@@ -149,7 +149,7 @@
             "timeout=5, max=99"
           ],
           "Location": [
-            "/modelPublish/destinations/caslocal"
+            "/modelPublish/destinations/sasctlcas"
           ],
           "Pragma": [
             "no-cache"

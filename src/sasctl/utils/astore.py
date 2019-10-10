@@ -101,6 +101,26 @@ def create_package_from_astore(table):
     :meth:`model_repository.import_model_from_zip <.ModelRepository.import_model_from_zip>`
 
     """
+    files = create_files_from_astore(table)
+
+    return _build_zip_from_files(files)
+
+
+def create_files_from_astore(table):
+    """Generate files for importing a model from an ASTORE.
+
+    Parameters
+    ----------
+    table : swat.CASTable
+        The CAS table containing the ASTORE.
+
+
+    Returns
+    -------
+    dict
+        Dictionary of filename: content pairs.
+
+    """
     if swat is None:
         raise RuntimeError("The 'swat' package is required to work with "
                            "ASTORE models.")
@@ -150,7 +170,7 @@ def create_package_from_astore(table):
                         'uri': '/dataTables/dataSources/cas~fs~cas-shared-default~fs~ModelStore/tables/{}'.format(astore_filename),
                         'key': astore_key}]
 
-    zip_file = _build_zip_from_files({
+    return {
         'dmcas_packagescorecode.sas': '\n'.join(package_ds2),
         'dmcas_epscorecode.sas': ep_ds2,
         astore_filename: astore,
@@ -159,9 +179,7 @@ def create_package_from_astore(table):
         'AstoreMetadata.json': astore_metadata,
         'inputVar.json': input_vars,
         'outputVar.json': output_vars
-    })
-
-    return zip_file
+    }
 
 
 def _build_zip_from_files(files):

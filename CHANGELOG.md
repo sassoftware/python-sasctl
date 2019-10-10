@@ -1,7 +1,20 @@
 
 Unreleased
 ----------
- - 
+ -
+
+v1.3 (2019-10-10)
+----------------- 
+**Improvements**
+ - Added `update_performance` task for easily uploading performance information for a model. 
+ - New (experimental) pyml2sas sub-package provides utilities for generating SAS code from Python gradient boosting models. 
+ - New (experimental) methods for managing workflows added to `model_management` service.
+ 
+**Changes**
+ - `register_model` task automatically captures installed Python packages.
+ - All `list_xxx` methods return all matching items unless a `limit` parameter is specified.
+ - Improved API documentation.
+ - Updated `full_lifecycle` example with performance monitoring.
 
 v1.2.5 (2019-10-10)
 -------------------

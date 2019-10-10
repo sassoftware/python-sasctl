@@ -279,6 +279,6 @@ def test_publish_and_execute(tmpdir):
     result = mas.execute_module_step('sasctl_test', 'score', **x1)
 
     assert result['rc'] == 0
-    assert result['var1'] == 24
+    assert round(result['var1'], 2) == 30.29
     assert result['msg'] is None
 

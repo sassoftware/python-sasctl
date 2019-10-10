@@ -11,7 +11,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 
 from sasctl import Session
-from sasctl.tasks import register_model, publish_model
+from sasctl.tasks import register_model, publish_model, update_model_performance
 from sasctl.services import model_repository as mr
 from sasctl.services import model_management as mm
 
@@ -39,12 +39,10 @@ register_model(lm,
                project=project,     # Register in "Iris" project
                force=True)          # Create project if it doesn't exist
 
-# Update project properties
+# Update project properties.  Target variable must be set before performance
+# definitions can be created.
 project = mr.get_project(project)
-project['function'] = 'prediction'
-project['targetLevel'] = 'interval'
 project['targetVariable'] = 'Price'
-project['predictionVariable'] = 'var1'
 project = mr.update_project(project)
 
 # Instruct the project to look for tables in the "Public" CAS library with
@@ -55,8 +53,8 @@ mm.create_performance_definition(model_name, 'Public', 'boston')
 # Publish the model to the real-time scoring engine
 module_lm = publish_model(model_name, 'maslocal')
 
-# Select the first row of training data
-x = X.iloc[0, :]
+# Select the first row of testing data
+x = X_test.iloc[0, :]
 
 # Call the published module and score the record
 result = module_lm.score(**x)
@@ -76,5 +74,16 @@ module_dt = publish_model(model_dt, 'maslocal')
 result = module_dt.score(**x)
 print(result)
 
+# Model Manager can track model performance over time if provided with
+# historical model observations & predictions.  SIMULATE historical data by
+# repeatedly sampling from the test set.
+perf_df = X_test.copy()
+perf_df['var1'] = lm.predict(X_test)
+perf_df['Price'] = y
+
+# For each (simulated) historical period, upload model results
+for period in ('q12019', 'q22019', 'q32019', 'q42019'):
+    sample = perf_df.sample(frac=0.2)
+    update_model_performance(sample, model_name, period)
 
 

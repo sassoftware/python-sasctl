@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2019-06-10T21:42:58",
+      "recorded_at": "2019-09-06T18:14:37",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -21,13 +21,13 @@
             "keep-alive"
           ],
           "Content-Length": [
-            "60"
+            "54"
           ],
           "Content-Type": [
             "application/x-www-form-urlencoded"
           ],
           "User-Agent": [
-            "python-requests/2.18.4"
+            "python-requests/2.22.0"
           ]
         },
         "method": "POST",
@@ -36,7 +36,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint gelupdates scim.read SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS USCALA mercuryusers CTRYUNITEDSTATES BLDGC tisurvey GLOBALPRESALES intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install ApplicationAdministrators techoffice COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"1791e1da79474beb9f27c6203d7b9106\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"0945ce0a1b5b406e8726eb58e79bbadd\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -50,7 +50,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Mon, 10 Jun 2019 21:42:58 GMT"
+            "Fri, 06 Sep 2019 18:14:41 GMT"
           ],
           "Expires": [
             "0"
@@ -61,9 +61,6 @@
           "Pragma": [
             "no-cache",
             "no-cache"
-          ],
-          "Server": [
-            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -92,7 +89,7 @@
       }
     },
     {
-      "recorded_at": "2019-06-10T21:43:01",
+      "recorded_at": "2019-09-06T18:14:37",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -118,7 +115,7 @@
             "application/vnd.sas.project+json"
           ],
           "User-Agent": [
-            "python-requests/2.18.4"
+            "python-requests/2.22.0"
           ]
         },
         "method": "POST",
@@ -127,7 +124,7 @@
       "response": {
         "body": {
           "encoding": null,
-          "string": "{\"creationTimeStamp\":\"2019-06-10T21:42:59.636Z\",\"modifiedTimeStamp\":\"2019-06-10T21:42:59.636Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"name\":\"Test Project\",\"imageUri\":\"/projects/cyan-bubbles.png\",\"folderUri\":\"/folders/folders/7527040e-252b-423f-beba-932fd08fefc3\",\"userCount\":1,\"groupCount\":0,\"properties\":[],\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"type\":\"application/vnd.sas.project\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"type\":\"application/vnd.sas.project.summary\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"type\":\"application/vnd.sas.project\",\"responseType\":\"application/vnd.sas.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5\"},{\"method\":\"GET\",\"rel\":\"folder\",\"href\":\"/folders/folders/7527040e-252b-423f-beba-932fd08fefc3\",\"uri\":\"/folders/folders/7527040e-252b-423f-beba-932fd08fefc3\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"resources\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/resources\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/resources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.resource\"},{\"method\":\"POST\",\"rel\":\"addResource\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/resources\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/resources\",\"type\":\"application/vnd.sas.project.resource\"},{\"method\":\"GET\",\"rel\":\"participants\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/participants\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/participants\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.participant\"},{\"method\":\"POST\",\"rel\":\"addParticipant\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/participants\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/participants\",\"type\":\"application/vnd.sas.project.participant\"},{\"method\":\"GET\",\"rel\":\"comments\",\"href\":\"/comments/comments?resourceUri={/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5}\",\"uri\":\"/comments/comments?resourceUri={/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5}\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.comment\"},{\"method\":\"POST\",\"rel\":\"createComment\",\"href\":\"/comments/comments\",\"uri\":\"/comments/comments\",\"type\":\"application/vnd.sas.comment\"},{\"method\":\"GET\",\"rel\":\"activities\",\"href\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/activities\",\"uri\":\"/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5/activities\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.activity\"}]}"
+          "string": "{\"creationTimeStamp\":\"2019-09-06T18:14:41.991Z\",\"modifiedTimeStamp\":\"2019-09-06T18:14:41.991Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":1,\"id\":\"ee790250-ab93-40ae-b772-fa438c52c473\",\"name\":\"Test Project\",\"imageUri\":\"/projects/blue-chart.png\",\"folderUri\":\"/folders/folders/bb4787ea-52a5-4674-bc2a-5ed30b804869\",\"userCount\":1,\"groupCount\":0,\"properties\":[],\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473\",\"uri\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473\",\"type\":\"application/vnd.sas.project\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473\",\"uri\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473\",\"type\":\"application/vnd.sas.project.summary\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473\",\"uri\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473\",\"type\":\"application/vnd.sas.project\",\"responseType\":\"application/vnd.sas.project\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473\",\"uri\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473\"},{\"method\":\"GET\",\"rel\":\"folder\",\"href\":\"/folders/folders/bb4787ea-52a5-4674-bc2a-5ed30b804869\",\"uri\":\"/folders/folders/bb4787ea-52a5-4674-bc2a-5ed30b804869\",\"type\":\"application/vnd.sas.content.folder\"},{\"method\":\"GET\",\"rel\":\"resources\",\"href\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473/resources\",\"uri\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473/resources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.resource\"},{\"method\":\"POST\",\"rel\":\"addResource\",\"href\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473/resources\",\"uri\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473/resources\",\"type\":\"application/vnd.sas.project.resource\"},{\"method\":\"GET\",\"rel\":\"participants\",\"href\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473/participants\",\"uri\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473/participants\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.participant\"},{\"method\":\"POST\",\"rel\":\"addParticipant\",\"href\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473/participants\",\"uri\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473/participants\",\"type\":\"application/vnd.sas.project.participant\"},{\"method\":\"GET\",\"rel\":\"comments\",\"href\":\"/comments/comments?resourceUri={/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473}\",\"uri\":\"/comments/comments?resourceUri={/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473}\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.comment\"},{\"method\":\"POST\",\"rel\":\"createComment\",\"href\":\"/comments/comments\",\"uri\":\"/comments/comments\",\"type\":\"application/vnd.sas.comment\"},{\"method\":\"GET\",\"rel\":\"activities\",\"href\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473/activities\",\"uri\":\"/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473/activities\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.project.activity\"}]}"
         },
         "headers": {
           "Cache-Control": [
@@ -143,10 +140,10 @@
             "application/vnd.sas.project+json"
           ],
           "Date": [
-            "Mon, 10 Jun 2019 21:43:01 GMT"
+            "Fri, 06 Sep 2019 18:14:42 GMT"
           ],
           "ETag": [
-            "\"jwqwkjsk\""
+            "\"k08fvn7r\""
           ],
           "Expires": [
             "0"
@@ -155,16 +152,13 @@
             "timeout=5, max=99"
           ],
           "Last-Modified": [
-            "Mon, 10 Jun 2019 21:42:59 GMT"
+            "Fri, 06 Sep 2019 18:14:41 GMT"
           ],
           "Location": [
-            "/projects/projects/d3e4f10b-2385-4141-a403-1ed4615cc2b5"
+            "/projects/projects/ee790250-ab93-40ae-b772-fa438c52c473"
           ],
           "Pragma": [
             "no-cache"
-          ],
-          "Server": [
-            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"

@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2019-08-16T17:24:19",
+      "recorded_at": "2019-09-06T18:01:49",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -36,7 +36,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"6ef188ff66f94944bca01486dc9a20eb\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"e20acd06533147f897b16fe929646cf3\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -50,7 +50,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Fri, 16 Aug 2019 17:24:19 GMT"
+            "Fri, 06 Sep 2019 18:01:53 GMT"
           ],
           "Expires": [
             "0"
@@ -89,11 +89,11 @@
       }
     },
     {
-      "recorded_at": "2019-08-16T17:24:19",
+      "recorded_at": "2019-09-06T18:01:49",
       "request": {
         "body": {
           "encoding": "utf-8",
-          "string": "{\"name\": \"maslocal2\", \"destinationType\": \"microAnalyticService\", \"description\": null, \"masUri\": \"localhost\"}"
+          "string": "{\"name\": \"sasctlmas\", \"destinationType\": \"microAnalyticService\", \"description\": null, \"masUri\": \"localhost\"}"
         },
         "headers": {
           "Accept": [
@@ -124,7 +124,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-08-16T17:24:20.007Z\",\"modifiedTimeStamp\":\"2019-08-16T17:24:20.007Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"30c98ec3-ce6e-4e42-92ba-7eebd1e36874\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations/maslocal2\",\"uri\":\"/modelPublish/destinations/maslocal2\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/destinations/maslocal2\",\"uri\":\"/modelPublish/destinations/maslocal2\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelPublish/destinations/maslocal2\",\"uri\":\"/modelPublish/destinations/maslocal2\"}],\"version\":1,\"name\":\"maslocal2\",\"destinationType\":\"microAnalyticService\",\"masUri\":\"localhost\"}"
+          "string": "{\"creationTimeStamp\":\"2019-09-06T18:01:53.395Z\",\"modifiedTimeStamp\":\"2019-09-06T18:01:53.395Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"dbfc4ebb-a08d-4151-bb3f-36805f5500c4\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations/sasctlmas\",\"uri\":\"/modelPublish/destinations/sasctlmas\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/destinations/sasctlmas\",\"uri\":\"/modelPublish/destinations/sasctlmas\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelPublish/destinations/sasctlmas\",\"uri\":\"/modelPublish/destinations/sasctlmas\"}],\"version\":1,\"name\":\"sasctlmas\",\"destinationType\":\"microAnalyticService\",\"masUri\":\"localhost\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -140,7 +140,7 @@
             "application/vnd.sas.models.publishing.destination+json;charset=UTF-8"
           ],
           "Date": [
-            "Fri, 16 Aug 2019 17:24:20 GMT"
+            "Fri, 06 Sep 2019 18:01:53 GMT"
           ],
           "Expires": [
             "0"
@@ -149,7 +149,7 @@
             "timeout=5, max=99"
           ],
           "Location": [
-            "/modelPublish/destinations/maslocal2"
+            "/modelPublish/destinations/sasctlmas"
           ],
           "Pragma": [
             "no-cache"

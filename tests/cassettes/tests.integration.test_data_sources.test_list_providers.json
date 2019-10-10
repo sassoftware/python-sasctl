@@ -1,97 +1,6 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2019-06-26T19:18:24",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": "grant_type=password&username=USERNAME&password=*****"
-        },
-        "headers": {
-          "Accept": [
-            "application/json"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Basic [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "Content-Length": [
-            "60"
-          ],
-          "Content-Type": [
-            "application/x-www-form-urlencoded"
-          ],
-          "User-Agent": [
-            "python-requests/2.18.4"
-          ]
-        },
-        "method": "POST",
-        "uri": "https://hostname.com/SASLogon/oauth/token"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read gelupdates SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey GLOBALPRESALES intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap defsusers opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin EsriUsers AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install techoffice ApplicationAdministrators COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"2a7428fb97d14589a13c257ca4583687\"}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate",
-            "no-store"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Type": [
-            "application/json;charset=UTF-8"
-          ],
-          "Date": [
-            "Wed, 26 Jun 2019 19:18:24 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
-          ],
-          "Pragma": [
-            "no-cache",
-            "no-cache"
-          ],
-          "Server": [
-            "Apache/2.4"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "DENY"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/SASLogon/oauth/token"
-      }
-    },
-    {
       "recorded_at": "2019-06-26T19:18:25",
       "request": {
         "body": {
@@ -175,6 +84,602 @@
           "message": ""
         },
         "url": "https://hostname.com/dataSources/providers"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T13:41:49",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/dataSources/providers?limit=1000000"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers?start=0&limit=1000000\",\"uri\":\"/dataSources/providers?start=0&limit=1000000\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"}],\"name\":\"providers\",\"accept\":\"application/vnd.sas.data.provider.summary application/vnd.sas.data.provider\",\"start\":0,\"count\":3,\"items\":[{\"id\":\"cas\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"sourceDefinitions\",\"href\":\"/dataSources/providers/cas/sourceDefinitions\",\"uri\":\"/dataSources/providers/cas/sourceDefinitions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source.definition\"}],\"version\":1},{\"id\":\"Compute\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/Compute\",\"uri\":\"/dataSources/providers/Compute\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/Compute\",\"uri\":\"/dataSources/providers/Compute\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/Compute/sources\",\"uri\":\"/dataSources/providers/Compute/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"sourceDefinitions\",\"href\":\"/dataSources/providers/Compute/sourceDefinitions\",\"uri\":\"/dataSources/providers/Compute/sourceDefinitions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source.definition\"}],\"version\":1},{\"id\":\"dataAgent\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/dataAgent\",\"uri\":\"/dataSources/providers/dataAgent\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/dataAgent\",\"uri\":\"/dataSources/providers/dataAgent\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/dataAgent/sources\",\"uri\":\"/dataSources/providers/dataAgent/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"sourceDefinitions\",\"href\":\"/dataSources/providers/dataAgent/sourceDefinitions\",\"uri\":\"/dataSources/providers/dataAgent/sourceDefinitions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source.definition\"}],\"version\":1}],\"limit\":1000000,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 13:41:53 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataSources/providers?limit=1000000"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T13:46:42",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "54"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"a01c631daada461682baf309ea5f0c67\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 13:46:45 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T13:46:42",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/dataSources/providers?limit=10000"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers?start=0&limit=10000\",\"uri\":\"/dataSources/providers?start=0&limit=10000\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"}],\"name\":\"providers\",\"accept\":\"application/vnd.sas.data.provider.summary application/vnd.sas.data.provider\",\"start\":0,\"count\":3,\"items\":[{\"id\":\"cas\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"sourceDefinitions\",\"href\":\"/dataSources/providers/cas/sourceDefinitions\",\"uri\":\"/dataSources/providers/cas/sourceDefinitions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source.definition\"}],\"version\":1},{\"id\":\"Compute\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/Compute\",\"uri\":\"/dataSources/providers/Compute\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/Compute\",\"uri\":\"/dataSources/providers/Compute\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/Compute/sources\",\"uri\":\"/dataSources/providers/Compute/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"sourceDefinitions\",\"href\":\"/dataSources/providers/Compute/sourceDefinitions\",\"uri\":\"/dataSources/providers/Compute/sourceDefinitions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source.definition\"}],\"version\":1},{\"id\":\"dataAgent\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/dataAgent\",\"uri\":\"/dataSources/providers/dataAgent\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/dataAgent\",\"uri\":\"/dataSources/providers/dataAgent\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/dataAgent/sources\",\"uri\":\"/dataSources/providers/dataAgent/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"sourceDefinitions\",\"href\":\"/dataSources/providers/dataAgent/sourceDefinitions\",\"uri\":\"/dataSources/providers/dataAgent/sourceDefinitions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source.definition\"}],\"version\":1}],\"limit\":10000,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 13:46:46 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataSources/providers?limit=10000"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:13:50",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "54"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"e564f22f3d8c4aeda2f68802f26f2833\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:13:54 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:13:50",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/dataSources/providers?limit=10000"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers?start=0&limit=10000\",\"uri\":\"/dataSources/providers?start=0&limit=10000\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"}],\"name\":\"providers\",\"accept\":\"application/vnd.sas.data.provider.summary application/vnd.sas.data.provider\",\"start\":0,\"count\":3,\"items\":[{\"id\":\"cas\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"sourceDefinitions\",\"href\":\"/dataSources/providers/cas/sourceDefinitions\",\"uri\":\"/dataSources/providers/cas/sourceDefinitions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source.definition\"}],\"version\":1},{\"id\":\"Compute\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/Compute\",\"uri\":\"/dataSources/providers/Compute\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/Compute\",\"uri\":\"/dataSources/providers/Compute\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/Compute/sources\",\"uri\":\"/dataSources/providers/Compute/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"sourceDefinitions\",\"href\":\"/dataSources/providers/Compute/sourceDefinitions\",\"uri\":\"/dataSources/providers/Compute/sourceDefinitions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source.definition\"}],\"version\":1},{\"id\":\"dataAgent\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/dataAgent\",\"uri\":\"/dataSources/providers/dataAgent\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/dataAgent\",\"uri\":\"/dataSources/providers/dataAgent\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/dataAgent/sources\",\"uri\":\"/dataSources/providers/dataAgent/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"sourceDefinitions\",\"href\":\"/dataSources/providers/dataAgent/sourceDefinitions\",\"uri\":\"/dataSources/providers/dataAgent/sourceDefinitions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source.definition\"}],\"version\":1}],\"limit\":10000,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:13:54 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataSources/providers?limit=10000"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:11",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "54"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"feecde75a8a54b93a769d0910764b134\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:14 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:11",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/dataSources/providers?limit=10000"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers?start=0&limit=10000\",\"uri\":\"/dataSources/providers?start=0&limit=10000\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"}],\"name\":\"providers\",\"accept\":\"application/vnd.sas.data.provider.summary application/vnd.sas.data.provider\",\"start\":0,\"count\":3,\"items\":[{\"id\":\"cas\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"sourceDefinitions\",\"href\":\"/dataSources/providers/cas/sourceDefinitions\",\"uri\":\"/dataSources/providers/cas/sourceDefinitions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source.definition\"}],\"version\":1},{\"id\":\"Compute\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/Compute\",\"uri\":\"/dataSources/providers/Compute\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/Compute\",\"uri\":\"/dataSources/providers/Compute\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/Compute/sources\",\"uri\":\"/dataSources/providers/Compute/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"sourceDefinitions\",\"href\":\"/dataSources/providers/Compute/sourceDefinitions\",\"uri\":\"/dataSources/providers/Compute/sourceDefinitions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source.definition\"}],\"version\":1},{\"id\":\"dataAgent\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/dataAgent\",\"uri\":\"/dataSources/providers/dataAgent\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/dataAgent\",\"uri\":\"/dataSources/providers/dataAgent\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/dataAgent/sources\",\"uri\":\"/dataSources/providers/dataAgent/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"sourceDefinitions\",\"href\":\"/dataSources/providers/dataAgent/sourceDefinitions\",\"uri\":\"/dataSources/providers/dataAgent/sourceDefinitions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source.definition\"}],\"version\":1}],\"limit\":10000,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:15 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataSources/providers?limit=10000"
       }
     }
   ],

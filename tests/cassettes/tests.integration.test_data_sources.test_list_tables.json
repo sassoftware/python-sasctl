@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2019-06-27T13:08:15",
+      "recorded_at": "2019-09-06T13:46:44",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -21,13 +21,13 @@
             "keep-alive"
           ],
           "Content-Length": [
-            "60"
+            "54"
           ],
           "Content-Type": [
             "application/x-www-form-urlencoded"
           ],
           "User-Agent": [
-            "python-requests/2.18.4"
+            "python-requests/2.22.0"
           ]
         },
         "method": "POST",
@@ -36,7 +36,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read gelupdates SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey GLOBALPRESALES intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap defsusers opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin EsriUsers AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install techoffice ApplicationAdministrators COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"f372d9a3c8304c12ac1dfe075c3887ce\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"f0479514a1994f0bb636db5543727155\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -50,7 +50,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 27 Jun 2019 13:08:15 GMT"
+            "Fri, 06 Sep 2019 13:46:46 GMT"
           ],
           "Expires": [
             "0"
@@ -61,9 +61,6 @@
           "Pragma": [
             "no-cache",
             "no-cache"
-          ],
-          "Server": [
-            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -92,7 +89,7 @@
       }
     },
     {
-      "recorded_at": "2019-06-27T13:08:15",
+      "recorded_at": "2019-09-06T13:46:44",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -112,7 +109,7 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.18.4"
+            "python-requests/2.22.0"
           ]
         },
         "method": "GET",
@@ -137,7 +134,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 27 Jun 2019 13:08:15 GMT"
+            "Fri, 06 Sep 2019 13:46:47 GMT"
           ],
           "Expires": [
             "0"
@@ -147,9 +144,6 @@
           ],
           "Pragma": [
             "no-cache"
-          ],
-          "Server": [
-            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -178,7 +172,7 @@
       }
     },
     {
-      "recorded_at": "2019-06-27T13:08:15",
+      "recorded_at": "2019-09-06T13:46:44",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -198,7 +192,7 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.18.4"
+            "python-requests/2.22.0"
           ]
         },
         "method": "GET",
@@ -206,7 +200,7 @@
       },
       "response": {
         "body": {
-          "encoding": null,
+          "encoding": "UTF-8",
           "string": ""
         },
         "headers": {
@@ -222,8 +216,11 @@
           "Content-Security-Policy": [
             "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
           ],
+          "Content-Type": [
+            "text/plain; charset=UTF-8"
+          ],
           "Date": [
-            "Thu, 27 Jun 2019 13:08:15 GMT"
+            "Fri, 06 Sep 2019 13:46:47 GMT"
           ],
           "Expires": [
             "0"
@@ -236,9 +233,6 @@
           ],
           "Pragma": [
             "no-cache"
-          ],
-          "Server": [
-            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -264,7 +258,7 @@
       }
     },
     {
-      "recorded_at": "2019-06-27T13:08:15",
+      "recorded_at": "2019-09-06T13:46:44",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -284,7 +278,7 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.18.4"
+            "python-requests/2.22.0"
           ]
         },
         "method": "GET",
@@ -293,7 +287,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"uri\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"}],\"name\":\"sources\",\"accept\":\"application/vnd.sas.data.source application/vnd.sas.data.source.summary\",\"start\":0,\"count\":1,\"items\":[{\"id\":\"cas-shared-default\",\"name\":\"cas-shared-default\",\"type\":\"casServer\",\"providerId\":\"cas\",\"description\":\"controller\",\"hasTables\":false,\"hasEngines\":false,\"attributes\":{\"port\":5570,\"host\":\"fsds-viya19w04-primary-controller.fsl.sashq-d.openstack.sas.com\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source.summary\"},{\"method\":\"GET\",\"rel\":\"state\",\"href\":\"/casManagement/servers/cas-shared-default/state\",\"uri\":\"/casManagement/servers/cas-shared-default/state\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"children\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}]}],\"limit\":10,\"version\":2}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"uri\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"}],\"name\":\"sources\",\"accept\":\"application/vnd.sas.data.source application/vnd.sas.data.source.summary\",\"start\":0,\"count\":1,\"items\":[{\"id\":\"cas-shared-default\",\"name\":\"cas-shared-default\",\"type\":\"casServer\",\"providerId\":\"cas\",\"description\":\"controller\",\"hasTables\":false,\"hasEngines\":false,\"attributes\":{\"port\":5570,\"host\":\"sasserver.demo.sas.com\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source.summary\"},{\"method\":\"GET\",\"rel\":\"state\",\"href\":\"/casManagement/servers/cas-shared-default/state\",\"uri\":\"/casManagement/servers/cas-shared-default/state\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"children\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}]}],\"limit\":10,\"version\":2}"
         },
         "headers": {
           "Cache-Control": [
@@ -309,7 +303,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 27 Jun 2019 13:08:14 GMT"
+            "Fri, 06 Sep 2019 13:46:47 GMT"
           ],
           "Expires": [
             "0"
@@ -319,9 +313,6 @@
           ],
           "Pragma": [
             "no-cache"
-          ],
-          "Server": [
-            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -350,7 +341,7 @@
       }
     },
     {
-      "recorded_at": "2019-06-27T13:08:15",
+      "recorded_at": "2019-09-06T13:46:44",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -370,7 +361,7 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.18.4"
+            "python-requests/2.22.0"
           ]
         },
         "method": "GET",
@@ -378,7 +369,7 @@
       },
       "response": {
         "body": {
-          "encoding": null,
+          "encoding": "UTF-8",
           "string": ""
         },
         "headers": {
@@ -394,8 +385,11 @@
           "Content-Security-Policy": [
             "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
           ],
+          "Content-Type": [
+            "text/plain; charset=UTF-8"
+          ],
           "Date": [
-            "Thu, 27 Jun 2019 13:08:15 GMT"
+            "Fri, 06 Sep 2019 13:46:47 GMT"
           ],
           "Expires": [
             "0"
@@ -408,9 +402,6 @@
           ],
           "Pragma": [
             "no-cache"
-          ],
-          "Server": [
-            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -436,7 +427,7 @@
       }
     },
     {
-      "recorded_at": "2019-06-27T13:08:16",
+      "recorded_at": "2019-09-06T13:46:44",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -456,7 +447,7 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.18.4"
+            "python-requests/2.22.0"
           ]
         },
         "method": "GET",
@@ -481,7 +472,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 27 Jun 2019 13:08:16 GMT"
+            "Fri, 06 Sep 2019 13:46:47 GMT"
           ],
           "Expires": [
             "0"
@@ -491,9 +482,6 @@
           ],
           "Pragma": [
             "no-cache"
-          ],
-          "Server": [
-            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -522,7 +510,7 @@
       }
     },
     {
-      "recorded_at": "2019-06-27T13:08:16",
+      "recorded_at": "2019-09-06T13:46:44",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -542,7 +530,7 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.18.4"
+            "python-requests/2.22.0"
           ]
         },
         "method": "GET",
@@ -550,7 +538,7 @@
       },
       "response": {
         "body": {
-          "encoding": null,
+          "encoding": "UTF-8",
           "string": ""
         },
         "headers": {
@@ -566,8 +554,11 @@
           "Content-Security-Policy": [
             "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
           ],
+          "Content-Type": [
+            "text/plain; charset=UTF-8"
+          ],
           "Date": [
-            "Thu, 27 Jun 2019 13:08:16 GMT"
+            "Fri, 06 Sep 2019 13:46:47 GMT"
           ],
           "Expires": [
             "0"
@@ -580,9 +571,6 @@
           ],
           "Pragma": [
             "no-cache"
-          ],
-          "Server": [
-            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -608,7 +596,7 @@
       }
     },
     {
-      "recorded_at": "2019-06-27T13:08:18",
+      "recorded_at": "2019-09-06T13:46:44",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -628,7 +616,7 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.18.4"
+            "python-requests/2.22.0"
           ]
         },
         "method": "GET",
@@ -637,7 +625,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables?start=0&limit=10\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources/cas~fs~cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas~fs~cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"}],\"name\":\"tables\",\"accept\":\"application/vnd.sas.data.table application/vnd.sas.data.table.summary\",\"start\":0,\"count\":7,\"items\":[{\"name\":\"COSTCHANGE\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"5048bda0-ec17-fe43-ae2a-4439aa21c262\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"COSTCHANGE.sashdat\",\"sourceTableLastModified\":\"2018-08-24T15:08:59.000Z\",\"size\":9776,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2018-08-24T15:08:59+00:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~COSTCHANGE/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~COSTCHANGE/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"PREDEF_SVRTDIST\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"5048bda0-ec17-fe43-ae2a-4439aa21c262\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"predef_svrtdist.sashdat\",\"sourceTableLastModified\":\"2019-06-11T01:09:33.000Z\",\"size\":78872,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-06-11T01:09:33+00:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PREDEF_SVRTDIST/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PREDEF_SVRTDIST/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"5048bda0-ec17-fe43-ae2a-4439aa21c262\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"PROMO_EFFECTIVENESS_X_EFFECTS_2.sashdat\",\"sourceTableLastModified\":\"2018-08-24T15:08:38.000Z\",\"size\":9312,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2018-08-24T15:08:38+00:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PROMO_EFFECTIVENESS_X_EFFECTS_2/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PROMO_EFFECTIVENESS_X_EFFECTS_2/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"RAND_RETAILDEMO\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"5048bda0-ec17-fe43-ae2a-4439aa21c262\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"RAND_RETAILDEMO.sashdat\",\"sourceTableLastModified\":\"2018-08-24T15:08:45.000Z\",\"size\":42579352,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2018-08-24T15:08:45+00:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~RAND_RETAILDEMO/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~RAND_RETAILDEMO/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"SW_LAKE_RT_SENSOR_WATERQUALITY\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"5048bda0-ec17-fe43-ae2a-4439aa21c262\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"SW_LAKE_RT_SENSOR_WATERQUALITY.sashdat\",\"sourceTableLastModified\":\"2018-08-24T15:08:48.000Z\",\"size\":290024,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2018-08-24T15:08:48+00:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~SW_LAKE_RT_SENSOR_WATERQUALITY/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~SW_LAKE_RT_SENSOR_WATERQUALITY/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"WARRANTY_CLAIMS_0117\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"5048bda0-ec17-fe43-ae2a-4439aa21c262\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"WARRANTY_CLAIMS_0117.sashdat\",\"sourceTableLastModified\":\"2018-08-24T15:08:51.000Z\",\"size\":13661856,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2018-08-24T15:08:51+00:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WARRANTY_CLAIMS_0117/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WARRANTY_CLAIMS_0117/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"WATER_CLUSTER\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"5048bda0-ec17-fe43-ae2a-4439aa21c262\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"WATER_CLUSTER.sashdat\",\"sourceTableLastModified\":\"2018-08-24T15:08:54.000Z\",\"size\":525568,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2018-08-24T15:08:54+00:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WATER_CLUSTER/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WATER_CLUSTER/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state\",\"responseType\":\"text/plain\"}]}],\"limit\":10,\"version\":2}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables?start=0&limit=10\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources/cas~fs~cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas~fs~cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"}],\"name\":\"tables\",\"accept\":\"application/vnd.sas.data.table application/vnd.sas.data.table.summary\",\"start\":0,\"count\":7,\"items\":[{\"name\":\"COSTCHANGE\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"b3d7c7cd-0413-c34f-9cca-c2fd86e46589\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"COSTCHANGE.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:08:47.000Z\",\"size\":9776,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:08:47-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~COSTCHANGE/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~COSTCHANGE/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"PREDEF_SVRTDIST\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"b3d7c7cd-0413-c34f-9cca-c2fd86e46589\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"predef_svrtdist.sashdat\",\"sourceTableLastModified\":\"2019-09-05T10:09:29.000Z\",\"size\":78872,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-09-05T06:09:29-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PREDEF_SVRTDIST/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PREDEF_SVRTDIST/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"b3d7c7cd-0413-c34f-9cca-c2fd86e46589\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"PROMO_EFFECTIVENESS_X_EFFECTS_2.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:08:54.000Z\",\"size\":9312,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:08:54-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PROMO_EFFECTIVENESS_X_EFFECTS_2/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PROMO_EFFECTIVENESS_X_EFFECTS_2/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"RAND_RETAILDEMO\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"b3d7c7cd-0413-c34f-9cca-c2fd86e46589\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"RAND_RETAILDEMO.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:09:16.000Z\",\"size\":42565080,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:09:16-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~RAND_RETAILDEMO/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~RAND_RETAILDEMO/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"SW_LAKE_RT_SENSOR_WATERQUALITY\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"b3d7c7cd-0413-c34f-9cca-c2fd86e46589\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"SW_LAKE_RT_SENSOR_WATERQUALITY.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:09:16.000Z\",\"size\":290936,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:09:16-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~SW_LAKE_RT_SENSOR_WATERQUALITY/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~SW_LAKE_RT_SENSOR_WATERQUALITY/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"WARRANTY_CLAIMS_0117\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"b3d7c7cd-0413-c34f-9cca-c2fd86e46589\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"WARRANTY_CLAIMS_0117.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:09:20.000Z\",\"size\":13657784,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:09:20-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WARRANTY_CLAIMS_0117/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WARRANTY_CLAIMS_0117/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"WATER_CLUSTER\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"b3d7c7cd-0413-c34f-9cca-c2fd86e46589\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"WATER_CLUSTER.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:09:20.000Z\",\"size\":526472,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:09:20-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WATER_CLUSTER/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WATER_CLUSTER/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state\",\"responseType\":\"text/plain\"}]}],\"limit\":10,\"version\":2}"
         },
         "headers": {
           "Cache-Control": [
@@ -653,7 +641,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 27 Jun 2019 13:08:17 GMT"
+            "Fri, 06 Sep 2019 13:46:47 GMT"
           ],
           "Expires": [
             "0"
@@ -664,8 +652,1361 @@
           "Pragma": [
             "no-cache"
           ],
-          "Server": [
-            "Apache/2.4"
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/casManagement/dataSources/cas~fs~cas-shared-default~fs~Samples/tables"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:13:51",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "54"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"43b62ebbc3184caa97bdfff0fb6040b8\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:13:54 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:13:51",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/dataSources/providers/cas"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"id\":\"cas\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}],\"version\":2,\"apiVersion\":1,\"usesSessions\":true,\"sourceDefinitionsSupport\":\"none\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:13:55 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataSources/providers/cas"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:13:51",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/dataSources/providers/cas/sources"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": ""
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain; charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:13:55 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=98"
+          ],
+          "Location": [
+            "/casManagement/providers/cas/sources"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 302,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataSources/providers/cas/sources"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:13:51",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/casManagement/providers/cas/sources"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"uri\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"}],\"name\":\"sources\",\"accept\":\"application/vnd.sas.data.source application/vnd.sas.data.source.summary\",\"start\":0,\"count\":1,\"items\":[{\"id\":\"cas-shared-default\",\"name\":\"cas-shared-default\",\"type\":\"casServer\",\"providerId\":\"cas\",\"description\":\"controller\",\"hasTables\":false,\"hasEngines\":false,\"attributes\":{\"port\":5570,\"host\":\"sasserver.demo.sas.com\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source.summary\"},{\"method\":\"GET\",\"rel\":\"state\",\"href\":\"/casManagement/servers/cas-shared-default/state\",\"uri\":\"/casManagement/servers/cas-shared-default/state\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"children\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}]}],\"limit\":10,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:13:54 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=97"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/casManagement/providers/cas/sources"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:13:51",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/dataSources/providers/cas/sources/cas-shared-default/children?filter=eq(name,%20%22Samples%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": ""
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain; charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:13:55 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=96"
+          ],
+          "Location": [
+            "/casManagement/providers/cas/sources/cas-shared-default/children?filter=eq(name,%20%22Samples%22)"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 302,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataSources/providers/cas/sources/cas-shared-default/children?filter=eq(name,%20%22Samples%22)"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:13:52",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/casManagement/providers/cas/sources/cas-shared-default/children?filter=eq(name,%20%22Samples%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children?start=0&limit=10\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"}],\"name\":\"sources\",\"accept\":\"application/vnd.sas.data.source\",\"start\":0,\"count\":1,\"items\":[{\"id\":\"Samples\",\"name\":\"Samples\",\"type\":\"caslib\",\"providerId\":\"cas\",\"description\":\"Stores sample data, supplied by SAS.\",\"hasTables\":true,\"hasEngines\":false,\"attributes\":{\"path\":\"/opt/sas/viya/config/data/cas/default/samples/\",\"transient\":false,\"scope\":\"global\",\"active\":false,\"personal\":false,\"caslibType\":\"PATH\",\"subDirs\":false},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"parent\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"tables\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"}]}],\"limit\":10,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:13:56 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=95"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/casManagement/providers/cas/sources/cas-shared-default/children?filter=eq(name,%20%22Samples%22)"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:13:52",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": ""
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain; charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:13:56 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=94"
+          ],
+          "Location": [
+            "/casManagement/dataSources/cas~fs~cas-shared-default~fs~Samples/tables"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 302,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:13:53",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/casManagement/dataSources/cas~fs~cas-shared-default~fs~Samples/tables"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables?start=0&limit=10\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources/cas~fs~cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas~fs~cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"}],\"name\":\"tables\",\"accept\":\"application/vnd.sas.data.table application/vnd.sas.data.table.summary\",\"start\":0,\"count\":7,\"items\":[{\"name\":\"COSTCHANGE\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"44f9a54b-9271-fb49-80a7-a2dd06ddb67c\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"COSTCHANGE.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:08:47.000Z\",\"size\":9776,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:08:47-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~COSTCHANGE/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~COSTCHANGE/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"PREDEF_SVRTDIST\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"44f9a54b-9271-fb49-80a7-a2dd06ddb67c\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"predef_svrtdist.sashdat\",\"sourceTableLastModified\":\"2019-09-05T10:09:29.000Z\",\"size\":78872,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-09-05T06:09:29-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PREDEF_SVRTDIST/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PREDEF_SVRTDIST/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"44f9a54b-9271-fb49-80a7-a2dd06ddb67c\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"PROMO_EFFECTIVENESS_X_EFFECTS_2.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:08:54.000Z\",\"size\":9312,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:08:54-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PROMO_EFFECTIVENESS_X_EFFECTS_2/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PROMO_EFFECTIVENESS_X_EFFECTS_2/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"RAND_RETAILDEMO\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"44f9a54b-9271-fb49-80a7-a2dd06ddb67c\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"RAND_RETAILDEMO.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:09:16.000Z\",\"size\":42565080,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:09:16-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~RAND_RETAILDEMO/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~RAND_RETAILDEMO/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"SW_LAKE_RT_SENSOR_WATERQUALITY\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"44f9a54b-9271-fb49-80a7-a2dd06ddb67c\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"SW_LAKE_RT_SENSOR_WATERQUALITY.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:09:16.000Z\",\"size\":290936,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:09:16-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~SW_LAKE_RT_SENSOR_WATERQUALITY/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~SW_LAKE_RT_SENSOR_WATERQUALITY/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"WARRANTY_CLAIMS_0117\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"44f9a54b-9271-fb49-80a7-a2dd06ddb67c\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"WARRANTY_CLAIMS_0117.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:09:20.000Z\",\"size\":13657784,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:09:20-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WARRANTY_CLAIMS_0117/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WARRANTY_CLAIMS_0117/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"WATER_CLUSTER\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"44f9a54b-9271-fb49-80a7-a2dd06ddb67c\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"WATER_CLUSTER.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:09:20.000Z\",\"size\":526472,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:09:20-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WATER_CLUSTER/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WATER_CLUSTER/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state\",\"responseType\":\"text/plain\"}]}],\"limit\":10,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:13:56 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=93"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/casManagement/dataSources/cas~fs~cas-shared-default~fs~Samples/tables"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:12",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "54"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"e6b3c9ed5c5b4dbc913bed71140d1cd5\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate",
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:16 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache",
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:12",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/dataSources/providers/cas"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"id\":\"cas\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}],\"version\":2,\"apiVersion\":1,\"usesSessions\":true,\"sourceDefinitionsSupport\":\"none\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:16 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataSources/providers/cas"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:12",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/dataSources/providers/cas/sources"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": ""
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain; charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:16 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=98"
+          ],
+          "Location": [
+            "/casManagement/providers/cas/sources"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 302,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataSources/providers/cas/sources"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:12",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/casManagement/providers/cas/sources"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"uri\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"}],\"name\":\"sources\",\"accept\":\"application/vnd.sas.data.source application/vnd.sas.data.source.summary\",\"start\":0,\"count\":1,\"items\":[{\"id\":\"cas-shared-default\",\"name\":\"cas-shared-default\",\"type\":\"casServer\",\"providerId\":\"cas\",\"description\":\"controller\",\"hasTables\":false,\"hasEngines\":false,\"attributes\":{\"port\":5570,\"host\":\"sasserver.demo.sas.com\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source.summary\"},{\"method\":\"GET\",\"rel\":\"state\",\"href\":\"/casManagement/servers/cas-shared-default/state\",\"uri\":\"/casManagement/servers/cas-shared-default/state\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"children\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}]}],\"limit\":10,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:16 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=97"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/casManagement/providers/cas/sources"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:12",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/dataSources/providers/cas/sources/cas-shared-default/children?filter=eq(name,%20%22Samples%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": ""
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain; charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:16 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=96"
+          ],
+          "Location": [
+            "/casManagement/providers/cas/sources/cas-shared-default/children?filter=eq(name,%20%22Samples%22)"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 302,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataSources/providers/cas/sources/cas-shared-default/children?filter=eq(name,%20%22Samples%22)"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:12",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/casManagement/providers/cas/sources/cas-shared-default/children?filter=eq(name,%20%22Samples%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children?start=0&limit=10\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"}],\"name\":\"sources\",\"accept\":\"application/vnd.sas.data.source\",\"start\":0,\"count\":1,\"items\":[{\"id\":\"Samples\",\"name\":\"Samples\",\"type\":\"caslib\",\"providerId\":\"cas\",\"description\":\"Stores sample data, supplied by SAS.\",\"hasTables\":true,\"hasEngines\":false,\"attributes\":{\"path\":\"/opt/sas/viya/config/data/cas/default/samples/\",\"transient\":false,\"scope\":\"global\",\"active\":false,\"personal\":false,\"caslibType\":\"PATH\",\"subDirs\":false},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"parent\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"tables\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"}]}],\"limit\":10,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:16 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=95"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/casManagement/providers/cas/sources/cas-shared-default/children?filter=eq(name,%20%22Samples%22)"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:12",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": ""
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "text/plain; charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:16 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=94"
+          ],
+          "Location": [
+            "/casManagement/dataSources/cas~fs~cas-shared-default~fs~Samples/tables"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 302,
+          "message": ""
+        },
+        "url": "https://hostname.com/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables"
+      }
+    },
+    {
+      "recorded_at": "2019-09-06T14:23:12",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/casManagement/dataSources/cas~fs~cas-shared-default~fs~Samples/tables"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables?start=0&limit=10\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources/cas~fs~cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas~fs~cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"}],\"name\":\"tables\",\"accept\":\"application/vnd.sas.data.table application/vnd.sas.data.table.summary\",\"start\":0,\"count\":7,\"items\":[{\"name\":\"COSTCHANGE\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"0eeaa52e-641a-3849-8736-51b9ed9a0091\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"COSTCHANGE.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:08:47.000Z\",\"size\":9776,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:08:47-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~COSTCHANGE/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~COSTCHANGE/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/COSTCHANGE/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/COSTCHANGE/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"PREDEF_SVRTDIST\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"0eeaa52e-641a-3849-8736-51b9ed9a0091\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"predef_svrtdist.sashdat\",\"sourceTableLastModified\":\"2019-09-05T10:09:29.000Z\",\"size\":78872,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-09-05T06:09:29-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PREDEF_SVRTDIST/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PREDEF_SVRTDIST/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PREDEF_SVRTDIST/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PREDEF_SVRTDIST/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"0eeaa52e-641a-3849-8736-51b9ed9a0091\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"PROMO_EFFECTIVENESS_X_EFFECTS_2.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:08:54.000Z\",\"size\":9312,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:08:54-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PROMO_EFFECTIVENESS_X_EFFECTS_2/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~PROMO_EFFECTIVENESS_X_EFFECTS_2/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/PROMO_EFFECTIVENESS_X_EFFECTS_2/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"RAND_RETAILDEMO\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"0eeaa52e-641a-3849-8736-51b9ed9a0091\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"RAND_RETAILDEMO.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:09:16.000Z\",\"size\":42565080,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:09:16-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~RAND_RETAILDEMO/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~RAND_RETAILDEMO/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/RAND_RETAILDEMO/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/RAND_RETAILDEMO/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"SW_LAKE_RT_SENSOR_WATERQUALITY\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"0eeaa52e-641a-3849-8736-51b9ed9a0091\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"SW_LAKE_RT_SENSOR_WATERQUALITY.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:09:16.000Z\",\"size\":290936,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:09:16-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~SW_LAKE_RT_SENSOR_WATERQUALITY/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~SW_LAKE_RT_SENSOR_WATERQUALITY/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/SW_LAKE_RT_SENSOR_WATERQUALITY/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"WARRANTY_CLAIMS_0117\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"0eeaa52e-641a-3849-8736-51b9ed9a0091\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"WARRANTY_CLAIMS_0117.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:09:20.000Z\",\"size\":13657784,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:09:20-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WARRANTY_CLAIMS_0117/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WARRANTY_CLAIMS_0117/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WARRANTY_CLAIMS_0117/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WARRANTY_CLAIMS_0117/state\",\"responseType\":\"text/plain\"}]},{\"name\":\"WATER_CLUSTER\",\"providerId\":\"cas\",\"dataSourceId\":\"Samples\",\"type\":\"table\",\"attributes\":{\"owner\":\"cas\",\"characterSet\":null,\"sourceCaslibName\":\"Samples\",\"columnCount\":null,\"sessionId\":\"0eeaa52e-641a-3849-8736-51b9ed9a0091\",\"encoding\":null,\"serverId\":\"cas-shared-default\",\"sourceTableName\":\"WATER_CLUSTER.sashdat\",\"sourceTableLastModified\":\"2019-05-24T22:09:20.000Z\",\"size\":526472,\"encryption\":\"NONE\",\"scope\":null,\"caslibId\":\"Samples\",\"rowCount\":null,\"state\":\"unloaded\",\"time\":\"2019-05-24T18:09:20-04:00\",\"group\":\"sas\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"type\":\"application/vnd.sas.data.table.summary\"},{\"method\":\"GET\",\"rel\":\"connectionAttributes\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER\",\"type\":\"application/vnd.sas.attributes\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.table\"},{\"method\":\"PUT\",\"rel\":\"load\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state?value=loaded\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state?value=loaded\",\"responseType\":\"application/json;text/plain\"},{\"method\":\"GET\",\"rel\":\"rows\",\"href\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WATER_CLUSTER/rows\",\"uri\":\"/rowSets/tables/cas~fs~cas-shared-default~fs~Samples~fs~WATER_CLUSTER/rows\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.row\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER/columns\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/WATER_CLUSTER/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.column.summary\"},{\"method\":\"GET\",\"rel\":\"provider\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"dataSource\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default~fs~Samples\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/WATER_CLUSTER/state\",\"responseType\":\"text/plain\"}]}],\"limit\":10,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 06 Sep 2019 14:23:16 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=93"
+          ],
+          "Pragma": [
+            "no-cache"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"

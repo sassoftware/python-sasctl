@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2019-06-18T15:26:20",
+      "recorded_at": "2019-09-06T18:04:14",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -21,7 +21,7 @@
             "keep-alive"
           ],
           "Content-Length": [
-            "60"
+            "54"
           ],
           "Content-Type": [
             "application/x-www-form-urlencoded"
@@ -36,7 +36,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess viyapython SCR CARYEMPS misvaclrcustomers esvanemeainstructorconsumers rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess AWSSandboxAccount01 GLOBALSALES FSL modelmanager testdivsna uaa.resource instltech RNDSIMSUsers openid domainemps1 demoacl-fsriskint scim.read gelupdates SASAdministrators OneDriveUsers gsopsussales openstackusers CASDiscussion scr_us intcawebcertreq esvakmcorionconsultforecastconsumers ANALYSIS USCALA mercuryusers CTRYUNITEDSTATES BLDGC SASScoreUsers tisurvey GLOBALPRESALES intcausers INSURTEAMS HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit uscompresales Safari_list rdtcaccess DSCIENCE SAS_TE AWSsalesenableAccount unix_marketing csatechxchange DataBuilders USemps AWS-617292774228-sandbox SIMSView Weekly_Wrap opsglobalorion DomainEmployees salessupportcredittech AWS-TAM-Call esvanemeaeduconsumers C3RD googlecloudusers bareosdeploy KSA_mail_list revegyusercommunity uaa.admin clients.admin EsriUsers AMTX esvakmcorionconsumers AMPSX esvanemeaeduadmins azurecloudusers lanpanfilter EMINERS sas92_install techoffice ApplicationAdministrators COOALLSTAFF ussales allamazonusers clients.read WWMGlobalBanking GuestFSBU aideas hrsb BLDALL TESSAUSERS KSA_ADGroup birdrace ITatSAS democenterusers HADOOP-L RE_PYTHON clients.write scim.write\",\"jti\":\"39f8341c96a84f5992b9faa0ea131b44\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"de5996be9b29418397aee62fa78688e2\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -50,7 +50,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Tue, 18 Jun 2019 15:26:20 GMT"
+            "Fri, 06 Sep 2019 18:04:18 GMT"
           ],
           "Expires": [
             "0"
@@ -61,9 +61,6 @@
           "Pragma": [
             "no-cache",
             "no-cache"
-          ],
-          "Server": [
-            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -92,7 +89,7 @@
       }
     },
     {
-      "recorded_at": "2019-06-18T15:26:21",
+      "recorded_at": "2019-09-06T18:04:14",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -115,7 +112,7 @@
             "187"
           ],
           "Content-Type": [
-            "multipart/form-data; boundary=8928953f178ae1049aaf8945c99aa41d"
+            "multipart/form-data; boundary=6162636465666768696a6b6c6d6e6f70"
           ],
           "User-Agent": [
             "python-requests/2.22.0"
@@ -127,7 +124,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2019-06-18T15:26:21.086Z\",\"modifiedTimeStamp\":\"2019-06-18T15:26:21.086Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"4d3bdb17-2f49-4fbc-9311-1fae74aab13e\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e\",\"uri\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e\",\"uri\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e\",\"uri\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e\",\"uri\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e\",\"uri\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e/content\",\"uri\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e/content\",\"uri\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e/copy\",\"uri\":\"/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"sasctl_test_file\",\"size\":23,\"version\":2}"
+          "string": "{\"creationTimeStamp\":\"2019-09-06T18:04:18.623Z\",\"modifiedTimeStamp\":\"2019-09-06T18:04:18.623Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"b8c58dfe-f695-4da5-b8c7-759726df2229\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229\",\"uri\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229\",\"uri\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229\",\"uri\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229\",\"uri\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229\",\"uri\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229/content\",\"uri\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229/content\",\"uri\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229/copy\",\"uri\":\"/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"sasctl_test_file\",\"size\":23,\"version\":2}"
         },
         "headers": {
           "Accept-Ranges": [
@@ -146,10 +143,10 @@
             "application/vnd.sas.file+json; version=1;charset=UTF-8"
           ],
           "Date": [
-            "Tue, 18 Jun 2019 15:26:20 GMT"
+            "Fri, 06 Sep 2019 18:04:18 GMT"
           ],
           "ETag": [
-            "\"jx1ymzz2\""
+            "\"k08fia7z\""
           ],
           "Expires": [
             "0"
@@ -158,16 +155,13 @@
             "timeout=5, max=99"
           ],
           "Last-Modified": [
-            "Tue, 18 Jun 2019 15:26:21 GMT"
+            "Fri, 06 Sep 2019 18:04:18 GMT"
           ],
           "Location": [
-            "/files/files/4d3bdb17-2f49-4fbc-9311-1fae74aab13e"
+            "/files/files/b8c58dfe-f695-4da5-b8c7-759726df2229"
           ],
           "Pragma": [
             "no-cache"
-          ],
-          "Server": [
-            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
