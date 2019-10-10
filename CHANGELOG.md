@@ -1,6 +1,10 @@
 
 Unreleased
 ----------
+ -
+
+v1.3 (2019-10-10)
+----------------- 
 **Improvements**
  - Added `update_performance` task for easily uploading performance information for a model. 
  - New (experimental) pyml2sas sub-package provides utilities for generating SAS code from Python gradient boosting models. 
