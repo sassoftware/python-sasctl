@@ -227,8 +227,8 @@ class MicroAnalyticScore(Service):
             step = self.get_module_step(module, id)
 
             # Method should have an argument for each parameter of the step
-            arguments = [k['name'] for k in step.inputs]
-            arg_types = [k['type'] for k in step.inputs]
+            arguments = [k['name'] for k in step.get('inputs', [])]
+            arg_types = [k['type'] for k in step.get('inputs', [])]
 
             # Format call to execute_module_step()
             call_params = ['{}={}'.format(i, i) for i in arguments]
@@ -237,19 +237,23 @@ class MicroAnalyticScore(Service):
             type_string = '    # type: ({})'.format(', '.join(arg_types))
 
             # Method signature
-            signature = 'def _%s_%s(%s, **kwargs):' \
+            input_params = [a for a in arguments] + ['**kwargs']
+            signature = 'def _%s_%s(%s):' \
                         % (module.name,
                            step.id,
-                           ', '.join(a for a in arguments))
+                           ', '.join(input_params))
 
             # MAS always lower-cases variable names
             # Since the original Python variables may have a different case,
             # allow kwargs to be used to input alternative caps
-            arg_checks = ['for k in kwargs.keys():']
-            for arg in arguments:
-                arg_checks.append("    if k.lower() == '%s':" % arg.lower())
-                arg_checks.append("        %s = kwargs[k]" % arg)
-                arg_checks.append("        continue")
+            if len(arguments):
+                arg_checks = ['for k in kwargs.keys():']
+                for arg in arguments:
+                    arg_checks.append("    if k.lower() == '%s':" % arg.lower())
+                    arg_checks.append("        %s = kwargs[k]" % arg)
+                    arg_checks.append("        continue")
+            else:
+                arg_checks = []
 
             # Full method source code
             # Drops 'rc' and 'msg' from return values
@@ -257,8 +261,7 @@ class MicroAnalyticScore(Service):
                     type_string,
                     '    """Execute step %s of module %s."""' % (step, module),
                     '\n'.join(['    %s' % a for a in arg_checks]),
-                    '    r = execute_module_step(module, step, {})'.format(
-                        ', '.join(call_params)),
+                    '    r = execute_module_step(%s)' % ', '.join(['module', 'step'] + call_params),
                     '    r.pop("rc", None)',
                     '    r.pop("msg", None)',
                     '    if len(r) == 1:',

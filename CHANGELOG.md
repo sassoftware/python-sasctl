@@ -11,8 +11,16 @@ Unreleased
  - All `list_xxx` methods return all matching items unless a `limit` parameter is specified.
  - Improved API documentation.
  - Updated `full_lifecycle` example with performance monitoring.
+
+v1.2.5 (2019-10-10)
+-------------------
+**Changes**
+ - Registering an ASTORE model now creates an empty ASTORE file in Model Manager to be consistent with Model Studio behavior. 
  
- 
+**Bugfixes**
+ - `microanalytic_score.define_steps` now works with steps having no input parameters.
+ - Fixed an issue where score code generated from an ASTORE model lacked output variables.
+
 v1.2.4 (2019-9-20)
 ------------------
 **Bugfixes**
