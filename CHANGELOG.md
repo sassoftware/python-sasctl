@@ -5,6 +5,9 @@ Unreleased
 
 v1.2.5 (2019-10-10)
 -------------------
+**Changes**
+ - Registering an ASTORE model now creates an empty ASTORE file in Model Manager to be consistent with Model Studio behavior. 
+ 
 **Bugfixes**
  - `microanalytic_score.define_steps` now works with steps having no input parameters.
  - Fixed an issue where score code generated from an ASTORE model lacked output variables.

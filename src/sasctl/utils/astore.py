@@ -111,13 +111,17 @@ def create_package_from_astore(table):
     sess.loadactionset('astore')
 
     result = sess.astore.describe(rstore=table, epcode=True)
-    astore = sess.astore.download(rstore=table)
-    if not hasattr(astore, "blob"):
-        raise ValueError("Failed to download binary data for ASTORE '%s'."
-                         % astore)
-    astore = astore.blob
+    # astore = sess.astore.download(rstore=table)
+    # if not hasattr(astore, "blob"):
+    #     raise ValueError("Failed to download binary data for ASTORE '%s'."
+    #                      % astore)
+    # astore = astore.blob
+    #
+    # astore = bytes(astore)      # Convert from SWAT blob type
 
-    astore = bytes(astore)      # Convert from SWAT blob type
+    # Model Manager expects a 0-byte ASTORE file.  Will retrieve actual ASTORE
+    # from CAS during model publish.
+    astore = bytes()
 
     # Raise error if describe action fails
     if result.status_code != 0:
