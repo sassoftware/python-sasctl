@@ -2,7 +2,13 @@
 Unreleased
 ----------
  - 
- 
+
+v1.2.5 (2019-10-10)
+-------------------
+**Bugfixes**
+ - `microanalytic_score.define_steps` now works with steps having no input parameters.
+ - Fixed an issue where score code generated from an ASTORE model lacked output variables.
+
 v1.2.4 (2019-9-20)
 ------------------
 **Bugfixes**
