@@ -294,7 +294,7 @@ def _generate_package_code(result):
     score_method += (' ',
                      '       {}.scorerecord();'.format(id),
                      ' ')
-    score_method += tuple('       "{}" = this."{}";'.format(var, var) for var in result.InputVariables.Name)
+    score_method += tuple('       "{}" = this."{}";'.format(var, var) for var in result.OutputVariables.Name)
 
     footer = ('    end;',
               'endpackage;')
