@@ -3,6 +3,17 @@ Unreleased
 ----------
  -
 
+v1.4 (2019-10-15)
+-----------------
+**Changes**
+ - `PyMAS.score_code` now supports a `dest='Python'` option to retrieve the generated Python wrapper code.
+ - `register_model` task includes a `python_wrapper.py` file when registering a Python model. 
+ - Improved error message when user lacks required permissions to register a model. 
+ 
+**Bugfixes**
+ - Fixed an issue with CAS/EP score code that caused problems with model performance metrics.
+ 
+
 v1.3 (2019-10-10)
 ----------------- 
 **Improvements**
