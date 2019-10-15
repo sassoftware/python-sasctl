@@ -148,7 +148,12 @@ def create_files_from_astore(table):
         raise RuntimeError(result)
 
     astore_key = result.Key.Key[0].strip()
-    ep_ds2 = result.epcode
+
+    # Remove "Keep" sas code from CAS/EP code so full table plus output are returned
+    # This is so the MM performance charts and test work
+    keepstart=result.epcode.find("Keep")
+    keepend=result.epcode.find(";",keepstart)
+    ep_ds2 = result.epcode[0:keepstart] + result.epcode[keepend+1:]
     package_ds2 = _generate_package_code(result)
     model_properties = _get_model_properties(result)
     input_vars = [get_variable_properties(var)
@@ -163,7 +168,7 @@ def create_files_from_astore(table):
         table.save(name=astore_filename, caslib='ModelStore', replace=True)
 
     file_metadata = [{'role': 'analyticStore', 'name': ''},
-                     {'role': 'score', 'name': 'dmcas_packagescorecode.sas'}]
+                     {'role': 'score', 'name': 'dmcas_epscorecode.sas'}]
 
     astore_metadata = [{'name': astore_filename,
                         'caslib': 'ModelStore',

@@ -332,6 +332,7 @@ class PyMAS:
         # Lines of Python code to be embedded in DS2
         python_source = list(self.wrapper)
 
+        self.python_source = python_source
         self.variables = variables
         self.return_code = return_code
         self.return_message = return_msg
@@ -357,6 +358,10 @@ class PyMAS:
         """
 
         dest = dest.upper()
+
+        # Python code return
+        if dest == 'PY':
+            return '\n'.join(map(str, self.python_source))
 
         # Check for names that could result in DS2 errors.
         DS2_KEYWORDS = ['input', 'output']
