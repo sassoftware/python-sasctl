@@ -247,8 +247,8 @@ def register_model(model, name, project, repository=None, input=None,
             files.append({'name': 'dmcas_epscorecode.sas',
                           'file': mas_module.score_code(dest='CAS'),
                           'role': 'score'})
-            files.append({'name': 'python_wrappercode.py',
-                          'file': mas_module.score_code(dest='PY')})
+            files.append({'name': 'python_wrapper.py',
+                          'file': mas_module.score_code(dest='Python')})
 
             model['inputVariables'] = [var.as_model_metadata()
                                        for var in mas_module.variables

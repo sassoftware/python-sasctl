@@ -350,18 +350,20 @@ class PyMAS:
             The name of the table where execution results will be written
         columns : list of str
             Names of the columns from `table` that will be passed to `func`
-        dest : str {'MAS', 'EP', 'CAS'}
+        dest : str {'MAS', 'EP', 'CAS', 'Python'}
+            Specifies the publishing destination for the score code to ensure
+            that compatible code is generated.
 
         Returns
         -------
+        str
+            Score code
+
+        .. versionchanged:: 1.3.1
+            Added `dest='Python'` option
 
         """
-
         dest = dest.upper()
-
-        # Python code return
-        if dest == 'PY':
-            return '\n'.join(map(str, self.python_source))
 
         # Check for names that could result in DS2 errors.
         DS2_KEYWORDS = ['input', 'output']
@@ -393,5 +395,9 @@ class PyMAS:
                      '    output;',
                      '  end;',
                      'enddata;')
+
+        elif dest == 'PYTHON':
+            # Python code return
+            code = self.package._python_code
 
         return '\n'.join(code)
