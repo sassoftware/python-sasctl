@@ -15,8 +15,11 @@ import re
 import sys
 import warnings
 
+from six.moves.urllib.error import HTTPError
+
 from . import utils
 from .core import RestObj, current_session, get, get_link, request_link
+from .exceptions import AuthorizationError
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
@@ -180,10 +183,20 @@ def register_model(model, name, project, repository=None, input=None,
         raise ValueError("Project '{}' not found".format(project))
 
     # Use default repository if not specified
-    if repository is None:
-        repo_obj = mr.default_repository()
-    else:
-        repo_obj = mr.get_repository(repository)
+    try:
+        if repository is None:
+            repo_obj = mr.default_repository()
+        else:
+            repo_obj = mr.get_repository(repository)
+    except HTTPError as e:
+        if e.code == 403:
+            raise AuthorizationError('Unable to register model.  User account '
+                                     'does not have read permissions for the '
+                                     '/modelRepository/repositories/ URL. '
+                                     'Please contact your SAS Viya '
+                                     'administrator.')
+        else:
+            raise e
 
     # Unable to find or create the repo.
     if repo_obj is None and repository is None:
@@ -247,8 +260,8 @@ def register_model(model, name, project, repository=None, input=None,
             files.append({'name': 'dmcas_epscorecode.sas',
                           'file': mas_module.score_code(dest='CAS'),
                           'role': 'score'})
-            files.append({'name': 'python_wrappercode.py',
-                          'file': mas_module.score_code(dest='PY')})
+            files.append({'name': 'python_wrapper.py',
+                          'file': mas_module.score_code(dest='Python')})
 
             model['inputVariables'] = [var.as_model_metadata()
                                        for var in mas_module.variables

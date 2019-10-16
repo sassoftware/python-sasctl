@@ -131,13 +131,6 @@ def create_files_from_astore(table):
     sess.loadactionset('astore')
 
     result = sess.astore.describe(rstore=table, epcode=True)
-    # astore = sess.astore.download(rstore=table)
-    # if not hasattr(astore, "blob"):
-    #     raise ValueError("Failed to download binary data for ASTORE '%s'."
-    #                      % astore)
-    # astore = astore.blob
-    #
-    # astore = bytes(astore)      # Convert from SWAT blob type
 
     # Model Manager expects a 0-byte ASTORE file.  Will retrieve actual ASTORE
     # from CAS during model publish.
@@ -149,11 +142,12 @@ def create_files_from_astore(table):
 
     astore_key = result.Key.Key[0].strip()
 
-    # Remove "Keep" sas code from CAS/EP code so full table plus output are returned
-    # This is so the MM performance charts and test work
-    keepstart=result.epcode.find("Keep")
-    keepend=result.epcode.find(";",keepstart)
+    # Remove "Keep" sas code from CAS/EP code so full table plus output are
+    # returned. This is so the MM performance charts and test work.
+    keepstart = result.epcode.find("Keep")
+    keepend = result.epcode.find(";", keepstart)
     ep_ds2 = result.epcode[0:keepstart] + result.epcode[keepend+1:]
+
     package_ds2 = _generate_package_code(result)
     model_properties = _get_model_properties(result)
     input_vars = [get_variable_properties(var)

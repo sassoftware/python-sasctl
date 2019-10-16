@@ -13,5 +13,10 @@ class AuthenticationError(ValueError):
         super(AuthenticationError, self).__init__(msg, *args, **kwargs)
 
 
+class AuthorizationError(RuntimeError):
+    """A user lacks permission to perform an action."""
+    pass
+
+
 class JobTimeoutError(RuntimeError):
     pass

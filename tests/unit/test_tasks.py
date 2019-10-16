@@ -8,7 +8,7 @@ import pytest
 from six.moves import mock
 
 from sasctl.core import RestObj
-
+from sasctl._services.model_repository import ModelRepository
 
 def test_sklearn_metadata():
     pytest.importorskip('sklearn')
@@ -77,7 +77,7 @@ def test_parse_module_url():
 def test_save_performance_project_types():
     from sasctl.tasks import update_model_performance
 
-    with mock.patch('sasctl._services.model_repository.ModelRepository''.get_model') as model:
+    with mock.patch('sasctl._services.model_repository.ModelRepository.get_model') as model:
         with mock.patch('sasctl._services.model_repository.ModelRepository.get_project') as project:
             model.return_value = RestObj(name='fakemodel', projectId=1)
 
@@ -98,3 +98,34 @@ def test_save_performance_project_types():
                 update_model_performance(None, None, None)
 
     # Check projects w/ invalid properties
+
+
+@mock.patch.object(ModelRepository, 'get_repository')
+@mock.patch.object(ModelRepository, 'get_project')
+def test_register_model_403_error(get_project, get_repository):
+    """Verify HTTP 403 is converted to a user-friendly error.
+
+    Depending on environment configuration, this can happen when attempting to
+    find a repository.
+
+    See: https://github.com/sassoftware/python-sasctl/issues/39
+    """
+
+    from six.moves.urllib.error import HTTPError
+    from sasctl.exceptions import AuthorizationError
+    from sasctl.tasks import register_model
+
+    get_project.return_value = {'name': 'Project Name'}
+    get_repository.side_effect = HTTPError(None, 403, None, None, None)
+
+    # HTTP 403 error when getting repository should throw a user-friendly
+    # AuthorizationError
+    with pytest.raises(AuthorizationError):
+        register_model(None, 'model name', 'project name')
+
+    # All other errors should be bubbled up
+    get_repository.side_effect = HTTPError(None, 404, None, None, None)
+    with pytest.raises(HTTPError):
+        register_model(None, 'model name', 'project name')
+
+
