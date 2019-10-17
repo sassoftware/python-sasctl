@@ -69,7 +69,7 @@ def build_wrapper_function(func, variables, array_input, setup=None,
     if array_input:
         middle = string_input +\
                  ('        inputarray = np.array([{}]).reshape((1, -1))'.format(','.join(args)),
-                  '        column = [{}]'.format(','.join(str(w) for w in args)),
+                  '        column = [{}]'.format(','.join('"{0}"'.format(w) for w in args)),
                   '        import pandas as pd',
                   '        inputrun = pd.DataFrame(data=inputarray, columns=column)',
                   '        result = {}(inputrun)'.format(func))
