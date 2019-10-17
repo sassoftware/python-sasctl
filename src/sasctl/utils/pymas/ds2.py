@@ -18,7 +18,7 @@ class DS2Package(object):
         self._python_code = code or []
         code = code or []
 
-        self.methods = [DS2PyMASMethod(variables, code, return_code,
+        self.methods = [DS2PyMASMethod(self._id, variables, code, return_code,
                                        return_message, target)]
 
         self._body = ("dcl package pymas py;",
@@ -88,7 +88,7 @@ class DS2BaseMethod(object):
 
 
 class DS2PyMASMethod(DS2BaseMethod):
-    def __init__(self, variables, python_code, return_code=True,
+    def __init__(self, name, variables, python_code, return_code=True,
                  return_message=True, target='wrapper'):
 
         target = target or 'wrapper'
@@ -110,12 +110,12 @@ class DS2PyMASMethod(DS2BaseMethod):
                 self.private_variables] \
                + ["if null(py) then do;",
                   "    py = _new_ pymas();",
-                  "    rc = py.useModule('mypymodule', 1);",
+                  "    rc = py.useModule('%s', 1);" % name,
                   "    if rc then do;"] \
                + ["        rc = py.appendSrcLine('%s');" % l for l in
                   python_code] \
                + ["        pycode = py.getSource();",
-                  "        revision = py.publish(pycode, 'mypymodule');",
+                  "        revision = py.publish(pycode, '%s');" % name,
                   "        if revision lt 1 then do;",
                   "            logr.log('e', 'py.publish() failed.');",
                   "            rc = -1;",
