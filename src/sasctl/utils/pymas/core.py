@@ -58,11 +58,25 @@ def build_wrapper_function(func, variables, array_input, setup=None,
     args = input_names
     func = func.__name__ if callable(func) else func
 
+    # HELPER: SAS to python char issue where SAS char have spaces and python string does not.
+    #   NOTE: we assume SAS char always need white space to be trimmed.  This seems to match python model built so far
+    pythonStringInput = ('',)
+    for tmp1 in variables:
+        if not tmp1.out:
+            if tmp1.type == 'char':
+                pythonStringInput = pythonStringInput + ("        if " + tmp1.name + ": " + tmp1.name + " = " + tmp1.name + ".strip()",)
+
     # Statement to execute the function w/ provided parameters
     if array_input:
-        func_call = '{}(np.array([{}]).reshape((1, -1)))'.format(func, ','.join(args))
+        middle = pythonStringInput +\
+                 ('        inputarray = np.array([{}]).reshape((1, -1))'.format(','.join(args)),
+                  '        column=[{}]'.format(','.join('"{0}"'.format(w) for w in args)),
+                  '        import pandas as pd',
+                  '        inputrun=pd.DataFrame(data=inputarray, columns=column)',
+                  '        result = {}(inputrun)'.format(func))
     else:
         func_call = '{}({})'.format(func, ','.join(args))
+        middle = ('        result = {}'.format(func_call),)
 
     # TODO: Verify that # of values returned by wrapped func matches length of output_names
     # TODO: cast all return types before returning (DS2 errors out if not exact match)
@@ -80,6 +94,7 @@ def build_wrapper_function(func, variables, array_input, setup=None,
     else:
         header = ('', )
 
+
     definition = header +\
                  ('def wrapper({}):'.format(', '.join(args)),
                   '    "Output: {}"'.format(', '.join(output_names + ['msg']) if return_msg
@@ -90,9 +105,9 @@ def build_wrapper_function(func, variables, array_input, setup=None,
                   '        if _compile_error is not None:',
                   '            raise _compile_error',
                   '        msg = ""' if return_msg else '',
-                  '        import numpy as np',
-                  '        result = {}'.format(func_call),
-                  '        if result.size == 1:',
+                  '        import numpy as np') +\
+                 middle +\
+                 ('        if result.size == 1:',
                   '            result = np.asscalar(result)',
                   '    except Exception as e:',
                   '        msg = str(e)' if return_msg else '',
@@ -102,6 +117,7 @@ def build_wrapper_function(func, variables, array_input, setup=None,
                   '        return tuple(x for x in list(result) + [msg])',
                   '    else: ',
                   '        return result, msg')
+
 
     return '\n'.join(definition)
 
