@@ -165,7 +165,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     
         if null(py) then do;
             py = _new_ pymas();
-            rc = py.useModule('mypymodule', 1);
+            rc = py.useModule('DF74A4B18C9E41A2A34B0053E123AA67', 1);
             if rc then do;
                 rc = py.appendSrcLine('try:');
                 rc = py.appendSrcLine('    import pickle, base64');
@@ -196,7 +196,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('    else: ');
                 rc = py.appendSrcLine('        return result, msg');
                 pycode = py.getSource();
-                revision = py.publish(pycode, 'mypymodule');
+                revision = py.publish(pycode, 'DF74A4B18C9E41A2A34B0053E123AA67');
                 if revision lt 1 then do;
                     logr.log('e', 'py.publish() failed.');
                     rc = -1;

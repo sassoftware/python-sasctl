@@ -357,7 +357,7 @@ method score(
     d = py.getDouble('d');
 end;
 """
-    method = DS2PyMASMethod([
+    method = DS2PyMASMethod('mypymodule',[
         DS2Variable('a', 'double', False),
         DS2Variable('b', 'double', False),
         DS2Variable('c', 'double', True),
@@ -452,7 +452,7 @@ package _pyscore / overwrite=yes;
     
         if null(py) then do;
             py = _new_ pymas();
-            rc = py.useModule('mypymodule', 1);
+            rc = py.useModule('pyscore', 1);
             if rc then do;
                 rc = py.appendSrcLine('def domath(a, b):');
                 rc = py.appendSrcLine('    "Output: c, d"');
@@ -460,7 +460,7 @@ package _pyscore / overwrite=yes;
                 rc = py.appendSrcLine('    d = a / b');
                 rc = py.appendSrcLine('    return c, d');
                 pycode = py.getSource();
-                revision = py.publish(pycode, 'mypymodule');
+                revision = py.publish(pycode, 'pyscore');
                 if revision lt 1 then do;
                     logr.log('e', 'py.publish() failed.');
                     rc = -1;

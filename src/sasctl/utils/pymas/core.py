@@ -76,7 +76,7 @@ def build_wrapper_function(func, variables, array_input, setup=None,
                   '        result = {}(inputrun)'.format(func))
     else:
         func_call = '{}({})'.format(func, ','.join(args))
-        middle = ('        result = {}'.format(func_call))
+        middle = ('        result = {}'.format(func_call),)
 
     # TODO: Verify that # of values returned by wrapped func matches length of output_names
     # TODO: cast all return types before returning (DS2 errors out if not exact match)
