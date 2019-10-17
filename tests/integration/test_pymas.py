@@ -186,7 +186,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('        import numpy as np');
                 rc = py.appendSrcLine('');
                 rc = py.appendSrcLine('        inputarray = np.array([SepalLength,SepalWidth,PetalLength,PetalWidth]).reshape((1, -1))');
-                rc = py.appendSrcLine('        column=["CRIM","ZN","INDUS","CHAS","NOX","RM","AGE","DIS","RAD","TAX","PTRATIO","B","LSTAT"]');
+                rc = py.appendSrcLine('        column=["SepalLength","SepalWidth","PetalLength","PetalWidth"]');
                 rc = py.appendSrcLine('        import pandas as pd');
                 rc = py.appendSrcLine('        inputrun=pd.DataFrame(data=inputarray, columns=column)');
                 rc = py.appendSrcLine('        result = obj.predict(inputrun)');
