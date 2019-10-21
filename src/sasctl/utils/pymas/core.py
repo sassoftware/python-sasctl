@@ -59,20 +59,19 @@ def build_wrapper_function(func, variables, array_input, setup=None,
     func = func.__name__ if callable(func) else func
 
     # HELPER: SAS to python char issue where SAS char have spaces and python string does not.
-    #   NOTE: we assume SAS char always need white space to be trimmed.  This seems to match python model built so far
-    pythonStringInput = ('',)
-    for tmp1 in variables:
-        if not tmp1.out:
-            if tmp1.type == 'char':
-                pythonStringInput = pythonStringInput + ("        if " + tmp1.name + ": " + tmp1.name + " = " + tmp1.name + ".strip()",)
+    # NOTE: we assume SAS char always need white space to be trimmed.  This seems to match python model built so far
+    string_input = ('', )
+    for v in variables:
+        if v.type == 'char' and not v.out:
+            string_input += ("        if {0}: {0} = {0}.strip()".format(v.name), )
 
     # Statement to execute the function w/ provided parameters
     if array_input:
-        middle = pythonStringInput +\
+        middle = string_input +\
                  ('        inputarray = np.array([{}]).reshape((1, -1))'.format(','.join(args)),
-                  '        column=[{}]'.format(','.join('"{0}"'.format(w) for w in args)),
+                  '        column = [{}]'.format(','.join('"{0}"'.format(w) for w in args)),
                   '        import pandas as pd',
-                  '        inputrun=pd.DataFrame(data=inputarray, columns=column)',
+                  '        inputrun = pd.DataFrame(data=inputarray, columns=column)',
                   '        result = {}(inputrun)'.format(func))
     else:
         func_call = '{}({})'.format(func, ','.join(args))

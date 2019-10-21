@@ -3,6 +3,11 @@ Unreleased
 ----------
  -
 
+v1.4.1 (2019-10-17)
+-------------------
+**Bugfixes**
+ - Fixed an issue where string inputs to Python models were incorrectly handled by DS2.
+
 v1.4 (2019-10-15)
 -----------------
 **Changes**
