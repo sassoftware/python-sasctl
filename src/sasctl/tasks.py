@@ -49,8 +49,8 @@ def _sklearn_to_dict(model):
                 'RandomForestClassifier': 'Forest',
                 'DecisionTreeClassifier': 'Decision tree',
                 'DecisionTreeRegressor': 'Decision tree',
-                'classifier': 'Classification',
-                'regressor': 'Prediction'}
+                'classifier': 'classification',
+                'regressor': 'prediction'}
 
     if hasattr(model, '_final_estimator'):
         estimator = type(model._final_estimator)
@@ -302,17 +302,27 @@ def register_model(model, name, project, repository=None, input=None,
         else:
             prediction_variable = None
 
-        project = mr.create_project(project, repo_obj,
+        # As of Viya 3.4 the 'predictionVariable' parameter is not set during
+        # project creation.  Update the project if necessary.
+        if model.get('function') == 'prediction':   #Predications require predictionVariable
+            project = mr.create_project(project, repo_obj,
                                     variables=vars,
                                     function=model.get('function'),
                                     targetLevel=target_level,
                                     predictionVariable=prediction_variable)
 
-        # As of Viya 3.4 the 'predictionVariable' parameter is not set during
-        # project creation.  Update the project if necessary.
-        if project.get('predictionVariable') != prediction_variable:
-            project['predictionVariable'] = prediction_variable
-            mr.update_project(project)
+            if project.get('predictionVariable') != prediction_variable:
+                project['predictionVariable'] = prediction_variable
+                mr.update_project(project)
+        else:  #Classifications require eventProbabilityVariable 
+            project = mr.create_project(project, repo_obj,
+                                    variables=vars,
+                                    function=model.get('function'),
+                                    targetLevel=target_level,
+                                    eventProbabilityVariable=prediction_variable)
+            if project.get('eventProbabilityVariable') != prediction_variable:
+                project['eventProbabilityVariable'] = prediction_variable
+                mr.update_project(project)
 
     model = mr.create_model(model, project)
 
@@ -506,8 +516,11 @@ def update_model_performance(data, model, label, refresh=True):
                          "regression and binary classification projects.  "
                          "Received project with '%s' target level.  Should be "
                          "'Interval' or 'Binary'.", project.get('targetLevel'))
-    elif project.get('predictionVariable', '') == '':
+    elif project.get('predictionVariable', '') == '' and project.get('function', '').lower() == 'prediction':
         raise ValueError("Project '%s' does not have a prediction variable "
+                         "specified." % project)
+    elif project.get('eventProbabilityVariable', '') == '' and project.get('function', '').lower() == 'classification':
+        raise ValueError("Project '%s' does not have an Event Probability variable "
                          "specified." % project)
 
     # Find the performance definition for the model

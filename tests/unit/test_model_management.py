@@ -50,13 +50,20 @@ def test_create_performance_definition():
                 with pytest.raises(ValueError):
                     # Project missing some required properties
                     get_project.return_value = copy.deepcopy(PROJECT)
-                    get_project.return_value['predictionVariable'] = 'predicted'
+                    get_project.return_value['function'] = 'classification'
+                    _ = mm.create_performance_definition('model', 'TestLibrary', 'TestData')
+
+                with pytest.raises(ValueError):
+                    # Project missing some required properties
+                    get_project.return_value = copy.deepcopy(PROJECT)
+                    get_project.return_value['function'] = 'prediction'
                     _ = mm.create_performance_definition('model', 'TestLibrary', 'TestData')
 
                 get_project.return_value = copy.deepcopy(PROJECT)
                 get_project.return_value['targetVariable'] = 'target'
                 get_project.return_value['targetLevel'] = 'interval'
                 get_project.return_value['predictionVariable'] = 'predicted'
+                get_project.return_value['function'] = 'prediction'
                 _ = mm.create_performance_definition('model', 'TestLibrary',
                                                      'TestData',
                                                      max_bins=3,

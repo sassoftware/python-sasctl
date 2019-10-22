@@ -22,27 +22,27 @@ def test_sklearn_metadata():
 
     info = _sklearn_to_dict(LinearRegression())
     assert info['algorithm'] == 'Linear regression'
-    assert info['function'] == 'Prediction'
+    assert info['function'] == 'prediction'
 
     info = _sklearn_to_dict(LogisticRegression())
     assert info['algorithm'] == 'Logistic regression'
-    assert info['function'] == 'Classification'
+    assert info['function'] == 'classification'
 
     info = _sklearn_to_dict(SVC())
     assert info['algorithm'] == 'Support vector machine'
-    assert info['function'] == 'Classification'
+    assert info['function'] == 'classification'
 
     info = _sklearn_to_dict(GradientBoostingClassifier())
     assert info['algorithm'] == 'Gradient boosting'
-    assert info['function'] == 'Classification'
+    assert info['function'] == 'classification'
 
     info = _sklearn_to_dict(DecisionTreeClassifier())
     assert info['algorithm'] == 'Decision tree'
-    assert info['function'] == 'Classification'
+    assert info['function'] == 'classification'
 
     info = _sklearn_to_dict(RandomForestClassifier())
     assert info['algorithm'] == 'Forest'
-    assert info['function'] == 'Classification'
+    assert info['function'] == 'classification'
 
 
 def test_parse_module_url():
@@ -96,6 +96,13 @@ def test_save_performance_project_types():
                 project.return_value = {'function': 'Prediction',
                                         'targetLevel': 'Binary'}
                 update_model_performance(None, None, None)
+            
+            # Classification variable required
+            with pytest.raises(ValueError):
+                project.return_value = {'function': 'classification',
+                                        'targetLevel': 'Binary'}
+                update_model_performance(None, None, None)
+
 
     # Check projects w/ invalid properties
 
