@@ -207,10 +207,26 @@ def register_model(model, name, project, repository=None, input=None,
     # If model is a CASTable then assume it holds an ASTORE model.
     # Import these via a ZIP file.
     if 'swat.cas.table.CASTable' in str(type(model)):
-        zipfile = utils.create_package(model)
+        zipfile = utils.create_package(model, input=input)
 
         if create_project:
-            project = mr.create_project(project, repo_obj)
+            outvar=[]
+            invar=[]
+            import zipfile as zp
+            import copy
+            zipfilecopy = copy.deepcopy(zipfile)
+            tmpzip=zp.ZipFile(zipfilecopy)
+            if "outputVar.json" in tmpzip.namelist():
+                outvar=json.loads(tmpzip.read("outputVar.json"))
+                for tmp in outvar:
+                    tmp.update({'role':'output'})
+            if "inputVar.json" in tmpzip.namelist():
+                invar=json.loads(tmpzip.read("inputVar.json"))
+                for tmp in invar:
+                    if tmp['role'] != 'input':
+                       tmp['role']='input'
+            vars=invar + outvar
+            project = mr.create_project(project, repo_obj, variables=vars)
 
         model = mr.import_model_from_zip(name, project, zipfile,
                                          version=version)

@@ -20,13 +20,21 @@ except ImportError:
     swat = None
 
 
-def create_package(table):
+def create_package(table, input=None):
     """Create an importable model package from a CAS table.
 
     Parameters
     ----------
     table : swat.CASTable
         The CAS table containing an ASTORE or score code.
+    input : DataFrame, type, list of type, or dict of str: type, optional
+        The expected type for each input value of the target function.
+        Can be omitted if target function includes type hints.  If a DataFrame
+        is provided, the columns will be inspected to determine type information.
+        If a single type is provided, all columns will be assumed to be that type,
+        otherwise a list of column types or a dictionary of column_name: type
+        may be provided.
+
 
     Returns
     -------
@@ -45,18 +53,26 @@ def create_package(table):
     assert isinstance(table, swat.CASTable)
 
     if 'DataStepSrc' in table.columns:
-        return create_package_from_datastep(table)
+        #Input only passed to datastep
+        return create_package_from_datastep(table, input=input)
     else:
         return create_package_from_astore(table)
 
 
-def create_package_from_datastep(table):
+def create_package_from_datastep(table, input=None):
     """Create an importable model package from a score code table.
 
     Parameters
     ----------
     table : swat.CASTable
         The CAS table containing the score code.
+    input : DataFrame, type, list of type, or dict of str: type, optional
+        The expected type for each input value of the target function.
+        Can be omitted if target function includes type hints.  If a DataFrame
+        is provided, the columns will be inspected to determine type information.
+        If a single type is provided, all columns will be assumed to be that type,
+        otherwise a list of column types or a dictionary of column_name: type
+        may be provided.
 
     Returns
     -------
@@ -73,11 +89,41 @@ def create_package_from_datastep(table):
 
     dscode = table.to_frame().loc[0, 'DataStepSrc']
 
+    #TODO: Extract inputs into file
+
+    #Find outputs from ds code
+    output_vars=[]
+    for sasline in dscode.split('\n'):
+        if sasline.strip().startswith('label'):
+            output_var=dict()
+            for tmp in sasline.split('='):
+                if 'label' in tmp:
+                    ovarname=tmp.split('label')[1].strip()
+                    output_var.update({"name":ovarname})
+                    #Determine type of variable is decimal or string
+                    if "length " + ovarname in dscode:
+                        sastype=dscode.split("length " + ovarname)[1].split(';')[0].strip()
+                        if "$" in sastype:
+                            output_var.update({"type":"string"})
+                            output_var.update({"length":sastype.split("$")[1]})
+                        else:
+                            output_var.update({"type":"decimal"})
+                            output_var.update({"length":sastype})
+                    else:
+                        #If no length for varaible, default is decimal, 8
+                        output_var.update({"type":"decimal"})
+                        output_var.update({"length":8})
+                else:
+                    output_var.update({"description":tmp.split(';')[0].strip().strip("'")})
+            output_vars.append(output_var) 
+
     file_metadata = [{'role': 'score', 'name': 'dmcas_scorecode.sas'}]
 
     zip_file = _build_zip_from_files({
         'fileMetadata.json': file_metadata,
-        'dmcas_scorecode.sas': dscode
+        'dmcas_scorecode.sas': dscode,
+        'ModelProperties.json': {"scoreCodeType":"dataStep"},
+        'outputVar.json': output_vars
     })
 
     return zip_file
