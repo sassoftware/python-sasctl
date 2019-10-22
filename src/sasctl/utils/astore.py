@@ -89,7 +89,24 @@ def create_package_from_datastep(table, input=None):
 
     dscode = table.to_frame().loc[0, 'DataStepSrc']
 
-    #TODO: Extract inputs into file
+    # Extract inputs if provided
+    input_vars = []
+    # Workaround because sasdataframe does not like to be check if exist
+    if str(input) != "None":
+        from .pymas.python import ds2_variables
+        vars=None
+        if hasattr(input, 'columns'):
+            # Assuming input is a DataFrame representing model inputs.  Use to
+            # get input variables
+            vars = ds2_variables(input)
+        elif isinstance(input, type):
+            params = OrderedDict([(k, input)
+                              for k in target_func.__code__.co_varnames])
+            vars = ds2_variables(params)
+        elif isinstance(input, dict):
+            vars = ds2_variables(input)
+        if vars:
+            input_vars = [var.as_model_metadata() for var in vars if not var.out]
 
     #Find outputs from ds code
     output_vars=[]
@@ -123,7 +140,8 @@ def create_package_from_datastep(table, input=None):
         'fileMetadata.json': file_metadata,
         'dmcas_scorecode.sas': dscode,
         'ModelProperties.json': {"scoreCodeType":"dataStep"},
-        'outputVar.json': output_vars
+        'outputVar.json': output_vars,
+        'inputVar.json': input_vars
     })
 
     return zip_file
