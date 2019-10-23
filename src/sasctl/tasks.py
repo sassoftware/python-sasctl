@@ -49,8 +49,8 @@ def _sklearn_to_dict(model):
                 'RandomForestClassifier': 'Forest',
                 'DecisionTreeClassifier': 'Decision tree',
                 'DecisionTreeRegressor': 'Decision tree',
-                'classifier': 'Classification',
-                'regressor': 'Prediction'}
+                'classifier': 'classification',
+                'regressor': 'prediction'}
 
     if hasattr(model, '_final_estimator'):
         estimator = type(model._final_estimator)
