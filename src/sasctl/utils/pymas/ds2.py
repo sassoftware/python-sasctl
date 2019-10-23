@@ -339,7 +339,7 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
 
     def as_model_metadata(self):
         viya_type = self._map_type(self.DS2_TYPE_TO_VIYA, self.type)
-        role = 'Output' if self.out else 'Input'
+        role = 'Output' if self.out else 'input'
 
         return OrderedDict(
             [('name', self.name), ('role', role), ('type', viya_type)])

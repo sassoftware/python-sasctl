@@ -174,11 +174,16 @@ class ModelManagement(Service):
 
         # Performance data cannot be captured unless certain project properties
         # have been configured.
-        for required in ['targetVariable', 'targetLevel',
-                         'predictionVariable']:
+        for required in ['targetVariable', 'targetLevel']:
             if getattr(project, required, None) is None:
                 raise ValueError("Project %s must have the '%s' property set."
                                  % (project.name, required))
+        if project['function'] == 'classification' and project['eventProbabilityVariable'] == None:
+            raise ValueError("Project %s must have the 'eventProbabilityVariable' property set."
+                                 % (project.name))
+        if project['function'] == 'prediction' and project['predictionVariable'] == None:
+            raise ValueError("Project %s must have the 'predictionVariable' property set."
+                                 % (project.name))
 
         request = {'projectId': project.id,
                    'name': name or model.name + ' Performance',

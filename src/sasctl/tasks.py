@@ -49,8 +49,8 @@ def _sklearn_to_dict(model):
                 'RandomForestClassifier': 'Forest',
                 'DecisionTreeClassifier': 'Decision tree',
                 'DecisionTreeRegressor': 'Decision tree',
-                'classifier': 'Classification',
-                'regressor': 'Prediction'}
+                'classifier': 'classification',
+                'regressor': 'prediction'}
 
     if hasattr(model, '_final_estimator'):
         estimator = type(model._final_estimator)
@@ -207,10 +207,26 @@ def register_model(model, name, project, repository=None, input=None,
     # If model is a CASTable then assume it holds an ASTORE model.
     # Import these via a ZIP file.
     if 'swat.cas.table.CASTable' in str(type(model)):
-        zipfile = utils.create_package(model)
+        zipfile = utils.create_package(model, input=input)
 
         if create_project:
-            project = mr.create_project(project, repo_obj)
+            outvar=[]
+            invar=[]
+            import zipfile as zp
+            import copy
+            zipfilecopy = copy.deepcopy(zipfile)
+            tmpzip=zp.ZipFile(zipfilecopy)
+            if "outputVar.json" in tmpzip.namelist():
+                outvar=json.loads(tmpzip.read("outputVar.json").decode('utf=8')) #added decode for 3.5 and older
+                for tmp in outvar:
+                    tmp.update({'role':'output'})
+            if "inputVar.json" in tmpzip.namelist():
+                invar=json.loads(tmpzip.read("inputVar.json").decode('utf-8')) #added decode for 3.5 and older
+                for tmp in invar:
+                    if tmp['role'] != 'input':
+                       tmp['role']='input'
+            vars=invar + outvar
+            project = mr.create_project(project, repo_obj, variables=vars)
 
         model = mr.import_model_from_zip(name, project, zipfile,
                                          version=version)
@@ -302,17 +318,27 @@ def register_model(model, name, project, repository=None, input=None,
         else:
             prediction_variable = None
 
-        project = mr.create_project(project, repo_obj,
+        # As of Viya 3.4 the 'predictionVariable' parameter is not set during
+        # project creation.  Update the project if necessary.
+        if function == 'prediction':   #Predications require predictionVariable
+            project = mr.create_project(project, repo_obj,
                                     variables=vars,
                                     function=model.get('function'),
                                     targetLevel=target_level,
                                     predictionVariable=prediction_variable)
 
-        # As of Viya 3.4 the 'predictionVariable' parameter is not set during
-        # project creation.  Update the project if necessary.
-        if project.get('predictionVariable') != prediction_variable:
-            project['predictionVariable'] = prediction_variable
-            mr.update_project(project)
+            if project.get('predictionVariable') != prediction_variable:
+                project['predictionVariable'] = prediction_variable
+                mr.update_project(project)
+        else:  #Classifications require eventProbabilityVariable 
+            project = mr.create_project(project, repo_obj,
+                                    variables=vars,
+                                    function=model.get('function'),
+                                    targetLevel=target_level,
+                                    eventProbabilityVariable=prediction_variable)
+            if project.get('eventProbabilityVariable') != prediction_variable:
+                project['eventProbabilityVariable'] = prediction_variable
+                mr.update_project(project)
 
     model = mr.create_model(model, project)
 
@@ -506,8 +532,11 @@ def update_model_performance(data, model, label, refresh=True):
                          "regression and binary classification projects.  "
                          "Received project with '%s' target level.  Should be "
                          "'Interval' or 'Binary'.", project.get('targetLevel'))
-    elif project.get('predictionVariable', '') == '':
+    elif project.get('predictionVariable', '') == '' and project.get('function', '').lower() == 'prediction':
         raise ValueError("Project '%s' does not have a prediction variable "
+                         "specified." % project)
+    elif project.get('eventProbabilityVariable', '') == '' and project.get('function', '').lower() == 'classification':
+        raise ValueError("Project '%s' does not have an Event Probability variable "
                          "specified." % project)
 
     # Find the performance definition for the model
