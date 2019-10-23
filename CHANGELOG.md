@@ -3,6 +3,12 @@ Unreleased
 ----------
  -
 
+v1.4.2 (2019-10-23)
+-------------------
+**Bugfixes**
+ - Fixed project properties when registering a model from ASTORE. 
+ - Fixed model metadata when registering a datastep model.
+ 
 v1.4.1 (2019-10-17)
 -------------------
 **Bugfixes**
