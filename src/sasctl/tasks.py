@@ -320,7 +320,7 @@ def register_model(model, name, project, repository=None, input=None,
 
         # As of Viya 3.4 the 'predictionVariable' parameter is not set during
         # project creation.  Update the project if necessary.
-        if model.get('function') == 'prediction':   #Predications require predictionVariable
+        if function == 'prediction':   #Predications require predictionVariable
             project = mr.create_project(project, repo_obj,
                                     variables=vars,
                                     function=model.get('function'),
