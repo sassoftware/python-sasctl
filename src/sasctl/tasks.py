@@ -217,11 +217,11 @@ def register_model(model, name, project, repository=None, input=None,
             zipfilecopy = copy.deepcopy(zipfile)
             tmpzip=zp.ZipFile(zipfilecopy)
             if "outputVar.json" in tmpzip.namelist():
-                outvar=json.loads(tmpzip.read("outputVar.json"))
+                outvar=json.loads(tmpzip.read("outputVar.json").decode('utf=8')) #added decode for 3.5 and older
                 for tmp in outvar:
                     tmp.update({'role':'output'})
             if "inputVar.json" in tmpzip.namelist():
-                invar=json.loads(tmpzip.read("inputVar.json"))
+                invar=json.loads(tmpzip.read("inputVar.json").decode('utf-8')) #added decode for 3.5 and older
                 for tmp in invar:
                     if tmp['role'] != 'input':
                        tmp['role']='input'
