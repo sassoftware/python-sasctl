@@ -3,6 +3,12 @@ Unreleased
 ----------
  -
 
+v1.4.3 (2019-10-28)
+-------------------
+**Bugfixes**
+ - Model versioning now works correctly for Python models
+ - Fixed an issue where `None` values in Python caused issues with MAS models.
+
 v1.4.2 (2019-10-23)
 -------------------
 **Bugfixes**
