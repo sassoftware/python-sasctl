@@ -60,10 +60,15 @@ def build_wrapper_function(func, variables, array_input, setup=None,
 
     # HELPER: SAS to python char issue where SAS char have spaces and python string does not.
     # NOTE: we assume SAS char always need white space to be trimmed.  This seems to match python model built so far
+    # Note: Using this string fix to help with None or blank input situation for numerics
     string_input = ('', )
     for v in variables:
-        if v.type == 'char' and not v.out:
-            string_input += ("        if {0}: {0} = {0}.strip()".format(v.name), )
+        if not v.out:
+            if v.type == 'char':
+                string_input += ("        if {0}: {0} = {0}.strip()".format(v.name), )
+            else:
+                string_input += ("        if {0} == None: {0} = np.nan".format(v.name), )
+        
 
     # Statement to execute the function w/ provided parameters
     if array_input:
