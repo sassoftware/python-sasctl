@@ -18,7 +18,7 @@ import warnings
 from six.moves.urllib.error import HTTPError
 
 from . import utils
-from .core import RestObj, current_session, get, get_link, request_link, delete
+from .core import RestObj, current_session, get, get_link, request_link
 from .exceptions import AuthorizationError
 from .services import model_management as mm
 from .services import model_publish as mp
