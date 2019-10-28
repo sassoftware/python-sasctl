@@ -7,7 +7,7 @@
 """The Model Repository service supports registering and managing models."""
 
 from .service import Service
-from ..core import current_session, get
+from ..core import current_session, get, delete
 
 FUNCTIONS = {'Analytical', 'Classification', 'Clustering', 'Forecasting',
              'Prediction', 'Text categorization', 'Text extraction',
@@ -497,3 +497,24 @@ class ModelRepository(Service):
             model = cls.get_model(model, refresh=True)
 
         return cls.request_link(model, 'copyAnalyticStore')
+
+
+    @classmethod
+    def delete_model_contents(cls, model):
+        """Deletes all contents (files) in the model.
+
+        Parameters
+        ----------
+        model : str or dict
+            The name, id, or dictionary representation of a model.
+
+        Returns
+        -------
+
+        """
+        rel = 'delete'
+
+        filelist=cls.get_model_contents(model)
+        for delfile in filelist:
+            modelfileuri=cls.get_link(delfile, rel)
+            delete(modelfileuri['uri'])
