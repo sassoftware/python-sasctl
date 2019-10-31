@@ -519,7 +519,7 @@ def update_model_performance(data, model, label, refresh=True):
     # As of Viya 3.4, no way to search by model or project
     perf_def = None
     for p in mm.list_performance_definitions():
-        if model_obj.id in p.modelIds:
+        if project.id in p.projectId:
             perf_def = p
             break
 
