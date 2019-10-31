@@ -3,6 +3,11 @@ Unreleased
 ----------
  -
 
+v1.4.4 (2019-10-31)
+-------------------
+**Bugfixes**
+ - Match performance definitions based on project instead of model.
+
 v1.4.3 (2019-10-28)
 -------------------
 **Bugfixes**
