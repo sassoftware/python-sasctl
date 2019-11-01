@@ -178,7 +178,7 @@ Register a CAS model in Model Manager:
 >>> astore = s.CASTable('some_astore')
 
 >>> with Session(s):
-...    register_model('SAS Model', astore, 'My Project')
+...    register_model(astore, 'SAS Model', 'My Project')
 ```
 
 ## Contributing
