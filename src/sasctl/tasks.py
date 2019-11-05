@@ -261,7 +261,9 @@ def register_model(model, name, project, repository=None, input=None,
                           'model functionality may not be available.')
     else:
         # Otherwise, the model better be a dictionary of metadata
-        assert isinstance(model, dict)
+        assert isinstance(model, dict), "Expected an instance of %r. " \
+                                        " Received %r instead." % (dict(), model)
+
 
     if create_project:
         vars = model.get('inputVariables', [])[:]
