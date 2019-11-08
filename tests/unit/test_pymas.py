@@ -208,6 +208,11 @@ def test_ds2_variables_dict_input():
                                                                             ('b', str),
                                                                             ('x', (float, True))]))
 
+    assert [DS2Variable('a', 'uint8', False),
+            DS2Variable('b', 'uint16', False),
+            DS2Variable('c', 'uint32', False),
+            DS2Variable('d', 'uint64', False)] == ds2_variables(OrderedDict(a=int, b=int, c=int, d=int))
+
 
 def test_ds2_variables_func_input():
     target = [DS2Variable(name='x1', type='double', out=False),

@@ -29,16 +29,16 @@ from .utils.misc import installed_packages
 
 logger = logging.getLogger(__name__)
 
+# As of Viya 3.4 model registration fails if character fields are longer
+# than 1024 characters
+_DESC_MAXLEN = 1024
+
+# As of Viya 3.4 model registration fails if user-defined properties are
+# longer than 512 characters.
+_PROP_MAXLEN = 512
+
 
 def _sklearn_to_dict(model):
-    # As of Viya 3.4 model registration fails if character fields are longer
-    # than 1024 characters
-    DESC_MAXLEN = 1024
-
-    # As of Viya 3.4 model registration fails if user-defined properties are
-    # longer than 512 characters.
-    PROP_MAXLEN = 512
-
     # Convert Scikit-learn values to built-in Model Manager values
     mappings = {'LogisticRegression': 'Logistic regression',
                 'LinearRegression': 'Linear regression',
@@ -59,15 +59,15 @@ def _sklearn_to_dict(model):
 
     # Can tell if multi-class .multi_class
     result = dict(
-        description=str(model)[:DESC_MAXLEN],
+        description=str(model)[:_DESC_MAXLEN],
         algorithm=mappings.get(estimator.__name__, estimator.__name__),
         scoreCodeType='ds2MultiType',
         trainCodeType='Python',
         function=mappings.get(model._estimator_type, model._estimator_type),
         tool='Python %s.%s'
              % (sys.version_info.major, sys.version_info.minor),
-        properties=[{'name': str(k)[:PROP_MAXLEN],
-                     'value': str(v)[:PROP_MAXLEN]}
+        properties=[{'name': str(k)[:_PROP_MAXLEN],
+                     'value': str(v)[:_PROP_MAXLEN]}
                     for k, v in model.get_params().items()]
     )
 
@@ -217,12 +217,17 @@ def register_model(model, name, project, repository=None, input=None,
             model.setdefault('properties', [])
 
             # Define a custom property to capture each package version
+            # NOTE: some packages may not conform to the 'name==version' format
+            #  expected here (e.g those installed with pip install -e). Such
+            #  packages also generally contain characters that are not allowed
+            # in custom properties, so they are excluded here.
             for p in packages:
-                n, v = p.split('==')
-                model['properties'].append({
-                    'name': 'env_%s' % n,
-                    'value': v
-                })
+                if '==' in p:
+                    n, v = p.split('==')
+                    model['properties'].append({
+                        'name': 'env_%s' % n,
+                        'value': v
+                    })
 
             # Generate and upload a requirements.txt file
             files.append({'name': 'requirements.txt',
@@ -263,7 +268,6 @@ def register_model(model, name, project, repository=None, input=None,
         # Otherwise, the model better be a dictionary of metadata
         assert isinstance(model, dict), "Expected an instance of %r. " \
                                         " Received %r instead." % (dict(), model)
-
 
     if create_project:
         vars = model.get('inputVariables', [])[:]

@@ -304,7 +304,12 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
                                   # Terminates search if full string matches
                                   ('int64', 'integer'),
                                   ('int32', 'integer'),
-                                  ('int', 'integer')
+                                  ('int', 'integer'),
+                                  ('uint8', 'integer'),
+                                  ('uint16', 'integer'),
+                                  ('uint32', 'integer'),
+                                  ('uint64', 'integer')
+
                                   ])
 
     DS2_TYPE_TO_VIYA = OrderedDict([('double', 'decimal'),

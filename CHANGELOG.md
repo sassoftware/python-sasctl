@@ -1,7 +1,8 @@
 
 Unreleased
 ----------
- -
+**Bugfixes**
+ - Added support for uint data types to the `register_model` task.
 
 v1.4.4 (2019-10-31)
 -------------------

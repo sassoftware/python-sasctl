@@ -63,11 +63,11 @@ def ds2_variables(input, output_vars=False):
         # Numpy array?  No column names, but we can at least create dummy vars of the correct type
         types = OrderedDict([('var{}'.format(i),
                               (input.dtype.name.replace('object', 'char'), False)) for i in range(1, len(input)+1)])
-        # types = {'var{}'.format(i): (input.dtype.name.replace('object', 'char'), False) for i in range(1, len(input)+1)}
     elif six.callable(input):
         types = parse_type_hints(input)
     else:
-        raise RuntimeError('Unable to determine input/ouput types using instance of type `%s`.' % type(input))
+        raise RuntimeError("Unable to determine input/ouput types using "
+                           "instance of type '%s'." % type(input))
 
     results = []
     for k, v in six.iteritems(types):
