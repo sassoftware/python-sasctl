@@ -52,7 +52,7 @@ class LightgbmParser(EnsembleParser):
         self._booster = booster
         self._dump = booster.dump_model()
 
-        if self._dump['objective'] != 'binary sigmoid:1':
+        if self._dump.get('objective') != 'binary sigmoid:1':
             raise ValueError("Only binary sigmoid objective function is "
                              "currently supported. Received '%s'."
                              % self.dump['objective'])
