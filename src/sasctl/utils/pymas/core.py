@@ -17,9 +17,12 @@ import six
 
 from .ds2 import DS2Thread, DS2Variable, DS2Package
 from .python import ds2_variables
+from ..decorators import versionchanged
 
-
-def build_wrapper_function(func, variables, array_input, setup=None,
+@versionchanged(reason='Added `name` parameter.', version='1.5')
+def build_wrapper_function(func, variables, array_input,
+                           name='wrapper',
+                           setup=None,
                            return_msg=True):
     """Wraps a function to ensure compatibility when called by PyMAS.
 
@@ -34,10 +37,15 @@ def build_wrapper_function(func, variables, array_input, setup=None,
         Function name or an instance of Function which will be wrapped
     variables : list of DS2Variable
     array_input : bool
-        Whether `variables` should be combined into a single array before passing to `func`
+        Whether `variables` should be combined into a single array before
+        passing to `func`
+    name : str, optional
+        Name of the generated wrapper function.  Defaults to 'wrapper'.
     setup : iterable
         Python source code lines to be executed during package setup
-    return_msg : bool
+    return_msg : bool, optional
+        Whether error messages will be captured and returned as an additional
+        output variable.  Defaults to True.
 
     Returns
     -------
@@ -52,6 +60,8 @@ def build_wrapper_function(func, variables, array_input, setup=None,
     executed.
 
     """
+
+    # need to know func & input/output vars for each func
 
     input_names = [v.name for v in variables if not v.out]
     output_names = [v.name for v in variables if v.out]
@@ -68,7 +78,7 @@ def build_wrapper_function(func, variables, array_input, setup=None,
                 string_input += ("        if {0}: {0} = {0}.strip()".format(v.name), )
             else:
                 string_input += ("        if {0} == None: {0} = np.nan".format(v.name), )
-        
+
 
     # Statement to execute the function w/ provided parameters
     if array_input:
@@ -100,7 +110,7 @@ def build_wrapper_function(func, variables, array_input, setup=None,
 
 
     definition = header +\
-                 ('def wrapper({}):'.format(', '.join(args)),
+                 ('def {name}({args}):'.format(name=name, args=', '.join(args)),
                   '    "Output: {}"'.format(', '.join(output_names + ['msg']) if return_msg
                                             else ', '.join(output_names)),
                   '    result = None',
@@ -359,6 +369,7 @@ class PyMAS:
 
         self.package = DS2Package(variables, python_source, return_code, return_msg)
 
+    @versionchanged(version='1.4', reason="Added `dest='Python'` option")
     def score_code(self, input_table=None, output_table=None, columns=None, dest='MAS'):
         """Generate DS2 score code
 
@@ -379,10 +390,8 @@ class PyMAS:
         str
             Score code
 
-        .. versionchanged:: 1.3.1
-            Added `dest='Python'` option
-
         """
+
         dest = dest.upper()
 
         # Check for names that could result in DS2 errors.

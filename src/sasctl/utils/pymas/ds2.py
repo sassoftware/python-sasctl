@@ -10,6 +10,8 @@ from collections import namedtuple, OrderedDict
 
 import six
 
+from ..decorators import deprecated, versionadded
+
 
 class DS2Package(object):
     def __init__(self, variables, code=None, return_code=True,
@@ -88,8 +90,11 @@ class DS2BaseMethod(object):
 
 
 class DS2PyMASMethod(DS2BaseMethod):
+    """
+
+    """
     def __init__(self, name, variables, python_code, return_code=True,
-                 return_message=True, target='wrapper'):
+                 return_message=True, target='wrapper', method_name='score'):
 
         target = target or 'wrapper'
         if isinstance(python_code, six.string_types):
@@ -131,10 +136,11 @@ class DS2PyMASMethod(DS2BaseMethod):
                + [v.pymas_statement() for v in self.public_variables
                   if v.out and v.name != 'rc']
 
-        super(DS2PyMASMethod, self).__init__('score', variables,
+        super(DS2PyMASMethod, self).__init__(method_name, variables,
                                              body=body)
 
 
+@deprecated(version='1.5', removed_in='1.6')
 class DS2ScoreMethod(DS2BaseMethod):
     def __init__(self, variables, return_code=True, return_message=True,
                  target='wrapper', ):
@@ -166,6 +172,21 @@ class DS2ScoreMethod(DS2BaseMethod):
                                              body=body_statements)
 
 
+@versionadded(version='1.5')
+class DS2PredictProbaMethod(DS2BaseMethod):
+    def __init__(self, variables, return_code=True, return_message=True,
+                 target='wrapper'):
+
+        self.public_variables = variables
+        self.private_variables = []
+
+        body_statements = []
+
+        super(DS2PredictProbaMethod, self).__init__('predict_proba', variables,
+                                                    body=body_statements)
+
+
+@deprecated(version='1.5', removed_in='1.6')
 class DS2Method(object):
     def __init__(self, variables, code, target='wrapper'):
         self.variables = variables
