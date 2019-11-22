@@ -6,18 +6,19 @@
 
 from __future__ import print_function
 import base64
-from collections import OrderedDict
 import importlib
 import pickle
 import os
+import re
 import sys
-
+from collections import OrderedDict
 
 import six
 
 from .ds2 import DS2Thread, DS2Variable, DS2Package
 from .python import ds2_variables
 from ..decorators import versionadded, versionchanged
+
 
 @versionchanged(reason='Added `name` parameter.', version='1.5')
 def build_wrapper_function(func, variables, array_input,
@@ -141,16 +142,26 @@ def build_wrapper_function(func, variables, array_input,
 
 @versionadded(version='1.5')
 def wrap_predict_method(func, variables, **kwargs):
-    """
+    """Create a PyMAS wrapper designed for Sci-kit's `.predict` methods.
 
     Parameters
     ----------
-    func
-    variables
-    kwargs
+    func : function or str
+        Function name or an instance of Function which will be wrapped.  Assumed
+        to behave as `.predict()` methods.
+     variables : list of DS2Variable
+        Input and output variables for the function
+    kwargs : any
+        Will be passed to `build_wrapper_function`.
 
     Returns
     -------
+    str
+        the Python definition for the wrapper function.
+
+    See Also
+    --------
+    :meth:`build_wrapper_function`
 
     """
     kwargs.setdefault('array_input', True)
@@ -162,16 +173,26 @@ def wrap_predict_method(func, variables, **kwargs):
 
 @versionadded(version='1.5')
 def wrap_predict_proba_method(func, variables, **kwargs):
-    """
+    """Create a PyMAS wrapper designed for Sci-kit's `.predict_proba` methods.
 
     Parameters
     ----------
-    func
-    variables
-    kwargs
+    func : function or str
+        Function name or an instance of Function which will be wrapped.  Assumed
+        to behave as `.predict_proba()` methods.
+     variables : list of DS2Variable
+        Input and output variables for the function
+    kwargs : any
+        Will be passed to `build_wrapper_function`.
 
     Returns
     -------
+    str
+        the Python definition for the wrapper function.
+
+    See Also
+    --------
+    :meth:`build_wrapper_function`
 
     """
     kwargs.setdefault('array_input', True)
@@ -180,7 +201,13 @@ def wrap_predict_proba_method(func, variables, **kwargs):
 
     # setup = None,
 
-    return build_wrapper_function(func, variables, **kwargs)
+    wrapper = build_wrapper_function(func, variables, **kwargs)
+
+    old_code = 'if result.size == 1:\s*result = np.asscalar\(result\)'
+    new_code = 'assert result.shape[0] == 1\n'
+    new_code += '        result = tuple(result[0].tolist())'
+
+    return re.sub(old_code, new_code, wrapper)
 
 
 def from_inline(func, input_types=None, array_input=False, return_code=True, return_message=True):

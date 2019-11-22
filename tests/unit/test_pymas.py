@@ -675,7 +675,7 @@ def predict(a, b):
 
 
 def test_wrap_predict_proba_method():
-    """Check wrap_predict__proba_method output with default inputs."""
+    """Check wrap_predict_proba_method output with default inputs."""
     from sasctl.utils.pymas.core import wrap_predict_proba_method
 
     target = """
@@ -696,8 +696,8 @@ def predict_proba(a, b):
         column = ["a","b"]
         inputrun = pd.DataFrame(data=inputarray, columns=column)
         result = dummy_func(inputrun)
-        if result.size == 1:
-            result = np.asscalar(result)
+        assert result.shape[0] == 1
+        result = tuple(result[0].tolist())
     except Exception as e:
 
         if result is None:
