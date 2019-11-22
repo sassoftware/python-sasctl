@@ -565,12 +565,12 @@ def wrapper(a, b):
             raise _compile_error
         msg = ""
         import numpy as np
+        import pandas as pd
 
         if a == None: a = np.nan
         if b == None: b = np.nan
         inputarray = np.array([a,b]).reshape((1, -1))
         column = ["a","b"]
-        import pandas as pd
         inputrun = pd.DataFrame(data=inputarray, columns=column)
         result = dummy_func(inputrun)
         if result.size == 1:
@@ -594,7 +594,7 @@ def wrapper(a, b):
 
 
 def test_wrapper_renamed():
-    """Check build_wrapper_function output with customer name."""
+    """Check wrap_predict_method output with custom name."""
     from sasctl.utils.pymas.core import build_wrapper_function
 
     target = """
@@ -607,12 +607,12 @@ def renamed_wrapper(a, b):
             raise _compile_error
         msg = ""
         import numpy as np
+        import pandas as pd
 
         if a == None: a = np.nan
         if b == None: b = np.nan
         inputarray = np.array([a,b]).reshape((1, -1))
         column = ["a","b"]
-        import pandas as pd
         inputrun = pd.DataFrame(data=inputarray, columns=column)
         result = dummy_func(inputrun)
         if result.size == 1:
@@ -632,5 +632,82 @@ def renamed_wrapper(a, b):
                                                 DS2Variable('c', float, True)],
                                    array_input=True,
                                    name='renamed_wrapper')
+
+    assert code == target
+
+
+def test_wrap_predict_method():
+    """Check wrap_predict_method output with default inputs."""
+    from sasctl.utils.pymas.core import wrap_predict_method
+
+    target = """
+def predict(a, b):
+    "Output: c"
+    result = None
+    try:
+        global _compile_error
+        if _compile_error is not None:
+            raise _compile_error
+
+        import numpy as np
+        import pandas as pd
+
+        if a == None: a = np.nan
+        if b == None: b = np.nan
+        inputarray = np.array([a,b]).reshape((1, -1))
+        column = ["a","b"]
+        inputrun = pd.DataFrame(data=inputarray, columns=column)
+        result = dummy_func(inputrun)
+        if result.size == 1:
+            result = np.asscalar(result)
+    except Exception as e:
+
+        if result is None:
+            result = tuple(None for i in range(1))
+    return result
+        """.rstrip()
+
+    code = wrap_predict_method(dummy_func, [DS2Variable('a', float, False),
+                                                DS2Variable('b', float, False),
+                                                DS2Variable('c', float, True)])
+
+    assert code == target
+
+
+def test_wrap_predict_proba_method():
+    """Check wrap_predict__proba_method output with default inputs."""
+    from sasctl.utils.pymas.core import wrap_predict_proba_method
+
+    target = """
+def predict_proba(a, b):
+    "Output: c"
+    result = None
+    try:
+        global _compile_error
+        if _compile_error is not None:
+            raise _compile_error
+
+        import numpy as np
+        import pandas as pd
+
+        if a == None: a = np.nan
+        if b == None: b = np.nan
+        inputarray = np.array([a,b]).reshape((1, -1))
+        column = ["a","b"]
+        inputrun = pd.DataFrame(data=inputarray, columns=column)
+        result = dummy_func(inputrun)
+        if result.size == 1:
+            result = np.asscalar(result)
+    except Exception as e:
+
+        if result is None:
+            result = tuple(None for i in range(1))
+    return result
+        """.rstrip()
+
+    code = wrap_predict_proba_method(dummy_func,
+                                     [DS2Variable('a', float, False),
+                                      DS2Variable('b', float, False),
+                                      DS2Variable('c', float, True)])
 
     assert code == target

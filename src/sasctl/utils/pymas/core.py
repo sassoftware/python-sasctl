@@ -17,7 +17,7 @@ import six
 
 from .ds2 import DS2Thread, DS2Variable, DS2Package
 from .python import ds2_variables
-from ..decorators import versionchanged
+from ..decorators import versionadded, versionchanged
 
 @versionchanged(reason='Added `name` parameter.', version='1.5')
 def build_wrapper_function(func, variables, array_input,
@@ -85,7 +85,6 @@ def build_wrapper_function(func, variables, array_input,
         middle = string_input +\
                  ('        inputarray = np.array([{}]).reshape((1, -1))'.format(','.join(args)),
                   '        column = [{}]'.format(','.join('"{0}"'.format(w) for w in args)),
-                  '        import pandas as pd',
                   '        inputrun = pd.DataFrame(data=inputarray, columns=column)',
                   '        result = {}(inputrun)'.format(func))
     else:
@@ -119,21 +118,69 @@ def build_wrapper_function(func, variables, array_input,
                   '        if _compile_error is not None:',
                   '            raise _compile_error',
                   '        msg = ""' if return_msg else '',
-                  '        import numpy as np') +\
+                  '        import numpy as np',
+                  '        import pandas as pd') +\
                  middle +\
                  ('        if result.size == 1:',
                   '            result = np.asscalar(result)',
                   '    except Exception as e:',
                   '        msg = str(e)' if return_msg else '',
                   '        if result is None:',
-                  '            result = tuple(None for i in range({}))'.format(len(output_names)),
-                  '    if isinstance(result, tuple):',
-                  '        return tuple(x for x in list(result) + [msg])',
-                  '    else: ',
-                  '        return result, msg')
+                  '            result = tuple(None for i in range({}))'.format(len(output_names)))
 
+    if return_msg:
+        definition += ('    if isinstance(result, tuple):',
+                       '        return tuple(x for x in list(result) + [msg])',
+                       '    else: ',
+                       '        return result, msg')
+    else:
+        definition += ('    return result', )
 
     return '\n'.join(definition)
+
+
+@versionadded(version='1.5')
+def wrap_predict_method(func, variables, **kwargs):
+    """
+
+    Parameters
+    ----------
+    func
+    variables
+    kwargs
+
+    Returns
+    -------
+
+    """
+    kwargs.setdefault('array_input', True)
+    kwargs.setdefault('name', 'predict')
+    kwargs.setdefault('return_msg', False)
+
+    return build_wrapper_function(func, variables, **kwargs)
+
+
+@versionadded(version='1.5')
+def wrap_predict_proba_method(func, variables, **kwargs):
+    """
+
+    Parameters
+    ----------
+    func
+    variables
+    kwargs
+
+    Returns
+    -------
+
+    """
+    kwargs.setdefault('array_input', True)
+    kwargs.setdefault('name', 'predict_proba')
+    kwargs.setdefault('return_msg', False)
+
+    # setup = None,
+
+    return build_wrapper_function(func, variables, **kwargs)
 
 
 def from_inline(func, input_types=None, array_input=False, return_code=True, return_message=True):
