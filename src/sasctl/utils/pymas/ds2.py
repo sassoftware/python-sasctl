@@ -50,7 +50,7 @@ class DS2Package(object):
         return '\n'.join(code)
 
 
-class DS2BaseMethod(object):
+class DS2BaseMethod:
     def __init__(self, name, variables, body=None):
         self._name = name
         self.variables = variables
