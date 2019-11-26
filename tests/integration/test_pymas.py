@@ -153,16 +153,9 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     dcl varchar(67108864) character set utf8 pycode;
     dcl int revision;
 
-    method score(
-        double SepalLength,
-        double SepalWidth,
-        double PetalLength,
-        double PetalWidth,
-        in_out char var1,
-        in_out integer rc,
-        in_out char msg
-        );
+    method init();
     
+        dcl integer rc;
         if null(py) then do;
             py = _new_ pymas();
             rc = py.useModule('DF74A4B18C9E41A2A34B0053E123AA67', 1);
@@ -212,9 +205,21 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                     return;
                 end;
             end;
-            rc = py.useMethod('wrapper');
-            if rc then return;
         end;
+    end;
+    
+    method score(
+        double SepalLength,
+        double SepalWidth,
+        double PetalLength,
+        double PetalWidth,
+        in_out char var1,
+        in_out integer rc,
+        in_out char msg
+        );
+    
+        rc = py.useMethod('wrapper');
+        if rc then return;
         rc = py.setDouble('SepalLength', SepalLength);    if rc then return;
         rc = py.setDouble('SepalWidth', SepalWidth);    if rc then return;
         rc = py.setDouble('PetalLength', PetalLength);    if rc then return;
@@ -225,7 +230,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     end;
     
 endpackage;
-"""
+""".lstrip('\n')
 
     assert isinstance(p, PyMAS)
 
@@ -235,7 +240,7 @@ endpackage;
     # Ignore byte string during comparison.  Pickle seems to change with
     # time / Python versions
     result = re.sub('bytes = .*', 'bytes = "X"\');', result)
-    assert result == target.lstrip('\n')
+    assert result == target
 
 
 def test_from_pickle_stream(train_data, pickle_stream):

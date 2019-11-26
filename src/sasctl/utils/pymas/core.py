@@ -15,7 +15,7 @@ from collections import OrderedDict
 
 import six
 
-from .ds2 import DS2Thread, DS2Variable, DS2Package
+from .ds2 import DS2Thread, DS2Variable, DS2PyMASPackage
 from .python import ds2_variables
 from ..decorators import versionadded, versionchanged
 
@@ -402,30 +402,31 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
 
 
 class PyMAS:
-    def __init__(self, target_function, variables, python_source,
-                 return_code=True, return_msg=True, **kwargs):
-        """
+    """
 
-        Parameters
-        ----------
-        target_function : function
-            The Python function to be executed
-        variables : list of DS2Variable
-            The input/ouput variables be declared in the module
-        python_source
-        return_code : bool
-            Whether the DS2-generated return code should be included
-        return_msg : bool
-            Whether the DS2-generated return message should be included
-        kwargs : any
-            Passed to :func:`build_wrapper_function`
+    Parameters
+    ----------
+    target_function : function
+        The Python function to be executed.
+    variables : list of DS2Variable
+        The input/ouput variables be declared in the module.
+    python_source : str
+        Additional Python code to be executed during setup.
+    return_code : bool
+        Whether the DS2-generated return code should be included.
+    return_msg : bool
+        Whether the DS2-generated return message should be included.
+    kwargs : any
+        Passed to :func:`build_wrapper_function`.
 
-        """
-
-        self.target = target_function
-
-        # Any input variable that should be treated as an array
-        # array_input = any(v for v in variables if v.is_array)
+    """
+    def __init__(self,
+                 target_function,
+                 variables,
+                 python_source,
+                 return_code=True,
+                 return_msg=True,
+                 **kwargs):
 
         # Python wrapper function will serve as entrypoint from DS2
         self.wrapper = build_wrapper_function(target_function, variables,
@@ -441,7 +442,7 @@ class PyMAS:
         self.return_code = return_code
         self.return_message = return_msg
 
-        self.package = DS2Package(variables, python_source, return_code, return_msg)
+        self.package = DS2PyMASPackage(variables, python_source, return_code, return_msg)
 
     @versionchanged(version='1.4', reason="Added `dest='Python'` option")
     def score_code(self, input_table=None, output_table=None, columns=None, dest='MAS'):
@@ -487,7 +488,9 @@ class PyMAS:
                                                    '   end;',
                                                    'enddata;')
         elif dest == 'CAS':
-            thread = DS2Thread(self.variables, input_table, column_names=columns, return_message=self.return_message,
+            thread = DS2Thread(self.variables, input_table,
+                               column_names=columns,
+                               return_message=self.return_message,
                                package=self.package)
 
             code += (str(thread),
