@@ -87,8 +87,14 @@ def deprecated(reason=None, version=None, removed_in=None):
         if reason is not None:
             directive += '\n  %s' % reason
 
-        # Insert directive into original docstring
-        _wrapper.__doc__ = _insert_docstring_text(func, directive)
+        try:
+            functools.update_wrapper(_wrapper, func)
+
+            # Insert directive into original docstring
+            _wrapper.__doc__ = _insert_docstring_text(func, directive)
+        except AttributeError:
+            # __doc__ is not writable in Py27
+            pass
 
         return _wrapper
 
@@ -120,8 +126,12 @@ def experimental(func):
     type_ = 'class' if isinstance(func, six.class_types) else 'method'
     directive = '.. warning:: This %s is experimental and may be modified or removed without warning.' % type_
 
-    # Insert directive into original docstring
-    _wrapper.__doc__ = _insert_docstring_text(func, directive)
+    try:
+        # Insert directive into original docstring
+        _wrapper.__doc__ = _insert_docstring_text(func, directive)
+    except AttributeError:
+        # __doc__ is not writable in Py27
+        pass
 
     return _wrapper
 
@@ -156,8 +166,12 @@ def versionadded(reason=None, version=None):
         if reason is not None:
             directive += '\n  %s' % reason
 
-        # Insert directive into original docstring
-        func.__doc__ = _insert_docstring_text(func, directive)
+        try:
+            # Insert directive into original docstring
+            func.__doc__ = _insert_docstring_text(func, directive)
+        except AttributeError:
+            # __doc__ is not writable in Py27
+            pass
 
         return func
 
@@ -193,8 +207,12 @@ def versionchanged(reason=None, version=None):
         if reason is not None:
             directive += '\n  %s' % reason
 
-        # Insert directive into original docstring
-        func.__doc__ = _insert_docstring_text(func, directive)
+        try:
+            # Insert directive into original docstring
+            func.__doc__ = _insert_docstring_text(func, directive)
+        except AttributeError:
+            # __doc__ is not writable in Py27
+            pass
 
         return func
 
