@@ -35,7 +35,12 @@ _DESC_MAXLEN = 1024
 
 # As of Viya 3.4 model registration fails if user-defined properties are
 # longer than 512 characters.
-_PROP_MAXLEN = 512
+_PROP_VALUE_MAXLEN = 512
+_PROP_NAME_MAXLEN = 60
+
+def _property(k, v):
+    return {'name': str(k)[:_PROP_NAME_MAXLEN],
+            'value': str(v)[:_PROP_VALUE_MAXLEN]}
 
 
 def _sklearn_to_dict(model):
@@ -66,16 +71,15 @@ def _sklearn_to_dict(model):
         function=mappings.get(model._estimator_type, model._estimator_type),
         tool='Python %s.%s'
              % (sys.version_info.major, sys.version_info.minor),
-        properties=[{'name': str(k)[:_PROP_MAXLEN],
-                     'value': str(v)[:_PROP_MAXLEN]}
-                    for k, v in model.get_params().items()]
+        properties=[_property(k, v) for k, v in model.get_params().items()]
     )
 
     return result
 
 
 def register_model(model, name, project, repository=None, input=None,
-                   version=None, files=None, force=False):
+                   version=None, files=None, force=False,
+                   record_packages=True):
     """Register a model in the model repository.
 
     Parameters
@@ -111,6 +115,9 @@ def register_model(model, name, project, repository=None, input=None,
     force : bool, optional
         Create dependencies such as projects and repositories if they do not
         already exist.
+    record_packages : bool, optional
+        Capture Python packages registered in the environment.  Defaults to
+        True.  Ignored if `model` is not a Python object.
 
     Returns
     -------
@@ -129,6 +136,9 @@ def register_model(model, name, project, repository=None, input=None,
 
     .. versionchanged:: v1.3
         Create requirements.txt with installed packages.
+
+    .. versionchanged:: v1.4.5
+        Added `record_packages` parameter.
 
     """
     # TODO: Create new version if model already exists
@@ -213,7 +223,7 @@ def register_model(model, name, project, repository=None, input=None,
 
         # Get package versions in environment
         packages = installed_packages()
-        if packages is not None:
+        if record_packages and packages is not None:
             model.setdefault('properties', [])
 
             # Define a custom property to capture each package version
@@ -224,10 +234,7 @@ def register_model(model, name, project, repository=None, input=None,
             for p in packages:
                 if '==' in p:
                     n, v = p.split('==')
-                    model['properties'].append({
-                        'name': 'env_%s' % n,
-                        'value': v
-                    })
+                    model['properties'].append(_property('env_%s' % n, v))
 
             # Generate and upload a requirements.txt file
             files.append({'name': 'requirements.txt',
