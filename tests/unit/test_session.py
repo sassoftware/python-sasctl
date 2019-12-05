@@ -279,7 +279,7 @@ def test_ssl_context():
     del os.environ['REQUESTS_CA_BUNDLE']
 
 
-def test_verify_ssl():
+def test_verify_ssl(missing_packages):
     with mock.patch('sasctl.core.Session.get_token', return_value='token'):
         # Should verify SSL by default
         s = Session('hostname', 'username', 'password')
@@ -310,6 +310,12 @@ def test_verify_ssl():
         s = Session('hostname', 'username', 'password', verify_ssl=True)
         assert s.verify == True
 
+        with missing_packages('urllib3.util.ssl_'):
+            # IP Address validation should work even if urllib3 import fails
+            s = Session('127.0.0.1', 'username', 'password', verify_ssl=True)
+            assert s.verify == True
+
+
 
 def test_kerberos():
     with mock.patch('sasctl.core.Session._get_token_with_kerberos',
@@ -322,6 +328,7 @@ def test_kerberos():
 
         s = Session('hostname', 'username@REALM')
         assert s.auth.token == 'token'
+
 
 def test_authentication_failure():
     from sasctl.exceptions import AuthenticationError
