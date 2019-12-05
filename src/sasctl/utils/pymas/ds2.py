@@ -50,27 +50,46 @@ class DS2Package(object):
         return '\n'.join(code)
 
 
+@versionadded(version='1.5')
 class DS2BasePackage(object):
-    def __init__(self,
-                 code=None,
-):
-        self._id = uuid.uuid4().hex.upper()
-        # self._python_code = code or []
-        # code = code or []
+    """Defines a DS2 package.
 
-        self.methods = []
+    Parameters
+    ----------
+    code : str
+        Any code to include in the body of the package.
+
+    Attributes
+    ----------
+    methods : list
+        A collection of :class:`DS2BaseMethod` instances that will be included in the
+        package definition.
+
+    """
+    def __init__(self, code=None):
+        self._id = uuid.uuid4().hex.upper()
         self._body = code or tuple()
+        self.methods = []
 
     @property
     def id(self):
+        """Unique identifier generated for the package."""
         return self._id
 
     @property
     def name(self):
+        """Unique name generated for the package."""
         # Max length in some SAS products in 32 characters
         return ('_' + str(self.id))[:32]
 
     def code(self):
+        """Get the DS2 code for the package.
+
+        Returns
+        -------
+        str
+
+        """
         code = ("package %s / overwrite=yes;" % self.name,) + \
                tuple('    ' + line for line in self._body) + \
                ('',)
@@ -83,16 +102,17 @@ class DS2BasePackage(object):
         return '\n'.join(code)
 
 
+@versionadded(version='1.5')
 class DS2PyMASPackage(DS2BasePackage):
+    """A DS2 package that uses PyMAS to invoke Python code.
 
-    def __init__(self, variables,
-                 code=None,
-                 return_code=True,
-                 return_message=True,
-                 target=None):
+    Parameters
+    ----------
+    code
 
-        target = target or 'wrapper'
+    """
 
+    def __init__(self, code=None):
         body = ("dcl package pymas py;",
                 "dcl package logger logr('App.tk.MAS');",
                 "dcl varchar(67108864) character set utf8 pycode;",
@@ -111,25 +131,29 @@ class DS2PyMASPackage(DS2BasePackage):
                            target=None,
                            method_name='init'))
 
-        self.add_method('score', target, variables, return_code, return_message)
-
     def add_method(self, name, target, variables, return_code=False, return_message=False):
-        """
+        """Add a DS2 method that calls a Python function defined by the package.
 
         Parameters
         ----------
-        name
-        target
-        variables
-        return_code
-        return_message
+        name : str
+            Name of the DS2 method to create.
+        target : str
+            Name of the Python method to call
+        variables : list of :class:`DS2Variable`
+            List of input and output variables for the method.
+        return_code : bool
+            Add a return code parameter to the output.
+        return_message : bool
+            Add a return message parameter to the output.
 
         Returns
         -------
+        None
 
         """
 
-        public_variables = variables
+        public_variables = list(variables)
         private_variables = []
 
         if return_code:

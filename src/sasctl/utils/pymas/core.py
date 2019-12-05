@@ -357,48 +357,77 @@ def from_pickle(file, func_name=None, input_types=None, array_input=False,
 
 def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
                  return_code=True, return_message=True, code=[]):
+    """
 
-    # If the object passed was a function, no need to search for
-    # target function
-    if six.callable(obj) and (func_name is None or obj.__name__ == func_name):
-        target_func = obj
-    elif func_name is None:
-        raise ValueError('Parameter `func_name` must be specified.')
-    else:
-        target_func = getattr(obj, func_name)
+    Parameters
+    ----------
+    obj
+    func_name
+    input_types
+    array_input
+    return_code
+    return_message
+    code
 
-    if not callable(target_func):
-        raise RuntimeError("Could not find a valid function named %s"
-                           % func_name)
+    Returns
+    -------
 
-    # Need to create DS2Variable instances to pass to PyMAS
-    if hasattr(input_types, 'columns'):
-        # Assuming input is a DataFrame representing model inputs.  Use to
-        # get input variables
-        vars = ds2_variables(input_types)
+    """
 
-        # Run one observation through the model and use the result to
-        # determine output variables
-        output = target_func(input_types.head(1))
-        output_vars = ds2_variables(output, output_vars=True)
-        vars.extend(output_vars)
-    elif isinstance(input_types, type):
-        params = OrderedDict([(k, input_types)
-                              for k in target_func.__code__.co_varnames])
-        vars = ds2_variables(params)
-    elif isinstance(input_types, dict):
-        vars = ds2_variables(input_types)
-    else:
-        # Inspect the Python method to determine arguments
-        vars = ds2_variables(target_func)
+    if not isinstance(func_name, list):
+        func_name = [func_name]
 
-    target_func = 'obj.' + target_func.__name__
+    def parse_function(obj, func_name):
+        # If the object passed was a function, no need to search for
+        # target function
+        if six.callable(obj) and (func_name is None or obj.__name__ == func_name):
+            target_func = obj
+        elif func_name is None:
+            raise ValueError('Parameter `func_name` must be specified.')
+        else:
+            target_func = getattr(obj, func_name)
 
-    if not any([v for v in vars if v.out]):
-        vars.append(DS2Variable(name='result', type='float', out=True))
+        if not callable(target_func):
+            raise RuntimeError("Could not find a valid function named %s"
+                               % func_name)
+
+        # Need to create DS2Variable instances to pass to PyMAS
+        if hasattr(input_types, 'columns'):
+            # Assuming input is a DataFrame representing model inputs.  Use to
+            # get input variables
+            vars = ds2_variables(input_types)
+
+            # Run one observation through the model and use the result to
+            # determine output variables
+            output = target_func(input_types.head(1))
+            output_vars = ds2_variables(output, output_vars=True)
+            vars.extend(output_vars)
+        elif isinstance(input_types, type):
+            params = OrderedDict([(k, input_types)
+                                  for k in target_func.__code__.co_varnames])
+            vars = ds2_variables(params)
+        elif isinstance(input_types, dict):
+            vars = ds2_variables(input_types)
+        else:
+            # Inspect the Python method to determine arguments
+            vars = ds2_variables(target_func)
+
+        target_func = target_func.__name__
+
+        if not any([v for v in vars if v.out]):
+            vars.append(DS2Variable(name='result', type='float', out=True))
+
+        return target_func, vars
+
+    t0 = [parse_function(obj, f) for f in func_name]
+    target_func, vars = zip(*t0)
+
+    # Convert from tuples to lists
+    target_func = list(target_func)
+    vars = list(vars)
 
     return PyMAS(target_func, vars, code, return_code, return_message,
-                 array_input=array_input)
+                 array_input=array_input, func_prefix='obj.')
 
 
 class PyMAS:
@@ -406,7 +435,7 @@ class PyMAS:
 
     Parameters
     ----------
-    target_function : function
+    target_function : str
         The Python function to be executed.
     variables : list of DS2Variable
         The input/ouput variables be declared in the module.
@@ -426,23 +455,62 @@ class PyMAS:
                  python_source,
                  return_code=True,
                  return_msg=True,
+                 func_prefix=None,
                  **kwargs):
 
-        # Python wrapper function will serve as entrypoint from DS2
-        self.wrapper = build_wrapper_function(target_function, variables,
-                                              setup=python_source,
-                                              return_msg=return_msg,
-                                              **kwargs).split('\n')
+        func_prefix = func_prefix or ''
 
-        # Lines of Python code to be embedded in DS2
-        python_source = list(self.wrapper)
+        if not isinstance(target_function, list):
+            target_function = [target_function]
+            variables = [variables]
 
-        self.python_source = python_source
-        self.variables = variables
-        self.return_code = return_code
-        self.return_message = return_msg
+        # Replicate parameter for each function to be exposed
+        if isinstance(return_code, bool):
+            return_code = [return_code] * len(target_function)
 
-        self.package = DS2PyMASPackage(variables, python_source, return_code, return_msg)
+        # Replicate parameter for each function to be exposed
+        if isinstance(return_msg, bool):
+            return_msg = [return_msg] * len(target_function)
+
+        self.wrapper = []
+        for func, vars, code, msg in zip(target_function, variables, return_code, return_msg):
+            # Add DS2 variables for returning error codes/messages
+            if code:
+                vars.append(DS2Variable(name='rc', type='int32', out=True))
+            if msg:
+                vars.append(DS2Variable(name='msg', type='char', out=True))
+
+            if func.lower() == 'predict':
+                lines = wrap_predict_method(func_prefix+func, vars,
+                                            setup=python_source,
+                                            return_msg=msg, **kwargs)
+            elif func.lower() == 'predict_proba':
+                lines = wrap_predict_proba_method(func_prefix+func, vars,
+                                                  setup=python_source,
+                                                  return_msg=msg, **kwargs)
+            else:
+                lines = build_wrapper_function(func_prefix+func,
+                                               vars,
+                                               name=func,
+                                               setup=python_source,
+                                               return_msg=msg,
+                                               **kwargs)
+            # Clear setup code once it's been added once.  No need to duplicate
+            # if multiple functions are defined.
+            python_source = None
+
+            self.wrapper.extend(lines.split('\n'))
+
+        self.variables = variables[0]
+        # self.return_code = return_code[0]
+        self.return_message = return_msg[0]
+
+        self.package = DS2PyMASPackage(self.wrapper)
+
+        for idx, func in enumerate(target_function):
+            self.package.add_method(func, func,
+                                    variables[idx], return_code[idx],
+                                    return_msg[idx])
 
     @versionchanged(version='1.4', reason="Added `dest='Python'` option")
     def score_code(self, input_table=None, output_table=None, columns=None, dest='MAS'):
