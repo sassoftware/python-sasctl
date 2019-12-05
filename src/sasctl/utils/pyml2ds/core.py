@@ -62,6 +62,16 @@ def pyml2ds(in_file, out_var_name="P_TARGET"):
     str
         A SAS Data Step program implementing the model.
 
+    Examples
+    --------
+    Generate SAS code from an XGBoost model.
+
+    >>> from xgboost.sklearn import XGBRegressor
+    >>> xgb = XGBRegressor()
+    >>> xgb.fit(X, y)
+    >>> pkl = pickle.dumps(xgb)
+    >>> sas_code = pyml2ds(pkl)
+
     """
 
     try:
