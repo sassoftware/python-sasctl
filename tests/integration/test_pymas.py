@@ -274,14 +274,12 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('try:');
                 rc = py.appendSrcLine('    import pickle, base64');
                 rc = py.appendSrcLine('    bytes = "X"');
-                rc = py.appendSrcLine('    obj = pickle.loads(
-                base64.b64decode(bytes))');
+                rc = py.appendSrcLine('    obj = pickle.loads(base64.b64decode(bytes))');
                 rc = py.appendSrcLine('    _compile_error = None');
                 rc = py.appendSrcLine('except Exception as e:');
                 rc = py.appendSrcLine('    _compile_error = e');
                 rc = py.appendSrcLine('');
-                rc = py.appendSrcLine('def wrapper(SepalLength, SepalWidth, 
-                PetalLength, PetalWidth):');
+                rc = py.appendSrcLine('def wrapper(SepalLength, SepalWidth, PetalLength, PetalWidth):');
                 rc = py.appendSrcLine('    "Output: var1, msg"');
                 rc = py.appendSrcLine('    result = None');
                 rc = py.appendSrcLine('    try:');
@@ -292,33 +290,22 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('        import numpy as np');
                 rc = py.appendSrcLine('        import pandas as pd');
                 rc = py.appendSrcLine('');
-                rc = py.appendSrcLine('        if SepalLength == None: 
-                SepalLength = np.nan');
-                rc = py.appendSrcLine('        if SepalWidth == None: 
-                SepalWidth = np.nan');
-                rc = py.appendSrcLine('        if PetalLength == None: 
-                PetalLength = np.nan');
-                rc = py.appendSrcLine('        if PetalWidth == None: 
-                PetalWidth = np.nan');
-                rc = py.appendSrcLine('        inputarray = np.array([
-                SepalLength,SepalWidth,PetalLength,PetalWidth]).reshape((1, 
-                -1))');
-                rc = py.appendSrcLine('        column = ["SepalLength",
-                "SepalWidth","PetalLength","PetalWidth"]');
-                rc = py.appendSrcLine('        inputrun = pd.DataFrame(
-                data=inputarray, columns=column)');
+                rc = py.appendSrcLine('        if SepalLength == None: SepalLength = np.nan');
+                rc = py.appendSrcLine('        if SepalWidth == None: SepalWidth = np.nan');
+                rc = py.appendSrcLine('        if PetalLength == None: PetalLength = np.nan');
+                rc = py.appendSrcLine('        if PetalWidth == None: PetalWidth = np.nan');
+                rc = py.appendSrcLine('        inputarray = np.array([SepalLength,SepalWidth,PetalLength,PetalWidth]).reshape((1, -1))');
+                rc = py.appendSrcLine('        column = ["SepalLength", "SepalWidth","PetalLength","PetalWidth"]');
+                rc = py.appendSrcLine('        inputrun = pd.DataFrame(data=inputarray, columns=column)');
                 rc = py.appendSrcLine('        result = obj.predict(inputrun)');
                 rc = py.appendSrcLine('        if result.size == 1:');
-                rc = py.appendSrcLine('            result = np.asscalar(
-                result)');
+                rc = py.appendSrcLine('            result = np.asscalar(result)');
                 rc = py.appendSrcLine('    except Exception as e:');
                 rc = py.appendSrcLine('        msg = str(e)');
                 rc = py.appendSrcLine('        if result is None:');
-                rc = py.appendSrcLine('            result = tuple(None for i 
-                in range(1))');
+                rc = py.appendSrcLine('            result = tuple(None for i in range(1))');
                 rc = py.appendSrcLine('    if isinstance(result, tuple):');
-                rc = py.appendSrcLine('        return tuple(x for x in list(
-                result) + [msg])');
+                rc = py.appendSrcLine('        return tuple(x for x in list(result) + [msg])');
                 rc = py.appendSrcLine('    else: ');
                 rc = py.appendSrcLine('        return result, msg');
                 pycode = py.getSource();

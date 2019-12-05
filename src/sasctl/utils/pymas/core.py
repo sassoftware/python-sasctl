@@ -474,12 +474,6 @@ class PyMAS:
 
         self.wrapper = []
         for func, vars, code, msg in zip(target_function, variables, return_code, return_msg):
-            # Add DS2 variables for returning error codes/messages
-            if code:
-                vars.append(DS2Variable(name='rc', type='int32', out=True))
-            if msg:
-                vars.append(DS2Variable(name='msg', type='char', out=True))
-
             if func.lower() == 'predict':
                 lines = wrap_predict_method(func_prefix+func, vars,
                                             setup=python_source,
@@ -495,6 +489,15 @@ class PyMAS:
                                                setup=python_source,
                                                return_msg=msg,
                                                **kwargs)
+
+            # Add DS2 variables for returning error codes/messages
+            # NOTE: add these *after* wrapper function is generated to prevent
+            # double-counting them.
+            if code:
+                vars.append(DS2Variable(name='rc', type='int32', out=True))
+            if msg:
+                vars.append(DS2Variable(name='msg', type='char', out=True))
+
             # Clear setup code once it's been added once.  No need to duplicate
             # if multiple functions are defined.
             python_source = None
