@@ -1,8 +1,16 @@
-
 Unreleased
 ----------
+ -
+ 
+v1.4.5 (2019-12-5)
+------------------
+**Changes**
+ - Saving of package information can now be disabled using the `record_packages` parameter of `register_model`.
+
 **Bugfixes**
  - Added support for uint data types to the `register_model` task.
+ - Fixed an issue where long package names caused `register_model` to fail.
+ - `Session` creation now works with older versions of urllib3.
 
 v1.4.4 (2019-10-31)
 -------------------
