@@ -1,6 +1,7 @@
 Unreleased
 ----------
- -
+**Improvements**
+ - Registered Python models will now include both `predict` and `predict_proba` methods. 
  
 v1.4.5 (2019-12-5)
 ------------------
