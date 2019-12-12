@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
 
     sasctl.utils.pymas
+    sasctl.utils.pyml2ds
 
 Submodules
 ----------

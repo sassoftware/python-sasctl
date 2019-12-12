@@ -240,8 +240,14 @@ class Session(requests.Session):
         if 'REQUESTS_CA_BUNDLE' not in os.environ:
             if verify_ssl:
                 # Skip hostname verification if IP address specified instead
-                # of DNS name.  Prevents error from urllib3
-                from urllib3.util.ssl_ import is_ipaddress
+                # of DNS name.  Prevents error from urllib3.
+                try:
+                    from urllib3.util.ssl_ import is_ipaddress
+                except ImportError:
+                    # is_ipaddres not present in older versions of urllib3
+                    def is_ipaddress(hst):
+                        return re.match(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$", hst)
+
                 verify_hostname = not is_ipaddress(hostname)
                 adapter = SSLContextAdapter(assert_hostname=verify_hostname)
 
