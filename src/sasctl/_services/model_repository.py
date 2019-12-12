@@ -6,6 +6,8 @@
 
 """The Model Repository service supports registering and managing models."""
 
+import six
+
 from .service import Service
 from ..core import current_session, get, delete
 
@@ -276,7 +278,8 @@ class ModelRepository(Service):
             'Content-Type': 'application/vnd.sas.models.model+json'})
 
     @classmethod
-    def add_model_content(cls, model, file, name=None, role=None):
+    def add_model_content(cls, model, file, name, role=None,
+                          content_type=None):
         """Add additional files to the model.
 
         Parameters
@@ -306,12 +309,18 @@ class ModelRepository(Service):
             model = cls.get_model(model)
             id = model['id']
 
-        metadata = {'role': role}
-        if name is not None:
-            metadata['name'] = name
+        if content_type is None and isinstance(file, six.binary_type):
+            content_type = 'application/octet-stream'
+
+        if content_type is not None:
+            files = {name: (name, file, content_type)}
+        else:
+            files = {name: file}
+
+        metadata = {'role': role, 'name': name}
 
         return cls.post('/models/{}/contents'.format(id),
-                        files={name: file}, data=metadata)
+                        files=files, data=metadata)
 
     @classmethod
     def default_repository(cls):
