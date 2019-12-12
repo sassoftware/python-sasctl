@@ -156,12 +156,14 @@ class DS2PyMASPackage(DS2BasePackage):
         public_variables = list(variables)
         private_variables = []
 
-        if return_code:
-            public_variables.append(DS2Variable('rc', 'int', True))
-        else:
-            private_variables.append(DS2Variable('rc', 'int', True))
+        # Add a return code if not already present
+        if not any(v for v in public_variables if v.name.lower() == 'rc'):
+            if return_code:
+                public_variables.append(DS2Variable('rc', 'int', True))
+            else:
+                private_variables.append(DS2Variable('rc', 'int', True))
 
-        if return_message:
+        if return_message and not any(v for v in public_variables if v.name.lower() == 'msg'):
             public_variables.append(DS2Variable('msg', 'char', True))
 
         body = [v.as_declaration() for v in

@@ -209,8 +209,8 @@ def wrap_predict_proba_method(func, variables, **kwargs):
 
     return re.sub(old_code, new_code, wrapper)
 
-
-def from_inline(func, input_types=None, array_input=False, return_code=True, return_message=True):
+@versionchanged('Return code and message are disabled by default.', version='1.5')
+def from_inline(func, input_types=None, array_input=False, return_code=False, return_message=False):
     """Creates a PyMAS wrapper to execute the inline python function.
 
     Parameters
@@ -237,8 +237,9 @@ def from_inline(func, input_types=None, array_input=False, return_code=True, ret
     return from_pickle(obj, None, input_types, array_input, return_code, return_message)
 
 
+@versionchanged('Return code and message are disabled by default.', version='1.5')
 def from_python_file(file, func_name=None, input_types=None, array_input=False,
-                     return_code=True, return_message=True):
+                     return_code=False, return_message=False):
     """Creates a PyMAS wrapper to execute a function defined in an
     external .py file.
 
@@ -292,8 +293,9 @@ def from_python_file(file, func_name=None, input_types=None, array_input=False,
                         return_code, return_message, code)
 
 
+@versionchanged('Return code and message are disabled by default.', version='1.5')
 def from_pickle(file, func_name=None, input_types=None, array_input=False,
-                return_code=True, return_message=True):
+                return_code=False, return_message=False):
     """Create a deployable DS2 package from a Python pickle file.
 
     Parameters
@@ -356,7 +358,7 @@ def from_pickle(file, func_name=None, input_types=None, array_input=False,
 
 
 def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
-                 return_code=True, return_message=True, code=[]):
+                 return_code=False, return_message=False, code=[]):
     """
 
     Parameters
@@ -391,6 +393,13 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
             raise RuntimeError("Could not find a valid function named %s"
                                % func_name)
 
+        target_func_name = target_func.__name__
+
+        if target_func_name.lower() == 'predict_proba':
+            names = 'P_'
+        else:
+            names = None
+
         # Need to create DS2Variable instances to pass to PyMAS
         if hasattr(input_types, 'columns'):
             # Assuming input is a DataFrame representing model inputs.  Use to
@@ -400,7 +409,7 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
             # Run one observation through the model and use the result to
             # determine output variables
             output = target_func(input_types.head(1))
-            output_vars = ds2_variables(output, output_vars=True)
+            output_vars = ds2_variables(output, output_vars=True, names=names)
             vars.extend(output_vars)
         elif isinstance(input_types, type):
             params = OrderedDict([(k, input_types)
@@ -412,15 +421,14 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
             # Inspect the Python method to determine arguments
             vars = ds2_variables(target_func)
 
-        target_func = target_func.__name__
-
         if not any([v for v in vars if v.out]):
             vars.append(DS2Variable(name='result', type='float', out=True))
 
-        return target_func, vars
+        return target_func_name, vars
 
-    t0 = [parse_function(obj, f) for f in func_name]
-    target_func, vars = zip(*t0)
+    # Get variables for each function
+    temp = [parse_function(obj, f) for f in func_name]
+    target_func, vars = zip(*temp)
 
     # Convert from tuples to lists
     target_func = list(target_func)

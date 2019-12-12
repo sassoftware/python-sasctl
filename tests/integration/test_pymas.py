@@ -171,7 +171,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('except Exception as e:');
                 rc = py.appendSrcLine('    _compile_error = e');
                 rc = py.appendSrcLine('');
-                rc = py.appendSrcLine('def wrapper(SepalLength, SepalWidth, PetalLength, PetalWidth):');
+                rc = py.appendSrcLine('def predict(SepalLength, SepalWidth, PetalLength, PetalWidth):');
                 rc = py.appendSrcLine('    "Output: var1, msg"');
                 rc = py.appendSrcLine('    result = None');
                 rc = py.appendSrcLine('    try:');
@@ -211,7 +211,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
         end;
     end;
     
-    method score(
+    method predict(
         double SepalLength,
         double SepalWidth,
         double PetalLength,
@@ -221,7 +221,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
         in_out char msg
         );
     
-        rc = py.useMethod('wrapper');
+        rc = py.useMethod('predict');
         if rc then return;
         rc = py.setDouble('SepalLength', SepalLength);    if rc then return;
         rc = py.setDouble('SepalWidth', SepalWidth);    if rc then return;
@@ -255,7 +255,7 @@ def test_from_pickle_2(train_data, pickle_file):
     with mock.patch('uuid.uuid4') as mocked:
         mocked.return_value.hex = 'DF74A4B18C9E41A2A34B0053E123AA67'
         p = from_pickle(pickle_file, func_name=['predict', 'predict_proba'],
-                        input_types=X, array_input=True)
+                        input_types=X, array_input=True, return_code=True, return_message=True)
 
     target = """
 package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;

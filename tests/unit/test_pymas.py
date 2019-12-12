@@ -54,25 +54,25 @@ def test_from_inline():
         _ = from_inline(dummy_func)
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [DS2Variable('x1', 'str', False),
+        assert [[DS2Variable('x1', 'str', False),
                 DS2Variable('x2', 'int', False),
-                DS2Variable('out1', 'float', True)] == call_args[1]   # Variables
+                DS2Variable('out1', 'float', True)]] == call_args[1]   # Variables
 
     with mock.patch('sasctl.utils.pymas.core.PyMAS', autospec=True) as mocked:
         _ = from_inline(dummy_func, input_types=int)
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [DS2Variable('x1', 'int', False),
+        assert [[DS2Variable('x1', 'int', False),
                 DS2Variable('x2', 'int', False),
-                DS2Variable('result', 'float', True)] == call_args[1]   # Variables
+                DS2Variable('result', 'float', True)]] == call_args[1]   # Variables
 
     with mock.patch('sasctl.utils.pymas.core.PyMAS', autospec=True) as mocked:
         _ = from_inline(dummy_func, input_types=OrderedDict([('a', int), ('b', float)]))
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [DS2Variable('a', 'int', False),
+        assert [[DS2Variable('a', 'int', False),
                 DS2Variable('b', 'double', False),
-                DS2Variable('result', 'float', True)] == call_args[1]   # Variables
+                DS2Variable('result', 'float', True)]] == call_args[1]   # Variables
 
 
 def test_from_pickle_with_func():
@@ -87,9 +87,9 @@ def test_from_pickle_with_func():
         result = from_pickle(data)
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [DS2Variable('x1', 'str', False),
+        assert [[DS2Variable('x1', 'str', False),
                 DS2Variable('x2', 'int', False),
-                DS2Variable('out1', 'float', True)] == call_args[1]   # Variables
+                DS2Variable('out1', 'float', True)]] == call_args[1]   # Variables
 
     assert isinstance(result, PyMAS)
 
@@ -109,9 +109,9 @@ def test_from_pickle_with_class():
         result = from_pickle(data, 'func')
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [DS2Variable('x1', 'str', False),
+        assert [[DS2Variable('x1', 'str', False),
                 DS2Variable('x2', 'int', False),
-                DS2Variable('out1', 'float', True)] == call_args[1]   # Variables
+                DS2Variable('out1', 'float', True)]] == call_args[1]   # Variables
 
     assert isinstance(result, PyMAS)
 
