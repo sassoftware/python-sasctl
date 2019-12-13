@@ -2,6 +2,10 @@ Unreleased
 ----------
 **Improvements**
  - Registered Python models will now include both `predict` and `predict_proba` methods. 
+
+**Changes**
+ - Replaced the `raw` parameter of the `request` methods with a `format` parameter, allowing more control over the
+   returned value.
  
 v1.4.5 (2019-12-5)
 ------------------
