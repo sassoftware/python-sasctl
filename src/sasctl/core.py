@@ -630,6 +630,7 @@ class Session(requests.Session):
             protocol=self._settings.get('protocol'),
             verify=self.verify))
 
+
 def is_uuid(id):
     try:
         UUID(str(id))
@@ -763,8 +764,9 @@ def request(verb, path, session=None, raw=False, format='auto', **kwargs):
     raw : bool
         Deprecated. Whether to return the raw `Response` object.
         Defaults to False.
-    format : {'auto', 'response', 'content', 'json', 'text'}
+    format : {'auto', 'rest', 'response', 'content', 'json', 'text'}
         The format of the return response.  Defaults to `auto`.
+        rest: `RestObj` constructed from JSON.
         response: the raw `Response` object.
         content: Response.content
         json: Response.json()
@@ -790,7 +792,7 @@ def request(verb, path, session=None, raw=False, format='auto', **kwargs):
         format = 'response'
 
     format = 'auto' if format is None else str(format).lower()
-    if format not in ('auto', 'response', 'content', 'text', 'json'):
+    if format not in ('auto', 'response', 'content', 'text', 'json', 'rest'):
         raise ValueError
 
     response = session.request(verb, path, **kwargs)
@@ -819,7 +821,10 @@ def request(verb, path, session=None, raw=False, format='auto', **kwargs):
                 obj._headers = response.headers
             return obj
         except ValueError:
-            return response.text
+            if format == 'rest':
+                return RestObj()
+            else:
+                return response.text
 
 
 def get_link(obj, rel):

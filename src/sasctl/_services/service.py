@@ -86,41 +86,12 @@ class Service(object):
         -------
 
         """
-        # session = session or core.current_session()
-        #
-        # if session is None:
-        #     raise TypeError('No `Session` instance found.')
-
         if path.startswith('/'):
             path = cls._SERVICE_ROOT + path
         else:
             path = cls._SERVICE_ROOT + '/' + path
 
         return core.request(verb, path, session, raw, format, **kwargs)
-        #
-        # response = session.request(verb, path, **kwargs)
-        #
-        # if 400 <= response.status_code <= 599:
-        #     raise HTTPError(response.url, response.status_code,
-        #                     response.text, response.headers, None)
-        #
-        # if raw:
-        #     return response
-        #
-        # try:
-        #     if raw:
-        #         return response.json()
-        #     else:
-        #         obj = core._unwrap(response.json())
-        #
-        #         # ETag is required to update any object
-        #         # May not be returned on all responses (e.g. listing
-        #         # multiple objects)
-        #         if isinstance(obj, core.RestObj):
-        #             obj._headers = response.headers
-        #         return obj
-        # except ValueError:
-        #     return response.text
 
     @classmethod
     def get(self, *args, **kwargs):
