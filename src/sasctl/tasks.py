@@ -262,7 +262,7 @@ def register_model(model, name, project, repository=None, input=None,
 
             model['outputVariables'] = \
                 [var.as_model_metadata() for var in mas_module.variables
-                 if var.out and var.name not in ('rc', 'msg')]
+                 if var.out]
         except ValueError:
             # PyMAS creation failed, most likely because input data wasn't
             # provided
