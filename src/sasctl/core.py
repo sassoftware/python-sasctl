@@ -387,7 +387,6 @@ class Session(requests.Session):
     def hostname(self):
         return self._settings.get('domain')
 
-
     def send(self, request, **kwargs):
         if self.message_log.isEnabledFor(logging.DEBUG):
             r = copy.deepcopy(request)
