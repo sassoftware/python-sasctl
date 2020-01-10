@@ -2,11 +2,13 @@ Unreleased
 ----------
 **Improvements**
  - Registered Python models will now include both `predict` and `predict_proba` methods. 
-
+ - Added a new Relationships service for managing links between objects. 
+ 
 **Changes**
  - Replaced the `raw` parameter of the `request` methods with a `format` parameter, allowing more control over the
    returned value.
- 
+ - The `get_file_content` method of the Files service now returns the actual content instead of the file metadata.
+
 v1.4.5 (2019-12-5)
 ------------------
 **Changes**
