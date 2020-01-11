@@ -362,6 +362,16 @@ def _get_model_properties(result):
         else:
             function = 'Prediction'
             target = regression_target(result)
+    elif algorithm == 'svmachine':
+        algorithm = 'Support vector machine'
+        tool = 'SAS Visual Data Mining and Machine Learning'
+
+        if 'Classification' in result.InputVariables.Type.values:
+            function = 'Classification'
+            target = classification_target(result)
+        else:
+            function = 'Prediction'
+            target = regression_target(result)
     else:
         algorithm = None
         function = None

@@ -13,9 +13,7 @@ import six
 # clustering        (fastKnn)
 # gb
 # tree
-# svm           (svm.svmTrain)
 # svdd?
-# neural
 # deep neural
 # bayes net
 # factmac
@@ -27,6 +25,7 @@ from sasctl.utils.astore import _get_model_properties
 
 @pytest.fixture
 def boston_dataset():
+    """Regression dataset."""
     import pandas as pd
     from sklearn import datasets
 
@@ -35,9 +34,23 @@ def boston_dataset():
     df['Price'] = raw.target
     return df
 
+@pytest.fixture
+def cancer_dataset():
+    """Binary classification dataset."""
+    import pandas as pd
+    from sklearn import datasets
+
+    raw = datasets.load_breast_cancer()
+    df = pd.DataFrame(raw.data, columns=raw.feature_names)
+    df['Type'] = raw.target
+    df.Type = df.Type.astype('category')
+    df.Type.cat.categories = raw.target_names
+    return df
+
 
 @pytest.fixture
 def iris_dataset():
+    """Multi-class classification dataset."""
     import pandas as pd
     from sklearn import datasets
 
@@ -259,3 +272,51 @@ def test_neuralnet_regression(cas_session, boston_dataset):
         assert props[k] == v
 
 
+def test_svm_classification(cas_session, cancer_dataset):
+    target = {
+        'tool': 'SAS Visual Data Mining and Machine Learning',
+        'targetVariable': 'Type',
+        'scoreCodeType': 'ds2MultiType',
+        'function': 'Classification',
+        'algorithm': 'Support vector machine'
+    }
+
+    cas_session.loadactionset('svm')
+    cas_session.loadactionset('astore')
+
+    tbl = cas_session.upload(cancer_dataset).casTable
+
+    tbl.svm.svmTrain(target='Type',
+                     inputs=list(cancer_dataset.columns[:-1]),
+                     saveState='astore')
+
+    desc = cas_session.astore.describe(rstore='astore', epcode=True)
+    props = _get_model_properties(desc)
+
+    for k, v in six.iteritems(target):
+        assert props[k] == v
+
+
+def test_svm_regression(cas_session, boston_dataset):
+    target = {
+        'tool': 'SAS Visual Data Mining and Machine Learning',
+        'targetVariable': 'Price',
+        'scoreCodeType': 'ds2MultiType',
+        'function': 'Prediction',
+        'algorithm': 'Support vector machine'
+    }
+
+    cas_session.loadactionset('svm')
+    cas_session.loadactionset('astore')
+
+    tbl = cas_session.upload(boston_dataset).casTable
+
+    tbl.svm.svmTrain(target='Price',
+                     inputs=list(boston_dataset.columns[:-1]),
+                     saveState='astore')
+
+    desc = cas_session.astore.describe(rstore='astore', epcode=True)
+    props = _get_model_properties(desc)
+
+    for k, v in six.iteritems(target):
+        assert props[k] == v
