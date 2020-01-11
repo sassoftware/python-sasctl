@@ -11,9 +11,7 @@ import six
 
 # general additive model  (gamSelect)
 # clustering        (fastKnn)
-# logistic          (regression.logistic)
 # gb
-# random forsest
 # tree
 # svm           (svm.svmTrain)
 # svdd?
@@ -117,7 +115,12 @@ def test_dtree_regression(cas_session, boston_dataset):
 
     tbl.decisiontree.dtreetrain(target='Price',
                                 inputs=list(boston_dataset.columns[:-1]),
-                                savestate='astore')
+                                casout='tree')
+
+    pytest.skip('Implement.  How to get an astore?')
+
+    cas_session.decisiontree.dtreeExportModel(modelTable='tree',
+                                         casout='astore')
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
@@ -223,3 +226,36 @@ def test_gradboost_regression(cas_session, boston_dataset):
 
     for k, v in six.iteritems(target):
         assert props[k] == v
+
+
+def test_neuralnet_regression(cas_session, boston_dataset):
+    target = {
+        'tool': 'SAS Visual Data Mining and Machine Learning',
+        'targetVariable': 'Price',
+        'scoreCodeType': 'ds2MultiType',
+        'function': 'Prediction',
+        'algorithm': 'Neural network'
+    }
+
+    cas_session.loadactionset('neuralnet')
+    cas_session.loadactionset('astore')
+
+    tbl = cas_session.upload(boston_dataset).casTable
+
+    tbl.neuralNet.annTrain(target='Price',
+                           inputs=list(boston_dataset.columns[:-1]),
+                           # modelTable='network',
+                           arch='MLP',
+                           hiddens=[2],
+                           combs=['linear'],
+                           casout='network')
+                           # savestate='astore')
+
+    pytest.skip('Implement.  How to get an astore?')
+    desc = cas_session.astore.describe(rstore='astore', epcode=True)
+    props = _get_model_properties(desc)
+
+    for k, v in six.iteritems(target):
+        assert props[k] == v
+
+
