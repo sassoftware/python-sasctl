@@ -11,7 +11,6 @@ import shutil
 import tempfile
 import uuid
 import zipfile
-from collections import defaultdict
 
 import six
 
@@ -312,13 +311,6 @@ def get_variable_properties(var):
 
 
 def _get_model_properties(result):
-    algorithm_mapping = defaultdict(str,
-                                    forest='Random Forest',
-                                    glm='Linear Regression',
-                                    gradboost='Gradient Boosting',
-                                    logistic='Logistic Regression'
-                                    )
-
     properties = {
         "custom properties": [],
         "externalUrl": "",
