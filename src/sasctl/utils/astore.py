@@ -36,7 +36,6 @@ def create_package(table, input=None):
         otherwise a list of column types or a dictionary of column_name: type
         may be provided.
 
-
     Returns
     -------
     BytesIO
@@ -178,7 +177,6 @@ def create_files_from_astore(table):
     ----------
     table : swat.CASTable
         The CAS table containing the ASTORE.
-
 
     Returns
     -------
@@ -322,11 +320,53 @@ def _get_model_properties(result):
                                     )
 
     algorithm = result.Description[result.Description.Attribute == 'Analytic Engine']
-    algorithm = algorithm.Value.iloc[0] if len(algorithm) else None
-    algorithm = algorithm_mapping[algorithm]
+    algorithm = str(algorithm.Value.iloc[0]).lower() if len(algorithm) else None
 
-    target = result.InputVariables[result.InputVariables.Role == 'Target']
-    function = target.Type.iloc[0] if len(target) else None
+    def classification_target(r):
+        target = r.OutputVariables.Name.str.startswith('I_')
+        target = r.OutputVariables.Name[target].iloc[0]
+        return target.replace('I_', '', 1)
+
+    def regression_target(r):
+        target = r.OutputVariables.Name.str.startswith('P_')
+        target = r.OutputVariables.Name[target].iloc[0]
+        return target.replace('P_', '', 1)
+
+    if algorithm == 'glm':
+        algorithm = 'Linear regression'
+        tool = 'SAS Visual Analytics'
+        function = 'Prediction'
+        target = regression_target(result)
+    elif algorithm == 'logistic':
+        algorithm = 'Logistic regression'
+        tool = 'SAS Visual Analytics'
+        function = 'Classification'
+        target = classification_target(result)
+    elif algorithm == 'forest':
+        algorithm = 'Random forest'
+        tool = 'SAS Visual Data Mining and Machine Learning'
+
+        if 'Classification' in result.InputVariables.Type.values:
+            function = 'Classification'
+            target = classification_target(result)
+        else:
+            function = 'Prediction'
+            target = regression_target(result)
+    elif algorithm == 'gradboost':
+        algorithm = 'Gradient boosting'
+        tool = 'SAS Visual Data Mining and Machine Learning'
+
+        if 'Classification' in result.InputVariables.Type.values:
+            function = 'Classification'
+            target = classification_target(result)
+        else:
+            function = 'Prediction'
+            target = regression_target(result)
+    else:
+        algorithm = None
+        function = None
+        target = None
+        tool = None
 
     return {
         "custom properties": [],
@@ -334,9 +374,9 @@ def _get_model_properties(result):
         "trainTable": "",
         "trainCodeType": "",
         "description": "",
-        "tool": "",
+        "tool": tool,
         "toolVersion": "",
-        "targetVariable": "",
+        "targetVariable": target,
         "scoreCodeType": "ds2MultiType",
         "externalModelId": "",
         "function": function,
