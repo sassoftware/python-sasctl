@@ -325,7 +325,7 @@ def _get_model_properties(result):
         "trainTable": "",
         "trainCodeType": "",
         "description": "",
-        "tool": '',
+        "tool": 'SAS Visual Data Mining and Machine Learning',
         "toolVersion": "",
         "targetVariable": '',
         "scoreCodeType": "ds2MultiType",
@@ -366,7 +366,6 @@ def _get_model_properties(result):
 
     elif algorithm == 'forest':
         properties['algorithm'] = 'Random forest'
-        properties['tool'] = 'SAS Visual Data Mining and Machine Learning'
 
         if 'Classification' in result.InputVariables.Type.values:
             properties['function'] = 'Classification'
@@ -377,7 +376,6 @@ def _get_model_properties(result):
 
     elif algorithm == 'gradboost':
         properties['algorithm'] = 'Gradient boosting'
-        properties['tool'] = 'SAS Visual Data Mining and Machine Learning'
 
         if 'Classification' in result.InputVariables.Type.values:
             properties['function'] = 'Classification'
@@ -391,7 +389,6 @@ def _get_model_properties(result):
 
     elif algorithm == 'svmachine':
         properties['algorithm'] = 'Support vector machine'
-        properties['tool'] = 'SAS Visual Data Mining and Machine Learning'
 
         if 'Classification' in result.InputVariables.Type.values:
             properties['function'] = 'Classification'
@@ -400,6 +397,17 @@ def _get_model_properties(result):
         else:
             properties['function'] = 'Prediction'
             properties['targetVariable'] = regression_target(result)
+
+    elif algorithm == 'bnet':
+        properties['algorithm'] = 'Bayesian network'
+        properties['function'] = 'Classification'
+        properties['targetVariable'] = classification_target(result)
+
+        if result.OutputVariables.Name.str.startswith('P_').sum() == 2:
+            properties['targetLevel'] = 'Binary'
+
+    else:
+        properties['tool'] = ''
 
     return properties
 

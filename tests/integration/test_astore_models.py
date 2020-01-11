@@ -11,8 +11,6 @@ import six
 
 # general additive model  (gamSelect)
 # clustering        (fastKnn)
-# gb
-# tree
 # svdd?
 # deep neural
 # bayes net
@@ -342,6 +340,57 @@ def test_svm_regression(cas_session, boston_dataset):
     tbl.svm.svmTrain(target='Price',
                      inputs=list(boston_dataset.columns[:-1]),
                      saveState='astore')
+
+    desc = cas_session.astore.describe(rstore='astore', epcode=True)
+    props = _get_model_properties(desc)
+
+    for k, v in six.iteritems(target):
+        assert props[k] == v
+
+
+def test_bayesnet_binary_classification(cas_session, cancer_dataset):
+    target = {
+        'tool': 'SAS Visual Data Mining and Machine Learning',
+        'targetVariable': 'Type',
+        'scoreCodeType': 'ds2MultiType',
+        'function': 'Classification',
+        'algorithm': 'Bayesian network',
+        'targetLevel': 'Binary'
+    }
+
+    cas_session.loadactionset('bayesianNetClassifier')
+    cas_session.loadactionset('astore')
+
+    tbl = cas_session.upload(cancer_dataset).casTable
+
+    tbl.bayesianNetClassifier.bnet(target='Type',
+                                   inputs=list(cancer_dataset.columns[:-1]),
+                                   saveState='astore')
+
+    desc = cas_session.astore.describe(rstore='astore', epcode=True)
+    props = _get_model_properties(desc)
+
+    for k, v in six.iteritems(target):
+        assert props[k] == v
+
+
+def test_bayesnet_classification(cas_session, iris_dataset):
+    target = {
+        'tool': 'SAS Visual Data Mining and Machine Learning',
+        'targetVariable': 'Species',
+        'scoreCodeType': 'ds2MultiType',
+        'function': 'Classification',
+        'algorithm': 'Bayesian network'
+    }
+
+    cas_session.loadactionset('bayesianNetClassifier')
+    cas_session.loadactionset('astore')
+
+    tbl = cas_session.upload(iris_dataset).casTable
+
+    tbl.bayesianNetClassifier.bnet(target='Species',
+                                inputs=list(iris_dataset.columns[:-1]),
+                                savestate='astore')
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
