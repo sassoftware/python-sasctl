@@ -11,6 +11,7 @@ import shutil
 import tempfile
 import uuid
 import zipfile
+from collections import defaultdict
 
 import six
 
@@ -313,6 +314,20 @@ def get_variable_properties(var):
 
 
 def _get_model_properties(result):
+    algorithm_mapping = defaultdict(str,
+                                    forest='Random Forest',
+                                    glm='Linear Regression',
+                                    gradboost='Gradient Boosting',
+                                    logistic='Logistic Regression'
+                                    )
+
+    algorithm = result.Description[result.Description.Attribute == 'Analytic Engine']
+    algorithm = algorithm.Value.iloc[0] if len(algorithm) else None
+    algorithm = algorithm_mapping[algorithm]
+
+    target = result.InputVariables[result.InputVariables.Role == 'Target']
+    function = target.Type.iloc[0] if len(target) else None
+
     return {
         "custom properties": [],
         "externalUrl": "",
@@ -324,13 +339,13 @@ def _get_model_properties(result):
         "targetVariable": "",
         "scoreCodeType": "ds2MultiType",
         "externalModelId": "",
-        "function": "",
+        "function": function,
         "eventProbVar": "",
         "modeler": "",
         "name": "",
         "targetEvent": "",
         "targetLevel": "",
-        "algorithm": ""
+        "algorithm": algorithm
     }
 
 
