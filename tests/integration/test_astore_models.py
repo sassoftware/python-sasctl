@@ -191,6 +191,33 @@ def test_forest_regression(cas_session, boston_dataset):
     for k, v in six.iteritems(target):
         assert props[k] == v
 
+
+def test_gradboost_binary_classification(cas_session, cancer_dataset):
+    target = {
+        'tool': 'SAS Visual Data Mining and Machine Learning',
+        'targetVariable': 'Type',
+        'scoreCodeType': 'ds2MultiType',
+        'function': 'Classification',
+        'algorithm': 'Gradient boosting',
+        'targetLevel': 'Binary'
+    }
+
+    cas_session.loadactionset('decisiontree')
+    cas_session.loadactionset('astore')
+
+    tbl = cas_session.upload(cancer_dataset).casTable
+
+    tbl.decisiontree.gbtreetrain(target='Type',
+                                 inputs=list(cancer_dataset.columns[:-1]),
+                                 savestate='astore')
+
+    desc = cas_session.astore.describe(rstore='astore', epcode=True)
+    props = _get_model_properties(desc)
+
+    for k, v in six.iteritems(target):
+        assert props[k] == v
+
+
 def test_gradboost_classification(cas_session, iris_dataset):
     target = {
         'tool': 'SAS Visual Data Mining and Machine Learning',
@@ -278,7 +305,8 @@ def test_svm_classification(cas_session, cancer_dataset):
         'targetVariable': 'Type',
         'scoreCodeType': 'ds2MultiType',
         'function': 'Classification',
-        'algorithm': 'Support vector machine'
+        'algorithm': 'Support vector machine',
+        'targetLevel': 'Binary'
     }
 
     cas_session.loadactionset('svm')

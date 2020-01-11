@@ -319,6 +319,26 @@ def _get_model_properties(result):
                                     logistic='Logistic Regression'
                                     )
 
+    properties = {
+        "custom properties": [],
+        "externalUrl": "",
+        "trainTable": "",
+        "trainCodeType": "",
+        "description": "",
+        "tool": '',
+        "toolVersion": "",
+        "targetVariable": '',
+        "scoreCodeType": "ds2MultiType",
+        "externalModelId": "",
+        "function": '',
+        "eventProbVar": "",
+        "modeler": "",
+        "name": "",
+        "targetEvent": "",
+        "targetLevel": "",
+        "algorithm": ''
+    }
+
     algorithm = result.Description[result.Description.Attribute == 'Analytic Engine']
     algorithm = str(algorithm.Value.iloc[0]).lower() if len(algorithm) else None
 
@@ -333,70 +353,55 @@ def _get_model_properties(result):
         return target.replace('P_', '', 1)
 
     if algorithm == 'glm':
-        algorithm = 'Linear regression'
-        tool = 'SAS Visual Analytics'
-        function = 'Prediction'
-        target = regression_target(result)
+        properties['algorithm'] = 'Linear regression'
+        properties['tool'] = 'SAS Visual Analytics'
+        properties['function'] = 'Prediction'
+        properties['targetVariable'] = regression_target(result)
+
     elif algorithm == 'logistic':
-        algorithm = 'Logistic regression'
-        tool = 'SAS Visual Analytics'
-        function = 'Classification'
-        target = classification_target(result)
+        properties['algorithm'] = 'Logistic regression'
+        properties['tool'] = 'SAS Visual Analytics'
+        properties['function'] = 'Classification'
+        properties['targetVariable'] = classification_target(result)
+
     elif algorithm == 'forest':
-        algorithm = 'Random forest'
-        tool = 'SAS Visual Data Mining and Machine Learning'
+        properties['algorithm'] = 'Random forest'
+        properties['tool'] = 'SAS Visual Data Mining and Machine Learning'
 
         if 'Classification' in result.InputVariables.Type.values:
-            function = 'Classification'
-            target = classification_target(result)
+            properties['function'] = 'Classification'
+            properties['targetVariable'] = classification_target(result)
         else:
-            function = 'Prediction'
-            target = regression_target(result)
+            properties['function'] = 'Prediction'
+            properties['targetVariable'] = regression_target(result)
+
     elif algorithm == 'gradboost':
-        algorithm = 'Gradient boosting'
-        tool = 'SAS Visual Data Mining and Machine Learning'
+        properties['algorithm'] = 'Gradient boosting'
+        properties['tool'] = 'SAS Visual Data Mining and Machine Learning'
 
         if 'Classification' in result.InputVariables.Type.values:
-            function = 'Classification'
-            target = classification_target(result)
+            properties['function'] = 'Classification'
+            properties['targetVariable'] = classification_target(result)
+
+            if result.OutputVariables.Name.str.startswith('P_').sum() == 2:
+                properties['targetLevel'] = 'Binary'
         else:
-            function = 'Prediction'
-            target = regression_target(result)
+            properties['function'] = 'Prediction'
+            properties['targetVariable'] = regression_target(result)
+
     elif algorithm == 'svmachine':
-        algorithm = 'Support vector machine'
-        tool = 'SAS Visual Data Mining and Machine Learning'
+        properties['algorithm'] = 'Support vector machine'
+        properties['tool'] = 'SAS Visual Data Mining and Machine Learning'
 
         if 'Classification' in result.InputVariables.Type.values:
-            function = 'Classification'
-            target = classification_target(result)
+            properties['function'] = 'Classification'
+            properties['targetVariable'] = classification_target(result)
+            properties['targetLevel'] = 'Binary'
         else:
-            function = 'Prediction'
-            target = regression_target(result)
-    else:
-        algorithm = None
-        function = None
-        target = None
-        tool = None
+            properties['function'] = 'Prediction'
+            properties['targetVariable'] = regression_target(result)
 
-    return {
-        "custom properties": [],
-        "externalUrl": "",
-        "trainTable": "",
-        "trainCodeType": "",
-        "description": "",
-        "tool": tool,
-        "toolVersion": "",
-        "targetVariable": target,
-        "scoreCodeType": "ds2MultiType",
-        "externalModelId": "",
-        "function": function,
-        "eventProbVar": "",
-        "modeler": "",
-        "name": "",
-        "targetEvent": "",
-        "targetLevel": "",
-        "algorithm": algorithm
-    }
+    return properties
 
 
 def _generate_package_code(result):
