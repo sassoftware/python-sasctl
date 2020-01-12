@@ -2,7 +2,9 @@ Unreleased
 ----------
 **Improvements**
  - Registered Python models will now include both `predict` and `predict_proba` methods. 
- - Added a new Relationships service for managing links between objects. 
+ - Added a new Relationships service for managing links between objects.
+ - Added a new Reports service for retrieving SAS Visual Analytics reports.
+ - Added a new Report_Images service for rendering content from reports. 
  - Additional metadata fields are set when registering an ASTORE model.
  
 **Changes**
