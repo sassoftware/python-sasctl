@@ -73,10 +73,21 @@ betamax.Betamax.register_request_matcher(PartialBodyMatcher)
 # Replay cassettes only by default
 # Can be overridden as necessary to update cassettes
 # See https://betamax.readthedocs.io/en/latest/record_modes.html for details.
+# NOTE: We've added a custom "live" record mode that bypasses all cassettes
+#       and allows test suite to be run against a live server.
 os.environ.setdefault('SASCTL_RECORD_MODE', 'once')
 if os.environ['SASCTL_RECORD_MODE'] \
-        not in ('once', 'new_episodes', 'all', 'none'):
+        not in ('once', 'new_episodes', 'all', 'none', 'live'):
     os.environ['SASCTL_RECORD_MODE'] = 'once'
+
+# Set a flag to indicate whether bypassing Betamax altogether.
+if os.environ['SASCTL_RECORD_MODE'].lower() == 'live':
+    SKIP_REPLAY = True
+
+    # Setting this back to a valid Betamax value to avoid downstream errors.
+    os.environ['SASCTL_RECORD_MODE'] = 'once'
+else:
+    SKIP_REPLAY = False
 
 with betamax.Betamax.configure() as config:
     config.cassette_library_dir = "tests/cassettes"
@@ -135,6 +146,11 @@ def session(request, credentials):
     from six.moves import mock
     from betamax.fixtures.pytest import _casette_name
     from sasctl import current_session
+
+    if SKIP_REPLAY:
+        yield Session(**credentials)
+        current_session(None)
+        return
 
     # Ignore FutureWarnings from betamax to avoid cluttering test results
     with warnings.catch_warnings():
@@ -210,6 +226,14 @@ def cas_session(request, credentials):
     from betamax.fixtures.pytest import _casette_name
     from six.moves import mock
     swat = pytest.importorskip('swat')
+
+    if SKIP_REPLAY:
+        with swat.CAS('https://{}/cas-shared-default-http/'.format(
+                credentials['hostname']),
+                username=credentials['username'],
+                password=credentials['password']) as s:
+            yield s
+        return
 
     # Ignore FutureWarnings from betamax to avoid cluttering test results
     with warnings.catch_warnings():
