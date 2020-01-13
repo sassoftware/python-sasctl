@@ -27,7 +27,7 @@ def test_glm(cas_session, boston_dataset):
         'tool': 'SAS Visual Analytics',
         'targetVariable': 'Price',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Prediction',
+        'function': 'prediction',
         'algorithm': 'Linear regression'
     }
 
@@ -52,7 +52,7 @@ def test_logistic(cas_session, iris_dataset):
         'tool': 'SAS Visual Analytics',
         'targetVariable': 'Species',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Classification',
+        'function': 'classification',
         'algorithm': 'Logistic regression'
     }
 
@@ -77,7 +77,7 @@ def test_dtree_regression(cas_session, boston_dataset):
         'tool': 'SAS Visual Analytics',
         'targetVariable': 'Price',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Prediction',
+        'function': 'prediction',
         'algorithm': 'Decision tree'
     }
 
@@ -107,7 +107,7 @@ def test_forest_classification(cas_session, iris_dataset):
         'tool': 'SAS Visual Data Mining and Machine Learning',
         'targetVariable': 'Species',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Classification',
+        'function': 'classification',
         'algorithm': 'Random forest'
     }
 
@@ -132,7 +132,7 @@ def test_forest_regression(cas_session, boston_dataset):
         'tool': 'SAS Visual Data Mining and Machine Learning',
         'targetVariable': 'Price',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Prediction',
+        'function': 'prediction',
         'algorithm': 'Random forest'
     }
 
@@ -157,9 +157,9 @@ def test_gradboost_binary_classification(cas_session, cancer_dataset):
         'tool': 'SAS Visual Data Mining and Machine Learning',
         'targetVariable': 'Type',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Classification',
+        'function': 'classification',
         'algorithm': 'Gradient boosting',
-        'targetLevel': 'Binary'
+        'targetLevel': 'binary'
     }
 
     cas_session.loadactionset('decisiontree')
@@ -183,7 +183,7 @@ def test_gradboost_classification(cas_session, iris_dataset):
         'tool': 'SAS Visual Data Mining and Machine Learning',
         'targetVariable': 'Species',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Classification',
+        'function': 'classification',
         'algorithm': 'Gradient boosting'
     }
 
@@ -208,7 +208,7 @@ def test_gradboost_regression(cas_session, boston_dataset):
         'tool': 'SAS Visual Data Mining and Machine Learning',
         'targetVariable': 'Price',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Prediction',
+        'function': 'prediction',
         'algorithm': 'Gradient boosting'
     }
 
@@ -233,7 +233,7 @@ def test_neuralnet_regression(cas_session, boston_dataset):
         'tool': 'SAS Visual Data Mining and Machine Learning',
         'targetVariable': 'Price',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Prediction',
+        'function': 'prediction',
         'algorithm': 'Neural network'
     }
 
@@ -264,9 +264,9 @@ def test_svm_classification(cas_session, cancer_dataset):
         'tool': 'SAS Visual Data Mining and Machine Learning',
         'targetVariable': 'Type',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Classification',
+        'function': 'classification',
         'algorithm': 'Support vector machine',
-        'targetLevel': 'Binary'
+        'targetLevel': 'binary'
     }
 
     cas_session.loadactionset('svm')
@@ -290,7 +290,7 @@ def test_svm_regression(cas_session, boston_dataset):
         'tool': 'SAS Visual Data Mining and Machine Learning',
         'targetVariable': 'Price',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Prediction',
+        'function': 'prediction',
         'algorithm': 'Support vector machine'
     }
 
@@ -315,9 +315,9 @@ def test_bayesnet_binary_classification(cas_session, cancer_dataset):
         'tool': 'SAS Visual Data Mining and Machine Learning',
         'targetVariable': 'Type',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Classification',
+        'function': 'classification',
         'algorithm': 'Bayesian network',
-        'targetLevel': 'Binary'
+        'targetLevel': 'binary'
     }
 
     cas_session.loadactionset('bayesianNetClassifier')
@@ -341,7 +341,7 @@ def test_bayesnet_classification(cas_session, iris_dataset):
         'tool': 'SAS Visual Data Mining and Machine Learning',
         'targetVariable': 'Species',
         'scoreCodeType': 'ds2MultiType',
-        'function': 'Classification',
+        'function': 'classification',
         'algorithm': 'Bayesian network'
     }
 

@@ -167,9 +167,12 @@ class TestPickleFile:
 
         # Betamax recording seems to add 4 extra bytes to the beginning?
         # Doesn't occur during real requests.
-        content = content[4:]
+        try:
+            result = pickle.loads(content)
+        except pickle.UnpicklingError:
+            result = pickle.loads(content[4:])
 
-        assert target == pickle.loads(content)
+        assert target == result
 
     def test_delete_file_with_name(self):
         """Delete previously created file."""
