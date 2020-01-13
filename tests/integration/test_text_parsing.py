@@ -46,17 +46,6 @@ def test_from_table(cas_session, airline_dataset):
     assert_job_succeeds(job)
 
 
-# def test_parsing_input_table():
-#     from sasctl.services import cas_management as cm
-#
-#     input = cm.get_table('COMPLAINTS', 'Public')
-#     job = tp.parse_documents(input,
-#                              id_column='__uniqueid__',
-#                              text_column='Consumer_complaint_narrative')
-#
-#     assert_job_succeeds(job)
-
-
 def test_parsing_inline_docs():
     from sasctl.services import cas_management as cm
 
