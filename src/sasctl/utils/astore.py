@@ -347,56 +347,56 @@ def _get_model_properties(result):
     if algorithm == 'glm':
         properties['algorithm'] = 'Linear regression'
         properties['tool'] = 'SAS Visual Analytics'
-        properties['function'] = 'Prediction'
+        properties['function'] = 'prediction'
         properties['targetVariable'] = regression_target(result)
 
     elif algorithm == 'logistic':
         properties['algorithm'] = 'Logistic regression'
         properties['tool'] = 'SAS Visual Analytics'
-        properties['function'] = 'Classification'
+        properties['function'] = 'classification'
         properties['targetVariable'] = classification_target(result)
 
     elif algorithm == 'forest':
         properties['algorithm'] = 'Random forest'
 
         if 'Classification' in result.InputVariables.Type.values:
-            properties['function'] = 'Classification'
+            properties['function'] = 'classification'
             properties['targetVariable'] = classification_target(result)
         else:
-            properties['function'] = 'Prediction'
+            properties['function'] = 'prediction'
             properties['targetVariable'] = regression_target(result)
 
     elif algorithm == 'gradboost':
         properties['algorithm'] = 'Gradient boosting'
 
         if 'Classification' in result.InputVariables.Type.values:
-            properties['function'] = 'Classification'
+            properties['function'] = 'classification'
             properties['targetVariable'] = classification_target(result)
 
             if result.OutputVariables.Name.str.startswith('P_').sum() == 2:
-                properties['targetLevel'] = 'Binary'
+                properties['targetLevel'] = 'binary'
         else:
-            properties['function'] = 'Prediction'
+            properties['function'] = 'prediction'
             properties['targetVariable'] = regression_target(result)
 
     elif algorithm == 'svmachine':
         properties['algorithm'] = 'Support vector machine'
 
         if 'Classification' in result.InputVariables.Type.values:
-            properties['function'] = 'Classification'
+            properties['function'] = 'classification'
             properties['targetVariable'] = classification_target(result)
-            properties['targetLevel'] = 'Binary'
+            properties['targetLevel'] = 'binary'
         else:
-            properties['function'] = 'Prediction'
+            properties['function'] = 'prediction'
             properties['targetVariable'] = regression_target(result)
 
     elif algorithm == 'bnet':
         properties['algorithm'] = 'Bayesian network'
-        properties['function'] = 'Classification'
+        properties['function'] = 'classification'
         properties['targetVariable'] = classification_target(result)
 
         if result.OutputVariables.Name.str.startswith('P_').sum() == 2:
-            properties['targetLevel'] = 'Binary'
+            properties['targetLevel'] = 'binary'
 
     else:
         properties['tool'] = ''
