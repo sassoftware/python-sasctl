@@ -30,15 +30,31 @@ def assert_job_succeeds(job):
     assert state == 'completed'
 
 
-def test_parsing_input_table():
+def test_from_table(cas_session, airline_dataset):
+    TABLE_NAME = 'airline_tweets'
+    cas_session.upload(airline_dataset, casout=dict(name=TABLE_NAME,
+                                                    replace=True))
     from sasctl.services import cas_management as cm
 
-    input = cm.get_table('COMPLAINTS', 'Public')
+    cas_session.table.promote(TABLE_NAME, targetlib='Public')
+
+    input = cm.get_table(TABLE_NAME, 'Public')
     job = tp.parse_documents(input,
-                             id_column='__uniqueid__',
-                             text_column='Consumer_complaint_narrative')
+                             id_column='tweet_id',
+                             text_column='text')
 
     assert_job_succeeds(job)
+
+
+# def test_parsing_input_table():
+#     from sasctl.services import cas_management as cm
+#
+#     input = cm.get_table('COMPLAINTS', 'Public')
+#     job = tp.parse_documents(input,
+#                              id_column='__uniqueid__',
+#                              text_column='Consumer_complaint_narrative')
+#
+#     assert_job_succeeds(job)
 
 
 def test_parsing_inline_docs():
