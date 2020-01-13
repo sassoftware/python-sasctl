@@ -21,44 +21,6 @@ import six
 from sasctl.utils.astore import _get_model_properties
 
 
-@pytest.fixture
-def boston_dataset():
-    """Regression dataset."""
-    import pandas as pd
-    from sklearn import datasets
-
-    raw = datasets.load_boston()
-    df = pd.DataFrame(raw.data, columns=raw.feature_names)
-    df['Price'] = raw.target
-    return df
-
-@pytest.fixture
-def cancer_dataset():
-    """Binary classification dataset."""
-    import pandas as pd
-    from sklearn import datasets
-
-    raw = datasets.load_breast_cancer()
-    df = pd.DataFrame(raw.data, columns=raw.feature_names)
-    df['Type'] = raw.target
-    df.Type = df.Type.astype('category')
-    df.Type.cat.categories = raw.target_names
-    return df
-
-
-@pytest.fixture
-def iris_dataset():
-    """Multi-class classification dataset."""
-    import pandas as pd
-    from sklearn import datasets
-
-    raw = datasets.load_iris()
-    df = pd.DataFrame(raw.data, columns=raw.feature_names)
-    df['Species'] = raw.target
-    df.Species = df.Species.astype('category')
-    df.Species.cat.categories = raw.target_names
-    return df
-
 
 def test_glm(cas_session, boston_dataset):
     target = {
