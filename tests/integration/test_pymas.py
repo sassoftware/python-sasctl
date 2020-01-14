@@ -435,30 +435,30 @@ def test_with_sklearn_pipeline(train_data, sklearn_pipeline):
     assert isinstance(p, PyMAS)
     assert len(p.variables) > 4  # 4 input features in Iris data set
 
+
 @pytest.mark.usefixtures('session')
-def test_publish_and_execute(tmpdir):
+def test_publish_and_execute(tmpdir, boston_dataset):
     import pickle
     from sasctl.utils.pymas import from_pickle
     from sasctl.services import microanalytic_score as mas
-
-    sklearn = pytest.importorskip('sklearn')
-    from sklearn import datasets
     from sklearn.linear_model import LinearRegression
-    pd = pytest.importorskip('pandas')
-    data = sklearn.datasets.load_boston()
-    X = pd.DataFrame(data.data, columns=data.feature_names)
-    y = pd.DataFrame(data.target, columns=['Price'])
+
+    X = boston_dataset[boston_dataset.columns[:-1]]
+    y = boston_dataset[boston_dataset.columns[-1]]
 
     lm = LinearRegression()
     lm.fit(X, y)
     pkl = pickle.dumps(lm)
     p = from_pickle(pkl, 'predict', X, array_input=True)
 
-    mas.create_module('sasctl_test', source=p.score_code(), language='ds2')
-    x1 = {k.lower(): v for k, v in X.iloc[0, :].items()}
-    result = mas.execute_module_step('sasctl_test', 'score', **x1)
+    # Generate the score code & publish as a model
+    code = p.score_code()
+    mas.create_module('sasctl_test', source=code, language='ds2')
 
-    assert result['rc'] == 0
-    assert round(result['var1'], 2) == 30.29
-    assert result['msg'] is None
+    x1 = {k.lower(): v for k, v in X.iloc[0, :].items()}
+    result = mas.execute_module_step('sasctl_test', 'predict', **x1)
+
+    assert round(result['var1'], 3) == 30.004
+
+    mas.delete_module('sasctl_test')
 

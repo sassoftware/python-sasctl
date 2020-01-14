@@ -316,7 +316,8 @@ def airline_dataset():
 @pytest.fixture
 def boston_dataset():
     """Regression dataset."""
-    import pandas as pd
+    pytest.importorskip('sklearn')
+    pd = pytest.importorskip('pandas')
     from sklearn import datasets
 
     raw = datasets.load_boston()
@@ -324,10 +325,12 @@ def boston_dataset():
     df['Price'] = raw.target
     return df
 
+
 @pytest.fixture
 def cancer_dataset():
     """Binary classification dataset."""
-    import pandas as pd
+    sklearn = pytest.importorskip('sklearn')
+    pd = pytest.importorskip('pandas')
     from sklearn import datasets
 
     raw = datasets.load_breast_cancer()
@@ -341,7 +344,8 @@ def cancer_dataset():
 @pytest.fixture
 def iris_dataset():
     """Multi-class classification dataset."""
-    import pandas as pd
+    sklearn = pytest.importorskip('sklearn')
+    pd = pytest.importorskip('pandas')
     from sklearn import datasets
 
     raw = datasets.load_iris()
