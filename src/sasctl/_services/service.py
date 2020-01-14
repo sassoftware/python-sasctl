@@ -41,8 +41,11 @@ class Service(object):
         bool
 
         """
-        response = cls.head('/', raw=True)
-        return response.status_code == 200
+        try:
+            response = cls.head('/', format='response')
+            return response.status_code == 200
+        except HTTPError:
+            return False
 
     @classmethod
     def info(cls):

@@ -52,8 +52,11 @@ def redact(interaction, cassette):
             old_text = match.group(group)
             cassette.placeholders.append(Placeholder(placeholder=placeholder, replace=old_text))
 
-    add_placeholder(r"(?<=&password=)([^&]*)\b", interaction.data['request']['body']['string'], '*****', 1)
-    add_placeholder('(?<=access_token":")[^"]*', interaction.data['response']['body']['string'], '[redacted]', 0)
+    if 'string' in interaction.data['request']['body']:
+        add_placeholder(r"(?<=&password=)([^&]*)\b", interaction.data['request']['body']['string'], '*****', 1)
+
+    if 'string' in interaction.data['response']['body']:
+        add_placeholder('(?<=access_token":")[^"]*', interaction.data['response']['body']['string'], '[redacted]', 0)
 
     for index, header in enumerate(interaction.data['request']['headers'].get('Authorization', [])):
         # Betamax tries to replace Placeholders on all headers.  Mixed str/bytes headers will cause Betamax to break.

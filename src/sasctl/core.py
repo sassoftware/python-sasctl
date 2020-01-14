@@ -895,6 +895,8 @@ def uri_as_str(obj):
         if isinstance(link, dict):
             return link.get('uri')
 
+    return obj
+
 
 def _unwrap(json):
     """Converts a JSON response to one or more `RestObj` instances.

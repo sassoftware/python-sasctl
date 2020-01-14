@@ -13,9 +13,9 @@ import pytest
 # Every test function in the module will automatically receive the session fixture
 pytestmark = pytest.mark.usefixtures('session')
 
-ASTORE_MODEL_NAME = 'Astore Model'
-SCIKIT_MODEL_NAME = 'Scikit Model'
-PROJECT_NAME = 'Test Project'
+ASTORE_MODEL_NAME = 'sasctl_testing Astore Model'
+SCIKIT_MODEL_NAME = 'sasctl_testing Scikit Model'
+PROJECT_NAME = 'sasctl_testing Task Project'
 
 
 @pytest.fixture
@@ -92,7 +92,7 @@ class TestModels:
                                force=True)
         assert isinstance(model, RestObj)
         assert SCIKIT_MODEL_NAME == model.name
-        assert 'classification' == model.function
+        assert 'classification' == model.function.lower()
         assert 'Logistic regression' == model.algorithm
         assert 'Python' == model.trainCodeType
         assert 'ds2MultiType' == model.scoreCodeType
@@ -128,7 +128,8 @@ class TestModels:
         assert 'predict_proba' in p.stepIds
 
         # MAS module should automatically have methods bound
-        assert callable(p.score)
+        assert callable(p.predict)
+        assert callable(p.predict_proba)
 
     def test_publish_sklearn_again(self):
         from sasctl.tasks import publish_model
@@ -143,25 +144,27 @@ class TestModels:
         # Publish should succeed with replace flag
         p = publish_model(model, 'maslocal', max_retries=100, replace=True)
 
-        # Score step should have been defined in the module
-        assert 'score' in p.stepIds
+        # Model functions should have been defined in the module
+        assert 'predict' in p.stepIds
+        assert 'predict_proba' in p.stepIds
 
         # MAS module should automatically have methods bound
-        assert callable(p.score)
+        assert callable(p.predict)
+        assert callable(p.predict_proba)
 
     def test_score_sklearn(self):
         from sasctl.services import microanalytic_score as mas
 
         m = mas.get_module(SCIKIT_MODEL_NAME.replace(' ', ''))
         m = mas.define_steps(m)
-        r = m.score(sepalwidth=1, sepallength=2, petallength=3, petalwidth=4)
+        r = m.predict(sepalwidth=1, sepallength=2, petallength=3, petalwidth=4)
         assert r == 'virginica'
 
 
 @pytest.mark.incremental
 class TestSklearnLinearModel:
-    MODEL_NAME = 'Scikit Linear Model'
-    PROJECT_NAME = 'Boston Housing'
+    MODEL_NAME = 'sasctl_testing Scikit Linear Model'
+    PROJECT_NAME = 'sasctl_testing Boston Housing'
 
     def test_register_model(self, sklearn_linear_model):
         from sasctl.tasks import register_model
@@ -178,7 +181,7 @@ class TestSklearnLinearModel:
 
         assert isinstance(model, RestObj)
         assert self.MODEL_NAME == model.name
-        assert 'prediction' == model.function
+        assert 'prediction' == model.function.lower()
         assert 'Linear regression' == model.algorithm
         assert 'Python' == model.trainCodeType
         assert 'ds2MultiType' == model.scoreCodeType

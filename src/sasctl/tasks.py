@@ -217,6 +217,9 @@ def register_model(model, name, project, repository=None, input=None,
                       'file': model_pkl,
                       'role': 'Python Pickle'})
 
+        target_funcs = [f for f in ('predict', 'predict_proba')
+                        if hasattr(model, f)]
+
         # Extract model properties
         model = _sklearn_to_dict(model)
         model['name'] = name
@@ -242,7 +245,7 @@ def register_model(model, name, project, repository=None, input=None,
 
         # Generate PyMAS wrapper
         try:
-            mas_module = from_pickle(model_pkl, 'predict',
+            mas_module = from_pickle(model_pkl, target_funcs,
                                      input_types=input, array_input=True)
             assert isinstance(mas_module, PyMAS)
 
