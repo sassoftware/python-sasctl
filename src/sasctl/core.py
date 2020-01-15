@@ -634,7 +634,22 @@ class Session(requests.Session):
 
 
 class PagingIterator:
-    """
+    """Iterate through a collection that must be "paged" from the server.
+
+    Parameters
+    ----------
+    obj : RestObj
+        An instance of `RestObj` containing any initial items and a link to
+        retrieve additional items.
+    session : Session
+        The `Session` instance to use for requesting additional items.  Defaults
+        to current_session()
+    threads : int
+        Number of threads allocated to downloading additional items.
+
+    Yields
+    ------
+    RestObj
 
     """
     def __init__(self, obj, session=None, threads=4):
@@ -688,7 +703,7 @@ class PagingIterator:
 
         # Format the link to retrieve desired batch
         link = self._next_link.format(start=start, limit=self._limit)
-        r = get(link, format='json', session=self._session)
+        r = get(link, raw=True, session=self._session)
         return (RestObj(item) for item in r['items'])
 
     def __iter__(self):
