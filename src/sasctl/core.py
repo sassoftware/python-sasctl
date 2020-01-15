@@ -4,6 +4,7 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import concurrent.futures
 import copy
 import logging
 import json
@@ -13,6 +14,7 @@ import re
 import ssl
 import sys
 import warnings
+from collections import deque
 from uuid import UUID, uuid4
 
 import requests, requests.exceptions
@@ -629,6 +631,87 @@ class Session(requests.Session):
             username=self.username,
             protocol=self._settings.get('protocol'),
             verify=self.verify))
+
+
+class PagingIterator:
+    """
+
+    """
+    def __init__(self, obj, session=None, threads=4):
+        # Total number of items to iterate over
+        self._count = obj.count
+
+        self.__queue = deque()
+        self._num_threads = threads
+
+        # Session to use when requesting items
+        self._session = session or current_session()
+
+        link = get_link(obj, 'next')
+
+        # Dissect the "next" link so it can be reformatted and used by
+        # parallel threads
+        if link is not None:
+            link = link['href']
+            start = re.search('(?<=start=)[\d]+', link)
+            limit = re.search('(?<=limit=)[\d]+', link)
+
+            # Construct a new link with format params
+            # Result is "/spam/spam?start={start}&limit={limit}"
+            link = link[:start.start()] + '{start}' \
+                   + link[start.end():limit.start()] \
+                   + '{limit}' + link[limit.end():]
+
+            self._start = int(start.group())
+            self._limit = int(limit.group())
+
+            # Length at which to beging requesting new items from the server
+            self._min_queue_len = self._limit
+
+        self._next_link = link
+
+        # Store the current items to iterate over
+        for item in obj['items']:
+            self.__queue.appendleft(RestObj(item))
+
+    def __len__(self):
+        return self._count
+
+    def _request_async(self, start):
+        """Used by worker threads to retrieve next batch of items."""
+
+        if self._next_link is None:
+            return []
+
+        # Format the link to retrieve desired batch
+        link = self._next_link.format(start=start, limit=self._limit)
+        r = get(link, format='json', session=self._session)
+        return (RestObj(item) for item in r['items'])
+
+    def __iter__(self):
+        new_items = []
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=self._num_threads) as executor:
+            while len(self.__queue):
+                # Return the next item
+                yield self.__queue.pop()
+
+                if len(self.__queue) < self._min_queue_len and self._start < self._count and len(new_items) < self._num_threads:
+                    print('Requesting items starting from %s.' % self._start)
+                    new_items.append(executor.submit(self._request_async, self._start))
+                    self._start += self._limit
+
+                # Wait for the queue to refill if it's empty to avoid
+                # terminating the iterator early
+                if len(self.__queue) == 0 and len(new_items) > 0:
+                    print('Waiting on items...')
+                    concurrent.futures.wait(new_items)
+
+                # If new items have been retrieved, add them to the queue
+                if len(new_items) > 0 and new_items[0].done():
+                    items = new_items.pop(0)
+                    self.__queue.extendleft(items.result())
+
 
 def is_uuid(id):
     try:
