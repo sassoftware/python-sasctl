@@ -41,8 +41,11 @@ class Service(object):
         bool
 
         """
-        response = cls.head('/', raw=True)
-        return response.status_code == 200
+        try:
+            response = cls.head('/', format='response')
+            return response.status_code == 200
+        except HTTPError:
+            return False
 
     @classmethod
     def info(cls):
@@ -56,7 +59,7 @@ class Service(object):
         return cls.get('/apiMeta')
 
     @classmethod
-    def request(cls, verb, path, session=None, raw=False, **kwargs):
+    def request(cls, verb, path, session=None, raw=False, format='auto', **kwargs):
         """Send an HTTP request with a session.
 
         Parameters
@@ -69,46 +72,29 @@ class Service(object):
         session : Session, optional
             Defaults to `current_session()`.
         raw : bool
-            Whether to return the raw `Response` object.  Defaults to False.
+            Deprecated. Whether to return the raw `Response` object.
+            Defaults to False.
+        format : {'auto', 'response', 'content', 'json', 'text'}
+            The format of the return response.  Defaults to `auto`.
+            response: the raw `Response` object.
+            content: Response.content
+            json: Response.json()
+            text: Response.text
+            auto: `RestObj` constructed from JSON if possible, otherwise same as
+                  `text`.
         kwargs : any
+            Additional arguments are passed to the session `request` method.
 
         Returns
         -------
 
         """
-        session = session or core.current_session()
-
-        if session is None:
-            raise TypeError('No `Session` instance found.')
-
         if path.startswith('/'):
             path = cls._SERVICE_ROOT + path
         else:
             path = cls._SERVICE_ROOT + '/' + path
 
-        response = session.request(verb, path, **kwargs)
-
-        if 400 <= response.status_code <= 599:
-            raise HTTPError(response.url, response.status_code,
-                            response.text, response.headers, None)
-
-        if raw:
-            return response
-
-        try:
-            if raw:
-                return response.json()
-            else:
-                obj = core._unwrap(response.json())
-
-                # ETag is required to update any object
-                # May not be returned on all responses (e.g. listing
-                # multiple objects)
-                if isinstance(obj, core.RestObj):
-                    obj._headers = response.headers
-                return obj
-        except ValueError:
-            return response.text
+        return core.request(verb, path, session, raw, format, **kwargs)
 
     @classmethod
     def get(self, *args, **kwargs):

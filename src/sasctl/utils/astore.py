@@ -35,7 +35,6 @@ def create_package(table, input=None):
         otherwise a list of column types or a dictionary of column_name: type
         may be provided.
 
-
     Returns
     -------
     BytesIO
@@ -178,7 +177,6 @@ def create_files_from_astore(table):
     table : swat.CASTable
         The CAS table containing the ASTORE.
 
-
     Returns
     -------
     dict
@@ -313,25 +311,97 @@ def get_variable_properties(var):
 
 
 def _get_model_properties(result):
-    return {
+    properties = {
         "custom properties": [],
         "externalUrl": "",
         "trainTable": "",
         "trainCodeType": "",
         "description": "",
-        "tool": "",
+        "tool": 'SAS Visual Data Mining and Machine Learning',
         "toolVersion": "",
-        "targetVariable": "",
+        "targetVariable": '',
         "scoreCodeType": "ds2MultiType",
         "externalModelId": "",
-        "function": "",
+        "function": '',
         "eventProbVar": "",
         "modeler": "",
         "name": "",
         "targetEvent": "",
         "targetLevel": "",
-        "algorithm": ""
+        "algorithm": ''
     }
+
+    algorithm = result.Description[result.Description.Attribute == 'Analytic Engine']
+    algorithm = str(algorithm.Value.iloc[0]).lower() if len(algorithm) else None
+
+    def classification_target(r):
+        target = r.OutputVariables.Name.str.startswith('I_')
+        target = r.OutputVariables.Name[target].iloc[0]
+        return target.replace('I_', '', 1)
+
+    def regression_target(r):
+        target = r.OutputVariables.Name.str.startswith('P_')
+        target = r.OutputVariables.Name[target].iloc[0]
+        return target.replace('P_', '', 1)
+
+    if algorithm == 'glm':
+        properties['algorithm'] = 'Linear regression'
+        properties['tool'] = 'SAS Visual Analytics'
+        properties['function'] = 'prediction'
+        properties['targetVariable'] = regression_target(result)
+
+    elif algorithm == 'logistic':
+        properties['algorithm'] = 'Logistic regression'
+        properties['tool'] = 'SAS Visual Analytics'
+        properties['function'] = 'classification'
+        properties['targetVariable'] = classification_target(result)
+
+    elif algorithm == 'forest':
+        properties['algorithm'] = 'Random forest'
+
+        if 'Classification' in result.InputVariables.Type.values:
+            properties['function'] = 'classification'
+            properties['targetVariable'] = classification_target(result)
+        else:
+            properties['function'] = 'prediction'
+            properties['targetVariable'] = regression_target(result)
+
+    elif algorithm == 'gradboost':
+        properties['algorithm'] = 'Gradient boosting'
+
+        if 'Classification' in result.InputVariables.Type.values:
+            properties['function'] = 'classification'
+            properties['targetVariable'] = classification_target(result)
+
+            if result.OutputVariables.Name.str.startswith('P_').sum() == 2:
+                properties['targetLevel'] = 'binary'
+        else:
+            properties['function'] = 'prediction'
+            properties['targetVariable'] = regression_target(result)
+
+    elif algorithm == 'svmachine':
+        properties['algorithm'] = 'Support vector machine'
+
+        if 'Classification' in result.InputVariables.Type.values:
+            properties['function'] = 'classification'
+            properties['targetVariable'] = classification_target(result)
+            properties['targetLevel'] = 'binary'
+        else:
+            properties['function'] = 'prediction'
+            properties['targetVariable'] = regression_target(result)
+
+    elif algorithm == 'bnet':
+        properties['algorithm'] = 'Bayesian network'
+        properties['function'] = 'classification'
+        properties['targetVariable'] = classification_target(result)
+
+        if result.OutputVariables.Name.str.startswith('P_').sum() == 2:
+            properties['targetLevel'] = 'binary'
+
+    else:
+        properties['tool'] = ''
+
+    return properties
 
 
 def _generate_package_code(result):

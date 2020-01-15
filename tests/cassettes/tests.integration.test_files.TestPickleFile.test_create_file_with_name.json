@@ -1,0 +1,195 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2020-01-10T22:41:36",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "54"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIwODU0ZGEyMC1jZGVlLTRkZWEtOGRlNC04YTZhMDc2OTg0MDciLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE1Nzg3MzIwOTYsImlhdCI6MTU3ODY5NjA5NiwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJzYXNkZW1vQG5vbmUuc2FzLmNvbSIsInppZCI6InVhYSIsIm9yaWdpbiI6ImxkYXAiLCJqdGkiOiJlMGQwMTdlZjVlN2Y0ZmNmYTRjMTMxNTE1NTM4MmZmMiIsInByZXZpb3VzX2xvZ29uX3RpbWUiOjE1Nzg2OTU3MjYwMjcsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50X2lkIjoic2FzLmVjIiwiY2lkIjoic2FzLmVjIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoic2FzZGVtbyIsInJldl9zaWciOiI5ZjAwNjhmYSIsImF1dGhfdGltZSI6MTU3ODY5NjA5NiwidXNlcl9pZCI6IjA4NTRkYTIwLWNkZWUtNGRlYS04ZGU0LThhNmEwNzY5ODQwNyJ9.DSNsWqc767XO-ESyCGFKNAjHUpxQQ_TxxYL8tT3mM7hVRjThcOJ6YPN5KoeFkOKtIoBAQEdhGYKb_IQlSTsIXezyNbQVArZRKjf5bHmCL1elg-c0Ve_b26qs6LM4OhKUOgmvWk5pZBvCU4KSRNuSAn7kgnGJHbbXoI1Nfm37_ikYhcqe5SDa0LBnd8yCIZA50wEsIjABg-I0j7pxnKrBY4TyzMxXpAHiVIqxfJOqPTimmQ8qgo2Y_G3EyZvpOlQDnrXYcv4J1es5NLZ3R1li6U1NT_12cFIzupiqRvnZRoE7ohe7TyarUs-ELMomUTl7uLQ8-HGaCM2YlZI_iErWZg\",\"expires_in\":35999,\"scope\":\"clients.read clients.secret DataBuilders uaa.resource openid ApplicationAdministrators uaa.admin clients.admin EsriUsers scim.read SASScoreUsers SASAdministrators clients.write scim.write\",\"jti\":\"e0d017ef5e7f4fcfa4c1315155382ff2\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 10 Jan 2020 22:41:36 GMT"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2020-01-10T22:41:36",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "--6162636465666768696a6b6c6d6e6f70\r\nContent-Disposition: form-data; name=\"sasctl_test_pickle_file\"; filename=\"sasctl_test_pickle_file\"\r\n\r\n\ufffd\u0003X\u0017\u0000\u0000\u0000Some test file content.q\u0000.\r\n--6162636465666768696a6b6c6d6e6f70--\r\n"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "211"
+          ],
+          "Content-Type": [
+            "multipart/form-data; boundary=6162636465666768696a6b6c6d6e6f70"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/files/files#multipartUpload"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"creationTimeStamp\":\"2020-01-10T22:41:36.337Z\",\"modifiedTimeStamp\":\"2020-01-10T22:41:36.337Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"716bbabe-d5ae-4378-8895-3c0d5ae89d3b\",\"properties\":{},\"contentType\":\"application/octet-stream\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b\",\"uri\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b\",\"uri\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b\",\"uri\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b\",\"uri\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b\",\"uri\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b/content\",\"uri\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b/content\",\"type\":\"application/octet-stream\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b/content\",\"uri\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b/copy\",\"uri\":\"/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"sasctl_test_pickle_file\",\"size\":33,\"version\":3}"
+        },
+        "headers": {
+          "Accept-Ranges": [
+            "bytes"
+          ],
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.file+json; version=1;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 10 Jan 2020 22:41:36 GMT"
+          ],
+          "ETag": [
+            "\"k58qw7yp\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Last-Modified": [
+            "Fri, 10 Jan 2020 22:41:36 GMT"
+          ],
+          "Location": [
+            "/files/files/716bbabe-d5ae-4378-8895-3c0d5ae89d3b"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/files/files#multipartUpload"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}

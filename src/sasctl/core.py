@@ -389,7 +389,6 @@ class Session(requests.Session):
     def hostname(self):
         return self._settings.get('domain')
 
-
     def send(self, request, **kwargs):
         if self.message_log.isEnabledFor(logging.DEBUG):
             r = copy.deepcopy(request)
@@ -730,7 +729,7 @@ class PagingIterator:
                     items = new_items.pop(0)
                     self.__queue.extendleft(items.result())
 
-
+                    
 def is_uuid(id):
     try:
         UUID(str(id))
@@ -850,11 +849,50 @@ def delete(path, **kwargs):
     return request('delete', path, **kwargs)
 
 
-def request(verb, path, session=None, raw=False, **kwargs):
+def request(verb, path, session=None, raw=False, format='auto', **kwargs):
+    """Send an HTTP request with a session.
+
+    Parameters
+    ----------
+    verb : str
+        A valid HTTP request verb.
+    path : str
+        Path portion of URL to request.
+    session : Session, optional
+        Defaults to `current_session()`.
+    raw : bool
+        Deprecated. Whether to return the raw `Response` object.
+        Defaults to False.
+    format : {'auto', 'rest', 'response', 'content', 'json', 'text'}
+        The format of the return response.  Defaults to `auto`.
+        rest: `RestObj` constructed from JSON.
+        response: the raw `Response` object.
+        content: Response.content
+        json: Response.json()
+        text: Response.text
+        auto: `RestObj` constructed from JSON if possible, otherwise same as
+              `text`.
+    kwargs : any
+        Additional arguments are passed to the session `request` method.
+
+    Returns
+    -------
+
+    """
     session = session or current_session()
 
     if session is None:
         raise TypeError('No `Session` instance found.')
+
+    if raw:
+        warnings.warn("The 'raw' parameter is deprecated and will be removed in"
+                      " a future version.  Use format='response' instead.",
+                      DeprecationWarning)
+        format = 'response'
+
+    format = 'auto' if format is None else str(format).lower()
+    if format not in ('auto', 'response', 'content', 'text', 'json', 'rest'):
+        raise ValueError
 
     response = session.request(verb, path, **kwargs)
 
@@ -862,19 +900,30 @@ def request(verb, path, session=None, raw=False, **kwargs):
         raise HTTPError(response.url, response.status_code, response.text,
                         response.headers, None)
 
-    try:
-        if raw:
-            return response.json()
-        else:
+    # Return the raw response if requested
+    if format == 'response':
+        return response
+    elif format == 'json':
+        return response.json()
+    elif format == 'text':
+        return response.text
+    elif format == 'content':
+        return response.content
+    else:
+        try:
             obj = _unwrap(response.json())
 
             # ETag is required to update any object
-            # May not be returned on all responses (e.g. listing multiple objects)
+            # May not be returned on all responses (e.g. listing
+            # multiple objects)
             if isinstance(obj, RestObj):
-                setattr(obj, '_headers', response.headers)
+                obj._headers = response.headers
             return obj
-    except ValueError:
-        return response.text
+        except ValueError:
+            if format == 'rest':
+                return RestObj()
+            else:
+                return response.text
 
 
 def get_link(obj, rel):
@@ -945,6 +994,8 @@ def uri_as_str(obj):
         link = get_link(obj, 'self')
         if isinstance(link, dict):
             return link.get('uri')
+
+    return obj
 
 
 def _unwrap(json):

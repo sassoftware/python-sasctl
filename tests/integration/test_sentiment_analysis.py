@@ -31,13 +31,20 @@ def assert_job_succeeds(job):
     assert state == 'completed'
 
 
-def test_from_table():
+def test_from_table(cas_session, airline_dataset):
     from sasctl.services import cas_management as cm
 
-    input = cm.get_table('COMPLAINTS', 'Public')
+    TABLE_NAME = 'airline_tweets'
+    cas_session.upload(airline_dataset, casout=dict(name=TABLE_NAME,
+                                                    replace=True))
+
+    cas_session.table.promote(TABLE_NAME, targetlib='Public')
+
+    input = cm.get_table(TABLE_NAME, 'Public')
     job = sa.analyze_sentiment(input,
-                               id_column='__uniqueid__',
-                               text_column='Consumer_complaint_narrative')
+                               id_column='tweet_id',
+                               text_column='text')
+
     assert_job_succeeds(job)
 
 

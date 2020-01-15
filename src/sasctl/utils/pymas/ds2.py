@@ -10,7 +10,9 @@ from collections import namedtuple, OrderedDict
 
 import six
 
+from ..decorators import deprecated, versionadded
 
+@deprecated('Use DS2PyMASPackage instead.', version='1.5', removed_in='1.6')
 class DS2Package(object):
     def __init__(self, variables, code=None, return_code=True,
                  return_message=True, target=None):
@@ -46,6 +48,142 @@ class DS2Package(object):
                  '')
 
         return '\n'.join(code)
+
+
+@versionadded(version='1.5')
+class DS2BasePackage(object):
+    """Defines a DS2 package.
+
+    Parameters
+    ----------
+    code : str
+        Any code to include in the body of the package.
+
+    Attributes
+    ----------
+    methods : list
+        A collection of :class:`DS2BaseMethod` instances that will be included in the
+        package definition.
+
+    """
+    def __init__(self, code=None):
+        self._id = uuid.uuid4().hex.upper()
+        self._body = code or tuple()
+        self.methods = []
+
+    @property
+    def id(self):
+        """Unique identifier generated for the package."""
+        return self._id
+
+    @property
+    def name(self):
+        """Unique name generated for the package."""
+        # Max length in some SAS products in 32 characters
+        return ('_' + str(self.id))[:32]
+
+    def code(self):
+        """Get the DS2 code for the package.
+
+        Returns
+        -------
+        str
+
+        """
+        code = ("package %s / overwrite=yes;" % self.name,) + \
+               tuple('    ' + line for line in self._body) + \
+               ('',)
+
+        for method in self.methods:
+            code += tuple('    ' + line for line in method.code().split('\n'))
+        code += ("endpackage;",
+                 '')
+
+        return '\n'.join(code)
+
+
+@versionadded(version='1.5')
+class DS2PyMASPackage(DS2BasePackage):
+    """A DS2 package that uses PyMAS to invoke Python code.
+
+    Parameters
+    ----------
+    code
+
+    """
+
+    def __init__(self, code=None):
+        body = ("dcl package pymas py;",
+                "dcl package logger logr('App.tk.MAS');",
+                "dcl varchar(67108864) character set utf8 pycode;",
+                "dcl int revision;")
+
+        super(DS2PyMASPackage, self).__init__(body)
+
+        self._python_code = code or []
+        code = code or []
+
+        self.methods.append(
+            # Package init() method
+            DS2PyMASMethod(self._id, [], code,
+                           return_code=False,
+                           return_message=False,
+                           target=None,
+                           method_name='init'))
+
+    def add_method(self, name, target, variables, return_code=False, return_message=False):
+        """Add a DS2 method that calls a Python function defined by the package.
+
+        Parameters
+        ----------
+        name : str
+            Name of the DS2 method to create.
+        target : str
+            Name of the Python method to call
+        variables : list of :class:`DS2Variable`
+            List of input and output variables for the method.
+        return_code : bool
+            Add a return code parameter to the output.
+        return_message : bool
+            Add a return message parameter to the output.
+
+        Returns
+        -------
+        None
+
+        """
+
+        public_variables = list(variables)
+        private_variables = []
+
+        # Add a return code if not already present
+        if not any(v for v in public_variables if v.name.lower() == 'rc'):
+            if return_code:
+                public_variables.append(DS2Variable('rc', 'int', True))
+            else:
+                private_variables.append(DS2Variable('rc', 'int', True))
+
+        if return_message and not any(v for v in public_variables if v.name.lower() == 'msg'):
+            public_variables.append(DS2Variable('msg', 'char', True))
+
+        body = [v.as_declaration() for v in
+                private_variables]
+
+        body += ["rc = py.useMethod('%s');" % target,
+                 "if rc then return;"]
+
+        # Set Python input variables
+        body += ['%s    if rc then return;' % v.pymas_statement() for v in
+                 public_variables if not v.out]
+
+        # Execute Python method
+        body += ['rc = py.execute();    if rc then return;']
+
+        # Get Python output variables
+        body += [v.pymas_statement() for v in public_variables
+                 if v.out and v.name != 'rc']
+
+        self.methods.append(DS2BaseMethod(name, variables, body))
 
 
 class DS2BaseMethod(object):
@@ -88,10 +226,24 @@ class DS2BaseMethod(object):
 
 
 class DS2PyMASMethod(DS2BaseMethod):
-    def __init__(self, name, variables, python_code, return_code=True,
-                 return_message=True, target='wrapper'):
+    """
 
-        target = target or 'wrapper'
+    Parameters
+    ----------
+    name : str
+        Name of Python model to define
+    variables
+    python_code
+    return_code
+    return_message
+    target
+    method_name
+    """
+    def __init__(self, name, variables, python_code, return_code=True,
+                 return_message=True, target='wrapper', method_name='score'):
+
+        # target = target or 'wrapper'
+
         if isinstance(python_code, six.string_types):
             python_code = python_code.split('\n')
 
@@ -107,34 +259,44 @@ class DS2PyMASMethod(DS2BaseMethod):
             self.public_variables.append(DS2Variable('msg', 'char', True))
 
         body = [v.as_declaration() for v in
-                self.private_variables] \
-               + ["if null(py) then do;",
-                  "    py = _new_ pymas();",
-                  "    rc = py.useModule('%s', 1);" % name,
-                  "    if rc then do;"] \
-               + ["        rc = py.appendSrcLine('%s');" % l for l in
-                  python_code] \
-               + ["        pycode = py.getSource();",
-                  "        revision = py.publish(pycode, '%s');" % name,
-                  "        if revision lt 1 then do;",
-                  "            logr.log('e', 'py.publish() failed.');",
-                  "            rc = -1;",
-                  "            return;",
-                  "        end;",
-                  "    end;",
-                  "    rc = py.useMethod('%s');" % target,
-                  "    if rc then return;",
-                  "end;"] \
-               + ['%s    if rc then return;' % v.pymas_statement() for v in
-                  self.public_variables if not v.out] \
-               + ['rc = py.execute();    if rc then return;'] \
-               + [v.pymas_statement() for v in self.public_variables
-                  if v.out and v.name != 'rc']
+                self.private_variables]
 
-        super(DS2PyMASMethod, self).__init__('score', variables,
-                                             body=body)
+        body += ["if null(py) then do;",
+                 "    py = _new_ pymas();",
+                 "    rc = py.useModule('%s', 1);" % name,
+                 "    if rc then do;"]
+
+        body += ["        rc = py.appendSrcLine('%s');" % l for l in python_code] \
+
+        body += ["        pycode = py.getSource();",
+                 "        revision = py.publish(pycode, '%s');" % name,
+                 "        if revision lt 1 then do;",
+                 "            logr.log('e', 'py.publish() failed.');",
+                 "            rc = -1;",
+                 "            return;",
+                 "        end;",
+                 "    end;"]
+        if target is not None:
+            body += ["    rc = py.useMethod('%s');" % target,
+                     "    if rc then return;"]
+        body += ["end;"]
+
+        if target is not None:
+            # Set Python input variables
+            body += ['%s    if rc then return;' % v.pymas_statement() for v in
+                  self.public_variables if not v.out]
+
+            # Execute Python method
+            body += ['rc = py.execute();    if rc then return;']
+
+            # Get Python output variables
+            body += [v.pymas_statement() for v in self.public_variables
+                     if v.out and v.name != 'rc']
+
+        super(DS2PyMASMethod, self).__init__(method_name, variables, body=body)
 
 
+@deprecated(version='1.5', removed_in='1.6')
 class DS2ScoreMethod(DS2BaseMethod):
     def __init__(self, variables, return_code=True, return_message=True,
                  target='wrapper', ):
@@ -166,6 +328,21 @@ class DS2ScoreMethod(DS2BaseMethod):
                                              body=body_statements)
 
 
+@versionadded(version='1.5')
+class DS2PredictProbaMethod(DS2BaseMethod):
+    def __init__(self, variables, return_code=True, return_message=True,
+                 target='wrapper'):
+
+        self.public_variables = variables
+        self.private_variables = []
+
+        body_statements = []
+
+        super(DS2PredictProbaMethod, self).__init__('predict_proba', variables,
+                                                    body=body_statements)
+
+
+@deprecated(version='1.5', removed_in='1.6')
 class DS2Method(object):
     def __init__(self, variables, code, target='wrapper'):
         self.variables = variables
