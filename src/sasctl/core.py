@@ -640,7 +640,6 @@ class PagingIterator:
     def __init__(self, obj, session=None, threads=4):
         # Total number of items to iterate over
         self._count = obj.count
-
         self.__queue = deque()
         self._num_threads = threads
 
@@ -651,6 +650,10 @@ class PagingIterator:
 
         # Dissect the "next" link so it can be reformatted and used by
         # parallel threads
+        if link is None:
+            self._min_queue_len = 0
+            self._start = 0
+            self._limit = 0
         if link is not None:
             link = link['href']
             start = re.search('(?<=start=)[\d]+', link)
