@@ -29,6 +29,7 @@ If not already present, these packages will be downloaded and install automatica
 
 - requests
 - six
+- futures (Python 2.7 only)
 
 The following additional packages are recommended for full functionality:
 
