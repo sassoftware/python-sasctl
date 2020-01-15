@@ -234,9 +234,10 @@ class TestSklearnLinearModel:
         train_df['Price'] = y
 
         with mock.patch('swat.CAS') as CAS:
-            for period in ('q12019', 'q22019', 'q32019', 'q42019'):
+            CAS.return_value = cas_session
+
+            # NOTE: can only automate testing of 1 period at a time since
+            # upload_model_performance closes the CAS session when it's done.
+            for period in ['q12019']:
                 sample = train_df.sample(frac=0.1)
                 update_model_performance(sample, self.MODEL_NAME, period)
-
-    def test_publish_to_cas(self):
-        pytest.fail()

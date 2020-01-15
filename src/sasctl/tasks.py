@@ -569,7 +569,7 @@ def update_model_performance(data, model, label, refresh=True):
     url = '{}://{}/{}-http/'.format(sess._settings['protocol'],
                                     sess.hostname,
                                     cas_id)
-    regex = r'{}_(\d)_.*_{}'.format(table_prefix,
+    regex = r'{}_(\d+)_.*_{}'.format(table_prefix,
                                   model_obj.id)
 
     # Save the current setting before overwriting
@@ -612,9 +612,14 @@ def update_model_performance(data, model, label, refresh=True):
 
         with swat.options(exception_on_severity=2):
             # Table must be promoted so performance jobs can access.
-            tbl = s.upload(data, casout=dict(name=table_name,
+            result = s.upload(data, casout=dict(name=table_name,
                                                 caslib=caslib,
-                                                promote=True)).casTable
+                                                promote=True))
+
+            if not hasattr(result, 'casTable'):
+                raise RuntimeError('Unable to upload performance data to CAS.')
+
+            tbl = result.casTable
 
     # Restore the original value
     if orig_sslreqcert is not None:

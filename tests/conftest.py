@@ -229,6 +229,7 @@ def cas_session(request, credentials):
     from betamax.fixtures.pytest import _casette_name
     from six.moves import mock
     swat = pytest.importorskip('swat')
+    from swat.exceptions import SWATError
 
     if SKIP_REPLAY:
         with swat.CAS('https://{}/cas-shared-default-http/'.format(
@@ -253,14 +254,23 @@ def cas_session(request, credentials):
         # Inject the session being recorded into the CAS connection
         with mock.patch('swat.cas.rest.connection.requests.Session') as mocked:
             mocked.return_value = recorded_session
-            with swat.CAS('https://{}/cas-shared-default-http/'.format(
+
+            try:
+                s = swat.CAS('https://{}/cas-shared-default-http/'.format(
                     credentials['hostname']),
-                          username=credentials['username'],
-                          password=credentials['password']) as s:
+                    username=credentials['username'],
+                    password=credentials['password'])
 
                 # Strip out the session id from requests & responses.
                 recorder.config.define_cassette_placeholder('[session id]', s._session)
                 yield s
+            finally:
+                try:
+                    s.close()
+                except SWATError:
+                    # session was closed during testing
+                    pass
+
         recorder.stop()
 
 
