@@ -44,7 +44,7 @@ def paging(request):
             return RestObj(items=items[start:start + limit])
 
         req.side_effect = side_effect
-        yield obj, items.copy(), req
+        yield obj, items[:], req
 
     # Enough requests should have been made to retrieve all the data.
     # Additional requests may have been made by workers to non-existent pages.

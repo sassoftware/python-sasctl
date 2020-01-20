@@ -807,7 +807,7 @@ class PagedListIterator():
 
 class PagedList(list):
     def __init__(self, obj, **kwargs):
-        super(PagedList).__init__()
+        super(PagedList, self).__init__()
         self._pager = PagedItemIterator(obj, **kwargs)
 
         # Force caching of first page
