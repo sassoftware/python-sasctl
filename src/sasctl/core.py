@@ -823,7 +823,9 @@ class PagedList(list):
         self.append(next(self._pager))
         items = self._pager._cache
         self.extend(items)
-        self._pager._cache.clear()
+
+        # clear the list (py27 compatible)
+        del self._pager._cache[:]
 
 
     def __len__(self):
