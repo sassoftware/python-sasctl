@@ -6,6 +6,7 @@
 
 import pytest
 
+from sasctl.core import PagedItemIterator
 from sasctl.services import microanalytic_score as mas
 
 pytestmark = pytest.mark.usefixtures('session')

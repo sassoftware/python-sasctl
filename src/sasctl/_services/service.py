@@ -13,7 +13,7 @@ import six
 from six.moves.urllib_parse import quote
 
 from .. import core
-from ..core import HTTPError, sasctl_command
+from ..core import HTTPError, PagedItemIterator, sasctl_command
 from ..exceptions import JobTimeoutError
 
 
@@ -203,10 +203,10 @@ class Service(object):
                 kwargs['start'] = int(start)
             if limit is not None:
                 kwargs['limit'] = int(limit)
-            else:
-                # Until search is more precise, try to pull all results
-                # Needed until transparent pagination is implemented.
-                kwargs['limit'] = int(1e4)
+            # else:
+            #     # Until search is more precise, try to pull all results
+            #     # Needed until transparent pagination is implemented.
+            #     kwargs['limit'] = int(1e4)
 
             params = '&'.join(['%s=%s' % (k, quote(str(v), safe='/(),"'))
                                for k, v in six.iteritems(kwargs)])
@@ -214,8 +214,10 @@ class Service(object):
             results = cls.get(path, params=params)
             if results is None:
                 return []
+            elif isinstance(results, (list, PagedItemIterator)):
+                return results
             else:
-                return results if isinstance(results, list) else [results]
+                return [results]
 
         @sasctl_command('get')
         def get_item(cls, item, refresh=False):
@@ -376,7 +378,11 @@ class Service(object):
         params = 'filter={}'.format(filter) if filter is not None else {}
 
         resources = self.request_link(obj, rel, params=params)
-        return resources if isinstance(resources, list) else [resources]
+
+        if isinstance(resources, (list, PagedItemIterator)):
+            return resources
+        else:
+            return [resources]
 
     @classmethod
     def _monitor_job(cls, job, max_retries=60):

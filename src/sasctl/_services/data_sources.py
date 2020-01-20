@@ -4,7 +4,9 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+from ..core import PagedItemIterator
 from .service import Service
+
 
 class DataSources(Service):
     """Enables retrieval of data source metadata.
@@ -68,7 +70,7 @@ class DataSources(Service):
         provider = self.get_provider(provider)
 
         sources = self.request_link(provider, 'dataSources')
-        if isinstance(sources, list):
+        if isinstance(sources, (list, PagedItemIterator)):
             return sources
         else:
             return [sources]
@@ -124,7 +126,7 @@ class DataSources(Service):
         params = 'filter={}'.format(filter) if filter is not None else {}
         result = self.request_link(source, 'children', params=params)
 
-        return result if isinstance(result, list) else [result]
+        return result if isinstance(result, (list, PagedItemIterator)) else [result]
 
 
     def get_caslib(self, name, source=None):
@@ -177,7 +179,7 @@ class DataSources(Service):
         params = 'filter={}'.format(filter) if filter is not None else {}
         result = self.request_link(caslib, 'tables', params=params)
 
-        return result if isinstance(result, list) else [result]
+        return result if isinstance(result, (list, PagedItemIterator)) else [result]
 
     def get_table(self, name, caslib, server=None):
         """Get metadata for a CAS table.

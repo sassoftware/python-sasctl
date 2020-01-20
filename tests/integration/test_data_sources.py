@@ -7,6 +7,7 @@
 import pytest
 from six.moves import mock
 
+from sasctl.core import PagedItemIterator
 from sasctl.services import data_sources as ds
 
 pytestmark = pytest.mark.usefixtures('session')
@@ -61,7 +62,8 @@ def test_list_caslibs():
     caslibs_2 = ds.list_caslibs(source)
 
     assert isinstance(caslibs_2, list)
-    assert caslibs == caslibs_2
+    # Force download before comparing
+    assert caslibs[:] == caslibs_2[:]
 
 
 def test_get_caslib():

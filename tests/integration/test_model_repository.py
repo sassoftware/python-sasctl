@@ -9,7 +9,7 @@ import pytest
 from sasctl.services import microanalytic_score
 from sasctl.services import model_repository as mr
 from sasctl.tasks import register_model, publish_model
-from sasctl.core import RestObj
+from sasctl.core import PagedItemIterator, RestObj
 
 # Every test function in the module will automatically receive the session fixture
 pytestmark = pytest.mark.usefixtures('session')

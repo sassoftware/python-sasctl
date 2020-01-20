@@ -6,7 +6,7 @@
 
 import pytest
 
-from sasctl import RestObj
+from sasctl.core import PagedItemIterator, RestObj
 from sasctl.services import folders
 
 pytestmark = pytest.mark.usefixtures('session')
@@ -38,13 +38,18 @@ class TestFolders:
 
     def test_list_with_pagination(self):
         some_folders = folders.list_folders(limit=2)
+
+        # PagedList with technically include all results, so subset to just
+        # the results that were explicitly requested
+        some_folders = some_folders[:2]
+
         assert isinstance(some_folders, list)
-        assert len(some_folders) <= 2
         assert all(isinstance(f, RestObj) for f in some_folders)
 
         other_folders = folders.list_folders(start=2, limit=3)
         assert isinstance(other_folders, list)
-        assert len(other_folders) <= 3
+        other_folders = other_folders[:3]
+
         assert all(f not in some_folders for f in other_folders)
 
     def test_delete_folder(self):
