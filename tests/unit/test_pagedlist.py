@@ -136,6 +136,8 @@ def test_copy(paging):
     target = items[:]
     actual = l[:]
 
+    assert len(actual) == len(l)
+
     for i, item in enumerate(actual):
         assert item.name == RestObj(target[i]).name
         print('Verified item %s' % i)
