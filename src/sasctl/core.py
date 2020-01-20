@@ -695,6 +695,9 @@ class PageIterator:
         self._obj = obj
 
     def __next__(self):
+        return self.next()
+
+    def next(self):
         if self._pool is None:
             self._pool = concurrent.futures.ThreadPoolExecutor(max_workers=self._num_threads)
 
@@ -774,6 +777,9 @@ class PagedItemIterator:
         return self._count
 
     def __next__(self):
+        return self.next()
+
+    def next(self):
         # Get next page of items if we're currently out
         if len(self._cache) == 0:
             self._cache = next(self._pager)
@@ -794,6 +800,9 @@ class PagedListIterator():
         self.__index = 0
 
     def __next__(self):
+        return self.next()
+
+    def next(self):
         if self.__index >= len(self.__list):
             raise StopIteration
 
