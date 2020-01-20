@@ -835,6 +835,11 @@ class PagedList(list):
         # return super(PagedList, self).__iter__()
         return PagedListIterator(self)
 
+    def __getslice__(self, i, j):
+        # Removed from Py3.x but still implemented in CPython built-in list
+        # Override to ensure __getitem__ is used instead.
+        return self.__getitem__(slice(i, j))
+
     def __getitem__(self, item):
         if hasattr(item, 'stop'):
             # `item` is a slice
