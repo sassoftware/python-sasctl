@@ -169,7 +169,7 @@ class TestPickleFile:
         # Doesn't occur during real requests.
         try:
             result = pickle.loads(content)
-        except pickle.UnpicklingError:
+        except (KeyError, pickle.UnpicklingError):
             result = pickle.loads(content[4:])
 
         assert target == result
