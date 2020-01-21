@@ -4,6 +4,8 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+"""The ds2 module contains classes representing DS2 code constructs."""
+
 import re
 import uuid
 from collections import namedtuple, OrderedDict
@@ -11,6 +13,7 @@ from collections import namedtuple, OrderedDict
 import six
 
 from ..decorators import deprecated, versionadded
+
 
 @deprecated('Use DS2PyMASPackage instead.', version='1.5', removed_in='1.6')
 class DS2Package(object):
@@ -402,15 +405,7 @@ class DS2Method(object):
 
 class DS2Thread(object):
     def __init__(self, variables, table, column_names=None, return_code=True,
-                 return_message=True, package=None):
-        """
-        Args:
-            variables:
-            table:
-            return_code:
-            return_message:
-            name:
-        """
+                 return_message=True, package=None, method=None):
 
         self._id = uuid.uuid4().hex.upper()
         self.table = table
@@ -419,6 +414,20 @@ class DS2Thread(object):
         self.return_message = return_message
         self.column_names = column_names
         self.package = package
+
+        # Default to predict() method if present
+        if method is None and any(m.name == 'predict' for m in package.methods):
+            method = next(x for x in package.methods if x.name == 'predict')
+
+        # Fall back to score() method if present
+        if method is None and any(m.name == 'score' for m in package.methods):
+            method = next(x for x in package.methods if x.name == 'score')
+
+        # Assume first method is init(), so fall back to next method
+        if method is None and len(package.methods) > 1:
+            method = package.methods[1]
+
+        self.method = method
 
     @property
     def id(self):
@@ -454,7 +463,7 @@ class DS2Thread(object):
                 "  method run();",
                 "    set SASEP.in;",
                 var_assignments,
-                "    pythonPackage.{}({});".format(self.package.methods[0].name,','.join(keep_vars)),
+                "    pythonPackage.{}({});".format(self.method.name,','.join(keep_vars)),
                 "    output;",
                 "  end;",
                 "endthread;")

@@ -49,6 +49,7 @@ def _sklearn_to_dict(model):
                 'LinearRegression': 'Linear regression',
                 'SVC': 'Support vector machine',
                 'GradientBoostingClassifier': 'Gradient boosting',
+                'GradientBoostingRegressor': 'Gradient boosting',
                 'XGBClassifier': 'Gradient boosting',
                 'XGBRegressor': 'Gradient boosting',
                 'RandomForestClassifier': 'Forest',

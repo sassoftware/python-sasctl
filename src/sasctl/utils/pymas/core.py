@@ -4,6 +4,8 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+"""Contains utilities for wrapping Python models in DS2 for publishing."""
+
 from __future__ import print_function
 import base64
 import importlib
@@ -567,7 +569,8 @@ class PyMAS:
                                                    '   end;',
                                                    'enddata;')
         elif dest == 'CAS':
-            thread = DS2Thread(self.variables, input_table,
+            thread = DS2Thread(self.variables,
+                               input_table,
                                column_names=columns,
                                return_message=self.return_message,
                                package=self.package)

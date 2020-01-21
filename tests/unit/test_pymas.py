@@ -711,3 +711,4 @@ def predict_proba(a, b):
                                       DS2Variable('c', float, True)])
 
     assert code == target
+
