@@ -6,6 +6,7 @@ Unreleased
  - Added a new Reports service for retrieving SAS Visual Analytics reports.
  - Added a new Report_Images service for rendering content from reports. 
  - Additional metadata fields are set when registering an ASTORE model.
+ - Collections of items should now return an instance of `PagedList` for lazy loading of results.
  
 **Changes**
  - Replaced the `raw` parameter of the `request` methods with a `format` parameter, allowing more control over the
