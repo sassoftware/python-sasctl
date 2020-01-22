@@ -252,16 +252,24 @@ class MicroAnalyticScore(Service):
                 arg_checks = [
                     'first_input = %s' % arguments[0],
                     'first_input_type = str(type(first_input))',
-                    'is_pandas = "pandas.core.frame.DataFrame" in first_input_type',
-                    'is_numpy = "numpy.ndarray" in first_input_type',
+                    'try:',
+                    '    import pandas as pd',
+                    '    is_pandas = isinstance(first_input, pd.Series)',
+                    'except ImportError:',
+                    '    is_pandas = False',
+                    'try:',
+                    '    import numpy as np',
+                    '    is_numpy = isinstance(first_input, np.ndarray)',
+                    'except ImportError:',
+                    '    is_numpy = False',
                     'if is_pandas:',
-                    '    assert first_input.shape[0] == 1',
-                    '    for k in first_input.columns:'
+                    '    assert len(first_input.shape) == 1',
+                    '    for k in first_input.keys():'
                 ]
 
                 for arg in arguments:
                     arg_checks.append("        if k.lower() == '%s':" % arg.lower())
-                    arg_checks.append("            %s = first_input.loc[0, k]" % arg)
+                    arg_checks.append("            %s = first_input[k]" % arg)
                     arg_checks.append("            continue")
 
                 arg_checks.extend([

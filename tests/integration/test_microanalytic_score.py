@@ -39,10 +39,10 @@ class TestMicroAnalyticScore:
 
         r = mas.define_steps(self.MODULE_NAME)
         df = pd.DataFrame(dict(var1=[1], var2=['test']))
-        assert (6, 'TEST') == r.myfunction(df)
+        assert (6, 'TEST') == r.myfunction(df.iloc[0, :])
 
         df = pd.DataFrame(dict(var1=[1.5], var2=[3]))
-        assert r.myfunction2(df) == 4.5
+        assert r.myfunction2(df.iloc[0, :]) == 4.5
 
     def test_call_python_module_steps_numpy(self):
         np = pytest.importorskip('numpy')

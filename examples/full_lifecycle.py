@@ -57,7 +57,7 @@ module_lm = publish_model(model_name, 'maslocal')
 x = X_test.iloc[0, :]
 
 # Call the published module and score the record
-result = module_lm.score(**x)
+result = module_lm.score(x)
 print(result)
 
 # Build a second model
@@ -71,7 +71,7 @@ model_dt = register_model(dt, 'Decision Tree', project, input=X)
 module_dt = publish_model(model_dt, 'maslocal')
 
 # Use MAS to score some new data
-result = module_dt.score(**x)
+result = module_dt.score(x)
 print(result)
 
 # Model Manager can track model performance over time if provided with
