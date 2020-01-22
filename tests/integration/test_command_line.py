@@ -47,13 +47,8 @@ def test_command_with_args(capsys):
     captured = capsys.readouterr()
 
     # Output should be valid JSON
-    # pprint() adds some newlines and ' characters that should be removed first
-    output = captured.out.replace('\'', '').replace('\n', '')
+    output = json.loads(captured.out)
 
-    # capsys puts () around captured output
-    output = output.lstrip('(').rstrip(')')
-
-    output = json.loads(output)
     assert output['name'] == FOLDER_NAME
     assert 'id' in output
     assert 'links' in output
