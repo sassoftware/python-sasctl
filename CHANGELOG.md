@@ -13,6 +13,7 @@ Unreleased
  - Replaced the `raw` parameter of the `request` methods with a `format` parameter, allowing more control over the
    returned value.
  - The `get_file_content` method of the Files service now returns the actual content instead of the file metadata.
+ - JSON output when using `sasctl` from the command line is now formatted correctly.
 
 v1.4.5 (2019-12-5)
 ------------------
