@@ -59,17 +59,32 @@ def _sklearn_to_dict(model):
                 'regressor': 'prediction'}
 
     if hasattr(model, '_final_estimator'):
-        estimator = type(model._final_estimator)
+        estimator = model._final_estimator
     else:
-        estimator = type(model)
+        estimator = model
+    estimator = type(estimator).__name__
+
+    # Standardize algorithm names
+    algorithm = mappings.get(estimator, estimator)
+
+    # Standardize regression/classification terms
+    analytic_function = mappings.get(model._estimator_type, model._estimator_type)
+
+    if analytic_function == 'classification' and 'logistic' in algorithm.lower():
+        target_level = 'Binary'
+    elif analytic_function == 'prediction' and ('regressor' in estimator or 'regression' in algorithm.lower()):
+        target_level = 'Interval'
+    else:
+        target_level = None
 
     # Can tell if multi-class .multi_class
     result = dict(
         description=str(model)[:_DESC_MAXLEN],
-        algorithm=mappings.get(estimator.__name__, estimator.__name__),
+        algorithm=algorithm,
         scoreCodeType='ds2MultiType',
         trainCodeType='Python',
-        function=mappings.get(model._estimator_type, model._estimator_type),
+        targetLevel = target_level,
+        function=analytic_function,
         tool='Python %s.%s'
              % (sys.version_info.major, sys.version_info.minor),
         properties=[_property(k, v) for k, v in model.get_params().items()]
@@ -287,12 +302,15 @@ def register_model(model, name, project, repository=None, input=None,
         function = model.get('function', '').lower()
         algorithm = model.get('algorithm', '').lower()
 
-        if function == 'classification' and 'logistic' in algorithm:
-            target_level = 'Binary'
-        elif function == 'prediction' and 'regression' in algorithm:
-            target_level = 'Interval'
+        if 'targetLevel' in model:
+            target_level = 'targetLevel'
         else:
-            target_level = None
+            if function == 'classification' and 'logistic' in algorithm:
+                target_level = 'Binary'
+            elif function == 'prediction' and 'regression' in algorithm:
+                target_level = 'Interval'
+            else:
+                target_level = None
 
         if len(model.get('outputVariables', [])) == 1:
             var = model['outputVariables'][0]
