@@ -215,7 +215,8 @@ class MicroAnalyticScore(Service):
 
         Returns
         -------
-        module
+        RestObj
+            The module with additional methods defined.
 
         """
         import types
@@ -237,21 +238,51 @@ class MicroAnalyticScore(Service):
             type_string = '    # type: ({})'.format(', '.join(arg_types))
 
             # Method signature
+            # Default all params to None to allow method(DataFrame) execution
             input_params = [a for a in arguments] + ['**kwargs']
-            signature = 'def _%s_%s(%s):' \
-                        % (module.name,
-                           step.id,
-                           ', '.join(input_params))
+            method_name = '_%s_%s' % (module.id, step.id)
+            signature = 'def %s(%s):' \
+                        % (method_name, ', '.join(input_params))
 
-            # MAS always lower-cases variable names
-            # Since the original Python variables may have a different case,
-            # allow kwargs to be used to input alternative caps
+            # If the module step takes arguments, then we perform a number
+            # of additional checks to make the allowed input as wide as possible
             if len(arguments):
-                arg_checks = ['for k in kwargs.keys():']
+                # Perform some initial checks to see if the input is a Numpy array
+                # or a Pandas DataFrame.  Each will be handled separately.
+                arg_checks = [
+                    'first_input = %s' % arguments[0],
+                    'first_input_type = str(type(first_input))',
+                    'is_pandas = "pandas.core.frame.DataFrame" in first_input_type',
+                    'is_numpy = "numpy.ndarray" in first_input_type',
+                    'if is_pandas:',
+                    '    assert first_input.shape[0] == 1',
+                    '    for k in first_input.columns:'
+                ]
+
                 for arg in arguments:
-                    arg_checks.append("    if k.lower() == '%s':" % arg.lower())
-                    arg_checks.append("        %s = kwargs[k]" % arg)
-                    arg_checks.append("        continue")
+                    arg_checks.append("        if k.lower() == '%s':" % arg.lower())
+                    arg_checks.append("            %s = first_input.loc[0, k]" % arg)
+                    arg_checks.append("            continue")
+
+                arg_checks.extend([
+                    'elif is_numpy:',
+                    '    if len(first_input.shape) > 1:',
+                    '        assert first_input.shape[0] == 1',
+                    '    first_input = first_input.ravel()'
+                ])
+
+                for i, arg in enumerate(arguments):
+                    arg_checks.append('    %s = first_input[%d]' % (arg, i))
+
+                # MAS always lower-cases variable names
+                # Since the original Python variables may have a different case,
+                # allow kwargs to be used to input alternative caps
+                arg_checks.append('else:')
+                arg_checks.append('    for k in kwargs.keys():')
+                for arg in arguments:
+                    arg_checks.append("        if k.lower() == '%s':" % arg.lower())
+                    arg_checks.append("            %s = kwargs[k]" % arg)
+                    arg_checks.append("            continue")
             else:
                 arg_checks = []
 
@@ -259,7 +290,7 @@ class MicroAnalyticScore(Service):
             # Drops 'rc' and 'msg' from return values
             code = (signature,
                     type_string,
-                    '    """Execute step %s of module %s."""' % (step, module),
+                    '    """Execute step \'%s\' of module \'%s\'."""' % (step, module),
                     '\n'.join(['    %s' % a for a in arg_checks]),
                     '    r = execute_module_step(%s)' % ', '.join(['module', 'step'] + call_params),
                     '    r.pop("rc", None)',

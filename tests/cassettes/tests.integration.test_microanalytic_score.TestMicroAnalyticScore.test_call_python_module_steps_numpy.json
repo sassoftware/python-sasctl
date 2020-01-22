@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2020-01-22T00:07:18",
+      "recorded_at": "2020-01-22T00:17:40",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -36,7 +36,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIwODU0ZGEyMC1jZGVlLTRkZWEtOGRlNC04YTZhMDc2OTg0MDciLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE1Nzk2ODc2MzgsImlhdCI6MTU3OTY1MTYzOCwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJzYXNkZW1vQG5vbmUuc2FzLmNvbSIsInppZCI6InVhYSIsIm9yaWdpbiI6ImxkYXAiLCJqdGkiOiJiYWVmMDgyNjYxZTc0NDRjOTY0MWY1MjAxMTUyMzdiNiIsInByZXZpb3VzX2xvZ29uX3RpbWUiOjE1Nzk2NTEzMzM5MzQsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50X2lkIjoic2FzLmVjIiwiY2lkIjoic2FzLmVjIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoic2FzZGVtbyIsInJldl9zaWciOiI5ZjAwNjhmYSIsImF1dGhfdGltZSI6MTU3OTY1MTYzOCwidXNlcl9pZCI6IjA4NTRkYTIwLWNkZWUtNGRlYS04ZGU0LThhNmEwNzY5ODQwNyJ9.WLS2ix_YL8RCDxNvyO5h_ZK8RZr6tmMED7m27hYRDx3RSD9fSYFdp5RKCb9xxUCqALpjwha-8xVG3QgWig3c4i8MMnK7OPxU-Td0c4SbNaa9h-mSZ16Zk4H5feOMmh5Bw2ZCfboIRv44YtT3InHYqngeBDvXnjn0KpbazsUA49sy-739X_SsGWhdsavkq6Aq_ztNzqtzsgFczL4jN2l7QaHopTC5VpMCG9escx3chcW9EOfoRzZNaV3SoFwkefVPWLhjozI-iqR0n3A8Yf_9HT2Cwn1Ml_NRtOjUPRY5m1oFIo-XNLW8JBqYl45VtPCAB4W4DtzJAVZXQ1DdZ4sDtw\",\"expires_in\":35999,\"scope\":\"clients.read clients.secret DataBuilders uaa.resource openid ApplicationAdministrators uaa.admin clients.admin EsriUsers scim.read SASScoreUsers SASAdministrators clients.write scim.write\",\"jti\":\"baef082661e7444c9641f520115237b6\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIwODU0ZGEyMC1jZGVlLTRkZWEtOGRlNC04YTZhMDc2OTg0MDciLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE1Nzk2ODgyNjAsImlhdCI6MTU3OTY1MjI2MCwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJzYXNkZW1vQG5vbmUuc2FzLmNvbSIsInppZCI6InVhYSIsIm9yaWdpbiI6ImxkYXAiLCJqdGkiOiI0OWFhNWIwYWYwZTY0MTNiOGE4ZTZhMzhiYjQ4NjA1NiIsInByZXZpb3VzX2xvZ29uX3RpbWUiOjE1Nzk2NTE5MTIwNDcsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50X2lkIjoic2FzLmVjIiwiY2lkIjoic2FzLmVjIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoic2FzZGVtbyIsInJldl9zaWciOiI5ZjAwNjhmYSIsImF1dGhfdGltZSI6MTU3OTY1MjI2MCwidXNlcl9pZCI6IjA4NTRkYTIwLWNkZWUtNGRlYS04ZGU0LThhNmEwNzY5ODQwNyJ9.c8TqCfjKxh7rP7sqjXWgycy_drGnoWJ8tTycjnJDoayqjxSSC9a11c1oPgGvnhYUo5JXkQr-OrUGsIpG7-m5krZYmFLFl5o60PCM62VAjOiwW-lT64PpvlhxSEWcruxWWlE7_KEH67mN79k3Q1H7UavrJzdhoFexA2FngwURxBK0j9TaDFF1wCHnTfW_-lRQxBFUOGmXcBxHhyMts8VPzrGSomKzC2_eE07_MCUTJ9WeXamVqbcCSfBhkJO4uJCewyqcfZSMGp__7DETBJ29zCFSkMUnHVmZ4unh1c-OaD7WCH6d-2AybpJVciWpup0I-_WwjWj1p5fRgltqy3LQtw\",\"expires_in\":35999,\"scope\":\"clients.read clients.secret DataBuilders uaa.resource openid ApplicationAdministrators uaa.admin clients.admin EsriUsers scim.read SASScoreUsers SASAdministrators clients.write scim.write\",\"jti\":\"49aa5b0af0e6413b8a8e6a38bb486056\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -49,7 +49,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Wed, 22 Jan 2020 00:07:18 GMT"
+            "Wed, 22 Jan 2020 00:17:40 GMT"
           ],
           "Keep-Alive": [
             "timeout=5, max=100"
@@ -87,7 +87,7 @@
       }
     },
     {
-      "recorded_at": "2020-01-22T00:07:18",
+      "recorded_at": "2020-01-22T00:17:40",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -132,7 +132,7 @@
             "application/vnd.sas.microanalytic.module+json;charset=UTF-8"
           ],
           "Date": [
-            "Wed, 22 Jan 2020 00:07:18 GMT"
+            "Wed, 22 Jan 2020 00:17:40 GMT"
           ],
           "ETag": [
             "\"k5ojhsc4\""
@@ -182,7 +182,7 @@
       }
     },
     {
-      "recorded_at": "2020-01-22T00:07:18",
+      "recorded_at": "2020-01-22T00:17:40",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -227,7 +227,7 @@
             "application/vnd.sas.microanalytic.module.step+json;charset=UTF-8"
           ],
           "Date": [
-            "Wed, 22 Jan 2020 00:07:18 GMT"
+            "Wed, 22 Jan 2020 00:17:40 GMT"
           ],
           "ETag": [
             "\"k5ojhsc4\""
@@ -277,7 +277,7 @@
       }
     },
     {
-      "recorded_at": "2020-01-22T00:07:20",
+      "recorded_at": "2020-01-22T00:17:40",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -322,7 +322,7 @@
             "application/vnd.sas.microanalytic.module.step+json;charset=UTF-8"
           ],
           "Date": [
-            "Wed, 22 Jan 2020 00:07:20 GMT"
+            "Wed, 22 Jan 2020 00:17:40 GMT"
           ],
           "ETag": [
             "\"k5ojhsc4\""
@@ -372,11 +372,11 @@
       }
     },
     {
-      "recorded_at": "2020-01-22T00:07:22",
+      "recorded_at": "2020-01-22T00:17:40",
       "request": {
         "body": {
           "encoding": "utf-8",
-          "string": "{\"inputs\": [{\"name\": \"var1\", \"value\": 1}, {\"name\": \"var2\", \"value\": \"test\"}]}"
+          "string": "{\"inputs\": [{\"name\": \"var1\", \"value\": 1.5}, {\"name\": \"var2\", \"value\": 3.0}]}"
         },
         "headers": {
           "Accept": [
@@ -392,7 +392,7 @@
             "keep-alive"
           ],
           "Content-Length": [
-            "77"
+            "76"
           ],
           "Content-Type": [
             "application/json"
@@ -402,12 +402,12 @@
           ]
         },
         "method": "POST",
-        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_testmodule/steps/myfunction"
+        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_testmodule/steps/myfunction2"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[],\"version\":2,\"moduleId\":\"sasctl_testmodule\",\"stepId\":\"myfunction\",\"executionState\":\"completed\",\"outputs\":[{\"name\":\"out1\",\"value\":6},{\"name\":\"out2\",\"value\":\"TEST\"}]}"
+          "string": "{\"links\":[],\"version\":2,\"moduleId\":\"sasctl_testmodule\",\"stepId\":\"myfunction2\",\"executionState\":\"completed\",\"outputs\":[{\"name\":\"out1\",\"value\":4.5}]}"
         },
         "headers": {
           "Cache-Control": [
@@ -423,7 +423,7 @@
             "application/vnd.sas.microanalytic.module.step.output+json;charset=UTF-8"
           ],
           "Date": [
-            "Wed, 22 Jan 2020 00:07:22 GMT"
+            "Wed, 22 Jan 2020 00:17:40 GMT"
           ],
           "Expires": [
             "0"
@@ -460,7 +460,7 @@
           "code": 201,
           "message": ""
         },
-        "url": "https://hostname.com/microanalyticScore/modules/sasctl_testmodule/steps/myfunction"
+        "url": "https://hostname.com/microanalyticScore/modules/sasctl_testmodule/steps/myfunction2"
       }
     }
   ],
