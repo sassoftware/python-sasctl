@@ -72,7 +72,7 @@ def _sklearn_to_dict(model):
 
     if analytic_function == 'classification' and 'logistic' in algorithm.lower():
         target_level = 'Binary'
-    elif analytic_function == 'prediction' and ('regressor' in estimator or 'regression' in algorithm.lower()):
+    elif analytic_function == 'prediction' and ('regressor' in estimator.lower() or 'regression' in algorithm.lower()):
         target_level = 'Interval'
     else:
         target_level = None
@@ -303,7 +303,7 @@ def register_model(model, name, project, repository=None, input=None,
         algorithm = model.get('algorithm', '').lower()
 
         if 'targetLevel' in model:
-            target_level = 'targetLevel'
+            target_level = model['targetLevel']
         else:
             if function == 'classification' and 'logistic' in algorithm:
                 target_level = 'Binary'
