@@ -6,6 +6,7 @@
 
 import argparse
 import inspect
+import json
 import logging
 import os
 import pkgutil
@@ -249,6 +250,8 @@ def main(args=None):
             result = func(**kwargs)
             if isinstance(result, list):
                 pprint([str(x) for x in result])
+            elif isinstance(result, dict):
+                pprint(json.dumps(result))
             else:
                 pprint(result)
     except RuntimeError as e:

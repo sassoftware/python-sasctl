@@ -35,3 +35,27 @@ def test_command_without_args(capsys):
     assert 'Application Data' in captured.out
     assert 'Model Repositories' in captured.out
 
+
+def test_command_with_args(capsys):
+    """Verify that a simple command with arguments works."""
+    import json
+
+    FOLDER_NAME = 'Public'
+
+    main(['folders', 'get', FOLDER_NAME])
+
+    captured = capsys.readouterr()
+
+    # Output should be valid JSON
+    # pprint() adds some newlines and ' characters that should be removed first
+    output = captured.out.replace('\'', '').replace('\n', '')
+
+    # capsys puts () around captured output
+    output = output.lstrip('(').rstrip(')')
+
+    output = json.loads(output)
+    assert output['name'] == FOLDER_NAME
+    assert 'id' in output
+    assert 'links' in output
+
+
