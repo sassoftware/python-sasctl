@@ -518,13 +518,12 @@ def update_model_performance(data, model, label, refresh=True):
         raise ValueError("Performance monitoring is currently supported for "
                          "regression and binary classification projects.  "
                          "Received project with '%s' function.  Should be "
-                         "'Prediction' or 'Classification'.",
-                         project.get('function'))
+                         "'Prediction' or 'Classification'." % project.get('function'))
     elif project.get('targetLevel', '').lower() not in ('interval', 'binary'):
         raise ValueError("Performance monitoring is currently supported for "
                          "regression and binary classification projects.  "
                          "Received project with '%s' target level.  Should be "
-                         "'Interval' or 'Binary'.", project.get('targetLevel'))
+                         "'Interval' or 'Binary'." % project.get('targetLevel'))
     elif project.get('predictionVariable', '') == '' and project.get('function', '').lower() == 'prediction':
         raise ValueError("Project '%s' does not have a prediction variable "
                          "specified." % project)
