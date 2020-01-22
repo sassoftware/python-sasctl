@@ -52,6 +52,7 @@ def test_define_steps():
 
     # Mock module to be returned
     module = RestObj(name='unittestmodule',
+                     id='unittestmodule',
                      stepIds=['step1', 'step2'])
 
     # Mock module step with no inputs

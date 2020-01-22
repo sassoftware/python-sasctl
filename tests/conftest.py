@@ -52,8 +52,11 @@ def redact(interaction, cassette):
             old_text = match.group(group)
             cassette.placeholders.append(Placeholder(placeholder=placeholder, replace=old_text))
 
-    add_placeholder(r"(?<=&password=)([^&]*)\b", interaction.data['request']['body']['string'], '*****', 1)
-    add_placeholder('(?<=access_token":")[^"]*', interaction.data['response']['body']['string'], '[redacted]', 0)
+    if 'string' in interaction.data['request']['body']:
+        add_placeholder(r"(?<=&password=)([^&]*)\b", interaction.data['request']['body']['string'], '*****', 1)
+
+    if 'string' in interaction.data['response']['body']:
+        add_placeholder('(?<=access_token":")[^"]*', interaction.data['response']['body']['string'], '[redacted]', 0)
 
     for index, header in enumerate(interaction.data['request']['headers'].get('Authorization', [])):
         # Betamax tries to replace Placeholders on all headers.  Mixed str/bytes headers will cause Betamax to break.
@@ -73,10 +76,21 @@ betamax.Betamax.register_request_matcher(PartialBodyMatcher)
 # Replay cassettes only by default
 # Can be overridden as necessary to update cassettes
 # See https://betamax.readthedocs.io/en/latest/record_modes.html for details.
+# NOTE: We've added a custom "live" record mode that bypasses all cassettes
+#       and allows test suite to be run against a live server.
 os.environ.setdefault('SASCTL_RECORD_MODE', 'once')
 if os.environ['SASCTL_RECORD_MODE'] \
-        not in ('once', 'new_episodes', 'all', 'none'):
+        not in ('once', 'new_episodes', 'all', 'none', 'live'):
     os.environ['SASCTL_RECORD_MODE'] = 'once'
+
+# Set a flag to indicate whether bypassing Betamax altogether.
+if os.environ['SASCTL_RECORD_MODE'].lower() == 'live':
+    SKIP_REPLAY = True
+
+    # Setting this back to a valid Betamax value to avoid downstream errors.
+    os.environ['SASCTL_RECORD_MODE'] = 'once'
+else:
+    SKIP_REPLAY = False
 
 with betamax.Betamax.configure() as config:
     config.cassette_library_dir = "tests/cassettes"
@@ -135,6 +149,11 @@ def session(request, credentials):
     from six.moves import mock
     from betamax.fixtures.pytest import _casette_name
     from sasctl import current_session
+
+    if SKIP_REPLAY:
+        yield Session(**credentials)
+        current_session(None)
+        return
 
     # Ignore FutureWarnings from betamax to avoid cluttering test results
     with warnings.catch_warnings():
@@ -210,6 +229,15 @@ def cas_session(request, credentials):
     from betamax.fixtures.pytest import _casette_name
     from six.moves import mock
     swat = pytest.importorskip('swat')
+    from swat.exceptions import SWATError
+
+    if SKIP_REPLAY:
+        with swat.CAS('https://{}/cas-shared-default-http/'.format(
+                credentials['hostname']),
+                username=credentials['username'],
+                password=credentials['password']) as s:
+            yield s
+        return
 
     # Ignore FutureWarnings from betamax to avoid cluttering test results
     with warnings.catch_warnings():
@@ -226,14 +254,23 @@ def cas_session(request, credentials):
         # Inject the session being recorded into the CAS connection
         with mock.patch('swat.cas.rest.connection.requests.Session') as mocked:
             mocked.return_value = recorded_session
-            with swat.CAS('https://{}/cas-shared-default-http/'.format(
+
+            try:
+                s = swat.CAS('https://{}/cas-shared-default-http/'.format(
                     credentials['hostname']),
-                          username=credentials['username'],
-                          password=credentials['password']) as s:
+                    username=credentials['username'],
+                    password=credentials['password'])
 
                 # Strip out the session id from requests & responses.
                 recorder.config.define_cassette_placeholder('[session id]', s._session)
                 yield s
+            finally:
+                try:
+                    s.close()
+                except SWATError:
+                    # session was closed during testing
+                    pass
+
         recorder.stop()
 
 
@@ -278,3 +315,55 @@ def pytest_runtest_setup(item):
             pytest.xfail("previous test failed (%s)" % previousfailed.name)
 
 
+@pytest.fixture
+def airline_dataset():
+    """Sentiment analysis dataset."""
+    import pandas as pd
+
+    df = pd.read_csv('examples/data/airline_tweets.csv')
+    df = df[['airline_sentiment', 'airline', 'name', 'tweet_location',
+             'tweet_id', 'tweet_created', 'retweet_count', 'text']]
+    return df
+
+
+@pytest.fixture
+def boston_dataset():
+    """Regression dataset."""
+    pytest.importorskip('sklearn')
+    pd = pytest.importorskip('pandas')
+    from sklearn import datasets
+
+    raw = datasets.load_boston()
+    df = pd.DataFrame(raw.data, columns=raw.feature_names)
+    df['Price'] = raw.target
+    return df
+
+
+@pytest.fixture
+def cancer_dataset():
+    """Binary classification dataset."""
+    sklearn = pytest.importorskip('sklearn')
+    pd = pytest.importorskip('pandas')
+    from sklearn import datasets
+
+    raw = datasets.load_breast_cancer()
+    df = pd.DataFrame(raw.data, columns=raw.feature_names)
+    df['Type'] = raw.target
+    df.Type = df.Type.astype('category')
+    df.Type.cat.categories = raw.target_names
+    return df
+
+
+@pytest.fixture
+def iris_dataset():
+    """Multi-class classification dataset."""
+    sklearn = pytest.importorskip('sklearn')
+    pd = pytest.importorskip('pandas')
+    from sklearn import datasets
+
+    raw = datasets.load_iris()
+    df = pd.DataFrame(raw.data, columns=raw.feature_names)
+    df['Species'] = raw.target
+    df.Species = df.Species.astype('category')
+    df.Species.cat.categories = raw.target_names
+    return df

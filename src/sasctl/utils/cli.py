@@ -6,6 +6,7 @@
 
 import argparse
 import inspect
+import json
 import logging
 import os
 import pkgutil
@@ -170,7 +171,8 @@ def _build_parser(services):
 
     # Create standard, top-level arguments
     parser = argparse.ArgumentParser(prog='sasctl', description='sasctl interacts with a SAS Viya environment.')
-    parser.add_argument('-k', '--insecure', action='store_true', help='Skip SSL verification')
+    parser.add_argument('-k', '--insecure', action='store_true', help='skip SSL verification')
+    parser.add_argument('-f', '--format', choices=['json'], default='json', help='output format')
     parser.add_argument('-v', '--verbose', action='count')
     parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
 
@@ -228,7 +230,7 @@ def main(args=None):
     kwargs = vars(args).copy()
 
     # Remove args that shouldn't be passed to the underlying command
-    for k in ['command', 'service', 'insecure', 'verbose']:
+    for k in ['command', 'service', 'insecure', 'verbose', 'format']:
         kwargs.pop(k, None)
 
     username = os.environ.get('SASCTL_USER_NAME')
@@ -249,6 +251,8 @@ def main(args=None):
             result = func(**kwargs)
             if isinstance(result, list):
                 pprint([str(x) for x in result])
+            elif isinstance(result, dict) and args.format == 'json':
+                    print(json.dumps(result, indent=2))
             else:
                 pprint(result)
     except RuntimeError as e:

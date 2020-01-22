@@ -49,6 +49,7 @@ def _sklearn_to_dict(model):
                 'LinearRegression': 'Linear regression',
                 'SVC': 'Support vector machine',
                 'GradientBoostingClassifier': 'Gradient boosting',
+                'GradientBoostingRegressor': 'Gradient boosting',
                 'XGBClassifier': 'Gradient boosting',
                 'XGBRegressor': 'Gradient boosting',
                 'RandomForestClassifier': 'Forest',
@@ -217,6 +218,9 @@ def register_model(model, name, project, repository=None, input=None,
                       'file': model_pkl,
                       'role': 'Python Pickle'})
 
+        target_funcs = [f for f in ('predict', 'predict_proba')
+                        if hasattr(model, f)]
+
         # Extract model properties
         model = _sklearn_to_dict(model)
         model['name'] = name
@@ -242,7 +246,7 @@ def register_model(model, name, project, repository=None, input=None,
 
         # Generate PyMAS wrapper
         try:
-            mas_module = from_pickle(model_pkl, 'predict',
+            mas_module = from_pickle(model_pkl, target_funcs,
                                      input_types=input, array_input=True)
             assert isinstance(mas_module, PyMAS)
 
@@ -262,7 +266,7 @@ def register_model(model, name, project, repository=None, input=None,
 
             model['outputVariables'] = \
                 [var.as_model_metadata() for var in mas_module.variables
-                 if var.out and var.name not in ('rc', 'msg')]
+                 if var.out]
         except ValueError:
             # PyMAS creation failed, most likely because input data wasn't
             # provided
@@ -514,13 +518,12 @@ def update_model_performance(data, model, label, refresh=True):
         raise ValueError("Performance monitoring is currently supported for "
                          "regression and binary classification projects.  "
                          "Received project with '%s' function.  Should be "
-                         "'Prediction' or 'Classification'.",
-                         project.get('function'))
+                         "'Prediction' or 'Classification'." % project.get('function'))
     elif project.get('targetLevel', '').lower() not in ('interval', 'binary'):
         raise ValueError("Performance monitoring is currently supported for "
                          "regression and binary classification projects.  "
                          "Received project with '%s' target level.  Should be "
-                         "'Interval' or 'Binary'.", project.get('targetLevel'))
+                         "'Interval' or 'Binary'." % project.get('targetLevel'))
     elif project.get('predictionVariable', '') == '' and project.get('function', '').lower() == 'prediction':
         raise ValueError("Project '%s' does not have a prediction variable "
                          "specified." % project)
@@ -566,7 +569,7 @@ def update_model_performance(data, model, label, refresh=True):
     url = '{}://{}/{}-http/'.format(sess._settings['protocol'],
                                     sess.hostname,
                                     cas_id)
-    regex = r'{}_(\d)_.*_{}'.format(table_prefix,
+    regex = r'{}_(\d+)_.*_{}'.format(table_prefix,
                                   model_obj.id)
 
     # Save the current setting before overwriting
@@ -609,9 +612,14 @@ def update_model_performance(data, model, label, refresh=True):
 
         with swat.options(exception_on_severity=2):
             # Table must be promoted so performance jobs can access.
-            tbl = s.upload(data, casout=dict(name=table_name,
+            result = s.upload(data, casout=dict(name=table_name,
                                                 caslib=caslib,
-                                                promote=True)).casTable
+                                                promote=True))
+
+            if not hasattr(result, 'casTable'):
+                raise RuntimeError('Unable to upload performance data to CAS.')
+
+            tbl = result.casTable
 
     # Restore the original value
     if orig_sslreqcert is not None:

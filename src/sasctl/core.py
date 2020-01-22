@@ -4,6 +4,7 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import concurrent.futures
 import copy
 import logging
 import json
@@ -13,6 +14,7 @@ import re
 import ssl
 import sys
 import warnings
+from collections import deque
 from uuid import UUID, uuid4
 
 import requests, requests.exceptions
@@ -387,7 +389,6 @@ class Session(requests.Session):
     def hostname(self):
         return self._settings.get('domain')
 
-
     def send(self, request, **kwargs):
         if self.message_log.isEnabledFor(logging.DEBUG):
             r = copy.deepcopy(request)
@@ -630,6 +631,245 @@ class Session(requests.Session):
             protocol=self._settings.get('protocol'),
             verify=self.verify))
 
+
+class PageIterator:
+    """Iterates through a collection that must be "paged" from the server.
+
+    Pages contain a batch of items from the overall collection.  Iterates the
+    series of pages and returns a single batch of items each time `next()` is
+    called.
+
+    Parameters
+    ----------
+    obj : RestObj
+        An instance of `RestObj` containing any initial items and a link to
+        retrieve additional items.
+    session : Session
+        The `Session` instance to use for requesting additional items.  Defaults
+        to current_session()
+    threads : int
+        Number of threads allocated to downloading additional pages.
+
+    Yields
+    ------
+    List[RestObj]
+        Items contained in the current page
+
+    """
+    def __init__(self, obj, session=None, threads=4):
+        self._num_threads = threads
+
+        # Session to use when requesting items
+        self._session = session or current_session()
+        self._pool = None
+        self._requested = []
+
+        link = get_link(obj, 'next')
+
+        # Dissect the "next" link so it can be reformatted and used by
+        # parallel threads
+        if link is None:
+            self._min_queue_len = 0
+            self._start = 0
+            self._limit = 0
+        if link is not None:
+            link = link['href']
+            start = re.search('(?<=start=)[\d]+', link)
+            limit = re.search('(?<=limit=)[\d]+', link)
+
+            # Construct a new link with format params
+            # Result is "/spam/spam?start={start}&limit={limit}"
+            link = link[:start.start()] + '{start}' \
+                   + link[start.end():limit.start()] \
+                   + '{limit}' + link[limit.end():]
+
+            self._start = int(start.group())
+            self._limit = int(limit.group())
+
+            # Length at which to beging requesting new items from the server
+            self._min_queue_len = self._limit
+
+        self._next_link = link
+
+        # Store the current items to iterate over
+        self._obj = obj
+
+    def __next__(self):
+        return self.next()
+
+    def next(self):
+        if self._pool is None:
+            self._pool = concurrent.futures.ThreadPoolExecutor(max_workers=self._num_threads)
+
+        # Send request for new pages if we don't have enough cached
+        num_req_needed = self._num_threads - len(self._requested)
+        for _ in range(num_req_needed):
+            self._requested.append(self._pool.submit(self._request_async, self._start))
+            self._start += self._limit
+
+        # If this is the first time next() has been called, return the items
+        # contained in the initial page.
+        if self._obj is not None:
+            result = [RestObj(x) for x in self._obj['items']]
+            self._obj = None
+            return result
+
+        # Make sure the next page has been received
+        if len(self._requested):
+            items = self._requested.pop(0).result()
+
+            if len(items) == 0:
+                raise StopIteration
+
+            return items
+
+        raise StopIteration
+
+    def __iter__(self):
+        # All Iterators are also Iterables
+        return self
+
+    def _request_async(self, start):
+        """Used by worker threads to retrieve next batch of items."""
+
+        if self._next_link is None:
+            return []
+
+        # Format the link to retrieve desired batch
+        link = self._next_link.format(start=start, limit=self._limit)
+        r = get(link, format='json', session=self._session)
+        r = RestObj(r)
+        return [RestObj(x) for x in r['items']]
+
+
+class PagedItemIterator:
+    """Iterates through a collection that must be "paged" from the server.
+
+    Parameters
+    ----------
+    obj : RestObj
+        An instance of `RestObj` containing any initial items and a link to
+        retrieve additional items.
+    session : Session
+        The `Session` instance to use for requesting additional items.  Defaults
+        to current_session()
+    threads : int
+        Number of threads allocated to downloading additional items.
+
+    Yields
+    ------
+    RestObj
+
+    """
+    def __init__(self, obj, session=None, threads=4):
+        # Iterates over whole pages of items
+        self._pager = PageIterator(obj, session, threads)
+
+        # Total number of items to iterate over
+        if 'count' in obj:
+            self._count = int(obj.count)
+        else:
+            self._count = len(obj['items'])
+
+        self._cache = []
+
+    def __len__(self):
+        return self._count
+
+    def __next__(self):
+        return self.next()
+
+    def next(self):
+        # Get next page of items if we're currently out
+        if len(self._cache) == 0:
+            self._cache = next(self._pager)
+
+        # Return the next item
+        if len(self._cache):
+            return self._cache.pop(0)
+
+        raise StopIteration
+
+    def __iter__(self):
+        return self
+
+
+class PagedListIterator():
+    def __init__(self, l):
+        self.__list = l
+        self.__index = 0
+
+    def __next__(self):
+        return self.next()
+
+    def next(self):
+        if self.__index >= len(self.__list):
+            raise StopIteration
+
+        item = self.__list[self.__index]
+        self.__index += 1
+        return item
+
+    def __iter__(self):
+        return self
+
+
+class PagedList(list):
+    def __init__(self, obj, **kwargs):
+        super(PagedList, self).__init__()
+        self._pager = PagedItemIterator(obj, **kwargs)
+
+        # Force caching of first page
+        self.append(next(self._pager))
+        items = self._pager._cache
+        self.extend(items)
+
+        # clear the list (py27 compatible)
+        del self._pager._cache[:]
+
+
+    def __len__(self):
+        return len(self._pager)
+
+    def __iter__(self):
+        # return super(PagedList, self).__iter__()
+        return PagedListIterator(self)
+
+    def __getslice__(self, i, j):
+        # Removed from Py3.x but still implemented in CPython built-in list
+        # Override to ensure __getitem__ is used instead.
+        return self.__getitem__(slice(i, j))
+
+    def __getitem__(self, item):
+        if hasattr(item, 'stop'):
+            # `item` is a slice
+            # if no stop was specified, assume full length
+            idx = item.stop or len(self)
+        else:
+            idx = int(item)
+
+        try:
+            while super(PagedList, self).__len__() <= idx:
+                n = next(self._pager)
+                self.append(n)
+        except StopIteration:
+            # May cause if slice or index extends beyond array
+            # Ignore and let List handle IndexErrors if necessary.
+            pass
+
+        return super(PagedList, self).__getitem__(item)
+
+    def __str__(self):
+        string = super(PagedList, self).__str__()
+
+        # If the list has more "items" than are stored in the underlying list
+        # then there are more downloads to make.
+        if len(self) - super(PagedList, self).__len__() > 0:
+            string = string.rstrip(']') + ', ... ]'
+
+        return string
+
+
 def is_uuid(id):
     try:
         UUID(str(id))
@@ -749,11 +989,50 @@ def delete(path, **kwargs):
     return request('delete', path, **kwargs)
 
 
-def request(verb, path, session=None, raw=False, **kwargs):
+def request(verb, path, session=None, raw=False, format='auto', **kwargs):
+    """Send an HTTP request with a session.
+
+    Parameters
+    ----------
+    verb : str
+        A valid HTTP request verb.
+    path : str
+        Path portion of URL to request.
+    session : Session, optional
+        Defaults to `current_session()`.
+    raw : bool
+        Deprecated. Whether to return the raw `Response` object.
+        Defaults to False.
+    format : {'auto', 'rest', 'response', 'content', 'json', 'text'}
+        The format of the return response.  Defaults to `auto`.
+        rest: `RestObj` constructed from JSON.
+        response: the raw `Response` object.
+        content: Response.content
+        json: Response.json()
+        text: Response.text
+        auto: `RestObj` constructed from JSON if possible, otherwise same as
+              `text`.
+    kwargs : any
+        Additional arguments are passed to the session `request` method.
+
+    Returns
+    -------
+
+    """
     session = session or current_session()
 
     if session is None:
         raise TypeError('No `Session` instance found.')
+
+    if raw:
+        warnings.warn("The 'raw' parameter is deprecated and will be removed in"
+                      " a future version.  Use format='response' instead.",
+                      DeprecationWarning)
+        format = 'response'
+
+    format = 'auto' if format is None else str(format).lower()
+    if format not in ('auto', 'response', 'content', 'text', 'json', 'rest'):
+        raise ValueError
 
     response = session.request(verb, path, **kwargs)
 
@@ -761,19 +1040,30 @@ def request(verb, path, session=None, raw=False, **kwargs):
         raise HTTPError(response.url, response.status_code, response.text,
                         response.headers, None)
 
-    try:
-        if raw:
-            return response.json()
-        else:
+    # Return the raw response if requested
+    if format == 'response':
+        return response
+    elif format == 'json':
+        return response.json()
+    elif format == 'text':
+        return response.text
+    elif format == 'content':
+        return response.content
+    else:
+        try:
             obj = _unwrap(response.json())
 
             # ETag is required to update any object
-            # May not be returned on all responses (e.g. listing multiple objects)
+            # May not be returned on all responses (e.g. listing
+            # multiple objects)
             if isinstance(obj, RestObj):
-                setattr(obj, '_headers', response.headers)
+                obj._headers = response.headers
             return obj
-    except ValueError:
-        return response.text
+        except ValueError:
+            if format == 'rest':
+                return RestObj()
+            else:
+                return response.text
 
 
 def get_link(obj, rel):
@@ -845,6 +1135,8 @@ def uri_as_str(obj):
         if isinstance(link, dict):
             return link.get('uri')
 
+    return obj
+
 
 def _unwrap(json):
     """Converts a JSON response to one or more `RestObj` instances.
@@ -863,7 +1155,7 @@ def _unwrap(json):
         if len(json['items']) == 1:
             return RestObj(json['items'][0])
         elif len(json['items']) > 1:
-            return list(map(RestObj, json['items']))
+            return PagedList(RestObj(json))
         else:
             return []
     return RestObj(json)
