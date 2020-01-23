@@ -254,6 +254,9 @@ class MicroAnalyticScore(Service):
                     'first_input_type = str(type(first_input))',
                     'try:',
                     '    import pandas as pd',
+                    '    if isinstance(first_input, pd.DataFrame):',
+                    '        assert first_input.shape[0] == 1',
+                    '        first_input = first_input.iloc[0]',
                     '    is_pandas = isinstance(first_input, pd.Series)',
                     'except ImportError:',
                     '    is_pandas = False',
@@ -291,6 +294,15 @@ class MicroAnalyticScore(Service):
                     arg_checks.append("        if k.lower() == '%s':" % arg.lower())
                     arg_checks.append("            %s = kwargs[k]" % arg)
                     arg_checks.append("            continue")
+
+                # MAS does not attempt any type conversions, so int, decimal, etc
+                # needs to be exactly typed or the call will fail.  Cast everything
+                # just to be sure.
+                for arg, arg_type in zip(arguments, arg_types):
+                    if arg_type == 'decimal':
+                        arg_checks.append('%s = float(%s)' % (arg, arg))
+                    elif arg_type == 'integer':
+                        arg_checks.append('%s = int(%s)' % (arg, arg))
             else:
                 arg_checks = []
 
