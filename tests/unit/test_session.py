@@ -377,7 +377,7 @@ def test_str():
     import os
 
     # Remove any environment variables disabling SSL verification
-    _ = os.environ.pop('SSLREQCERT')
+    _ = os.environ.pop('SSLREQCERT', None)
 
     with mock.patch('sasctl.core.Session.get_token', return_value='token'):
 
