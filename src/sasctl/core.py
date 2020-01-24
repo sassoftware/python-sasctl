@@ -387,7 +387,6 @@ class Session(requests.Session):
     def hostname(self):
         return self._settings.get('domain')
 
-
     def send(self, request, **kwargs):
         if self.message_log.isEnabledFor(logging.DEBUG):
             r = copy.deepcopy(request)
@@ -431,6 +430,7 @@ class Session(requests.Session):
                 hooks=None, stream=None, verify=None, cert=None, json=None):
 
         url = self._build_url(url)
+        verify = verify or self.verify
 
         try:
             return super(Session, self).request(method, url, params, data,

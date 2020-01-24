@@ -2,6 +2,11 @@ Unreleased
 ----------
  -
  
+v1.4.6 (2020-1-24)
+------------------
+**Bugfixes**
+ - Fixed an issue where the `REQUESTS_CA_BUNDLE` environment variable was taking precedence over the `verify_ssl` parameter.
+
 v1.4.5 (2019-12-5)
 ------------------
 **Changes**
