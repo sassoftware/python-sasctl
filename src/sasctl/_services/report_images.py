@@ -4,6 +4,8 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import six
+
 from .service import Service
 from ..core import RestObj
 
@@ -83,6 +85,9 @@ class ReportImages(Service):
         if isinstance(size, tuple):
             size = '%dx%d' % size
 
+        if size is None:
+            size = '640x480'
+
         lod = lod or HIGH
 
         if lod not in _LOD_VALUES.keys():
@@ -102,15 +107,33 @@ class ReportImages(Service):
         if elements is not None:
             selection = 'visualElements'
 
+            # In the case where a single element was passed, wrap it in a list
+            if isinstance(elements, (six.string_types, dict)):
+                elements = [elements]
+
             # In the case where a single tuple was passed, wrap it in a list
             # Don't do this if a tuple of tuples was passed.
             if isinstance(elements, tuple) and not isinstance(elements[0], tuple):
                 elements = [elements]
 
-            for name, size in elements:
-                if isinstance(size, tuple):
-                    size = '%dx%d' % size
-                formatted_elements.append(dict(name=name, size=size))
+            for element in elements:
+                if isinstance(element, tuple) and len(element) == 2:
+                    # Get element & target size if both were provided
+                    elem_name, elem_size = element
+                else:
+                    # Otherwise, assume top-level size value will be used.
+                    elem_name = element
+                    elem_size = size
+
+                # If element was passed as a RestObj, extract the name
+                if hasattr(elem_name, 'name'):
+                    elem_name = elem_name.name
+
+                # If size was passed as a tuple, format as string
+                if isinstance(elem_size, tuple):
+                    elem_size = '%dx%d' % elem_size
+
+                formatted_elements.append(dict(name=elem_name, size=elem_size))
 
         elif section is not None:
             selection = 'report'
