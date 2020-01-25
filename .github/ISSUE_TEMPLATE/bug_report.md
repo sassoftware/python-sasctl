@@ -1,27 +1,23 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: Report an issue
+about: Report a problem you're having or a bug you found
 title: ''
 labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Describe the issue**
+A clear and concise description of the issue you're experiencing.
 
 **To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Steps or example code to reproduce the issue.
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
 **Stack Trace**
-Include the full stack trace and error message to help isolate your problem.
+If you're experiencing an exception, include the full stack trace and error message.
 
 **Version**
 What version of `sasctl` are you using?
