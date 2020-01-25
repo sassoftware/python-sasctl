@@ -432,6 +432,7 @@ class Session(requests.Session):
                 hooks=None, stream=None, verify=None, cert=None, json=None):
 
         url = self._build_url(url)
+        verify = verify or self.verify
 
         try:
             return super(Session, self).request(method, url, params, data,

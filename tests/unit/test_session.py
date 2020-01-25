@@ -280,6 +280,10 @@ def test_ssl_context():
 
 
 def test_verify_ssl(missing_packages):
+    # Clear environment variables
+    os.environ.pop('SSLREQCERT', None)
+    os.environ.pop('REQUESTS_CA_BUNDLE', None)
+
     with mock.patch('sasctl.core.Session.get_token', return_value='token'):
         # Should verify SSL by default
         s = Session('hostname', 'username', 'password')
@@ -315,6 +319,35 @@ def test_verify_ssl(missing_packages):
             s = Session('127.0.0.1', 'username', 'password', verify_ssl=True)
             assert s.verify == True
 
+    # Clear environment variables
+    os.environ.pop('SSLREQCERT', None)
+    os.environ.pop('REQUESTS_CA_BUNDLE', None)
+
+    # Ensure correct verify_ssl values are passed to requests module
+    with mock.patch('requests.Session.request') as req:
+        req.return_value.status_code = 200
+        s = Session('127.0.0.1', 'username', 'password')
+
+        # Check value passed to verify= parameter
+        assert req.call_args[0][13] == True
+        assert s.verify == True
+
+    with mock.patch('requests.Session.request') as req:
+        req.return_value.status_code = 200
+        s = Session('127.0.0.1', 'username', 'password', verify_ssl=False)
+
+        # Check value passed to verify= parameter
+        assert req.call_args[0][13] == False
+        assert s.verify == False
+
+    with mock.patch('requests.Session.request') as req:
+        # Explicit verify_ssl= flag should take precedence over env vars
+        os.environ['REQUESTS_CA_BUNDLE'] = 'dummy.crt'
+        s = Session('127.0.0.1', 'username', 'password', verify_ssl=False)
+
+        # Check value passed to verify= parameter
+        assert req.call_args[0][13] == False
+        assert s.verify == False
 
 
 def test_kerberos():
@@ -344,7 +377,7 @@ def test_str():
     import os
 
     # Remove any environment variables disabling SSL verification
-    _ = os.environ.pop('SSLREQCERT')
+    _ = os.environ.pop('SSLREQCERT', None)
 
     with mock.patch('sasctl.core.Session.get_token', return_value='token'):
 

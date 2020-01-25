@@ -14,6 +14,11 @@ Unreleased
    returned value.
  - The `get_file_content` method of the Files service now returns the actual content instead of the file metadata.
  - JSON output when using `sasctl` from the command line is now formatted correctly.
+ 
+v1.4.6 (2020-1-24)
+------------------
+**Bugfixes**
+ - Fixed an issue where the `REQUESTS_CA_BUNDLE` environment variable was taking precedence over the `verify_ssl` parameter.
 
 v1.4.5 (2019-12-5)
 ------------------
