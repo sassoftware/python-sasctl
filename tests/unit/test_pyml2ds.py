@@ -21,7 +21,7 @@ def test_xgb2ds():
     pytest.importorskip('xgboost')
 
     IN_PKL = os.path.join(DATA_PATH, 'xgb.pkl')
-    EXPECTED_SAS = os.path.join(DATA_PATH, 'xgb.sas')
+    EXPECTED_SAS = os.path.join(DATA_PATH, 'xgb_datastep')
 
     from sasctl.utils.pyml2ds.connectors.ensembles.xgb import XgbTreeParser
 
@@ -50,7 +50,7 @@ def test_lgb2ds():
     pytest.importorskip('lightgbm')
 
     IN_PKL = os.path.join(DATA_PATH, 'lgb.pkl')
-    EXPECTED_SAS = os.path.join(DATA_PATH, 'lgb.sas')
+    EXPECTED_SAS = os.path.join(DATA_PATH, 'lgb_datastep')
 
     from sasctl.utils.pyml2ds.connectors.ensembles.lgb import LightgbmTreeParser
 
@@ -77,7 +77,7 @@ def test_lgb2ds():
 
 def test_gbm2ds():
     IN_PKL = os.path.join(DATA_PATH, 'gbm.pmml')
-    EXPECTED_SAS = os.path.join(DATA_PATH, 'gbm.sas')
+    EXPECTED_SAS = os.path.join(DATA_PATH, 'gbm_datastep')
 
     from sasctl.utils.pyml2ds.connectors.ensembles.pmml import PmmlTreeParser
 
