@@ -170,7 +170,7 @@ class TestSklearnLinearModel:
         from sasctl.tasks import register_model
         from sasctl import RestObj
 
-        sk_model, X, y = sklearn_linear_model
+        sk_model, X, _ = sklearn_linear_model
 
         # Register model and ensure attributes are set correctly
         model = register_model(sk_model,
@@ -206,11 +206,9 @@ class TestSklearnLinearModel:
         assert 'dmcas_epscorecode.sas' in filenames
         assert 'dmcas_packagescorecode.sas' in filenames
 
-    def test_create_performance_definition(self, sklearn_linear_model):
+    def test_create_performance_definition(self):
         from sasctl.services import model_repository as mr
         from sasctl.services import model_management as mm
-
-        lm, X, y = sklearn_linear_model
 
         project = mr.get_project(self.PROJECT_NAME)
         # Update project properties

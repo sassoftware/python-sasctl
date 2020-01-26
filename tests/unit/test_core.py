@@ -27,7 +27,6 @@ def test_crud_function_doc():
     from sasctl.core import _build_crud_funcs
 
     for func in _build_crud_funcs('/widgets'):
-        t0 = func.__doc__
         assert ' widgets ' in func.__doc__
         assert '{item}' not in func.__doc__
 
