@@ -203,10 +203,6 @@ class Service(object):
                 kwargs['start'] = int(start)
             if limit is not None:
                 kwargs['limit'] = int(limit)
-            # else:
-            #     # Until search is more precise, try to pull all results
-            #     # Needed until transparent pagination is implemented.
-            #     kwargs['limit'] = int(1e4)
 
             params = '&'.join(['%s=%s' % (k, quote(str(v), safe='/(),"'))
                                for k, v in six.iteritems(kwargs)])
@@ -214,10 +210,10 @@ class Service(object):
             results = cls.get(path, params=params)
             if results is None:
                 return []
-            elif isinstance(results, (list, PagedItemIterator)):
+            if isinstance(results, (list, PagedItemIterator)):
                 return results
-            else:
-                return [results]
+
+            return [results]
 
         @sasctl_command('get')
         def get_item(cls, item, refresh=False):
@@ -381,8 +377,8 @@ class Service(object):
 
         if isinstance(resources, (list, PagedItemIterator)):
             return resources
-        else:
-            return [resources]
+
+        return [resources]
 
     @classmethod
     def _monitor_job(cls, job, max_retries=60):

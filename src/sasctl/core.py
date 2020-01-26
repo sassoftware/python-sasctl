@@ -1043,27 +1043,25 @@ def request(verb, path, session=None, raw=False, format='auto', **kwargs):
     # Return the raw response if requested
     if format == 'response':
         return response
-    elif format == 'json':
+    if format == 'json':
         return response.json()
-    elif format == 'text':
+    if format == 'text':
         return response.text
-    elif format == 'content':
+    if format == 'content':
         return response.content
-    else:
-        try:
-            obj = _unwrap(response.json())
+    try:
+        obj = _unwrap(response.json())
 
-            # ETag is required to update any object
-            # May not be returned on all responses (e.g. listing
-            # multiple objects)
-            if isinstance(obj, RestObj):
-                obj._headers = response.headers
-            return obj
-        except ValueError:
-            if format == 'rest':
-                return RestObj()
-            else:
-                return response.text
+        # ETag is required to update any object
+        # May not be returned on all responses (e.g. listing
+        # multiple objects)
+        if isinstance(obj, RestObj):
+            obj._headers = response.headers
+        return obj
+    except ValueError:
+        if format == 'rest':
+            return RestObj()
+        return response.text
 
 
 def get_link(obj, rel):

@@ -104,9 +104,9 @@ class Files(Service):
 
         if 'text/plain' in content_type:
             return r.text
-        elif 'application/json' in content_type:
+        if 'application/json' in content_type:
             return r.json()
-        elif 'application/octet-stream' in content_type:
+        if 'application/octet-stream' in content_type:
             return r.content
-        else:
-            return r.text
+
+        return r.text

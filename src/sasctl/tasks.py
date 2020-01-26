@@ -83,7 +83,7 @@ def _sklearn_to_dict(model):
         algorithm=algorithm,
         scoreCodeType='ds2MultiType',
         trainCodeType='Python',
-        targetLevel = target_level,
+        targetLevel=target_level,
         function=analytic_function,
         tool='Python %s.%s'
              % (sys.version_info.major, sys.version_info.minor),
@@ -201,22 +201,24 @@ def register_model(model, name, project, repository=None, input=None,
         zipfile = utils.create_package(model, input=input)
 
         if create_project:
-            outvar=[]
-            invar=[]
+            outvar = []
+            invar = []
             import zipfile as zp
             import copy
             zipfilecopy = copy.deepcopy(zipfile)
-            tmpzip=zp.ZipFile(zipfilecopy)
+            tmpzip = zp.ZipFile(zipfilecopy)
             if "outputVar.json" in tmpzip.namelist():
-                outvar=json.loads(tmpzip.read("outputVar.json").decode('utf=8')) #added decode for 3.5 and older
+                outvar = json.loads(tmpzip.read("outputVar.json").decode(
+                    'utf=8'))  # added decode for 3.5 and older
                 for tmp in outvar:
-                    tmp.update({'role':'output'})
+                    tmp.update({'role': 'output'})
             if "inputVar.json" in tmpzip.namelist():
-                invar=json.loads(tmpzip.read("inputVar.json").decode('utf-8')) #added decode for 3.5 and older
+                invar = json.loads(tmpzip.read("inputVar.json").decode(
+                    'utf-8'))  #added decode for 3.5 and older
                 for tmp in invar:
                     if tmp['role'] != 'input':
                         tmp['role'] = 'input'
-            vars=invar + outvar
+            vars = invar + outvar
             project = mr.create_project(project, repo_obj, variables=vars)
 
         model = mr.import_model_from_zip(name, project, zipfile,

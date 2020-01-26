@@ -115,17 +115,18 @@ def create_package_from_datastep(table, input=None):
                     if "length " + ovarname in dscode:
                         sastype=dscode.split("length " + ovarname)[1].split(';')[0].strip()
                         if "$" in sastype:
-                            output_var.update({"type":"string"})
-                            output_var.update({"length":sastype.split("$")[1]})
+                            output_var.update({"type": "string"})
+                            output_var.update({"length": sastype.split("$")[1]})
                         else:
-                            output_var.update({"type":"decimal"})
-                            output_var.update({"length":sastype})
+                            output_var.update({"type": "decimal"})
+                            output_var.update({"length": sastype})
                     else:
                         #If no length for varaible, default is decimal, 8
-                        output_var.update({"type":"decimal"})
-                        output_var.update({"length":8})
+                        output_var.update({"type": "decimal"})
+                        output_var.update({"length": 8})
                 else:
-                    output_var.update({"description":tmp.split(';')[0].strip().strip("'")})
+                    output_var.update(
+                        {"description": tmp.split(';')[0].strip().strip("'")})
             output_vars.append(output_var) 
 
     file_metadata = [{'role': 'score', 'name': 'dmcas_scorecode.sas'}]
@@ -133,7 +134,7 @@ def create_package_from_datastep(table, input=None):
     zip_file = _build_zip_from_files({
         'fileMetadata.json': file_metadata,
         'dmcas_scorecode.sas': dscode,
-        'ModelProperties.json': {"scoreCodeType":"dataStep"},
+        'ModelProperties.json': {"scoreCodeType": "dataStep"},
         'outputVar.json': output_vars,
         'inputVar.json': input_vars
     })

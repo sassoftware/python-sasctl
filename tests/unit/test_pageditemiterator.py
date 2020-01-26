@@ -7,7 +7,7 @@
 from six.moves import mock
 
 from sasctl.core import PagedItemIterator, RestObj
-
+from .test_pageiterator import paging
 
 def test_no_paging_required():
     """If "next" link not present, current items should be included."""
