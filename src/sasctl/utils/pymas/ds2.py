@@ -71,7 +71,7 @@ class DS2BasePackage(object):
     """
     def __init__(self, code=None):
         self._id = uuid.uuid4().hex.upper()
-        self._body = code or tuple()
+        self._body = code or ()
         self.methods = []
 
     @property
@@ -333,8 +333,7 @@ class DS2ScoreMethod(DS2BaseMethod):
 
 @versionadded(version='1.5')
 class DS2PredictProbaMethod(DS2BaseMethod):
-    def __init__(self, variables, return_code=True, return_message=True,
-                 target='wrapper'):
+    def __init__(self, variables):
 
         self.public_variables = variables
         self.private_variables = []

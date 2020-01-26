@@ -170,8 +170,10 @@ class Service(object):
         """
         # Set a default filter
         if get_filter is None:
-            def get_filter(item):
+            def default_filter(item):
                 return dict(filter='eq(name, "%s")' % item)
+
+            get_filter = default_filter
 
         @sasctl_command('list')
         def list_items(cls, filter=None, start=None, limit=None, **kwargs):
