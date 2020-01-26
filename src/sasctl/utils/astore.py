@@ -98,10 +98,6 @@ def create_package_from_datastep(table, input=None):
             # Assuming input is a DataFrame representing model inputs.  Use to
             # get input variables
             vars = ds2_variables(input)
-        elif isinstance(input, type):
-            params = OrderedDict(
-                [(k, input) for k in target_func.__code__.co_varnames])
-            vars = ds2_variables(params)
         elif isinstance(input, dict):
             vars = ds2_variables(input)
         if vars:
@@ -429,15 +425,14 @@ def _generate_package_code(result):
     def extract_type(var, out=False):
         # Find the matching variable declarations and extract the type
         var = str(var).strip()
-        l = [l for l in dcl_lines if ' "{}"'.format(var) in l][0]
-        l = l.replace('dcl ', '').strip().split(' ')[0]
+        x = [x for x in dcl_lines if ' "{}"'.format(var) in x][0]
+        x = x.replace('dcl ', '').strip().split(' ')[0]
 
-        # Remove the length component from output variables
-        # Otherwise, compilation warning is raised which prevents publishing to MAS
-        if out and '(' in l:
-            l = l[:l.find('(')]
-        return l
-
+        # Remove the length component from output variables to prevent
+        # compilation warning which prevents publishing to MAS
+        if out and '(' in x:
+            x = x[:x.find('(')]
+        return x
 
     variables = ['       {} "{}"'.format(extract_type(var), var) for var in result.InputVariables.Name]
     variables += ['       IN_OUT {} "{}"'.format(extract_type(var, out=True), var) for var in result.OutputVariables.Name]
