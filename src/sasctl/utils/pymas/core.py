@@ -423,7 +423,7 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
             # Inspect the Python method to determine arguments
             vars = ds2_variables(target_func)
 
-        if not any([v for v in vars if v.out]):
+        if not any(v for v in vars if v.out):
             vars.append(DS2Variable(name='result', type='float', out=True))
 
         return target_func_name, vars
