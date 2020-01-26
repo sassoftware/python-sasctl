@@ -40,7 +40,7 @@ def paging(request):
 
         def side_effect(_, link, **kwargs):
             assert 'limit=%d' % limit in link
-            start = int(re.search('(?<=start=)[\d]+', link).group())
+            start = int(re.search(r'(?<=start=)[\d]+', link).group())
             return RestObj(items=items[start:start + limit])
 
         req.side_effect = side_effect

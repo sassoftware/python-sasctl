@@ -342,7 +342,7 @@ def boston_dataset():
 @pytest.fixture
 def cancer_dataset():
     """Binary classification dataset."""
-    sklearn = pytest.importorskip('sklearn')
+    pytest.importorskip('sklearn')
     pd = pytest.importorskip('pandas')
     from sklearn import datasets
 
@@ -357,7 +357,7 @@ def cancer_dataset():
 @pytest.fixture
 def iris_dataset():
     """Multi-class classification dataset."""
-    sklearn = pytest.importorskip('sklearn')
+    pytest.importorskip('sklearn')
     pd = pytest.importorskip('pandas')
     from sklearn import datasets
 

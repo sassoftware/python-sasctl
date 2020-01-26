@@ -60,7 +60,7 @@ def test_convert_to_list():
 def test_paging(paging):
     """Test that correct paging requests are made."""
 
-    obj, items, request = paging
+    obj, items, _ = paging
 
     pager = PagedItemIterator(obj)
 

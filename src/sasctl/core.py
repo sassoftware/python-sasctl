@@ -674,8 +674,8 @@ class PageIterator:
             self._limit = 0
         if link is not None:
             link = link['href']
-            start = re.search('(?<=start=)[\d]+', link)
-            limit = re.search('(?<=limit=)[\d]+', link)
+            start = re.search(r'(?<=start=)[\d]+', link)
+            limit = re.search(r'(?<=limit=)[\d]+', link)
 
             # Construct a new link with format params
             # Result is "/spam/spam?start={start}&limit={limit}"

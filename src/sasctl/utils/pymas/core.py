@@ -205,7 +205,7 @@ def wrap_predict_proba_method(func, variables, **kwargs):
 
     wrapper = build_wrapper_function(func, variables, **kwargs)
 
-    old_code = 'if result.size == 1:\s*result = np.asscalar\(result\)'
+    old_code = r'if result.size == 1:\s*result = np.asscalar\(result\)'
     new_code = 'assert result.shape[0] == 1\n'
     new_code += '        result = tuple(result[0].tolist())'
 

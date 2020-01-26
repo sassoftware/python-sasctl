@@ -250,7 +250,7 @@ def test_from_pickle_2(train_data, pickle_file):
     import re
     from sasctl.utils.pymas import PyMAS, from_pickle
 
-    X, y = train_data
+    X, _ = train_data
 
     with mock.patch('uuid.uuid4') as mocked:
         mocked.return_value.hex = 'DF74A4B18C9E41A2A34B0053E123AA67'

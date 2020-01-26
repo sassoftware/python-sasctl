@@ -81,14 +81,14 @@ class TestTextFile:
         assert isinstance(file, RestObj)
         assert FILENAME == file.name
 
-    def test_get_file_without_name(self):
+    def test_get_file_without_name(self):  # skipcq: PYL-R0201
         """Ensure previously created file can be retrieved."""
         file = files.get_file(FILENAME)
 
         assert isinstance(file, RestObj)
         assert FILENAME == file.name
 
-    def test_delete_file_without_name(self):
+    def test_delete_file_without_name(self):  # skipcq: PYL-R0201
         """Delete previously created file."""
         files.delete_file(FILENAME)
         file = files.get_file(FILENAME)
@@ -182,7 +182,7 @@ class TestPickleFile:
 
         assert file is None
 
-    def test_create_file_without_name(self, dummy_file):
+    def test_create_file_without_name(self, dummy_file):  # skipcq: PYL-R0201
         """Create a file from just a path."""
         # Requests uses os.urandom(16) to generate boundaries for multi-part
         # form uploads.  Mock the output to ensure a consistent value so

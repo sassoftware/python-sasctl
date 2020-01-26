@@ -82,7 +82,7 @@ def ds2_variables(input, output_vars=False, names=None):
         names = list(types.keys())
 
     results = []
-    for k, v in six.iteritems(types):
+    for v in six.itervalues(types):
         name = names.pop(0)
         if isinstance(v, six.string_types):
             results.append(DS2Variable(name=name, type=v, out=output_vars))
