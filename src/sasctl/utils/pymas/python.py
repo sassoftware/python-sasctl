@@ -80,8 +80,6 @@ def ds2_variables(input, output_vars=False, names=None):
         names = [names + str(i) for i in range(1, len(types)+1)]
     elif names is None:
         names = list(types.keys())
-    else:
-        assert len(names) == len(types)
 
     results = []
     for k, v in six.iteritems(types):

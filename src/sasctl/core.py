@@ -14,7 +14,6 @@ import re
 import ssl
 import sys
 import warnings
-from collections import deque
 from uuid import UUID, uuid4
 
 import requests, requests.exceptions

@@ -11,6 +11,7 @@ import shutil
 import tempfile
 import uuid
 import zipfile
+from collections import OrderedDict
 
 import six
 
@@ -84,7 +85,6 @@ def create_package_from_datastep(table, input=None):
 
     """
     assert 'DataStepSrc' in table.columns
-    sess = table.session.get_connection()
 
     dscode = table.to_frame().loc[0, 'DataStepSrc']
 
@@ -99,8 +99,8 @@ def create_package_from_datastep(table, input=None):
             # get input variables
             vars = ds2_variables(input)
         elif isinstance(input, type):
-            params = OrderedDict([(k, input)
-                              for k in target_func.__code__.co_varnames])
+            params = OrderedDict(
+                [(k, input) for k in target_func.__code__.co_varnames])
             vars = ds2_variables(params)
         elif isinstance(input, dict):
             vars = ds2_variables(input)

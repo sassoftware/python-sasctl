@@ -215,7 +215,7 @@ def register_model(model, name, project, repository=None, input=None,
                 invar=json.loads(tmpzip.read("inputVar.json").decode('utf-8')) #added decode for 3.5 and older
                 for tmp in invar:
                     if tmp['role'] != 'input':
-                       tmp['role']='input'
+                        tmp['role'] = 'input'
             vars=invar + outvar
             project = mr.create_project(project, repo_obj, variables=vars)
 
