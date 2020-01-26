@@ -715,7 +715,7 @@ class PageIterator:
             return result
 
         # Make sure the next page has been received
-        if len(self._requested):
+        if len(self._requested) > 0:
             items = self._requested.pop(0).result()
 
             if len(items) == 0:
@@ -785,7 +785,7 @@ class PagedItemIterator:
             self._cache = next(self._pager)
 
         # Return the next item
-        if len(self._cache):
+        if len(self._cache) > 0:
             return self._cache.pop(0)
 
         raise StopIteration

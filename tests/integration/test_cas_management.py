@@ -7,7 +7,6 @@
 import pytest
 from six.moves import mock
 
-from sasctl.core import PagedItemIterator
 from sasctl.services import cas_management as cm
 
 

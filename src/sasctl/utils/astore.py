@@ -11,7 +11,6 @@ import shutil
 import tempfile
 import uuid
 import zipfile
-from collections import OrderedDict
 
 import six
 
@@ -328,7 +327,10 @@ def _get_model_properties(result):
     }
 
     algorithm = result.Description[result.Description.Attribute == 'Analytic Engine']
-    algorithm = str(algorithm.Value.iloc[0]).lower() if len(algorithm) else None
+    if len(algorithm) > 0:
+        algorithm = str(algorithm.Value.iloc[0]).lower()
+    else:
+        algorithm = None
 
     def classification_target(r):
         target = r.OutputVariables.Name.str.startswith('I_')

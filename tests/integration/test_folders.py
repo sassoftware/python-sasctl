@@ -6,7 +6,7 @@
 
 import pytest
 
-from sasctl.core import PagedItemIterator, RestObj
+from sasctl.core import RestObj
 from sasctl.services import folders
 
 pytestmark = pytest.mark.usefixtures('session')

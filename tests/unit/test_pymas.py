@@ -118,7 +118,7 @@ def test_from_pickle_with_class():
 
 def test_build_wrapper_function():
     def func(a, b):
-        pass
+        return a, b
 
     # Actual function inputs & DS2 variables current dont have to match.
     result = build_wrapper_function(func, [DS2Variable('a', 'int', False),
@@ -553,7 +553,6 @@ def test_bugfix_27():
 
 def test_wrapper():
     """Verify correct output from build_wrapper_function under default settings."""
-    from sasctl.utils.pymas.core import build_wrapper_function
 
     target = """
 def wrapper(a, b):
@@ -595,7 +594,6 @@ def wrapper(a, b):
 
 def test_wrapper_renamed():
     """Check wrap_predict_method output with custom name."""
-    from sasctl.utils.pymas.core import build_wrapper_function
 
     target = """
 def renamed_wrapper(a, b):

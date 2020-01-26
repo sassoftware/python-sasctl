@@ -4,11 +4,10 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import pytest
 from six.moves import mock
 
 from sasctl.core import PagedItemIterator, RestObj
-from .test_pageiterator import paging
+
 
 def test_no_paging_required():
     """If "next" link not present, current items should be included."""

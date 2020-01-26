@@ -8,8 +8,6 @@ from six.moves import mock
 
 from sasctl.core import PagedList, RestObj
 
-from .test_pageiterator import paging
-
 
 def test_len_no_paging():
     items = [{'name': 'a'}, {'name': 'b'}, {'name': 'c'}]
