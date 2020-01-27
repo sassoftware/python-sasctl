@@ -106,7 +106,7 @@ DEFAULT_FILTERS = [
 
 
 def current_session(*args, **kwargs):
-    global _session
+    global _session  # skipcq PYL-W0603
 
     # Explicitly set or clear the current session
     if len(args) == 1 and (isinstance(args[0], Session) or args[0] is None):
@@ -606,16 +606,14 @@ class Session(requests.Session):
         super(Session, self).__enter__()
 
         # Make this the current session
-        global _session
-        self._old_session = _session
-        _session = self
+        self._old_session = current_session()
+        current_session(self)
 
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         # Restore previous current session
-        global _session
-        _session = self._old_session
+        current_session(self._old_session)
 
         super(Session, self).__exit__()
 

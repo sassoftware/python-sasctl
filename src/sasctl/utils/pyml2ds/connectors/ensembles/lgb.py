@@ -16,7 +16,7 @@ class LightgbmTreeParser(TreeParser):
         return self._node['default_left']
 
     def _go_right(self):
-        return (not self._node['default_left'])
+        return not self._node['default_left']
 
     def _left_node(self):
         return self._node['left_child']

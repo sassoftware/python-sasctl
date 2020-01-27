@@ -170,11 +170,11 @@ def parse_type_hints_from_source(func, skip_var='self'):
                 pass
 
             for a, t in zip(args, types):
-                params[a] = tuple((t.strip(), False))
+                params[a] = (t.strip(), False)
 
             types = parse_types(outputs)
-            for i in range(len(types)):
-                params['out' + str(i + 1)] = tuple((types[i].strip(), True))
+            for i, t in enumerate(types):
+                params['out%d' % (i + 1)] = (t.strip(), True)
 
     return params
 
