@@ -83,8 +83,6 @@ def create_package_from_datastep(table, input=None):
     :meth:`model_repository.import_model_from_zip <.ModelRepository.import_model_from_zip>`
 
     """
-    assert 'DataStepSrc' in table.columns
-
     dscode = table.to_frame().loc[0, 'DataStepSrc']
 
     # Extract inputs if provided
