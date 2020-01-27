@@ -89,28 +89,30 @@ def create_package_from_datastep(table, input=None):
     # Workaround because sasdataframe does not like to be check if exist
     if str(input) != "None":
         from .pymas.python import ds2_variables
-        vars=None
+        variables = None
         if hasattr(input, 'columns'):
             # Assuming input is a DataFrame representing model inputs.  Use to
             # get input variables
-            vars = ds2_variables(input)
+            variables = ds2_variables(input)
         elif isinstance(input, dict):
-            vars = ds2_variables(input)
-        if vars:
-            input_vars = [var.as_model_metadata() for var in vars if not var.out]
+            variables = ds2_variables(input)
+        if variables:
+            input_vars = [v.as_model_metadata() for v in variables if not v.out]
 
-    #Find outputs from ds code
-    output_vars=[]
+    # Find outputs from ds code
+    output_vars = []
     for sasline in dscode.split('\n'):
         if sasline.strip().startswith('label'):
-            output_var=dict()
+            output_var = dict()
             for tmp in sasline.split('='):
                 if 'label' in tmp:
-                    ovarname=tmp.split('label')[1].strip()
-                    output_var.update({"name":ovarname})
-                    #Determine type of variable is decimal or string
+                    ovarname = tmp.split('label')[1].strip()
+                    output_var.update({"name": ovarname})
+                    # Determine type of variable is decimal or string
                     if "length " + ovarname in dscode:
-                        sastype=dscode.split("length " + ovarname)[1].split(';')[0].strip()
+                        sastype = \
+                        dscode.split("length " + ovarname)[1].split(';')[
+                            0].strip()
                         if "$" in sastype:
                             output_var.update({"type": "string"})
                             output_var.update({"length": sastype.split("$")[1]})
@@ -118,7 +120,7 @@ def create_package_from_datastep(table, input=None):
                             output_var.update({"type": "decimal"})
                             output_var.update({"length": sastype})
                     else:
-                        #If no length for varaible, default is decimal, 8
+                        # If no length for variable, default is decimal, 8
                         output_var.update({"type": "decimal"})
                         output_var.update({"length": 8})
                 else:
@@ -440,11 +442,13 @@ def _generate_package_code(result):
     score_method = ('    method score(',
                     ',\n'.join(variables),
                     '   );')
-    score_method += tuple('       this."{}" = "{}";'.format(var, var) for var in result.InputVariables.Name)
+    score_method += tuple('       this."{var}" = "{var}";'.format(var=v)
+                          for v in result.InputVariables.Name)
     score_method += (' ',
                      '       {}.scorerecord();'.format(id),
                      ' ')
-    score_method += tuple('       "{}" = this."{}";'.format(var, var) for var in result.OutputVariables.Name)
+    score_method += tuple('       "{var}" = this."{var}";'.format(var=v)
+                          for v in result.OutputVariables.Name)
 
     footer = ('    end;',
               'endpackage;')

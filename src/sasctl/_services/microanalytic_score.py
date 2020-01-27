@@ -135,7 +135,7 @@ class MicroAnalyticScore(Service):
         for input in body['inputs']:
             try:
                 if isnan(input['value']):
-                    input['value']  = None
+                    input['value'] = None
             except TypeError:
                 pass
 
@@ -231,7 +231,7 @@ class MicroAnalyticScore(Service):
             arg_types = [k['type'] for k in step.get('inputs', [])]
 
             # Format call to execute_module_step()
-            call_params = ['{}={}'.format(i, i) for i in arguments]
+            call_params = ['{arg}={arg}'.format(arg=a) for a in arguments]
 
             # Set type hints for the function
             type_string = '    # type: ({})'.format(', '.join(arg_types))

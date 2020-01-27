@@ -523,7 +523,7 @@ class ModelRepository(Service):
         """
         rel = 'delete'
 
-        filelist=cls.get_model_contents(model)
+        filelist = cls.get_model_contents(model)
         for delfile in filelist:
-            modelfileuri=cls.get_link(delfile, rel)
+            modelfileuri = cls.get_link(delfile, rel)
             delete(modelfileuri['uri'])

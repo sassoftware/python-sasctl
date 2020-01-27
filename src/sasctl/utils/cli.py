@@ -181,7 +181,7 @@ def _build_parser(services):
     for service, commands in six.iteritems(services):
         service_parser = subparsers.add_parser(service)
         service_subparser = service_parser.add_subparsers(title='command', dest='command')
-        service_subparser.required=True
+        service_subparser.required = True
 
         # Add the command and arguments for each command
         for command in commands:
