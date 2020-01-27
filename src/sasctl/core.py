@@ -584,8 +584,7 @@ class Session(requests.Session):
 
         if username is None or password is None:
             return self._get_token_with_kerberos()
-        else:
-            return self._get_token_with_password()
+        return self._get_token_with_password()
 
     def _build_url(self, url):
         """Build a complete URL from a path by substituting in session parameters."""
@@ -899,8 +898,7 @@ def get(path, **kwargs):
     except HTTPError as e:
         if e.code == 404:
             return None  # Resource not found
-        else:
-            raise e
+        raise e
 
 
 def head(path, **kwargs):
@@ -1082,10 +1080,11 @@ def get_link(obj, rel):
             return obj['links'].get(rel)
 
         links = [l for l in obj.get('links', []) if l.get('rel') == rel]
+        if len(links) == 0:
+            return None
         if len(links) == 1:
             return links[0]
-        elif len(links) > 1:
-            return links
+        return links
     elif isinstance(obj, dict) and 'rel' in obj and obj['rel'] == rel:
         # Object is already a link, just return it
         return obj
@@ -1154,8 +1153,8 @@ def _unwrap(json):
             return RestObj(json['items'][0])
         elif len(json['items']) > 1:
             return PagedList(RestObj(json))
-        else:
-            return []
+        return []
+
     return RestObj(json)
 
 

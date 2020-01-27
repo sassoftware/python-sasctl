@@ -250,24 +250,20 @@ class Service(object):
 
             if cls.is_uuid(item):
                 return cls.get(path + '/{id}'.format(id=item))
-            else:
-                results = list_items(cls, **get_filter(item))
+            results = list_items(cls, **get_filter(item))
 
-                # Not sure why, but as of 19w04 the filter doesn't seem to work
-                for result in results:
-                    if result['name'] == str(item):
-                        # Make a request for the specific object so that ETag
-                        # is included, allowing updates.
-                        if cls.get_link(result, 'self'):
-                            return cls.request_link(result, 'self')
-                        else:
-                            id = result.get('id', result['name'])
-                        return cls.get(path + '/{id}'.format(id=id))
+            # Not sure why, but as of 19w04 the filter doesn't seem to work
+            for result in results:
+                if result['name'] == str(item):
+                    # Make a request for the specific object so that ETag
+                    # is included, allowing updates.
+                    if cls.get_link(result, 'self'):
+                        return cls.request_link(result, 'self')
 
-                return None
+                    id = result.get('id', result['name'])
+                    return cls.get(path + '/{id}'.format(id=id))
 
-            assert item is None or isinstance(item, dict)
-            return item
+            return None
 
         @sasctl_command('update')
         def update_item(cls, item):

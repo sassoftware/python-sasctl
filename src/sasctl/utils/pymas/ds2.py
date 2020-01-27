@@ -582,54 +582,44 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
                 if self.is_array:
                     return "py.getDoubleArray('{}', {}, ret);".format(
                         python_var_name, self.name)
-                else:
-                    return "{} = py.getDouble('{}');".format(self.name,
-                                                             python_var_name)
+                return "{} = py.getDouble('{}');".format(self.name,
+                                                         python_var_name)
             elif self.type.startswith('char'):
                 if self.is_array:
                     return "py.getStringArray('{}', {}, ret);".format(
                         python_var_name, self.name)
-                else:
-                    return "{} = py.getString('{}');".format(self.name,
-                                                             python_var_name)
+                return "{} = py.getString('{}');".format(self.name,
+                                                         python_var_name)
             elif self.type.startswith('integer'):
                 if self.is_array:
                     return "py.getIntArray('{}', {}, ret);".format(
                         python_var_name, self.name)
-                else:
-                    return "{} = py.getInt('{}');".format(self.name,
-                                                          python_var_name)
-            else:
-                raise ValueError(
-                    "Can't generate a DS2 statement for type `{}`".format(
-                        self.type))
+                return "{} = py.getInt('{}');".format(self.name,
+                                                      python_var_name)
+
+            raise ValueError("Can't generate a DS2 statement for type `%s`"
+                             % self.type)
         else:
             if self.type.startswith('double'):
                 if self.is_array:
                     return "rc = py.setDoubleArray('{}', {});".format(
                         python_var_name, self.name)
-                else:
-                    return "rc = py.setDouble('{}', {});".format(
+                return "rc = py.setDouble('{}', {});".format(
                         python_var_name, self.name)
             elif self.type.startswith('char'):
                 if self.is_array:
                     return "rc = py.setStringArray('{}', {});".format(
                         python_var_name, self.name)
-                else:
-                    return "rc = py.setString('{}', {});".format(
-                        python_var_name, self.name)
+                return "rc = py.setString('{}', {});".format(
+                    python_var_name, self.name)
             elif self.type.startswith('integer'):
                 if self.is_array:
                     return "rc = py.setIntArray('{}', {});".format(
                         python_var_name, self.name)
-                else:
-                    return "rc = py.setInt('{}', {});".format(python_var_name,
-                                                              self.name)
-
-            else:
-                raise ValueError(
-                    "Can't generate a DS2 statement for type `{}`".format(
-                        self.type))
+                return "rc = py.setInt('{}', {});".format(python_var_name,
+                                                          self.name)
+            raise ValueError("Can't generate a DS2 statement for type `%s`"
+                             % self.type)
 
     @property
     def is_array(self):

@@ -118,8 +118,7 @@ def sasctl_command(name, subname=None):
     if six.callable(name):
         # allow direct decoration without arguments
         return decorator(name)
-    else:
-        return decorator
+    return decorator
 
 
 def _find_services(module='sasctl'):
