@@ -112,7 +112,7 @@ def current_session(*args, **kwargs):
     if len(args) == 1 and (isinstance(args[0], Session) or args[0] is None):
         _session = args[0]
     # Create a new session
-    elif len(args):
+    elif len(args) > 0:
         _session = Session(*args, **kwargs)
 
     return _session

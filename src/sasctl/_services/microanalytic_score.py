@@ -121,7 +121,7 @@ class MicroAnalyticScore(Service):
 
         # Make sure all inputs are JSON serializable
         # Common types such as numpy.int64 and numpy.float64 are NOT serializable
-        for k in kwargs.keys():
+        for k in kwargs:
             type_name = type(kwargs[k]).__name__
             if type_name == 'float64':
                 kwargs[k] = float(kwargs[k])
@@ -246,7 +246,7 @@ class MicroAnalyticScore(Service):
 
             # If the module step takes arguments, then we perform a number
             # of additional checks to make the allowed input as wide as possible
-            if len(arguments):
+            if len(arguments) > 0:
                 # Perform some initial checks to see if the input is a Numpy array
                 # or a Pandas DataFrame.  Each will be handled separately.
                 arg_checks = [

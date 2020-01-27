@@ -347,7 +347,7 @@ def register_model(model, name, project, repository=None, input=None,
         #Update an existing model with new files
         model_obj = mr.get_model(name)
         if model_obj is None:
-            raise ValueError("Unable to update version '%s' of model '%s%.  "
+            raise ValueError("Unable to update version '%s' of model '%s.  "
                              "Model not found." % (version, name))
         model = mr.create_model_version(name)
         mr.delete_model_contents(model)
@@ -571,7 +571,7 @@ def update_model_performance(data, model, label, refresh=True):
     # All input variables must be present
     missing_cols = [col for col in perf_def.inputVariables if
                     col not in data.columns]
-    if len(missing_cols):
+    if len(missing_cols) > 0:
         raise ValueError("The following columns were expected but not found in "
                          "the data set: %s" % ', '.join(missing_cols))
 
@@ -580,7 +580,7 @@ def update_model_performance(data, model, label, refresh=True):
     if not perf_def.scoreExecutionRequired:
         missing_cols = [col for col in perf_def.outputVariables if
                         col not in data.columns]
-        if len(missing_cols):
+        if len(missing_cols) > 0:
             raise ValueError(
                 "The following columns were expected but not found in the data "
                 "set: %s" % ', '.join(missing_cols))

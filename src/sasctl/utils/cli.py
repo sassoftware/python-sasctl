@@ -84,10 +84,10 @@ def sasctl_command(name, subname=None):
                 doc_lines = doc[doc.find('Parameters\n'):].splitlines()
                 doc_lines.pop(0)  # First line is "Parameters"
 
-                if len(doc_lines) and doc_lines[0].startswith('---'):
+                if len(doc_lines) > 0 and doc_lines[0].startswith('---'):
                     doc_lines.pop(0)  # Discard ----------- line under "Parameters" heading
 
-                while len(doc_lines):
+                while len(doc_lines) > 0:
                     var = doc_lines.pop(0)
 
                     if var.startswith('Returns') or var.strip() == '':
@@ -98,7 +98,7 @@ def sasctl_command(name, subname=None):
                     else:
                         types.append('str')
 
-                    if len(doc_lines) and doc_lines[0].startswith('    '):
+                    if len(doc_lines) > 0 and doc_lines[0].startswith('    '):
                         help_doc.append(doc_lines.pop(0).strip())
                     else:
                         help_doc.append('')

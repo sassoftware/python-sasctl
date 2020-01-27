@@ -360,7 +360,7 @@ def from_pickle(file, func_name=None, input_types=None, array_input=False,
 
 
 def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
-                 return_code=False, return_message=False, code=[]):
+                 return_code=False, return_message=False, code=None):
     """
 
     Parameters
@@ -377,6 +377,7 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
     -------
 
     """
+    code = code or []
 
     if not isinstance(func_name, list):
         func_name = [func_name]

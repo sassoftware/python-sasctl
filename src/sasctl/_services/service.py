@@ -97,10 +97,10 @@ class Service(object):
         return core.request(verb, path, session, raw, format, **kwargs)
 
     @classmethod
-    def get(self, *args, **kwargs):
+    def get(cls, *args, **kwargs):
         """Send a GET request."""
         try:
-            return self.request('get', *args, **kwargs)
+            return cls.request('get', *args, **kwargs)
         except HTTPError as e:
             if e.code == 404:
                 return None  # Resource not found

@@ -149,7 +149,7 @@ class DataSources(Service):
 
         # caslibs = [c for c in caslibs if c.name == name]
 
-        if len(caslibs):
+        if len(caslibs) > 0:
             return caslibs.pop()
 
     def list_tables(self, caslib, filter=None):
@@ -200,7 +200,7 @@ class DataSources(Service):
         """
         tables = self.list_tables(caslib, filter='eq(name, "%s")' % name)
 
-        if len(tables):
+        if len(tables) > 0:
             return tables.pop()
 
 
