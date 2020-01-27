@@ -72,8 +72,7 @@ class DataSources(Service):
         sources = self.request_link(provider, 'dataSources')
         if isinstance(sources, (list, PagedItemIterator)):
             return sources
-        else:
-            return [sources]
+        return [sources]
 
     def get_source(self, provider, source):
         """Returns a data source belonging to a given provider.

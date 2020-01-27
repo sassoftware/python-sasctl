@@ -143,7 +143,7 @@ def parse_type_hints(func, skip_var='self'):
 def parse_type_hints_from_source(func, skip_var='self'):
     """Parse type hints stored in comments according to PEP 484."""
 
-    regex = re.compile('^\s+\# types?: ', re.IGNORECASE)
+    regex = re.compile(r'^\s+\# types?: ', re.IGNORECASE)
 
     def parse_types(line):
         if line:

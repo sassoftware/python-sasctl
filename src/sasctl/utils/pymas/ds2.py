@@ -536,7 +536,7 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
 
     def as_declaration(self):
         """DS2 variable declaration statement."""
-        match = re.search('\[\d+\]$', self.type)
+        match = re.search(r'\[\d+\]$', self.type)
         if match is None:
             return 'dcl {} {};'.format(self.type, self.name)
         else:
@@ -546,7 +546,7 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
 
     def as_parameter(self):
         """DS2 parameter syntax for method signatures."""
-        match = re.search('\[\d+\]$', self.type)
+        match = re.search(r'\[\d+\]$', self.type)
         param = self.name
 
         param = self.type + ' ' + param if match is None else self.type[
@@ -557,7 +557,7 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
 
     @property
     def size(self):
-        match = re.search('\[\d+\]$', self.type)
+        match = re.search(r'\[\d+\]$', self.type)
         if match:
             return int(self.type[match.start() + 1:match.end() - 1])
         else:
@@ -634,4 +634,4 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
     @property
     def is_array(self):
         # If type contains [n] then it's an array
-        return re.search('\[\d+\]$', self.type) is not None
+        return re.search(r'\[\d+\]$', self.type) is not None

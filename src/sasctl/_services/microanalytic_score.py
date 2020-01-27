@@ -155,13 +155,12 @@ class MicroAnalyticScore(Service):
         if return_dict:
             # Return results as k=v pairs
             return outputs
-        else:
-            # Return only the values, as if calling another Python function.
-            outputs = tuple(outputs.values())
-            if len(outputs) == 1:
-                return outputs[0]
-            else:
-                return outputs
+
+        # Return only the values, as if calling another Python function.
+        outputs = tuple(outputs.values())
+        if len(outputs) == 1:
+            return outputs[0]
+        return outputs
 
     def create_module(self, name=None, description=None, source=None,
                       language='python', scope='public'):

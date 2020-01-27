@@ -104,8 +104,7 @@ class Service(object):
         except HTTPError as e:
             if e.code == 404:
                 return None  # Resource not found
-            else:
-                raise e
+            raise e
 
     @classmethod
     def head(cls, *args, **kwargs):
@@ -326,8 +325,7 @@ class Service(object):
 
             if cls.is_uuid(item):
                 return cls.delete(path + '/{id}'.format(id=item))
-            else:
-                raise ValueError("Unrecognized id '%s'" % item)
+            raise ValueError("Unrecognized id '%s'" % item)
 
         # Pull object name from path if unspecified (many paths end in
         # nouns like /folders or /repositories).
@@ -419,5 +417,4 @@ class Service(object):
 
         if completed(job):
             return job
-        else:
-            raise JobTimeoutError('Timeout while waiting on job %s' % job)
+        raise JobTimeoutError('Timeout while waiting on job %s' % job)

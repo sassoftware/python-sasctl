@@ -530,7 +530,7 @@ def update_model_performance(data, model, label, refresh=True):
     model_obj = mr.get_model(model)
 
     if model_obj is None:
-        raise ValueError('Model %s was not found.', model)
+        raise ValueError('Model %s was not found.' % model)
 
     project = mr.get_project(model_obj.projectId)
 

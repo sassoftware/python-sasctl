@@ -144,11 +144,11 @@ class RestObj(dict):
 
             if isinstance(result, dict):
                 return RestObj(result)
-            else:
-                return result
-        else:
-            raise AttributeError("'%s' object has no attribute '%s'" % (
-                self.__class__.__name__, item))
+
+            return result
+
+        raise AttributeError("'%s' object has no attribute '%s'" % (
+            self.__class__.__name__, item))
 
     def __repr__(self):
         headers = getattr(self, '_headers', {})
@@ -1080,12 +1080,12 @@ def get_link(obj, rel):
     if isinstance(obj, dict) and 'links' in obj:
         if isinstance(obj['links'], dict):
             return obj['links'].get(rel)
-        else:
-            links = [l for l in obj.get('links', []) if l.get('rel') == rel]
-            if len(links) == 1:
-                return links[0]
-            elif len(links) > 1:
-                return links
+
+        links = [l for l in obj.get('links', []) if l.get('rel') == rel]
+        if len(links) == 1:
+            return links[0]
+        elif len(links) > 1:
+            return links
     elif isinstance(obj, dict) and 'rel' in obj and obj['rel'] == rel:
         # Object is already a link, just return it
         return obj
@@ -1245,23 +1245,20 @@ def _build_crud_funcs(path, single_term=None, plural_term=None,
 
         if is_uuid(item):
             return get(path + '/{id}'.format(id=item))
-        else:
-            results = list_items(filter='eq(name, "{}")'.format(item))
+        results = list_items(filter='eq(name, "{}")'.format(item))
 
-            # Not sure why, but as of 19w04 the filter doesn't seem to work.
-            for result in results:
-                if result['name'] == str(item):
-                    # Make a request for the specific object so that ETag is included, allowing updates.
-                    if get_link(result, 'self'):
-                        return request_link(result, 'self')
-                    else:
-                        id = result.get('id', result['name'])
-                    return get(path + '/{id}'.format(id=id))
+        # Not sure why, but as of 19w04 the filter doesn't seem to work.
+        for result in results:
+            if result['name'] == str(item):
+                # Make a request for the specific object so that ETag is
+                # included, allowing updates.
+                if get_link(result, 'self'):
+                    return request_link(result, 'self')
 
-            return None
+                id = result.get('id', result['name'])
+                return get(path + '/{id}'.format(id=id))
 
-        assert item is None or isinstance(item, dict)
-        return item
+        return None
 
     @sasctl_command('update')
     def update_item(item):
@@ -1314,8 +1311,7 @@ def _build_crud_funcs(path, single_term=None, plural_term=None,
 
         if is_uuid(item):
             return delete(path + '/{id}'.format(id=item))
-        else:
-            raise ValueError("Unrecognized id '%s'" % item)
+        raise ValueError("Unrecognized id '%s'" % item)
 
     # Pull object name from path if unspecified (many paths end in /folders or /repositories).
     plural_term = plural_term or str(path).split('/')[-1]
