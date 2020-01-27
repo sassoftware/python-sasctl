@@ -1236,7 +1236,7 @@ def _build_crud_funcs(path, single_term=None, plural_term=None,
 
         # If the input already appears to be the requested object just return it, unless
         # a refresh of the data was explicitly requested.
-        if isinstance(item, dict) and all([k in item for k in ('id', 'name')]):
+        if isinstance(item, dict) and all(k in item for k in ('id', 'name')):
             if refresh:
                 item = item['id']
             else:

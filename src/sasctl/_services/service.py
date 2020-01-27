@@ -205,8 +205,8 @@ class Service(object):
             if limit is not None:
                 kwargs['limit'] = int(limit)
 
-            params = '&'.join(['%s=%s' % (k, quote(str(v), safe='/(),"'))
-                               for k, v in six.iteritems(kwargs)])
+            params = '&'.join('%s=%s' % (k, quote(str(v), safe='/(),"'))
+                              for k, v in six.iteritems(kwargs))
 
             results = cls.get(path, params=params)
             if results is None:
@@ -242,7 +242,7 @@ class Service(object):
             # If the input already appears to be the requested object just
             # return it, unless a refresh of the data was explicitly requested.
             if isinstance(item, dict) and all(
-                    [k in item for k in ('id', 'name')]):
+                    k in item for k in ('id', 'name')):
                 if refresh:
                     item = item['id']
                 else:

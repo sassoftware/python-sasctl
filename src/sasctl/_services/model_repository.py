@@ -405,7 +405,7 @@ class ModelRepository(Service):
                   'type': 'ZIP',
                   'projectId': project.id,
                   'versionOption': version}
-        params = '&'.join(['{}={}'.format(k, v) for k, v in params.items()])
+        params = '&'.join('{}={}'.format(k, v) for k, v in params.items())
 
         r = cls.post('/models#octetStream',
                      data=file.read(),

@@ -310,7 +310,7 @@ class MicroAnalyticScore(Service):
             code = (signature,
                     type_string,
                     '    """Execute step \'%s\' of module \'%s\'."""' % (step, module),
-                    '\n'.join(['    %s' % a for a in arg_checks]),
+                    '\n'.join('    %s' % a for a in arg_checks),
                     '    r = execute_module_step(%s)' % ', '.join(['module', 'step'] + call_params),
                     '    r.pop("rc", None)',
                     '    r.pop("msg", None)',

@@ -206,8 +206,7 @@ class DS2BaseMethod(object):
         return self._name
 
     def code(self):
-        vars = ',\n'.join(
-            ['    %s' % v.as_parameter() for v in self.variables])
+        vars = ',\n'.join('    %s' % v.as_parameter() for v in self.variables)
 
         # Don't spread signature over multiple lines if there are no variables
         if len(vars) > 0:
@@ -382,7 +381,7 @@ class DS2Method(object):
 
         ds2_statements = set_statements + [
             'err = py.execute();'] + get_statements
-        ds2_statements = '\n'.join(['\t\t\t\t' + s for s in ds2_statements])
+        ds2_statements = '\n'.join('\t\t\t\t' + s for s in ds2_statements)
 
         func = ('            method {}({});'.format(self.name, signature),
                 '                dcl double err;',
@@ -437,7 +436,7 @@ class DS2Thread(object):
         return 'pyMasThread'
 
     def __str__(self):
-        array_input = any([v.is_array for v in self.variables if not v.out])
+        array_input = any(v.is_array for v in self.variables if not v.out)
 
         # If passing column data into Python as an array, need extra assignment statements to set values
         if array_input and self.column_names is not None:
@@ -451,8 +450,8 @@ class DS2Thread(object):
             var_assignments = ''
 
         # Declare output variables.  Input variables are assumed to be columns in the input table.
-        declarations = '\n'.join([v.as_declaration() for v in self.variables if
-                                  v.out or v.is_array])
+        declarations = '\n'.join(v.as_declaration() for v in self.variables if
+                                 v.out or v.is_array)
 
         keep_vars = [v.name for v in self.variables]
 
