@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2020-01-27T13:52:25",
+      "recorded_at": "2020-01-28T03:03:46",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -36,7 +36,7 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIwODU0ZGEyMC1jZGVlLTRkZWEtOGRlNC04YTZhMDc2OTg0MDciLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE1ODAxNjkxNDUsImlhdCI6MTU4MDEzMzE0NSwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJzYXNkZW1vQG5vbmUuc2FzLmNvbSIsInppZCI6InVhYSIsIm9yaWdpbiI6ImxkYXAiLCJqdGkiOiI5M2Y3MDQxMjBmODQ0NWY0YjczMGYwOWQxZjA5NDdjMiIsInByZXZpb3VzX2xvZ29uX3RpbWUiOjE1ODAxMzMxMzYzMzYsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50X2lkIjoic2FzLmVjIiwiY2lkIjoic2FzLmVjIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoic2FzZGVtbyIsInJldl9zaWciOiI5ZjAwNjhmYSIsInVzZXJfaWQiOiIwODU0ZGEyMC1jZGVlLTRkZWEtOGRlNC04YTZhMDc2OTg0MDciLCJhdXRoX3RpbWUiOjE1ODAxMzMxNDV9.VYhWsaCTUwxFm_Bfl3KFb1VWF7h_ShJ5rPHZZlItV30DyMF50ZPIzSrO25xqoZRdhhQ3os46_X0Z2-GKJt99RsTlLksG4lnqtmgPzdy9uvkzVyX1xJeQRNnuuwIVB5DozH080bcPzEMh8mDPI0wmVT8YW-7ecIpDVQ960qfdLA4vfiOrNVn2aoo3RDePIxPQA-BkGAigvlWGP4fmYpYXQmBN_Hm8rHMnkIOc7IEhOtDZ2V3VVce2sig3O_J_mYZi7Qn02ZSHUKKKLaOIi-KgKv7fLxnTu_eexNr-_1qyjmF658m-4iOSM-wST2si6-D8V3X04B1TYikYUgtveblP4g\",\"expires_in\":35999,\"scope\":\"clients.read clients.secret DataBuilders uaa.resource openid ApplicationAdministrators uaa.admin clients.admin EsriUsers scim.read SASScoreUsers SASAdministrators clients.write scim.write\",\"jti\":\"93f704120f8445f4b730f09d1f0947c2\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIwODU0ZGEyMC1jZGVlLTRkZWEtOGRlNC04YTZhMDc2OTg0MDciLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE1ODAyMTY2MjYsImlhdCI6MTU4MDE4MDYyNiwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJzYXNkZW1vQG5vbmUuc2FzLmNvbSIsInppZCI6InVhYSIsIm9yaWdpbiI6ImxkYXAiLCJqdGkiOiIzNDI0OWQzODJlNTg0MjdhODY3ZWFiNTNmZTdiYmRlMSIsInByZXZpb3VzX2xvZ29uX3RpbWUiOjE1ODAxODA2MTcxNTQsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50X2lkIjoic2FzLmVjIiwiY2lkIjoic2FzLmVjIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoic2FzZGVtbyIsInJldl9zaWciOiI5ZjAwNjhmYSIsInVzZXJfaWQiOiIwODU0ZGEyMC1jZGVlLTRkZWEtOGRlNC04YTZhMDc2OTg0MDciLCJhdXRoX3RpbWUiOjE1ODAxODA2MjZ9.OKhrIdkBsivMV6P6CblGvqgzaPLoL2Q2ftwgxHEoDmUsdDobsjB4I5UucclvYbyZ3nJaJR5zderwuBclO16qB-FTFXQud4osAFGnb5DRzphsd4y-n2lFOhG55n9JuMtJgsIvfyaIQ6cuqjYlO3Hna5V73tjIJj_RgRC7H7yfkVwq67t2xehf30uHp7mfavR98RqndqpHzAUvMnchwVvlYCYj2Vmb9TSaXVu1-Qk2tdC5sjoUwGR0JcpQPUCBKADRgW0hIfSawHi4ObMbdHI0mIkb8qOW--xt_uMewlTRdRAO0AbCmMFf6NjYIFoBAl-HdYNDsONoqhBtBqX6xZ3qCw\",\"expires_in\":35999,\"scope\":\"clients.read clients.secret DataBuilders uaa.resource openid ApplicationAdministrators uaa.admin clients.admin EsriUsers scim.read SASScoreUsers SASAdministrators clients.write scim.write\",\"jti\":\"34249d382e58427a867eab53fe7bbde1\"}"
         },
         "headers": {
           "Cache-Control": [
@@ -49,7 +49,7 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Mon, 27 Jan 2020 13:52:24 GMT"
+            "Tue, 28 Jan 2020 03:03:45 GMT"
           ],
           "Keep-Alive": [
             "timeout=5, max=100"

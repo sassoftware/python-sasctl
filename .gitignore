@@ -1,5 +1,6 @@
 ## Assorted files that shouldn't be uploaded
 .private/*
+_private/*
 
 ## Editor temporary/working/backup files
 .#*

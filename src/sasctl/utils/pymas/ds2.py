@@ -132,7 +132,7 @@ class DS2PyMASPackage(DS2BasePackage):
                            return_code=False,
                            return_message=False,
                            target=None,
-                           method_name='init'))
+                           method_name=self.name))
 
     def add_method(self, name, target, variables, return_code=False, return_message=False):
         """Add a DS2 method that calls a Python function defined by the package.
@@ -275,7 +275,6 @@ class DS2PyMASMethod(DS2BaseMethod):
                  "        if revision lt 1 then do;",
                  "            logr.log('e', 'py.publish() failed.');",
                  "            rc = -1;",
-                 "            return;",
                  "        end;",
                  "    end;"]
         if target is not None:

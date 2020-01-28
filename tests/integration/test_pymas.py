@@ -156,7 +156,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     dcl varchar(67108864) character set utf8 pycode;
     dcl int revision;
 
-    method init();
+    method _DF74A4B18C9E41A2A34B0053E123AA6();
     
         dcl integer rc;
         if null(py) then do;
@@ -205,7 +205,6 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 if revision lt 1 then do;
                     logr.log('e', 'py.publish() failed.');
                     rc = -1;
-                    return;
                 end;
             end;
         end;
@@ -264,7 +263,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     dcl varchar(67108864) character set utf8 pycode;
     dcl int revision;
 
-    method init();
+    method _DF74A4B18C9E41A2A34B0053E123AA6();
     
         dcl integer rc;
         if null(py) then do;
@@ -343,7 +342,6 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 if revision lt 1 then do;
                     logr.log('e', 'py.publish() failed.');
                     rc = -1;
-                    return;
                 end;
             end;
         end;

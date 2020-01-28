@@ -352,7 +352,6 @@ method score(
             if revision lt 1 then do;
                 logr.log('e', 'py.publish() failed.');
                 rc = -1;
-                return;
             end;
         end;
         rc = py.useMethod('domath');
@@ -472,7 +471,6 @@ package _pyscore / overwrite=yes;
                 if revision lt 1 then do;
                     logr.log('e', 'py.publish() failed.');
                     rc = -1;
-                    return;
                 end;
             end;
             rc = py.useMethod('domath');
