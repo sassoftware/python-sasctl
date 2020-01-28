@@ -91,7 +91,7 @@ class TreeParser:
             output = unicodedata.normalize('NFKD', input).encode('ASCII', 'ignore').decode()
         else:
             # On Python < 3.0.0
-            if isinstance(input, six.string_types):
+            if isinstance(input, str):
                 input = six.text_type(input, 'ISO-8859-1')
             output = unicodedata.normalize('NFKD', input).encode('ASCII', 'ignore')
 
