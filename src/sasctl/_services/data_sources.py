@@ -127,7 +127,6 @@ class DataSources(Service):
 
         return result if isinstance(result, (list, PagedItemIterator)) else [result]
 
-
     def get_caslib(self, name, source=None):
         """Get a caslib by name.
 
@@ -180,7 +179,7 @@ class DataSources(Service):
 
         return result if isinstance(result, (list, PagedItemIterator)) else [result]
 
-    def get_table(self, name, caslib, server=None):
+    def get_table(self, name, caslib):
         """Get metadata for a CAS table.
 
         Parameters
@@ -189,8 +188,6 @@ class DataSources(Service):
             Name of the table
         caslib : str or dict
             Name, ID, or dictionary representation of the caslib.
-        server : str
-            Name of the CAS server on which the `caslib` is registered.
 
         Returns
         -------

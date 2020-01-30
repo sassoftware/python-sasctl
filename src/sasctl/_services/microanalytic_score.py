@@ -181,8 +181,7 @@ class MicroAnalyticScore(Service):
         """
         if source is None:
             raise ValueError('The `source` parameter is required.')
-        else:
-            source = str(source)
+        source = str(source)
 
         if language == 'python':
             t = 'text/x-python'

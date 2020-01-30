@@ -342,7 +342,7 @@ class Service(object):
         return [classmethod(f) for f in
                 (list_items, get_item, update_item, delete_item)]
 
-    def _get_rel(self, item, rel, func=None, filter=None, *args):
+    def _get_rel(self, item, rel, *args, func=None, filter=None):
         """Get `item` and request a link.
 
         Parameters

@@ -9,7 +9,7 @@
 from __future__ import print_function
 import base64
 import importlib
-import pickle
+import pickle  # skipcq BAN-B301
 import os
 import re
 import sys
@@ -339,13 +339,13 @@ def from_pickle(file, func_name=None, input_types=None, array_input=False,
     # Path to a pickle file
     if is_file_path:
         with open(file, 'rb') as f:
-            obj = pickle.load(f)
+            obj = pickle.load(f)  # skipcq BAN-B301
 
     # The actual pickled bytes
     elif isinstance(file, bytes):
-        obj = pickle.loads(file)
+        obj = pickle.loads(file)  # skipcq BAN-B301
     else:
-        obj = pickle.load(file)
+        obj = pickle.load(file)  # skipcq BAN-B301
 
     # Encode the pickled data so we can inline it in the DS2 package
     pkl = base64.b64encode(pickle.dumps(obj))

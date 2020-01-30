@@ -537,10 +537,10 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
         match = re.search(r'\[\d+\]$', self.type)
         if match is None:
             return 'dcl {} {};'.format(self.type, self.name)
-        else:
-            # Type is an array
-            return 'dcl {} {}{};'.format(self.type[:match.start()], self.name,
-                                         self.type[match.start():])
+
+        # Type is an array
+        return 'dcl {} {}{};'.format(self.type[:match.start()], self.name,
+                                     self.type[match.start():])
 
     def as_parameter(self):
         """DS2 parameter syntax for method signatures."""
@@ -558,17 +558,18 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
         match = re.search(r'\[\d+\]$', self.type)
         if match:
             return int(self.type[match.start() + 1:match.end() - 1])
-        else:
-            return 0
+        return 0
 
-    def pymas_statement(self, python_var_name=None, pymas_name='py'):
+    def pymas_statement(self, python_var_name=None):
         """Returns appropriate PyMAS get/set statements to move values between a Python variable and the DS2 variable.
 
-        Args:
-            python_var_name: Python variable name.
-            pymas_name: Name of the DS2 PyMAS package being used.  Defaults to `py`
+        Parameters
+        ----------
+        python_var_name : str
+            Python variable name.
 
-        Returns:
+        Returns
+        -------
 
         """
 
@@ -597,27 +598,28 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
 
             raise ValueError("Can't generate a DS2 statement for type `%s`"
                              % self.type)
-        else:
-            if self.type.startswith('double'):
-                if self.is_array:
-                    return "rc = py.setDoubleArray('{}', {});".format(
-                        python_var_name, self.name)
-                return "rc = py.setDouble('{}', {});".format(
-                        python_var_name, self.name)
-            elif self.type.startswith('char'):
-                if self.is_array:
-                    return "rc = py.setStringArray('{}', {});".format(
-                        python_var_name, self.name)
-                return "rc = py.setString('{}', {});".format(
+
+        # If we got this far, it's an input variable
+        if self.type.startswith('double'):
+            if self.is_array:
+                return "rc = py.setDoubleArray('{}', {});".format(
                     python_var_name, self.name)
-            elif self.type.startswith('integer'):
-                if self.is_array:
-                    return "rc = py.setIntArray('{}', {});".format(
-                        python_var_name, self.name)
-                return "rc = py.setInt('{}', {});".format(python_var_name,
-                                                          self.name)
-            raise ValueError("Can't generate a DS2 statement for type `%s`"
-                             % self.type)
+            return "rc = py.setDouble('{}', {});".format(
+                python_var_name, self.name)
+        elif self.type.startswith('char'):
+            if self.is_array:
+                return "rc = py.setStringArray('{}', {});".format(
+                    python_var_name, self.name)
+            return "rc = py.setString('{}', {});".format(
+                python_var_name, self.name)
+        elif self.type.startswith('integer'):
+            if self.is_array:
+                return "rc = py.setIntArray('{}', {});".format(
+                    python_var_name, self.name)
+            return "rc = py.setInt('{}', {});".format(python_var_name,
+                                                      self.name)
+        raise ValueError("Can't generate a DS2 statement for type `%s`"
+                         % self.type)
 
     @property
     def is_array(self):

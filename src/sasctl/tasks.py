@@ -9,7 +9,7 @@
 import json
 import logging
 import math
-import pickle
+import pickle  # skipcq BAN-B301
 import os
 import re
 import sys
@@ -186,8 +186,7 @@ def register_model(model, name, project, repository=None, input=None,
                                      '/modelRepository/repositories/ URL. '
                                      'Please contact your SAS Viya '
                                      'administrator.')
-        else:
-            raise e
+        raise e
 
     # Unable to find or create the repo.
     if repo_obj is None and repository is None:
@@ -227,8 +226,8 @@ def register_model(model, name, project, repository=None, input=None,
 
     # If the model is an scikit-learn model, generate the model dictionary
     # from it and pickle the model for storage
-    elif all(hasattr(model, attr) for attr
-             in ['_estimator_type', 'get_params']):
+    if all(hasattr(model, attr) for attr
+           in ['_estimator_type', 'get_params']):
         # Pickle the model so we can store it
         model_pkl = pickle.dumps(model)
         files.append({'name': 'model.pkl',
@@ -295,7 +294,7 @@ def register_model(model, name, project, repository=None, input=None,
     else:
         # Otherwise, the model better be a dictionary of metadata
         assert isinstance(model, dict), "Expected an instance of %r. " \
-                                        " Received %r instead." % (dict(), model)
+                                        " Received %r instead." % ({}, model)
 
     if create_project:
         vars = model.get('inputVariables', [])[:]
@@ -539,15 +538,20 @@ def update_model_performance(data, model, label, refresh=True):
                          "regression and binary classification projects.  "
                          "Received project with '%s' function.  Should be "
                          "'Prediction' or 'Classification'." % project.get('function'))
-    elif project.get('targetLevel', '').lower() not in ('interval', 'binary'):
+
+    if project.get('targetLevel', '').lower() not in ('interval', 'binary'):
         raise ValueError("Performance monitoring is currently supported for "
                          "regression and binary classification projects.  "
                          "Received project with '%s' target level.  Should be "
                          "'Interval' or 'Binary'." % project.get('targetLevel'))
-    elif project.get('predictionVariable', '') == '' and project.get('function', '').lower() == 'prediction':
+
+    if project.get('predictionVariable', '') == '' and project.get('function',
+                                                                   '').lower() == 'prediction':
         raise ValueError("Project '%s' does not have a prediction variable "
                          "specified." % project)
-    elif project.get('eventProbabilityVariable', '') == '' and project.get('function', '').lower() == 'classification':
+
+    if project.get('eventProbabilityVariable', '') == '' and project.get(
+            'function', '').lower() == 'classification':
         raise ValueError("Project '%s' does not have an Event Probability variable "
                          "specified." % project)
 

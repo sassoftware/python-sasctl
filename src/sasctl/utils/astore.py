@@ -103,7 +103,7 @@ def create_package_from_datastep(table, input=None):
     output_vars = []
     for sasline in dscode.split('\n'):
         if sasline.strip().startswith('label'):
-            output_var = dict()
+            output_var = {}
             for tmp in sasline.split('='):
                 if 'label' in tmp:
                     ovarname = tmp.split('label')[1].strip()

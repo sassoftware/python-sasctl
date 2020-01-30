@@ -71,9 +71,8 @@ class Files(Service):
 
             if _folder is None:
                 raise ValueError("Folder '%s' could not be found." % folder)
-            else:
-                params['parentFolderUri'] = self.get_link(_folder,
-                                                          'self')['href']
+
+            params['parentFolderUri'] = self.get_link(_folder, 'self')['href']
 
         if expiration is not None:
             pass

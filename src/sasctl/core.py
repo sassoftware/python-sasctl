@@ -446,8 +446,7 @@ class Session(requests.Session):
                     "environment variable should contain the path to the CA "
                     "certificate.  Alternatively, set verify_ssl=False to "
                     "disable certificate verification.")
-            else:
-                raise e
+            raise e
 
     def get(self, url, **kwargs):
         return self.request('GET', url, **kwargs)
@@ -557,8 +556,7 @@ class Session(requests.Session):
 
         if r.status_code == 401:
             raise exceptions.AuthenticationError(username)
-        else:
-            r.raise_for_status()
+        r.raise_for_status()
 
         return r.json().get('access_token')
 
@@ -1081,7 +1079,8 @@ def get_link(obj, rel):
         if len(links) == 1:
             return links[0]
         return links
-    elif isinstance(obj, dict) and 'rel' in obj and obj['rel'] == rel:
+
+    if isinstance(obj, dict) and 'rel' in obj and obj['rel'] == rel:
         # Object is already a link, just return it
         return obj
 
@@ -1147,7 +1146,7 @@ def _unwrap(json):
     if 'items' in json:
         if len(json['items']) == 1:
             return RestObj(json['items'][0])
-        elif len(json['items']) > 1:
+        if len(json['items']) > 1:
             return PagedList(RestObj(json))
         return []
 
