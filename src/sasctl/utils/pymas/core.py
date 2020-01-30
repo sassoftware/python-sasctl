@@ -110,7 +110,6 @@ def build_wrapper_function(func, variables, array_input,
     else:
         header = ('', )
 
-
     definition = header +\
                  ('def {name}({args}):'.format(name=name, args=', '.join(args)),
                   '    "Output: {}"'.format(', '.join(output_names + ['msg']) if return_msg

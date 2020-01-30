@@ -16,7 +16,8 @@ import sys
 import warnings
 from uuid import UUID, uuid4
 
-import requests, requests.exceptions
+import requests
+import requests.exceptions
 from requests.adapters import HTTPAdapter
 from six.moves.urllib.parse import urlsplit, urlunsplit
 from six.moves.urllib.error import HTTPError
@@ -819,7 +820,6 @@ class PagedList(list):
 
         # clear the list (py27 compatible)
         del self._pager._cache[:]
-
 
     def __len__(self):
         return len(self._pager)

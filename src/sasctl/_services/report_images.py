@@ -148,7 +148,7 @@ class ReportImages(Service):
                             'size': size,
                             'specificVisualElements': formatted_elements,
                             'sectionIndex': section
-                        })
+                       })
 
         return job
 

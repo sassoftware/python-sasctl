@@ -170,17 +170,22 @@ def _build_parser(services):
 
     # Create standard, top-level arguments
     parser = argparse.ArgumentParser(prog='sasctl', description='sasctl interacts with a SAS Viya environment.')
-    parser.add_argument('-k', '--insecure', action='store_true', help='skip SSL verification')
-    parser.add_argument('-f', '--format', choices=['json'], default='json', help='output format')
+    parser.add_argument('-k', '--insecure', action='store_true',
+                        help='skip SSL verification')
+    parser.add_argument('-f', '--format', choices=['json'],
+                        default='json', help='output format')
     parser.add_argument('-v', '--verbose', action='count')
-    parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
+    parser.add_argument('--version',
+                        action='version',
+                        version='%(prog)s ' + __version__)
 
     subparsers = parser.add_subparsers(title='service', dest='service')
-    subparsers.required=True
+    subparsers.required = True
 
     for service, commands in six.iteritems(services):
         service_parser = subparsers.add_parser(service)
-        service_subparser = service_parser.add_subparsers(title='command', dest='command')
+        service_subparser = service_parser.add_subparsers(title='command',
+                                                          dest='command')
         service_subparser.required = True
 
         # Add the command and arguments for each command

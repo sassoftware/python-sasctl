@@ -9,15 +9,16 @@ from collections import OrderedDict
 import re
 
 import six
+
+from .ds2 import DS2Variable
+from ..decorators import versionchanged
+
 if six.PY2:
     # Eliminate DeprecationWarnings.  Only import getargspec if in Python 2.
     from inspect import getargspec as getfullargspec
     from inspect import getsourcelines
 else:
     from inspect import getfullargspec, getsourcelines
-
-from .ds2 import DS2Variable
-from ..decorators import versionchanged
 
 
 logger = logging.getLogger(__name__)
@@ -162,7 +163,7 @@ def parse_type_hints_from_source(func, skip_var='self'):
                 outputs = None
 
             types = parse_types(inputs)
-            args = getfullargspec(func).args
+            args = getfullargspec(func).args  # skipcq PYL-W1505
 
             try:
                 args.remove(skip_var)

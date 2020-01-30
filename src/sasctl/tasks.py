@@ -168,7 +168,7 @@ def register_model(model, name, project, repository=None, input=None,
     p = mr.get_project(project) if project is not None else None
 
     # Do we need to create the project first?
-    create_project = True if p is None and force else False
+    create_project = bool(p is None and force is True)
 
     if p is None and not create_project:
         raise ValueError("Project '{}' not found".format(project))

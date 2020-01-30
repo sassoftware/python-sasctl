@@ -22,6 +22,7 @@ def _get_filter(x):
     # Define a custom function for building out the filter
     return dict(properties='(name, %s)' % x)
 
+
 class ModelRepository(Service):
     """Implements the Model Repository REST API.
 
@@ -293,7 +294,8 @@ class ModelRepository(Service):
             Name of the file related to the model.
         role : str
             Role of the model file, such as 'Python pickle'.
-
+        content_type : str
+            an HTTP Content-Type value
 
         Returns
         -------
@@ -370,7 +372,8 @@ class ModelRepository(Service):
         project.update(kwargs)
         return cls.post('/projects', json=project,
                         headers={
-                            'Content-Type': 'application/vnd.sas.models.project+json'})
+                            'Content-Type':
+                                'application/vnd.sas.models.project+json'})
 
     @classmethod
     def import_model_from_zip(cls, name, project, file, description=None,
@@ -506,7 +509,6 @@ class ModelRepository(Service):
             model = cls.get_model(model, refresh=True)
 
         return cls.request_link(model, 'copyAnalyticStore')
-
 
     @classmethod
     def delete_model_contents(cls, model):
