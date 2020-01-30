@@ -342,7 +342,8 @@ class Service(object):  # skipcq PYL-R0205
         return [classmethod(f) for f in
                 (list_items, get_item, update_item, delete_item)]
 
-    def _get_rel(self, item, rel, func=None, filter=None, *args):
+    def _get_rel(self, item, rel, func=None, filter=None,
+                 *args):  # skipcq PYL-W1113 - py27 compatibility
         """Get `item` and request a link.
 
         Parameters
