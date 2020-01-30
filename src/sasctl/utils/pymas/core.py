@@ -210,8 +210,10 @@ def wrap_predict_proba_method(func, variables, **kwargs):
 
     return re.sub(old_code, new_code, wrapper)
 
+
 @versionchanged('Return code and message are disabled by default.', version='1.5')
-def from_inline(func, input_types=None, array_input=False, return_code=False, return_message=False):
+def from_inline(func, input_types=None, array_input=False, return_code=False,
+                return_message=False):
     """Creates a PyMAS wrapper to execute the inline python function.
 
     Parameters
@@ -219,9 +221,11 @@ def from_inline(func, input_types=None, array_input=False, return_code=False, re
     func : function
         A Python function object to be used
     input_types : list of type, optional
-        The expected type for each input value of `func`.  Can be ommitted if `func` includes type hints.
+        The expected type for each input value of `func`.  Can be ommitted if
+        `func` includes type hints.
     array_input : bool
-        Whether the function inputs should be treated as an array instead of individual parameters
+        Whether the function inputs should be treated as an array instead of
+        individual parameters
     return_code : bool
         Whether the DS2-generated return code should be included
     return_message : bool

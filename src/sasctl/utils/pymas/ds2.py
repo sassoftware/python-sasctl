@@ -65,8 +65,8 @@ class DS2BasePackage(object):  # skipcq PYL-R0205
     Attributes
     ----------
     methods : list
-        A collection of :class:`DS2BaseMethod` instances that will be included in the
-        package definition.
+        A collection of :class:`DS2BaseMethod` instances that will be included
+        in the package definition.
 
     """
     def __init__(self, code=None):
@@ -94,8 +94,7 @@ class DS2BasePackage(object):  # skipcq PYL-R0205
 
         """
         code = ("package %s / overwrite=yes;" % self.name,) + \
-               tuple('    ' + line for line in self._body) + \
-               ('',)
+               tuple('    ' + line for line in self._body) + ('',)
 
         for method in self.methods:
             code += tuple('    ' + line for line in method.code().split('\n'))
@@ -134,7 +133,8 @@ class DS2PyMASPackage(DS2BasePackage):
                            target=None,
                            method_name=self.name))
 
-    def add_method(self, name, target, variables, return_code=False, return_message=False):
+    def add_method(self, name, target, variables, return_code=False,
+                   return_message=False):
         """Add a DS2 method that calls a Python function defined by the package.
 
         Parameters
@@ -285,7 +285,7 @@ class DS2PyMASMethod(DS2BaseMethod):
         if target is not None:
             # Set Python input variables
             body += ['%s    if rc then return;' % v.pymas_statement() for v in
-                  self.public_variables if not v.out]
+                     self.public_variables if not v.out]
 
             # Execute Python method
             body += ['rc = py.execute();    if rc then return;']
@@ -460,7 +460,8 @@ class DS2Thread(object):  # skipcq PYL-R0205
                 "  method run();",
                 "    set SASEP.in;",
                 var_assignments,
-                "    pythonPackage.{}({});".format(self.method.name,','.join(keep_vars)),
+                "    pythonPackage.{}({});".format(self.method.name,
+                                                   ','.join(keep_vars)),
                 "    output;",
                 "  end;",
                 "endthread;")
@@ -561,7 +562,8 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
         return 0
 
     def pymas_statement(self, python_var_name=None):
-        """Returns appropriate PyMAS get/set statements to move values between a Python variable and the DS2 variable.
+        """Returns appropriate PyMAS get/set statements to move values between
+        a Python variable and the DS2 variable.
 
         Parameters
         ----------

@@ -299,10 +299,10 @@ class Session(requests.Session):
             domain = url.hostname or str(hostname)
 
         self._settings = {'protocol': protocol or 'https',
-                         'domain': domain,
-                         'port': port,
-                         'username': username,
-                         'password': password
+                          'domain': domain,
+                          'port': port,
+                          'username': username,
+                          'password': password
                           }
 
         if self._settings['password'] is None:
@@ -316,8 +316,8 @@ class Session(requests.Session):
                 self._settings['password'] = auth.get('password')
 
             # Not able to load credentials using SWAT.  Try Netrc.
-            # TODO: IF a username was specified, verify that the credentials found
-            #       are for that username.
+            # TODO: IF a username was specified, verify that the credentials
+            #       found are for that username.
             if self._settings['password'] is None:
                 try:
                     parser = netrc.netrc(authinfo)

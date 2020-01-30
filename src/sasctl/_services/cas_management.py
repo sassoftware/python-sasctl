@@ -100,8 +100,8 @@ class CASManagement(Service):
 
         """
         tables = self.list_tables(caslib,
-                             server=server,
-                             filter='eq($primary,name, "%s")' % name)
+                                  server=server,
+                                  filter='eq($primary,name, "%s")' % name)
 
         if len(tables) > 0:
             return tables.pop()

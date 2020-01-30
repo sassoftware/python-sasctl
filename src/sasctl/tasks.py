@@ -38,6 +38,7 @@ _DESC_MAXLEN = 1024
 _PROP_VALUE_MAXLEN = 512
 _PROP_NAME_MAXLEN = 60
 
+
 def _property(k, v):
     return {'name': str(k)[:_PROP_NAME_MAXLEN],
             'value': str(v)[:_PROP_VALUE_MAXLEN]}
@@ -117,17 +118,18 @@ def register_model(model, name, project, repository=None, input=None,
     input : DataFrame, type, list of type, or dict of str: type, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
-        is provided, the columns will be inspected to determine type information.
-        If a single type is provided, all columns will be assumed to be that type,
-        otherwise a list of column types or a dictionary of column_name: type
-        may be provided.
+        is provided, the columns will be inspected to determine type
+        information.  If a single type is provided, all columns will be assumed
+        to be that type, otherwise a list of column types or a dictionary of
+        column_name: type may be provided.
     version : {'new', 'latest', int}, optional
         Version number of the project in which the model should be created.
         Defaults to 'new'.
     files : list
-        A list of dictionaries of the form {'name': filename, 'file': filecontent}.
-        An optional 'role' key is supported for designating a file as score code,
-        astore, etc.
+        A list of dictionaries of the form
+        {'name': filename, 'file': filecontent}.
+        An optional 'role' key is supported for designating a file as score
+        code, astore, etc.
     force : bool, optional
         Create dependencies such as projects and repositories if they do not
         already exist.
@@ -213,7 +215,7 @@ def register_model(model, name, project, repository=None, input=None,
                     tmp.update({'role': 'output'})
             if "inputVar.json" in tmpzip.namelist():
                 invar = json.loads(tmpzip.read("inputVar.json").decode(
-                    'utf-8'))  #added decode for 3.5 and older
+                    'utf-8'))  # added decode for 3.5 and older
                 for tmp in invar:
                     if tmp['role'] != 'input':
                         tmp['role'] = 'input'
@@ -321,7 +323,7 @@ def register_model(model, name, project, repository=None, input=None,
 
         # As of Viya 3.4 the 'predictionVariable' parameter is not set during
         # project creation.  Update the project if necessary.
-        if function == 'prediction':   #Predications require predictionVariable
+        if function == 'prediction':  # Predictions require predictionVariable
             project = mr.create_project(project, repo_obj,
                                         variables=all_vars,
                                         function=model.get('function'),
@@ -331,7 +333,7 @@ def register_model(model, name, project, repository=None, input=None,
             if project.get('predictionVariable') != prediction_variable:
                 project['predictionVariable'] = prediction_variable
                 mr.update_project(project)
-        else:  #Classifications require eventProbabilityVariable 
+        else:  # Classifications require eventProbabilityVariable
             project = mr.create_project(project, repo_obj,
                                         variables=all_vars,
                                         function=model.get('function'),
@@ -343,7 +345,7 @@ def register_model(model, name, project, repository=None, input=None,
 
     # If replacing an existing version, make sure the model version exists
     if str(version).lower() != 'new':
-        #Update an existing model with new files
+        # Update an existing model with new files
         model_obj = mr.get_model(name)
         if model_obj is None:
             raise ValueError("Unable to update version '%s' of model '%s.  "
@@ -351,7 +353,7 @@ def register_model(model, name, project, repository=None, input=None,
         model = mr.create_model_version(name)
         mr.delete_model_contents(model)
     else:
-        #Assume new model to create
+        # Assume new model to create
         model = mr.create_model(model, project)
 
     assert isinstance(model, RestObj)
@@ -430,8 +432,8 @@ def publish_model(model,
         # A successfully submitted request doesn't mean a successfully
         # published model.  Response for publish request includes link to
         # check publish log
-        job = mr._monitor_job(publish_req, max_retries=max_retries)
-        return job
+        result = mr._monitor_job(publish_req, max_retries=max_retries)
+        return result
 
     # Submit and wait for status
     job = submit_request()
@@ -439,17 +441,17 @@ def publish_model(model,
     # If model was successfully published and it isn't a MAS module, we're done
     if job.state.lower() == 'completed' \
             and job.destination.destinationType != 'microAnalyticService':
-            return request_link(job,'self')
+        return request_link(job, 'self')
 
     # If MAS publish failed and replace=True, attempt to delete the module
     # and republish
     if job.state.lower() == 'failed' and replace and \
             job.destination.destinationType == 'microAnalyticService':
-            from .services import microanalytic_score as mas
-            mas.delete_module(job.publishName)
+        from .services import microanalytic_score as mas
+        mas.delete_module(job.publishName)
 
-            # Resubmit the request
-            job = submit_request()
+        # Resubmit the request
+        job = submit_request()
 
     # Raise exception if still failing
     if job.state.lower() == 'failed':
@@ -474,8 +476,8 @@ def publish_model(model,
 
     module = get(module_url)
 
-    if 'application/vnd.sas.microanalytic.module' in module._headers[
-        'content-type']:
+    if 'application/vnd.sas.microanalytic.module' \
+            in module._headers['content-type']:
         # Bind Python methods to the module instance that will execute the
         # corresponding MAS module step.
         from sasctl.services import microanalytic_score as mas
@@ -593,8 +595,7 @@ def update_model_performance(data, model, label, refresh=True):
     url = '{}://{}/{}-http/'.format(sess._settings['protocol'],
                                     sess.hostname,
                                     cas_id)
-    regex = r'{}_(\d+)_.*_{}'.format(table_prefix,
-                                  model_obj.id)
+    regex = r'{}_(\d+)_.*_{}'.format(table_prefix, model_obj.id)
 
     # Save the current setting before overwriting
     orig_sslreqcert = os.environ.get('SSLREQCERT')

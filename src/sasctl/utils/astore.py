@@ -52,7 +52,7 @@ def create_package(table, input=None):
     assert isinstance(table, swat.CASTable)
 
     if 'DataStepSrc' in table.columns:
-        #Input only passed to datastep
+        # Input only passed to datastep
         return create_package_from_datastep(table, input=input)
     return create_package_from_astore(table)
 
