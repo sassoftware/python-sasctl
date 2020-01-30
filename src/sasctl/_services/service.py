@@ -17,7 +17,7 @@ from ..core import HTTPError, PagedItemIterator, sasctl_command
 from ..exceptions import JobTimeoutError
 
 
-class Service(object):
+class Service(object):  # skipcq PYL-R0205
     """Base class for all services.  Should not be used directly."""
 
     _SERVICE_ROOT = None
@@ -260,8 +260,8 @@ class Service(object):
                     if cls.get_link(result, 'self'):
                         return cls.request_link(result, 'self')
 
-                    id = result.get('id', result['name'])
-                    return cls.get(path + '/{id}'.format(id=id))
+                    id_ = result.get('id', result['name'])
+                    return cls.get(path + '/{id}'.format(id=id_))
 
             return None
 
@@ -283,15 +283,15 @@ class Service(object):
                 raise ValueError(
                     'Could not find ETag for update of %s.' % item)
 
-            id = getattr(item, 'id', None)
-            if id is None:
+            id_ = getattr(item, 'id', None)
+            if id_ is None:
                 raise ValueError(
                     'Could not find property `id` for update of %s.' % item)
 
             headers = {'If-Match': item._headers.get('etag'),
                        'Content-Type': item._headers.get('content-type')}
 
-            return cls.put(path + '/%s' % id, json=item, headers=headers)
+            return cls.put(path + '/%s' % id_, json=item, headers=headers)
 
         @sasctl_command('delete')
         def delete_item(cls, item):

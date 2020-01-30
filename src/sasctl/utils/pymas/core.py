@@ -431,13 +431,13 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
 
     # Get variables for each function
     temp = [parse_function(obj, f) for f in func_name]
-    target_func, vars = zip(*temp)
+    target_func, variables = zip(*temp)
 
     # Convert from tuples to lists
     target_func = list(target_func)
-    vars = list(vars)
+    variables = list(variables)
 
-    return PyMAS(target_func, vars, code, return_code, return_message,
+    return PyMAS(target_func, variables, code, return_code, return_message,
                  array_input=array_input, func_prefix='obj.')
 
 

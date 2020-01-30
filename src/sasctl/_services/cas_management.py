@@ -57,7 +57,7 @@ class CASManagement(Service):
 
         assert isinstance(caslibs, list)
 
-        if len(caslibs):
+        if len(caslibs) > 0:
             return caslibs.pop()
 
     def list_tables(self, caslib, server=None, filter=None):
@@ -103,5 +103,5 @@ class CASManagement(Service):
                              server=server,
                              filter='eq($primary,name, "%s")' % name)
 
-        if len(tables):
+        if len(tables) > 0:
             return tables.pop()

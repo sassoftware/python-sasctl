@@ -302,12 +302,12 @@ class ModelRepository(Service):
 
         """
         if cls.is_uuid(model):
-            id = model
+            id_ = model
         elif isinstance(model, dict) and 'id' in model:
-            id = model['id']
+            id_ = model['id']
         else:
             model = cls.get_model(model)
-            id = model['id']
+            id_ = model['id']
 
         if content_type is None and isinstance(file, six.binary_type):
             content_type = 'application/octet-stream'
@@ -319,7 +319,7 @@ class ModelRepository(Service):
 
         metadata = {'role': role, 'name': name}
 
-        return cls.post('/models/{}/contents'.format(id),
+        return cls.post('/models/{}/contents'.format(id_),
                         files=files, data=metadata)
 
     @classmethod

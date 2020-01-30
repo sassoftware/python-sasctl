@@ -863,9 +863,9 @@ class PagedList(list):
         return string
 
 
-def is_uuid(id):
+def is_uuid(id_):
     try:
-        UUID(str(id))
+        UUID(str(id_))
         return True
     except (ValueError, TypeError):
         return False
@@ -1249,8 +1249,8 @@ def _build_crud_funcs(path, single_term=None, plural_term=None,
                 if get_link(result, 'self'):
                     return request_link(result, 'self')
 
-                id = result.get('id', result['name'])
-                return get(path + '/{id}'.format(id=id))
+                id_ = result.get('id', result['name'])
+                return get(path + '/{id}'.format(id=id_))
 
         return None
 
@@ -1272,15 +1272,15 @@ def _build_crud_funcs(path, single_term=None, plural_term=None,
         if headers is None or headers.get('etag') is None:
             raise ValueError('Could not find ETag for update of %s.' % item)
 
-        id = getattr(item, 'id', None)
-        if id is None:
+        id_ = getattr(item, 'id', None)
+        if id_ is None:
             raise ValueError(
                 'Could not find property `id` for update of %s.' % item)
 
         headers = {'If-Match': item._headers.get('etag'),
                    'Content-Type': item._headers.get('content-type')}
 
-        return put(path + '/%s' % id, json=item, headers=headers)
+        return put(path + '/%s' % id_, json=item, headers=headers)
 
     @sasctl_command('delete')
     def delete_item(item):

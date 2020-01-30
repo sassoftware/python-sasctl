@@ -16,7 +16,7 @@ from ..decorators import deprecated, versionadded
 
 
 @deprecated('Use DS2PyMASPackage instead.', version='1.5', removed_in='1.6')
-class DS2Package(object):
+class DS2Package(object):  # skipcq PYL-R0205
     def __init__(self, variables, code=None, return_code=True,
                  return_message=True, target=None):
         self._id = uuid.uuid4().hex.upper()
@@ -54,7 +54,7 @@ class DS2Package(object):
 
 
 @versionadded(version='1.5')
-class DS2BasePackage(object):
+class DS2BasePackage(object):  # skipcq PYL-R0205
     """Defines a DS2 package.
 
     Parameters
@@ -189,7 +189,7 @@ class DS2PyMASPackage(DS2BasePackage):
         self.methods.append(DS2BaseMethod(name, variables, body))
 
 
-class DS2BaseMethod(object):
+class DS2BaseMethod(object):  # skipcq PYL-R0205
     def __init__(self, name, variables, body=None):
         self._name = name
         self.variables = variables
@@ -343,7 +343,7 @@ class DS2PredictProbaMethod(DS2BaseMethod):
 
 
 @deprecated(version='1.5', removed_in='1.6')
-class DS2Method(object):
+class DS2Method(object):  # skipcq PYL-R0205
     def __init__(self, variables, code, target='wrapper'):
         self.variables = variables
         self._code = code
@@ -400,7 +400,7 @@ class DS2Method(object):
         return func
 
 
-class DS2Thread(object):
+class DS2Thread(object):  # skipcq PYL-R0205
     def __init__(self, variables, table, column_names=None, return_code=True,
                  return_message=True, package=None, method=None):
 
@@ -583,13 +583,13 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
                         python_var_name, self.name)
                 return "{} = py.getDouble('{}');".format(self.name,
                                                          python_var_name)
-            elif self.type.startswith('char'):
+            if self.type.startswith('char'):
                 if self.is_array:
                     return "py.getStringArray('{}', {}, ret);".format(
                         python_var_name, self.name)
                 return "{} = py.getString('{}');".format(self.name,
                                                          python_var_name)
-            elif self.type.startswith('integer'):
+            if self.type.startswith('integer'):
                 if self.is_array:
                     return "py.getIntArray('{}', {}, ret);".format(
                         python_var_name, self.name)
@@ -606,13 +606,15 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
                     python_var_name, self.name)
             return "rc = py.setDouble('{}', {});".format(
                 python_var_name, self.name)
-        elif self.type.startswith('char'):
+
+        if self.type.startswith('char'):
             if self.is_array:
                 return "rc = py.setStringArray('{}', {});".format(
                     python_var_name, self.name)
             return "rc = py.setString('{}', {});".format(
                 python_var_name, self.name)
-        elif self.type.startswith('integer'):
+
+        if self.type.startswith('integer'):
             if self.is_array:
                 return "rc = py.setIntArray('{}', {});".format(
                     python_var_name, self.name)

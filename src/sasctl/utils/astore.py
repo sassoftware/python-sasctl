@@ -405,11 +405,11 @@ def _get_model_properties(result):
 def _generate_package_code(result):
     """Generates package-style DS2 code from EP-style DS2 code."""
 
-    id = '_' + uuid.uuid4().hex  # Random ID for package
+    id_ = '_' + uuid.uuid4().hex  # Random ID for package
     key = result.Key.Key[0]
 
     header = ('package ds2score / overwrite=yes;',
-              '    dcl package score {}();'.format(id))
+              '    dcl package score {}();'.format(id_))
 
     dcl_lines = []
     for line in result.epcode.split('\n'):
@@ -420,8 +420,8 @@ def _generate_package_code(result):
     init_method = ('    varlist allvars [_all_];',
                    ' ',
                    '    method init();',
-                   "       {}.setvars(allvars);".format(id),
-                   "       {}.setkey(n'{}');".format(id, key),
+                   "       {}.setvars(allvars);".format(id_),
+                   "       {}.setkey(n'{}');".format(id_, key),
                    '    end;')
 
     def extract_type(var, out=False):
@@ -445,7 +445,7 @@ def _generate_package_code(result):
     score_method += tuple('       this."{var}" = "{var}";'.format(var=v)
                           for v in result.InputVariables.Name)
     score_method += (' ',
-                     '       {}.scorerecord();'.format(id),
+                     '       {}.scorerecord();'.format(id_),
                      ' ')
     score_method += tuple('       "{var}" = this."{var}";'.format(var=v)
                           for v in result.OutputVariables.Name)

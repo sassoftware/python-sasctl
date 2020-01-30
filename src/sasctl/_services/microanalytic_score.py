@@ -21,7 +21,7 @@ class MicroAnalyticScore(Service):
     _SERVICE_ROOT = '/microanalyticScore'
 
     @classmethod
-    def is_uuid(cls, id):
+    def is_uuid(cls, id_):
         """Check if the ID appears to be a valid MAS id.
 
         Indicates whether `id` appears to be a correctly formatted ID.  Does
@@ -29,7 +29,7 @@ class MicroAnalyticScore(Service):
 
         Parameters
         ----------
-        id : str
+        id_ : str
 
         Returns
         -------
@@ -44,7 +44,7 @@ class MicroAnalyticScore(Service):
         # Anything that consists of only numbers, lowercase letters,
         # and underscores, and does not start with a number, looks like a
         # MAS id.
-        return re.match('^[_a-z][_a-z0-9]+$', id) is not None
+        return re.match('^[_a-z][_a-z0-9]+$', id_) is not None
 
     list_modules, get_module, update_module, \
         delete_module = Service._crud_funcs('/modules', 'module')
@@ -120,7 +120,8 @@ class MicroAnalyticScore(Service):
         step = step.id if hasattr(step, 'id') else step
 
         # Make sure all inputs are JSON serializable
-        # Common types such as numpy.int64 and numpy.float64 are NOT serializable
+        # Common types such as numpy.int64 and numpy.float64 are NOT
+        # serializable
         for k in kwargs:
             type_name = type(kwargs[k]).__name__
             if type_name == 'float64':
@@ -132,10 +133,10 @@ class MicroAnalyticScore(Service):
                            for k, v in six.iteritems(kwargs)]}
 
         # Convert NaN to None (null) before calling MAS
-        for input in body['inputs']:
+        for i in body['inputs']:
             try:
-                if isnan(input['value']):
-                    input['value'] = None
+                if isnan(i['value']):
+                    i['value'] = None
             except TypeError:
                 pass
 
@@ -222,8 +223,8 @@ class MicroAnalyticScore(Service):
         module = self.get_module(module)
 
         # Define a method for each step of the module
-        for id in module.get('stepIds', []):
-            step = self.get_module_step(module, id)
+        for id_ in module.get('stepIds', []):
+            step = self.get_module_step(module, id_)
 
             # Method should have an argument for each parameter of the step
             arguments = [k['name'] for k in step.get('inputs', [])]

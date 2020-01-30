@@ -217,8 +217,8 @@ def register_model(model, name, project, repository=None, input=None,
                 for tmp in invar:
                     if tmp['role'] != 'input':
                         tmp['role'] = 'input'
-            vars = invar + outvar
-            project = mr.create_project(project, repo_obj, variables=vars)
+            all_vars = invar + outvar
+            project = mr.create_project(project, repo_obj, variables=all_vars)
 
         model = mr.import_model_from_zip(name, project, zipfile,
                                          version=version)
@@ -297,8 +297,8 @@ def register_model(model, name, project, repository=None, input=None,
                                         " Received %r instead." % ({}, model)
 
     if create_project:
-        vars = model.get('inputVariables', [])[:]
-        vars += model.get('outputVariables', [])
+        all_vars = model.get('inputVariables', [])[:]
+        all_vars += model.get('outputVariables', [])
 
         function = model.get('function', '').lower()
         algorithm = model.get('algorithm', '').lower()
@@ -323,20 +323,20 @@ def register_model(model, name, project, repository=None, input=None,
         # project creation.  Update the project if necessary.
         if function == 'prediction':   #Predications require predictionVariable
             project = mr.create_project(project, repo_obj,
-                                    variables=vars,
-                                    function=model.get('function'),
-                                    targetLevel=target_level,
-                                    predictionVariable=prediction_variable)
+                                        variables=all_vars,
+                                        function=model.get('function'),
+                                        targetLevel=target_level,
+                                        predictionVariable=prediction_variable)
 
             if project.get('predictionVariable') != prediction_variable:
                 project['predictionVariable'] = prediction_variable
                 mr.update_project(project)
         else:  #Classifications require eventProbabilityVariable 
             project = mr.create_project(project, repo_obj,
-                                    variables=vars,
-                                    function=model.get('function'),
-                                    targetLevel=target_level,
-                                    eventProbabilityVariable=prediction_variable)
+                                        variables=all_vars,
+                                        function=model.get('function'),
+                                        targetLevel=target_level,
+                                        eventProbabilityVariable=prediction_variable)
             if project.get('eventProbabilityVariable') != prediction_variable:
                 project['eventProbabilityVariable'] = prediction_variable
                 mr.update_project(project)
