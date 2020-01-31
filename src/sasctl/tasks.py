@@ -23,7 +23,7 @@ from .exceptions import AuthorizationError
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
-from .utils.pymas import PyMAS, from_pickle
+from .utils.pymas import from_pickle
 from .utils.misc import installed_packages
 
 
@@ -521,7 +521,6 @@ def update_model_performance(data, model, label, refresh=True):
     .. versionadded:: v1.3
 
     """
-    from .services import model_management as mm
     try:
         import swat
     except ImportError:

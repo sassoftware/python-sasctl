@@ -110,7 +110,7 @@ def build_wrapper_function(func, variables, array_input,
     else:
         header = ('', )
 
-    definition = header +\
+    definition = header + \
                  ('def {name}({args}):'.format(name=name, args=', '.join(args)),
                   '    "Output: {}"'.format(', '.join(output_names + ['msg']) if return_msg
                                             else ', '.join(output_names)),
@@ -121,8 +121,8 @@ def build_wrapper_function(func, variables, array_input,
                   '            raise _compile_error',
                   '        msg = ""' if return_msg else '',
                   '        import numpy as np',
-                  '        import pandas as pd') +\
-                 middle +\
+                  '        import pandas as pd') + \
+                 middle + \
                  ('        if result.size == 1:',
                   '            result = np.asscalar(result)',
                   '    except Exception as e:',

@@ -43,7 +43,7 @@ logger = logging.getLogger(__name__)
 _session = None
 
 
-def pformat(text):
+def _pformat(text):
     from pprint import pformat
 
     try:
@@ -437,7 +437,7 @@ class Session(requests.Session):
                     url=r.url,
                     headers='\n'.join(
                         '{}: {}'.format(k, v) for k, v in r.headers.items()),
-                    body=pformat(r.body)))
+                    body=_pformat(r.body)))
         else:
             self.message_log.info('HTTP/1.1 %s %s', request.method,
                                   request.url)
@@ -455,7 +455,7 @@ class Session(requests.Session):
                     url=r.url,
                     headers='\n'.join(
                         '{}: {}'.format(k, v) for k, v in r.headers.items()),
-                    body=pformat(r.text)))
+                    body=_pformat(r.text)))
         else:
             self.message_log.info('HTTP/1.1 %s %s', response.status_code,
                                   response.url)
