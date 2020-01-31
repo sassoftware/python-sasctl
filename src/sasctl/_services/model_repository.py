@@ -233,7 +233,6 @@ class ModelRepository(Service):
 
         if isinstance(model, str):
             model = {'name': model}
-        assert isinstance(model, dict)
 
         p = cls.get_project(project)
         if p is None:

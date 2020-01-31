@@ -49,7 +49,9 @@ def create_package(table, input=None):
         raise RuntimeError(
             "The 'swat' package is required to work with SAS models.")
 
-    assert isinstance(table, swat.CASTable)
+    if not isinstance(table, swat.CASTable):
+        raise ValueError("Parameter 'table' should be an instance of '%r' but "
+                         "received '%r'." % (swat.CASTable, table))
 
     if 'DataStepSrc' in table.columns:
         # Input only passed to datastep
@@ -182,7 +184,9 @@ def create_files_from_astore(table):
         raise RuntimeError("The 'swat' package is required to work with "
                            "ASTORE models.")
 
-    assert isinstance(table, swat.CASTable)
+    if not isinstance(table, swat.CASTable):
+        raise ValueError("Parameter 'table' should be an instance of '%r' but "
+                         "received '%r'." % (swat.CASTable, table))
 
     sess = table.session.get_connection()
     sess.loadactionset('astore')

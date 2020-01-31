@@ -107,6 +107,42 @@ DEFAULT_FILTERS = [
 
 
 def current_session(*args, **kwargs):
+    """Gets and sets the current session.
+
+    If call with no arguments, the current session instance is returned, or
+    None if no session has been created yet.  If called with an existing session
+    instance, that session will be set as the default.  Otherwise, a new
+    `Session` is instantiated using the provided arguments and set as the
+    default.
+
+    Parameters
+    ----------
+    args : any
+    kwargs : any
+
+    Returns
+    -------
+    Session
+
+    Examples
+    --------
+
+    Get the current session
+
+    >>> current_session()
+    <sasctl.core.Session object at 0x1393fc550>
+
+    Clear the current session
+
+    >>> current_session(None)
+
+
+    Make a new session current
+
+    >>> current_session('example.com', 'knight', 'Ni!')
+    <sasctl.core.Session object at 0x15a9df491>
+
+    """
     global _session  # skipcq PYL-W0603
 
     # Explicitly set or clear the current session

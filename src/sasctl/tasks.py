@@ -193,7 +193,8 @@ def register_model(model, name, project, repository=None, input=None,
     # Unable to find or create the repo.
     if repo_obj is None and repository is None:
         raise ValueError("Unable to find a default repository")
-    elif repo_obj is None:
+
+    if repo_obj is None:
         raise ValueError("Unable to find repository '{}'".format(repository))
 
     # If model is a CASTable then assume it holds an ASTORE model.
@@ -266,7 +267,6 @@ def register_model(model, name, project, repository=None, input=None,
         try:
             mas_module = from_pickle(model_pkl, target_funcs,
                                      input_types=input, array_input=True)
-            assert isinstance(mas_module, PyMAS)
 
             # Include score code files from ESP and MAS
             files.append({'name': 'dmcas_packagescorecode.sas',
@@ -295,8 +295,9 @@ def register_model(model, name, project, repository=None, input=None,
                           'model functionality may not be available.')
     else:
         # Otherwise, the model better be a dictionary of metadata
-        assert isinstance(model, dict), "Expected an instance of %r. " \
-                                        " Received %r instead." % ({}, model)
+        if not isinstance(model, dict):
+            raise TypeError("Expected an instance of '%r' but received '%r'."
+                            % ({}, model))
 
     if create_project:
         all_vars = model.get('inputVariables', [])[:]
@@ -356,7 +357,9 @@ def register_model(model, name, project, repository=None, input=None,
         # Assume new model to create
         model = mr.create_model(model, project)
 
-    assert isinstance(model, RestObj)
+    if not isinstance(model, RestObj):
+        raise TypeError("Model should be an instance of '%r' but received '%r' "
+                        "instead." % (RestObj, model))
 
     # Upload any additional files
     for file in files:
@@ -460,7 +463,7 @@ def publish_model(model,
                            % (model, log.log))
 
     # Raise exception if unknown status received
-    elif job.state.lower() != 'completed':
+    if job.state.lower() != 'completed':
         raise RuntimeError("Model publishing job in an unknown state: '%s'"
                            % job.state.lower())
 

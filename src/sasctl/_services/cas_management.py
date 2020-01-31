@@ -55,8 +55,6 @@ class CASManagement(Service):
         caslibs = self.list_caslibs(server,
                                     filter='eq($primary,name, "%s")' % name)
 
-        assert isinstance(caslibs, list)
-
         if len(caslibs) > 0:
             return caslibs.pop()
 
