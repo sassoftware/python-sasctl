@@ -65,19 +65,25 @@ def sklearn_linear_model():
     return lm, X, y
 
 
-
 @pytest.mark.incremental
 class TestModels:
-    def test_register_astore(self, astore):
+    def test_register_astore(self, iris_astore):
         from sasctl.tasks import register_model
         from sasctl import RestObj
 
         # Register model and ensure attributes are set correctly
-        model = register_model(astore, ASTORE_MODEL_NAME,
+        model = register_model(iris_astore, ASTORE_MODEL_NAME,
                                project=PROJECT_NAME,
                                force=True)
         assert isinstance(model, RestObj)
         assert ASTORE_MODEL_NAME == model.name
+
+    def test_created_project(self):
+        from sasctl.services import model_repository as mr
+
+        project = mr.get_project(PROJECT_NAME)
+        assert project.function.lower() == 'classification'
+        assert 'Species' in project.eventProbabilityVariable
 
     def test_register_sklearn(self, sklearn_logistic_model):
         from sasctl.tasks import register_model

@@ -183,6 +183,7 @@ class TestSklearnRegressionModel:
 
         assert 'var1' in result.columns
         assert result.shape[0] > 0
+        assert all(result['var1'] > 15)
 
     def test_publish_mas(self, request):
         pytest.skip('Need to debug')

@@ -20,9 +20,10 @@ class TestAStoreModel:
     project_name = 'SASCTL AStore Test Project'
     model_name = 'AStore Model'
 
-    def test_model_import(self, astore):
+    def test_model_import(self, iris_astore):
         """Import a model from an ASTORE"""
-        model = register_model(astore, self.model_name, self.project_name, force=True)
+        model = register_model(iris_astore, self.model_name, self.project_name,
+                               force=True)
 
         assert self.model_name == model.name
 

@@ -8,7 +8,8 @@ Unreleased
  - Additional metadata fields are set when registering an ASTORE model.
  - Collections of items should now return an instance of `PagedList` for lazy loading of results.
  - Module steps can now be called using `module.step(df)` where `df` is the row of a DataFrame or Numpy array.
-  
+ - `register_model` sets additional project properties when registering an ASTORE model.
+
 **Changes**
  - Replaced the `raw` parameter of the `request` methods with a `format` parameter, allowing more control over the
    returned value.

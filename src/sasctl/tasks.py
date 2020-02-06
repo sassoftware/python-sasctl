@@ -94,6 +94,77 @@ def _sklearn_to_dict(model):
     return result
 
 
+def _create_project(project_name, model, repo, input_vars=None,
+                    output_vars=None):
+    """Creates a project based on the model specifications.
+
+    Parameters
+    ----------
+    project_name : str
+        Name of the project to be created
+    model : dict
+        Model information
+    repo : str or dict
+        Repository in which to create the project
+    input_vars : list
+        Input variables formatted as {'name': 'varname'}
+    output_vars
+        Output variables formatted as {'name': 'varname'}
+
+    Returns
+    -------
+    RestObj
+        The created project
+    """
+    properties = {k: model[k]
+                  for k in model if k in ('function', 'targetLevel')
+                  }
+
+    function = model.get('function', '').lower()
+    algorithm = model.get('algorithm', '').lower()
+
+    # Get input & output variable lists
+    # Note: copying lists to avoid altering original
+    input_vars = input_vars or model.get('inputVariables', [])
+    output_vars = output_vars or model.get('outputVariables', [])[:]
+    input_vars = input_vars[:]
+    output_vars = output_vars[:]
+
+    # Set prediction or eventProbabilityVariable
+    if len(output_vars) > 0:
+        if function == 'prediction':
+            properties['predictionVariable'] = output_vars[0]['name']
+        else:
+            properties['eventProbabilityVariable'] = output_vars[0]['name']
+
+    # Set targetLevel
+    if properties.get('targetLevel') is None:
+        if function == 'classification' and 'logistic' in algorithm:
+            properties['targetLevel'] = 'Binary'
+        elif function == 'prediction' and 'regression' in algorithm:
+            properties['targetLevel'] = 'Interval'
+        else:
+            properties['targetLevel'] = None
+
+    project = mr.create_project(project_name, repo,
+                                variables=input_vars + output_vars,
+                                **properties)
+
+    # As of Viya 3.4 the 'predictionVariable' and 'eventProbabilityVariable'
+    # parameters are not set during project creation.  Update the project if
+    # necessary.
+    needs_update = False
+    for p in ('predictionVariable', 'eventProbabilityVariable'):
+        if project.get(p) != properties.get(p):
+            project[p] = properties.get(p)
+            needs_update = True
+
+    if needs_update:
+        project = mr.update_project(project)
+
+    return project
+
+
 def register_model(model, name, project, repository=None, input=None,
                    version=None, files=None, force=False,
                    record_packages=True):
@@ -220,8 +291,15 @@ def register_model(model, name, project, repository=None, input=None,
                 for tmp in invar:
                     if tmp['role'] != 'input':
                         tmp['role'] = 'input'
-            all_vars = invar + outvar
-            project = mr.create_project(project, repo_obj, variables=all_vars)
+
+            if 'ModelProperties.json' in tmpzip.namelist():
+                model_props = json.loads(tmpzip.read(
+                    'ModelProperties.json').decode('utf-8'))
+            else:
+                model_props = {}
+
+            project = _create_project(project, model_props, repo_obj,
+                                      invar, outvar)
 
         model = mr.import_model_from_zip(name, project, zipfile,
                                          version=version)
@@ -300,49 +378,7 @@ def register_model(model, name, project, repository=None, input=None,
                             % ({}, model))
 
     if create_project:
-        all_vars = model.get('inputVariables', [])[:]
-        all_vars += model.get('outputVariables', [])
-
-        function = model.get('function', '').lower()
-        algorithm = model.get('algorithm', '').lower()
-
-        if 'targetLevel' in model:
-            target_level = model['targetLevel']
-        else:
-            if function == 'classification' and 'logistic' in algorithm:
-                target_level = 'Binary'
-            elif function == 'prediction' and 'regression' in algorithm:
-                target_level = 'Interval'
-            else:
-                target_level = None
-
-        if len(model.get('outputVariables', [])) == 1:
-            var = model['outputVariables'][0]
-            prediction_variable = var['name']
-        else:
-            prediction_variable = None
-
-        # As of Viya 3.4 the 'predictionVariable' parameter is not set during
-        # project creation.  Update the project if necessary.
-        if function == 'prediction':  # Predictions require predictionVariable
-            project = mr.create_project(project, repo_obj,
-                                        variables=all_vars,
-                                        function=model.get('function'),
-                                        targetLevel=target_level,
-                                        predictionVariable=prediction_variable)
-
-            if project.get('predictionVariable') != prediction_variable:
-                project['predictionVariable'] = prediction_variable
-                mr.update_project(project)
-        else:  # Classifications require eventProbabilityVariable
-            project = mr.create_project(project, repo_obj,
-                                        variables=all_vars,
-                                        function=model.get('function'),
-                                        targetLevel=target_level,
-                                        eventProbabilityVariable=prediction_variable)
-            if project.get('eventProbabilityVariable') != prediction_variable:
-                project['eventProbabilityVariable'] = prediction_variable
-                mr.update_project(project)
+        project = _create_project(project, model, repo_obj)
 
     # If replacing an existing version, make sure the model version exists
     if str(version).lower() != 'new':

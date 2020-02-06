@@ -275,7 +275,7 @@ def cas_session(request, credentials):
 
 
 @pytest.fixture
-def astore(cas_session):
+def iris_astore(cas_session):
     pd = pytest.importorskip('pandas')
     datasets = pytest.importorskip('sklearn.datasets')
 
@@ -289,10 +289,12 @@ def astore(cas_session):
     iris.columns = ['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth', 'Species']
 
     tbl = cas_session.upload(iris).casTable
-    r = tbl.decisiontree.gbtreetrain(target='Species',
-                                       inputs=['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth'],
-                                       ntree=10,
-                                       savestate=ASTORE_NAME)
+    _ = tbl.decisiontree.gbtreetrain(target='Species',
+                                     inputs=['SepalLength', 'SepalWidth',
+                                             'PetalLength', 'PetalWidth'],
+                                     nominal=['Species'],
+                                     ntree=10,
+                                     savestate=ASTORE_NAME)
     return cas_session.CASTable(ASTORE_NAME)
 
 
