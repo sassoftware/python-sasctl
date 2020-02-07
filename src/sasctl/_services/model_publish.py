@@ -81,8 +81,8 @@ class ModelPublish(Service):
         if not (isinstance(item, dict) and 'id' in item):
             item = cls.get_destination(item)
             if item is None:
-                cls.log.info("Object '%s' not found.  Skipping delete."
-                             % item_name)
+                cls.log.info("Object '%s' not found.  Skipping delete.",
+                             item_name)
                 return
 
         if isinstance(item, dict) and 'name' in item:
@@ -259,8 +259,10 @@ class ModelPublish(Service):
 
         """
         type_ = str(type_).lower()
-        assert type_ in ('cas', 'microanalyticservice', 'mas',
-                         'teradata', 'hadoop')
+        if type_ not in ('cas', 'microanalyticservice', 'mas', 'teradata',
+                         'hadoop'):
+            raise ValueError("Unrecognized destination type '%s' specified."
+                             % type_)
 
         # As of Viya 3.4 capitalization matters.
         if type_ in ('microanalyticservice', 'mas'):

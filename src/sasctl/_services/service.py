@@ -312,8 +312,8 @@ class Service(object):  # skipcq PYL-R0205
             if not (isinstance(item, dict) and 'id' in item):
                 item = get_item(cls, item)
                 if item is None:
-                    cls.log.info("Object '%s' not found.  Skipping delete."
-                                 % item_name)
+                    cls.log.info("Object '%s' not found.  Skipping delete.",
+                                 item_name)
                     return
 
             if isinstance(item, dict) and 'id' in item:
