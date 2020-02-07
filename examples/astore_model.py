@@ -10,7 +10,7 @@ from sasctl import Session
 from sasctl.tasks import register_model, publish_model
 from sasctl.services import microanalytic_score as mas
 
-s = swat.CAS('hostname', 'username', 'password')
+s = swat.CAS('hostname', 5570, 'username', 'password')
 s.loadactionset('decisionTree')
 
 tbl = s.CASTable('iris')
@@ -21,11 +21,8 @@ tbl.decisiontree.gbtreetrain(target='Species',
 
 astore = s.CASTable('gradboost_astore')
 
-with Session(s):
+with Session('hostname', 'username', 'password'):
     model = register_model(astore, 'Gradient Boosting', 'Iris')
     module = publish_model(model, 'maslocal')
-    response = mas.execute_module_step(module, 'score',
-                                       SepalLength=5.1,
-                                       SepalWidth=3.5,
-                                       PetalLength=1.4,
-                                       PetalWidth=0.2)
+    response = mas.score(SepalLength=5.1, SepalWidth=3.5,
+                         PetalLength=1.4, PetalWidth=0.2)
