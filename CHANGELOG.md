@@ -16,6 +16,10 @@ Unreleased
  - The `get_file_content` method of the Files service now returns the actual content instead of the file metadata.
  - JSON output when using `sasctl` from the command line is now formatted correctly.
  
+ **Bugfixes**
+ - `model_publish.delete_destination` now works correctly.
+ 
+ 
 v1.4.6 (2020-1-24)
 ------------------
 **Bugfixes**
