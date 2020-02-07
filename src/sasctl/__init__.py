@@ -14,7 +14,9 @@ __copyright__ = 'Copyright © 2019, SAS Institute Inc., ' \
 
 import logging
 
-from .core import Session, HTTPError, current_session
+from .core import Session, HTTPError
+from .core import current_session, delete, get, get_link, post, put, \
+    request_link
 from .tasks import *
 
 
