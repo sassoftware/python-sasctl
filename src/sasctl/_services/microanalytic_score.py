@@ -320,6 +320,8 @@ class MicroAnalyticScore(Service):
                     )
 
             code = '\n'.join(code)
+            self.log.debug("Generated code for step '%s' of module '%s':\n" +
+                           code, id_, module)
             compiled = compile(code, '<string>', 'exec')
 
             env = globals().copy()

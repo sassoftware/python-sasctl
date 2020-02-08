@@ -4,8 +4,23 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import os
+
 import pytest
 import six
+
+
+@pytest.fixture
+def change_dir():
+    """Change working directory for the duration of the test."""
+    old_dir = os.path.abspath(os.curdir)
+
+    def change(new_dir):
+        os.chdir(new_dir)
+
+    yield change
+    os.chdir(old_dir)
+
 
 def test_astore_model(session, cas_session):
     """Ensure the astore_model.py example executes successfully."""
@@ -27,14 +42,15 @@ def test_astore_model(session, cas_session):
         six.exec_(code)
 
 
-def test_sklearn_model(session):
+def test_sklearn_model(session, change_dir):
     """Ensure the sklearn_model.py example executes successfully."""
 
     # Mock up Session() to return the Betamax-recorded session
     def Session(*args, **kwargs):
         return session
 
-    with open('examples/sklearn_model.py') as f:
+    change_dir('examples')
+    with open('sklearn_model.py') as f:
         # Remove import of Session to ensure mock function will be used
         # instead.
         code = f.read().replace('from sasctl import Session, register_model',
@@ -51,9 +67,10 @@ def test_full_lifecycle(session):
     def Session(*args, **kwargs):
         return session
 
-    with open('examples/full_lifecycle.py') as f:
-        # Remove import of Session to ensure mock function will be used
-        # instead.
-        code = f.read().replace('from sasctl import Session', '')
+    with os.chdir('examples'):
+        with open('full_lifecycle.py') as f:
+            # Remove import of Session to ensure mock function will be used
+            # instead.
+            code = f.read().replace('from sasctl import Session', '')
 
-        six.exec_(code)
+            six.exec_(code)

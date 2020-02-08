@@ -440,7 +440,13 @@ def _generate_package_code(result):
             x = x[:x.find('(')]
         return x
 
-    variables = ['       {} "{}"'.format(extract_type(var), var) for var in result.InputVariables.Name]
+    variables = []
+    # Despite being call "InputVariables" at least some ASTORE models
+    # include the target variable in the list
+    for idx, row in result.InputVariables.iterrows():
+        if 'Role' in row and row['Role'].lower() != 'target':
+            name = row['Name']
+            variables.append('       %s "%s"' % (extract_type(name), name))
     variables += ['       IN_OUT {} "{}"'.format(extract_type(var, out=True), var) for var in result.OutputVariables.Name]
 
     score_method = ('    method score(',
