@@ -49,3 +49,21 @@ Rows: 506
 |lstat|float|% lower status of the population|
 |medv|float|median value of owner-occupied homes in $1000’s|
 
+
+Iris Species
+------------
+[https://en.wikipedia.org/wiki/Iris_flower_data_set](https://en.wikipedia.org/wiki/Iris_flower_data_set)
+
+Taxonomic classification of of iris plants based on flower measurements.
+  
+Originally published by Robert Fisher `The use of multiple measurements in taxonomic problems', Annals of Eugenics,  vol. 7, 179-188, 1936.
+
+Rows: 150
+
+|Column|Type|Description        |
+|------| :---: |----------------|
+|SepalLength|float|Length of sepal in cm.|
+|SepalWidth|float|Width of sepal in cm.|
+|PetalLength|float|Length of petal in cm.|
+|PetalWidth|float|Width of petal in cm.|
+|Species|str|Species of iris plant|
