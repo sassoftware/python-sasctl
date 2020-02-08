@@ -5,18 +5,14 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import pandas as pd
-from sklearn import datasets
 from sklearn.linear_model import LogisticRegression
 
 from sasctl import Session, register_model, publish_model
 
-
-# Load the Iris data set and convert into a Pandas data frame.
-raw = datasets.load_iris()
-X = pd.DataFrame(raw.data, columns=['SepalLength', 'SepalWidth',
-                                    'PetalLength', 'PetalWidth'])
-y = pd.DataFrame(raw.target, columns=['Species'], dtype='category')
-y.Species.cat.categories = raw.target_names
+# Load the Iris data set and split into features and target.
+df = pd.read_csv('data/iris.csv')
+X = df.drop('Species', axis=1)
+y = df.Species.astype('category')
 
 # Fit a sci-kit learn model
 model = LogisticRegression()
