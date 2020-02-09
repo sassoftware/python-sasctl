@@ -443,7 +443,7 @@ def _generate_package_code(result):
     variables = []
     # Despite being call "InputVariables" at least some ASTORE models
     # include the target variable in the list
-    for idx, row in result.InputVariables.iterrows():
+    for _, row in result.InputVariables.iterrows():
         if 'Role' in row and row['Role'].lower() != 'target':
             name = row['Name']
             variables.append('       %s "%s"' % (extract_type(name), name))
