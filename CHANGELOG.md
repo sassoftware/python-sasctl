@@ -1,23 +1,7 @@
 Unreleased
 ----------
 **Improvements**
- - Registered Python models will now include both `predict` and `predict_proba` methods. 
- - Added a new Relationships service for managing links between objects.
- - Added a new Reports service for retrieving SAS Visual Analytics reports.
- - Added a new Report_Images service for rendering content from reports. 
- - Additional metadata fields are set when registering an ASTORE model.
- - Collections of items should now return an instance of `PagedList` for lazy loading of results.
- - Module steps can now be called using `module.step(df)` where `df` is the row of a DataFrame or Numpy array.
- - `register_model` sets additional project properties when registering an ASTORE model.
-
-**Changes**
- - Replaced the `raw` parameter of the `request` methods with a `format` parameter, allowing more control over the
-   returned value.
- - The `get_file_content` method of the Files service now returns the actual content instead of the file metadata.
- - JSON output when using `sasctl` from the command line is now formatted correctly.
- 
- **Bugfixes**
- - `model_publish.delete_destination` now works correctly.
+ - Added `ml_pipeline_automation` service for automated building of machine learning pipelines.
  
  
 v1.4.6 (2020-1-24)

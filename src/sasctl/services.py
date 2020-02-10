@@ -20,6 +20,8 @@ files = _instantiate('sasctl._services.files.Files')
 folders = _instantiate('sasctl._services.folders.Folders')
 microanalytic_score = _instantiate(
     'sasctl._services.microanalytic_score.MicroAnalyticScore')
+ml_pipeline_automation = _instantiate(
+    'sasctl._services.ml_pipeline_automation.MLPipelineAutomation')
 model_management = _instantiate(
     'sasctl._services.model_management.ModelManagement')
 model_publish = _instantiate(
