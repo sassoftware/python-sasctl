@@ -16,7 +16,8 @@ class CASManagement(Service):
 
     list_servers, get_server, _, _ = Service._crud_funcs('/servers', 'server')
 
-    def list_caslibs(self, server, filter=None):
+    @classmethod
+    def list_caslibs(cls, server, filter=None):
         """List caslibs available on a server.
 
         Parameters
@@ -33,10 +34,11 @@ class CASManagement(Service):
             A collection of :class:`.RestObj` instances.
 
         """
-        return self._get_rel(server, 'caslibs', func=self.get_server,
-                             filter=filter) or []
+        return cls._get_rel(server, 'caslibs', func=cls.get_server,
+                            filter=filter) or []
 
-    def get_caslib(self, name, server=None):
+    @classmethod
+    def get_caslib(cls, name, server=None):
         """Get a caslib by name.
 
         Parameters
@@ -52,13 +54,14 @@ class CASManagement(Service):
 
         """
         server = server or 'cas-shared-default'
-        caslibs = self.list_caslibs(server,
-                                    filter='eq($primary,name, "%s")' % name)
+        caslibs = cls.list_caslibs(server,
+                                   filter='eq($primary,name, "%s")' % name)
 
         if len(caslibs) > 0:
             return caslibs.pop()
 
-    def list_tables(self, caslib, server=None, filter=None):
+    @classmethod
+    def list_tables(cls, caslib, server=None, filter=None):
         """List tables available in a caslib.
 
         Parameters
@@ -77,10 +80,11 @@ class CASManagement(Service):
             A collection of :class:`.RestObj` instances.
 
         """
-        return self._get_rel(caslib, 'tables', self.get_caslib, filter,
-                             server) or []
+        return cls._get_rel(caslib, 'tables', cls.get_caslib, filter,
+                            server) or []
 
-    def get_table(self, name, caslib, server=None):
+    @classmethod
+    def get_table(cls, name, caslib, server=None):
         """Get a table by name.
 
         Parameters
@@ -97,9 +101,9 @@ class CASManagement(Service):
         RestObj
 
         """
-        tables = self.list_tables(caslib,
-                                  server=server,
-                                  filter='eq($primary,name, "%s")' % name)
+        tables = cls.list_tables(caslib,
+                                 server=server,
+                                 filter='eq($primary,name, "%s")' % name)
 
         if len(tables) > 0:
             return tables.pop()
