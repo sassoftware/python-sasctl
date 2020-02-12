@@ -2,7 +2,7 @@ Unreleased
 ----------
 **Improvements**
  - Added `ml_pipeline_automation` service for automated building of machine learning pipelines.
- 
+ - Added a new `build_pipeline` task for creating automated pipelines.
  
 v1.4.6 (2020-1-24)
 ------------------

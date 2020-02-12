@@ -20,6 +20,8 @@ from six.moves.urllib.error import HTTPError
 from . import utils
 from .core import RestObj, current_session, get, get_link, request_link
 from .exceptions import AuthorizationError
+from .services import data_sources as ds
+from .services import ml_pipeline_automation as mpa
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
@@ -161,6 +163,45 @@ def _create_project(project_name, model, repo, input_vars=None,
 
     if needs_update:
         project = mr.update_project(project)
+
+    return project
+
+
+def build_pipeline(data, target, name,
+                   description=None,
+                   max_models=None):
+    """Automatically build a machine learning pipeline on a dataset.
+
+    Parameters
+    ----------
+    data : CASTable or dict
+    target : str
+        Name of column in `data` containing the target variable.
+    name : str
+        Name of the project.
+    description : str, optional
+        A description of the project.
+    max_models : int, optional
+        Maximum number of models to train.
+
+    Returns
+    -------
+    RestObj
+        Project metadata
+
+    Notes
+    -----
+    The `data` table to be used as input must be globally-scoped (as opposed to
+    session-scoped).
+
+    """
+
+    # If CASTable or RestObj (table) get the table URI
+    table_uri = ds.table_uri(data)
+
+    project = mpa.create_project(table_uri, target, name,
+                                 description=description,
+                                 max_models=max_models)
 
     return project
 
