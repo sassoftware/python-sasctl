@@ -135,7 +135,7 @@ def _find_services(module='sasctl'):
             if hasattr(obj, '_cli_command') and hasattr(obj, '_cli_service'):
                 services[obj._cli_service][obj._cli_command] = obj
 
-
+            # Check methods on service classes
             elif source_module.startswith('sasctl._services'):
                 for atr in dir(obj):
                     atr = getattr(obj, atr)
