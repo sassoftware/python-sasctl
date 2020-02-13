@@ -116,7 +116,8 @@ class CASManagement(Service):
             return tables.pop()
 
     @classmethod
-    def upload_file(cls, file, name, caslib=None, server=None, header=None):
+    def upload_file(cls, file, name, caslib=None, server=None, header=None,
+                    format_=None):
         """Upload a file to a CAS table.
 
         Uploads the contents of a CSV, XLS, XLSX, SAS7BDT or SASHDAT file to a
@@ -125,8 +126,7 @@ class CASManagement(Service):
         Parameters
         ----------
         file : str or file-like object
-            File containing data to upload or path to the file.  Valid file
-            types are .CSV, .XLS, .XSLX, .SAS7BDAT, .SASHDAT.
+            File containing data to upload or path to the file.
         name : str
             Name of the table to create
         caslib : str, optional
@@ -137,6 +137,9 @@ class CASManagement(Service):
         header : bool, optional
             Whether the first row of data contains column headers.  Defaults to
             True.
+        format_ : {"csv", "xls", "xlsx", "sas7bdat", "sashdat"}, optional
+            File of input `file`.  Not required if format can be discerned from
+            the file path.
 
         Returns
         -------
@@ -152,23 +155,27 @@ class CASManagement(Service):
         # Not a file-like object, assuming it's a file path
         if not hasattr(file, 'read'):
             path = os.path.abspath(os.path.expanduser(file))
-            extension = os.path.splitext(path)[-1].lstrip('.').lower()
+            format_ = os.path.splitext(path)[-1].lstrip('.').lower()
 
             # Extension should be supported & needs to be explicitly set in
             # the "format" parameter to avoid errors.
-            if extension not in ('csv', 'xls', 'xlsx', 'sas7bdat', 'sashdat'):
+            if format_ not in ('csv', 'xls', 'xlsx', 'sas7bdat', 'sashdat'):
                 raise ValueError("File '%s' has an unsupported file type." %
                                  file)
 
             with open(path, 'rb') as f:
                 file = f.read()
 
+        data = {
+            'tableName': name,
+            'containsHeaderRow': header,
+        }
+
+        if format_ is not None:
+            data['format'] = format_
+
         tbl = cls.post('/servers/%s/caslibs/%s/tables' % (server, caslib),
-                       data={
-                           'tableName': name,
-                           'containsHeaderRow': header,
-                           'format': extension
-                       },
+                       data=data,
                        files={
                            name: file
                        })

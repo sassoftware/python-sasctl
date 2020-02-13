@@ -6,7 +6,7 @@
 
 from ..core import PagedItemIterator
 from .service import Service
-
+from .cas_management import DEFAULT_CASLIB
 
 class DataSources(Service):
     """Enables retrieval of data source metadata.
@@ -236,15 +236,40 @@ class DataSources(Service):
 
         # Use the CASTable information to find the same table
         if all(hasattr(table, x) for x in ('name', 'caslib', 'get_connection')):
+            from .cas_management import CASManagement as cm
+
             server_http = table.builtins.httpAddress()
             server_name = server_http['restPrefix'].lstrip('/').rsplit('-http')[
                 0]
 
             table_name = table.name
             caslib_name = table.caslib
+
+            # If caslib is not set, empty dict is returned.
+            # Build the default caslib name (data_sources and cas_management
+            # services currently require username to be explicitly included)
+            if caslib_name == {}:
+                username = table.get_connection()._username
+                caslib_name = DEFAULT_CASLIB + '(%s)' % username
+
             session_id = table.get_connection()._session
 
-            caslib = cls.get_caslib(caslib_name, server_name)
-            table = cls.get_table(table_name, caslib, session_id=session_id)
+            caslib = cm.get_caslib(caslib_name, server_name)
+            table = cm.get_table(table_name, caslib)
 
-        return cls.get_link(table, 'self')['uri']
+        # Responses directly from cas_management service have a URI to
+        # data_tables service under the "dataTable" rel
+        link = cls.get_link(table, 'dataTable')
+        if link is not None:
+            return link['uri']
+
+        # Responses from data_tables service have the URI to data_tables under
+        # the "self" rel
+        link = cls.get_link(table, 'self')
+        if link is not None:
+            return link['uri']
+
+        # Responses from upload operations often don't include a links section.
+        # Fall back to tableReference section if present
+        table_ref = table.get('tableReference', {})
+        return table_ref.get('tableUri')

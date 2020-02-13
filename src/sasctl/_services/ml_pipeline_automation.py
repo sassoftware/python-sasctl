@@ -7,6 +7,41 @@
 from .service import Service
 
 
+class SELECTION_STATS:
+    """Selection statistics"""
+
+    """Average Squared Error"""
+    ASE = 'ase'
+
+    """Root Average Squared Error"""
+    RASE = 'rase'
+
+    """Root Mean Average Error"""
+    RMAE = 'rmae'
+
+    """Root Mean Squared Logarithmic Error"""
+    RMSLE = 'rmsle'
+
+
+"""
+classSelectionStatistic 	c
+classSelectionStatistic 	capturedResponse
+classSelectionStatistic 	cumulativeCapturedResponse
+classSelectionStatistic 	cumulativeLift
+classSelectionStatistic 	f1
+classSelectionStatistic 	fdr
+classSelectionStatistic 	fpr
+classSelectionStatistic 	gain
+classSelectionStatistic 	gini
+classSelectionStatistic 	ks
+classSelectionStatistic 	lift
+classSelectionStatistic 	misclassificationEvent
+classSelectionStatistic 	mce
+classSelectionStatistic 	mcll
+classSelectionStatistic 	ks2
+classSelectionStatistic 	misclassificationRateCutoff
+"""
+
 class MLPipelineAutomation(Service):
     """Automates project creation, pipeline building and training.
 
@@ -16,6 +51,8 @@ class MLPipelineAutomation(Service):
     """
 
     _SERVICE_ROOT = '/mlPipelineAutomation'
+
+    SELECTION = SELECTION_STATS
 
     list_projects, get_project, update_project, \
     delete_project = Service._crud_funcs('/projects', 'project')
@@ -37,7 +74,23 @@ class MLPipelineAutomation(Service):
             A description of the project.
         max_models : int, optional
             Maximum number of models to train.
+
+        Returns
+        -------
+        RestObj
+            Project metadata
+
         """
+
+        # TODO: targetEventLevel
+        # TODO: selectionDepth
+        # TODO: intervalSelectionStatistic
+        # TODO: classSelectionStatistic
+        # TODO: selectionPartition
+        # TODO: partitionEnabled
+        # TODO: cutoffPercentage
+        # TODO: samplingEnabled
+        # TODO: samplePercentage
 
         data = {
             'dataTableUri': table,
