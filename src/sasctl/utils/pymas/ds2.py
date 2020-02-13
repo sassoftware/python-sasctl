@@ -131,7 +131,7 @@ class DS2PyMASPackage(DS2BasePackage):
                            return_code=False,
                            return_message=False,
                            target=None,
-                           method_name=self.name))
+                           method_name='init'))
 
     def add_method(self, name, target, variables, return_code=False,
                    return_message=False):
@@ -155,6 +155,8 @@ class DS2PyMASPackage(DS2BasePackage):
         None
 
         """
+        return_code = False
+        return_message = True
 
         public_variables = list(variables)
         private_variables = []
@@ -166,13 +168,15 @@ class DS2PyMASPackage(DS2BasePackage):
             else:
                 private_variables.append(DS2Variable('rc', 'int', True))
 
-        if return_message and not any(v for v in public_variables if v.name.lower() == 'msg'):
-            public_variables.append(DS2Variable('msg', 'char', True))
+        # if return_message and not any(v for v in public_variables if
+        # v.name.lower() == 'msg'):
+        #     public_variables.append(DS2Variable('msg', 'char', True))
 
         body = [v.as_declaration() for v in
                 private_variables]
 
-        body += ["rc = py.useMethod('%s');" % target,
+        body += ["dcl varchar(4068) msg;",
+                 "rc = py.useMethod('%s');" % target,
                  "if rc then return;"]
 
         # Set Python input variables
@@ -185,6 +189,11 @@ class DS2PyMASPackage(DS2BasePackage):
         # Get Python output variables
         body += [v.pymas_statement() for v in public_variables
                  if v.out and v.name != 'rc']
+
+        # Log any error messages returned
+        body += ["msg = py.getString('msg');",
+                 'if not null(msg) then logr.log(\'e\', \'Error executing '
+                 'Python method "%s": $s\', msg);' % name]
 
         self.methods.append(DS2BaseMethod(name, variables, body))
 
@@ -460,6 +469,7 @@ class DS2Thread(object):  # skipcq PYL-R0205
                 "  method run();",
                 "    set SASEP.in;",
                 var_assignments,
+                "    pythonPackage.init();",
                 "    pythonPackage.{}({});".format(self.method.name,
                                                    ','.join(keep_vars)),
                 "    output;",

@@ -64,6 +64,8 @@ def build_wrapper_function(func, variables, array_input,
 
     """
 
+    return_msg = True
+
     # need to know func & input/output vars for each func
 
     input_names = [v.name for v in variables if not v.out]
@@ -80,16 +82,20 @@ def build_wrapper_function(func, variables, array_input,
             if v.type == 'char':
                 string_input += ("        if {0}: {0} = {0}.strip()".format(v.name), )
             else:
-                string_input += ("        if {0} == None: {0} = np.nan".format(v.name), )
+                string_input += (
+                "        if {0} is None: {0} = np.nan".format(v.name),)
 
 
     # Statement to execute the function w/ provided parameters
     if array_input:
-        middle = string_input +\
-                 ('        inputarray = np.array([{}]).reshape((1, -1))'.format(','.join(args)),
-                  '        column = [{}]'.format(','.join('"{0}"'.format(w) for w in args)),
-                  '        inputrun = pd.DataFrame(data=inputarray, columns=column)',
-                  '        result = {}(inputrun)'.format(func))
+        middle = string_input + \
+                 (
+                 '        input_array = np.array([{}]).reshape((1, -1))'.format(
+                     ', '.join(args)),
+                 '        columns = [{}]'.format(
+                     ', '.join('"{0}"'.format(w) for w in args)),
+                 '        input_df = pd.DataFrame(data=input_array, columns=columns)',
+                 '        result = {}(input_df)'.format(func))
     else:
         func_call = '{}({})'.format(func, ','.join(args))
         middle = ('        result = {}'.format(func_call),)
@@ -115,26 +121,24 @@ def build_wrapper_function(func, variables, array_input,
                   '    "Output: {}"'.format(', '.join(output_names + ['msg']) if return_msg
                                             else ', '.join(output_names)),
                   '    result = None',
+                  '    msg = None' if return_msg else '',
                   '    try:',
                   '        global _compile_error',
                   '        if _compile_error is not None:',
                   '            raise _compile_error',
-                  '        msg = ""' if return_msg else '',
                   '        import numpy as np',
                   '        import pandas as pd') + \
                  middle + \
-                 ('        if result.size == 1:',
-                  '            result = np.asscalar(result)',
+                 ('        result = tuple(result)',
                   '    except Exception as e:',
-                  '        msg = str(e)' if return_msg else '',
+                  '        from traceback import format_exc',
+                  '        msg = str(e) + format_exc()' if return_msg else '',
                   '        if result is None:',
-                  '            result = tuple(None for i in range({}))'.format(len(output_names)))
+                  '            result = tuple(None for i in range({'
+                  '}))'.format(len(output_names)))
 
     if return_msg:
-        definition += ('    if isinstance(result, tuple):',
-                       '        return tuple(x for x in list(result) + [msg])',
-                       '    else: ',
-                       '        return result, msg')
+        definition += ('    return result + (msg, )',)
     else:
         definition += ('    return result', )
 
