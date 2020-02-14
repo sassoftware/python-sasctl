@@ -619,6 +619,38 @@ class Session(requests.Session):
             return self._get_token_with_kerberos()
         return self._get_token_with_password()
 
+    def to_swat(self, port=None):
+        """Establish a SWAT session to CAS.
+
+        Parameters
+        ----------
+        port : int, optional
+            Port number to connect to CAS.  Defaults to 5570.
+
+        Returns
+        -------
+        swat.CAS
+            Active SWAT connection to the CAS server
+
+        """
+        if swat is None:
+            raise RuntimeError("Cannot create a CAS session unless the SWAT "
+                               "package is installed.  Install with "
+                               "'pip install swat' before continuing.")
+
+        port = port or 5570
+
+        try:
+            cas = swat.CAS(self.hostname, port, username=self.username,
+                           password=self._settings.get('password'))
+        except ValueError as e:
+            cas = swat.CAS(
+                'https://%s/cas-shared-default-http/' % self.hostname,
+                username=self.username,
+                password=self._settings.get('password'))
+        return cas
+
+
     def _build_url(self, url):
         """Build a complete URL from a path by substituting in session parameters."""
         components = urlsplit(url)
