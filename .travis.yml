@@ -88,7 +88,7 @@ matrix:
 
 
 install:
-  - pip install tox "six>=1.14.0"  # workaround for pip issue:  https://github.com/pypa/virtualenv/issues/1551#issuecomment-584148133
+  - pip install tox "virtualenv<20.0.0"  # workaround for pip issue:  https://github.com/pypa/virtualenv/issues/1551#issuecomment-584148133
 
 
 script:
