@@ -315,7 +315,7 @@ def register_model(model, name, project, repository=None, input=None,
                       'file': model_pkl,
                       'role': 'Python Pickle'})
 
-        target_funcs = [f for f in ('predict', 'predict_proba')
+        target_funcs = [f for f in ('predict',)
                         if hasattr(model, f)]
 
         # Extract model properties
