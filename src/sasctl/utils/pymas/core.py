@@ -129,7 +129,12 @@ def build_wrapper_function(func, variables, array_input,
                   '        import numpy as np',
                   '        import pandas as pd') + \
                  middle + \
-                 ('        result = tuple(np.asscalar(i) for i in result)',
+                 ('        result = tuple(result)',
+                  '        if len(result) == 0:',
+                  '            result = tuple(None for i in range(%s))' % len(
+                      output_names),
+                  '        elif "numpy" in str(type(result[0])):',
+                  '            result = tuple(np.asscalar(i) for i in result)',
                   '    except Exception as e:',
                   '        from traceback import format_exc',
                   '        msg = str(e) + format_exc()' if return_msg else '',
