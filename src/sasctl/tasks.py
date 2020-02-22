@@ -21,7 +21,7 @@ from six.moves.urllib.error import HTTPError
 
 from . import utils
 from .core import RestObj, current_session, get, get_link, request_link
-from .exceptions import AuthorizationError
+from .exceptions import AuthorizationError, ServiceUnavailableError
 from .services import cas_management as cm
 from .services import data_sources as ds
 from .services import ml_pipeline_automation as mpa
@@ -209,6 +209,10 @@ def build_pipeline(data, target, name,
     --------
     build_pipeline('examples/data/iris.csv', 'Species', 'Example Iris Pipeline')
 
+    Raises
+    ------
+    ServiceUnavailableError
+        If the ML Pipeline Automation service is unavailable.
 
     Notes
     -----
@@ -216,6 +220,12 @@ def build_pipeline(data, target, name,
     session-scoped).
 
     """
+
+    if data is None:
+        raise ValueError("Parameter 'data' is required.  Received 'None'.")
+
+    if not mpa.is_available():
+        raise ServiceUnavailableError(mpa)
 
     # Local dataframe (either Pandas or SAS) will have .to_csv().  BUT CASTables
     # also have a .to_csv(), but there's no reason to download the data from
@@ -230,7 +240,7 @@ def build_pipeline(data, target, name,
                              "uploading a DataFrame.")
 
         # Upload the table to CAS
-        data = cm.upload_file(buffer, table_name, caslib=caslib, format='csv')
+        data = cm.upload_file(buffer, table_name, caslib=caslib, format_='csv')
 
     # If data is a string, assume it's a path to a file that can be uploaded
     elif isinstance(data, six.string_types):
