@@ -123,8 +123,7 @@ def test_build_wrapper_function():
     # Actual function inputs & DS2 variables current dont have to match.
     result = build_wrapper_function(func, [DS2Variable('a', 'int', False),
                                            DS2Variable('x', 'float', True)],
-                                    array_input=False,
-                                    return_msg=False)
+                                    array_input=False)
     assert isinstance(result, str)
     assert '"Output: x' in result
 
@@ -570,7 +569,12 @@ def wrapper(a, b):
         columns = ["a", "b"]
         input_df = pd.DataFrame(data=input_array, columns=columns)
         result = dummy_func(input_df)
-        result = tuple(result)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else 
+        tuple(result)
+        if len(result) == 0:
+            result = tuple(None for i in range(1))
+        elif "numpy" in str(type(result[0])):
+            result = tuple(np.asscalar(i) for i in result)
     except Exception as e:
         from traceback import format_exc
         msg = str(e) + format_exc()
@@ -608,7 +612,12 @@ def renamed_wrapper(a, b):
         columns = ["a", "b"]
         input_df = pd.DataFrame(data=input_array, columns=columns)
         result = dummy_func(input_df)
-        result = tuple(result)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else 
+        tuple(result)
+        if len(result) == 0:
+            result = tuple(None for i in range(1))
+        elif "numpy" in str(type(result[0])):
+            result = tuple(np.asscalar(i) for i in result)
     except Exception as e:
         from traceback import format_exc
         msg = str(e) + format_exc()
@@ -648,7 +657,12 @@ def predict(a, b):
         columns = ["a", "b"]
         input_df = pd.DataFrame(data=input_array, columns=columns)
         result = dummy_func(input_df)
-        result = tuple(result)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else 
+        tuple(result)
+        if len(result) == 0:
+            result = tuple(None for i in range(1))
+        elif "numpy" in str(type(result[0])):
+            result = tuple(np.asscalar(i) for i in result)
     except Exception as e:
         from traceback import format_exc
         msg = str(e) + format_exc()
@@ -686,7 +700,12 @@ def predict_proba(a, b):
         columns = ["a", "b"]
         input_df = pd.DataFrame(data=input_array, columns=columns)
         result = dummy_func(input_df)
-        result = tuple(result)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else 
+        tuple(result)
+        if len(result) == 0:
+            result = tuple(None for i in range(1))
+        elif "numpy" in str(type(result[0])):
+            result = tuple(np.asscalar(i) for i in result)
     except Exception as e:
         from traceback import format_exc
         msg = str(e) + format_exc()
