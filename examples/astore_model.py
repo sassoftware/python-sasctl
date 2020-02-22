@@ -13,7 +13,7 @@ from sasctl.services import microanalytic_score as mas
 s = swat.CAS('hostname', 5570, 'username', 'password')
 s.loadactionset('decisionTree')
 
-tbl = s.CASTable('iris')
+tbl = s.upload('data/iris.csv').casTable
 tbl.decisiontree.gbtreetrain(target='Species',
                              inputs=['SepalLength', 'SepalWidth',
                                      'PetalLength', 'PetalWidth'],
@@ -22,7 +22,7 @@ tbl.decisiontree.gbtreetrain(target='Species',
 astore = s.CASTable('gradboost_astore')
 
 with Session('hostname', 'username', 'password'):
-    model = register_model(astore, 'Gradient Boosting', 'Iris')
+    model = register_model(astore, 'Gradient Boosting', 'Iris', force=True)
     module = publish_model(model, 'maslocal')
-    response = mas.score(SepalLength=5.1, SepalWidth=3.5,
-                         PetalLength=1.4, PetalWidth=0.2)
+    response = module.score(SepalLength=5.1, SepalWidth=3.5,
+                            PetalLength=1.4, PetalWidth=0.2)

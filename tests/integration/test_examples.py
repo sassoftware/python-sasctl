@@ -22,21 +22,19 @@ def change_dir():
     os.chdir(old_dir)
 
 
-def test_astore_model(session, cas_session):
+def test_astore_model(session, cas_session, change_dir):
     """Ensure the astore_model.py example executes successfully."""
-
-    pytest.xfail('Model publish fails.')
 
     # Mock up Session() to return the Betamax-recorded session
     def Session(*args, **kwargs):
         return session
 
-    with open('examples/astore_model.py') as f:
+    change_dir('examples')
+    with open('astore_model.py') as f:
         # Remove Session import and set CAS session to Betamax-recorded CAS
         # session
         code = f.read().replace('from sasctl import Session', '')
-        code = code.replace("s = swat.CAS('hostname', 'username', "
-                            "'password')",
+        code = code.replace("s = swat.CAS('hostname', 5570, 'username', 'password')",
                             's = cas_session')
         # Exec the script.
         six.exec_(code)

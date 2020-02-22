@@ -254,7 +254,7 @@ def cas_session(request, credentials):
         # Inject the session being recorded into the CAS connection
         with mock.patch('swat.cas.rest.connection.requests.Session') as mocked:
             mocked.return_value = recorded_session
-
+            s = None
             try:
                 s = swat.CAS('https://{}/cas-shared-default-http/'.format(
                     credentials['hostname']),
@@ -266,7 +266,8 @@ def cas_session(request, credentials):
                 yield s
             finally:
                 try:
-                    s.close()
+                    if hasattr(s, 'close'):
+                        s.close()
                 except SWATError:
                     # session was closed during testing
                     pass
