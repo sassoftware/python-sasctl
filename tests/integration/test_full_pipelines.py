@@ -323,7 +323,7 @@ class TestSklearnClassificationModel:
         assert hasattr(module, 'predict')
         result = module.predict(x)
         assert isinstance(result, str)
-        assert result == 'setosa'
+        assert result in ('setosa', 'virginica', 'versicolor')
 
         # Call .predict_proba()
         assert hasattr(module, 'predict_proba')
