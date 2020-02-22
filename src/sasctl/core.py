@@ -149,7 +149,7 @@ def current_session(*args, **kwargs):
     if len(args) == 1 and (isinstance(args[0], Session) or args[0] is None):
         _session = args[0]
     # Create a new session
-    elif len(args) > 0:
+    elif args:
         _session = Session(*args, **kwargs)
 
     return _session
@@ -745,10 +745,10 @@ class PageIterator:
             return result
 
         # Make sure the next page has been received
-        if len(self._requested) > 0:
+        if self._requested:
             items = self._requested.pop(0).result()
 
-            if len(items) == 0:
+            if not items:
                 raise StopIteration
 
             return items

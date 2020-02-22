@@ -56,19 +56,20 @@ def test_sklearn_model(session, change_dir):
         six.exec_(code)
 
 
-def test_full_lifecycle(session):
+def test_full_lifecycle(session, change_dir):
     """Ensure the sklearn_model.py example executes successfully."""
 
-    pytest.xfail('Need to record & replay CAS connections.')
+    pytest.skip("Fix/re-implement.  Performance upload creates unrecorded CAS "
+                "session that can't be replayed.")
 
     # Mock up Session() to return the Betamax-recorded session
     def Session(*args, **kwargs):
         return session
 
-    with os.chdir('examples'):
-        with open('full_lifecycle.py') as f:
-            # Remove import of Session to ensure mock function will be used
-            # instead.
-            code = f.read().replace('from sasctl import Session', '')
+    change_dir('examples')
+    with open('full_lifecycle.py') as f:
+        # Remove import of Session to ensure mock function will be used
+        # instead.
+        code = f.read().replace('from sasctl import Session', '')
 
-            six.exec_(code)
+        six.exec_(code)
