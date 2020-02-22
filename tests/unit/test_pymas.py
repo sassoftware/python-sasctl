@@ -123,10 +123,9 @@ def test_build_wrapper_function():
     # Actual function inputs & DS2 variables current dont have to match.
     result = build_wrapper_function(func, [DS2Variable('a', 'int', False),
                                            DS2Variable('x', 'float', True)],
-                                    array_input=False,
-                                    return_msg=False)
+                                    array_input=False)
     assert isinstance(result, str)
-    assert '"Output: x"\n' in result
+    assert '"Output: x' in result
 
 
 def test_ds2_double():
@@ -556,30 +555,31 @@ def test_wrapper():
 def wrapper(a, b):
     "Output: c, msg"
     result = None
+    msg = None
     try:
         global _compile_error
         if _compile_error is not None:
             raise _compile_error
-        msg = ""
         import numpy as np
         import pandas as pd
 
-        if a == None: a = np.nan
-        if b == None: b = np.nan
-        inputarray = np.array([a,b]).reshape((1, -1))
-        column = ["a","b"]
-        inputrun = pd.DataFrame(data=inputarray, columns=column)
-        result = dummy_func(inputrun)
-        if result.size == 1:
-            result = np.asscalar(result)
+        if a is None: a = np.nan
+        if b is None: b = np.nan
+        input_array = np.array([a, b]).reshape((1, -1))
+        columns = ["a", "b"]
+        input_df = pd.DataFrame(data=input_array, columns=columns)
+        result = dummy_func(input_df)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)
+        if len(result) == 0:
+            result = tuple(None for i in range(1))
+        elif "numpy" in str(type(result[0])):
+            result = tuple(np.asscalar(i) for i in result)
     except Exception as e:
-        msg = str(e)
+        from traceback import format_exc
+        msg = str(e) + format_exc()
         if result is None:
             result = tuple(None for i in range(1))
-    if isinstance(result, tuple):
-        return tuple(x for x in list(result) + [msg])
-    else: 
-        return result, msg
+    return result + (msg, )
     """.rstrip()
 
     code = build_wrapper_function(dummy_func, [DS2Variable('a', float, False),
@@ -597,30 +597,31 @@ def test_wrapper_renamed():
 def renamed_wrapper(a, b):
     "Output: c, msg"
     result = None
+    msg = None
     try:
         global _compile_error
         if _compile_error is not None:
             raise _compile_error
-        msg = ""
         import numpy as np
         import pandas as pd
 
-        if a == None: a = np.nan
-        if b == None: b = np.nan
-        inputarray = np.array([a,b]).reshape((1, -1))
-        column = ["a","b"]
-        inputrun = pd.DataFrame(data=inputarray, columns=column)
-        result = dummy_func(inputrun)
-        if result.size == 1:
-            result = np.asscalar(result)
+        if a is None: a = np.nan
+        if b is None: b = np.nan
+        input_array = np.array([a, b]).reshape((1, -1))
+        columns = ["a", "b"]
+        input_df = pd.DataFrame(data=input_array, columns=columns)
+        result = dummy_func(input_df)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)
+        if len(result) == 0:
+            result = tuple(None for i in range(1))
+        elif "numpy" in str(type(result[0])):
+            result = tuple(np.asscalar(i) for i in result)
     except Exception as e:
-        msg = str(e)
+        from traceback import format_exc
+        msg = str(e) + format_exc()
         if result is None:
             result = tuple(None for i in range(1))
-    if isinstance(result, tuple):
-        return tuple(x for x in list(result) + [msg])
-    else: 
-        return result, msg
+    return result + (msg, )
         """.rstrip()
 
     code = build_wrapper_function(dummy_func, [DS2Variable('a', float, False),
@@ -638,29 +639,33 @@ def test_wrap_predict_method():
 
     target = """
 def predict(a, b):
-    "Output: c"
+    "Output: c, msg"
     result = None
+    msg = None
     try:
         global _compile_error
         if _compile_error is not None:
             raise _compile_error
-
         import numpy as np
         import pandas as pd
 
-        if a == None: a = np.nan
-        if b == None: b = np.nan
-        inputarray = np.array([a,b]).reshape((1, -1))
-        column = ["a","b"]
-        inputrun = pd.DataFrame(data=inputarray, columns=column)
-        result = dummy_func(inputrun)
-        if result.size == 1:
-            result = np.asscalar(result)
+        if a is None: a = np.nan
+        if b is None: b = np.nan
+        input_array = np.array([a, b]).reshape((1, -1))
+        columns = ["a", "b"]
+        input_df = pd.DataFrame(data=input_array, columns=columns)
+        result = dummy_func(input_df)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)
+        if len(result) == 0:
+            result = tuple(None for i in range(1))
+        elif "numpy" in str(type(result[0])):
+            result = tuple(np.asscalar(i) for i in result)
     except Exception as e:
-
+        from traceback import format_exc
+        msg = str(e) + format_exc()
         if result is None:
             result = tuple(None for i in range(1))
-    return result
+    return result + (msg, )
         """.rstrip()
 
     code = wrap_predict_method(dummy_func, [DS2Variable('a', float, False),
@@ -676,29 +681,33 @@ def test_wrap_predict_proba_method():
 
     target = """
 def predict_proba(a, b):
-    "Output: c"
+    "Output: c, msg"
     result = None
+    msg = None
     try:
         global _compile_error
         if _compile_error is not None:
             raise _compile_error
-
         import numpy as np
         import pandas as pd
 
-        if a == None: a = np.nan
-        if b == None: b = np.nan
-        inputarray = np.array([a,b]).reshape((1, -1))
-        column = ["a","b"]
-        inputrun = pd.DataFrame(data=inputarray, columns=column)
-        result = dummy_func(inputrun)
-        assert result.shape[0] == 1
-        result = tuple(result[0].tolist())
+        if a is None: a = np.nan
+        if b is None: b = np.nan
+        input_array = np.array([a, b]).reshape((1, -1))
+        columns = ["a", "b"]
+        input_df = pd.DataFrame(data=input_array, columns=columns)
+        result = dummy_func(input_df)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)
+        if len(result) == 0:
+            result = tuple(None for i in range(1))
+        elif "numpy" in str(type(result[0])):
+            result = tuple(np.asscalar(i) for i in result)
     except Exception as e:
-
+        from traceback import format_exc
+        msg = str(e) + format_exc()
         if result is None:
             result = tuple(None for i in range(1))
-    return result
+    return result + (msg, )
         """.rstrip()
 
     code = wrap_predict_proba_method(dummy_func,

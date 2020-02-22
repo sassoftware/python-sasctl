@@ -84,10 +84,10 @@ def sasctl_command(name, subname=None):
                 doc_lines = doc[doc.find('Parameters\n'):].splitlines()
                 doc_lines.pop(0)  # First line is "Parameters"
 
-                if len(doc_lines) > 0 and doc_lines[0].startswith('---'):
+                if doc_lines and doc_lines[0].startswith('---'):
                     doc_lines.pop(0)  # Discard ----------- line under "Parameters" heading
 
-                while len(doc_lines) > 0:
+                while doc_lines:
                     var = doc_lines.pop(0)
 
                     if var.startswith('Returns') or var.strip() == '':
@@ -98,7 +98,7 @@ def sasctl_command(name, subname=None):
                     else:
                         types.append('str')
 
-                    if len(doc_lines) > 0 and doc_lines[0].startswith('    '):
+                    if doc_lines and doc_lines[0].startswith('    '):
                         help_doc.append(doc_lines.pop(0).strip())
                     else:
                         help_doc.append('')
@@ -106,7 +106,7 @@ def sasctl_command(name, subname=None):
                 types = ['str'] * len(arg_spec.args)
                 help_doc = [None] * len(arg_spec.args)
 
-            return [ArgInfo(name, type, required, default, doc) for name, type, required, default, doc in
+            return [ArgInfo(n, t, r, d, o) for n, t, r, d, o in
                     zip(arg_spec.args, types, required, defaults, help_doc)]
 
         func._cli_command = command_name
@@ -165,7 +165,7 @@ def _get_func_description(func):
 
     lines = description.split('\n')
 
-    if len(lines) > 0:
+    if lines:
         return lines[0]
 
 

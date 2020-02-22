@@ -136,7 +136,7 @@ def _create_project(project_name, model, repo, input_vars=None,
     output_vars = output_vars[:]
 
     # Set prediction or eventProbabilityVariable
-    if len(output_vars) > 0:
+    if output_vars:
         if function == 'prediction':
             properties['predictionVariable'] = output_vars[0]['name']
         else:
@@ -706,7 +706,7 @@ def update_model_performance(data, model, label, refresh=True):
     # All input variables must be present
     missing_cols = [col for col in perf_def.inputVariables if
                     col not in data.columns]
-    if len(missing_cols) > 0:
+    if missing_cols:
         raise ValueError("The following columns were expected but not found in "
                          "the data set: %s" % ', '.join(missing_cols))
 
@@ -715,7 +715,7 @@ def update_model_performance(data, model, label, refresh=True):
     if not perf_def.scoreExecutionRequired:
         missing_cols = [col for col in perf_def.outputVariables if
                         col not in data.columns]
-        if len(missing_cols) > 0:
+        if missing_cols:
             raise ValueError(
                 "The following columns were expected but not found in the data "
                 "set: %s" % ', '.join(missing_cols))

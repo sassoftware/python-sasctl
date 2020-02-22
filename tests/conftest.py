@@ -254,7 +254,7 @@ def cas_session(request, credentials):
         # Inject the session being recorded into the CAS connection
         with mock.patch('swat.cas.rest.connection.requests.Session') as mocked:
             mocked.return_value = recorded_session
-
+            s = None
             try:
                 s = swat.CAS('https://{}/cas-shared-default-http/'.format(
                     credentials['hostname']),
@@ -266,7 +266,8 @@ def cas_session(request, credentials):
                 yield s
             finally:
                 try:
-                    s.close()
+                    if hasattr(s, 'close'):
+                        s.close()
                 except SWATError:
                     # session was closed during testing
                     pass
@@ -320,7 +321,7 @@ def pytest_runtest_setup(item):
 @pytest.fixture
 def airline_dataset():
     """Sentiment analysis dataset."""
-    import pandas as pd
+    pd = pytest.importorskip('pandas')
 
     df = pd.read_csv('examples/data/airline_tweets.csv')
     df = df[['airline_sentiment', 'airline', 'name', 'tweet_location',
@@ -359,13 +360,8 @@ def cancer_dataset():
 @pytest.fixture
 def iris_dataset():
     """Multi-class classification dataset."""
-    pytest.importorskip('sklearn')
     pd = pytest.importorskip('pandas')
-    from sklearn import datasets
 
-    raw = datasets.load_iris()
-    df = pd.DataFrame(raw.data, columns=raw.feature_names)
-    df['Species'] = raw.target
+    df = pd.read_csv('examples/data/iris.csv')
     df.Species = df.Species.astype('category')
-    df.Species.cat.categories = raw.target_names
     return df

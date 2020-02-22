@@ -149,7 +149,7 @@ def current_session(*args, **kwargs):
     if len(args) == 1 and (isinstance(args[0], Session) or args[0] is None):
         _session = args[0]
     # Create a new session
-    elif len(args) > 0:
+    elif args:
         _session = Session(*args, **kwargs)
 
     return _session
@@ -777,10 +777,10 @@ class PageIterator:
             return result
 
         # Make sure the next page has been received
-        if len(self._requested) > 0:
+        if self._requested:
             items = self._requested.pop(0).result()
 
-            if len(items) == 0:
+            if not items:
                 raise StopIteration
 
             return items
@@ -843,11 +843,11 @@ class PagedItemIterator:
 
     def next(self):
         # Get next page of items if we're currently out
-        if len(self._cache) == 0:
+        if not self._cache:
             self._cache = next(self._pager)
 
         # Return the next item
-        if len(self._cache) > 0:
+        if self._cache:
             return self._cache.pop(0)
 
         raise StopIteration
@@ -1142,7 +1142,7 @@ def get_link(obj, rel):
             return obj['links'].get(rel)
 
         links = [l for l in obj.get('links', []) if l.get('rel') == rel]
-        if len(links) == 0:
+        if not links:
             return None
         if len(links) == 1:
             return links[0]

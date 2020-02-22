@@ -14,10 +14,9 @@ __copyright__ = 'Copyright © 2019, SAS Institute Inc., ' \
 
 import logging
 
-from .core import Session, HTTPError
-from .core import current_session, delete, get, get_link, post, put, \
-    request_link
-from .tasks import *
+from .core import current_session, delete, get, get_link, post, put, request_link
+from .core import RestObj, Session, HTTPError
+from .tasks import register_model, publish_model, update_model_performance
 
 
 # Prevent package from emitting log records unless consuming

@@ -145,9 +145,7 @@ def test_from_pickle(train_data, pickle_file):
         p = from_pickle(pickle_file,
                         func_name='predict',
                         input_types=X,
-                        array_input=True,
-                        return_code=True,
-                        return_message=True)
+                        array_input=True)
 
     target = """
 package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
@@ -156,7 +154,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     dcl varchar(67108864) character set utf8 pycode;
     dcl int revision;
 
-    method _DF74A4B18C9E41A2A34B0053E123AA6();
+    method init();
     
         dcl integer rc;
         if null(py) then do;
@@ -174,32 +172,33 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('def predict(SepalLength, SepalWidth, PetalLength, PetalWidth):');
                 rc = py.appendSrcLine('    "Output: var1, msg"');
                 rc = py.appendSrcLine('    result = None');
+                rc = py.appendSrcLine('    msg = None');
                 rc = py.appendSrcLine('    try:');
                 rc = py.appendSrcLine('        global _compile_error');
                 rc = py.appendSrcLine('        if _compile_error is not None:');
                 rc = py.appendSrcLine('            raise _compile_error');
-                rc = py.appendSrcLine('        msg = ""');
                 rc = py.appendSrcLine('        import numpy as np');
                 rc = py.appendSrcLine('        import pandas as pd');
                 rc = py.appendSrcLine('');
-                rc = py.appendSrcLine('        if SepalLength == None: SepalLength = np.nan');
-                rc = py.appendSrcLine('        if SepalWidth == None: SepalWidth = np.nan');
-                rc = py.appendSrcLine('        if PetalLength == None: PetalLength = np.nan');
-                rc = py.appendSrcLine('        if PetalWidth == None: PetalWidth = np.nan');
-                rc = py.appendSrcLine('        inputarray = np.array([SepalLength,SepalWidth,PetalLength,PetalWidth]).reshape((1, -1))');
-                rc = py.appendSrcLine('        column = ["SepalLength","SepalWidth","PetalLength","PetalWidth"]');
-                rc = py.appendSrcLine('        inputrun = pd.DataFrame(data=inputarray, columns=column)');
-                rc = py.appendSrcLine('        result = obj.predict(inputrun)');
-                rc = py.appendSrcLine('        if result.size == 1:');
-                rc = py.appendSrcLine('            result = np.asscalar(result)');
+                rc = py.appendSrcLine('        if SepalLength is None: SepalLength = np.nan');
+                rc = py.appendSrcLine('        if SepalWidth is None: SepalWidth = np.nan');
+                rc = py.appendSrcLine('        if PetalLength is None: PetalLength = np.nan');
+                rc = py.appendSrcLine('        if PetalWidth is None: PetalWidth = np.nan');
+                rc = py.appendSrcLine('        input_array = np.array([SepalLength, SepalWidth, PetalLength, PetalWidth]).reshape((1, -1))');
+                rc = py.appendSrcLine('        columns = ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth"]');
+                rc = py.appendSrcLine('        input_df = pd.DataFrame(data=input_array, columns=columns)');
+                rc = py.appendSrcLine('        result = obj.predict(input_df)');
+                rc = py.appendSrcLine('        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)');
+                rc = py.appendSrcLine('        if len(result) == 0:');
+                rc = py.appendSrcLine('            result = tuple(None for i in range(1))');
+                rc = py.appendSrcLine('        elif "numpy" in str(type(result[0])):');
+                rc = py.appendSrcLine('            result = tuple(np.asscalar(i) for i in result)');
                 rc = py.appendSrcLine('    except Exception as e:');
-                rc = py.appendSrcLine('        msg = str(e)');
+                rc = py.appendSrcLine('        from traceback import format_exc');
+                rc = py.appendSrcLine('        msg = str(e) + format_exc()');
                 rc = py.appendSrcLine('        if result is None:');
                 rc = py.appendSrcLine('            result = tuple(None for i in range(1))');
-                rc = py.appendSrcLine('    if isinstance(result, tuple):');
-                rc = py.appendSrcLine('        return tuple(x for x in list(result) + [msg])');
-                rc = py.appendSrcLine('    else: ');
-                rc = py.appendSrcLine('        return result, msg');
+                rc = py.appendSrcLine('    return result + (msg, )');
                 pycode = py.getSource();
                 revision = py.publish(pycode, 'DF74A4B18C9E41A2A34B0053E123AA67');
                 if revision lt 1 then do;
@@ -215,11 +214,11 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
         double SepalWidth,
         double PetalLength,
         double PetalWidth,
-        in_out char var1,
-        in_out integer rc,
-        in_out char msg
+        in_out char var1
         );
     
+        dcl integer rc;
+        dcl varchar(4068) msg;
         rc = py.useMethod('predict');
         if rc then return;
         rc = py.setDouble('SepalLength', SepalLength);    if rc then return;
@@ -229,6 +228,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
         rc = py.execute();    if rc then return;
         var1 = py.getString('var1');
         msg = py.getString('msg');
+        if not null(msg) then logr.log('e', 'Error executing Python function "predict": $s', msg);
     end;
     
 endpackage;
@@ -254,7 +254,7 @@ def test_from_pickle_2(train_data, pickle_file):
     with mock.patch('uuid.uuid4') as mocked:
         mocked.return_value.hex = 'DF74A4B18C9E41A2A34B0053E123AA67'
         p = from_pickle(pickle_file, func_name=['predict', 'predict_proba'],
-                        input_types=X, array_input=True, return_code=True, return_message=True)
+                        input_types=X, array_input=True)
 
     target = """
 package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
@@ -263,7 +263,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     dcl varchar(67108864) character set utf8 pycode;
     dcl int revision;
 
-    method _DF74A4B18C9E41A2A34B0053E123AA6();
+    method init();
     
         dcl integer rc;
         if null(py) then do;
@@ -281,62 +281,64 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('def predict(SepalLength, SepalWidth, PetalLength, PetalWidth):');
                 rc = py.appendSrcLine('    "Output: var1, msg"');
                 rc = py.appendSrcLine('    result = None');
+                rc = py.appendSrcLine('    msg = None');
                 rc = py.appendSrcLine('    try:');
                 rc = py.appendSrcLine('        global _compile_error');
                 rc = py.appendSrcLine('        if _compile_error is not None:');
                 rc = py.appendSrcLine('            raise _compile_error');
-                rc = py.appendSrcLine('        msg = ""');
                 rc = py.appendSrcLine('        import numpy as np');
                 rc = py.appendSrcLine('        import pandas as pd');
                 rc = py.appendSrcLine('');
-                rc = py.appendSrcLine('        if SepalLength == None: SepalLength = np.nan');
-                rc = py.appendSrcLine('        if SepalWidth == None: SepalWidth = np.nan');
-                rc = py.appendSrcLine('        if PetalLength == None: PetalLength = np.nan');
-                rc = py.appendSrcLine('        if PetalWidth == None: PetalWidth = np.nan');
-                rc = py.appendSrcLine('        inputarray = np.array([SepalLength,SepalWidth,PetalLength,PetalWidth]).reshape((1, -1))');
-                rc = py.appendSrcLine('        column = ["SepalLength","SepalWidth","PetalLength","PetalWidth"]');
-                rc = py.appendSrcLine('        inputrun = pd.DataFrame(data=inputarray, columns=column)');
-                rc = py.appendSrcLine('        result = obj.predict(inputrun)');
-                rc = py.appendSrcLine('        if result.size == 1:');
-                rc = py.appendSrcLine('            result = np.asscalar(result)');
+                rc = py.appendSrcLine('        if SepalLength is None: SepalLength = np.nan');
+                rc = py.appendSrcLine('        if SepalWidth is None: SepalWidth = np.nan');
+                rc = py.appendSrcLine('        if PetalLength is None: PetalLength = np.nan');
+                rc = py.appendSrcLine('        if PetalWidth is None: PetalWidth = np.nan');
+                rc = py.appendSrcLine('        input_array = np.array([SepalLength, SepalWidth, PetalLength, PetalWidth]).reshape((1, -1))');
+                rc = py.appendSrcLine('        columns = ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth"]');
+                rc = py.appendSrcLine('        input_df = pd.DataFrame(data=input_array, columns=columns)');
+                rc = py.appendSrcLine('        result = obj.predict(input_df)');
+                rc = py.appendSrcLine('        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)');
+                rc = py.appendSrcLine('        if len(result) == 0:');
+                rc = py.appendSrcLine('            result = tuple(None for i in range(1))');
+                rc = py.appendSrcLine('        elif "numpy" in str(type(result[0])):');
+                rc = py.appendSrcLine('            result = tuple(np.asscalar(i) for i in result)');
                 rc = py.appendSrcLine('    except Exception as e:');
-                rc = py.appendSrcLine('        msg = str(e)');
+                rc = py.appendSrcLine('        from traceback import format_exc');
+                rc = py.appendSrcLine('        msg = str(e) + format_exc()');
                 rc = py.appendSrcLine('        if result is None:');
                 rc = py.appendSrcLine('            result = tuple(None for i in range(1))');
-                rc = py.appendSrcLine('    if isinstance(result, tuple):');
-                rc = py.appendSrcLine('        return tuple(x for x in list(result) + [msg])');
-                rc = py.appendSrcLine('    else: ');
-                rc = py.appendSrcLine('        return result, msg');
+                rc = py.appendSrcLine('    return result + (msg, )');
                 rc = py.appendSrcLine('');
                 rc = py.appendSrcLine('def predict_proba(SepalLength, SepalWidth, PetalLength, PetalWidth):');
                 rc = py.appendSrcLine('    "Output: P_1, P_2, P_3, msg"');
                 rc = py.appendSrcLine('    result = None');
+                rc = py.appendSrcLine('    msg = None');
                 rc = py.appendSrcLine('    try:');
                 rc = py.appendSrcLine('        global _compile_error');
                 rc = py.appendSrcLine('        if _compile_error is not None:');
                 rc = py.appendSrcLine('            raise _compile_error');
-                rc = py.appendSrcLine('        msg = ""');
                 rc = py.appendSrcLine('        import numpy as np');
                 rc = py.appendSrcLine('        import pandas as pd');
                 rc = py.appendSrcLine('');
-                rc = py.appendSrcLine('        if SepalLength == None: SepalLength = np.nan');
-                rc = py.appendSrcLine('        if SepalWidth == None: SepalWidth = np.nan');
-                rc = py.appendSrcLine('        if PetalLength == None: PetalLength = np.nan');
-                rc = py.appendSrcLine('        if PetalWidth == None: PetalWidth = np.nan');
-                rc = py.appendSrcLine('        inputarray = np.array([SepalLength,SepalWidth,PetalLength,PetalWidth]).reshape((1, -1))');
-                rc = py.appendSrcLine('        column = ["SepalLength","SepalWidth","PetalLength","PetalWidth"]');
-                rc = py.appendSrcLine('        inputrun = pd.DataFrame(data=inputarray, columns=column)');
-                rc = py.appendSrcLine('        result = obj.predict_proba(inputrun)');
-                rc = py.appendSrcLine('        assert result.shape[0] == 1');
-                rc = py.appendSrcLine('        result = tuple(result[0].tolist())');
+                rc = py.appendSrcLine('        if SepalLength is None: SepalLength = np.nan');
+                rc = py.appendSrcLine('        if SepalWidth is None: SepalWidth = np.nan');
+                rc = py.appendSrcLine('        if PetalLength is None: PetalLength = np.nan');
+                rc = py.appendSrcLine('        if PetalWidth is None: PetalWidth = np.nan');
+                rc = py.appendSrcLine('        input_array = np.array([SepalLength, SepalWidth, PetalLength, PetalWidth]).reshape((1, -1))');
+                rc = py.appendSrcLine('        columns = ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth"]');
+                rc = py.appendSrcLine('        input_df = pd.DataFrame(data=input_array, columns=columns)');
+                rc = py.appendSrcLine('        result = obj.predict_proba(input_df)');
+                rc = py.appendSrcLine('        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)');
+                rc = py.appendSrcLine('        if len(result) == 0:');
+                rc = py.appendSrcLine('            result = tuple(None for i in range(3))');
+                rc = py.appendSrcLine('        elif "numpy" in str(type(result[0])):');
+                rc = py.appendSrcLine('            result = tuple(np.asscalar(i) for i in result)');
                 rc = py.appendSrcLine('    except Exception as e:');
-                rc = py.appendSrcLine('        msg = str(e)');
+                rc = py.appendSrcLine('        from traceback import format_exc');
+                rc = py.appendSrcLine('        msg = str(e) + format_exc()');
                 rc = py.appendSrcLine('        if result is None:');
                 rc = py.appendSrcLine('            result = tuple(None for i in range(3))');
-                rc = py.appendSrcLine('    if isinstance(result, tuple):');
-                rc = py.appendSrcLine('        return tuple(x for x in list(result) + [msg])');
-                rc = py.appendSrcLine('    else: ');
-                rc = py.appendSrcLine('        return result, msg');
+                rc = py.appendSrcLine('    return result + (msg, )');
                 pycode = py.getSource();
                 revision = py.publish(pycode, 'DF74A4B18C9E41A2A34B0053E123AA67');
                 if revision lt 1 then do;
@@ -352,11 +354,11 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
         double SepalWidth,
         double PetalLength,
         double PetalWidth,
-        in_out char var1,
-        in_out integer rc,
-        in_out char msg
+        in_out char var1
         );
     
+        dcl integer rc;
+        dcl varchar(4068) msg;
         rc = py.useMethod('predict');
         if rc then return;
         rc = py.setDouble('SepalLength', SepalLength);    if rc then return;
@@ -366,6 +368,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
         rc = py.execute();    if rc then return;
         var1 = py.getString('var1');
         msg = py.getString('msg');
+        if not null(msg) then logr.log('e', 'Error executing Python function "predict": $s', msg);
     end;
     
     method predict_proba(
@@ -375,11 +378,11 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
         double PetalWidth,
         in_out double P_1,
         in_out double P_2,
-        in_out double P_3,
-        in_out integer rc,
-        in_out char msg
+        in_out double P_3
         );
     
+        dcl integer rc;
+        dcl varchar(4068) msg;
         rc = py.useMethod('predict_proba');
         if rc then return;
         rc = py.setDouble('SepalLength', SepalLength);    if rc then return;
@@ -391,6 +394,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
         P_2 = py.getDouble('P_2');
         P_3 = py.getDouble('P_3');
         msg = py.getString('msg');
+        if not null(msg) then logr.log('e', 'Error executing Python function "predict_proba": $s', msg);
     end;
     
 endpackage;

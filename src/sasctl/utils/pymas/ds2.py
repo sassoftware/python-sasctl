@@ -131,10 +131,9 @@ class DS2PyMASPackage(DS2BasePackage):
                            return_code=False,
                            return_message=False,
                            target=None,
-                           method_name=self.name))
+                           method_name='init'))
 
-    def add_method(self, name, target, variables, return_code=False,
-                   return_message=False):
+    def add_method(self, name, target, variables):
         """Add a DS2 method that calls a Python function defined by the package.
 
         Parameters
@@ -145,34 +144,24 @@ class DS2PyMASPackage(DS2BasePackage):
             Name of the Python method to call
         variables : list of :class:`DS2Variable`
             List of input and output variables for the method.
-        return_code : bool
-            Add a return code parameter to the output.
-        return_message : bool
-            Add a return message parameter to the output.
 
         Returns
         -------
         None
 
         """
-
         public_variables = list(variables)
         private_variables = []
 
         # Add a return code if not already present
         if not any(v for v in public_variables if v.name.lower() == 'rc'):
-            if return_code:
-                public_variables.append(DS2Variable('rc', 'int', True))
-            else:
-                private_variables.append(DS2Variable('rc', 'int', True))
-
-        if return_message and not any(v for v in public_variables if v.name.lower() == 'msg'):
-            public_variables.append(DS2Variable('msg', 'char', True))
+            private_variables.append(DS2Variable('rc', 'int', True))
 
         body = [v.as_declaration() for v in
                 private_variables]
 
-        body += ["rc = py.useMethod('%s');" % target,
+        body += ["dcl varchar(4068) msg;",
+                 "rc = py.useMethod('%s');" % target,
                  "if rc then return;"]
 
         # Set Python input variables
@@ -185,6 +174,11 @@ class DS2PyMASPackage(DS2BasePackage):
         # Get Python output variables
         body += [v.pymas_statement() for v in public_variables
                  if v.out and v.name != 'rc']
+
+        # Log any error messages returned
+        body += ["msg = py.getString('msg');",
+                 'if not null(msg) then logr.log(\'e\', \'Error executing '
+                 'Python function "%s": $s\', msg);' % name]
 
         self.methods.append(DS2BaseMethod(name, variables, body))
 
@@ -209,7 +203,7 @@ class DS2BaseMethod(object):  # skipcq PYL-R0205
         vars = ',\n'.join('    %s' % v.as_parameter() for v in self.variables)
 
         # Don't spread signature over multiple lines if there are no variables
-        if len(vars) > 0:
+        if vars:
             func = ('method %s(' % self.name,
                     vars,
                     '    );',
@@ -218,7 +212,7 @@ class DS2BaseMethod(object):  # skipcq PYL-R0205
             func = ('method %s();' % self.name,
                     '')
 
-        if len(self._body) > 0:
+        if self._body:
             func += tuple('    ' + line for line in self._body)
 
         func += ('end;',
@@ -228,7 +222,7 @@ class DS2BaseMethod(object):  # skipcq PYL-R0205
 
 
 class DS2PyMASMethod(DS2BaseMethod):
-    """
+    """A DS2 method that builds a PyMAS object.
 
     Parameters
     ----------
@@ -241,8 +235,9 @@ class DS2PyMASMethod(DS2BaseMethod):
     target
     method_name
     """
-    def __init__(self, name, variables, python_code, return_code=True,
-                 return_message=True, target='wrapper', method_name='score'):
+
+    def __init__(self, name, variables, python_code, return_code=None,
+                 return_message=None, target='wrapper', method_name='score'):
 
         # target = target or 'wrapper'
 
@@ -329,17 +324,18 @@ class DS2ScoreMethod(DS2BaseMethod):
                                              body=body_statements)
 
 
-@versionadded(version='1.5')
-class DS2PredictProbaMethod(DS2BaseMethod):
-    def __init__(self, variables):
-
-        self.public_variables = variables
-        self.private_variables = []
-
-        body_statements = []
-
-        super(DS2PredictProbaMethod, self).__init__('predict_proba', variables,
-                                                    body=body_statements)
+# @versionadded(version='1.5')
+# class DS2PredictProbaMethod(DS2BaseMethod):
+#     def __init__(self, variables):
+#
+#         self.public_variables = variables
+#         self.private_variables = []
+#
+#         body_statements = []
+#
+#         super(DS2PredictProbaMethod, self).__init__('predict_proba',
+#         variables,
+#                                                     body=body_statements)
 
 
 @deprecated(version='1.5', removed_in='1.6')
@@ -460,6 +456,7 @@ class DS2Thread(object):  # skipcq PYL-R0205
                 "  method run();",
                 "    set SASEP.in;",
                 var_assignments,
+                "    pythonPackage.init();",
                 "    pythonPackage.{}({});".format(self.method.name,
                                                    ','.join(keep_vars)),
                 "    output;",

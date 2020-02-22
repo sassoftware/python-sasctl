@@ -331,7 +331,7 @@ def _get_model_properties(result):
     }
 
     algorithm = result.Description[result.Description.Attribute == 'Analytic Engine']
-    if len(algorithm) > 0:
+    if algorithm.size > 0:
         algorithm = str(algorithm.Value.iloc[0]).lower()
     else:
         algorithm = None

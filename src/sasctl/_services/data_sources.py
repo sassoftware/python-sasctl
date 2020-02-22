@@ -150,10 +150,8 @@ class DataSources(Service):
         source = source or 'cas-shared-default'
         caslibs = cls.list_caslibs(source, filter='eq(name, "%s")' % name)
 
-        # caslibs = [c for c in caslibs if c.name == name]
-
-        if len(caslibs) > 0:
-            return caslibs.pop()
+        if caslibs:
+            return caslibs[0]
 
     @classmethod
     def list_tables(cls, caslib, filter=None, session_id=None):
@@ -216,8 +214,8 @@ class DataSources(Service):
                                  filter='eq(name, "%s")' % name,
                                  session_id=session_id)
 
-        if len(tables) > 0:
-            return tables.pop()
+        if tables:
+            return tables[0]
 
     @classmethod
     def table_uri(cls, table):

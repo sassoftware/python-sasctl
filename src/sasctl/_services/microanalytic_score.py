@@ -250,7 +250,7 @@ class MicroAnalyticScore(Service):
 
             # If the module step takes arguments, then we perform a number
             # of additional checks to make the allowed input as wide as possible
-            if len(arguments) > 0:
+            if arguments:
                 # Perform some initial checks to see if the input is a Numpy array
                 # or a Pandas DataFrame.  Each will be handled separately.
                 arg_checks = [

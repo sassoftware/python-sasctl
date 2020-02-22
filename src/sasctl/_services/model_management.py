@@ -207,7 +207,7 @@ class ModelManagement(Service):
                    }
 
         # If model doesn't specify input/output variables, try to pull from project definition
-        if len(model.get('inputVariables', [])) > 0:
+        if model.get('inputVariables', []):
             request['inputVariables'] = [v.get('name') for v in
                                          model['inputVariables']]
             request['outputVariables'] = [v.get('name') for v in
