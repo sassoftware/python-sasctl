@@ -5,7 +5,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import swat
-
 from sasctl import Session
 from sasctl.tasks import register_model, publish_model
 
