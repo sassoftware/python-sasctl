@@ -180,21 +180,13 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('        import numpy as np');
                 rc = py.appendSrcLine('        import pandas as pd');
                 rc = py.appendSrcLine('');
-                rc = py.appendSrcLine('        if SepalLength is None: 
-                SepalLength = np.nan');
-                rc = py.appendSrcLine('        if SepalWidth is None: 
-                SepalWidth = np.nan');
-                rc = py.appendSrcLine('        if PetalLength is None: 
-                PetalLength = np.nan');
-                rc = py.appendSrcLine('        if PetalWidth is None: 
-                PetalWidth = np.nan');
-                rc = py.appendSrcLine('        input_array = np.array([
-                SepalLength, SepalWidth, PetalLength, PetalWidth]).reshape((
-                1, -1))');
-                rc = py.appendSrcLine('        columns = ["SepalLength", 
-                "SepalWidth", "PetalLength", "PetalWidth"]');
-                rc = py.appendSrcLine('        input_df = pd.DataFrame(
-                data=input_array, columns=columns)');
+                rc = py.appendSrcLine('        if SepalLength is None: SepalLength = np.nan');
+                rc = py.appendSrcLine('        if SepalWidth is None: SepalWidth = np.nan');
+                rc = py.appendSrcLine('        if PetalLength is None: PetalLength = np.nan');
+                rc = py.appendSrcLine('        if PetalWidth is None: PetalWidth = np.nan');
+                rc = py.appendSrcLine('        input_array = np.array([SepalLength, SepalWidth, PetalLength, PetalWidth]).reshape((1, -1))');
+                rc = py.appendSrcLine('        columns = ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth"]');
+                rc = py.appendSrcLine('        input_df = pd.DataFrame(data=input_array, columns=columns)');
                 rc = py.appendSrcLine('        result = obj.predict(input_df)');
                 rc = py.appendSrcLine('        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)');
                 rc = py.appendSrcLine('        if len(result) == 0:');
@@ -297,14 +289,10 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('        import numpy as np');
                 rc = py.appendSrcLine('        import pandas as pd');
                 rc = py.appendSrcLine('');
-                rc = py.appendSrcLine('        if SepalLength is None: 
-                SepalLength = np.nan');
-                rc = py.appendSrcLine('        if SepalWidth is None: 
-                SepalWidth = np.nan');
-                rc = py.appendSrcLine('        if PetalLength is None: 
-                PetalLength = np.nan');
-                rc = py.appendSrcLine('        if PetalWidth is None: 
-                PetalWidth = np.nan');
+                rc = py.appendSrcLine('        if SepalLength is None: SepalLength = np.nan');
+                rc = py.appendSrcLine('        if SepalWidth is None: SepalWidth = np.nan');
+                rc = py.appendSrcLine('        if PetalLength is None: PetalLength = np.nan');
+                rc = py.appendSrcLine('        if PetalWidth is None: PetalWidth = np.nan');
                 rc = py.appendSrcLine('        input_array = np.array([SepalLength, SepalWidth, PetalLength, PetalWidth]).reshape((1, -1))');
                 rc = py.appendSrcLine('        columns = ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth"]');
                 rc = py.appendSrcLine('        input_df = pd.DataFrame(data=input_array, columns=columns)');
@@ -332,15 +320,13 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('        import numpy as np');
                 rc = py.appendSrcLine('        import pandas as pd');
                 rc = py.appendSrcLine('');
-                rc = py.appendSrcLine('        if SepalLength is None: 
-                SepalLength = np.nan');
+                rc = py.appendSrcLine('        if SepalLength is None: SepalLength = np.nan');
                 rc = py.appendSrcLine('        if SepalWidth is None: SepalWidth = np.nan');
                 rc = py.appendSrcLine('        if PetalLength is None: PetalLength = np.nan');
                 rc = py.appendSrcLine('        if PetalWidth is None: PetalWidth = np.nan');
                 rc = py.appendSrcLine('        input_array = np.array([SepalLength, SepalWidth, PetalLength, PetalWidth]).reshape((1, -1))');
                 rc = py.appendSrcLine('        columns = ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth"]');
-                rc = py.appendSrcLine('        input_df = pd.DataFrame(
-                data=input_array, columns=columns)');
+                rc = py.appendSrcLine('        input_df = pd.DataFrame(data=input_array, columns=columns)');
                 rc = py.appendSrcLine('        result = obj.predict_proba(input_df)');
                 rc = py.appendSrcLine('        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)');
                 rc = py.appendSrcLine('        if len(result) == 0:');
