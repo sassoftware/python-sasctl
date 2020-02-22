@@ -115,9 +115,6 @@ class CASManagement(Service):
         if tables:
             return tables[0]
 
-        if len(tables) > 0:
-            return tables.pop()
-
     @classmethod
     def upload_file(cls, file, name, caslib=None, server=None, header=None,
                     format_=None):
