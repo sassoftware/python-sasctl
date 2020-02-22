@@ -106,7 +106,7 @@ def sasctl_command(name, subname=None):
                 types = ['str'] * len(arg_spec.args)
                 help_doc = [None] * len(arg_spec.args)
 
-            return [ArgInfo(name, type, required, default, doc) for name, type, required, default, doc in
+            return [ArgInfo(n, t, r, d, o) for n, t, r, d, o in
                     zip(arg_spec.args, types, required, defaults, help_doc)]
 
         func._cli_command = command_name
