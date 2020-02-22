@@ -321,7 +321,7 @@ def pytest_runtest_setup(item):
 @pytest.fixture
 def airline_dataset():
     """Sentiment analysis dataset."""
-    import pandas as pd
+    pd = pytest.importorskip('pandas')
 
     df = pd.read_csv('examples/data/airline_tweets.csv')
     df = df[['airline_sentiment', 'airline', 'name', 'tweet_location',
@@ -360,13 +360,8 @@ def cancer_dataset():
 @pytest.fixture
 def iris_dataset():
     """Multi-class classification dataset."""
-    pytest.importorskip('sklearn')
     pd = pytest.importorskip('pandas')
-    from sklearn import datasets
 
-    raw = datasets.load_iris()
-    df = pd.DataFrame(raw.data, columns=raw.feature_names)
-    df['Species'] = raw.target
+    df = pd.read_csv('examples/data/iris.csv')
     df.Species = df.Species.astype('category')
-    df.Species.cat.categories = raw.target_names
     return df
