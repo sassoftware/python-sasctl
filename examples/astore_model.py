@@ -8,7 +8,6 @@ import swat
 
 from sasctl import Session
 from sasctl.tasks import register_model, publish_model
-from sasctl.services import microanalytic_score as mas
 
 s = swat.CAS('hostname', 5570, 'username', 'password')
 s.loadactionset('decisionTree')
