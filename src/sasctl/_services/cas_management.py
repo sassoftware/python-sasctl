@@ -55,8 +55,8 @@ class CASManagement(Service):
         caslibs = self.list_caslibs(server,
                                     filter='eq($primary,name, "%s")' % name)
 
-        if len(caslibs) > 0:
-            return caslibs.pop()
+        if caslibs:
+            return caslibs[0]
 
     def list_tables(self, caslib, server=None, filter=None):
         """List tables available in a caslib.
@@ -101,5 +101,5 @@ class CASManagement(Service):
                                   server=server,
                                   filter='eq($primary,name, "%s")' % name)
 
-        if len(tables) > 0:
-            return tables.pop()
+        if tables:
+            return tables[0]

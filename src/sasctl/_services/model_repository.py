@@ -337,8 +337,8 @@ class ModelRepository(Service):
             repo = cls.get_repository('Public')  # Default in 19w21
         if repo is None:
             all_repos = cls.list_repositories()
-            if len(all_repos) > 0:
-                repo = cls.list_repositories()[0]
+            if all_repos:
+                repo = all_repos[0]
 
         return repo
 

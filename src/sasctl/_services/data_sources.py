@@ -145,10 +145,8 @@ class DataSources(Service):
         source = source or 'cas-shared-default'
         caslibs = self.list_caslibs(source, filter='eq(name, "%s")' % name)
 
-        # caslibs = [c for c in caslibs if c.name == name]
-
-        if len(caslibs) > 0:
-            return caslibs.pop()
+        if caslibs:
+            return caslibs[0]
 
     def list_tables(self, caslib, filter=None):
         """List tables available in a caslib.
@@ -196,9 +194,5 @@ class DataSources(Service):
         """
         tables = self.list_tables(caslib, filter='eq(name, "%s")' % name)
 
-        if len(tables) > 0:
-            return tables.pop()
-
-
-
-
+        if tables:
+            return tables[0]

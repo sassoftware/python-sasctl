@@ -1110,7 +1110,7 @@ def get_link(obj, rel):
             return obj['links'].get(rel)
 
         links = [l for l in obj.get('links', []) if l.get('rel') == rel]
-        if len(links) == 0:
+        if not links:
             return None
         if len(links) == 1:
             return links[0]
