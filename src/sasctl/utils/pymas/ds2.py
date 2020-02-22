@@ -203,7 +203,7 @@ class DS2BaseMethod(object):  # skipcq PYL-R0205
         vars = ',\n'.join('    %s' % v.as_parameter() for v in self.variables)
 
         # Don't spread signature over multiple lines if there are no variables
-        if len(vars) > 0:
+        if vars:
             func = ('method %s(' % self.name,
                     vars,
                     '    );',
@@ -212,7 +212,7 @@ class DS2BaseMethod(object):  # skipcq PYL-R0205
             func = ('method %s();' % self.name,
                     '')
 
-        if len(self._body) > 0:
+        if self._body:
             func += tuple('    ' + line for line in self._body)
 
         func += ('end;',

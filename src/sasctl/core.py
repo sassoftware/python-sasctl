@@ -811,11 +811,11 @@ class PagedItemIterator:
 
     def next(self):
         # Get next page of items if we're currently out
-        if len(self._cache) == 0:
+        if not self._cache:
             self._cache = next(self._pager)
 
         # Return the next item
-        if len(self._cache) > 0:
+        if self._cache:
             return self._cache.pop(0)
 
         raise StopIteration
