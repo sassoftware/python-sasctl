@@ -612,8 +612,7 @@ def renamed_wrapper(a, b):
         columns = ["a", "b"]
         input_df = pd.DataFrame(data=input_array, columns=columns)
         result = dummy_func(input_df)
-        result = tuple(result.ravel()) if hasattr(result, "ravel") else 
-        tuple(result)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)
         if len(result) == 0:
             result = tuple(None for i in range(1))
         elif "numpy" in str(type(result[0])):
@@ -657,8 +656,7 @@ def predict(a, b):
         columns = ["a", "b"]
         input_df = pd.DataFrame(data=input_array, columns=columns)
         result = dummy_func(input_df)
-        result = tuple(result.ravel()) if hasattr(result, "ravel") else 
-        tuple(result)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)
         if len(result) == 0:
             result = tuple(None for i in range(1))
         elif "numpy" in str(type(result[0])):
@@ -700,8 +698,7 @@ def predict_proba(a, b):
         columns = ["a", "b"]
         input_df = pd.DataFrame(data=input_array, columns=columns)
         result = dummy_func(input_df)
-        result = tuple(result.ravel()) if hasattr(result, "ravel") else 
-        tuple(result)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)
         if len(result) == 0:
             result = tuple(None for i in range(1))
         elif "numpy" in str(type(result[0])):

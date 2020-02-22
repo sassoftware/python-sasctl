@@ -199,8 +199,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('        result = tuple(result.ravel()) 
                 if hasattr(result, "ravel") else tuple(result)');
                 rc = py.appendSrcLine('        if len(result) == 0:');
-                rc = py.appendSrcLine('            result = tuple(None for i 
-                in range(1))');
+                rc = py.appendSrcLine('            result = tuple(None for i in range(1))');
                 rc = py.appendSrcLine('        elif "numpy" in str(type(result[0])):');
                 rc = py.appendSrcLine('            result = tuple(np.asscalar(i) for i in result)');
                 rc = py.appendSrcLine('    except Exception as e:');
@@ -308,10 +307,8 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('        if PetalWidth is None: 
                 PetalWidth = np.nan');
                 rc = py.appendSrcLine('        input_array = np.array([
-                SepalLength, SepalWidth, PetalLength, PetalWidth]).reshape((
-                1, -1))');
-                rc = py.appendSrcLine('        columns = ["SepalLength", 
-                "SepalWidth", "PetalLength", "PetalWidth"]');
+                SepalLength, SepalWidth, PetalLength, PetalWidth]).reshape((1, -1))');
+                rc = py.appendSrcLine('        columns = ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth"]');
                 rc = py.appendSrcLine('        input_df = pd.DataFrame(data=input_array, columns=columns)');
                 rc = py.appendSrcLine('        result = obj.predict(input_df)');
                 rc = py.appendSrcLine('        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)');
@@ -345,19 +342,16 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 PetalLength = np.nan');
                 rc = py.appendSrcLine('        if PetalWidth is None: 
                 PetalWidth = np.nan');
-                rc = py.appendSrcLine('        input_array = np.array([
-                SepalLength, SepalWidth, PetalLength, PetalWidth]).reshape((
-                1, -1))');
-                rc = py.appendSrcLine('        columns = ["SepalLength", 
-                "SepalWidth", "PetalLength", "PetalWidth"]');
+                rc = py.appendSrcLine('        input_array = np.array([SepalLength, SepalWidth, PetalLength, PetalWidth]).reshape((1, -1))');
+                rc = py.appendSrcLine('        columns = ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth"]');
                 rc = py.appendSrcLine('        input_df = pd.DataFrame(data=input_array, columns=columns)');
                 rc = py.appendSrcLine('        result = obj.predict_proba(input_df)');
-                rc = py.appendSrcLine('        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)');
+                rc = py.appendSrcLine('        result = tuple(result.ravel()) 
+                if hasattr(result, "ravel") else tuple(result)');
                 rc = py.appendSrcLine('        if len(result) == 0:');
                 rc = py.appendSrcLine('            result = tuple(None for i in range(3))');
                 rc = py.appendSrcLine('        elif "numpy" in str(type(result[0])):');
-                rc = py.appendSrcLine('            result = tuple(
-                np.asscalar(i) for i in result)');
+                rc = py.appendSrcLine('            result = tuple(np.asscalar(i) for i in result)');
                 rc = py.appendSrcLine('    except Exception as e:');
                 rc = py.appendSrcLine('        from traceback import format_exc');
                 rc = py.appendSrcLine('        msg = str(e) + format_exc()');
