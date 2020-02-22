@@ -125,8 +125,8 @@ def test_direct_rest_calls(session, change_dir):
                                 'from sasctl import get, get_link, request_link')
         try:
             six.exec_(code)
-        except UnpicklingError as e:
-            if str(e) == "invalid load key, '\xef'.":
+        except (UnpicklingError, KeyError) as e:
+            if "'\xef'" in str(e):
                 # Betamax recording adds additional bytes to the content which
                 # breaks unpickling.  Ignore when this happens as correct
                 # handling of binary contents should be validated in integration
