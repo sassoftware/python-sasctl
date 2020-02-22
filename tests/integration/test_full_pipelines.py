@@ -6,6 +6,7 @@
 
 """Test multiple operations that must complete in order."""
 
+import six
 import pytest
 
 # Every test function in the module will automatically receive the session fixture
@@ -322,7 +323,7 @@ class TestSklearnClassificationModel:
         x = iris_dataset.iloc[0, :]
         assert hasattr(module, 'predict')
         result = module.predict(x)
-        assert isinstance(result, str)
+        assert isinstance(result, six.string_types)
         assert result in ('setosa', 'virginica', 'versicolor')
 
         # Call .predict_proba()
