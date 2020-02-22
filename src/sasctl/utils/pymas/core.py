@@ -26,7 +26,7 @@ from ..decorators import versionadded, versionchanged
 def build_wrapper_function(func, variables, array_input,
                            name='wrapper',
                            setup=None,
-                           return_msg=True):
+                           return_msg=None):
     """Wraps a function to ensure compatibility when called by PyMAS.
 
     PyMAS has strict expectations regarding the format of any function called
@@ -47,6 +47,7 @@ def build_wrapper_function(func, variables, array_input,
     setup : iterable
         Python source code lines to be executed during package setup
     return_msg : bool, optional
+        Deprecated.
         Whether error messages will be captured and returned as an additional
         output variable.  Defaults to True.
 
@@ -63,11 +64,15 @@ def build_wrapper_function(func, variables, array_input,
     executed.
 
     """
+    if return_msg is not None:
+        raise DeprecationWarning("The 'return_msg' parameter is ignored and "
+                                 "will be removed completely in a future "
+                                 "version")
 
+    # Always return an error message out of any Python method call.
     return_msg = True
 
     # need to know func & input/output vars for each func
-
     input_names = [v.name for v in variables if not v.out]
     output_names = [v.name for v in variables if v.out]
     args = input_names
@@ -100,12 +105,6 @@ def build_wrapper_function(func, variables, array_input,
         func_call = '{}({})'.format(func, ','.join(args))
         middle = ('        result = {}'.format(func_call),)
 
-    # TODO: Verify that # of values returned by wrapped func matches length of output_names
-    # TODO: cast all return types before returning (DS2 errors out if not exact match)
-
-    # NOTE: 'Output:' section is required.  All return variables must be listed
-    # separated by ', '
-
     if setup:
         header = ('try:', ) + \
                  tuple('    ' + line for line in setup) + \
@@ -116,6 +115,8 @@ def build_wrapper_function(func, variables, array_input,
     else:
         header = ('', )
 
+    # NOTE: 'Output:' section is required.  All return variables must be listed
+    # separated by ', '
     definition = header + \
                  ('def {name}({args}):'.format(name=name, args=', '.join(args)),
                   '    "Output: {}"'.format(', '.join(output_names + ['msg']) if return_msg
@@ -129,7 +130,9 @@ def build_wrapper_function(func, variables, array_input,
                   '        import numpy as np',
                   '        import pandas as pd') + \
                  middle + \
-                 ('        result = tuple(result)',
+                 (
+                 '        result = tuple(result.ravel()) if hasattr(result, '
+                 '"ravel") else tuple(result)',
                   '        if len(result) == 0:',
                   '            result = tuple(None for i in range(%s))' % len(
                       output_names),
@@ -139,13 +142,9 @@ def build_wrapper_function(func, variables, array_input,
                   '        from traceback import format_exc',
                   '        msg = str(e) + format_exc()' if return_msg else '',
                   '        if result is None:',
-                  '            result = tuple(None for i in range({'
-                  '}))'.format(len(output_names)))
-
-    if return_msg:
-        definition += ('    return result + (msg, )',)
-    else:
-        definition += ('    return result', )
+                 '            result = tuple(None for i in range(%s))' % len(
+                     output_names),
+                 '    return result + (msg, )')
 
     return '\n'.join(definition)
 
@@ -176,7 +175,6 @@ def wrap_predict_method(func, variables, **kwargs):
     """
     kwargs.setdefault('array_input', True)
     kwargs.setdefault('name', 'predict')
-    kwargs.setdefault('return_msg', False)
 
     return build_wrapper_function(func, variables, **kwargs)
 
@@ -207,9 +205,6 @@ def wrap_predict_proba_method(func, variables, **kwargs):
     """
     kwargs.setdefault('array_input', True)
     kwargs.setdefault('name', 'predict_proba')
-    kwargs.setdefault('return_msg', False)
-
-    # setup = None,
 
     wrapper = build_wrapper_function(func, variables, **kwargs)
 
@@ -220,9 +215,10 @@ def wrap_predict_proba_method(func, variables, **kwargs):
     return re.sub(old_code, new_code, wrapper)
 
 
-@versionchanged('Return code and message are disabled by default.', version='1.5')
-def from_inline(func, input_types=None, array_input=False, return_code=False,
-                return_message=False):
+@versionchanged('Return code and message are disabled by default.',
+                version='1.5')
+def from_inline(func, input_types=None, array_input=False, return_code=None,
+                return_message=None):
     """Creates a PyMAS wrapper to execute the inline python function.
 
     Parameters
@@ -236,8 +232,10 @@ def from_inline(func, input_types=None, array_input=False, return_code=False,
         Whether the function inputs should be treated as an array instead of
         individual parameters
     return_code : bool
+        Deprecated.
         Whether the DS2-generated return code should be included
     return_message : bool
+        Deprecated.
         Whether the DS2-generated return message should be included
 
     Returns
@@ -247,13 +245,18 @@ def from_inline(func, input_types=None, array_input=False, return_code=False,
 
     """
 
+    if return_code is not None or return_message is not None:
+        raise DeprecationWarning("The 'return_code' and 'return_message' "
+                                 "parameters are ignored and will be "
+                                 "removed completely in a future version")
+
     obj = pickle.dumps(func)
     return from_pickle(obj, None, input_types, array_input, return_code, return_message)
 
 
 @versionchanged('Return code and message are disabled by default.', version='1.5')
 def from_python_file(file, func_name=None, input_types=None, array_input=False,
-                     return_code=False, return_message=False):
+                     return_code=None, return_message=None):
     """Creates a PyMAS wrapper to execute a function defined in an
     external .py file.
 
@@ -270,8 +273,10 @@ def from_python_file(file, func_name=None, input_types=None, array_input=False,
         Whether the function inputs should be treated as an array instead of
         individual parameters
     return_code : bool
+        Deprecated
         Whether the DS2-generated return code should be included
     return_message : bool
+        Deprecated
         Whether the DS2-generated return message should be included
 
     Returns
@@ -280,6 +285,10 @@ def from_python_file(file, func_name=None, input_types=None, array_input=False,
         Generated DS2 code which can be executed in a SAS scoring environment
 
     """
+    if return_code is not None or return_message is not None:
+        raise DeprecationWarning("The 'return_code' and 'return_message' "
+                                 "parameters are ignored and will be "
+                                 "removed completely in a future version")
 
     if not str(file.lower().endswith('.py')):
         raise ValueError("File {} does not have a .py extension.".format(file))
@@ -309,7 +318,7 @@ def from_python_file(file, func_name=None, input_types=None, array_input=False,
 
 @versionchanged('Return code and message are disabled by default.', version='1.5')
 def from_pickle(file, func_name=None, input_types=None, array_input=False,
-                return_code=False, return_message=False):
+                return_code=None, return_message=None):
     """Create a deployable DS2 package from a Python pickle file.
 
     Parameters
@@ -331,8 +340,10 @@ def from_pickle(file, func_name=None, input_types=None, array_input=False,
         Whether the function inputs should be treated as an array instead of
         individual parameters
     return_code : bool
+        Deprecated.
         Whether the DS2-generated return code should be included
     return_message : bool
+        Deprecated.
         Whether the DS2-generated return message should be included
 
     Returns
@@ -341,6 +352,10 @@ def from_pickle(file, func_name=None, input_types=None, array_input=False,
         Generated DS2 code which can be executed in a SAS scoring environment
 
     """
+    if return_code is not None or return_message is not None:
+        raise DeprecationWarning("The 'return_code' and 'return_message' "
+                                 "parameters are ignored and will be "
+                                 "removed completely in a future version")
     try:
         # In Python2 str could either be a path or the binary pickle data,
         # so check if its a valid filepath too.
@@ -372,7 +387,7 @@ def from_pickle(file, func_name=None, input_types=None, array_input=False,
 
 
 def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
-                 return_code=False, return_message=False, code=None):
+                 return_code=None, return_message=None, code=None):
     """
 
     Parameters
@@ -449,7 +464,7 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
     target_func = list(target_func)
     variables = list(variables)
 
-    return PyMAS(target_func, variables, code, return_code, return_message,
+    return PyMAS(target_func, variables, code,
                  array_input=array_input, func_prefix='obj.')
 
 
@@ -465,8 +480,10 @@ class PyMAS:
     python_source : str
         Additional Python code to be executed during setup.
     return_code : bool
+        Deprecated.
         Whether the DS2-generated return code should be included.
     return_msg : bool
+        Deprecated.
         Whether the DS2-generated return message should be included.
     kwargs : any
         Passed to :func:`build_wrapper_function`.
@@ -476,16 +493,24 @@ class PyMAS:
                  target_function,
                  variables,
                  python_source,
-                 return_code=True,
-                 return_msg=True,
+                 return_code=None,
+                 return_msg=None,
                  func_prefix=None,
                  **kwargs):
+
+        if return_code is not None or return_msg is not None:
+            raise DeprecationWarning("The 'return_code' and 'return_msg' "
+                                     "parameters are ignored and will be "
+                                     "removed completely in a future version")
 
         func_prefix = func_prefix or ''
 
         if not isinstance(target_function, list):
             target_function = [target_function]
             variables = [variables]
+
+        return_code = False
+        return_msg = False
 
         # Replicate parameter for each function to be exposed
         if isinstance(return_code, bool):
@@ -498,19 +523,16 @@ class PyMAS:
         self.wrapper = []
         for func, vars, code, msg in zip(target_function, variables, return_code, return_msg):
             if func.lower() == 'predict':
-                lines = wrap_predict_method(func_prefix+func, vars,
-                                            setup=python_source,
-                                            return_msg=msg, **kwargs)
+                lines = wrap_predict_method(func_prefix + func, vars,
+                                            setup=python_source, **kwargs)
             elif func.lower() == 'predict_proba':
-                lines = wrap_predict_proba_method(func_prefix+func, vars,
-                                                  setup=python_source,
-                                                  return_msg=msg, **kwargs)
+                lines = wrap_predict_proba_method(func_prefix + func, vars,
+                                                  setup=python_source, **kwargs)
             else:
                 lines = build_wrapper_function(func_prefix+func,
                                                vars,
                                                name=func,
                                                setup=python_source,
-                                               return_msg=msg,
                                                **kwargs)
 
             # Add DS2 variables for returning error codes/messages
@@ -535,8 +557,7 @@ class PyMAS:
 
         for idx, func in enumerate(target_function):
             self.package.add_method(func, func,
-                                    variables[idx], return_code[idx],
-                                    return_msg[idx])
+                                    variables[idx])
 
     @versionchanged(version='1.4', reason="Added `dest='Python'` option")
     def score_code(self, input_table=None, output_table=None, columns=None, dest='MAS'):
