@@ -78,7 +78,9 @@ def test(cas_session, iris_dataset):
 
     result2 = sk_module.predict(first_row)
     assert result2 in ('setosa', 'virginica', 'versicolor')
-    assert species == result2
+
+    # SAS model may have CHAR variable that's padded with spaces.
+    assert species.strip() == result2
 
     result3 = sk_module.predict_proba(first_row)
     assert round(sum(result3), 5) == 1
