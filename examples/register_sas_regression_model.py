@@ -8,6 +8,7 @@ import swat
 from sasctl import Session
 from sasctl.tasks import register_model, publish_model
 
+
 with swat.CAS('hostname', 5570, 'username', 'password') as cas:
     # Load the regression actions in CAS
     cas.loadactionset('regression')

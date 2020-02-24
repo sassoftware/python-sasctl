@@ -5,9 +5,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import pandas as pd
+from sasctl import Session, register_model, publish_model
 from sklearn.linear_model import LogisticRegression
 
-from sasctl import Session, register_model, publish_model
 
 # Load the Iris data set and split into features and target.
 df = pd.read_csv('data/iris.csv')
