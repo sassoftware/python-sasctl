@@ -64,4 +64,4 @@ pkl = request_link(file, 'content', format='content')
 # contain malicious content.  Additionally, unpickling is likely to fail if
 # the Python environment on the client differs from the environment where the
 # object was first created.
-pickle.loads(pkl)                                             # skipcq: BAN-B403
+pickle.loads(pkl)                                             # skipcq: BAN-B301
