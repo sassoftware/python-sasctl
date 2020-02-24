@@ -4,7 +4,7 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import pickle
+import pickle                                                 # skipcq: BAN-B403
 from sasctl import get, get_link, request_link, Session
 
 # Authenticate to the SAS environment
@@ -64,4 +64,4 @@ pkl = request_link(file, 'content', format='content')
 # contain malicious content.  Additionally, unpickling is likely to fail if
 # the Python environment on the client differs from the environment where the
 # object was first created.
-pickle.loads(pkl)
+pickle.loads(pkl)                                             # skipcq: BAN-B403
