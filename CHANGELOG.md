@@ -1,5 +1,9 @@
 Unreleased
 ----------
+ - 
+ 
+v1.5 (2020-2-23)
+----------------
 **Improvements**
  - Registered Python models will now include both `predict` and `predict_proba` methods. 
  - Added a new Relationships service for managing links between objects.
@@ -18,7 +22,6 @@ Unreleased
  
  **Bugfixes**
  - `model_publish.delete_destination` now works correctly.
- 
  
 v1.4.6 (2020-1-24)
 ------------------
