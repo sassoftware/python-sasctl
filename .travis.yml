@@ -9,7 +9,6 @@ dist: xenial
 stages:
   - flake8
   - test
-    if: branch IS master
   - name: create release
     if: tag IS present
   - name: upload documentation
