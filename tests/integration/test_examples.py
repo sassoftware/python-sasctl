@@ -23,14 +23,14 @@ def change_dir():
 
 
 def test_astore_model(session, cas_session, change_dir):
-    """Ensure the astore_model.py example executes successfully."""
+    """Ensure the register_sas_classification_model.py example executes successfully."""
 
     # Mock up Session() to return the Betamax-recorded session
     def Session(*args, **kwargs):
         return session
 
     change_dir('examples')
-    with open('astore_model.py') as f:
+    with open('register_sas_classification_model.py') as f:
         # Remove Session import and set CAS session to Betamax-recorded CAS
         # session
         code = f.read().replace('from sasctl import Session', '')
@@ -59,14 +59,14 @@ def test_register_sas_regression_model(session, cas_session, change_dir):
 
 
 def test_sklearn_model(session, change_dir):
-    """Ensure the sklearn_model.py example executes successfully."""
+    """Ensure the register_scikit_classification_model.py example executes successfully."""
 
     # Mock up Session() to return the Betamax-recorded session
     def Session(*args, **kwargs):
         return session
 
     change_dir('examples')
-    with open('sklearn_model.py') as f:
+    with open('register_scikit_classification_model.py') as f:
         # Remove import of Session to ensure mock function will be used
         # instead.
         code = f.read().replace('from sasctl import Session, register_model',
@@ -91,7 +91,7 @@ def test_scikit_regression_model(session, change_dir):
 
 
 def test_full_lifecycle(session, change_dir):
-    """Ensure the sklearn_model.py example executes successfully."""
+    """Ensure the register_scikit_classification_model.py example executes successfully."""
 
     pytest.skip("Fix/re-implement.  Performance upload creates unrecorded CAS "
                 "session that can't be replayed.")
