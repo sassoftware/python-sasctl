@@ -45,11 +45,6 @@ project = mr.get_project(project)
 project['targetVariable'] = 'Price'
 project = mr.update_project(project)
 
-# Instruct the project to look for tables in the "Public" CAS library with
-# names starting with "boston_" and use these tables to track model
-# performance over time.
-mm.create_performance_definition(model_name, 'Public', 'boston')
-
 # Publish the model to the real-time scoring engine
 module_lm = publish_model(model_name, 'maslocal')
 
@@ -57,7 +52,7 @@ module_lm = publish_model(model_name, 'maslocal')
 x = X_test.iloc[0, :]
 
 # Call the published module and score the record
-result = module_lm.score(**x)
+result = module_lm.predict(x)
 print(result)
 
 # Build a second model
@@ -71,8 +66,13 @@ model_dt = register_model(dt, 'Decision Tree', project, input=X)
 module_dt = publish_model(model_dt, 'maslocal')
 
 # Use MAS to score some new data
-result = module_dt.score(**x)
+result = module_dt.predict(x)
 print(result)
+
+# Instruct the project to look for tables in the "Public" CAS library with
+# names starting with "boston_" and use these tables to track model
+# performance over time.
+mm.create_performance_definition(model_name, 'Public', 'boston')
 
 # Model Manager can track model performance over time if provided with
 # historical model observations & predictions.  SIMULATE historical data by
@@ -82,7 +82,7 @@ perf_df['var1'] = lm.predict(X_test)
 perf_df['Price'] = y
 
 # For each (simulated) historical period, upload model results
-for period in ('q12019', 'q22019', 'q32019', 'q42019'):
+for period in ('q1', 'q2', 'q3', 'q4'):
     sample = perf_df.sample(frac=0.2)
     update_model_performance(sample, model_name, period)
 

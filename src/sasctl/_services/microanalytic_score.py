@@ -21,7 +21,7 @@ class MicroAnalyticScore(Service):
     _SERVICE_ROOT = '/microanalyticScore'
 
     @classmethod
-    def is_uuid(cls, id):
+    def is_uuid(cls, id_):
         """Check if the ID appears to be a valid MAS id.
 
         Indicates whether `id` appears to be a correctly formatted ID.  Does
@@ -29,7 +29,7 @@ class MicroAnalyticScore(Service):
 
         Parameters
         ----------
-        id : str
+        id_ : str
 
         Returns
         -------
@@ -44,7 +44,7 @@ class MicroAnalyticScore(Service):
         # Anything that consists of only numbers, lowercase letters,
         # and underscores, and does not start with a number, looks like a
         # MAS id.
-        return re.match('^[_a-z][_a-z0-9]+$', id) is not None
+        return re.match('^[_a-z][_a-z0-9]+$', id_) is not None
 
     list_modules, get_module, update_module, \
         delete_module = Service._crud_funcs('/modules', 'module')
@@ -120,8 +120,9 @@ class MicroAnalyticScore(Service):
         step = step.id if hasattr(step, 'id') else step
 
         # Make sure all inputs are JSON serializable
-        # Common types such as numpy.int64 and numpy.float64 are NOT serializable
-        for k in kwargs.keys():
+        # Common types such as numpy.int64 and numpy.float64 are NOT
+        # serializable
+        for k in kwargs:
             type_name = type(kwargs[k]).__name__
             if type_name == 'float64':
                 kwargs[k] = float(kwargs[k])
@@ -132,10 +133,10 @@ class MicroAnalyticScore(Service):
                            for k, v in six.iteritems(kwargs)]}
 
         # Convert NaN to None (null) before calling MAS
-        for input in body['inputs']:
+        for i in body['inputs']:
             try:
-                if isnan(input['value']):
-                    input['value']  = None
+                if isnan(i['value']):
+                    i['value'] = None
             except TypeError:
                 pass
 
@@ -155,13 +156,12 @@ class MicroAnalyticScore(Service):
         if return_dict:
             # Return results as k=v pairs
             return outputs
-        else:
-            # Return only the values, as if calling another Python function.
-            outputs = tuple(outputs.values())
-            if len(outputs) == 1:
-                return outputs[0]
-            else:
-                return outputs
+
+        # Return only the values, as if calling another Python function.
+        outputs = tuple(outputs.values())
+        if len(outputs) == 1:
+            return outputs[0]
+        return outputs
 
     def create_module(self, name=None, description=None, source=None,
                       language='python', scope='public'):
@@ -182,8 +182,7 @@ class MicroAnalyticScore(Service):
         """
         if source is None:
             raise ValueError('The `source` parameter is required.')
-        else:
-            source = str(source)
+        source = str(source)
 
         if language == 'python':
             t = 'text/x-python'
@@ -215,7 +214,8 @@ class MicroAnalyticScore(Service):
 
         Returns
         -------
-        module
+        RestObj
+            The module with additional methods defined.
 
         """
         import types
@@ -223,35 +223,85 @@ class MicroAnalyticScore(Service):
         module = self.get_module(module)
 
         # Define a method for each step of the module
-        for id in module.get('stepIds', []):
-            step = self.get_module_step(module, id)
+        for id_ in module.get('stepIds', []):
+            step = self.get_module_step(module, id_)
 
             # Method should have an argument for each parameter of the step
             arguments = [k['name'] for k in step.get('inputs', [])]
             arg_types = [k['type'] for k in step.get('inputs', [])]
 
             # Format call to execute_module_step()
-            call_params = ['{}={}'.format(i, i) for i in arguments]
+            call_params = ['{arg}={arg}'.format(arg=a) for a in arguments]
 
             # Set type hints for the function
             type_string = '    # type: ({})'.format(', '.join(arg_types))
 
             # Method signature
+            # Default all params to None to allow method(DataFrame) execution
             input_params = [a for a in arguments] + ['**kwargs']
-            signature = 'def _%s_%s(%s):' \
-                        % (module.name,
-                           step.id,
-                           ', '.join(input_params))
+            method_name = '_%s_%s' % (module.id, step.id)
+            signature = 'def %s(%s):' \
+                        % (method_name, ', '.join(input_params))
 
-            # MAS always lower-cases variable names
-            # Since the original Python variables may have a different case,
-            # allow kwargs to be used to input alternative caps
-            if len(arguments):
-                arg_checks = ['for k in kwargs.keys():']
+            # If the module step takes arguments, then we perform a number
+            # of additional checks to make the allowed input as wide as possible
+            if arguments:
+                # Perform some initial checks to see if the input is a Numpy array
+                # or a Pandas DataFrame.  Each will be handled separately.
+                arg_checks = [
+                    'first_input = %s' % arguments[0],
+                    'first_input_type = str(type(first_input))',
+                    'try:',
+                    '    import pandas as pd',
+                    '    if isinstance(first_input, pd.DataFrame):',
+                    '        assert first_input.shape[0] == 1',
+                    '        first_input = first_input.iloc[0]',
+                    '    is_pandas = isinstance(first_input, pd.Series)',
+                    'except ImportError:',
+                    '    is_pandas = False',
+                    'try:',
+                    '    import numpy as np',
+                    '    is_numpy = isinstance(first_input, np.ndarray)',
+                    'except ImportError:',
+                    '    is_numpy = False',
+                    'if is_pandas:',
+                    '    assert len(first_input.shape) == 1',
+                    '    for k in first_input.keys():'
+                ]
+
                 for arg in arguments:
-                    arg_checks.append("    if k.lower() == '%s':" % arg.lower())
-                    arg_checks.append("        %s = kwargs[k]" % arg)
-                    arg_checks.append("        continue")
+                    arg_checks.append("        if k.lower() == '%s':" % arg.lower())
+                    arg_checks.append("            %s = first_input[k]" % arg)
+                    arg_checks.append("            continue")
+
+                arg_checks.extend([
+                    'elif is_numpy:',
+                    '    if len(first_input.shape) > 1:',
+                    '        assert first_input.shape[0] == 1',
+                    '    first_input = first_input.ravel()'
+                ])
+
+                for i, arg in enumerate(arguments):
+                    arg_checks.append('    %s = first_input[%d]' % (arg, i))
+
+                # MAS always lower-cases variable names
+                # Since the original Python variables may have a different case,
+                # allow kwargs to be used to input alternative caps
+                arg_checks.append('else:')
+                arg_checks.append('    for k in kwargs.keys():')
+                for arg in arguments:
+                    arg_checks.append("        if k.lower() == '%s':" % arg.lower())
+                    arg_checks.append("            %s = kwargs[k]" % arg)
+                    arg_checks.append("            continue")
+
+                # MAS does not attempt any type conversions, so int, decimal, etc
+                # needs to be exactly typed or the call will fail.  Cast everything
+                # just to be sure.
+                for arg, arg_type in zip(arguments, arg_types):
+                    if arg_type == 'decimal':
+                        arg_checks.append('%s = float(%s)' % (arg, arg))
+                    elif arg_type == 'integer':
+                        arg_checks.append('%s = int(%s)' % (arg, arg))
             else:
                 arg_checks = []
 
@@ -259,8 +309,8 @@ class MicroAnalyticScore(Service):
             # Drops 'rc' and 'msg' from return values
             code = (signature,
                     type_string,
-                    '    """Execute step %s of module %s."""' % (step, module),
-                    '\n'.join(['    %s' % a for a in arg_checks]),
+                    '    """Execute step \'%s\' of module \'%s\'."""' % (step, module),
+                    '\n'.join('    %s' % a for a in arg_checks),
                     '    r = execute_module_step(%s)' % ', '.join(['module', 'step'] + call_params),
                     '    r.pop("rc", None)',
                     '    r.pop("msg", None)',
@@ -270,6 +320,8 @@ class MicroAnalyticScore(Service):
                     )
 
             code = '\n'.join(code)
+            self.log.debug("Generated code for step '%s' of module '%s':\n%s",
+                           id_, module, code)
             compiled = compile(code, '<string>', 'exec')
 
             env = globals().copy()

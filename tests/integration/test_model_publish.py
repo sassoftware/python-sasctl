@@ -43,3 +43,12 @@ class TestModelPublish:
         assert dest.name == 'sasctlmas'
         assert dest.destinationType == 'microAnalyticService'
         assert 'description' not in dest
+
+    def test_delete_cas_destionation(self):
+        dest = mp.get_destination('sasctlcas')
+        assert dest.name == 'sasctlcas'
+
+        mp.delete_destination('sasctlcas')
+
+        dest = mp.get_destination('sasctlcas')
+        assert dest is None

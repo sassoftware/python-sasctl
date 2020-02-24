@@ -178,12 +178,15 @@ class ModelManagement(Service):
             if getattr(project, required, None) is None:
                 raise ValueError("Project %s must have the '%s' property set."
                                  % (project.name, required))
-        if project['function'] == 'classification' and project['eventProbabilityVariable'] == None:
-            raise ValueError("Project %s must have the 'eventProbabilityVariable' property set."
-                                 % (project.name))
-        if project['function'] == 'prediction' and project['predictionVariable'] == None:
-            raise ValueError("Project %s must have the 'predictionVariable' property set."
-                                 % (project.name))
+        if project.get('function') == 'classification' \
+                and project.get('eventProbabilityVariable') is None:
+            raise ValueError("Project %s must have the "
+                             "'eventProbabilityVariable' property set."
+                             % project.name)
+        if project.get('function') == 'prediction' \
+                and project.get('predictionVariable') is None:
+            raise ValueError("Project %s must have the 'predictionVariable' "
+                             "property set." % project.name)
 
         request = {'projectId': project.id,
                    'name': name or model.name + ' Performance',
@@ -204,7 +207,7 @@ class ModelManagement(Service):
                    }
 
         # If model doesn't specify input/output variables, try to pull from project definition
-        if len(model.get('inputVariables', [])) > 0:
+        if model.get('inputVariables', []):
             request['inputVariables'] = [v.get('name') for v in
                                          model['inputVariables']]
             request['outputVariables'] = [v.get('name') for v in

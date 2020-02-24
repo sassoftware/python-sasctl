@@ -26,7 +26,6 @@ def test_crud_function_doc():
     from sasctl.core import _build_crud_funcs
 
     for func in _build_crud_funcs('/widgets'):
-        t0 = func.__doc__
         assert ' widgets ' in func.__doc__
         assert '{item}' not in func.__doc__
 
@@ -161,3 +160,42 @@ def test_put_restobj():
     assert kwargs['headers']['If-Match'] == 123
     assert kwargs['headers']['Content-Type'] == 'notspam'
     assert kwargs['headers']['encoding'] == 'spammy'
+
+
+def test_request_formats():
+    from requests import Response
+    import sasctl
+    from sasctl.core import request, RestObj
+
+    response = Response()
+    response.status_code = 200
+    response._content = '{"name": "test"}'.encode('utf-8')
+
+    with mock.patch('sasctl.core.Session') as mock_sess:
+        mock_sess.request.return_value = response
+        resp = request('GET', 'example.com', session=mock_sess, format='response')
+        assert mock_sess.request.call_count == 1
+        assert isinstance(resp, Response)
+
+        with pytest.warns(DeprecationWarning):
+            resp = request('GET', 'example.com', session=mock_sess, raw=True)
+
+            # Make sure old param is eventually cleaned up
+            if sasctl.__version__.startswith('1.6'):
+                pytest.fail("Deprecated 'raw' parameter should be removed.")
+            assert isinstance(resp, Response)
+
+        resp = request('GET', 'example.com', session=mock_sess, format='json')
+        assert isinstance(resp, dict)
+        assert resp['name'] == 'test'
+
+        resp = request('GET', 'example.com', session=mock_sess, format='text')
+        assert resp == '{"name": "test"}'
+
+        resp = request('GET', 'example.com', session=mock_sess, format='content')
+        assert resp == response._content
+
+        resp = request('GET', 'example.com', session=mock_sess, format=None)
+        assert isinstance(resp, RestObj)
+        assert resp.name == 'test'
+

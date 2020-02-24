@@ -13,11 +13,11 @@ import six
 from six.moves.urllib_parse import quote
 
 from .. import core
-from ..core import HTTPError, sasctl_command
+from ..core import HTTPError, PagedItemIterator, sasctl_command
 from ..exceptions import JobTimeoutError
 
 
-class Service(object):
+class Service(object):  # skipcq PYL-R0205
     """Base class for all services.  Should not be used directly."""
 
     _SERVICE_ROOT = None
@@ -41,8 +41,11 @@ class Service(object):
         bool
 
         """
-        response = cls.head('/', raw=True)
-        return response.status_code == 200
+        try:
+            response = cls.head('/', format='response')
+            return response.status_code == 200
+        except HTTPError:
+            return False
 
     @classmethod
     def info(cls):
@@ -56,7 +59,7 @@ class Service(object):
         return cls.get('/apiMeta')
 
     @classmethod
-    def request(cls, verb, path, session=None, raw=False, **kwargs):
+    def request(cls, verb, path, session=None, raw=False, format='auto', **kwargs):
         """Send an HTTP request with a session.
 
         Parameters
@@ -69,57 +72,39 @@ class Service(object):
         session : Session, optional
             Defaults to `current_session()`.
         raw : bool
-            Whether to return the raw `Response` object.  Defaults to False.
+            Deprecated. Whether to return the raw `Response` object.
+            Defaults to False.
+        format : {'auto', 'response', 'content', 'json', 'text'}
+            The format of the return response.  Defaults to `auto`.
+            response: the raw `Response` object.
+            content: Response.content
+            json: Response.json()
+            text: Response.text
+            auto: `RestObj` constructed from JSON if possible, otherwise same as
+                  `text`.
         kwargs : any
+            Additional arguments are passed to the session `request` method.
 
         Returns
         -------
 
         """
-        session = session or core.current_session()
-
-        if session is None:
-            raise TypeError('No `Session` instance found.')
-
         if path.startswith('/'):
             path = cls._SERVICE_ROOT + path
         else:
             path = cls._SERVICE_ROOT + '/' + path
 
-        response = session.request(verb, path, **kwargs)
-
-        if 400 <= response.status_code <= 599:
-            raise HTTPError(response.url, response.status_code,
-                            response.text, response.headers, None)
-
-        if raw:
-            return response
-
-        try:
-            if raw:
-                return response.json()
-            else:
-                obj = core._unwrap(response.json())
-
-                # ETag is required to update any object
-                # May not be returned on all responses (e.g. listing
-                # multiple objects)
-                if isinstance(obj, core.RestObj):
-                    obj._headers = response.headers
-                return obj
-        except ValueError:
-            return response.text
+        return core.request(verb, path, session, raw, format, **kwargs)
 
     @classmethod
-    def get(self, *args, **kwargs):
+    def get(cls, *args, **kwargs):
         """Send a GET request."""
         try:
-            return self.request('get', *args, **kwargs)
+            return cls.request('get', *args, **kwargs)
         except HTTPError as e:
             if e.code == 404:
                 return None  # Resource not found
-            else:
-                raise e
+            raise e
 
     @classmethod
     def head(cls, *args, **kwargs):
@@ -184,8 +169,10 @@ class Service(object):
         """
         # Set a default filter
         if get_filter is None:
-            def get_filter(item):
+            def default_filter(item):
                 return dict(filter='eq(name, "%s")' % item)
+
+            get_filter = default_filter
 
         @sasctl_command('list')
         def list_items(cls, filter=None, start=None, limit=None, **kwargs):
@@ -217,19 +204,17 @@ class Service(object):
                 kwargs['start'] = int(start)
             if limit is not None:
                 kwargs['limit'] = int(limit)
-            else:
-                # Until search is more precise, try to pull all results
-                # Needed until transparent pagination is implemented.
-                kwargs['limit'] = int(1e4)
 
-            params = '&'.join(['%s=%s' % (k, quote(str(v), safe='/(),"'))
-                               for k, v in six.iteritems(kwargs)])
+            params = '&'.join('%s=%s' % (k, quote(str(v), safe='/(),"'))
+                              for k, v in six.iteritems(kwargs))
 
             results = cls.get(path, params=params)
             if results is None:
                 return []
-            else:
-                return results if isinstance(results, list) else [results]
+            if isinstance(results, (list, PagedItemIterator)):
+                return results
+
+            return [results]
 
         @sasctl_command('get')
         def get_item(cls, item, refresh=False):
@@ -257,7 +242,7 @@ class Service(object):
             # If the input already appears to be the requested object just
             # return it, unless a refresh of the data was explicitly requested.
             if isinstance(item, dict) and all(
-                    [k in item for k in ('id', 'name')]):
+                    k in item for k in ('id', 'name')):
                 if refresh:
                     item = item['id']
                 else:
@@ -265,24 +250,20 @@ class Service(object):
 
             if cls.is_uuid(item):
                 return cls.get(path + '/{id}'.format(id=item))
-            else:
-                results = list_items(cls, **get_filter(item))
+            results = list_items(cls, **get_filter(item))
 
-                # Not sure why, but as of 19w04 the filter doesn't seem to work
-                for result in results:
-                    if result['name'] == str(item):
-                        # Make a request for the specific object so that ETag
-                        # is included, allowing updates.
-                        if cls.get_link(result, 'self'):
-                            return cls.request_link(result, 'self')
-                        else:
-                            id = result.get('id', result['name'])
-                        return cls.get(path + '/{id}'.format(id=id))
+            # Not sure why, but as of 19w04 the filter doesn't seem to work
+            for result in results:
+                if result['name'] == str(item):
+                    # Make a request for the specific object so that ETag
+                    # is included, allowing updates.
+                    if cls.get_link(result, 'self'):
+                        return cls.request_link(result, 'self')
 
-                return None
+                    id_ = result.get('id', result['name'])
+                    return cls.get(path + '/{id}'.format(id=id_))
 
-            assert item is None or isinstance(item, dict)
-            return item
+            return None
 
         @sasctl_command('update')
         def update_item(cls, item):
@@ -302,15 +283,15 @@ class Service(object):
                 raise ValueError(
                     'Could not find ETag for update of %s.' % item)
 
-            id = getattr(item, 'id', None)
-            if id is None:
+            id_ = getattr(item, 'id', None)
+            if id_ is None:
                 raise ValueError(
                     'Could not find property `id` for update of %s.' % item)
 
             headers = {'If-Match': item._headers.get('etag'),
                        'Content-Type': item._headers.get('content-type')}
 
-            return cls.put(path + '/%s' % id, json=item, headers=headers)
+            return cls.put(path + '/%s' % id_, json=item, headers=headers)
 
         @sasctl_command('delete')
         def delete_item(cls, item):
@@ -331,8 +312,8 @@ class Service(object):
             if not (isinstance(item, dict) and 'id' in item):
                 item = get_item(cls, item)
                 if item is None:
-                    cls.log.info("Object '%s' not found.  Skipping delete."
-                                 % item_name)
+                    cls.log.info("Object '%s' not found.  Skipping delete.",
+                                 item_name)
                     return
 
             if isinstance(item, dict) and 'id' in item:
@@ -340,8 +321,7 @@ class Service(object):
 
             if cls.is_uuid(item):
                 return cls.delete(path + '/{id}'.format(id=item))
-            else:
-                raise ValueError("Unrecognized id '%s'" % item)
+            raise ValueError("Unrecognized id '%s'" % item)
 
         # Pull object name from path if unspecified (many paths end in
         # nouns like /folders or /repositories).
@@ -362,6 +342,9 @@ class Service(object):
         return [classmethod(f) for f in
                 (list_items, get_item, update_item, delete_item)]
 
+    # Compatibility with Python 2.7 requires *args to be after key-words
+    # arguments.
+    # skipcq: PYL-W1113
     def _get_rel(self, item, rel, func=None, filter=None, *args):
         """Get `item` and request a link.
 
@@ -390,7 +373,11 @@ class Service(object):
         params = 'filter={}'.format(filter) if filter is not None else {}
 
         resources = self.request_link(obj, rel, params=params)
-        return resources if isinstance(resources, list) else [resources]
+
+        if isinstance(resources, (list, PagedItemIterator)):
+            return resources
+
+        return [resources]
 
     @classmethod
     def _monitor_job(cls, job, max_retries=60):
@@ -429,5 +416,4 @@ class Service(object):
 
         if completed(job):
             return job
-        else:
-            raise JobTimeoutError('Timeout while waiting on job %s' % job)
+        raise JobTimeoutError('Timeout while waiting on job %s' % job)

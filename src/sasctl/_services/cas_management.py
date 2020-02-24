@@ -33,7 +33,8 @@ class CASManagement(Service):
             A collection of :class:`.RestObj` instances.
 
         """
-        return self._get_rel(server, 'caslibs', self.get_server, filter) or []
+        return self._get_rel(server, 'caslibs', func=self.get_server,
+                             filter=filter) or []
 
     def get_caslib(self, name, server=None):
         """Get a caslib by name.
@@ -54,10 +55,8 @@ class CASManagement(Service):
         caslibs = self.list_caslibs(server,
                                     filter='eq($primary,name, "%s")' % name)
 
-        assert isinstance(caslibs, list)
-
-        if len(caslibs):
-            return caslibs.pop()
+        if caslibs:
+            return caslibs[0]
 
     def list_tables(self, caslib, server=None, filter=None):
         """List tables available in a caslib.
@@ -78,9 +77,8 @@ class CASManagement(Service):
             A collection of :class:`.RestObj` instances.
 
         """
-        return self._get_rel(caslib, 'tables',
-                             self.get_caslib, filter, server) or []
-
+        return self._get_rel(caslib, 'tables', self.get_caslib, filter,
+                             server) or []
 
     def get_table(self, name, caslib, server=None):
         """Get a table by name.
@@ -100,8 +98,8 @@ class CASManagement(Service):
 
         """
         tables = self.list_tables(caslib,
-                             server=server,
-                             filter='eq($primary,name, "%s")' % name)
+                                  server=server,
+                                  filter='eq($primary,name, "%s")' % name)
 
-        if len(tables):
-            return tables.pop()
+        if tables:
+            return tables[0]

@@ -44,9 +44,10 @@ setup(
     python_requires='>=2.7',
     install_requires=[
         'requests',
-        'six >= 1.11'
+        'six >= 1.11',
+        'futures ; python_version <= "2.7"'
     ],
-    extras_require = {
+    extras_require={
         'swat': ['swat'],
         'kerberos': ['kerberos ; platform_system != "Windows"',
                      'winkerberos ; platform_system == "Windows"'],
@@ -54,7 +55,7 @@ setup(
                 'kerberos ; platform_system != "Windows"',
                 'winkerberos ; platform_system == "Windows"'],
     },
-    entry_points = {'console_scripts': ['sasctl = sasctl.utils.cli:main']},
+    entry_points={'console_scripts': ['sasctl = sasctl.utils.cli:main']},
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: Apache Software License',

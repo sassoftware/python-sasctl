@@ -45,13 +45,14 @@ def test_delete_module(caplog):
         get.return_value = None
 
         assert mas.delete_module('spam') is None
-        assert any("Object 'spam' not found" in r.msg for r in caplog.records)
+        assert any("Object 'spam' not found" in m for m in caplog.messages)
 
 
 def test_define_steps():
 
     # Mock module to be returned
     module = RestObj(name='unittestmodule',
+                     id='unittestmodule',
                      stepIds=['step1', 'step2'])
 
     # Mock module step with no inputs

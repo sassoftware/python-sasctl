@@ -9,6 +9,10 @@ from collections import OrderedDict
 import re
 
 import six
+
+from .ds2 import DS2Variable
+from ..decorators import versionchanged
+
 if six.PY2:
     # Eliminate DeprecationWarnings.  Only import getargspec if in Python 2.
     from inspect import getargspec as getfullargspec
@@ -16,13 +20,12 @@ if six.PY2:
 else:
     from inspect import getfullargspec, getsourcelines
 
-from .ds2 import DS2Variable
-
 
 logger = logging.getLogger(__name__)
 
 
-def ds2_variables(input, output_vars=False):
+@versionchanged('`names` parameter added.', version='1.5')
+def ds2_variables(input, output_vars=False, names=None):
     """Generate a collection of `DS2Variable` instances corresponding to the input
 
     Parameters
@@ -32,6 +35,11 @@ def ds2_variables(input, output_vars=False):
 
     output_vars : bool
         Whether or not to treat  all variables from `input` as output variables
+
+    names : list of str
+        List of variable names to used.  If a single string is specified it will
+        be used as a prefix and variable names in the format "prefixNN" will be
+        generated.
 
     Returns
     -------
@@ -62,23 +70,29 @@ def ds2_variables(input, output_vars=False):
     elif hasattr(input, 'dtype'):
         # Numpy array?  No column names, but we can at least create dummy vars of the correct type
         types = OrderedDict([('var{}'.format(i),
-                              (input.dtype.name.replace('object', 'char'), False)) for i in range(1, len(input)+1)])
+                              (input.dtype.name.replace('object', 'char'), False)) for i in range(1, input.size+1)])
     elif six.callable(input):
         types = parse_type_hints(input)
     else:
         raise RuntimeError("Unable to determine input/ouput types using "
                            "instance of type '%s'." % type(input))
 
+    if isinstance(names, six.string_types):
+        names = [names + str(i) for i in range(1, len(types)+1)]
+    elif names is None:
+        names = list(types.keys())
+
     results = []
-    for k, v in six.iteritems(types):
+    for v in six.itervalues(types):
+        name = names.pop(0)
         if isinstance(v, six.string_types):
-            results.append(DS2Variable(name=k, type=v, out=output_vars))
+            results.append(DS2Variable(name=name, type=v, out=output_vars))
         elif isinstance(v, type):
-            results.append(DS2Variable(name=k, type=v.__name__, out=output_vars))
+            results.append(DS2Variable(name=name, type=v.__name__, out=output_vars))
         elif isinstance(v, tuple):
             type_ = v[0].__name__ if isinstance(v[0], type) else str(v[0])
             out = v[1] or output_vars
-            results.append(DS2Variable(name=k, type=type_, out=out))
+            results.append(DS2Variable(name=name, type=type_, out=out))
         else:
             raise RuntimeError('Unable to determine input/ouput types.')
 
@@ -130,7 +144,7 @@ def parse_type_hints(func, skip_var='self'):
 def parse_type_hints_from_source(func, skip_var='self'):
     """Parse type hints stored in comments according to PEP 484."""
 
-    regex = re.compile('^\s+\# types?: ', re.IGNORECASE)
+    regex = re.compile(r'^\s+\# types?: ', re.IGNORECASE)
 
     def parse_types(line):
         if line:
@@ -149,7 +163,7 @@ def parse_type_hints_from_source(func, skip_var='self'):
                 outputs = None
 
             types = parse_types(inputs)
-            args = getfullargspec(func).args
+            args = getfullargspec(func).args  # skipcq PYL-W1505
 
             try:
                 args.remove(skip_var)
@@ -157,11 +171,11 @@ def parse_type_hints_from_source(func, skip_var='self'):
                 pass
 
             for a, t in zip(args, types):
-                params[a] = tuple((t.strip(), False))
+                params[a] = (t.strip(), False)
 
             types = parse_types(outputs)
-            for i in range(len(types)):
-                params['out' + str(i + 1)] = tuple((types[i].strip(), True))
+            for i, t in enumerate(types):
+                params['out%d' % (i + 1)] = (t.strip(), True)
 
     return params
 
