@@ -25,7 +25,7 @@ with swat.CAS('hostname', 5570, 'username', 'password') as cas:
     astore = cas.CASTable('model_table')
 
     # Use sasctl to connect to SAS
-    Session('hostnane', 'username', 'password')
+    Session('hostname', 'username', 'password')
 
     # Register the model in SAS Model Manager, creating the "Boston Housing"
     # project if it doesn't already exist

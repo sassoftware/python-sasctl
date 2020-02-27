@@ -23,7 +23,7 @@ model = GradientBoostingRegressor()
 model.fit(X, y)
 
 # Establish a session with Viya
-with Session('hostnane', 'username', 'password'):
+with Session('hostname', 'username', 'password'):
     model_name = 'GB Regression'
     project_name = 'Boston Housing'
 
