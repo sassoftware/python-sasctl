@@ -25,6 +25,28 @@ from scipy.stats import ks_2samp
 from sklearn.base import BaseEstimator, ClassifierMixin
 
 
+
+def fit_statistics(train_expected=None, train_actual=None,
+                   valid_expected=None, valid_actual=None,
+                   test_expected=None, test_actual=None):
+
+
+
+    for expected, actual in ((train_expected, train_actual), ):
+        if expected is None or actual is None:
+            continue
+
+        metrics = {}
+
+        metrics['_DataRole_'] = '' # TRAIN / VALIDATE / TEST
+
+        # Number of observations used to calculate metrics
+        metrics['_NObs_'] = len(actual)
+
+        # Root Average Squared Error
+        metrics['_RASE_'] = sqrt(metrics.mean_squared_error(expected, actual))
+
+
 def prep_rocstat(model, X_train, y_train, X_test, y_test, targetname, outdir, templatedir):
     '''
     Function to prepare ROC json file
@@ -381,35 +403,57 @@ def prep_liftstat(model, X_train, y_train, X_test, y_test, targetname, targetval
     print("Saved in:", outdir)
 
 
-def prep_fitstat(model, X_train, y_train, X_test, y_test, outdir, templatedir):
-    '''
-    Function to prepare FitStat json file
-    '''
-    # prepare sample
-    X_t, X_v, y_t, y_v = train_test_split(X_train, y_train, test_size=0.3, random_state=12345)
-    data = [(y_t, model.predict(X_t)), (y_v, model.predict(X_v)), (y_test, model.predict(X_test))]
+# def fit_statistics(model, X_train, y_train, X_test, y_test, outdir, templatedir):
+def fit_statistics(train_expected=None, train_actual=None,
+                       valid_expected=None, valid_actual=None,
+                       test_expected=None, test_actual=None):
 
-    # Open template get from SAS VDMML model register into MM
+    datasets = ((train_expected, train_actual), (valid_expected, valid_actual),
+                (test_expected, test_actual))
 
-    with open(templatedir + '/R_HMEQ_fitstat.json', 'r') as f:
-        body = json.load(f)
+    labels = ['TEST', 'VALIDATE', 'TRAIN']
 
-    for i in range(3):
+    t0 = all(d is None for d in datasets)
 
-        stats = dict()
+    for expected, actual in datasets:
+        label = labels.pop()
 
-        # RASE uses the root average squared error as the objective function
-        stats.update(_RASE_=str(sqrt(metrics.mean_squared_error(data[i][0], data[i][1]))))
+        if expected is None or actual is None:
+            continue
 
-        # Number of sample observation
-        stats.update(_NObs_=str(len(data[i][0])))
+        # Average Squared Error
+        ase = metrics.mean_squared_error(expected, actual)
 
-        # AUC uses area under the curve as the objective function
-        fpr, tpr, thresholds = metrics.roc_curve(data[i][0], data[i][1])
-        auc = metrics.roc_auc_score(data[i][0], data[i][1])
+        # Root Average Squared Error
+        rase = sqrt(ase)
 
-        # GINI uses the Gini coefficient as the objective function
-        stats.update(_GINI_=str((2 * auc) - 1))
+        fpr, tpr, _ = metrics.roc_curve(expected, actual)
+
+        # Area under Curve
+        auc = metrics.roc_auc_score(expected, actual)
+        gini = (2 * auc) - 1
+
+        #
+        mce = 1 - metrics.accuracy_score(expected, actual)
+
+        # Multi-Class Log Loss
+        mcll = metrics.log_loss((expected, actual))
+
+        # KS uses the Kolmogorov-Smirnov coefficient as the objective function
+        stats.update(_KS_=str(max(fpr - tpr)))
+
+
+        stats = {
+            '_DataRole_': label,
+            '_NObs_': len(actual),
+            '_ASE_': ase,
+            '_C_': auc,
+            '_RASE_': rase,
+            '_GINI_': gini,
+            '_KS_': None,
+            '_MCE_': mce,
+            '_MCLL_': mcll
+        }
 
         # GAMMA uses the gamma coefficient as the objective function
         # from scipy.stats import gamma
@@ -424,70 +468,48 @@ def prep_fitstat(model, X_train, y_train, X_test, y_test, outdir, templatedir):
             shape = (mean / std) ** 2
             scale = (std ** 2) / mean
             return (shape, 0, scale)
-
-        eshape, eloc, escale = calculateGammaParams(data[i][1])
-
-        stats.update(_GAMMA_=str(1 / escale))
-
-        # _formattedPartition_
-
-        if i == 0:
-            stats.update(_DataRole_='TRAIN')
-        if i == 1:
-            stats.update(_DataRole_='TEST')
-        if i == 2:
-            stats.update(_DataRole_='VALIDATE')
-
-        # _DataRole_
-
-        stats.update(_formattedPartition_='           ' + str(i))
-
-        # MCE uses the misclassification rate as the objective function
-
-        stats.update(_MCE_=str(1 - metrics.accuracy_score(data[i][0], data[i][1])))
-
-        # ASE uses average squared error as the objective function
-        stats.update(_ASE_=str(metrics.mean_squared_error(data[i][0], data[i][1])))
-
-        # MCLL uses the multiclass log loss as the objective function
-        stats.update(_MCLL_=str(metrics.log_loss(data[i][0], data[i][1])))
-
-        # KS uses the Kolmogorov-Smirnov coefficient as the objective function
-        stats.update(_KS_=str(max(fpr - tpr)))
-
-        # _KSPostCutoff_
-
-        stats.update(_KSPostCutoff_='null')
-
-        # _DIV_
-
-        stats.update(_DIV_=len(data[i][0]))
-
-        # TAU uses the tau coefficient as the objective function
-
-        stats.update(_TAU_=str(kendalltau(data[i][0], data[i][1])[0]))
-
-        # C uses Area Under ROC
-
-        stats.update(_C_=str(metrics.auc(fpr, tpr)))
-
-        # _KSCut_
-
-        stats.update(_KSCut_='null')
-
-        _PartInd_ = str(i)
-
-        # rowNumber
-
-        stats.update(rowNumber=str(i))
-
-        # header
-
-        stats.update(header='null')
-
-        body['data'][i] = {'dataMap': stats}
-
-    with open(outdir + '/dmcas_fitstat.json', 'w') as f:
-        json.dump(body, f, indent=2)
-
-    print("Saved in:", outdir)
+    #
+    #     eshape, eloc, escale = calculateGammaParams(data[i][1])
+    #     stats.update(_GAMMA_=str(1 / escale))
+    #
+    #
+    #     stats.update(_formattedPartition_='           ' + str(i))
+    #
+    #
+    #
+    #     # _KSPostCutoff_
+    #
+    #     stats.update(_KSPostCutoff_='null')
+    #
+    #     # _DIV_
+    #
+    #     stats.update(_DIV_=len(data[i][0]))
+    #
+    #     # TAU uses the tau coefficient as the objective function
+    #
+    #     stats.update(_TAU_=str(kendalltau(data[i][0], data[i][1])[0]))
+    #
+    #     # C uses Area Under ROC
+    #
+    #     stats.update(_C_=str(metrics.auc(fpr, tpr)))
+    #
+    #     # _KSCut_
+    #
+    #     stats.update(_KSCut_='null')
+    #
+    #     _PartInd_ = str(i)
+    #
+    #     # rowNumber
+    #
+    #     stats.update(rowNumber=str(i))
+    #
+    #     # header
+    #
+    #     stats.update(header='null')
+    #
+    #     body['data'][i] = {'dataMap': stats}
+    #
+    # with open(outdir + '/dmcas_fitstat.json', 'w') as f:
+    #     json.dump(body, f, indent=2)
+    #
+    # print("Saved in:", outdir)
