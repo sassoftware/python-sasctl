@@ -9,7 +9,7 @@
 import json
 import logging
 import math
-import pickle
+import pickle  # skipcq BAN-B301
 import os
 import re
 import sys
@@ -23,7 +23,7 @@ from .exceptions import AuthorizationError
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
-from .utils.pymas import PyMAS, from_pickle
+from .utils.pymas import from_pickle
 from .utils.misc import installed_packages
 
 
@@ -38,6 +38,7 @@ _DESC_MAXLEN = 1024
 _PROP_VALUE_MAXLEN = 512
 _PROP_NAME_MAXLEN = 60
 
+
 def _property(k, v):
     return {'name': str(k)[:_PROP_NAME_MAXLEN],
             'value': str(v)[:_PROP_VALUE_MAXLEN]}
@@ -49,6 +50,7 @@ def _sklearn_to_dict(model):
                 'LinearRegression': 'Linear regression',
                 'SVC': 'Support vector machine',
                 'GradientBoostingClassifier': 'Gradient boosting',
+                'GradientBoostingRegressor': 'Gradient boosting',
                 'XGBClassifier': 'Gradient boosting',
                 'XGBRegressor': 'Gradient boosting',
                 'RandomForestClassifier': 'Forest',
@@ -58,23 +60,109 @@ def _sklearn_to_dict(model):
                 'regressor': 'prediction'}
 
     if hasattr(model, '_final_estimator'):
-        estimator = type(model._final_estimator)
+        estimator = model._final_estimator
     else:
-        estimator = type(model)
+        estimator = model
+    estimator = type(estimator).__name__
+
+    # Standardize algorithm names
+    algorithm = mappings.get(estimator, estimator)
+
+    # Standardize regression/classification terms
+    analytic_function = mappings.get(model._estimator_type, model._estimator_type)
+
+    if analytic_function == 'classification' and 'logistic' in algorithm.lower():
+        target_level = 'Binary'
+    elif analytic_function == 'prediction' and ('regressor' in estimator.lower() or 'regression' in algorithm.lower()):
+        target_level = 'Interval'
+    else:
+        target_level = None
 
     # Can tell if multi-class .multi_class
     result = dict(
         description=str(model)[:_DESC_MAXLEN],
-        algorithm=mappings.get(estimator.__name__, estimator.__name__),
+        algorithm=algorithm,
         scoreCodeType='ds2MultiType',
         trainCodeType='Python',
-        function=mappings.get(model._estimator_type, model._estimator_type),
+        targetLevel=target_level,
+        function=analytic_function,
         tool='Python %s.%s'
              % (sys.version_info.major, sys.version_info.minor),
         properties=[_property(k, v) for k, v in model.get_params().items()]
     )
 
     return result
+
+
+def _create_project(project_name, model, repo, input_vars=None,
+                    output_vars=None):
+    """Creates a project based on the model specifications.
+
+    Parameters
+    ----------
+    project_name : str
+        Name of the project to be created
+    model : dict
+        Model information
+    repo : str or dict
+        Repository in which to create the project
+    input_vars : list
+        Input variables formatted as {'name': 'varname'}
+    output_vars
+        Output variables formatted as {'name': 'varname'}
+
+    Returns
+    -------
+    RestObj
+        The created project
+    """
+    properties = {k: model[k]
+                  for k in model if k in ('function', 'targetLevel')
+                  }
+
+    function = model.get('function', '').lower()
+    algorithm = model.get('algorithm', '').lower()
+
+    # Get input & output variable lists
+    # Note: copying lists to avoid altering original
+    input_vars = input_vars or model.get('inputVariables', [])
+    output_vars = output_vars or model.get('outputVariables', [])[:]
+    input_vars = input_vars[:]
+    output_vars = output_vars[:]
+
+    # Set prediction or eventProbabilityVariable
+    if output_vars:
+        if function == 'prediction':
+            properties['predictionVariable'] = output_vars[0]['name']
+        else:
+            properties['eventProbabilityVariable'] = output_vars[0]['name']
+
+    # Set targetLevel
+    if properties.get('targetLevel') is None:
+        if function == 'classification' and 'logistic' in algorithm:
+            properties['targetLevel'] = 'Binary'
+        elif function == 'prediction' and 'regression' in algorithm:
+            properties['targetLevel'] = 'Interval'
+        else:
+            properties['targetLevel'] = None
+
+    project = mr.create_project(project_name, repo,
+                                variables=input_vars + output_vars,
+                                **properties)
+
+    # As of Viya 3.4 the 'predictionVariable' and 'eventProbabilityVariable'
+    # parameters are not set during project creation.  Update the project if
+    # necessary.
+    needs_update = False
+    for p in ('predictionVariable', 'eventProbabilityVariable'):
+        if project.get(p) != properties.get(p):
+            project[p] = properties.get(p)
+            needs_update = True
+
+    if needs_update:
+        project = mr.update_project(project)
+
+    return project
 
 
 def register_model(model, name, project, repository=None, input=None,
@@ -101,17 +189,18 @@ def register_model(model, name, project, repository=None, input=None,
     input : DataFrame, type, list of type, or dict of str: type, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
-        is provided, the columns will be inspected to determine type information.
-        If a single type is provided, all columns will be assumed to be that type,
-        otherwise a list of column types or a dictionary of column_name: type
-        may be provided.
+        is provided, the columns will be inspected to determine type
+        information.  If a single type is provided, all columns will be assumed
+        to be that type, otherwise a list of column types or a dictionary of
+        column_name: type may be provided.
     version : {'new', 'latest', int}, optional
         Version number of the project in which the model should be created.
         Defaults to 'new'.
     files : list
-        A list of dictionaries of the form {'name': filename, 'file': filecontent}.
-        An optional 'role' key is supported for designating a file as score code,
-        astore, etc.
+        A list of dictionaries of the form
+        {'name': filename, 'file': filecontent}.
+        An optional 'role' key is supported for designating a file as score
+        code, astore, etc.
     force : bool, optional
         Create dependencies such as projects and repositories if they do not
         already exist.
@@ -152,7 +241,7 @@ def register_model(model, name, project, repository=None, input=None,
     p = mr.get_project(project) if project is not None else None
 
     # Do we need to create the project first?
-    create_project = True if p is None and force else False
+    create_project = bool(p is None and force is True)
 
     if p is None and not create_project:
         raise ValueError("Project '{}' not found".format(project))
@@ -170,13 +259,13 @@ def register_model(model, name, project, repository=None, input=None,
                                      '/modelRepository/repositories/ URL. '
                                      'Please contact your SAS Viya '
                                      'administrator.')
-        else:
-            raise e
+        raise e
 
     # Unable to find or create the repo.
     if repo_obj is None and repository is None:
         raise ValueError("Unable to find a default repository")
-    elif repo_obj is None:
+
+    if repo_obj is None:
         raise ValueError("Unable to find repository '{}'".format(repository))
 
     # If model is a CASTable then assume it holds an ASTORE model.
@@ -185,23 +274,32 @@ def register_model(model, name, project, repository=None, input=None,
         zipfile = utils.create_package(model, input=input)
 
         if create_project:
-            outvar=[]
-            invar=[]
+            outvar = []
+            invar = []
             import zipfile as zp
             import copy
             zipfilecopy = copy.deepcopy(zipfile)
-            tmpzip=zp.ZipFile(zipfilecopy)
+            tmpzip = zp.ZipFile(zipfilecopy)
             if "outputVar.json" in tmpzip.namelist():
-                outvar=json.loads(tmpzip.read("outputVar.json").decode('utf=8')) #added decode for 3.5 and older
+                outvar = json.loads(tmpzip.read("outputVar.json").decode(
+                    'utf=8'))  # added decode for 3.5 and older
                 for tmp in outvar:
-                    tmp.update({'role':'output'})
+                    tmp.update({'role': 'output'})
             if "inputVar.json" in tmpzip.namelist():
-                invar=json.loads(tmpzip.read("inputVar.json").decode('utf-8')) #added decode for 3.5 and older
+                invar = json.loads(tmpzip.read("inputVar.json").decode(
+                    'utf-8'))  # added decode for 3.5 and older
                 for tmp in invar:
                     if tmp['role'] != 'input':
-                       tmp['role']='input'
-            vars=invar + outvar
-            project = mr.create_project(project, repo_obj, variables=vars)
+                        tmp['role'] = 'input'
+
+            if 'ModelProperties.json' in tmpzip.namelist():
+                model_props = json.loads(tmpzip.read(
+                    'ModelProperties.json').decode('utf-8'))
+            else:
+                model_props = {}
+
+            project = _create_project(project, model_props, repo_obj,
+                                      invar, outvar)
 
         model = mr.import_model_from_zip(name, project, zipfile,
                                          version=version)
@@ -209,13 +307,16 @@ def register_model(model, name, project, repository=None, input=None,
 
     # If the model is an scikit-learn model, generate the model dictionary
     # from it and pickle the model for storage
-    elif all(hasattr(model, attr) for attr
-             in ['_estimator_type', 'get_params']):
+    if all(hasattr(model, attr) for attr
+           in ['_estimator_type', 'get_params']):
         # Pickle the model so we can store it
         model_pkl = pickle.dumps(model)
         files.append({'name': 'model.pkl',
                       'file': model_pkl,
                       'role': 'Python Pickle'})
+
+        target_funcs = [f for f in ('predict', 'predict_proba')
+                        if hasattr(model, f)]
 
         # Extract model properties
         model = _sklearn_to_dict(model)
@@ -242,9 +343,8 @@ def register_model(model, name, project, repository=None, input=None,
 
         # Generate PyMAS wrapper
         try:
-            mas_module = from_pickle(model_pkl, 'predict',
+            mas_module = from_pickle(model_pkl, target_funcs,
                                      input_types=input, array_input=True)
-            assert isinstance(mas_module, PyMAS)
 
             # Include score code files from ESP and MAS
             files.append({'name': 'dmcas_packagescorecode.sas',
@@ -262,7 +362,7 @@ def register_model(model, name, project, repository=None, input=None,
 
             model['outputVariables'] = \
                 [var.as_model_metadata() for var in mas_module.variables
-                 if var.out and var.name not in ('rc', 'msg')]
+                 if var.out]
         except ValueError:
             # PyMAS creation failed, most likely because input data wasn't
             # provided
@@ -273,65 +373,29 @@ def register_model(model, name, project, repository=None, input=None,
                           'model functionality may not be available.')
     else:
         # Otherwise, the model better be a dictionary of metadata
-        assert isinstance(model, dict), "Expected an instance of %r. " \
-                                        " Received %r instead." % (dict(), model)
+        if not isinstance(model, dict):
+            raise TypeError("Expected an instance of '%r' but received '%r'."
+                            % ({}, model))
 
     if create_project:
-        vars = model.get('inputVariables', [])[:]
-        vars += model.get('outputVariables', [])
-
-        function = model.get('function', '').lower()
-        algorithm = model.get('algorithm', '').lower()
-
-        if function == 'classification' and 'logistic' in algorithm:
-            target_level = 'Binary'
-        elif function == 'prediction' and 'regression' in algorithm:
-            target_level = 'Interval'
-        else:
-            target_level = None
-
-        if len(model.get('outputVariables', [])) == 1:
-            var = model['outputVariables'][0]
-            prediction_variable = var['name']
-        else:
-            prediction_variable = None
-
-        # As of Viya 3.4 the 'predictionVariable' parameter is not set during
-        # project creation.  Update the project if necessary.
-        if function == 'prediction':   #Predications require predictionVariable
-            project = mr.create_project(project, repo_obj,
-                                    variables=vars,
-                                    function=model.get('function'),
-                                    targetLevel=target_level,
-                                    predictionVariable=prediction_variable)
-
-            if project.get('predictionVariable') != prediction_variable:
-                project['predictionVariable'] = prediction_variable
-                mr.update_project(project)
-        else:  #Classifications require eventProbabilityVariable 
-            project = mr.create_project(project, repo_obj,
-                                    variables=vars,
-                                    function=model.get('function'),
-                                    targetLevel=target_level,
-                                    eventProbabilityVariable=prediction_variable)
-            if project.get('eventProbabilityVariable') != prediction_variable:
-                project['eventProbabilityVariable'] = prediction_variable
-                mr.update_project(project)
+        project = _create_project(project, model, repo_obj)
 
     # If replacing an existing version, make sure the model version exists
     if str(version).lower() != 'new':
-        #Update an existing model with new files
+        # Update an existing model with new files
         model_obj = mr.get_model(name)
         if model_obj is None:
-            raise ValueError("Unable to update version '%s' of model '%s%.  "
+            raise ValueError("Unable to update version '%s' of model '%s.  "
                              "Model not found." % (version, name))
         model = mr.create_model_version(name)
         mr.delete_model_contents(model)
     else:
-        #Assume new model to create
+        # Assume new model to create
         model = mr.create_model(model, project)
 
-    assert isinstance(model, RestObj)
+    if not isinstance(model, RestObj):
+        raise TypeError("Model should be an instance of '%r' but received '%r' "
+                        "instead." % (RestObj, model))
 
     # Upload any additional files
     for file in files:
@@ -407,8 +471,8 @@ def publish_model(model,
         # A successfully submitted request doesn't mean a successfully
         # published model.  Response for publish request includes link to
         # check publish log
-        job = mr._monitor_job(publish_req, max_retries=max_retries)
-        return job
+        result = mr._monitor_job(publish_req, max_retries=max_retries)
+        return result
 
     # Submit and wait for status
     job = submit_request()
@@ -416,17 +480,17 @@ def publish_model(model,
     # If model was successfully published and it isn't a MAS module, we're done
     if job.state.lower() == 'completed' \
             and job.destination.destinationType != 'microAnalyticService':
-            return request_link(job,'self')
+        return request_link(job, 'self')
 
     # If MAS publish failed and replace=True, attempt to delete the module
     # and republish
     if job.state.lower() == 'failed' and replace and \
             job.destination.destinationType == 'microAnalyticService':
-            from .services import microanalytic_score as mas
-            mas.delete_module(job.publishName)
+        from .services import microanalytic_score as mas
+        mas.delete_module(job.publishName)
 
-            # Resubmit the request
-            job = submit_request()
+        # Resubmit the request
+        job = submit_request()
 
     # Raise exception if still failing
     if job.state.lower() == 'failed':
@@ -435,7 +499,7 @@ def publish_model(model,
                            % (model, log.log))
 
     # Raise exception if unknown status received
-    elif job.state.lower() != 'completed':
+    if job.state.lower() != 'completed':
         raise RuntimeError("Model publishing job in an unknown state: '%s'"
                            % job.state.lower())
 
@@ -451,8 +515,8 @@ def publish_model(model,
 
     module = get(module_url)
 
-    if 'application/vnd.sas.microanalytic.module' in module._headers[
-        'content-type']:
+    if 'application/vnd.sas.microanalytic.module' \
+            in module._headers['content-type']:
         # Bind Python methods to the module instance that will execute the
         # corresponding MAS module step.
         from sasctl.services import microanalytic_score as mas
@@ -493,7 +557,6 @@ def update_model_performance(data, model, label, refresh=True):
     .. versionadded:: v1.3
 
     """
-    from .services import model_management as mm
     try:
         import swat
     except ImportError:
@@ -506,7 +569,7 @@ def update_model_performance(data, model, label, refresh=True):
     model_obj = mr.get_model(model)
 
     if model_obj is None:
-        raise ValueError('Model %s was not found.', model)
+        raise ValueError('Model %s was not found.' % model)
 
     project = mr.get_project(model_obj.projectId)
 
@@ -514,17 +577,21 @@ def update_model_performance(data, model, label, refresh=True):
         raise ValueError("Performance monitoring is currently supported for "
                          "regression and binary classification projects.  "
                          "Received project with '%s' function.  Should be "
-                         "'Prediction' or 'Classification'.",
-                         project.get('function'))
-    elif project.get('targetLevel', '').lower() not in ('interval', 'binary'):
+                         "'Prediction' or 'Classification'." % project.get('function'))
+
+    if project.get('targetLevel', '').lower() not in ('interval', 'binary'):
         raise ValueError("Performance monitoring is currently supported for "
                          "regression and binary classification projects.  "
                          "Received project with '%s' target level.  Should be "
-                         "'Interval' or 'Binary'.", project.get('targetLevel'))
-    elif project.get('predictionVariable', '') == '' and project.get('function', '').lower() == 'prediction':
+                         "'Interval' or 'Binary'." % project.get('targetLevel'))
+
+    if project.get('predictionVariable', '') == '' and project.get('function',
+                                                                   '').lower() == 'prediction':
         raise ValueError("Project '%s' does not have a prediction variable "
                          "specified." % project)
-    elif project.get('eventProbabilityVariable', '') == '' and project.get('function', '').lower() == 'classification':
+
+    if project.get('eventProbabilityVariable', '') == '' and project.get(
+            'function', '').lower() == 'classification':
         raise ValueError("Project '%s' does not have an Event Probability variable "
                          "specified." % project)
 
@@ -548,7 +615,7 @@ def update_model_performance(data, model, label, refresh=True):
     # All input variables must be present
     missing_cols = [col for col in perf_def.inputVariables if
                     col not in data.columns]
-    if len(missing_cols):
+    if missing_cols:
         raise ValueError("The following columns were expected but not found in "
                          "the data set: %s" % ', '.join(missing_cols))
 
@@ -557,7 +624,7 @@ def update_model_performance(data, model, label, refresh=True):
     if not perf_def.scoreExecutionRequired:
         missing_cols = [col for col in perf_def.outputVariables if
                         col not in data.columns]
-        if len(missing_cols):
+        if missing_cols:
             raise ValueError(
                 "The following columns were expected but not found in the data "
                 "set: %s" % ', '.join(missing_cols))
@@ -566,8 +633,7 @@ def update_model_performance(data, model, label, refresh=True):
     url = '{}://{}/{}-http/'.format(sess._settings['protocol'],
                                     sess.hostname,
                                     cas_id)
-    regex = r'{}_(\d)_.*_{}'.format(table_prefix,
-                                  model_obj.id)
+    regex = r'{}_(\d+)_.*_{}'.format(table_prefix, model_obj.id)
 
     # Save the current setting before overwriting
     orig_sslreqcert = os.environ.get('SSLREQCERT')
@@ -609,9 +675,14 @@ def update_model_performance(data, model, label, refresh=True):
 
         with swat.options(exception_on_severity=2):
             # Table must be promoted so performance jobs can access.
-            tbl = s.upload(data, casout=dict(name=table_name,
+            result = s.upload(data, casout=dict(name=table_name,
                                                 caslib=caslib,
-                                                promote=True)).casTable
+                                                promote=True))
+
+            if not hasattr(result, 'casTable'):
+                raise RuntimeError('Unable to upload performance data to CAS.')
+
+            tbl = result.casTable
 
     # Restore the original value
     if orig_sslreqcert is not None:

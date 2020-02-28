@@ -34,6 +34,9 @@ matrix:
       env: TOXENV=py36-tests-codecov TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.7
       env: TOXENV=py37-tests-codecov TOX_SKIP_MISSING_INTERPRETERS=False
+# TODO:  Enable when numpy, Pandas, and other dependencies are released on 3.8
+#    - python: 3.8
+#      env: TOXENV=py38-tests-codecov TOX_SKIP_MISSING_INTERPRETERS=False
 
 
     - stage: flake8
@@ -88,7 +91,7 @@ matrix:
 
 
 install:
-  - pip install tox
+  - pip install tox "virtualenv<20.0.0"  # workaround for pip issue:  https://github.com/pypa/virtualenv/issues/1551#issuecomment-584148133
 
 
 script:
