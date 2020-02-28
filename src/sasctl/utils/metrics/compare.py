@@ -4,47 +4,18 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-# Import libraries
-import os
-import sys
 import pandas as pd
 import numpy as np
 import json
 
-from random import randrange, uniform, gauss
 from math import sqrt
-from scipy.stats import kendalltau
-from sklearn.base import TransformerMixin
-from sklearn import metrics
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_curve, auc
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import roc_curve,  log_loss, roc_auc_score
+from sklearn.metrics import accuracy_score, mean_squared_error
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import fbeta_score
 from scipy.stats import ks_2samp
 from sklearn.base import BaseEstimator, ClassifierMixin
-
-
-
-def fit_statistics(train_expected=None, train_actual=None,
-                   valid_expected=None, valid_actual=None,
-                   test_expected=None, test_actual=None):
-
-
-
-    for expected, actual in ((train_expected, train_actual), ):
-        if expected is None or actual is None:
-            continue
-
-        metrics = {}
-
-        metrics['_DataRole_'] = '' # TRAIN / VALIDATE / TEST
-
-        # Number of observations used to calculate metrics
-        metrics['_NObs_'] = len(actual)
-
-        # Root Average Squared Error
-        metrics['_RASE_'] = sqrt(metrics.mean_squared_error(expected, actual))
 
 
 def prep_rocstat(model, X_train, y_train, X_test, y_test, targetname, outdir, templatedir):
@@ -237,7 +208,7 @@ def prep_liftstat(model, X_train, y_train, X_test, y_test, targetname, targetval
         rows = []
 
         for group in np.array_split(subset, 20):
-            score = metrics.accuracy_score(group[actual_col].tolist(),
+            score = accuracy_score(group[actual_col].tolist(),
                                            group[predicted_col].tolist(),
                                            normalize=False)
 
@@ -295,7 +266,7 @@ def prep_liftstat(model, X_train, y_train, X_test, y_test, targetname, targetval
         rows = []
 
         for group in np.array_split(subset, 20):
-            score = metrics.accuracy_score(
+            score = accuracy_score(
                 group[targetname].tolist(), group['pred_col'].tolist(), normalize=False)
 
             rows.append({'NumCases': len(group),
@@ -403,113 +374,81 @@ def prep_liftstat(model, X_train, y_train, X_test, y_test, targetname, targetval
     print("Saved in:", outdir)
 
 
-# def fit_statistics(model, X_train, y_train, X_test, y_test, outdir, templatedir):
-def fit_statistics(train_expected=None, train_actual=None,
-                       valid_expected=None, valid_actual=None,
-                       test_expected=None, test_actual=None):
+def fit_statistics(train_true=None, train_pred=None,
+                   valid_true=None, valid_pred=None,
+                   test_true=None, test_pred=None):
 
-    datasets = ((train_expected, train_actual), (valid_expected, valid_actual),
-                (test_expected, test_actual))
+    datasets = ((valid_true, valid_pred), (train_true, train_pred),
+                (test_true, test_pred))
+    labels = ['VALIDATE', 'TRAIN', 'TEST']
 
-    labels = ['TEST', 'VALIDATE', 'TRAIN']
+    results = []
 
-    t0 = all(d is None for d in datasets)
+    # At least some combination of datasets must be provided
+    if all(any(x is None for x in d) for d in datasets):
+        raise ValueError()
 
-    for expected, actual in datasets:
-        label = labels.pop()
+    for idx, dataset in enumerate(datasets):
+        expected, actual = dataset
 
         if expected is None or actual is None:
             continue
 
         # Average Squared Error
-        ase = metrics.mean_squared_error(expected, actual)
+        try:
+            ase = mean_squared_error(expected, actual)
+            rase = sqrt(ase)
+        except ValueError:
+            ase = None
+            rase = None
 
-        # Root Average Squared Error
-        rase = sqrt(ase)
-
-        fpr, tpr, _ = metrics.roc_curve(expected, actual)
+        try:
+            # Kolmogorov - Smirnov (KS) Statistics
+            fpr, tpr, _ = roc_curve(expected, actual)
+            ks = max(np.abs(fpr - tpr))
+        except ValueError:
+            ks = None
 
         # Area under Curve
-        auc = metrics.roc_auc_score(expected, actual)
-        gini = (2 * auc) - 1
+        try:
+            auc = roc_auc_score(expected, actual)
+            gini = (2 * auc) - 1
+        except ValueError:
+            auc = None
+            gini = None
 
-        #
-        mce = 1 - metrics.accuracy_score(expected, actual)
+        try:
+            # Misclassification Error
+            mce = 1 - accuracy_score(expected, actual)  # classification
+        except ValueError:
+            mce = None
 
         # Multi-Class Log Loss
-        mcll = metrics.log_loss((expected, actual))
+        try:
+            mcll = log_loss(expected, actual)
+        except ValueError:
+            mcll = None
 
         # KS uses the Kolmogorov-Smirnov coefficient as the objective function
-        stats.update(_KS_=str(max(fpr - tpr)))
-
+        # stats.update(_KS_=str(max(fpr - tpr)))
 
         stats = {
-            '_DataRole_': label,
+            '_DataRole_': labels[idx],
+            '_PartInd_': str(idx),
+            '_PartInd__f': '           %d' % idx,
             '_NObs_': len(actual),
+            '_DIV_': len(actual),
             '_ASE_': ase,
             '_C_': auc,
             '_RASE_': rase,
             '_GINI_': gini,
-            '_KS_': None,
+            '_KSPostCutoff_': None,
+            '_KS_': ks,
+            '_KSCut_': None,
             '_MCE_': mce,
             '_MCLL_': mcll
         }
 
-        # GAMMA uses the gamma coefficient as the objective function
-        # from scipy.stats import gamma
-        # shape, loc, scale = gamma.fit(model.predict(updata), floc=0)
-        # _GAMMA_ = 1/scale
+        results.append({'dataMap': stats, 'rowNumber': idx, 'header': None})
 
-        # GAMMA (Method of Moments) uses the gamma coefficient as the objective function
-
-        def calculateGammaParams(data):
-            mean = np.mean(data)
-            std = np.std(data)
-            shape = (mean / std) ** 2
-            scale = (std ** 2) / mean
-            return (shape, 0, scale)
-    #
-    #     eshape, eloc, escale = calculateGammaParams(data[i][1])
-    #     stats.update(_GAMMA_=str(1 / escale))
-    #
-    #
-    #     stats.update(_formattedPartition_='           ' + str(i))
-    #
-    #
-    #
-    #     # _KSPostCutoff_
-    #
-    #     stats.update(_KSPostCutoff_='null')
-    #
-    #     # _DIV_
-    #
-    #     stats.update(_DIV_=len(data[i][0]))
-    #
-    #     # TAU uses the tau coefficient as the objective function
-    #
-    #     stats.update(_TAU_=str(kendalltau(data[i][0], data[i][1])[0]))
-    #
-    #     # C uses Area Under ROC
-    #
-    #     stats.update(_C_=str(metrics.auc(fpr, tpr)))
-    #
-    #     # _KSCut_
-    #
-    #     stats.update(_KSCut_='null')
-    #
-    #     _PartInd_ = str(i)
-    #
-    #     # rowNumber
-    #
-    #     stats.update(rowNumber=str(i))
-    #
-    #     # header
-    #
-    #     stats.update(header='null')
-    #
-    #     body['data'][i] = {'dataMap': stats}
-    #
-    # with open(outdir + '/dmcas_fitstat.json', 'w') as f:
-    #     json.dump(body, f, indent=2)
-    #
-    # print("Saved in:", outdir)
+    return {'data': results}
