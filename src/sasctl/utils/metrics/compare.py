@@ -10,7 +10,7 @@ import json
 
 from math import sqrt
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_curve,  log_loss, roc_auc_score
+from sklearn.metrics import roc_curve, log_loss, roc_auc_score
 from sklearn.metrics import accuracy_score, mean_squared_error
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import fbeta_score
@@ -374,29 +374,190 @@ def prep_liftstat(model, X_train, y_train, X_test, y_test, targetname, targetval
     print("Saved in:", outdir)
 
 
-def fit_statistics(train_true=None, train_pred=None,
-                   valid_true=None, valid_pred=None,
-                   test_true=None, test_pred=None):
+def roc_statistics(model, train=None, valid=None, test=None):
+    """
 
-    datasets = ((valid_true, valid_pred), (train_true, train_pred),
-                (test_true, test_pred))
+    Parameters
+    ----------
+    model
+    train
+    valid
+    test
+
+    Returns
+    -------
+
+    """
+    datasets = (valid, train, test)
+    labels = ['VALIDATE', 'TRAIN', 'TEST']
+
+    # At least some combination of datasets must be provided
+    if all(d is None for d in datasets):
+        raise ValueError("At least one dataset must be provided.")
+
+    results = []
+    row_count = 0
+
+    for idx, dataset in enumerate(datasets):
+        if dataset is None:
+            continue
+
+        X, y_true = dataset
+
+        y_pred = model.predict(X)
+        y_pred = pd.Series(y_pred, dtype=y_true.dtype)
+
+        fpr, tpr, threshold = roc_curve(y_true.cat.codes, y_pred.cat.codes)
+
+        for f, t, h in zip(fpr, tpr, threshold):
+            row_count += 1
+            stats = {'rowNumber': row_count,
+                     'header': None,
+                     'dataMap': {
+                         '_DataRole_': labels[idx],
+                         '_PartInd_': str(idx),
+                         '_PartInd__f': '           %d' % idx,
+                         '_Sensitivity_': t,
+                         '_Specificity_': (1 - f),
+                         '_OneMinusSpecificity_': 1 - (1 - f),
+                         '_Event_': 1,
+                         '_Cutoff_': h,
+                         '_FPR_': f}
+                     }
+            results.append(stats)
+
+        return {'name': 'dmcas_roc',
+                'revision': 0,
+                'order': 0,
+                'type': None,
+                'parameterMap': {
+                    '_DataRole_': {
+                        'parameter': '_DataRole_',
+                        'type': 'char',
+                        'label': 'Data Role',
+                        'length': 10,
+                        'order': 1,
+                        'values': ['_DataRole_'],
+                        'preformatted': False},
+                    '_PartInd_': {
+                        'parameter': '_PartInd_',
+                        'type': 'num',
+                       'label': 'Partition Indicator',
+                        'length': 8,
+                       'order': 2,
+                        'values': ['_PartInd_'],
+                       'preformatted': False},
+                    '_PartInd__f': {
+                        'parameter': '_PartInd__f',
+                        'type': 'char',
+                        'label': 'Formatted Partition',
+                        'length': 12,
+                        'order': 3,
+                        'values': ['_PartInd__f'],
+                        'preformatted': False},
+                    '_Column_': {
+                        'parameter': '_Column_',
+                        'type': 'num',
+                        'label': 'Analysis Variable',
+                        'length': 32,
+                        'order': 4,
+                        'values': ['_Column_'],
+                        'preformatted': False},
+                    '_Event_': {
+                        'parameter': '_Event_',
+                        'type': 'char',
+                        'label': 'Event',
+                        'length': 8,
+                        'order': 5,
+                        'values': [ '_Event_' ],
+                        'preformatted': False},
+                    '_Cutoff_': {
+                        'parameter': '_Cutoff_',
+                        'type': 'num',
+                        'label': 'Cutoff',
+                        'length': 8,
+                        'order': 6,
+                        'values': [ '_Cutoff_' ],
+                        'preformatted': False},
+                    '_Sensitivity_': {
+                        'parameter': '_Sensitivity_',
+                        'type': 'num',
+                        'label': 'Sensitivity',
+                        'length': 8,
+                        'order': 7,
+                        'values': [ '_Sensitivity_' ],
+                        'preformatted': False},
+                    '_Specificity_': {
+                        'parameter': '_Specificity_',
+                        'type': 'num',
+                        'label': 'Specificity',
+                        'length': 8,
+                        'order': 8,
+                        'values': [ '_Specificity_' ],
+                        'preformatted' : False},
+                    '_FPR_': {
+                        'parameter': '_FPR_',
+                        'type': 'num',
+                        'label': 'False Positive Rate',
+                        'length': 8,
+                        'order': 9,
+                        'values': [ '_FPR_' ],
+                        'preformatted' : False},
+                    '_OneMinusSpecificity_': {
+                        'parameter': '_OneMinusSpecificity_',
+                        'type': 'num',
+                        'label': '1 - Specificity',
+                        'length': 8,
+                        'order': 10,
+                        'values': [ '_OneMinusSpecificity_' ],
+                        'preformatted' : False}},
+                'data': results,
+                'version': 1,
+                'xInteger': False,
+                'yInteger': False}
+
+
+def fit_statistics(model, train=None, valid=None, test=None):
+    """Calculate model fit statistics.
+
+    Parameters
+    ----------
+    model
+    train : (array_like, array_like)
+        A tuple of the training inputs and target output.
+    valid : (array_like, array_like)
+        A tuple of the validation inputs and target output.
+    test : (array_like, array_like)
+        A tuple of the test inputs and target output.
+
+    Returns
+    -------
+    dict
+        Metrics calculated for each dataset and formatted as expected by SAS
+        Model Manager.
+
+    """
+
+    datasets = (valid, train, test)
+
     labels = ['VALIDATE', 'TRAIN', 'TEST']
 
     results = []
 
     # At least some combination of datasets must be provided
-    if all(any(x is None for x in d) for d in datasets):
-        raise ValueError()
+    if all(d is None for d in datasets):
+        raise ValueError("At least one dataset must be provided.")
 
     for idx, dataset in enumerate(datasets):
-        expected, actual = dataset
-
-        if expected is None or actual is None:
+        if dataset is None:
             continue
+
+        X, y_true = dataset
+        y_pred = model.predict(X)
 
         # Average Squared Error
         try:
-            ase = mean_squared_error(expected, actual)
+            ase = mean_squared_error(y_true, y_pred)
             rase = sqrt(ase)
         except ValueError:
             ase = None
@@ -404,28 +565,28 @@ def fit_statistics(train_true=None, train_pred=None,
 
         try:
             # Kolmogorov - Smirnov (KS) Statistics
-            fpr, tpr, _ = roc_curve(expected, actual)
+            fpr, tpr, _ = roc_curve(y_true, y_pred)
             ks = max(np.abs(fpr - tpr))
         except ValueError:
             ks = None
 
         # Area under Curve
         try:
-            auc = roc_auc_score(expected, actual)
+            auc = roc_auc_score(y_true, y_pred)
             gini = (2 * auc) - 1
-        except ValueError:
+        except (ValueError, TypeError):
             auc = None
             gini = None
 
         try:
             # Misclassification Error
-            mce = 1 - accuracy_score(expected, actual)  # classification
+            mce = 1 - accuracy_score(y_true, y_pred)  # classification
         except ValueError:
             mce = None
 
         # Multi-Class Log Loss
         try:
-            mcll = log_loss(expected, actual)
+            mcll = log_loss(y_true, y_pred)
         except ValueError:
             mcll = None
 
@@ -436,8 +597,8 @@ def fit_statistics(train_true=None, train_pred=None,
             '_DataRole_': labels[idx],
             '_PartInd_': str(idx),
             '_PartInd__f': '           %d' % idx,
-            '_NObs_': len(actual),
-            '_DIV_': len(actual),
+            '_NObs_': len(y_pred),
+            '_DIV_': len(y_pred),
             '_ASE_': ase,
             '_C_': auc,
             '_RASE_': rase,
