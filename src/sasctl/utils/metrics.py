@@ -12,175 +12,6 @@ from math import sqrt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_curve, log_loss, roc_auc_score
 from sklearn.metrics import accuracy_score, mean_squared_error
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import fbeta_score
-from scipy.stats import ks_2samp
-from sklearn.base import BaseEstimator, ClassifierMixin
-
-
-def prep_rocstat(model, X_train, y_train, X_test, y_test, targetname, outdir, templatedir):
-    '''
-    Function to prepare ROC json file
-    '''
-
-    # print("Printing...")
-
-    # Define CustomThreshold class
-    class CustomThreshold(BaseEstimator, ClassifierMixin):
-        """ Custom threshold wrapper for binary classification"""
-
-        def __init__(self, base, threshold=0.5):
-            self.base = base
-            self.threshold = threshold
-
-        def fit(self, *args, **kwargs):
-            self.base.fit(*args, **kwargs)
-            return self
-
-        def predict(self, X):
-            return (self.base.predict_proba(X)[:, 1] >= self.threshold).astype(int)
-
-    # Prepare sample
-    X_t, X_v, y_t, y_v = train_test_split(X_train, y_train, test_size=0.3, random_state=12345)
-
-    # Load template
-    with open(templatedir + "/dmcas_roc_template_class.json", "r") as jsonFile:
-        body = json.load(jsonFile)
-
-    # Create measures lists
-    th = range(0, 105, 5)
-    th_final = []
-    count_th = 0
-
-    for i in th:
-        th_final.append(round(i / 100, 2))
-
-    count_row = 0
-    part_list = (2, 1, 0)
-
-    for j in part_list:
-
-        clf = [CustomThreshold(model, threshold) for threshold in list(th_final)]
-
-        row = 0
-
-        for _ in range(0, 110, 5):
-
-            stats = dict()
-
-            # define datasets
-            if j == 1:  # train
-                X_part = X_t
-                y_part = y_t
-                stats.update(_DataRole_='TRAIN')
-                stats.update(_PartInd_="1")
-                stats.update(_PartInd__f="           1")
-
-            elif j == 0:  # validation
-                X_part = X_v
-                y_part = y_v
-                stats.update(_DataRole_='VALIDATE')
-                stats.update(_PartInd_="0")
-                stats.update(_PartInd__f="           0")
-
-            elif j == 2:  # test
-                X_part = X_test
-                y_part = y_test
-                stats.update(_DataRole_='TEST')
-                stats.update(_PartInd_="2")
-                stats.update(_PartInd__f="           2")
-
-            if (row + 1) == 22:
-                stats.update(_ACC_=None)
-                stats.update(_TP_=None)
-                stats.update(_OneMinusSpecificity_="0")
-                stats.update(_Column_='P_' + str(targetname) + '1')
-                stats.update(_TN_=None)
-                stats.update(_KS2_=None)
-                stats.update(_FPR_="0")
-                stats.update(_FDR_="0")
-                stats.update(_MiscEvent_=None)
-                stats.update(_FN_=None)
-                stats.update(_KS_=None)
-                stats.update(_Sensitivity_="0")
-                stats.update(_Event_="1")
-                stats.update(_FP_=None)
-                stats.update(_Cutoff_="1")
-                stats.update(_Specificity_="1")
-                stats.update(_FHALF_=None)
-
-            else:
-                # score model for each threshold
-                y_score = clf[row].predict(X_part)
-
-                stats.update(_Cutoff_=str(th_final[row]))
-
-                # confusion matrix
-                tn, fp, fn, tp = confusion_matrix(y_part, y_score).ravel()
-                stats.update(_TP_=str(tp))
-                stats.update(_TN_=str(tn))
-                stats.update(_FN_=str(fn))
-                stats.update(_FP_=str(fp))
-
-                # sensitivity, hit rate, recall, or true positive rate
-                tpr = tp / (tp + fn)
-                stats.update(_Sensitivity_=str(tpr))
-
-                # specificity or true negative rate
-                tnr = tn / (tn + fp)
-
-                # precision or positive predictive value
-                # ppv = tp/(tp+fp)
-
-                # negative predictive value
-                # npv = tn/(tn+fn)
-
-                # fall out or false positive rate
-                fpr = fp / (fp + tn)
-                stats.update(_OneMinusSpecificity_=str(fpr))
-                stats.update(_FPR_=str(fpr))
-                stats.update(_Specificity_=str(fpr + 1))
-
-                # false negative rate
-                fnr = fn / (tp + fn)
-
-                # false discovery rate
-                fdr = fp / (tp + fp)
-                stats.update(_FDR_=str(fdr))
-
-                # overall accuracy
-                acc = (tp + tn) / (tp + fp + fn + tn)
-                stats.update(_ACC_=str(acc))
-                stats.update(_MiscEvent_=str(1 - acc))
-
-                # F0.5 score
-                f_05 = fbeta_score(y_part, y_score, beta=0.5)
-                stats.update(_FHALF_=str(f_05))
-
-                # KS statistics on 2 samples
-                y_score_arr = np.array(y_score)
-                y_score_df = pd.DataFrame(data=y_score_arr)
-                y_test_arr = np.array(y_part)
-                y_test_df = pd.DataFrame(data=y_test_arr)
-                KS_2 = ks_2samp(y_test_df[0], y_score_df[0])
-                stats.update(_KS2_=str(KS_2[0]))
-
-                # misc
-                stats.update(_Column_='P_' + str(targetname) + '1')
-                stats.update(_KS_=str(max(tpr - fpr, 0)))  # to check
-                stats.update(_Event_="1")
-
-            body['data'][count_row] = {'dataMap': stats}
-            body['data'][count_row]['rowNumber'] = str(count_row + 1)
-            body['data'][count_row]['header'] = None
-
-            row += 1
-            count_row += 1
-
-    with open(outdir + '/dmcas_roc.json', 'w') as f:
-        json.dump(body, f, indent=2)
-
-    print("Saved in:", outdir)
 
 
 def prep_liftstat(model, X_train, y_train, X_test, y_test, targetname, targetvalue, outdir, templatedir):
@@ -446,30 +277,93 @@ def lift_statistics(model, train=None, valid=None, test=None, event=None):
         num_groups = 20
         groups = []
         for i, g in enumerate(np.array_split(df, num_groups)):
-            stats = {'nobjs': len(g),
-                     'true_events': (g['target'] == event).count(),
-                     'accuracy': accuracy_score(g['target'],
-                                                g['predicted'], normalize=False),
-                     'sample': i}
+            stats = {'nobs': len(g),
+                     'true_events': (g['target'] == event).sum(),
+                     'pred_events': (g['predicted'] == event).sum(),
+                      'sample': i}
             groups.append(stats)
 
         t2 = pd.DataFrame(groups)
-        t2['total_correct'] = t2['accuracy'].cumsum()
-        t2['total_obs'] = t2['nobjs'].cumsum()
-        t2['percent_accuracy'] = 100 * t2['total_correct'] / t2['total_obs']
+
+        t2['total_predicted'] = t2['pred_events'].cumsum()
+        t2['total_events'] = t2['true_events'].cumsum()
+        t2['total_obs'] = t2['nobs'].cumsum()
+        t2['percent_accuracy'] = t2['total_predicted'] / t2['total_obs']
 
         total_true_events = (df['target'] == event).sum()
         total_samples = len(df)
         true_event_rate = total_true_events / float(total_samples)
-        # -----
 
-        actualValue = df['target']
-        predictValue = df['P_Type1']
+        t2['lift'] = t2['percent_accuracy'] / true_event_rate
+        t2['gain'] = t2['total_predicted'] / total_true_events
+
+
+
+        actualValue = y_true
+        targetValue = 'malignant'
+        predictValue = y_pred_index
         numObservations = len(actualValue)
-        quantileCutOff = np.percentile(df['P_Type1'], np.arange(0, 100, 10))
+        quantileCutOff = np.percentile(predictValue, np.arange(0, 100, 10))
+        numQuantiles = len(quantileCutOff)
+
+        quantileIndex = np.zeros(numObservations)
+        for i in range(numObservations):
+            k = numQuantiles
+            for j in range(1, numQuantiles):
+                if (predictValue[i] > quantileCutOff[-j]):
+                    k -= 1
+            quantileIndex[i] = k
+
+        countTable = pd.crosstab(quantileIndex, actualValue)
+        quantileNumber = countTable.sum(1)
+        quantilePercent = 100 * (quantileNumber / numObservations)
+        gainNumber = countTable[targetValue]
+        totalNumResponse = gainNumber.sum(0)
+        gainPercent = 100 * (gainNumber / totalNumResponse)
+        responsePercent = 100 * (gainNumber / quantileNumber)
+        overallResponsePercent = 100 * (totalNumResponse / numObservations)
+        lift = responsePercent / overallResponsePercent
+
+        liftDf = pd.DataFrame({'Quantile Number': quantileNumber,
+                               'Quantile Percent': quantilePercent,
+                               'Gain Number': gainNumber,
+                               'Gain Percent': gainPercent,
+                               'Response Percent': responsePercent,
+                               'Lift': lift})
+
+        import matplotlib.pyplot as plt
+        import scikitplot as skplt
+        skplt.metrics.plot_cumulative_gain(y_true, y_pred_probs)
+        plt.savefig('gain_%s.png' % idx)
+
+        skplt.metrics.plot_lift_curve(y_true, y_pred_probs)
+        plt.savefig('lift_%s.png' % idx)
 
 
-    return {'data': None}
+
+        for index, row in t2.iterrows():
+            stats = {'_DataRole_': labels[idx],
+                     '_Column_': target_column,
+                     '_Event_': event,
+                     # '_Depth_': accQuantilePercent,
+                     '_NObs_': row.nobs,
+                     '_Gain_': row.gain,
+                     # '_Resp_': gainPercent,
+                     # '_CumResp_': accGainPercent,
+                     # '_PctResp_': responsePercent,
+                     # '_CumPctResp_': accResponsePercent,
+                     '_Lift_': row.lift,
+                     # '_CumLift_': accLift
+            }
+
+            results.append({
+                'dataMap': stats,
+                'rowNumber': row_count,
+                'header': None
+            })
+
+
+    return {'data': results}
 
 
 def roc_statistics(model, train=None, valid=None, test=None):

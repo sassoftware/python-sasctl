@@ -11,14 +11,14 @@ def test_fit_statistics_binary(cancer_dataset):
     sklearn = pytest.importorskip('sklearn')
 
     from sklearn.ensemble import RandomForestClassifier
-    from sasctl.utils.metrics import compare
+    from sasctl.utils import metrics
 
     model = RandomForestClassifier()
     X = cancer_dataset.drop('Type', axis=1)
     y = cancer_dataset['Type']
     model.fit(X, y)
 
-    stats = compare.fit_statistics(model, train=(X, y))
+    stats = metrics.fit_statistics(model, train=(X, y))
 
     assert isinstance(stats, dict)
 
@@ -38,14 +38,14 @@ def test_fit_statistics_regression(boston_dataset):
     sklearn = pytest.importorskip('sklearn')
 
     from sklearn.ensemble import RandomForestRegressor
-    from sasctl.utils.metrics import compare
+    from sasctl.utils import metrics
 
     model = RandomForestRegressor()
     X = boston_dataset.drop('Price', axis=1)
     y_true = boston_dataset['Price']
     model.fit(X, y_true)
 
-    stats = compare.fit_statistics(model, train=(X, y_true))
+    stats = metrics.fit_statistics(model, train=(X, y_true))
 
     assert isinstance(stats, dict)
 
@@ -65,14 +65,14 @@ def test_fit_statistics_multiclass(iris_dataset):
     sklearn = pytest.importorskip('sklearn')
 
     from sklearn.ensemble import RandomForestClassifier
-    from sasctl.utils.metrics import compare
+    from sasctl.utils import metrics
 
     model = RandomForestClassifier()
     X = iris_dataset.drop('Species', axis=1)
     y_true = iris_dataset['Species']
     model.fit(X, y_true)
 
-    stats = compare.fit_statistics(model, (X, y_true))
+    stats = metrics.fit_statistics(model, (X, y_true))
 
     assert isinstance(stats, dict)
 
@@ -92,14 +92,14 @@ def test_roc_statistics_binary(cancer_dataset):
     sklearn = pytest.importorskip('sklearn')
 
     from sklearn.ensemble import RandomForestClassifier
-    from sasctl.utils.metrics import compare
+    from sasctl.utils import metrics
 
     model = RandomForestClassifier()
     X = cancer_dataset.drop('Type', axis=1)
     y = cancer_dataset['Type']
     model.fit(X, y)
 
-    stats = compare.roc_statistics(model, train=(X, y))
+    stats = metrics.roc_statistics(model, train=(X, y))
 
     assert isinstance(stats, dict)
 
@@ -110,18 +110,18 @@ def test_roc_statistics_binary(cancer_dataset):
 def test_lift_statistics_binary(cancer_dataset):
     sklearn = pytest.importorskip('sklearn')
 
-    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.tree import DecisionTreeClassifier
     from sklearn.model_selection import train_test_split
-    from sasctl.utils.metrics import compare
+    from sasctl.utils import metrics
 
-    model = RandomForestClassifier()
+    model = DecisionTreeClassifier()
     X = cancer_dataset.drop('Type', axis=1)
     y = cancer_dataset['Type']
 
     X_train, X_test, y_train, y_test = train_test_split(X, y)
     model.fit(X_train, y_train)
 
-    stats = compare.lift_statistics(model, train=(X_train, y_train),
+    stats = metrics.lift_statistics(model, train=(X_train, y_train),
                                     test=(X_test, y_test),
                                     event='malignant')
 
