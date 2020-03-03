@@ -619,11 +619,14 @@ class Session(requests.Session):
             return self._get_token_with_kerberos()
         return self._get_token_with_password()
 
-    def to_swat(self, port=None):
+    def to_swat(self, server=None, port=None):
         """Establish a SWAT session to CAS.
 
         Parameters
         ----------
+        server : str, optional
+            The hostname of the CAS controller or the CAS cluster logical name.
+            Defaults to current host and 'cas-shared-default'.
         port : int, optional
             Port number to connect to CAS.  Defaults to 5570.
 
@@ -641,13 +644,34 @@ class Session(requests.Session):
         port = port or 5570
 
         try:
-            cas = swat.CAS(self.hostname, port, username=self.username,
+            # Allow overriding of hostname in case CAS controller is not
+            # co-located with microservices
+            server_name = server or self.hostname
+            cas = swat.CAS(server_name, port, username=self.username,
                            password=self._settings.get('password'))
         except ValueError as e:
-            cas = swat.CAS(
-                'https://%s/cas-shared-default-http/' % self.hostname,
-                username=self.username,
-                password=self._settings.get('password'))
+            # Couldn't create a binary connection to CAS.  Attempt a REST
+            # connection.  Since hostname is known, interpret server as the
+            # logical server name for CAS.
+            server_name = server or 'cas-shared-default'
+            server_name += '-http'
+
+            environ = os.environ.copy()
+            try:
+                # Skip SSL validation for CAS if it was requested for sasctl
+                if not self.verify:
+                    os.environ['SSLREQCERT'] = 'no'
+
+                # Create a REST connection to CAS
+                cas = swat.CAS(
+                    'https://%s/%s/' % (self.hostname, server_name),
+                    username=self.username,
+                    password=self._settings.get('password'))
+            finally:
+                # Restore original environment
+                os.environ.clear()
+                os.environ.update(environ)
+
         return cas
 
 
