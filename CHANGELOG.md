@@ -4,6 +4,7 @@ Unreleased
  - Added `ml_pipeline_automation` service for automated building of machine learning pipelines.
  - Added a new `build_pipeline` task for creating automated pipelines.
  - Added an `upload_file` method to the `cas_management` service,
+ - Added a `to_swat` method to `Session` for easily moving between sasctl and SWAT.
  
 v1.4.6 (2020-1-24)
 ------------------
