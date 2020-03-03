@@ -199,46 +199,46 @@ def prep_liftstat(model, X_train, y_train, X_test, y_test, targetname, targetval
 
     # prepare function
 
-    def calc_cumulative_gains(df: pd.DataFrame, actual_col: str, predicted_col: str, probability_col: str):
-
-        df.sort_values(by=probability_col, ascending=False, inplace=True)
-
-        subset = df[df[predicted_col] == True]
-
-        rows = []
-
-        for group in np.array_split(subset, 20):
-            score = accuracy_score(group[actual_col].tolist(),
-                                           group[predicted_col].tolist(),
-                                           normalize=False)
-
-            rows.append({'NumCases': len(group),
-                         'NumCorrectPredictions': score})
-
-        lift = pd.DataFrame(rows)
-
-        # Cumulative Gains Calculation
-
-        lift['RunningCorrect'] = lift['NumCorrectPredictions'].cumsum()
-        lift['PercentCorrect'] = lift.apply(
-            lambda x: (100 / lift['NumCorrectPredictions'].sum()) * x['RunningCorrect'], axis=1)
-        lift['CumulativeCorrectBestCase'] = lift['NumCases'].cumsum()
-        lift['PercentCorrectBestCase'] = lift['CumulativeCorrectBestCase'].apply(
-            lambda x: 100 if (100 / lift['NumCorrectPredictions'].sum()) * x > 100 else (100 / lift[
-                'NumCorrectPredictions'].sum()) * x)
-        lift['AvgCase'] = lift['NumCorrectPredictions'].sum() / len(lift)
-        lift['CumulativeAvgCase'] = lift['AvgCase'].cumsum()
-        lift['PercentAvgCase'] = lift['CumulativeAvgCase'].apply(
-            lambda x: (100 / lift['NumCorrectPredictions'].sum()) * x)
-
-        # Lift Chart
-        lift['NormalisedPercentAvg'] = 1
-        lift['NormalisedPercentWithModel'] = lift['PercentCorrect'] / \
-                                             lift['PercentAvgCase']
-
-        lift_dict = lift.to_dict()
-
-        return lift_dict
+    # def calc_cumulative_gains(df: pd.DataFrame, actual_col: str, predicted_col: str, probability_col: str):
+    #
+    #     df.sort_values(by=probability_col, ascending=False, inplace=True)
+    #
+    #     subset = df[df[predicted_col] == True]
+    #
+    #     rows = []
+    #
+    #     for group in np.array_split(subset, 20):
+    #         score = accuracy_score(group[actual_col].tolist(),
+    #                                        group[predicted_col].tolist(),
+    #                                        normalize=False)
+    #
+    #         rows.append({'NumCases': len(group),
+    #                      'NumCorrectPredictions': score})
+    #
+    #     lift = pd.DataFrame(rows)
+    #
+    #     # Cumulative Gains Calculation
+    #
+    #     lift['RunningCorrect'] = lift['NumCorrectPredictions'].cumsum()
+    #     lift['PercentCorrect'] = lift.apply(
+    #         lambda x: (100 / lift['NumCorrectPredictions'].sum()) * x['RunningCorrect'], axis=1)
+    #     lift['CumulativeCorrectBestCase'] = lift['NumCases'].cumsum()
+    #     lift['PercentCorrectBestCase'] = lift['CumulativeCorrectBestCase'].apply(
+    #         lambda x: 100 if (100 / lift['NumCorrectPredictions'].sum()) * x > 100 else (100 / lift[
+    #             'NumCorrectPredictions'].sum()) * x)
+    #     lift['AvgCase'] = lift['NumCorrectPredictions'].sum() / len(lift)
+    #     lift['CumulativeAvgCase'] = lift['AvgCase'].cumsum()
+    #     lift['PercentAvgCase'] = lift['CumulativeAvgCase'].apply(
+    #         lambda x: (100 / lift['NumCorrectPredictions'].sum()) * x)
+    #
+    #     # Lift Chart
+    #     lift['NormalisedPercentAvg'] = 1
+    #     lift['NormalisedPercentWithModel'] = lift['PercentCorrect'] / \
+    #                                          lift['PercentAvgCase']
+    #
+    #     lift_dict = lift.to_dict()
+    #
+    #     return lift_dict
 
     with open(templatedir + '/R_HMEQ_lift.json', 'r') as i:
 
@@ -372,6 +372,104 @@ def prep_liftstat(model, X_train, y_train, X_test, y_test, targetname, targetval
         json.dump(body, f, indent=2)
 
     print("Saved in:", outdir)
+
+
+def lift_statistics(model, train=None, valid=None, test=None, event=None):
+    """
+
+    Parameters
+    ----------
+    model
+    train
+    valid
+    test
+    event
+
+    Returns
+    -------
+
+    """
+    datasets = (valid, train, test)
+    labels = ['VALIDATE', 'TRAIN', 'TEST']
+
+    # At least some combination of datasets must be provided
+    if all(d is None for d in datasets):
+        raise ValueError("At least one dataset must be provided.")
+
+    results = []
+    row_count = 0
+    if event is None:
+        event = 1
+    elif event in model.classes_:
+        event = 0 if event == model.classes_[0] else 1
+    else:
+        event = int(event)
+
+    for idx, dataset in enumerate(datasets):
+        if dataset is None:
+            continue
+
+        X, y_true = dataset
+
+        target_column = getattr(y_true, 'name', 'Class')
+        proba_columns = ['P_%s%d' % (target_column, i) for i in (0, 1)]
+        event_column = proba_columns[event]
+
+        # We need to re-assign int values to the dataset to ensure they match
+        # up to the column order output by the model.  Otherwise, output labels
+        # will match, but underlying int representations will be off.
+        y_true = y_true.cat.reorder_categories(model.classes_)
+
+        # Predicted probability for each class
+        y_pred_probs = pd.DataFrame(model.predict_proba(X))
+
+        # Maximum likelihood class for each observation
+        y_pred_index = y_pred_probs.idxmax(axis=1)
+
+        # Column names default to 0 / 1.  Only rename after calculating idxmax
+        # to ensure y_pred_index contains 0 / 1 values.
+        y_pred_probs.columns = proba_columns
+
+        # Explicitly reset indexes.  pd.concat(ignore_index=True) didn't work.
+        y_pred_probs.reset_index(drop=True, inplace=True)
+        y_pred_index.reset_index(drop=True, inplace=True)
+        y_true_codes = y_true.cat.codes
+        y_true_codes.reset_index(drop=True, inplace=True)
+
+        df = pd.concat((y_pred_probs, y_pred_index, y_true_codes), axis=1)
+        df.columns = proba_columns + ['predicted', 'target']
+
+        # Sort by highest probability of event (according to model)
+        df.sort_values(by=event_column, ascending=False, inplace=True)
+
+        # TODO: bin rows by percentiles or evenly?
+        num_groups = 20
+        groups = []
+        for i, g in enumerate(np.array_split(df, num_groups)):
+            stats = {'nobjs': len(g),
+                     'true_events': (g['target'] == event).count(),
+                     'accuracy': accuracy_score(g['target'],
+                                                g['predicted'], normalize=False),
+                     'sample': i}
+            groups.append(stats)
+
+        t2 = pd.DataFrame(groups)
+        t2['total_correct'] = t2['accuracy'].cumsum()
+        t2['total_obs'] = t2['nobjs'].cumsum()
+        t2['percent_accuracy'] = 100 * t2['total_correct'] / t2['total_obs']
+
+        total_true_events = (df['target'] == event).sum()
+        total_samples = len(df)
+        true_event_rate = total_true_events / float(total_samples)
+        # -----
+
+        actualValue = df['target']
+        predictValue = df['P_Type1']
+        numObservations = len(actualValue)
+        quantileCutOff = np.percentile(df['P_Type1'], np.arange(0, 100, 10))
+
+
+    return {'data': None}
 
 
 def roc_statistics(model, train=None, valid=None, test=None):

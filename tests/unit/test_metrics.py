@@ -104,9 +104,28 @@ def test_roc_statistics_binary(cancer_dataset):
     assert isinstance(stats, dict)
 
     # Should only contain stats for training data
-    assert len(stats['data']) == 1
+    assert len(stats['data']) == 3
 
-    assert stats['data'][0]['rowNumber'] == 1
-    assert stats['data'][0]['dataMap']['_DataRole_'] == 'TRAIN'
-    assert stats['data'][0]['dataMap']['_NObs_'] == X.shape[0]
-    assert stats['data'][0]['dataMap']['_DIV_'] == X.shape[0]
+
+def test_lift_statistics_binary(cancer_dataset):
+    sklearn = pytest.importorskip('sklearn')
+
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+    from sasctl.utils.metrics import compare
+
+    model = RandomForestClassifier()
+    X = cancer_dataset.drop('Type', axis=1)
+    y = cancer_dataset['Type']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y)
+    model.fit(X_train, y_train)
+
+    stats = compare.lift_statistics(model, train=(X_train, y_train),
+                                    test=(X_test, y_test),
+                                    event='malignant')
+
+    assert isinstance(stats, dict)
+
+    # Should only contain stats for training data
+    assert len(stats['data']) == 3
