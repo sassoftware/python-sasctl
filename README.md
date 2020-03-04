@@ -89,29 +89,24 @@ which can handle all necessary communication with the SAS Viya server:
 A slightly more low-level way to interact with the environment is to use 
 the service methods directly:
 ```
->>> from pprint import pprint
 >>> from sasctl import Session
 >>> from sasctl.services import folders
 
 >>> with Session(host, username, password):
-...    folders = folders.list_folders()
-...    pprint(folders)
-    
-{'links': [{'href': '/folders/folders',
-            'method': 'GET',
-            'rel': 'folders',
-            'type': 'application/vnd.sas.collection',
-            'uri': '/folders/folders'},
-           {'href': '/folders/folders',
-            'method': 'POST',
-            'rel': 'createFolder',
+...    for f in folders.list_folders():
+...        print(f)
+
+Public
+Projects
+ESP Projects
+Risk Environments
 
 ...  # truncated for clarity
 
-            'rel': 'createSubfolder',
-            'type': 'application/vnd.sas.content.folder',
-            'uri': '/folders/folders?parentFolderUri=/folders/folders/{parentId}'}],
- 'version': 1}
+My Folder
+My History
+My Favorites
+SAS Environment Manager
 ```
 
 

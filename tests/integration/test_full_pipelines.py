@@ -285,16 +285,6 @@ class TestSklearnClassificationModel:
         assert module.destinationName == self.CAS_DEST
         assert module.publishType == 'casModel'
 
-    # def test_create_mas_destination(self):
-    #     from sasctl.services import model_publish as mp
-    #
-    #     dest = mp.get_destination(self.MAS_DEST)
-    #     if not dest:
-    #         dest = mp.create_mas_destination(self.MAS_DEST, 'http://localhost')
-    #
-    #     assert dest.name == self.MAS_DEST
-    #     assert dest.destinationType == 'microAnalyticService'
-
     def test_publish_mas(self, request):
         from sasctl import publish_model
 

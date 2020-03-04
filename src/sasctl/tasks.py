@@ -10,7 +10,7 @@ import io
 import json
 import logging
 import math
-import pickle  # skipcq BAN-B301
+import pickle                                                  # skipcq BAN-B301
 import os
 import re
 import sys

@@ -17,7 +17,7 @@ from ..core import HTTPError, PagedItemIterator, sasctl_command
 from ..exceptions import JobTimeoutError
 
 
-class Service(object):  # skipcq PYL-R0205
+class Service(object):                                        # skipcq PYL-R0205
     """Base class for all services.  Should not be used directly."""
 
     _SERVICE_ROOT = None
