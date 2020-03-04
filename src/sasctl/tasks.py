@@ -167,6 +167,7 @@ def _create_project(project_name, model, repo, input_vars=None,
 
 def register_model(model, name, project, repository=None, input=None,
                    version=None, files=None, force=False,
+                   train=None,
                    record_packages=True):
     """Register a model in the model repository.
 
@@ -318,28 +319,44 @@ def register_model(model, name, project, repository=None, input=None,
         target_funcs = [f for f in ('predict', 'predict_proba')
                         if hasattr(model, f)]
 
+        # Save actual model instance
+        model_obj = model
+
         # Extract model properties
-        model = _sklearn_to_dict(model)
+        model = _sklearn_to_dict(model_obj)
         model['name'] = name
 
+        from .utils.metrics import lift_statistics, roc_statistics, fit_statistics
+        for name, func in (('dmcas_lift.json', lift_statistics),
+                           ('dmcas_fitstats.json', fit_statistics)):
+            if not any(f['name'] == name for f in files):
+                stats = func(model_obj, train=train)
+                files.append({'name': name,
+                              'file': json.dumps(stats)})
+
+        # stats = roc_statistics(model_obj, train=train)
+        # files.append({'name': 'dmcas_roc.json',
+        #               'file': json.dumps(stats)})
+
         # Get package versions in environment
-        packages = installed_packages()
-        if record_packages and packages is not None:
-            model.setdefault('properties', [])
+        if record_packages and not any(f['name'] == 'requirements.txt' for f in files):
+            packages = installed_packages()
+            if packages is not None:
+                model.setdefault('properties', [])
 
-            # Define a custom property to capture each package version
-            # NOTE: some packages may not conform to the 'name==version' format
-            #  expected here (e.g those installed with pip install -e). Such
-            #  packages also generally contain characters that are not allowed
-            # in custom properties, so they are excluded here.
-            for p in packages:
-                if '==' in p:
-                    n, v = p.split('==')
-                    model['properties'].append(_property('env_%s' % n, v))
+                # Define a custom property to capture each package version
+                # NOTE: some packages may not conform to the 'name==version' format
+                #  expected here (e.g those installed with pip install -e). Such
+                #  packages also generally contain characters that are not allowed
+                # in custom properties, so they are excluded here.
+                for p in packages:
+                    if '==' in p:
+                        n, v = p.split('==')
+                        model['properties'].append(_property('env_%s' % n, v))
 
-            # Generate and upload a requirements.txt file
-            files.append({'name': 'requirements.txt',
-                          'file': '\n'.join(packages)})
+                # Generate and upload a requirements.txt file
+                files.append({'name': 'requirements.txt',
+                              'file': '\n'.join(packages)})
 
         # Generate PyMAS wrapper
         try:
