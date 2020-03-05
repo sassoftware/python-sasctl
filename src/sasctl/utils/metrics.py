@@ -426,6 +426,31 @@ def roc_statistics(model, train=None, valid=None, test=None):
                 'yInteger': False}
 
 
+def _convert_class_labels(model, values):
+    """Convert classification labels to integer codes."""
+
+    # If it's not even a classification model, don't bother
+    if not hasattr(model, 'classes_'):
+        return values
+
+    if hasattr(values, 'cat'):
+        # Re-assign int values to the categorical data to ensure they match up
+        # with the column values output by the model.
+        values = values.cat.reorder_categories(model.classes_)
+
+        # Return integer values
+        return values.cat.codes
+
+    # Construct a new array by replacing labels with their corresponding code
+    # as output by the model.
+    new_values = np.zeros(len(values), dtype='int')
+    for i, c in enumerate(model.classes_):
+        mask = values == c
+        new_values[mask] = i
+
+    return new_values
+
+
 def fit_statistics(model, train=None, valid=None, test=None):
     """Calculate model fit statistics.
 
@@ -457,12 +482,23 @@ def fit_statistics(model, train=None, valid=None, test=None):
     if all(d is None for d in datasets):
         raise ValueError("At least one dataset must be provided.")
 
+    event = None
+    if event is None:
+        event = 1
+    elif event in model.classes_:
+        event = 0 if event == model.classes_[0] else 1
+    else:
+        event = int(event)
+
     for idx, dataset in enumerate(datasets):
         if dataset is None:
             continue
 
         X, y_true = dataset
         y_pred = model.predict(X)
+
+        y_true = _convert_class_labels(model, y_true)
+        y_pred = _convert_class_labels(model, y_pred)
 
         # Average Squared Error
         try:
@@ -499,8 +535,20 @@ def fit_statistics(model, train=None, valid=None, test=None):
         except ValueError:
             mcll = None
 
-        # KS uses the Kolmogorov-Smirnov coefficient as the objective function
-        # stats.update(_KS_=str(max(fpr - tpr)))
+        # Gamma
+        try:
+            from scipy.stats import gamma
+            _, _, beta = gamma.fit(y_pred)
+            gamma_scale = 1. / beta
+        except ImportError:
+            gamma_scale = None
+
+        # Tau
+        try:
+            from scipy.stats import kendalltau
+            tau, _ = kendalltau(y_true, y_pred)
+        except:
+            tau = None
 
         stats = {
             '_DataRole_': labels[idx],
@@ -511,12 +559,14 @@ def fit_statistics(model, train=None, valid=None, test=None):
             '_ASE_': ase,
             '_C_': auc,
             '_RASE_': rase,
+            '_GAMMA_': 1. / gamma_scale,
             '_GINI_': gini,
             '_KSPostCutoff_': None,
             '_KS_': ks,
             '_KSCut_': None,
             '_MCE_': mce,
-            '_MCLL_': mcll
+            '_MCLL_': mcll,
+            '_TAU_': tau
         }
 
         results.append({'dataMap': stats, 'rowNumber': idx, 'header': None})

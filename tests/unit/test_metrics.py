@@ -26,12 +26,21 @@ def test_fit_statistics_binary(cancer_dataset):
     assert len(stats['data']) == 1
 
     assert stats['data'][0]['rowNumber'] == 1
-    assert stats['data'][0]['dataMap']['_DataRole_'] == 'TRAIN'
-    assert stats['data'][0]['dataMap']['_NObs_'] == X.shape[0]
-    assert stats['data'][0]['dataMap']['_DIV_'] == X.shape[0]
+    datamap = stats['data'][0]['dataMap']
 
-    for stat in ('_MCE_', ):
-        assert stats['data'][0]['dataMap'][stat] is not None
+    assert datamap['_DataRole_'] == 'TRAIN'
+    assert datamap['_NObs_'] == X.shape[0]
+    assert datamap['_DIV_'] == X.shape[0]
+
+    assert datamap['_ASE_'] is not None
+    assert datamap['_C_'] is not None
+    assert datamap['_GAMMA_'] is not None
+    assert datamap['_GINI_'] is not None
+    assert datamap['_KS_'] is not None
+    assert datamap['_MCE_'] is not None
+    assert datamap['_MCLL_'] is not None
+    assert datamap['_RASE_'] is not None
+    assert datamap['_TAU_'] is not None
 
 
 def test_fit_statistics_regression(boston_dataset):
@@ -80,12 +89,21 @@ def test_fit_statistics_multiclass(iris_dataset):
     assert len(stats['data']) == 1
 
     assert stats['data'][0]['rowNumber'] == 1
-    assert stats['data'][0]['dataMap']['_DataRole_'] == 'TRAIN'
-    assert stats['data'][0]['dataMap']['_NObs_'] == X.shape[0]
-    assert stats['data'][0]['dataMap']['_DIV_'] == X.shape[0]
+    datamap = stats['data'][0]['dataMap']
 
-    for stat in ('_MCE_', ):
-        assert stats['data'][0]['dataMap'][stat] is not None
+    assert datamap['_DataRole_'] == 'TRAIN'
+    assert datamap['_NObs_'] == X.shape[0]
+    assert datamap['_DIV_'] == X.shape[0]
+
+    assert datamap['_ASE_'] is not None
+    assert datamap['_C_'] is not None
+    assert datamap['_GAMMA_'] is not None
+    assert datamap['_GINI_'] is not None
+    assert datamap['_KS_'] is not None
+    assert datamap['_MCE_'] is not None
+    assert datamap['_MCLL_'] is not None
+    assert datamap['_RASE_'] is not None
+    assert datamap['_TAU_'] is not None
 
 
 def test_roc_statistics_binary(cancer_dataset):
