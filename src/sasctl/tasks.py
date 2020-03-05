@@ -9,7 +9,7 @@
 import json
 import logging
 import math
-import pickle  # skipcq BAN-B301
+import pickle                                                  # skipcq BAN-B301
 import os
 import re
 import sys
@@ -25,7 +25,7 @@ from .services import model_publish as mp
 from .services import model_repository as mr
 from .utils.pymas import from_pickle
 from .utils.misc import installed_packages
-
+from .utils.metrics import lift_statistics, roc_statistics, fit_statistics
 
 logger = logging.getLogger(__name__)
 
@@ -168,6 +168,8 @@ def _create_project(project_name, model, repo, input_vars=None,
 def register_model(model, name, project, repository=None, input=None,
                    version=None, files=None, force=False,
                    train=None,
+                   test=None,
+                   valid=None,
                    record_packages=True):
     """Register a model in the model repository.
 
@@ -326,17 +328,15 @@ def register_model(model, name, project, repository=None, input=None,
         model = _sklearn_to_dict(model_obj)
         model['name'] = name
 
-        from .utils.metrics import lift_statistics, roc_statistics, fit_statistics
-        for name, func in (('dmcas_lift.json', lift_statistics),
-                           ('dmcas_fitstats.json', fit_statistics)):
-            if not any(f['name'] == name for f in files):
-                stats = func(model_obj, train=train)
-                files.append({'name': name,
-                              'file': json.dumps(stats)})
-
-        # stats = roc_statistics(model_obj, train=train)
-        # files.append({'name': 'dmcas_roc.json',
-        #               'file': json.dumps(stats)})
+        # Calculate and include various model statistics.
+        if any(x is not None for x in (train, test, valid)):
+            for name, func in (('dmcas_lift.json', lift_statistics),
+                               ('dmcas_fitstats.json', fit_statistics,
+                                'dmcas_roc.json', roc_statistics)):
+                if not any(f['name'] == name for f in files):
+                    stats = func(model_obj, train=train, test=test, valid=valid)
+                    files.append({'name': name,
+                                  'file': json.dumps(stats)})
 
         # Get package versions in environment
         if record_packages and not any(f['name'] == 'requirements.txt' for f in files):
