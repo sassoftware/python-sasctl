@@ -1,6 +1,10 @@
 Unreleased
 ----------
- - 
+ - Added metrics module
+ - train, test, valid inputs to register_model
+ - overwrite register_model files
+ - metrics included by default
+ 
  
 v1.5 (2020-2-23)
 ----------------

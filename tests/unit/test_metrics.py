@@ -7,7 +7,8 @@
 import pytest
 
 
-def test_fit_statistics_binary(cancer_dataset):
+def test_fit_statistics_binary_pandas(cancer_dataset):
+    """Check fit statistics for a binary classification model with Pandas inputs."""
     sklearn = pytest.importorskip('sklearn')
 
     from sklearn.ensemble import RandomForestClassifier
@@ -16,6 +17,43 @@ def test_fit_statistics_binary(cancer_dataset):
     model = RandomForestClassifier()
     X = cancer_dataset.drop('Type', axis=1)
     y = cancer_dataset['Type']
+    model.fit(X, y)
+
+    stats = metrics.fit_statistics(model, train=(X, y))
+
+    assert isinstance(stats, dict)
+
+    # Should only contain stats for training data
+    assert len(stats['data']) == 1
+
+    assert stats['data'][0]['rowNumber'] == 1
+    datamap = stats['data'][0]['dataMap']
+
+    assert datamap['_DataRole_'] == 'TRAIN'
+    assert datamap['_NObs_'] == X.shape[0]
+    assert datamap['_DIV_'] == X.shape[0]
+
+    assert datamap['_ASE_'] is not None
+    assert datamap['_C_'] is not None
+    assert datamap['_GAMMA_'] is not None
+    assert datamap['_GINI_'] is not None
+    assert datamap['_KS_'] is not None
+    assert datamap['_MCE_'] is not None
+    assert datamap['_MCLL_'] is not None
+    assert datamap['_RASE_'] is not None
+    assert datamap['_TAU_'] is not None
+
+
+def test_fit_statistics_binary_numpy(cancer_dataset):
+    """Check fit statistics for a binary classification model with Numpy inputs."""
+    sklearn = pytest.importorskip('sklearn')
+
+    from sklearn.ensemble import RandomForestClassifier
+    from sasctl.utils import metrics
+
+    model = RandomForestClassifier()
+    X = cancer_dataset.drop('Type', axis=1).values
+    y = cancer_dataset['Type'].values
     model.fit(X, y)
 
     stats = metrics.fit_statistics(model, train=(X, y))
@@ -62,12 +100,14 @@ def test_fit_statistics_regression(boston_dataset):
     assert len(stats['data']) == 1
 
     assert stats['data'][0]['rowNumber'] == 1
-    assert stats['data'][0]['dataMap']['_DataRole_'] == 'TRAIN'
-    assert stats['data'][0]['dataMap']['_NObs_'] == X.shape[0]
-    assert stats['data'][0]['dataMap']['_DIV_'] == X.shape[0]
+    datamap = stats['data'][0]['dataMap']
 
-    for stat in ('_ASE_', ):
-        assert stats['data'][0]['dataMap'][stat] is not None
+    assert datamap['_DataRole_'] == 'TRAIN'
+    assert datamap['_NObs_'] == X.shape[0]
+    assert datamap['_DIV_'] == X.shape[0]
+
+    assert datamap['_ASE_'] is not None
+    assert datamap['_RASE_'] is not None
 
 
 def test_fit_statistics_multiclass(iris_dataset):
