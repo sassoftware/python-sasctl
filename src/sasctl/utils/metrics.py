@@ -6,175 +6,35 @@
 
 import pandas as pd
 import numpy as np
-import json
 
 from math import sqrt
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_curve, log_loss, roc_auc_score
 from sklearn.metrics import accuracy_score, mean_squared_error
 
 
-def prep_liftstat(model, X_train, y_train, X_test, y_test, targetname, targetvalue, outdir, templatedir):
-    '''
-    Function to prepare Liftstat json file
-    https://go.documentation.sas.com/?cdcId=vdmmlcdc&cdcVersion=1.0&docsetId=casml&docsetTarget=viyaml_assess_examples01.htm&locale=en
-    '''
-
-    # prepare sample
-
-    X_t, X_v, y_t, y_v = train_test_split(
-        X_train, y_train, test_size=0.3, random_state=12345)
-    data = [(X_t, y_t, model.predict_proba(X_t)),
-            (X_v, y_v, model.predict_proba(X_v)),
-            (X_test, y_test, model.predict_proba(X_test))]
-
-    with open(templatedir + '/R_HMEQ_lift.json', 'r') as i:
-
-        body = json.load(i)
-
-    count = 0
-
-    for j in range(3):
-
-        # prepare data
-
-        data[j][0].reset_index(drop=True, inplace=True)
-        data[j][1].reset_index(drop=True, inplace=True)
-        score_probability = pd.DataFrame(data[j][2], columns=[
-            'P_' + str(targetname) + '0', 'P_' + str(targetname) + '1'])
-        df = pd.concat([data[j][0], data[j][1], score_probability], axis=1)
-        df['pred_col'] = np.where(
-            df['P_' + str(targetname) + '1'] >= 0.5, 1, 0)
-
-        df.sort_values(by='P_' + str(targetname) + '1',
-                       ascending=False, inplace=True)
-
-        subset = df[df['pred_col'] == True]
-
-        rows = []
-
-        for group in np.array_split(subset, 20):
-            score = accuracy_score(
-                group[targetname].tolist(), group['pred_col'].tolist(), normalize=False)
-
-            rows.append({'NumCases': len(group),
-                         'NumCorrectPredictions': score})
-
-            lift = pd.DataFrame(rows)
-
-            # Cumulative Gains Calculation
-
-            lift['RunningCorrect'] = lift['NumCorrectPredictions'].cumsum()
-            lift['PercentCorrect'] = lift.apply(
-                lambda x: (100 / lift['NumCorrectPredictions'].sum()) * x['RunningCorrect'], axis=1)
-            lift['CumulativeCorrectBestCase'] = lift['NumCases'].cumsum()
-            lift['PercentCorrectBestCase'] = lift['CumulativeCorrectBestCase'].apply(
-                lambda x: 100 if (100 / lift['NumCorrectPredictions'].sum()) * x > 100 else (100 / lift[
-                    'NumCorrectPredictions'].sum()) * x)
-            lift['AvgCase'] = lift['NumCorrectPredictions'].sum() / len(lift)
-            lift['CumulativeAvgCase'] = lift['AvgCase'].cumsum()
-            lift['PercentAvgCase'] = lift['CumulativeAvgCase'].apply(
-                lambda x: (100 / lift['NumCorrectPredictions'].sum()) * x)
-
-            # Lift Chart
-            lift['NormalisedPercentAvg'] = 1
-            lift['NormalisedPercentWithModel'] = lift['PercentCorrect'] / \
-                                                 lift['PercentAvgCase']
-            lift['Gain'] = lift['NormalisedPercentWithModel'] - lift['NormalisedPercentAvg']
-
-            lift_dict = lift.to_dict()
-
-        #             return lift_dict
-
-        #         calc_cumulative_gains(perf_probability, targetname, 'pred_col', 'P_' + str(targetname) + '1')
-
-        for index, row in enumerate(range(0, 105, 5)):
-
-            count = count + 1
-
-            stats = dict()
-
-            if j == 0:
-                stats.update(_DataRole_='VALIDATE')
-            if j == 1:
-                stats.update(_DataRole_='TRAIN')
-            if j == 2:
-                stats.update(_DataRole_='TEST')
-
-            if index == 0:
-
-                stats.update(_CumLiftBest_=None)
-                stats.update(_NObs_='0')
-                stats.update(_Depth_='0')
-                stats.update(_CumRespBest_='0')
-                stats.update(_formattedPartition_='           0')
-                stats.update(_Column_=str(targetname))
-                stats.update(_Lift_=None)
-                stats.update(_RespBest_='0')
-                stats.update(_CumPctResp_=None)
-                stats.update(_NEventsBest_='0')
-                stats.update(_CumResp_='0')
-                stats.update(_PctRespBest_=None)
-                stats.update(_Gain_=None)
-                stats.update(_CumLift_='0')
-                stats.update(_CumPctRespBest_=None)
-                stats.update(_Value_='0')
-                stats.update(_Event_=str(targetvalue))
-                stats.update(_NEvents_='0')
-                stats.update(_PctResp_=None)
-                stats.update(_LiftBest_=None)
-                stats.update(_PartInd_='0')
-                stats.update(_Resp_='0')
-                stats.update(_GainBest_=None)
-
-            else:
-                stats.update(_CumLiftBest_=str(lift_dict['NormalisedPercentWithModel'][index - 1]))
-                stats.update(_NObs_=str(lift_dict['NumCases'][index - 1]))
-                stats.update(_Depth_=str(index - 1))
-                stats.update(_CumRespBest_='100')
-                stats.update(_formattedPartition_='           0')
-                stats.update(_Column_=str(targetname))
-                stats.update(_Lift_=str(lift_dict['NormalisedPercentWithModel'][index - 1]))
-                stats.update(_RespBest_=str(lift_dict['PercentCorrect'][index - 1]))
-                stats.update(_CumPctResp_=str(lift_dict['PercentCorrectBestCase'][index - 1]))
-                stats.update(_NEventsBest_=str(lift_dict['NumCorrectPredictions'][index - 1]))
-                stats.update(_CumResp_=str(lift_dict['RunningCorrect'][index - 1]))
-                stats.update(_PctRespBest_=str(lift_dict['PercentCorrect'][index - 1]))
-                stats.update(_Gain_=str(lift['Gain'][index - 1]))
-                stats.update(_CumLift_=str(lift_dict['RunningCorrect'][index - 1]))
-                stats.update(_CumPctRespBest_=str(lift_dict['PercentCorrect'][index - 1]))
-                stats.update(_Value_=str(lift['Gain'][index - 1]))
-                stats.update(_Event_=str(targetvalue))
-                stats.update(_NEvents_=str(' '))
-                stats.update(_PctResp_=str(lift_dict['PercentCorrect'][index - 1]))
-                stats.update(_LiftBest_=str(lift_dict['NormalisedPercentWithModel'][index - 1]))
-                stats.update(_PartInd_=str(j))
-                stats.update(_Resp_=str(lift_dict['PercentCorrect'][index - 1]))
-                stats.update(_GainBest_=str(lift['Gain'][index - 1]))
-
-            body['data'][count - 1] = {'dataMap': stats}
-            body['data'][count - 1]['rowNumber'] = count
-            body['data'][count - 1]['header'] = None
-
-    with open(outdir + '/dmcas_lift.json', 'w') as f:
-        json.dump(body, f, indent=2)
-
-    print("Saved in:", outdir)
-
-
 def lift_statistics(model, train=None, valid=None, test=None, event=None):
-    """
+    """Calculate lift statistics for a model.
 
     Parameters
     ----------
-    model
-    train
-    valid
-    test
-    event
+    model : predictor-like
+        An object that conforms to scikit-learn's Predictor interface and
+        implements a `predict_proba` method.
+    train : (array_like, array_like), optional
+        A tuple of the training inputs and target output.
+    valid : (array_like, array_like), optional
+        A tuple of the validation inputs and target output.
+    test : (array_like, array_like), optional
+        A tuple of the test inputs and target output.
+    event : str or int, optional
+        The model output value that corresponds to a positive event in a
+        binary classification task.
 
     Returns
     -------
+    dict
+        Metrics calculated for each dataset and formatted as expected by SAS
+        Model Manager.
 
     """
     datasets = (valid, train, test)
@@ -245,8 +105,14 @@ def lift_statistics(model, train=None, valid=None, test=None, event=None):
         # Count of event label by group
         event_counts_by_group = label_counts_by_group[event]
 
+        # Cumulative total of event label by group
+        cum_events_by_group = event_counts_by_group.cumsum()
+
         # Total # of observations in each group
         obs_counts_by_group = label_counts_by_group.sum(axis=1)
+
+        # Cumulative total of observations by group
+        cum_obs_by_group = obs_counts_by_group.cumsum()
 
         # Percent of total observations in each group
         obs_percent_by_group = 100 * obs_counts_by_group / total_samples
@@ -260,34 +126,25 @@ def lift_statistics(model, train=None, valid=None, test=None, event=None):
         # Percent of obs in group that are event
         event_percent_by_group = 100 * event_counts_by_group / obs_counts_by_group
 
-        overallResponsePercent = 100 * (total_event_count / total_samples)
-        lift = event_percent_by_group / overallResponsePercent
+        total_response_percent = 100 * (total_event_count / total_samples)
+        lift = event_percent_by_group / total_response_percent
+        cum_response_percent = 100 * cum_events_by_group / cum_obs_by_group
 
-        liftDf = pd.DataFrame({'Quantile Number': obs_counts_by_group,  # 10/20/etc
-                               'Quantile Percent': obs_percent_by_group, #
-                               'Gain Number': event_counts_by_group,
-                               'Gain Percent': gain_by_group,
-                               'Response Percent': event_percent_by_group,
-                               'Lift': lift})
+        df = pd.DataFrame({'Quantile Number': obs_counts_by_group,
+                           'Quantile Percent': obs_percent_by_group,
+                           'Gain Number': event_counts_by_group,
+                           'Gain Percent': gain_by_group,
+                           'Response Percent': event_percent_by_group,
+                           'Lift': lift,
+                           'Acc Quantile Number': cum_obs_by_group,
+                           'Acc Quantile Percent': 100 * cum_obs_by_group / total_samples,  # Cumulate % of obs by group
+                           'Acc Gain Number': cum_events_by_group,
+                           'Acc Gain Percent': 100 * cum_events_by_group / total_event_count,
+                           'Acc Response Percent': cum_response_percent,
+                           'Acc Lift': cum_response_percent / total_response_percent
+                           })
 
-        accCountTable = label_counts_by_group.cumsum(axis = 0)
-        obs_counts_by_group = accCountTable.sum(1)
-        obs_percent_by_group = 100 * (obs_counts_by_group / total_samples)
-        event_counts_by_group = accCountTable[event]
-        gain_by_group = 100 * (event_counts_by_group / total_event_count)
-        event_percent_by_group = 100 * (event_counts_by_group / obs_counts_by_group)
-        accLift = event_percent_by_group / overallResponsePercent
-
-        accLiftDf = pd.DataFrame({'Acc Quantile Number': obs_counts_by_group,
-                                  'Acc Quantile Percent': obs_percent_by_group,
-                                  'Acc Gain Number': event_counts_by_group,
-                                  'Acc Gain Percent': gain_by_group,
-                                  'Acc Response Percent': event_percent_by_group,
-                                  'Acc Lift': accLift})
-
-        liftDf = pd.concat([liftDf, accLiftDf], axis=1, ignore_index=False)
-
-        for index, row in liftDf.iterrows():
+        for index, row in df.iterrows():
             row_count += 1
 
             stats = {'header': None,
@@ -297,11 +154,11 @@ def lift_statistics(model, train=None, valid=None, test=None, event=None):
                                  '_Event_': event,
                                  '_Depth_': row['Acc Quantile Percent'],
                                  '_NObs_': row['Quantile Number'],
-                                 '_Gain_': row['Gain Number'],      # of events in bucket
-                                 '_Resp_': row['Gain Percent'],       # Capture Response
+                                 '_Gain_': row['Gain Number'],
+                                 '_Resp_': row['Gain Percent'],
                                  '_CumResp_': row['Acc Gain Percent'],
-                                 '_PctResp_': row['Response Percent'],       # % of bin that is event
-                                 '_CumPctResp_': row['Acc Response Percent'],    # % of events in all bins so far
+                                 '_PctResp_': row['Response Percent'],
+                                 '_CumPctResp_': row['Acc Response Percent'],
                                  '_Lift_': row['Lift'],
                                  '_CumLift_': row['Acc Lift']
                                  }}

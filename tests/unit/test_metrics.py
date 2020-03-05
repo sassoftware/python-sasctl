@@ -109,14 +109,16 @@ def test_roc_statistics_binary(cancer_dataset):
 
 def test_lift_statistics_binary(cancer_dataset):
     sklearn = pytest.importorskip('sklearn')
-
+    pd = pytest.importorskip('pandas')
     from sklearn.tree import DecisionTreeClassifier
     from sklearn.model_selection import train_test_split
     from sasctl.utils import metrics
 
+    TARGET = 'Type'
+
     model = DecisionTreeClassifier()
-    X = cancer_dataset.drop('Type', axis=1)
-    y = cancer_dataset['Type']
+    X = cancer_dataset.drop(TARGET, axis=1)
+    y = cancer_dataset[TARGET]
 
     X_train, X_test, y_train, y_test = train_test_split(X, y)
     model.fit(X_train, y_train)
@@ -126,6 +128,31 @@ def test_lift_statistics_binary(cancer_dataset):
                                     event='malignant')
 
     assert isinstance(stats, dict)
+    assert stats['name'] == 'dmcas_lift'
+    assert 'parameterMap' in stats
 
-    # Should only contain stats for training data
-    assert len(stats['data']) == 3
+    data = stats['data']
+    assert isinstance(data, list)
+
+    df = pd.DataFrame((row['dataMap'] for row in data))
+    rownums = pd.Series((row['rowNumber'] for row in data))
+    df = pd.concat([df, rownums], axis=1)
+
+    # Verify data set names
+    assert df._DataRole_.isin(('TRAIN', 'TEST')).all()
+
+    # Each row should refer to the target variable
+    assert (df._Column_ == TARGET).all()
+
+    # "_CumLift_" should never drop below 1
+    min_cum_lift = round(df.groupby('_DataRole_')._CumLift_.min(), 10)
+    assert (min_cum_lift >= 1).all()
+
+    # "_Lift_" should never drop below 0
+    min_lift = round(df.groupby('_DataRole_')._Lift_.min(), 10)
+    assert (min_lift >= 0).all()
+
+    # Number of observations across all groups should match
+    num_obs = df.groupby('_DataRole_')._NObs_.sum()
+    assert num_obs['TEST'] == len(X_test)
+    assert num_obs['TRAIN'] == len(X_train)
