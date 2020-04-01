@@ -4,6 +4,11 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import random
+import string
+
+from .decorators import versionadded
+
 
 def installed_packages():
     """List Python packages installed in the current environment.
@@ -26,3 +31,20 @@ def installed_packages():
 
     if freeze is not None:
         return list(freeze.freeze())
+
+
+@versionadded(version='1.5.1')
+def random_string(length):
+    """Generates a random alpha-numeric string of a given length.
+
+    Parameters
+    ----------
+    length : int
+        The length of the generate string.
+
+    Returns
+    -------
+    str
+
+    """
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))

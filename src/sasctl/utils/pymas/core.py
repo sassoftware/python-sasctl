@@ -9,17 +9,17 @@
 from __future__ import print_function
 import base64
 import importlib
-import pickle  # skipcq BAN-B301
+import pickle                                                                                          # skipcq BAN-B301
 import os
 import re
 import sys
 from collections import OrderedDict
-
 import six
 
 from .ds2 import DS2Thread, DS2Variable, DS2PyMASPackage
 from .python import ds2_variables
 from ..decorators import versionadded, versionchanged
+from ..misc import random_string
 
 
 @versionchanged(reason='Added `name` parameter.', version='1.5')
@@ -88,19 +88,18 @@ def build_wrapper_function(func, variables, array_input,
                 string_input += ("        if {0}: {0} = {0}.strip()".format(v.name), )
             else:
                 string_input += (
-                "        if {0} is None: {0} = np.nan".format(v.name),)
-
+                 "        if {0} is None: {0} = np.nan".format(v.name),)
 
     # Statement to execute the function w/ provided parameters
     if array_input:
         middle = string_input + \
                  (
-                 '        input_array = np.array([{}]).reshape((1, -1))'.format(
+                  '        input_array = np.array([{}]).reshape((1, -1))'.format(
                      ', '.join(args)),
-                 '        columns = [{}]'.format(
+                  '        columns = [{}]'.format(
                      ', '.join('"{0}"'.format(w) for w in args)),
-                 '        input_df = pd.DataFrame(data=input_array, columns=columns)',
-                 '        result = {}(input_df)'.format(func))
+                  '        input_df = pd.DataFrame(data=input_array, columns=columns)',
+                  '        result = {}(input_df)'.format(func))
     else:
         func_call = '{}({})'.format(func, ','.join(args))
         middle = ('        result = {}'.format(func_call),)
@@ -131,8 +130,8 @@ def build_wrapper_function(func, variables, array_input,
                   '        import pandas as pd') + \
                  middle + \
                  (
-                 '        result = tuple(result.ravel()) if hasattr(result, '
-                 '"ravel") else tuple(result)',
+                  '        result = tuple(result.ravel()) if hasattr(result, '
+                  '"ravel") else tuple(result)',
                   '        if len(result) == 0:',
                   '            result = tuple(None for i in range(%s))' % len(
                       output_names),
@@ -142,9 +141,9 @@ def build_wrapper_function(func, variables, array_input,
                   '        from traceback import format_exc',
                   '        msg = str(e) + format_exc()' if return_msg else '',
                   '        if result is None:',
-                 '            result = tuple(None for i in range(%s))' % len(
+                  '            result = tuple(None for i in range(%s))' % len(
                      output_names),
-                 '    return result + (msg, )')
+                  '    return result + (msg, )')
 
     return '\n'.join(definition)
 
@@ -158,7 +157,7 @@ def wrap_predict_method(func, variables, **kwargs):
     func : function or str
         Function name or an instance of Function which will be wrapped.  Assumed
         to behave as `.predict()` methods.
-     variables : list of DS2Variable
+    variables : list of DS2Variable
         Input and output variables for the function
     kwargs : any
         Will be passed to `build_wrapper_function`.
@@ -188,7 +187,7 @@ def wrap_predict_proba_method(func, variables, **kwargs):
     func : function or str
         Function name or an instance of Function which will be wrapped.  Assumed
         to behave as `.predict_proba()` methods.
-     variables : list of DS2Variable
+    variables : list of DS2Variable
         Input and output variables for the function
     kwargs : any
         Will be passed to `build_wrapper_function`.
@@ -312,8 +311,7 @@ def from_python_file(file, func_name=None, input_types=None, array_input=False,
     with open(file, 'r') as f:
         code = [line.strip('\n') for line in f.readlines()]
 
-    return _build_pymas(target_func, None, input_types, array_input,
-                        return_code, return_message, code)
+    return _build_pymas(target_func, None, input_types, array_input, code=code)
 
 
 @versionchanged('Return code and message are disabled by default.', version='1.5')
@@ -382,11 +380,12 @@ def from_pickle(file, func_name=None, input_types=None, array_input=False,
             'bytes = {}'.format(pkl).replace("'", '"'),
             'obj = pickle.loads(base64.b64decode(bytes))')
 
-    return _build_pymas(obj, func_name, input_types, array_input, return_code,
-                        return_message, code)
+    return _build_pymas(obj, func_name, input_types, array_input,
+                        func_prefix='obj.', code=code)
 
 
 def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
+                 func_prefix=None,
                  return_code=None, return_message=None, code=None):
     """
 
@@ -465,7 +464,7 @@ def _build_pymas(obj, func_name=None, input_types=None, array_input=False,
     variables = list(variables)
 
     return PyMAS(target_func, variables, code,
-                 array_input=array_input, func_prefix='obj.')
+                 array_input=array_input, func_prefix=func_prefix)
 
 
 class PyMAS:
@@ -521,17 +520,23 @@ class PyMAS:
             return_msg = [return_msg] * len(target_function)
 
         self.wrapper = []
+        wrapper_names = []
         for func, vars, code, msg in zip(target_function, variables, return_code, return_msg):
+            wrapper_names.append('_' + random_string(20))
+
             if func.lower() == 'predict':
                 lines = wrap_predict_method(func_prefix + func, vars,
-                                            setup=python_source, **kwargs)
+                                            setup=python_source,
+                                            name=wrapper_names[-1],
+                                            **kwargs)
             elif func.lower() == 'predict_proba':
                 lines = wrap_predict_proba_method(func_prefix + func, vars,
+                                                  name=wrapper_names[-1],
                                                   setup=python_source, **kwargs)
             else:
                 lines = build_wrapper_function(func_prefix+func,
                                                vars,
-                                               name=func,
+                                               name=wrapper_names[-1],
                                                setup=python_source,
                                                **kwargs)
 
@@ -556,7 +561,8 @@ class PyMAS:
         self.package = DS2PyMASPackage(self.wrapper)
 
         for idx, func in enumerate(target_function):
-            self.package.add_method(func, func,
+            self.package.add_method(func,
+                                    wrapper_names[idx],
                                     variables[idx])
 
     @versionchanged(version='1.4', reason="Added `dest='Python'` option")
