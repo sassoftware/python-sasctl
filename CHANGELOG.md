@@ -1,5 +1,9 @@
 Unreleased
 ----------
+ - 
+ 
+v1.5.1 (2020-4-1)
+----------------
  - Fixed PyMAS utilities to correctly work functions not bound to pickled objects. 
  
 v1.5 (2020-2-23)
