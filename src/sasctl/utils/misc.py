@@ -47,4 +47,7 @@ def random_string(length):
     str
 
     """
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+
+    # random.choices() wasn't added until Python 3.6, so repeatedly call .choice() instead
+    chars = string.ascii_letters + string.digits
+    return ''.join(random.choice(chars) for _ in range(length))
