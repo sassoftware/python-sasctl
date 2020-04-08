@@ -18,8 +18,28 @@ import six
 # forecast
 # text?
 
-from sasctl.utils.astore import _get_model_properties
+from sasctl.utils.astore import _get_model_properties, create_files_from_astore
 
+
+BOSTON_INPUT_VARS = ('CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT')
+CANCER_INPUT_VARS = ('mean radius', 'mean texture', 'mean perimeter', 'mean area', 'mean smoothness', 'mean compactness',
+                     'mean concavity', 'mean concave points', 'mean symmetry', 'mean fractal dimension', 'radius error',
+                     'texture error', 'perimeter error', 'area error', 'smoothness error', 'compactness error', 'concavity error',
+                     'concave points error', 'symmetry error', 'fractal dimension error', 'worst radius', 'worst texture',
+                     'worst perimeter', 'worst area', 'worst smoothness', 'worst compactness', 'worst concavity',
+                     'worst concave points', 'worst symmetry', 'worst fractal dimension')
+IRIS_INPUT_VARS = ('SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth')
+
+
+def check_input_variables(files, var_list):
+    assert 'inputVar.json' in files
+
+    input_vars = files['inputVar.json']
+
+    # Loop through each input variable that was used by the model
+    for var in input_vars:
+        # Ensure it was in the list of input variables for the dataset
+        assert var['name'] in var_list
 
 
 def test_glm(cas_session, boston_dataset):
@@ -43,8 +63,12 @@ def test_glm(cas_session, boston_dataset):
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
+    # Verify properties are set
     for k, v in six.iteritems(target):
         assert props[k] == v
+
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, BOSTON_INPUT_VARS)
 
 
 def test_logistic(cas_session, iris_dataset):
@@ -70,6 +94,9 @@ def test_logistic(cas_session, iris_dataset):
 
     for k, v in six.iteritems(target):
         assert props[k] == v
+
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, IRIS_INPUT_VARS)
 
 
 def test_dtree_regression(cas_session, boston_dataset):
@@ -101,6 +128,9 @@ def test_dtree_regression(cas_session, boston_dataset):
     for k, v in six.iteritems(target):
         assert props[k] == v
 
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, BOSTON_INPUT_VARS)
+
 
 def test_forest_classification(cas_session, iris_dataset):
     target = {
@@ -126,6 +156,9 @@ def test_forest_classification(cas_session, iris_dataset):
     for k, v in six.iteritems(target):
         assert props[k] == v
 
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, IRIS_INPUT_VARS)
+
 
 def test_forest_regression(cas_session, boston_dataset):
     target = {
@@ -150,6 +183,9 @@ def test_forest_regression(cas_session, boston_dataset):
 
     for k, v in six.iteritems(target):
         assert props[k] == v
+
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, BOSTON_INPUT_VARS)
 
 
 def test_gradboost_binary_classification(cas_session, cancer_dataset):
@@ -177,6 +213,9 @@ def test_gradboost_binary_classification(cas_session, cancer_dataset):
     for k, v in six.iteritems(target):
         assert props[k] == v
 
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, CANCER_INPUT_VARS)
+
 
 def test_gradboost_classification(cas_session, iris_dataset):
     target = {
@@ -202,6 +241,9 @@ def test_gradboost_classification(cas_session, iris_dataset):
     for k, v in six.iteritems(target):
         assert props[k] == v
 
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, IRIS_INPUT_VARS)
+
 
 def test_gradboost_regression(cas_session, boston_dataset):
     target = {
@@ -226,6 +268,9 @@ def test_gradboost_regression(cas_session, boston_dataset):
 
     for k, v in six.iteritems(target):
         assert props[k] == v
+
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, BOSTON_INPUT_VARS)
 
 
 def test_neuralnet_regression(cas_session, boston_dataset):
@@ -258,6 +303,9 @@ def test_neuralnet_regression(cas_session, boston_dataset):
     for k, v in six.iteritems(target):
         assert props[k] == v
 
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, BOSTON_INPUT_VARS)
+
 
 def test_svm_classification(cas_session, cancer_dataset):
     target = {
@@ -284,6 +332,9 @@ def test_svm_classification(cas_session, cancer_dataset):
     for k, v in six.iteritems(target):
         assert props[k] == v
 
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, CANCER_INPUT_VARS)
+
 
 def test_svm_regression(cas_session, boston_dataset):
     target = {
@@ -308,6 +359,9 @@ def test_svm_regression(cas_session, boston_dataset):
 
     for k, v in six.iteritems(target):
         assert props[k] == v
+
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, BOSTON_INPUT_VARS)
 
 
 def test_bayesnet_binary_classification(cas_session, cancer_dataset):
@@ -335,6 +389,9 @@ def test_bayesnet_binary_classification(cas_session, cancer_dataset):
     for k, v in six.iteritems(target):
         assert props[k] == v
 
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, CANCER_INPUT_VARS)
+
 
 def test_bayesnet_classification(cas_session, iris_dataset):
     target = {
@@ -359,3 +416,6 @@ def test_bayesnet_classification(cas_session, iris_dataset):
 
     for k, v in six.iteritems(target):
         assert props[k] == v
+
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, IRIS_INPUT_VARS)
