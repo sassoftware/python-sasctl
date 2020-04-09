@@ -2,7 +2,7 @@ Unreleased
 ----------
  - 
  
-v1.5.1 (2020-4-1)
+v1.5.1 (2020-4-9)
 ----------------
  - Fixed PyMAS utilities to correctly work functions not bound to pickled objects.
  - Model target variables should no longer appear as an input variable when registering ASTORE models. 
