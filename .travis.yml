@@ -75,16 +75,19 @@ matrix:
         on:
           tags: true
 
-
+    # Travis deploy: pypi settings started returning "Your build exited with 86."
+    # Reverting to manual build and upload
     - stage: deploy to pypi
+      python: 3.6
+      install: pip install setuptools wheel twine
+      env:
+      - TWINE_USERNAME: "$PYPI_USERNAME"
+      - TWINE_PASSWORD: "$PYPI_PASSWORD"
       script:
-        -
-      deploy:
-        provider: pypi
-        distributions: sdist bdist_wheel
-        edge: true
-        on:
-          tags: true
+        - python setup.py sdist bdist_wheel
+        - python -m twine upload dist/*
+      on:
+        tags: true
 
 
 install:
