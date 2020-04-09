@@ -77,6 +77,7 @@ matrix:
 
 
     - stage: deploy to pypi
+      python: 3.6
       script:
       -
       deploy:
@@ -86,6 +87,7 @@ matrix:
         password:
           secure: UOnKL5rBTgv8ubh/0l+4BKEO1C89h/PF3y+Y6cq40881yQLkLItTDxYkWCf36m6L/IyOnACwn5kJziQuTUSgyzfN58TRBvjVagjdkDQtwObLZVoU5PX+aMLRF+D7djdIekiOvhvQ476UDUR8jL3FwcQU4QJ72KQJqNn/UohdQquDP91qlcr+XLN/rvLeJAdQ8brOjpansX5qbHuJey+9oGgl9cwAVapvGVzvxk46oDb8hSrWJXZZU5PeEkoOdtGnOUdmWTtjuPjjYA6Fk/jyk+3fSgolHqa4vjFLu2PfDK+hDSZY1JIAxqUGKRzj+O4J2cm5ChMOwB4FwkA+7ZUBptHKnAD+qD4Z2iDRvkVTGgOUsmwS25DAcoEM6t9j5bjozW1vgCiIjf51v6GplQC0rY/QpxVkDnNlLC9Ov+paj+3KgG+BI2S+gjb9XD9tgnsHXpgc0i3dZSmjaO4eA9jetm9bG32irDdQGSifF27vv0m3X1GlgeIYtK2kZnUmxFBYadiGCGBk3+V78VKCLiTsB/G5b/9L70AaQmodPjYiOqmi2K5k6rMJ0lpP52ho3njN2oIvH7Ot4vNdc75qXlsHFX1VQfQlenxuzWszmlQQQAfQ+uj26rhftaKiYfPETPTztRHoRIeyYxqCnpNU5oGw3EcWQklxyNDVH0FqQ7H5iZw=
         distributions: sdist bdist_wheel
+        edge: true
         on:
           tags: true
 
