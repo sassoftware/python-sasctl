@@ -77,6 +77,8 @@ matrix:
 
 
     - stage: deploy to pypi
+      script:
+        -
       deploy:
         provider: pypi
         distributions: sdist bdist_wheel
