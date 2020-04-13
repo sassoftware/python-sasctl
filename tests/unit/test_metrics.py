@@ -202,10 +202,11 @@ def test_lift_statistics_binary(cancer_dataset):
 
     # Each row should refer to the target variable
     assert (df._Column_ == TARGET).all()
+    assert df.shape[0] == len(data)
 
     # "_CumLift_" should never drop below 1
-    assert 'TRAIN' in df._DataRole_
-    assert 'TEST' in df._DataRole_
+    assert 'TRAIN' in df._DataRole_.values
+    assert 'TEST' in df._DataRole_.values
     assert round(df._CumLift_.min(), 10) >= 1
     # min_cum_lift = round(df.groupby('_DataRole_')._CumLift_.min(), 10)
     # assert (min_cum_lift >= 1).all()
