@@ -204,12 +204,16 @@ def test_lift_statistics_binary(cancer_dataset):
     assert (df._Column_ == TARGET).all()
 
     # "_CumLift_" should never drop below 1
-    min_cum_lift = round(df.groupby('_DataRole_')._CumLift_.min(), 10)
-    assert (min_cum_lift >= 1).all()
+    assert 'TRAIN' in df._DataRole_
+    assert 'TEST' in df._DataRole_
+    assert round(df._CumLift_.min(), 10) >= 1
+    # min_cum_lift = round(df.groupby('_DataRole_')._CumLift_.min(), 10)
+    # assert (min_cum_lift >= 1).all()
 
     # "_Lift_" should never drop below 0
-    min_lift = round(df.groupby('_DataRole_')._Lift_.min(), 10)
-    assert (min_lift >= 0).all()
+    assert round(df._Lift_.min(), 10) >= 0
+    # min_lift = round(df.groupby('_DataRole_')._Lift_.min(), 10)
+    # assert (min_lift >= 0).all()
 
     # Number of observations across all groups should match
     num_obs = df.groupby('_DataRole_')._NObs_.sum()
