@@ -4,12 +4,19 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+"""Calculates and formats model statistics for inclusion in SAS Model Manager."""
+
+import logging
+
 import pandas as pd
 import numpy as np
 
 from math import sqrt
 from sklearn.metrics import roc_curve, log_loss, roc_auc_score
 from sklearn.metrics import accuracy_score, mean_squared_error
+
+
+log = logging.getLogger(__name__)
 
 
 def lift_statistics(model, train=None, valid=None, test=None, event=None):
@@ -288,13 +295,21 @@ def roc_statistics(model, train=None, valid=None, test=None):
 
     Parameters
     ----------
-    model
-    train
-    valid
-    test
+    model : predictor-like
+        An object that conforms to scikit-learn's Predictor interface and
+        implements a `predict` method.
+    train : (array_like, array_like)
+        A tuple of the training inputs and target output.
+    valid : (array_like, array_like)
+        A tuple of the validation inputs and target output.
+    test : (array_like, array_like)
+        A tuple of the test inputs and target output.
 
     Returns
     -------
+    dict
+        Metrics calculated for each dataset and formatted as expected by SAS
+        Model Manager.
 
     """
     datasets = (valid, train, test)
@@ -451,18 +466,22 @@ def _convert_class_labels(model, values):
     return new_values
 
 
-def fit_statistics(model, train=None, valid=None, test=None):
+def fit_statistics(model, train=None, valid=None, test=None, event=None):
     """Calculate model fit statistics.
 
     Parameters
     ----------
-    model
+    model : predictor-like
+        An object that conforms to scikit-learn's Predictor interface and
+        implements a `predict` method.
     train : (array_like, array_like)
         A tuple of the training inputs and target output.
     valid : (array_like, array_like)
         A tuple of the validation inputs and target output.
     test : (array_like, array_like)
         A tuple of the test inputs and target output.
+    event : str or int, optional
+        For classification models only.  The value corresponding to model output when the target event occurs.
 
     Returns
     -------
@@ -482,11 +501,10 @@ def fit_statistics(model, train=None, valid=None, test=None):
     if all(d is None for d in datasets):
         raise ValueError("At least one dataset must be provided.")
 
-    event = None
     if event is None:
         event = 1
     elif event in model.classes_:
-        event = 0 if event == model.classes_[0] else 1
+        event = model.classes_.index(event)
     else:
         event = int(event)
 
@@ -496,59 +514,88 @@ def fit_statistics(model, train=None, valid=None, test=None):
 
         X, y_true = dataset
         y_pred = model.predict(X)
+        is_classification = hasattr(model, 'classes_')
+        is_binary_classification = is_classification and len(model.classes_) == 2
 
-        y_true = _convert_class_labels(model, y_true)
-        y_pred = _convert_class_labels(model, y_pred)
+        if is_classification:
+            y_true = _convert_class_labels(model, y_true)
+            y_pred = _convert_class_labels(model, y_pred)
 
-        # Average Squared Error
+            y_pred_probs = pd.DataFrame(model.predict_proba(X))
+            y_prob = y_pred_probs.iloc[:, event]
+
+        # Initialize all metrics to a default value
+        ase = None
+        rase = None
+        ks = None
+        auc = None
+        gini = None
+        mce = None
+        mcll = None
+        gamma = None
+        tau = None
+
+        h = logging.FileHandler('test.log')
+        log.setLevel(logging.DEBUG)
+        log.addHandler(h)
         try:
-            ase = mean_squared_error(y_true, y_pred)
+            if is_binary_classification:
+                ase = mean_squared_error(y_true, y_prob)
+            elif is_classification:
+                # Do not calculate ASE/RMSE for multiclass problems until SAS MM numbers can be matched
+                pass
+            else:
+                ase = mean_squared_error(y_true, y_pred)
             rase = sqrt(ase)
-        except ValueError:
-            ase = None
-            rase = None
+        except (ValueError, TypeError):
+            log.debug('Unable to calculate RMSE:', exc_info=1)
 
+        # Kolmogorov - Smirnov (KS) Statistics
         try:
-            # Kolmogorov - Smirnov (KS) Statistics
-            fpr, tpr, _ = roc_curve(y_true, y_pred)
-            ks = max(np.abs(fpr - tpr))
+            if is_classification:
+                fpr, tpr, _ = roc_curve(y_true, y_pred)
+                ks = max(np.abs(fpr - tpr))
         except ValueError:
-            ks = None
+            log.debug('Unable to calculate KS statistic:', exc_info=1)
 
         # Area under Curve
         try:
-            auc = roc_auc_score(y_true, y_pred)
-            gini = (2 * auc) - 1
+            if is_classification and len(model.classes_) == 2:
+                auc = roc_auc_score(y_true, y_prob)
+                gini = 2 * auc - 1
         except (ValueError, TypeError):
-            auc = None
-            gini = None
+            log.debug('Unable to calculate AUC and Gini index:', exc_info=1)
 
+        # Misclassification Rate
         try:
-            # Misclassification Error
-            mce = 1 - accuracy_score(y_true, y_pred)  # classification
+            if is_binary_classification:
+                mce = 1 - accuracy_score(y_true, y_pred)
         except ValueError:
-            mce = None
+            log.debug('Unable to calculate Misclassificationrate:', exc_info=1)
 
         # Multi-Class Log Loss
         try:
-            mcll = log_loss(y_true, y_pred)
+            if is_binary_classification:
+                mcll = log_loss(y_true, y_pred_probs)
         except ValueError:
-            mcll = None
+            log.debug('Unable to calculate Multi-class Log Loss:', exc_info=1)
 
         # Gamma
-        try:
-            from scipy.stats import gamma
-            _, _, beta = gamma.fit(y_pred)
-            gamma_scale = 1. / beta
-        except ImportError:
-            gamma_scale = None
+        # try:
+        #     if is_classification:
+        #         from scipy.stats import gamma
+        #         _, _, beta = gamma.fit(y_pred)
+        #         gamma = 1. / beta
+        # except ImportError:
+        #     log.debug('Unable to calculate Gamma distribution:', exc_info=1)
 
         # Tau
-        try:
-            from scipy.stats import kendalltau
-            tau, _ = kendalltau(y_true, y_pred)
-        except:
-            tau = None
+        # try:
+        #     if is_classification:
+        #         from scipy.stats import kendalltau
+        #         tau, _ = kendalltau(y_true, y_pred)
+        # except Exception:
+        #     log.debug('Unable to calculate Kendall Tau coefficient:', exc_info=1)
 
         stats = {
             '_DataRole_': labels[idx],
@@ -559,7 +606,7 @@ def fit_statistics(model, train=None, valid=None, test=None):
             '_ASE_': ase,
             '_C_': auc,
             '_RASE_': rase,
-            '_GAMMA_': 1. / gamma_scale,
+            '_GAMMA_': gamma,
             '_GINI_': gini,
             '_KSPostCutoff_': None,
             '_KS_': ks,
