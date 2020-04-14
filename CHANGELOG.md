@@ -5,6 +5,10 @@ Unreleased
  - overwrite register_model files
  - metrics included by default
  
+v1.5.1 (2020-4-9)
+----------------
+ - Fixed PyMAS utilities to correctly work functions not bound to pickled objects.
+ - Model target variables should no longer appear as an input variable when registering ASTORE models. 
  
 v1.5 (2020-2-23)
 ----------------
