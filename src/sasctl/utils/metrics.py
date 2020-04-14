@@ -47,6 +47,9 @@ def lift_statistics(model, train=None, valid=None, test=None, event=None):
     datasets = (valid, train, test)
     labels = ['VALIDATE', 'TRAIN', 'TEST']
 
+    if not hasattr(model, 'classes_'):
+        return {}
+
     # At least some combination of datasets must be provided
     if all(d is None for d in datasets):
         raise ValueError("At least one dataset must be provided.")
