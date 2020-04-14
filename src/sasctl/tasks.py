@@ -331,12 +331,14 @@ def register_model(model, name, project, repository=None, input=None,
         # Calculate and include various model statistics.
         if any(x is not None for x in (train, test, valid)):
             for name, func in (('dmcas_lift.json', lift_statistics),
-                               ('dmcas_fitstats.json', fit_statistics,
-                                'dmcas_roc.json', roc_statistics)):
+                               ('dmcas_fitstat.json', fit_statistics),
+                               ('dmcas_roc.json', roc_statistics)):
                 if not any(f['name'] == name for f in files):
+                    logger.debug('Calling %s with train=%s, test=%s, valid=%s', func, type(train), type(test), type(valid))
                     stats = func(model_obj, train=train, test=test, valid=valid)
+                    logger.debug('Writing model statistics to %s:  %s', name, stats)
                     files.append({'name': name,
-                                  'file': json.dumps(stats)})
+                                  'file': json.dumps(stats, indent=2)})
 
         # Get package versions in environment
         if record_packages and not any(f['name'] == 'requirements.txt' for f in files):

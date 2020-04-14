@@ -73,7 +73,7 @@ def lift_statistics(model, train=None, valid=None, test=None, event=None):
         # We need to re-assign int values to the dataset to ensure they match
         # up to the column order output by the model.  Otherwise, output labels
         # will match, but underlying int representations will be off.
-        y_true = y_true.cat.reorder_categories(model.classes_)
+        y_true = y_true.astype('category').cat.reorder_categories(model.classes_)
 
         # Predicted probability for each class
         y_pred_probs = pd.DataFrame(model.predict_proba(X))
@@ -323,15 +323,15 @@ def roc_statistics(model, train=None, valid=None, test=None):
     row_count = 0
 
     for idx, dataset in enumerate(datasets):
-        if dataset is None:
+        if dataset is None or not hasattr(model, 'classes_'):
             continue
 
         X, y_true = dataset
 
         y_pred = model.predict(X)
-        y_pred = pd.Series(y_pred, dtype=y_true.dtype)
+        y_pred = pd.Series(y_pred, dtype='category')
 
-        fpr, tpr, threshold = roc_curve(y_true.cat.codes, y_pred.cat.codes)
+        fpr, tpr, threshold = roc_curve(y_true.astype('category').cat.codes, y_pred.cat.codes)
 
         for f, t, h in zip(fpr, tpr, threshold):
             row_count += 1
@@ -345,7 +345,7 @@ def roc_statistics(model, train=None, valid=None, test=None):
                          '_Specificity_': (1 - f),
                          '_OneMinusSpecificity_': 1 - (1 - f),
                          '_Event_': 1,
-                         '_Cutoff_': h,
+                         '_Cutoff_': int(h),
                          '_FPR_': f}
                      }
             results.append(stats)
