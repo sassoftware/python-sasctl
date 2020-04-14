@@ -6,6 +6,7 @@
 
 import argparse
 import inspect
+import json
 import logging
 import os
 import pkgutil
@@ -83,10 +84,10 @@ def sasctl_command(name, subname=None):
                 doc_lines = doc[doc.find('Parameters\n'):].splitlines()
                 doc_lines.pop(0)  # First line is "Parameters"
 
-                if len(doc_lines) and doc_lines[0].startswith('---'):
+                if doc_lines and doc_lines[0].startswith('---'):
                     doc_lines.pop(0)  # Discard ----------- line under "Parameters" heading
 
-                while len(doc_lines):
+                while doc_lines:
                     var = doc_lines.pop(0)
 
                     if var.startswith('Returns') or var.strip() == '':
@@ -97,7 +98,7 @@ def sasctl_command(name, subname=None):
                     else:
                         types.append('str')
 
-                    if len(doc_lines) and doc_lines[0].startswith('    '):
+                    if doc_lines and doc_lines[0].startswith('    '):
                         help_doc.append(doc_lines.pop(0).strip())
                     else:
                         help_doc.append('')
@@ -105,7 +106,7 @@ def sasctl_command(name, subname=None):
                 types = ['str'] * len(arg_spec.args)
                 help_doc = [None] * len(arg_spec.args)
 
-            return [ArgInfo(name, type, required, default, doc) for name, type, required, default, doc in
+            return [ArgInfo(n, t, r, d, o) for n, t, r, d, o in
                     zip(arg_spec.args, types, required, defaults, help_doc)]
 
         func._cli_command = command_name
@@ -117,8 +118,7 @@ def sasctl_command(name, subname=None):
     if six.callable(name):
         # allow direct decoration without arguments
         return decorator(name)
-    else:
-        return decorator
+    return decorator
 
 
 def _find_services(module='sasctl'):
@@ -160,7 +160,7 @@ def _get_func_description(func):
 
     lines = description.split('\n')
 
-    if len(lines) > 0:
+    if lines:
         return lines[0]
 
 
@@ -170,17 +170,23 @@ def _build_parser(services):
 
     # Create standard, top-level arguments
     parser = argparse.ArgumentParser(prog='sasctl', description='sasctl interacts with a SAS Viya environment.')
-    parser.add_argument('-k', '--insecure', action='store_true', help='Skip SSL verification')
+    parser.add_argument('-k', '--insecure', action='store_true',
+                        help='skip SSL verification')
+    parser.add_argument('-f', '--format', choices=['json'],
+                        default='json', help='output format')
     parser.add_argument('-v', '--verbose', action='count')
-    parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
+    parser.add_argument('--version',
+                        action='version',
+                        version='%(prog)s ' + __version__)
 
     subparsers = parser.add_subparsers(title='service', dest='service')
-    subparsers.required=True
+    subparsers.required = True
 
     for service, commands in six.iteritems(services):
         service_parser = subparsers.add_parser(service)
-        service_subparser = service_parser.add_subparsers(title='command', dest='command')
-        service_subparser.required=True
+        service_subparser = service_parser.add_subparsers(title='command',
+                                                          dest='command')
+        service_subparser.required = True
 
         # Add the command and arguments for each command
         for command in commands:
@@ -228,7 +234,7 @@ def main(args=None):
     kwargs = vars(args).copy()
 
     # Remove args that shouldn't be passed to the underlying command
-    for k in ['command', 'service', 'insecure', 'verbose']:
+    for k in ['command', 'service', 'insecure', 'verbose', 'format']:
         kwargs.pop(k, None)
 
     username = os.environ.get('SASCTL_USER_NAME')
@@ -249,6 +255,8 @@ def main(args=None):
             result = func(**kwargs)
             if isinstance(result, list):
                 pprint([str(x) for x in result])
+            elif isinstance(result, dict) and args.format == 'json':
+                    print(json.dumps(result, indent=2))
             else:
                 pprint(result)
     except RuntimeError as e:

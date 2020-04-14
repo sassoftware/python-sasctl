@@ -26,10 +26,10 @@ class XgbTreeParser(TreeParser):
         return self._node['split']
 
     def _go_left(self):
-        return (self._node['missing'] == self._node['yes'])
+        return self._node['missing'] == self._node['yes']
 
     def _go_right(self):
-        return (self._node['missing'] == self._node['no'])
+        return self._node['missing'] == self._node['no']
 
     def _left_node(self):
         return self.d[self._node['yes']]

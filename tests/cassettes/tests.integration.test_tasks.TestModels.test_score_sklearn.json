@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2019-08-01T15:38:22",
+      "recorded_at": "2020-01-18T21:31:52",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -36,11 +36,10 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"b1fe2b3182b240dd984582e145e64949\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIwODU0ZGEyMC1jZGVlLTRkZWEtOGRlNC04YTZhMDc2OTg0MDciLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE1Nzk0MTkxMTIsImlhdCI6MTU3OTM4MzExMiwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJzYXNkZW1vQG5vbmUuc2FzLmNvbSIsInppZCI6InVhYSIsIm9yaWdpbiI6ImxkYXAiLCJqdGkiOiI1YTA5NDdlYTVmMDI0ZjMwYmU4ODg2ZTUxOTY0NzUzYiIsInByZXZpb3VzX2xvZ29uX3RpbWUiOjE1NzkzODMxMDIxMDEsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50X2lkIjoic2FzLmVjIiwiY2lkIjoic2FzLmVjIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoic2FzZGVtbyIsInJldl9zaWciOiI5ZjAwNjhmYSIsImF1dGhfdGltZSI6MTU3OTM4MzExMiwidXNlcl9pZCI6IjA4NTRkYTIwLWNkZWUtNGRlYS04ZGU0LThhNmEwNzY5ODQwNyJ9.p-anngjMvmhYtyD9vB1VWGtSrV_ssTTJoCu5G7sFiOyh8rrMgfp6cJOUf0RAyXo9FqLEvUS0IazYVWgRxJf3Fxdid4ls8p72MEHA9IDwOSEFLWF9mqQNgoULwhlxDzQlBBLce4JmGSB0enQhdoje9rV1FbEQp7T7KMHuKUrpcs1zxgfTrQidKVHKq91uXLHbqZfCHaCwpYguI6NJL0JzCbNX0ztf5Kwe1p4_M6AaYvl6xJJjFWJLA1e0G04QDL-OGQjiDkGSq4q_D1PG9-WY5Fe9QCGNK6F4zatT_FllaEMcshQePSVogIZV4Fcvop04efxgpUMkigicx1SAel-N9Q\",\"expires_in\":35999,\"scope\":\"clients.read clients.secret DataBuilders uaa.resource openid ApplicationAdministrators uaa.admin clients.admin EsriUsers scim.read SASScoreUsers SASAdministrators clients.write scim.write\",\"jti\":\"5a0947ea5f024f30be8886e51964753b\"}"
         },
         "headers": {
           "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate",
             "no-store"
           ],
           "Connection": [
@@ -50,17 +49,16 @@
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 01 Aug 2019 15:38:23 GMT"
-          ],
-          "Expires": [
-            "0"
+            "Sat, 18 Jan 2020 21:31:51 GMT"
           ],
           "Keep-Alive": [
             "timeout=5, max=100"
           ],
           "Pragma": [
-            "no-cache",
             "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -89,7 +87,7 @@
       }
     },
     {
-      "recorded_at": "2019-08-01T15:38:22",
+      "recorded_at": "2020-01-18T21:31:52",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -113,12 +111,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/microanalyticScore/modules?filter=eq(name,%20%22ScikitModel%22)&limit=10000"
+        "uri": "https://hostname.com/microanalyticScore/modules?filter=eq(name,%20%22sasctl_testingScikitModel%22)"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules?filter=eq(name,%20%22ScikitModel%22)&start=0&limit=20\",\"uri\":\"/microanalyticScore/modules?filter=eq(name,%20%22ScikitModel%22)&start=0&limit=20\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createModule\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.microanalytic.module.definition\",\"responseType\":\"application/vnd.sas.microanalytic.module\"}],\"name\":\"modules\",\"accept\":\"application/vnd.sas.microanalytic.module\",\"start\":0,\"count\":1,\"items\":[{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"source\",\"href\":\"/microanalyticScore/modules/scikitmodel/source\",\"uri\":\"/microanalyticScore/modules/scikitmodel/source\",\"type\":\"application/vnd.sas.microanalytic.module.source\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/scikitmodel/submodules\",\"uri\":\"/microanalyticScore/modules/scikitmodel/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-08-01T15:16:54.140Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-08-01T15:16:54.140Z\",\"id\":\"scikitmodel\",\"name\":\"ScikitModel\",\"revision\":0,\"scope\":\"public\",\"language\":\"ds2\",\"stepIds\":[\"score\"],\"warnings\":[]}],\"limit\":20,\"version\":2}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules?filter=eq(name,%20%22sasctl_testingScikitModel%22)&start=0&limit=20\",\"uri\":\"/microanalyticScore/modules?filter=eq(name,%20%22sasctl_testingScikitModel%22)&start=0&limit=20\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createModule\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.microanalytic.module.definition\",\"responseType\":\"application/vnd.sas.microanalytic.module\"}],\"name\":\"modules\",\"accept\":\"application/vnd.sas.microanalytic.module\",\"start\":0,\"count\":1,\"items\":[{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"source\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/source\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/source\",\"type\":\"application/vnd.sas.microanalytic.module.source\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/submodules\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2020-01-18T21:31:41.257Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2020-01-18T21:31:51.521Z\",\"id\":\"sasctl_testingscikitmodel\",\"name\":\"sasctl_testingScikitModel\",\"revision\":0,\"scope\":\"public\",\"language\":\"ds2\",\"stepIds\":[\"predict\",\"predict_proba\"],\"properties\":[{\"name\":\"sourceURI\",\"value\":\"http://localhost/modelRepository/models/a8cef867-1ab1-42e8-b24d-b0108b9393f9\"}],\"warnings\":[]}],\"limit\":20,\"version\":2}"
         },
         "headers": {
           "Cache-Control": [
@@ -134,7 +132,7 @@
             "application/vnd.sas.collection+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 01 Aug 2019 15:38:23 GMT"
+            "Sat, 18 Jan 2020 21:31:51 GMT"
           ],
           "Expires": [
             "0"
@@ -144,6 +142,9 @@
           ],
           "Pragma": [
             "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -168,11 +169,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/microanalyticScore/modules?filter=eq(name,%20%22ScikitModel%22)"
+        "url": "https://hostname.com/microanalyticScore/modules?filter=eq(name,%20%22sasctl_testingScikitModel%22)"
       }
     },
     {
-      "recorded_at": "2019-08-01T15:38:22",
+      "recorded_at": "2020-01-18T21:31:52",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -196,12 +197,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/microanalyticScore/modules/scikitmodel"
+        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_testingscikitmodel"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"source\",\"href\":\"/microanalyticScore/modules/scikitmodel/source\",\"uri\":\"/microanalyticScore/modules/scikitmodel/source\",\"type\":\"application/vnd.sas.microanalytic.module.source\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/scikitmodel/submodules\",\"uri\":\"/microanalyticScore/modules/scikitmodel/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/scikitmodel\",\"uri\":\"/microanalyticScore/modules/scikitmodel\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-08-01T15:16:54.140Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-08-01T15:16:54.140Z\",\"id\":\"scikitmodel\",\"name\":\"ScikitModel\",\"revision\":0,\"scope\":\"public\",\"language\":\"ds2\",\"stepIds\":[\"score\"],\"warnings\":[]}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"source\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/source\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/source\",\"type\":\"application/vnd.sas.microanalytic.module.source\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/submodules\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2020-01-18T21:31:41.257Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2020-01-18T21:31:51.521Z\",\"id\":\"sasctl_testingscikitmodel\",\"name\":\"sasctl_testingScikitModel\",\"revision\":0,\"scope\":\"public\",\"language\":\"ds2\",\"stepIds\":[\"predict\",\"predict_proba\"],\"properties\":[{\"name\":\"sourceURI\",\"value\":\"http://localhost/modelRepository/models/a8cef867-1ab1-42e8-b24d-b0108b9393f9\"}],\"warnings\":[]}"
         },
         "headers": {
           "Cache-Control": [
@@ -217,10 +218,10 @@
             "application/vnd.sas.microanalytic.module+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 01 Aug 2019 15:38:23 GMT"
+            "Sat, 18 Jan 2020 21:31:51 GMT"
           ],
           "ETag": [
-            "\"jystobuk\""
+            "\"k5k3xc9t\""
           ],
           "Expires": [
             "0"
@@ -229,13 +230,16 @@
             "timeout=5, max=98"
           ],
           "Last-Modified": [
-            "Thu, 01 Aug 2019 15:16:54 GMT"
+            "Sat, 18 Jan 2020 21:31:51 GMT"
           ],
           "Location": [
-            "/microanalyticScore/modules/scikitmodel"
+            "/microanalyticScore/modules/sasctl_testingscikitmodel"
           ],
           "Pragma": [
             "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -260,11 +264,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/microanalyticScore/modules/scikitmodel"
+        "url": "https://hostname.com/microanalyticScore/modules/sasctl_testingscikitmodel"
       }
     },
     {
-      "recorded_at": "2019-08-01T15:38:22",
+      "recorded_at": "2020-01-18T21:31:52",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -288,12 +292,12 @@
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/microanalyticScore/modules/scikitmodel/steps/score"
+        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"type\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"POST\",\"rel\":\"execute\",\"href\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"uri\":\"/microanalyticScore/modules/scikitmodel/steps/score\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.microanalytic.module.step.output\"},{\"method\":\"POST\",\"rel\":\"validateStepInput\",\"href\":\"/microanalyticScore/commons/validations/modules/scikitmodel/steps/score\",\"uri\":\"/microanalyticScore/commons/validations/modules/scikitmodel/steps/score\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.validation\"}],\"version\":1,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-08-01T15:16:54.140Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-08-01T15:16:54.140Z\",\"id\":\"score\",\"moduleId\":\"scikitmodel\",\"inputs\":[{\"name\":\"sepallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"sepalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0}],\"outputs\":[{\"name\":\"var1\",\"type\":\"string\",\"dim\":0,\"size\":0},{\"name\":\"rc\",\"type\":\"integer\",\"dim\":0,\"size\":0},{\"name\":\"msg\",\"type\":\"string\",\"dim\":0,\"size\":0}]}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict\",\"type\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"POST\",\"rel\":\"execute\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.microanalytic.module.step.output\"},{\"method\":\"POST\",\"rel\":\"validateStepInput\",\"href\":\"/microanalyticScore/commons/validations/modules/sasctl_testingscikitmodel/steps/predict\",\"uri\":\"/microanalyticScore/commons/validations/modules/sasctl_testingscikitmodel/steps/predict\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.validation\"}],\"version\":1,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2020-01-18T21:31:41.257Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2020-01-18T21:31:51.521Z\",\"id\":\"predict\",\"moduleId\":\"sasctl_testingscikitmodel\",\"inputs\":[{\"name\":\"sepallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"sepalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0}],\"outputs\":[{\"name\":\"var1\",\"type\":\"string\",\"dim\":0,\"size\":0}]}"
         },
         "headers": {
           "Cache-Control": [
@@ -309,10 +313,10 @@
             "application/vnd.sas.microanalytic.module.step+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 01 Aug 2019 15:38:23 GMT"
+            "Sat, 18 Jan 2020 21:31:51 GMT"
           ],
           "ETag": [
-            "\"jystobuk\""
+            "\"k5k3xc9t\""
           ],
           "Expires": [
             "0"
@@ -321,13 +325,16 @@
             "timeout=5, max=97"
           ],
           "Last-Modified": [
-            "Thu, 01 Aug 2019 15:16:54 GMT"
+            "Sat, 18 Jan 2020 21:31:51 GMT"
           ],
           "Location": [
-            "/microanalyticScore/modules/scikitmodel/steps/score"
+            "/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict"
           ],
           "Pragma": [
             "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -352,11 +359,106 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/microanalyticScore/modules/scikitmodel/steps/score"
+        "url": "https://hostname.com/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict"
       }
     },
     {
-      "recorded_at": "2019-08-01T15:38:28",
+      "recorded_at": "2020-01-18T21:31:52",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict_proba"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict_proba\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict_proba\",\"type\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"POST\",\"rel\":\"execute\",\"href\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict_proba\",\"uri\":\"/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict_proba\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.microanalytic.module.step.output\"},{\"method\":\"POST\",\"rel\":\"validateStepInput\",\"href\":\"/microanalyticScore/commons/validations/modules/sasctl_testingscikitmodel/steps/predict_proba\",\"uri\":\"/microanalyticScore/commons/validations/modules/sasctl_testingscikitmodel/steps/predict_proba\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.validation\"}],\"version\":1,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2020-01-18T21:31:41.257Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2020-01-18T21:31:51.521Z\",\"id\":\"predict_proba\",\"moduleId\":\"sasctl_testingscikitmodel\",\"inputs\":[{\"name\":\"sepallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"sepalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0}],\"outputs\":[{\"name\":\"p_1\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"p_2\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"p_3\",\"type\":\"decimal\",\"dim\":0,\"size\":0}]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.microanalytic.module.step+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Sat, 18 Jan 2020 21:31:51 GMT"
+          ],
+          "ETag": [
+            "\"k5k3xc9t\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=96"
+          ],
+          "Last-Modified": [
+            "Sat, 18 Jan 2020 21:31:51 GMT"
+          ],
+          "Location": [
+            "/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict_proba"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict_proba"
+      }
+    },
+    {
+      "recorded_at": "2020-01-18T21:31:52",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -386,12 +488,12 @@
           ]
         },
         "method": "POST",
-        "uri": "https://hostname.com/microanalyticScore/modules/scikitmodel/steps/score"
+        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict"
       },
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[],\"version\":2,\"moduleId\":\"scikitmodel\",\"stepId\":\"score\",\"executionState\":\"completed\",\"outputs\":[{\"name\":\"var1\",\"value\":\"virginica\"},{\"name\":\"rc\",\"value\":0},{\"name\":\"msg\"}]}"
+          "string": "{\"links\":[],\"version\":2,\"moduleId\":\"sasctl_testingscikitmodel\",\"stepId\":\"predict\",\"executionState\":\"completed\",\"outputs\":[{\"name\":\"var1\",\"value\":\"virginica\"}]}"
         },
         "headers": {
           "Cache-Control": [
@@ -407,16 +509,19 @@
             "application/vnd.sas.microanalytic.module.step.output+json;charset=UTF-8"
           ],
           "Date": [
-            "Thu, 01 Aug 2019 15:38:28 GMT"
+            "Sat, 18 Jan 2020 21:31:51 GMT"
           ],
           "Expires": [
             "0"
           ],
           "Keep-Alive": [
-            "timeout=5, max=96"
+            "timeout=5, max=95"
           ],
           "Pragma": [
             "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
           ],
           "Strict-Transport-Security": [
             "max-age=31536000 ; includeSubDomains"
@@ -441,7 +546,7 @@
           "code": 201,
           "message": ""
         },
-        "url": "https://hostname.com/microanalyticScore/modules/scikitmodel/steps/score"
+        "url": "https://hostname.com/microanalyticScore/modules/sasctl_testingscikitmodel/steps/predict"
       }
     }
   ],

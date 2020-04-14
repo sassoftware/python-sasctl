@@ -54,25 +54,25 @@ def test_from_inline():
         _ = from_inline(dummy_func)
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [DS2Variable('x1', 'str', False),
+        assert [[DS2Variable('x1', 'str', False),
                 DS2Variable('x2', 'int', False),
-                DS2Variable('out1', 'float', True)] == call_args[1]   # Variables
+                DS2Variable('out1', 'float', True)]] == call_args[1]   # Variables
 
     with mock.patch('sasctl.utils.pymas.core.PyMAS', autospec=True) as mocked:
         _ = from_inline(dummy_func, input_types=int)
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [DS2Variable('x1', 'int', False),
+        assert [[DS2Variable('x1', 'int', False),
                 DS2Variable('x2', 'int', False),
-                DS2Variable('result', 'float', True)] == call_args[1]   # Variables
+                DS2Variable('result', 'float', True)]] == call_args[1]   # Variables
 
     with mock.patch('sasctl.utils.pymas.core.PyMAS', autospec=True) as mocked:
         _ = from_inline(dummy_func, input_types=OrderedDict([('a', int), ('b', float)]))
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [DS2Variable('a', 'int', False),
+        assert [[DS2Variable('a', 'int', False),
                 DS2Variable('b', 'double', False),
-                DS2Variable('result', 'float', True)] == call_args[1]   # Variables
+                DS2Variable('result', 'float', True)]] == call_args[1]   # Variables
 
 
 def test_from_pickle_with_func():
@@ -87,9 +87,9 @@ def test_from_pickle_with_func():
         result = from_pickle(data)
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [DS2Variable('x1', 'str', False),
+        assert [[DS2Variable('x1', 'str', False),
                 DS2Variable('x2', 'int', False),
-                DS2Variable('out1', 'float', True)] == call_args[1]   # Variables
+                DS2Variable('out1', 'float', True)]] == call_args[1]   # Variables
 
     assert isinstance(result, PyMAS)
 
@@ -109,24 +109,23 @@ def test_from_pickle_with_class():
         result = from_pickle(data, 'func')
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [DS2Variable('x1', 'str', False),
+        assert [[DS2Variable('x1', 'str', False),
                 DS2Variable('x2', 'int', False),
-                DS2Variable('out1', 'float', True)] == call_args[1]   # Variables
+                DS2Variable('out1', 'float', True)]] == call_args[1]   # Variables
 
     assert isinstance(result, PyMAS)
 
 
 def test_build_wrapper_function():
     def func(a, b):
-        pass
+        return a, b
 
     # Actual function inputs & DS2 variables current dont have to match.
     result = build_wrapper_function(func, [DS2Variable('a', 'int', False),
                                            DS2Variable('x', 'float', True)],
-                                    array_input=False,
-                                    return_msg=False)
+                                    array_input=False)
     assert isinstance(result, str)
-    assert '"Output: x"\n' in result
+    assert '"Output: x' in result
 
 
 def test_ds2_double():
@@ -352,7 +351,6 @@ method score(
             if revision lt 1 then do;
                 logr.log('e', 'py.publish() failed.');
                 rc = -1;
-                return;
             end;
         end;
         rc = py.useMethod('domath');
@@ -472,7 +470,6 @@ package _pyscore / overwrite=yes;
                 if revision lt 1 then do;
                     logr.log('e', 'py.publish() failed.');
                     rc = -1;
-                    return;
                 end;
             end;
             rc = py.useMethod('domath');
@@ -550,4 +547,173 @@ def test_bugfix_27():
     debtinc = [i for i in inputs if i['name'] == 'DEBTINC'].pop()
     assert debtinc['value'] is None
 
+
+def test_wrapper():
+    """Verify correct output from build_wrapper_function under default settings."""
+
+    target = """
+def wrapper(a, b):
+    "Output: c, msg"
+    result = None
+    msg = None
+    try:
+        global _compile_error
+        if _compile_error is not None:
+            raise _compile_error
+        import numpy as np
+        import pandas as pd
+
+        if a is None: a = np.nan
+        if b is None: b = np.nan
+        input_array = np.array([a, b]).reshape((1, -1))
+        columns = ["a", "b"]
+        input_df = pd.DataFrame(data=input_array, columns=columns)
+        result = dummy_func(input_df)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)
+        if len(result) == 0:
+            result = tuple(None for i in range(1))
+        elif "numpy" in str(type(result[0])):
+            result = tuple(np.asscalar(i) for i in result)
+    except Exception as e:
+        from traceback import format_exc
+        msg = str(e) + format_exc()
+        if result is None:
+            result = tuple(None for i in range(1))
+    return result + (msg, )
+    """.rstrip()
+
+    code = build_wrapper_function(dummy_func, [DS2Variable('a', float, False),
+                                             DS2Variable('b', float, False),
+                                             DS2Variable('c', float, True)],
+                                array_input=True)
+
+    assert code == target
+
+
+def test_wrapper_renamed():
+    """Check wrap_predict_method output with custom name."""
+
+    target = """
+def renamed_wrapper(a, b):
+    "Output: c, msg"
+    result = None
+    msg = None
+    try:
+        global _compile_error
+        if _compile_error is not None:
+            raise _compile_error
+        import numpy as np
+        import pandas as pd
+
+        if a is None: a = np.nan
+        if b is None: b = np.nan
+        input_array = np.array([a, b]).reshape((1, -1))
+        columns = ["a", "b"]
+        input_df = pd.DataFrame(data=input_array, columns=columns)
+        result = dummy_func(input_df)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)
+        if len(result) == 0:
+            result = tuple(None for i in range(1))
+        elif "numpy" in str(type(result[0])):
+            result = tuple(np.asscalar(i) for i in result)
+    except Exception as e:
+        from traceback import format_exc
+        msg = str(e) + format_exc()
+        if result is None:
+            result = tuple(None for i in range(1))
+    return result + (msg, )
+        """.rstrip()
+
+    code = build_wrapper_function(dummy_func, [DS2Variable('a', float, False),
+                                                DS2Variable('b', float, False),
+                                                DS2Variable('c', float, True)],
+                                   array_input=True,
+                                   name='renamed_wrapper')
+
+    assert code == target
+
+
+def test_wrap_predict_method():
+    """Check wrap_predict_method output with default inputs."""
+    from sasctl.utils.pymas.core import wrap_predict_method
+
+    target = """
+def predict(a, b):
+    "Output: c, msg"
+    result = None
+    msg = None
+    try:
+        global _compile_error
+        if _compile_error is not None:
+            raise _compile_error
+        import numpy as np
+        import pandas as pd
+
+        if a is None: a = np.nan
+        if b is None: b = np.nan
+        input_array = np.array([a, b]).reshape((1, -1))
+        columns = ["a", "b"]
+        input_df = pd.DataFrame(data=input_array, columns=columns)
+        result = dummy_func(input_df)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)
+        if len(result) == 0:
+            result = tuple(None for i in range(1))
+        elif "numpy" in str(type(result[0])):
+            result = tuple(np.asscalar(i) for i in result)
+    except Exception as e:
+        from traceback import format_exc
+        msg = str(e) + format_exc()
+        if result is None:
+            result = tuple(None for i in range(1))
+    return result + (msg, )
+        """.rstrip()
+
+    code = wrap_predict_method(dummy_func, [DS2Variable('a', float, False),
+                                                DS2Variable('b', float, False),
+                                                DS2Variable('c', float, True)])
+
+    assert code == target
+
+
+def test_wrap_predict_proba_method():
+    """Check wrap_predict_proba_method output with default inputs."""
+    from sasctl.utils.pymas.core import wrap_predict_proba_method
+
+    target = """
+def predict_proba(a, b):
+    "Output: c, msg"
+    result = None
+    msg = None
+    try:
+        global _compile_error
+        if _compile_error is not None:
+            raise _compile_error
+        import numpy as np
+        import pandas as pd
+
+        if a is None: a = np.nan
+        if b is None: b = np.nan
+        input_array = np.array([a, b]).reshape((1, -1))
+        columns = ["a", "b"]
+        input_df = pd.DataFrame(data=input_array, columns=columns)
+        result = dummy_func(input_df)
+        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)
+        if len(result) == 0:
+            result = tuple(None for i in range(1))
+        elif "numpy" in str(type(result[0])):
+            result = tuple(np.asscalar(i) for i in result)
+    except Exception as e:
+        from traceback import format_exc
+        msg = str(e) + format_exc()
+        if result is None:
+            result = tuple(None for i in range(1))
+    return result + (msg, )
+        """.rstrip()
+
+    code = wrap_predict_proba_method(dummy_func,
+                                     [DS2Variable('a', float, False),
+                                      DS2Variable('b', float, False),
+                                      DS2Variable('c', float, True)])
+
+    assert code == target
 

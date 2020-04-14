@@ -42,7 +42,9 @@ def test_xgb2ds():
         parser.return_value = test_parser
         result = pyml2ds(IN_PKL)
 
-    expected = open(EXPECTED_SAS, 'r').read()
+    with open(EXPECTED_SAS, 'r') as f:
+        expected = f.read()
+
     assert result == expected
 
 
@@ -71,7 +73,8 @@ def test_lgb2ds():
         parser.return_value = test_parser
         result = pyml2ds(IN_PKL)
 
-    expected = open(EXPECTED_SAS, 'r').read()
+    with open(EXPECTED_SAS, 'r') as f:
+        expected = f.read()
     assert result == expected
 
 
@@ -98,7 +101,8 @@ def test_gbm2ds():
         parser.return_value = test_parser
         result = pyml2ds(IN_PKL)
 
-    expected = open(EXPECTED_SAS, 'r').read()
+    with open(EXPECTED_SAS, 'r') as f:
+        expected = f.read()
     assert result == expected
 
 

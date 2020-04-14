@@ -11,7 +11,6 @@ import re
 from .model_repository import ModelRepository
 from .service import Service
 
-
 class ModelPublish(Service):
     """Enables publishing objects such as models to various destinations.
 
@@ -55,8 +54,41 @@ class ModelPublish(Service):
         return cls.get('/models').get('items', [])
 
     list_destinations, get_destination, update_destination, \
-        delete_destination = Service._crud_funcs('/destinations',
+    _ = Service._crud_funcs('/destinations',
                                                  'destination')
+
+    # @sasctl_command('delete')
+    @classmethod
+    def delete_destination(cls, item):
+        """Delete a destination instance.
+
+        Parameters
+        ----------
+        item : str or dict
+            Name or dictionary representation of publishing destination.
+
+        Returns
+        -------
+        None
+
+        """
+
+        # NOTE:  Explicitly defined since service requires destination NAME not
+        # ID which is standard.
+        item_name = str(item)
+
+        # Try to find the item if the id can't be found
+        if not (isinstance(item, dict) and 'id' in item):
+            item = cls.get_destination(item)
+            if item is None:
+                cls.log.info("Object '%s' not found.  Skipping delete.",
+                             item_name)
+                return
+
+        if isinstance(item, dict) and 'name' in item:
+            item = item['name']
+
+        return cls.delete('/destinations/{name}'.format(name=item))
 
     @classmethod
     def publish_model(cls,
@@ -227,8 +259,10 @@ class ModelPublish(Service):
 
         """
         type_ = str(type_).lower()
-        assert type_ in ('cas', 'microanalyticservice', 'mas',
-                         'teradata', 'hadoop')
+        if type_ not in ('cas', 'microanalyticservice', 'mas', 'teradata',
+                         'hadoop'):
+            raise ValueError("Unrecognized destination type '%s' specified."
+                             % type_)
 
         # As of Viya 3.4 capitalization matters.
         if type_ in ('microanalyticservice', 'mas'):

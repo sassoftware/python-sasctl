@@ -12,10 +12,12 @@ class PmmlTreeParser(TreeParser):
         return self._node.find('Node').find('SimplePredicate').get('field')
 
     def _go_left(self):
-        return (self._node.find('Node').get('id') == self._node.get('defaultChild'))
+        return self._node.find('Node').get('id') == self._node.get(
+            'defaultChild')
 
     def _go_right(self):
-        return (not self._node.find('Node').get('id') == self._node.get('defaultChild'))
+        return not self._node.find('Node').get('id') == self._node.get(
+            'defaultChild')
 
     def _left_node(self):
         return self._node.findall('Node')[0]

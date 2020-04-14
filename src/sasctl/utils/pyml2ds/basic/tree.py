@@ -22,6 +22,11 @@ class TreeParser:
     """
     def __init__(self):
         self.d = {}
+        self._indent = 4
+        self._depth = -1
+        self._tree_id = None
+        self._node = None
+        self._root = None
 
     def init(self, root, tree_id=0):
         """Custom init method. Need to be called before using TreeParser.
@@ -86,12 +91,13 @@ class TreeParser:
     def _leaf_value(self):
         pass
 
-    def _remove_diacritic(self, input):
+    @staticmethod
+    def _remove_diacritic(input):
         if sys.hexversion >= 0x3000000:
             output = unicodedata.normalize('NFKD', input).encode('ASCII', 'ignore').decode()
         else:
             # On Python < 3.0.0
-            if type(input) == str:
+            if isinstance(input, str):
                 input = six.text_type(input, 'ISO-8859-1')
             output = unicodedata.normalize('NFKD', input).encode('ASCII', 'ignore')
 
@@ -116,7 +122,7 @@ class TreeParser:
             self._node = self._root
 
         if self._node == self._root:
-            self.d = dict()
+            self.d = {}
             self._gen_dict()
 
         self._depth += 1

@@ -16,7 +16,7 @@ class LightgbmTreeParser(TreeParser):
         return self._node['default_left']
 
     def _go_right(self):
-        return (not self._node['default_left'])
+        return not self._node['default_left']
 
     def _left_node(self):
         return self._node['left_child']
@@ -52,10 +52,12 @@ class LightgbmParser(EnsembleParser):
         self._booster = booster
         self._dump = booster.dump_model()
 
-        if self._dump['objective'] != 'binary sigmoid:1':
+        objective = self._dump.get('objective')
+
+        if objective != 'binary sigmoid:1':
             raise ValueError("Only binary sigmoid objective function is "
                              "currently supported. Received '%s'."
-                             % self.dump['objective'])
+                             % objective)
 
         self._features = self._dump['feature_names']
         self.out_transform = "1 / (1 + exp(-{0}))"

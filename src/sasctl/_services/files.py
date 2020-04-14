@@ -71,16 +71,15 @@ class Files(Service):
 
             if _folder is None:
                 raise ValueError("Folder '%s' could not be found." % folder)
-            else:
-                params['parentFolderUri'] = self.get_link(_folder,
-                                                          'self')['href']
+
+            params['parentFolderUri'] = self.get_link(_folder, 'self')['href']
 
         if expiration is not None:
             pass
             # TODO: add 'expirationTimeStamp' to params.  Need to determine correct format
 
         return self.post('/files#multipartUpload',
-                         files={ filename: file}, params=params)
+                         files={filename: file}, params=params)
 
     @sasctl_command('files', 'content')
     def get_file_content(self, file):
@@ -89,7 +88,7 @@ class Files(Service):
         Parameters
         ----------
         file : str or dict, optional
-            Name, or, or file information as returned by :func:`get_file`.
+            Name or file information as returned by :func:`get_file`.
 
         Returns
         -------
@@ -98,5 +97,15 @@ class Files(Service):
         """
         file = self.get_file(file)
 
-        return self.request_link(file, 'content')
+        r = self.request_link(file, 'content', format='response')
 
+        content_type = r.headers.get('Content-Type', '')
+
+        if 'text/plain' in content_type:
+            return r.text
+        if 'application/json' in content_type:
+            return r.json()
+        if 'application/octet-stream' in content_type:
+            return r.content
+
+        return r.text

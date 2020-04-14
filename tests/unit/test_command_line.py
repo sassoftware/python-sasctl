@@ -9,6 +9,7 @@ from six.moves import mock
 
 
 def test_build_parser():
+    """Verify arguments are correctly parsed."""
     from sasctl.utils.cli import _build_parser
     from sasctl.utils.cli import ArgInfo
 
@@ -31,6 +32,7 @@ def test_build_parser():
 
 
 def test_get_func_description():
+    """Verify that function descriptions are correctly extracted from docstrings."""
     from sasctl.utils.cli import _get_func_description
 
     def func():

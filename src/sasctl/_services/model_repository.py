@@ -6,6 +6,8 @@
 
 """The Model Repository service supports registering and managing models."""
 
+import six
+
 from .service import Service
 from ..core import current_session, get, delete
 
@@ -19,6 +21,7 @@ def _get_filter(x):
     # instead of the default filter= parameter (as of Viya 3.4).
     # Define a custom function for building out the filter
     return dict(properties='(name, %s)' % x)
+
 
 class ModelRepository(Service):
     """Implements the Model Repository REST API.
@@ -230,7 +233,6 @@ class ModelRepository(Service):
 
         if isinstance(model, str):
             model = {'name': model}
-        assert isinstance(model, dict)
 
         p = cls.get_project(project)
         if p is None:
@@ -276,7 +278,8 @@ class ModelRepository(Service):
             'Content-Type': 'application/vnd.sas.models.model+json'})
 
     @classmethod
-    def add_model_content(cls, model, file, name=None, role=None):
+    def add_model_content(cls, model, file, name, role=None,
+                          content_type=None):
         """Add additional files to the model.
 
         Parameters
@@ -290,7 +293,8 @@ class ModelRepository(Service):
             Name of the file related to the model.
         role : str
             Role of the model file, such as 'Python pickle'.
-
+        content_type : str
+            an HTTP Content-Type value
 
         Returns
         -------
@@ -299,19 +303,25 @@ class ModelRepository(Service):
 
         """
         if cls.is_uuid(model):
-            id = model
+            id_ = model
         elif isinstance(model, dict) and 'id' in model:
-            id = model['id']
+            id_ = model['id']
         else:
             model = cls.get_model(model)
-            id = model['id']
+            id_ = model['id']
 
-        metadata = {'role': role}
-        if name is not None:
-            metadata['name'] = name
+        if content_type is None and isinstance(file, six.binary_type):
+            content_type = 'application/octet-stream'
 
-        return cls.post('/models/{}/contents'.format(id),
-                        files={name: file}, data=metadata)
+        if content_type is not None:
+            files = {name: (name, file, content_type)}
+        else:
+            files = {name: file}
+
+        metadata = {'role': role, 'name': name}
+
+        return cls.post('/models/{}/contents'.format(id_),
+                        files=files, data=metadata)
 
     @classmethod
     def default_repository(cls):
@@ -327,8 +337,8 @@ class ModelRepository(Service):
             repo = cls.get_repository('Public')  # Default in 19w21
         if repo is None:
             all_repos = cls.list_repositories()
-            if len(all_repos) > 0:
-                repo = cls.list_repositories()[0]
+            if all_repos:
+                repo = all_repos[0]
 
         return repo
 
@@ -361,7 +371,8 @@ class ModelRepository(Service):
         project.update(kwargs)
         return cls.post('/projects', json=project,
                         headers={
-                            'Content-Type': 'application/vnd.sas.models.project+json'})
+                            'Content-Type':
+                                'application/vnd.sas.models.project+json'})
 
     @classmethod
     def import_model_from_zip(cls, name, project, file, description=None,
@@ -396,7 +407,7 @@ class ModelRepository(Service):
                   'type': 'ZIP',
                   'projectId': project.id,
                   'versionOption': version}
-        params = '&'.join(['{}={}'.format(k, v) for k, v in params.items()])
+        params = '&'.join('{}={}'.format(k, v) for k, v in params.items())
 
         r = cls.post('/models#octetStream',
                      data=file.read(),
@@ -498,7 +509,6 @@ class ModelRepository(Service):
 
         return cls.request_link(model, 'copyAnalyticStore')
 
-
     @classmethod
     def delete_model_contents(cls, model):
         """Deletes all contents (files) in the model.
@@ -514,7 +524,7 @@ class ModelRepository(Service):
         """
         rel = 'delete'
 
-        filelist=cls.get_model_contents(model)
+        filelist = cls.get_model_contents(model)
         for delfile in filelist:
-            modelfileuri=cls.get_link(delfile, rel)
+            modelfileuri = cls.get_link(delfile, rel)
             delete(modelfileuri['uri'])
