@@ -222,6 +222,7 @@ Execute a model in MAS
     from sasctl.services import microanalytic_score as mas
 
     module = mas.get_module('Module Name')
+    module = mas.define_steps(module)
     module.predict(model_inputs)
 
 
