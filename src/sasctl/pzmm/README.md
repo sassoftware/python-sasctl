@@ -54,8 +54,7 @@ The easiest way to get started with the picklezip-mm package is to follow the Im
 
 ## Demos
 
-![Sample Video](https://players.brightcove.net/3665946608001/default_default/index.html?videoId=6164663310001)
-
+[![Watch the video](pzmmintro.jpg)](https://players.brightcove.net/3665946608001/default_default/index.html?videoId=6164663310001)
 
 ## License
 
