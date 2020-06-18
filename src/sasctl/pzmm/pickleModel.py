@@ -10,7 +10,7 @@ import pickle
 # %%
 class PickleModel():
     
-    def pickleTrainedModel(trainedModel, modelPrefix, pPath=os.getcwd()):
+    def pickleTrainedModel(self, trainedModel, modelPrefix, pPath=os.getcwd()):
         '''
         Write trained model to a binary pickle file. 
         

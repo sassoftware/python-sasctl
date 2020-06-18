@@ -43,6 +43,8 @@ setup(
     package_dir={"": "src"},
     python_requires='>=2.7',
     install_requires=[
+        'pandas',
+        'scikit-learn',
         'requests',
         'six >= 1.11',
         'futures ; python_version <= "2.7"'
