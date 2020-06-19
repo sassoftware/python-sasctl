@@ -13,6 +13,14 @@ __copyright__ = 'Copyright © 2019, SAS Institute Inc., ' \
                 'Cary, NC, USA.  All Rights Reserved.'
 
 import logging
+import sys
+
+if sys.version_info < (3, ):
+    from warnings import warn
+    warn('You are using Python %d.%d which was officially sunset on January 1st, 2020.  '
+         'sasctl will drop support for Python 2 in a future release.  '
+         'Please upgrade to a current version of Python to continue using sasctl.' % (sys.version_info.major, sys.version_info.minor),
+         UserWarning, 2)
 
 from .core import current_session, delete, get, get_link, post, put, request_link
 from .core import RestObj, Session, HTTPError
