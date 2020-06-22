@@ -1,6 +1,11 @@
 Unreleased
 ----------
- - 
+ -
+ 
+ v1.5.2 (2020-06-22)
+ -------------------
+  - PZMM module moved from a stand-alone [repository](https://github.com/sassoftware/open-model-manager-resources/tree/master/addons/picklezip-mm) to a sasctl submodule.
+  - Introduced deprecation warnings for Python 2 users.
  
 v1.5.1 (2020-4-9)
 ----------------
