@@ -2,7 +2,7 @@
 
 ## Overview
 
-The goal of the PZMM (Python Zip Model Management) module is allow users of SAS Model Manager on Viya (MM) and SAS Open Model Manager (OMM) to zip through the process of importing Python models to OMM & MM. In order to facilitate model imports, the module can allow the user to complete the following tasks:
+The goal of the PZMM (Python Zip Model Management) module is to allow users of SAS Model Manager on SAS SAS Viya (MM) and SAS Open Model Manager (OMM) to zip through the process of importing Python models to OMM & MM. In order to facilitate model imports, the module can allow the user to complete the following tasks:
 
 * Writes JSON files to read in the model information, which includes the following files:
   * `fileMetadata.json` specifies the file roles for the names of the input and output variables files, the Python score code file, and the Python pickle file
@@ -23,7 +23,7 @@ Use of this package requires the following:
 * SAS Viya 3.5+ environment or SAS Open Model Manager 1.2+ and user credentials
 * External Python libraries:
   * scipy v1.4.0+
-  * scikit v0.22.1+
+  * scikit-learn v0.22.1+
   * pandas v0.25.3+
   * requests v2.23.0+
 
@@ -34,7 +34,7 @@ Importing the PZMM module is done by running the following line in Python after 
 
 ## Demos
 
-The following demo video walks through the process of importing a Python model in SAS Model Manager in Viya and shows most of the current features of PZMM. (Note that for this release, the module import statement will need to be `import sasctl.pzmm as pzmm` instead of `import pzmm`.)
+The following demo video walks through the process of importing a Python model in SAS Model Manager in SAS Viya and shows most of the current features of PZMM. (Note that for this release, the module import statement needs to be `import sasctl.pzmm as pzmm` instead of `import pzmm`.)
 [<img src="pzmmintro.jpg" alt="drawing" width="600"/>](https://players.brightcove.net/3665946608001/default_default/index.html?videoId=6164663310001)
 
 ## License
