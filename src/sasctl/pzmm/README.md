@@ -2,7 +2,7 @@
 
 ## Overview
 
-The goal of the PZMM (Python Zip Model Management) module is to allow users of SAS Model Manager on SAS SAS Viya (MM) and SAS Open Model Manager (OMM) to zip through the process of importing Python models to OMM & MM. In order to facilitate model imports, the module can allow the user to complete the following tasks:
+The goal of the PZMM (Python Zip Model Management) module is to allow users of SAS Model Manager on SAS Viya (MM) and SAS Open Model Manager (OMM) to zip through the process of importing Python models to OMM & MM. In order to facilitate model imports, the module can allow the user to complete the following tasks:
 
 * Writes JSON files to read in the model information, which includes the following files:
   * `fileMetadata.json` specifies the file roles for the names of the input and output variables files, the Python score code file, and the Python pickle file
