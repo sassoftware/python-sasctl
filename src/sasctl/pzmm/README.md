@@ -1,59 +1,40 @@
-# pickleZip-mm (pzMM) v1.0
+# PZMM Module
 
 ## Overview
 
-The goal of this package is to provide users with a straight forward method to import trained Python models into SAS Model Manager and SAS Open Model Manager. In order to complete this task, the package completes the following:
+The goal of the PZMM (Python Zip Model Management) module is allow users of SAS Model Manager on Viya (MM) and SAS Open Model Manager (OMM) to zip through the process of importing Python models to OMM & MM. In order to facilitate model imports, the module can allow the user to complete the following tasks:
 
-* Writes `.JSON` files needed for SAS Open Model Manager to read in the model information, which includes the following files:
-  * fileMetadata.json specifies the file roles for the names of the input and output variables files, the Python score code file, and the Python pickle file
-  * ModelProperties.json is used to set the model properties that are read by SAS Open Model Manager during the import process
-  * inputVar.json and outputVar.json are used to set the input and output variables to be used by OMM
-  * dmcas_fitstat.json is an optional file that provides the fit statistics that are associated with the imported model, which are either user-generated or data-generated
-  * dmcas_lift.json and dmcas_roc.json are optional files that provide the lift and ROC plots that are associated with the imported model, which are data-generated
-* Writes the *score.py file that is used for model scoring
-* Serializes a trained model in to a binary pickle file
-* Archives all relevant model files in to a ZIP file and imports the model using REST API calls
+* Writes JSON files to read in the model information, which includes the following files:
+  * `fileMetadata.json` specifies the file roles for the names of the input and output variables files, the Python score code file, and the Python pickle file
+  * `ModelProperties.json` is used to set the model properties that are read during the import process
+  * `inputVar.json` and `outputVar.json` are used to set the input and output variables of the model
+  * `dmcas_fitstat.json` is an optional file that provides the fit statistics that are associated with the imported model, which are either user-generated or data-generated
+  * `dmcas_lift.json` and `dmcas_roc.json` are optional files that provide the Lift and ROC plots that are associated with the imported model, which are data-generated
+* Writes the `*score.py` file that is used for model scoring in MM & OMM
+* Serializes a trained model into a binary pickle file
+* Archives all relevant model files into a ZIP file and imports the model using REST API calls
 
 ## Prerequisites
 
 Use of this package requires the following:
 
 * Python version 3+
-* SAS Viya 3.5+ environment and user credentials
+  * Automatic generation of score code is limited to Python >= 3.6 (this functionality will be backported to Python 3+ in future releases)
+* SAS Viya 3.5+ environment or SAS Open Model Manager 1.2+ and user credentials
 * External Python libraries:
-  * scipy v1.4.0
-  * scikit v0.22.1
-  * pandas v0.25.3
-  * requests v2.23.0
+  * scipy v1.4.0+
+  * scikit v0.22.1+
+  * pandas v0.25.3+
+  * requests v2.23.0+
 
-## Installation
+## Module Import
 
-In order to install this package, run the following command:
-
-```bash
-git clone <SSH or HTTPS>
-```
-
-Also, when in the parent directory `~/picklezip-mm/`, run the following command:
-
-```bash
-pip install .
-```
-
-In order to upgrade the package after a git pull request, simply use the above command again, which uninstalls the old version and installs the new version in its place.
-
-To completely uninstall the package, run the following command:
-
-```bash
-pip uninstall picklezip-mm
-```
-
-## Getting Started
-
-The easiest way to get started with the picklezip-mm package is to follow the ImportPythonModel.ipynb notebook in the [examples](/examples) directory. Example data sets and an importable model ZIP file is included in the [samples](/samples/Python_Models/DTree_sklearn_PyPickleModel) directory.
+Importing the PZMM module is done by running the following line in Python after installation of the python-sasctl package:
+`import sasctl.pzmm as pzmm`
 
 ## Demos
 
+The following demo video walks through the process of importing a Python model in SAS Model Manager in Viya and shows most of the current features of PZMM. (Note that for this release, the module import statement will need to be `import sasctl.pzmm as pzmm` instead of `import pzmm`.)
 [<img src="pzmmintro.jpg" alt="drawing" width="600"/>](https://players.brightcove.net/3665946608001/default_default/index.html?videoId=6164663310001)
 
 ## License
