@@ -2,13 +2,20 @@ Unreleased
 ----------
  -
  
+ v1.5.3 (2020-06-25)
+ ------------------
+ **Bugfixes**
+  - Added PZMM fitstat JSON file to manifest.
+ 
  v1.5.2 (2020-06-22)
  -------------------
+ **Improvements**
   - PZMM module moved from a stand-alone [repository](https://github.com/sassoftware/open-model-manager-resources/tree/master/addons/picklezip-mm) to a sasctl submodule.
   - Introduced deprecation warnings for Python 2 users.
  
 v1.5.1 (2020-4-9)
 ----------------
+ **Bugfixes**
  - Fixed PyMAS utilities to correctly work functions not bound to pickled objects.
  - Model target variables should no longer appear as an input variable when registering ASTORE models. 
  
