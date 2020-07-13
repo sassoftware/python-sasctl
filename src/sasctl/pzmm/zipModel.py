@@ -9,7 +9,7 @@ import zipfile
 
 class ZipModel():
     
-    def zipFiles(self, fileDir, modelPrefix):
+    def zipFiles(fileDir, modelPrefix):
         '''
         Combines all JSON files with the model pickle file and associated score code file
         into a single archive ZIP file.

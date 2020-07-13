@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # %%
-import os
+from pathlib import Path
 import sys
 
 import getpass
@@ -16,7 +16,7 @@ from scipy.stats import kendalltau, gamma
 class JSONFiles():
         
     def writeVarJSON(self, inputDF, isInput=True,
-                     jPath=os.getcwd(), debug=False):
+                     jPath=Path.cwd(), debug=False):
         '''
         Writes a variable descriptor JSON file for input or output variables,
         based on an input dataframe containing predictor and prediction columns.
@@ -90,7 +90,7 @@ class JSONFiles():
         else:
             fileName = 'outputVar.json'
             
-        with open(os.path.join(jPath, fileName), 'w') as jFile:
+        with open(Path(jPath) / fileName, 'w') as jFile:
             dfDump = pd.DataFrame.to_dict(outputJSON.transpose()).values()
             json.dump(list(dfDump),
                       jFile,
@@ -100,7 +100,7 @@ class JSONFiles():
     def writeModelPropertiesJSON(self, modelName, modelDesc, targetVariable,
                                  modelType, modelPredictors, targetEvent,
                                  numTargetCategories, eventProbVar=None,
-                                 jPath=os.getcwd(), modeler=None):
+                                 jPath=Path.cwd(), modeler=None):
         '''
         Writes a model properties JSON file. The JSON file format is required by the
         Model Repository API service and only eventProbVar can be 'None'.
@@ -173,14 +173,14 @@ class JSONFiles():
         
         outputJSON = pd.Series(modelProperties, index=propIndex)
         
-        with open(os.path.join(jPath, 'ModelProperties.json'), 'w') as jFile:
+        with open(Path(jPath) / 'ModelProperties.json', 'w') as jFile:
             dfDump = pd.Series.to_dict(outputJSON.transpose())
             json.dump(dfDump,
                       jFile,
                       indent=4,
                       skipkeys=True)
             
-    def writeFileMetadataJSON(self, modelPrefix, jPath=os.getcwd()):
+    def writeFileMetadataJSON(self, modelPrefix, jPath=Path.cwd()):
         '''
         Writes a file metadata JSON file pointing to all relevant files.
         
@@ -207,14 +207,14 @@ class JSONFiles():
                                     columns = ['role', 'name']
                                     )
         
-        with open(os.path.join(jPath, 'fileMetadata.json'), 'w') as jFile:
+        with open(Path(jPath) / 'fileMetadata.json', 'w') as jFile:
             dfDump = pd.DataFrame.to_dict(fileMetadata.transpose()).values()
             json.dump(list(dfDump),
                       jFile,
                       indent=4,
                       skipkeys=True)
             
-    def writeBaseFitStat(self, csvPath=None, jPath=os.getcwd(),
+    def writeBaseFitStat(self, csvPath=None, jPath=Path.cwd(),
                          userInput=False, tupleList=None):
         '''
         Writes a JSON file to display fit statistics for the model in SAS Open Model Manager.
@@ -272,8 +272,7 @@ class JSONFiles():
                        '_ASE_', '_MCLL_', '_KS_', '_KSPostCutoff_', '_DIV_',
                        '_TAU_', '_KSCut_', '_C_']
         
-        nullJSONPath = os.path.join(os.path.dirname(__file__),
-                                       'null_dmcas_fitstat.json')
+        nullJSONPath = Path(__file__).resolve().parent / 'null_dmcas_fitstat.json'
         nullJSONDict = self.readJSONFile(nullJSONPath)
         
         dataMap = [{}, {}, {}]
@@ -327,13 +326,13 @@ class JSONFiles():
         for i in range(3):
             outJSON['data'][i] = dataMap[i]
                 
-        with open(os.path.join(jPath, 'dmcas_fitstat.json'), 'w') as jFile:
+        with open(Path(jPath) / 'dmcas_fitstat.json', 'w') as jFile:
             json.dump(outJSON,
                       jFile,
                       indent=4,
                       skipkeys=True)
             
-    def calculateFitStat(self, data, jPath=os.getcwd()):
+    def calculateFitStat(self, data, jPath=Path.cwd()):
         '''
         Calculates fit statistics from user data and writes it to a JSON file for
         importing into the common model repository. Input data takes the form of a list of
@@ -363,8 +362,7 @@ class JSONFiles():
             Output JSON file located at jPath.
         '''
         
-        nullJSONPath = os.path.join(os.path.dirname(__file__),
-                                       'null_dmcas_fitstat.json')
+        nullJSONPath = Path(__file__).resolve().parent / 'null_dmcas_fitstat.json'
         nullJSONDict = self.readJSONFile(nullJSONPath)
         
         dataPartitionExists = []
@@ -422,10 +420,10 @@ class JSONFiles():
         
             nullJSONDict['data'][j]['dataMap'] = fitStats
 
-        with open(os.path.join(jPath, 'dmcas_fitstat.json'), 'w') as jFile:
+        with open(Path(jPath) / 'dmcas_fitstat.json', 'w') as jFile:
             json.dump(nullJSONDict, jFile, indent=4)            
     
-    def generateROCStat(self, data, targetName, jPath=os.getcwd()):
+    def generateROCStat(self, data, targetName, jPath=Path.cwd()):
         '''
         Calculates the ROC curve from user data and writes it to a JSON file for
         importing in to common model repository. Input data takes the form of a list of
@@ -582,11 +580,11 @@ class JSONFiles():
                    'xInteger': False,
                    'yInteger': False}
         
-        with open(os.path.join(jPath, 'dmcas_roc.json'), 'w') as jFile:
+        with open(Path(jPath) / 'dmcas_roc.json', 'w') as jFile:
             json.dump(outJSON, jFile, indent=4)
             
     def generateLiftStat(self, data, targetName,
-                           targetValue, jPath=os.getcwd()):
+                           targetValue, jPath=Path.cwd()):
         '''
         Calculates the lift curves from user data and writes to a JSON file for
         importing to common model repository. Input data takes the form of a list of
@@ -774,7 +772,7 @@ class JSONFiles():
                    'xInteger': False,
                    'yInteger': False}
         
-        with open(os.path.join(jPath, 'dmcas_lift.json'), 'w') as jFile:
+        with open(Path(jPath) / 'dmcas_lift.json', 'w') as jFile:
             json.dump(outJSON, jFile, indent=4)
         
     def calculateLift(self, actualValue, targetValue, predictValue):
