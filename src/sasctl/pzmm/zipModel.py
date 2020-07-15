@@ -4,6 +4,7 @@
 # %%
 from pathlib import Path
 import zipfile
+import io
 
 # %%
 
@@ -37,3 +38,6 @@ class ZipModel():
         with zipfile.ZipFile(Path(fileDir) / (modelPrefix + '.zip'), mode='w') as zFile:
             for name in fileNames:
                 zFile.write(name, arcname=name)
+                
+        with open(Path(fileDir) / (modelPrefix + '.zip'), 'rb') as zipFile:
+            return io.BytesIO(zipFile.read())
