@@ -349,6 +349,7 @@ class JSONFiles():
     def calculateFitStat(self, validateData=None, trainData=None, 
                          testData=None, jPath=Path.cwd()):
         '''
+<<<<<<< HEAD
         Calculates fit statistics from user data and predictions and then writes to
         a JSON file for importing into the common model repository. Note that if
         no data set is provided (validate, train, or test), this function raises
@@ -359,6 +360,12 @@ class JSONFiles():
         * numpy array; the actual and predicted values are their own columns or rows 
         and ordered such that the actual values come first and the predicted second
         * list; the actual and predicted values are their own indexed entry
+=======
+        Calculates fit statistics from user data and predictions, then writes to
+        a JSON file for importing into the common model repository. Note that if
+        no dataset is provided (validate, train, or test), this function raises
+        an error and does not create a JSON file.
+>>>>>>> 2eaae50 (Adjust dmcas writers doc_strings to state acceptance of dataframe, array, or list)
         
         Datasets can be provided in the following forms:
         * pandas dataframe; the actual and predicted values are their own columns
@@ -369,6 +376,7 @@ class JSONFiles():
         Parameters
         ---------------
         validateData : pandas dataframe, numpy array, or list, optional
+<<<<<<< HEAD
             Dataframe, array, or list of the validation data set, including both
             the actual and predicted values. The default value is None.
         trainData : pandas dataframe, numpy array, or list, optional
@@ -376,6 +384,15 @@ class JSONFiles():
             the actual and predicted values. The default value is None.
         testData : pandas dataframe, numpy array, or list, optional
             Dataframe, array, or list of the test data set, including both
+=======
+            Dataframe, array, or list of the validation dataset, including both
+            the actual and predicted values. The default value is None.
+        trainData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the train dataset, including both
+            the actual and predicted values. The default value is None.
+        testData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the test dataset, including both
+>>>>>>> 2eaae50 (Adjust dmcas writers doc_strings to state acceptance of dataframe, array, or list)
             the actual and predicted values. The default value is None.
         jPath : string, optional
             Location for the output JSON file. The default value is the current
@@ -398,6 +415,7 @@ class JSONFiles():
         for i, data in enumerate([validateData, trainData, testData]):
             if data is not None:
                 dataPartitionExists.append(i)
+<<<<<<< HEAD
                 if type(data) is np.ndarray:
                     dataSets[i] = data.tolist()
                 elif type(data) is pd.core.frame.DataFrame:
@@ -413,6 +431,8 @@ class JSONFiles():
                       'and predicted values for at least one of the ' + 
                       'partitions (VALIDATE, TRAIN, or TEST).')
                 raise
+=======
+>>>>>>> 2eaae50 (Adjust dmcas writers doc_strings to state acceptance of dataframe, array, or list)
                             
         for j in dataPartitionExists:
             fitStats = nullJSONDict['data'][j]['dataMap']
@@ -467,6 +487,7 @@ class JSONFiles():
         with open(Path(jPath) / 'dmcas_fitstat.json', 'w') as jFile:
             json.dump(nullJSONDict, jFile, indent=4)            
     
+<<<<<<< HEAD
     def generateROCLiftStat(self, targetName, targetValue, swatConn, 
                             validateData=None, trainData=None, testData=None, 
                             jPath=Path.cwd()):
@@ -476,11 +497,22 @@ class JSONFiles():
         ROC and Lift calculations are completed by CAS through a SWAT call. Note that if
         no data set is provided (validate, train, or test), this function raises
         an error and does not create any JSON files.
+=======
+    def generateROCStat(self, targetName, validateData=None, trainData=None,
+                        testData=None, jPath=Path.cwd()):
+        '''
+        Calculates the ROC curve from user data and model predictions, then 
+        writes it to a JSON file for importing in to the common model repository.
+        ROC calculations are completed by CAS through a SWAT call. Note that if
+        no dataset is provided (validate, train, or test), this function raises
+        an error and does not create a JSON file.
+>>>>>>> 2eaae50 (Adjust dmcas writers doc_strings to state acceptance of dataframe, array, or list)
         
         Parameters
         ---------------
         targetName: str
             Target variable name to be predicted.
+<<<<<<< HEAD
         targetValue: int or float
             Value of target variable that indicates an event.
         swatConn: SWAT connection to CAS
@@ -494,6 +526,17 @@ class JSONFiles():
         testData : pandas dataframe, numpy array, or list, optional
             Dataframe, array, or list of the test data set, including both
             the actual values and the calculated probabilities. The default value is None.
+=======
+        validateData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the validation dataset, including both
+            the actual and predicted values. The default value is None.
+        trainData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the train dataset, including both
+            the actual and predicted values. The default value is None.
+        testData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the test dataset, including both
+            the actual and predicted values. The default value is None.
+>>>>>>> 2eaae50 (Adjust dmcas writers doc_strings to state acceptance of dataframe, array, or list)
         jPath : string, optional
             Location for the output JSON file. The default value is the current
             working directory.
@@ -502,6 +545,169 @@ class JSONFiles():
         ---------------
         'dmcas_roc.json'
             Output JSON file located at jPath.
+<<<<<<< HEAD
+=======
+        '''
+        
+        dictDataRole = {'parameter': '_DataRole_', 'type': 'char',
+                        'label': 'Data Role', 'length': 10,
+                        'order': 1, 'values': ['_DataRole_'],
+                        'preformatted': False}
+
+        dictPartInd = {'parameter': '_PartInd_', 'type': 'num',
+                       'label': 'Partition Indicator', 'length': 8,
+                       'order': 2, 'values': ['_PartInd_'],
+                       'preformatted': False}
+        
+        dictPartIndf = {'parameter': '_PartInd__f', 'type': 'char',
+                        'label': 'Formatted Partition', 'length': 12,
+                        'order': 3, 'values': ['_PartInd__f'],
+                        'preformatted': False}
+        
+        dictColumn = {'parameter': '_Column_', 'type': 'num',
+                      'label': 'Analysis Variable', 'length': 32,
+                      'order': 4, 'values': ['_Column_'],
+                      'preformatted': False}
+        
+        dictEvent = {'parameter' : '_Event_', 'type' : 'char',
+                     'label' : 'Event', 'length' : 8,
+                     'order' : 5, 'values' : [ '_Event_' ],
+                     'preformatted' : False}
+        
+        dictCutoff = {'parameter' : '_Cutoff_', 'type' : 'num',
+                      'label' : 'Cutoff', 'length' : 8,
+                      'order' : 6, 'values' : [ '_Cutoff_' ],
+                      'preformatted' : False}
+        
+        dictSensitivity = {'parameter' : '_Sensitivity_', 'type' : 'num',
+                           'label' : 'Sensitivity', 'length' : 8,
+                           'order' : 7, 'values' : [ '_Sensitivity_' ],
+                           'preformatted' : False}
+        
+        dictSpecificity = {'parameter' : '_Specificity_', 'type' : 'num',
+                           'label' : 'Specificity', 'length' : 8,
+                           'order' : 8, 'values' : [ '_Specificity_' ],
+                           'preformatted' : False}
+        
+        dictFPR = {'parameter' : '_FPR_', 'type' : 'num',
+                   'label' : 'False Positive Rate', 'length' : 8,
+                   'order' : 9, 'values' : [ '_FPR_' ],
+                   'preformatted' : False}
+        
+        dictOneMinusSpecificity = {'parameter' : '_OneMinusSpecificity_',
+                                   'type' : 'num', 'label' : '1 - Specificity',
+                                   'length' : 8, 'order' : 10,
+                                   'values' : [ '_OneMinusSpecificity_' ],
+                                   'preformatted' : False}
+        
+        parameterMap = {'_DataRole_': dictDataRole, '_PartInd_': dictPartInd,
+                        '_PartInd__f':  dictPartIndf, '_Column_': dictColumn,
+                        '_Event_': dictEvent, '_Cutoff_': dictCutoff,
+                        '_Sensitivity_': dictSensitivity,
+                        '_Specificity_': dictSpecificity, '_FPR_': dictFPR,
+                        '_OneMinusSpecificity_': dictOneMinusSpecificity}
+        
+        dataPartitionExists = []   
+        for i in range(3):
+            if data[i][0] is not None:
+                dataPartitionExists.append(i)
+        
+        listRoc = []
+        numRows = 0
+        
+        for j in list(reversed(dataPartitionExists)):
+            
+            falsePosRate, truePosRate, threshold = metrics.roc_curve(data[j][0], data[j][1])
+            rocDf = pd.DataFrame({'fpr': falsePosRate,
+                                  'tpr': truePosRate,
+                                  'threshold': np.minimum(1., np.maximum(0., threshold))})
+            
+            for count, row in rocDf.iterrows():
+                
+                rowStats = {}
+                innerDict = {}
+                
+                if j==0:
+                    dataRole = 'VALIDATE'
+                    innerDict['_DataRole_'] = dataRole
+                elif j==1:
+                    dataRole = 'TRAIN'
+                    innerDict['_DataRole_'] = dataRole
+                elif j==2:
+                    dataRole = 'TEST'
+                    innerDict['_DataRole_'] = dataRole
+                    
+                innerDict.update({'_PartInd_': str(j),
+                                '_PartInd__f': f'           {j}'})
+        
+                fpr = row['fpr']
+                tpr = row['tpr']
+                threshold = row['threshold']
+        
+                innerDict['_Column_'] = 'P_' + str(targetName) + '1'
+                innerDict['_Event_'] = 1
+                innerDict['_Cutoff_'] = threshold
+                innerDict['_Sensitivity_'] = tpr
+                innerDict['_Specificity_'] = (1.0 - fpr)
+                innerDict['_FPR_'] = fpr
+                innerDict['_OneMinusSpecificity_'] = fpr
+        
+                numRows += 1
+                rowStats.update({'dataMap': innerDict,
+                                 'rowNumber': numRows,
+                                 'header': None})
+                listRoc.append(dict(rowStats))
+        
+        outJSON = {'creationTimeStamp': None,
+                   'modifiedTimeStamp': None,
+                   'createdBy': None,
+                   'modifiedBy': None,
+                   'id': None,
+                   'name': 'dmcas_roc',
+                   'description': None,
+                   'revision': 0,
+                   'order': 0,
+                   'type': None,
+                   'parameterMap': parameterMap,
+                   'data': listRoc,
+                   'version': 1,
+                   'xInteger': False,
+                   'yInteger': False}
+        
+        with open(Path(jPath) / 'dmcas_roc.json', 'w') as jFile:
+            json.dump(outJSON, jFile, indent=4)
+            
+    def generateLiftStat(self, targetName, targetValue, validateData=None, 
+                         trainData=None, testData=None, jPath=Path.cwd()):
+        '''
+        Calculates the Lift curve from user data and model predictions, then 
+        writes it to a JSON file for importing in to the common model repository.
+        Lift calculations are completed by CAS through a SWAT call. Note that if
+        no dataset is provided (validate, train, or test), this function raises
+        an error and does not create a JSON file.
+        
+        Parameters
+        ---------------
+        targetName: str
+            Target variable name to be predicted.
+        targetValue: int or float
+            Value of target variable that indicates an event.
+        validateData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the validation dataset, including both
+            the actual and predicted values. The default value is None.
+        trainData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the train dataset, including both
+            the actual and predicted values. The default value is None.
+        testData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the test dataset, including both
+            the actual and predicted values. The default value is None.
+        jPath : string, optional
+            Location for the output JSON file. The default is the current
+            working directory.
+        
+        Yields
+        ---------------
+>>>>>>> 2eaae50 (Adjust dmcas writers doc_strings to state acceptance of dataframe, array, or list)
         'dmcas_lift.json'
             Output JSON file located at jPath.
         '''
