@@ -5,6 +5,7 @@
 from pathlib import Path
 import sys
 
+import swat
 import getpass
 import json
 import pandas as pd
@@ -332,26 +333,25 @@ class JSONFiles():
                       indent=4,
                       skipkeys=True)
             
-    def calculateFitStat(self, data, jPath=Path.cwd()):
+    def calculateFitStat(self, validateData=None, trainData=None, 
+                         testData=None, jPath=Path.cwd()):
         '''
-        Calculates fit statistics from user data and writes it to a JSON file for
-        importing into the common model repository. Input data takes the form of a list of
-        arrays, with the actual and predicted data separated into the
-        following parititions: validate, train, test. An example is shown
-        below:
-            
-            data = [(yValidateActual, yValidatePrediction),
-                    (yTrainActual, yTrainPrediction),
-                    (yTestActual, yTestPrediction)]
-        
-        For partitions without data, replace the array with a None assignment.
+        Calculates fit statistics from user data and predictions, then writes to
+        a JSON file for importing into the common model repository. Note that if
+        no dataset is provided (validate, train, or test), this function raises
+        an error and does not create a JSON file.
         
         Parameters
         ---------------
-        data : list of arrays
-            List of data arrays, separated into actual and predicted values
-            and partitioned into Validate, Test, and Train sets. See above for 
-            a formatted example.
+        validateData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the validation dataset, including both
+            the actual and predicted values. The default value is None.
+        trainData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the train dataset, including both
+            the actual and predicted values. The default value is None.
+        testData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the test dataset, including both
+            the actual and predicted values. The default value is None.
         jPath : string, optional
             Location for the output JSON file. The default value is the current
             working directory.
@@ -366,10 +366,10 @@ class JSONFiles():
         nullJSONDict = self.readJSONFile(nullJSONPath)
         
         dataPartitionExists = []
-        for i in range(3):
-            if data[i][0] is not None:
+        for i, data in enumerate([validateData, trainData, testData]):
+            if data is not None:
                 dataPartitionExists.append(i)
-                
+                            
         for j in dataPartitionExists:
             fitStats = nullJSONDict['data'][j]['dataMap']
 
@@ -423,28 +423,28 @@ class JSONFiles():
         with open(Path(jPath) / 'dmcas_fitstat.json', 'w') as jFile:
             json.dump(nullJSONDict, jFile, indent=4)            
     
-    def generateROCStat(self, data, targetName, jPath=Path.cwd()):
+    def generateROCStat(self, targetName, validateData=None, trainData=None,
+                        testData=None, jPath=Path.cwd()):
         '''
-        Calculates the ROC curve from user data and writes it to a JSON file for
-        importing in to common model repository. Input data takes the form of a list of
-        arrays, with the actual and predicted data separated into the
-        following parititions: validate, train, test. An example is shown
-        below:
-            
-            data = [(yValidateActual, yValidatePrediction),
-                    (yTrainActual, yTrainPrediction),
-                    (yTestActual, yTestPrediction)]
-        
-        For partitions without data, replace the array with a None assignment.
+        Calculates the ROC curve from user data and model predictions, then 
+        writes it to a JSON file for importing in to the common model repository.
+        ROC calculations are completed by CAS through a SWAT call. Note that if
+        no dataset is provided (validate, train, or test), this function raises
+        an error and does not create a JSON file.
         
         Parameters
         ---------------
-        data : list of arrays
-            List of data arrays, separated into actual and predicted values
-            and partitioned into Validate, Test, and Train sets. See above for 
-            a formatted example.
         targetName: str
             Target variable name to be predicted.
+        validateData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the validation dataset, including both
+            the actual and predicted values. The default value is None.
+        trainData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the train dataset, including both
+            the actual and predicted values. The default value is None.
+        testData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the test dataset, including both
+            the actual and predicted values. The default value is None.
         jPath : string, optional
             Location for the output JSON file. The default value is the current
             working directory.
@@ -583,31 +583,30 @@ class JSONFiles():
         with open(Path(jPath) / 'dmcas_roc.json', 'w') as jFile:
             json.dump(outJSON, jFile, indent=4)
             
-    def generateLiftStat(self, data, targetName,
-                           targetValue, jPath=Path.cwd()):
+    def generateLiftStat(self, targetName, targetValue, validateData=None, 
+                         trainData=None, testData=None, jPath=Path.cwd()):
         '''
-        Calculates the lift curves from user data and writes to a JSON file for
-        importing to common model repository. Input data takes the form of a list of
-        arrays, with the actual and predicted data separated into the
-        following parititions: validate, train, test. An example is shown
-        below:
-            
-            data = [(yValidateActual, yValidatePrediction),
-                    (yTrainActual, yTrainPrediction),
-                    (yTestActual, yTestPrediction)]
-        
-        For partitions without data, replace the array with a None assignment.
+        Calculates the Lift curve from user data and model predictions, then 
+        writes it to a JSON file for importing in to the common model repository.
+        Lift calculations are completed by CAS through a SWAT call. Note that if
+        no dataset is provided (validate, train, or test), this function raises
+        an error and does not create a JSON file.
         
         Parameters
         ---------------
-        data : list of arrays
-            List of data arrays, separated into actual and predicted values
-            and partitioned into Validate, Test, and Train sets. See above for 
-            a formatted example.
         targetName: str
             Target variable name to be predicted.
         targetValue: int or float
             Value of target variable that indicates an event.
+        validateData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the validation dataset, including both
+            the actual and predicted values. The default value is None.
+        trainData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the train dataset, including both
+            the actual and predicted values. The default value is None.
+        testData : pandas dataframe, numpy array, or list, optional
+            Dataframe, array, or list of the test dataset, including both
+            the actual and predicted values. The default value is None.
         jPath : string, optional
             Location for the output JSON file. The default is the current
             working directory.
