@@ -341,6 +341,12 @@ class JSONFiles():
         no dataset is provided (validate, train, or test), this function raises
         an error and does not create a JSON file.
         
+        Datasets can be provided in the following forms:
+        * pandas dataframe; the actual and predicted values are their own columns
+        * numpy array; the actual and predicted values are their own columns or rows 
+        and ordered such that the actual values come first and the predicted second
+        * list; the actual and predicted values are their own indexed entry
+        
         Parameters
         ---------------
         validateData : pandas dataframe, numpy array, or list, optional
@@ -365,39 +371,49 @@ class JSONFiles():
         nullJSONPath = Path(__file__).resolve().parent / 'null_dmcas_fitstat.json'
         nullJSONDict = self.readJSONFile(nullJSONPath)
         
+        dataSets = [[[None], [None]],
+                    [[None], [None]],
+                    [[None], [None]]]
+        
         dataPartitionExists = []
         for i, data in enumerate([validateData, trainData, testData]):
             if data is not None:
                 dataPartitionExists.append(i)
+                if type(data) is np.ndarray:
+                    dataSets[i] = data.tolist()
+                elif type(data) is pd.core.frame.DataFrame:
+                    dataSets[i] = data.transpose().values.tolist()
+                elif type(data) is list:
+                    dataSets[i] = data
                             
         for j in dataPartitionExists:
             fitStats = nullJSONDict['data'][j]['dataMap']
 
             fitStats['_PartInd_'] = j
             
-            fpr, tpr, _ = metrics.roc_curve(data[j][0], data[j][1])
+            fpr, tpr, _ = metrics.roc_curve(dataSets[j][0], dataSets[j][1])
         
-            RASE = np.sqrt(metrics.mean_squared_error(data[j][0], data[j][1]))
+            RASE = np.sqrt(metrics.mean_squared_error(dataSets[j][0], dataSets[j][1]))
             fitStats['_RASE_'] = RASE
         
-            NObs = len(data[j][0])
+            NObs = len(dataSets[j][0])
             fitStats['_NObs_'] = NObs
         
-            auc = metrics.roc_auc_score(data[j][0], data[j][1])
+            auc = metrics.roc_auc_score(dataSets[j][0], dataSets[j][1])
             GINI = (2 * auc) - 1
             fitStats['_GINI_'] = GINI
         
-            _, _, scale = gamma.fit(data[j][1])
+            _, _, scale = gamma.fit(dataSets[j][1])
             fitStats['_GAMMA_'] = 1/scale
         
-            intPredict = [round(x) for x in data[j][1]]
-            MCE = 1 - metrics.accuracy_score(data[j][0], intPredict)
+            intPredict = [round(x) for x in dataSets[j][1]]
+            MCE = 1 - metrics.accuracy_score(dataSets[j][0], intPredict)
             fitStats['_MCE_'] = MCE
         
-            ASE = metrics.mean_squared_error(data[j][0], data[j][1])
+            ASE = metrics.mean_squared_error(dataSets[j][0], dataSets[j][1])
             fitStats['_ASE_'] = ASE
         
-            MCLL = metrics.log_loss(data[j][0], data[j][1])
+            MCLL = metrics.log_loss(dataSets[j][0], dataSets[j][1])
             fitStats['_MCLL_'] = MCLL
         
             KS = max(np.abs(fpr-tpr))
@@ -406,10 +422,10 @@ class JSONFiles():
             KSPostCutoff = None
             fitStats['_KSPostCutoff_'] = KSPostCutoff
         
-            DIV = len(data[j][0])
+            DIV = len(dataSets[j][0])
             fitStats['_DIV_'] = DIV
         
-            TAU, _ = kendalltau(data[j][0], data[j][1])
+            TAU, _ = kendalltau(dataSets[j][0], dataSets[j][1])
             fitStats['_TAU_'] = TAU
         
             KSCut = None
@@ -454,134 +470,18 @@ class JSONFiles():
         'dmcas_roc.json'
             Output JSON file located at jPath.
         '''
-        
-        dictDataRole = {'parameter': '_DataRole_', 'type': 'char',
-                        'label': 'Data Role', 'length': 10,
-                        'order': 1, 'values': ['_DataRole_'],
-                        'preformatted': False}
-
-        dictPartInd = {'parameter': '_PartInd_', 'type': 'num',
-                       'label': 'Partition Indicator', 'length': 8,
-                       'order': 2, 'values': ['_PartInd_'],
-                       'preformatted': False}
-        
-        dictPartIndf = {'parameter': '_PartInd__f', 'type': 'char',
-                        'label': 'Formatted Partition', 'length': 12,
-                        'order': 3, 'values': ['_PartInd__f'],
-                        'preformatted': False}
-        
-        dictColumn = {'parameter': '_Column_', 'type': 'num',
-                      'label': 'Analysis Variable', 'length': 32,
-                      'order': 4, 'values': ['_Column_'],
-                      'preformatted': False}
-        
-        dictEvent = {'parameter' : '_Event_', 'type' : 'char',
-                     'label' : 'Event', 'length' : 8,
-                     'order' : 5, 'values' : [ '_Event_' ],
-                     'preformatted' : False}
-        
-        dictCutoff = {'parameter' : '_Cutoff_', 'type' : 'num',
-                      'label' : 'Cutoff', 'length' : 8,
-                      'order' : 6, 'values' : [ '_Cutoff_' ],
-                      'preformatted' : False}
-        
-        dictSensitivity = {'parameter' : '_Sensitivity_', 'type' : 'num',
-                           'label' : 'Sensitivity', 'length' : 8,
-                           'order' : 7, 'values' : [ '_Sensitivity_' ],
-                           'preformatted' : False}
-        
-        dictSpecificity = {'parameter' : '_Specificity_', 'type' : 'num',
-                           'label' : 'Specificity', 'length' : 8,
-                           'order' : 8, 'values' : [ '_Specificity_' ],
-                           'preformatted' : False}
-        
-        dictFPR = {'parameter' : '_FPR_', 'type' : 'num',
-                   'label' : 'False Positive Rate', 'length' : 8,
-                   'order' : 9, 'values' : [ '_FPR_' ],
-                   'preformatted' : False}
-        
-        dictOneMinusSpecificity = {'parameter' : '_OneMinusSpecificity_',
-                                   'type' : 'num', 'label' : '1 - Specificity',
-                                   'length' : 8, 'order' : 10,
-                                   'values' : [ '_OneMinusSpecificity_' ],
-                                   'preformatted' : False}
-        
-        parameterMap = {'_DataRole_': dictDataRole, '_PartInd_': dictPartInd,
-                        '_PartInd__f':  dictPartIndf, '_Column_': dictColumn,
-                        '_Event_': dictEvent, '_Cutoff_': dictCutoff,
-                        '_Sensitivity_': dictSensitivity,
-                        '_Specificity_': dictSpecificity, '_FPR_': dictFPR,
-                        '_OneMinusSpecificity_': dictOneMinusSpecificity}
-        
-        dataPartitionExists = []   
-        for i in range(3):
-            if data[i][0] is not None:
+        nullJSONPath = Path(__file__).resolve().parent / 'null_dmcas_roc.json'
+        nullJSONDict = self.readJSONFile(nullJSONPath)
+                
+        dataPartitionExists = []
+        for i, data in enumerate([validateData, trainData, testData]):
+            if data is not None:
                 dataPartitionExists.append(i)
-        
-        listRoc = []
-        numRows = 0
-        
-        for j in list(reversed(dataPartitionExists)):
-            
-            falsePosRate, truePosRate, threshold = metrics.roc_curve(data[j][0], data[j][1])
-            rocDf = pd.DataFrame({'fpr': falsePosRate,
-                                  'tpr': truePosRate,
-                                  'threshold': np.minimum(1., np.maximum(0., threshold))})
-            
-            for count, row in rocDf.iterrows():
                 
-                rowStats = {}
-                innerDict = {}
-                
-                if j==0:
-                    dataRole = 'VALIDATE'
-                    innerDict['_DataRole_'] = dataRole
-                elif j==1:
-                    dataRole = 'TRAIN'
-                    innerDict['_DataRole_'] = dataRole
-                elif j==2:
-                    dataRole = 'TEST'
-                    innerDict['_DataRole_'] = dataRole
-                    
-                innerDict.update({'_PartInd_': str(j),
-                                '_PartInd__f': f'           {j}'})
         
-                fpr = row['fpr']
-                tpr = row['tpr']
-                threshold = row['threshold']
-        
-                innerDict['_Column_'] = 'P_' + str(targetName) + '1'
-                innerDict['_Event_'] = 1
-                innerDict['_Cutoff_'] = threshold
-                innerDict['_Sensitivity_'] = tpr
-                innerDict['_Specificity_'] = (1.0 - fpr)
-                innerDict['_FPR_'] = fpr
-                innerDict['_OneMinusSpecificity_'] = fpr
-        
-                numRows += 1
-                rowStats.update({'dataMap': innerDict,
-                                 'rowNumber': numRows,
-                                 'header': None})
-                listRoc.append(dict(rowStats))
-        
-        outJSON = {'creationTimeStamp': None,
-                   'modifiedTimeStamp': None,
-                   'createdBy': None,
-                   'modifiedBy': None,
-                   'id': None,
-                   'name': 'dmcas_roc',
-                   'description': None,
-                   'revision': 0,
-                   'order': 0,
-                   'type': None,
-                   'parameterMap': parameterMap,
-                   'data': listRoc,
-                   'version': 1,
-                   'xInteger': False,
-                   'yInteger': False}
         
         with open(Path(jPath) / 'dmcas_roc.json', 'w') as jFile:
-            json.dump(outJSON, jFile, indent=4)
+            json.dump(nullJSONDict, jFile, indent=4) 
             
     def generateLiftStat(self, targetName, targetValue, validateData=None, 
                          trainData=None, testData=None, jPath=Path.cwd()):
