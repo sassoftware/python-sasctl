@@ -439,19 +439,25 @@ class JSONFiles():
         with open(Path(jPath) / 'dmcas_fitstat.json', 'w') as jFile:
             json.dump(nullJSONDict, jFile, indent=4)            
     
-    def generateROCStat(self, targetName, validateData=None, trainData=None,
-                        testData=None, jPath=Path.cwd()):
+    def generateROCLiftStat(self, targetName, targetValue, swatConn, 
+                            validateData=None, trainData=None, testData=None, 
+                            jPath=Path.cwd()):
         '''
-        Calculates the ROC curve from user data and model predictions, then 
-        writes it to a JSON file for importing in to the common model repository.
-        ROC calculations are completed by CAS through a SWAT call. Note that if
+        Calculates the ROC & Lift curves from user data and model predictions, then 
+        writes it to JSON files for importing in to the common model repository.
+        ROC & Lift calculations are completed by CAS through a SWAT call. Note that if
         no dataset is provided (validate, train, or test), this function raises
-        an error and does not create a JSON file.
+        an error and does not create any JSON files.
         
         Parameters
         ---------------
         targetName: str
             Target variable name to be predicted.
+        targetValue: int or float
+            Value of target variable that indicates an event.
+        swatConn: SWAT connection to CAS
+            Connection object to CAS service in SAS Model Manager or SAS Open 
+            Model Manager through SWAT authentication.
         validateData : pandas dataframe, numpy array, or list, optional
             Dataframe, array, or list of the validation dataset, including both
             the actual and predicted values. The default value is None.
@@ -469,282 +475,115 @@ class JSONFiles():
         ---------------
         'dmcas_roc.json'
             Output JSON file located at jPath.
-        '''
-        nullJSONPath = Path(__file__).resolve().parent / 'null_dmcas_roc.json'
-        nullJSONDict = self.readJSONFile(nullJSONPath)
-                
-        dataPartitionExists = []
-        for i, data in enumerate([validateData, trainData, testData]):
-            if data is not None:
-                dataPartitionExists.append(i)
-                
-        
-        
-        with open(Path(jPath) / 'dmcas_roc.json', 'w') as jFile:
-            json.dump(nullJSONDict, jFile, indent=4) 
-            
-    def generateLiftStat(self, targetName, targetValue, validateData=None, 
-                         trainData=None, testData=None, jPath=Path.cwd()):
-        '''
-        Calculates the Lift curve from user data and model predictions, then 
-        writes it to a JSON file for importing in to the common model repository.
-        Lift calculations are completed by CAS through a SWAT call. Note that if
-        no dataset is provided (validate, train, or test), this function raises
-        an error and does not create a JSON file.
-        
-        Parameters
-        ---------------
-        targetName: str
-            Target variable name to be predicted.
-        targetValue: int or float
-            Value of target variable that indicates an event.
-        validateData : pandas dataframe, numpy array, or list, optional
-            Dataframe, array, or list of the validation dataset, including both
-            the actual and predicted values. The default value is None.
-        trainData : pandas dataframe, numpy array, or list, optional
-            Dataframe, array, or list of the train dataset, including both
-            the actual and predicted values. The default value is None.
-        testData : pandas dataframe, numpy array, or list, optional
-            Dataframe, array, or list of the test dataset, including both
-            the actual and predicted values. The default value is None.
-        jPath : string, optional
-            Location for the output JSON file. The default is the current
-            working directory.
-        
-        Yields
-        ---------------
         'dmcas_lift.json'
             Output JSON file located at jPath.
         '''
         
-        dictDataRole = {'parameter': '_DataRole_', 'type': 'char',
-                        'label': 'Data Role', 'length': 10,
-                        'order': 1, 'values': ['_DataRole_'],
-                        'preformatted': False}
+        nullJSONROCPath = Path(__file__).resolve().parent / 'null_dmcas_roc.json'
+        nullJSONROCDict = self.readJSONFile(nullJSONROCPath)
+        
+        nullJSONLiftPath = Path(__file__).resolve().parent / 'null_dmcas_lift.json'
+        nullJSONLiftDict = self.readJSONFile(nullJSONLiftPath)
+                
+        dataSets = pd.DataFrame()
 
-        dictPartInd = {'parameter': '_PartInd_', 'type': 'num',
-                       'label': 'Partition Indicator', 'length': 8,
-                       'order': 2, 'values': ['_PartInd_'],
-                       'preformatted': False}
-        
-        dictPartIndf = {'parameter': '_PartInd__f', 'type': 'char',
-                        'label': 'Formatted Partition', 'length': 12,
-                        'order': 3, 'values': ['_PartInd__f'],
-                        'preformatted': False}
-        
-        dictColumn = {'parameter' : '_Column_', 'type' : 'char',
-                      'label' : 'Analysis Variable', 'length' : 32,
-                      'order' : 4, 'values' : [ '_Column_' ],
-                      'preformatted' : False}
-        
-        dictEvent = {'parameter' : '_Event_', 'type' : 'char',
-                     'label' : 'Event', 'length' : 8,
-                     'order' : 5, 'values' : [ '_Event_' ],
-                     'preformatted' : False}
-        
-        dictDepth = {'parameter' : '_Depth_', 'type' : 'num',
-                     'label' : 'Depth', 'length' : 8,
-                     'order' : 7, 'values' : [ '_Depth_' ],
-                     'preformatted' : False}
-        
-        dictNObs = {'parameter' : '_NObs_', 'type' : 'num',
-                    'label' : 'Sum of Frequencies', 'length' : 8,
-                    'order' : 8, 'values' : [ '_NObs_' ],
-                    'preformatted' : False}
-        
-        dictGain = {'parameter' : '_Gain_', 'type' : 'num',
-                    'label' : 'Gain', 'length' : 8,
-                    'order' : 9, 'values' : [ '_Gain_' ],
-                    'preformatted' : False}
-        
-        dictResp = {'parameter' : '_Resp_', 'type' : 'num',
-                    'label' : '% Captured Response', 'length' : 8,
-                    'order' : 10, 'values' : [ '_Resp_' ],
-                    'preformatted' : False}
-        
-        dictCumResp = {'parameter' : '_CumResp_', 'type' : 'num',
-                       'label' : 'Cumulative % Captured Response',
-                       'length' : 8, 'order' : 11,
-                       'values' : [ '_CumResp_' ], 'preformatted' : False}
-        
-        dictPctResp = {'parameter' : '_PctResp_', 'type' : 'num',
-                       'label' : '% Response', 'length' : 8,
-                       'order' : 12, 'values' : [ '_PctResp_' ],
-                       'preformatted' : False}
-        
-        dictCumPctResp = {'parameter' : '_CumPctResp_', 'type' : 'num',
-                          'label' : 'Cumulative % Response', 'length' : 8,
-                          'order' : 13, 'values' : [ '_CumPctResp_' ],
-                          'preformatted' : False}
-        
-        dictLift = {'parameter' : '_Lift_', 'type' : 'num',
-                    'label' : 'Lift', 'length' : 8,
-                    'order' : 14, 'values' : [ '_Lift_' ],
-                    'preformatted' : False}
-        
-        dictCumLift = {'parameter' : '_CumLift_', 'type' : 'num',
-                       'label' : 'Cumulative Lift', 'length' : 8,
-                       'order' : 15, 'values' : [ '_CumLift_' ],
-                       'preformatted' : False}
-        
-        parameterMap = {'_DataRole_': dictDataRole, '_PartInd_': dictPartInd,
-                        '_PartInd__f': dictPartIndf, '_Column_': dictColumn,
-                        '_Event_': dictEvent, '_Depth_': dictDepth,
-                        '_NObs_': dictNObs, '_Gain_': dictGain,
-                        '_Resp_': dictResp, '_CumResp_': dictCumResp,
-                        '_PctResp_': dictPctResp,
-                        '_CumPctResp_': dictCumPctResp,
-                        '_Lift_': dictLift, '_CumLift_': dictCumLift}
-        
-        dataPartitionExists = []   
-        for i in range(3):
-            if data[i][0] is not None:
+        dataPartitionExists = []
+        # Check if a data partition exists, then convert to a pandas dataframe
+        for i, data in enumerate([validateData, trainData, testData]):
+            if data is not None:
                 dataPartitionExists.append(i)
-        
-        listLift = []
-        numRows = 0
-            
-        for j in list(reversed(dataPartitionExists)):
-            
-            liftDf = self.calculateLift(pd.Series(data[j][0]), 1, data[j][1])
-            
-            for count, row in liftDf.iterrows():
-                
-                rowStats = {}
-                innerDict = {}
-                
-                if j==0:
-                    dataRole = 'VALIDATE'
-                    innerDict['_DataRole_'] = dataRole
-                elif j==1:
-                    dataRole = 'TRAIN'
-                    innerDict['_DataRole_'] = dataRole
-                elif j==2:
-                    dataRole = 'TEST'
-                    innerDict['_DataRole_'] = dataRole
+                columns = [f'actual{i}', f'predicted{i}']
+                if type(data) is np.ndarray:
+                    try:
+                        dataSets[columns] = data
+                    except ValueError:
+                        dataSets[columns] = data.transpose()
+                elif type(data) is list:
+                    dataSets[columns] = np.array(data).tranpose()
+                elif type(data) is pd.core.frame.DataFrame:
+                    dataSets[columns] = data.values
                     
-                innerDict.update({'_PartInd_': str(j),
-                                '_PartInd__f': f'           {j}'})
-                
-                quantileNumber = row['Quantile Number']
-                gainNumber = row['Gain Number']
-                gainPercent = row['Gain Percent']
-                responsePercent = row['Response Percent']
-                lift = row['Lift']
-                
-                accQuantilePercent = row['Acc Quantile Percent']
-                accGainPercent = row['Acc Gain Percent']
-                accResponsePercent = row['Acc Response Percent']
-                accLift = row['Acc Lift']
-                
-                innerDict['_Column_'] = 'P_' + str(targetName) + '1'
-                innerDict['_Event_'] = 1
-                innerDict['_Depth_'] = accQuantilePercent
-                innerDict['_NObs_'] = quantileNumber
-                innerDict['_Gain_'] = gainNumber
-                innerDict['_Resp_'] = gainPercent
-                innerDict['_CumResp_'] = accGainPercent
-                innerDict['_PctResp_'] = responsePercent
-                innerDict['_CumPctResp_'] = accResponsePercent
-                innerDict['_Lift_'] = lift
-                innerDict['_CumLift_'] = accLift
-                
-                numRows += 1
-                rowStats.update({'dataMap': innerDict,
-                                 'rowNumber': numRows,
-                                 'header': None})
-                listLift.append(dict(rowStats))
-            
-        outJSON = {'creationTimeStamp': None,
-                   'modifiedTimeStamp': None,
-                   'createdBy': None,
-                   'modifiedBy': None,
-                   'id': None,
-                   'name': 'dmcas_lift',
-                   'description': None,
-                   'revision': 0,
-                   'order': 0,
-                   'type': None,
-                   'parameterMap': parameterMap,
-                   'data': listLift,
-                   'version': 1,
-                   'xInteger': False,
-                   'yInteger': False}
+        if len(dataPartitionExists) == 0:
+            try:
+                raise ValueError
+            except ValueError:
+                print('No data was provided. Please provide the actual ' +
+                      'and predicted values for at least one of the ' + 
+                      'partitions (VALIDATE, TRAIN, or TEST).')
+                raise
         
+        swatConn.loadactionset('percentile')
+        
+        for i in dataPartitionExists:
+            columns = [f'actual{i}', f'predicted{i}']
+            predicted = f'predicted{i}'
+            swatConn.read_frame(dataSets[columns],
+                                casout=dict(name='scoredValues',
+                                            replace=True))
+            swatConn.percentile.assess(table='scoredValues',
+                                       inputs=predicted,
+                                       casout=dict(name='scoreAssess',
+                                                   replace=True),
+                                       response=targetName,
+                                       event=targetValue)
+            assessROC = swatConn.CASTable('scoreAssess_ROC').to_frame()
+            assessLift = swatConn.CASTable('scoreAssess').to_frame()
+
+            for j in range(100):
+                rowNumber = (i*100) + j
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_Event_'] = targetValue
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_TargetName_'] = targetName
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_Cutoff_'] = assessROC['_Cutoff_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_TP_'] = assessROC['_TP_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_FP_'] = assessROC['_FP_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_FN_'] = assessROC['_FN_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_TN_'] = assessROC['_TN_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_Sensitivity_'] = assessROC['_Sensitivity_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_Specificity_'] = assessROC['_Specificity_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_KS_'] = assessROC['_KS_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_KS2_'] = assessROC['_KS2_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_FHALF_'] = assessROC['_FHALF_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_FPR_'] = assessROC['_FPR_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_ACC_'] = assessROC['_ACC_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_FDR_'] = assessROC['_FDR_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_F1_'] = assessROC['_F1_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_C_'] = assessROC['_C_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_GINI_'] = assessROC['_GINI_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_GAMMA_'] = assessROC['_GAMMA_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_TAU_'] = assessROC['_TAU_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_MiscEvent_'] = assessROC['_MiscEvent_']
+            
+            for j in range(21):
+                rowNumber = (i*21) + j
+                nullJSONLiftDict['data'][rowNumber]['dataMap']['_Event_'] = targetValue
+                nullJSONLiftDict['data'][rowNumber]['dataMap']['_TargetName_'] = targetName
+                if j != 0:
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Depth_'] = assessLift['_Depth_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Value_'] = assessLift['_Value_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_NObs_'] = assessLift['_NObs_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_NEvents_'] = assessLift['_NEvents_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_NEventsBest_'] = assessLift['_NEventsBest_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Resp_'] = assessLift['_Resp_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_RespBest_'] = assessLift['_RespBest_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Lift_'] = assessLift['_Lift_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_LiftBest_'] = assessLift['_LiftBest_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumResp_'] = assessLift['_CumResp_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumRespBest_'] = assessLift['_CumRespBest_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumLift_'] = assessLift['_CumLift_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumLiftBest_'] = assessLift['_CumLiftBest_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_PctResp_'] = assessLift['_PctResp_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_PctRespBest_'] = assessLift['_PctRespBest_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumPctResp_'] = assessLift['_CumPctResp_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumPctRespBest_'] = assessLift['_CumPctRespBest_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Gain_'] = assessLift['_Gain_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_GainBest_'] = assessLift['_GainBest_']
+        
+        with open(Path(jPath) / 'dmcas_roc.json', 'w') as jFile:
+            json.dump(nullJSONROCDict, jFile, indent=4) 
+            
         with open(Path(jPath) / 'dmcas_lift.json', 'w') as jFile:
-            json.dump(outJSON, jFile, indent=4)
-        
-    def calculateLift(self, actualValue, targetValue, predictValue):
-        '''
-        Calculates the lift statistics required to generate lift curves. 
-
-        Parameters
-        ----------
-        actualValue : series
-            Series containing the actual values of the target variable.
-        targetValue: int or float
-            Value of target variable that indicates an event.
-        predictValue : array-like list
-            Array-like list containing the predictions of the model for the 
-            target variable
-
-        Returns
-        -------
-        liftDf : dataframe
-            Dataframe containing the lift and accumulated lift statistics.
-
-        '''
-        
-        numObservations = len(actualValue)
-
-        quantileCutOff = np.percentile(predictValue, np.arange(0, 100, 10))
-        numQuantiles = len(quantileCutOff)
-    
-        quantileIndex = np.zeros(numObservations)
-        for i in range(numObservations):
-            k = numQuantiles
-            for j in range(1, numQuantiles):
-                if (predictValue[i] > quantileCutOff[-j]):
-                    k -= 1
-            quantileIndex[i] = k
-    
-        countTable = pd.crosstab(quantileIndex, actualValue)
-        quantileNumber = countTable.sum(1)
-        quantilePercent = 100 * (quantileNumber / numObservations)
-        gainNumber = countTable[targetValue]
-        totalNumResponse = gainNumber.sum(0)
-        gainPercent = 100 * (gainNumber /totalNumResponse)
-        responsePercent = 100 * (gainNumber / quantileNumber)
-        overallResponsePercent = 100 * (totalNumResponse / numObservations)
-        lift = responsePercent / overallResponsePercent
-    
-        liftDf = pd.DataFrame({'Quantile Number': quantileNumber,
-                               'Quantile Percent': quantilePercent,
-                               'Gain Number': gainNumber,
-                               'Gain Percent': gainPercent,
-                               'Response Percent': responsePercent,
-                               'Lift': lift})
-    
-        accCountTable = countTable.cumsum(axis = 0)
-        quantileNumber = accCountTable.sum(1)
-        quantilePercent = 100 * (quantileNumber / numObservations)
-        gainNumber = accCountTable[targetValue]
-        gainPercent = 100 * (gainNumber / totalNumResponse)
-        responsePercent = 100 * (gainNumber / quantileNumber)
-        accLift = responsePercent / overallResponsePercent
-    
-    
-        accLiftDf = pd.DataFrame({'Acc Quantile Number': quantileNumber,
-                                  'Acc Quantile Percent': quantilePercent,
-                                  'Acc Gain Number': gainNumber,
-                                  'Acc Gain Percent': gainPercent,
-                                  'Acc Response Percent': responsePercent,
-                                  'Acc Lift': accLift})
-    
-        liftDf = pd.concat([liftDf, accLiftDf], axis=1, ignore_index=False)
-        
-        return(liftDf)
-            
+            json.dump(nullJSONLiftDict, jFile, indent=4)
+                        
     def readJSONFile(self, path):
         '''
         Reads a JSON file from a given path.
