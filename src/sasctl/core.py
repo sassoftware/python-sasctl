@@ -245,8 +245,13 @@ class Session(requests.Session):
 
     Attributes
     ----------
-    message_log
-    filters
+    message_log : logging.Logger
+        A log to which all REST request and response messages will be sent.  Attach a handler using
+        `add_logger()` to capture these messages.
+
+    filters : list of callable
+        A collection of functions that will be called with each request and response object *prior* to logging the
+        messages, allowing any sensitive information to be removed first.
 
     """
     def __init__(self, hostname,
@@ -420,7 +425,9 @@ class Session(requests.Session):
 
     @versionadded(version='1.6')
     def as_swat(self, server=None, **kwargs):
-        """Use the current credentials to establish a SWAT connection to CAS.
+        """Create a SWAT connection to a CAS server.
+
+        Uses the authentication information from the session to establish a CAS connection using SWAT.
 
         Parameters
         ----------
@@ -433,6 +440,21 @@ class Session(requests.Session):
         Returns
         -------
         swat.CAS
+            An active SWAT connection
+
+        Raises
+        ------
+        RuntimeError
+            If `swat` package is not available.
+
+        Examples
+        --------
+        >>> sess = Session('example.sas.com')
+        >>> with sess.as_swat() as conn:
+        ...    conn.listnodes()
+        CASResults([('nodelist', Node List
+                      name        role connected   IP Address
+        0  example.sas.com  controller       Yes  127.0.0.1)])
 
         """
         server = server or 'cas-shared-default'
