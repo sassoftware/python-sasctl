@@ -230,8 +230,8 @@ class JSONFiles():
             3. Import values from a CSV file. Format should contain the above
             tuple in each row.
             
-        The following are the base statistical parameters SAS Open Model Manager
-        currently supports:
+        The following are the base statistical parameters SAS Model Manager
+        and SAS Open Model Manager currently supports:
             * RASE = Root Average Squared Error
             * NObs = Sum of Frequencies
             * GINI = Gini Coefficient
@@ -499,7 +499,7 @@ class JSONFiles():
                     except ValueError:
                         dataSets[columns] = data.transpose()
                 elif type(data) is list:
-                    dataSets[columns] = np.array(data).tranpose()
+                    dataSets[columns] = np.array(data).transpose()
                 elif type(data) is pd.core.frame.DataFrame:
                     dataSets[columns] = data.values
                     
@@ -602,80 +602,6 @@ class JSONFiles():
         with open(path) as jFile:
             return(json.load(jFile))
             
-    def setInputType(self, paramValue):
-        '''
-        Given user input, determines if it is a string, int, or float. Returns
-        the value cast to the determined type.
-        
-        Parameters
-        ---------------
-        paramValue : int, float, or str
-            Value of the parameter.
-            
-        Returns
-        ---------------
-        paramValue : int, float, or str
-            Value of the parameter.
-        '''
-        
-        if paramValue.isdigit():
-            return int(paramValue)
-        try:
-            float(paramValue)
-            return float(paramValue)
-        except:
-            return paramValue
-            
-    def initializeDataMap(self, dataRole):
-        '''
-        Initializes a data map to include the data role, partition indicator,
-        and formatted partition indicator.
-        
-        Parameters
-        ---------------
-        dataRole : int
-            Identifier of the dataset's role. Either 1, 2, or 3.
-            
-        Returns
-        ---------------
-        dataMap : series
-            Pandas series containing values and their parameter mappings.
-        '''
-        
-        dataMap = pd.Series([self.convertDataRole(dataRole),
-                             dataRole,
-                             f'           {dataRole}'],
-                            index=['_DataRole_',
-                                   '_PartInd_',
-                                   '_PartInd__f'])
-        
-        return dataMap
-            
-    def isNewParameter(self, paramName, parameterMap):
-        '''
-        Determines if parameter is already built in the parameter map, but
-        first formats the parameter to the JSON standard (_<>_).
-        
-        Parameters
-        ---------------
-        paramName : string
-            Name of the parameter.
-        parameterMap : dict
-            Dictionary of statistical parameters.
-            
-        Returns
-        ---------------
-        boolean
-            True if the parameter is new. False if it already exists.
-        '''
-        
-        paramName = self.formatParameter(paramName)
-        
-        if paramName in parameterMap.keys():
-            return False
-        else:
-            return True
-        
     def formatParameter(self, paramName):
         '''
         Formats the parameter name to the JSON standard (_<>_). No changes are
@@ -741,44 +667,3 @@ class JSONFiles():
             conversion = 1
                 
         return conversion
-            
-    def createParameterDict(self, paramName, paramLabel,
-                            paramOrder, paramValue):
-        '''
-        Creates a parameter dictionary based on the provided values and return
-        the dictionary.
-        
-        Parameters
-        ---------------
-        paramName : string
-            Name of the parameter.
-        paramLabel : string
-            Description of the parameter.
-        paramOrder : int
-            Order to be displayed in SAS Open Model Manager.
-        paramValue : int, float, or str
-            Value of the parameter.
-                
-        Returns
-        ---------------
-        parameterDict : dict
-            Output dictionary containing proper JSON formatted information.
-        '''
-        if isinstance(paramValue, (int, float)):
-            paramType = 'num'
-            paramLength = 8
-        else:
-            paramType = 'char'
-            paramLength = len(paramValue)
-        
-        paramName = self.formatParameter(paramName)
-        
-        parameterDict = {'parameter': paramName,
-                         'type': paramType,
-                         'label': paramLabel,
-                         'length': paramLength,
-                         'order': paramOrder,
-                         'values': [paramName],
-                         'preformatted': False}
-        
-        return parameterDict
