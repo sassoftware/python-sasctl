@@ -492,7 +492,7 @@ class JSONFiles():
         for i, data in enumerate([validateData, trainData, testData]):
             if data is not None:
                 dataPartitionExists.append(i)
-                columns = [f'actual{i}', f'predicted{i}']
+                columns = [f'actual{i}', f'predict{i}']
                 if type(data) is np.ndarray:
                     try:
                         dataSets[columns] = data
@@ -501,7 +501,8 @@ class JSONFiles():
                 elif type(data) is list:
                     dataSets[columns] = np.array(data).transpose()
                 elif type(data) is pd.core.frame.DataFrame:
-                    dataSets[columns] = data.values
+                    dataSets[columns[0]] = data.iloc[:,0].values
+                    dataSets[columns[1]] = data.iloc[:,1].values
                     
         if len(dataPartitionExists) == 0:
             try:
@@ -515,68 +516,89 @@ class JSONFiles():
         swatConn.loadactionset('percentile')
         
         for i in dataPartitionExists:
-            columns = [f'actual{i}', f'predicted{i}']
-            predicted = f'predicted{i}'
+            columns = [f'actual{i}', f'predict{i}']
             swatConn.read_frame(dataSets[columns],
-                                casout=dict(name='scoredValues',
+                                casout=dict(name='SCOREDVALUES',
                                             replace=True))
-            swatConn.percentile.assess(table='scoredValues',
-                                       inputs=predicted,
-                                       casout=dict(name='scoreAssess',
+            swatConn.percentile.assess(table='SCOREDVALUES',
+                                       inputs=columns[1],
+                                       casout=dict(name='SCOREASSESS',
                                                    replace=True),
-                                       response=targetName,
-                                       event=targetValue)
-            assessROC = swatConn.CASTable('scoreAssess_ROC').to_frame()
-            assessLift = swatConn.CASTable('scoreAssess').to_frame()
+                                       response=columns[0],
+                                       event=str(targetValue))
+            assessROC = swatConn.CASTable('SCOREASSESS_ROC').to_frame()
+            assessLift = swatConn.CASTable('SCOREASSESS').to_frame()
+            
+            nullLiftRow = list(range(1, 64))
+            nullROCRow = list(range(1, 301))
 
             for j in range(100):
                 rowNumber = (i*100) + j
+                nullROCRow.remove(rowNumber + 1)
                 nullJSONROCDict['data'][rowNumber]['dataMap']['_Event_'] = targetValue
                 nullJSONROCDict['data'][rowNumber]['dataMap']['_TargetName_'] = targetName
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_Cutoff_'] = assessROC['_Cutoff_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_TP_'] = assessROC['_TP_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_FP_'] = assessROC['_FP_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_FN_'] = assessROC['_FN_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_TN_'] = assessROC['_TN_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_Sensitivity_'] = assessROC['_Sensitivity_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_Specificity_'] = assessROC['_Specificity_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_KS_'] = assessROC['_KS_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_KS2_'] = assessROC['_KS2_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_FHALF_'] = assessROC['_FHALF_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_FPR_'] = assessROC['_FPR_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_ACC_'] = assessROC['_ACC_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_FDR_'] = assessROC['_FDR_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_F1_'] = assessROC['_F1_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_C_'] = assessROC['_C_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_GINI_'] = assessROC['_GINI_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_GAMMA_'] = assessROC['_GAMMA_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_TAU_'] = assessROC['_TAU_']
-                nullJSONROCDict['data'][rowNumber]['dataMap']['_MiscEvent_'] = assessROC['_MiscEvent_']
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_Cutoff_'] = str(assessROC['_Cutoff_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_TP_'] = str(assessROC['_TP_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_FP_'] = str(assessROC['_FP_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_FN_'] = str(assessROC['_FN_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_TN_'] = str(assessROC['_TN_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_Sensitivity_'] = str(assessROC['_Sensitivity_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_Specificity_'] = str(assessROC['_Specificity_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_KS_'] = str(assessROC['_KS_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_KS2_'] = str(assessROC['_KS2_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_FHALF_'] = str(assessROC['_FHALF_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_FPR_'] = str(assessROC['_FPR_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_ACC_'] = str(assessROC['_ACC_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_FDR_'] = str(assessROC['_FDR_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_F1_'] = str(assessROC['_F1_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_C_'] = str(assessROC['_C_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_GINI_'] = str(assessROC['_GINI_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_GAMMA_'] = str(assessROC['_GAMMA_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_TAU_'] = str(assessROC['_TAU_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_MiscEvent_'] = str(assessROC['_MiscEvent_'][j])
+                nullJSONROCDict['data'][rowNumber]['dataMap']['_OneMinusSpecificity_'] = str(1 - assessROC['_Specificity_'][j])
             
             for j in range(21):
                 rowNumber = (i*21) + j
-                nullJSONLiftDict['data'][rowNumber]['dataMap']['_Event_'] = targetValue
+                nullLiftRow.remove(rowNumber + 1)
+                nullJSONLiftDict['data'][rowNumber]['dataMap']['_Event_'] = str(targetValue)
                 nullJSONLiftDict['data'][rowNumber]['dataMap']['_TargetName_'] = targetName
                 if j != 0:
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Depth_'] = assessLift['_Depth_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Value_'] = assessLift['_Value_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_NObs_'] = assessLift['_NObs_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_NEvents_'] = assessLift['_NEvents_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_NEventsBest_'] = assessLift['_NEventsBest_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Resp_'] = assessLift['_Resp_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_RespBest_'] = assessLift['_RespBest_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Lift_'] = assessLift['_Lift_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_LiftBest_'] = assessLift['_LiftBest_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumResp_'] = assessLift['_CumResp_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumRespBest_'] = assessLift['_CumRespBest_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumLift_'] = assessLift['_CumLift_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumLiftBest_'] = assessLift['_CumLiftBest_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_PctResp_'] = assessLift['_PctResp_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_PctRespBest_'] = assessLift['_PctRespBest_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumPctResp_'] = assessLift['_CumPctResp_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumPctRespBest_'] = assessLift['_CumPctRespBest_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Gain_'] = assessLift['_Gain_']
-                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_GainBest_'] = assessLift['_GainBest_']
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Depth_'] = str(assessLift['_Depth_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Value_'] = str(assessLift['_Value_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_NObs_'] = str(assessLift['_NObs_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_NEvents_'] = str(assessLift['_NEvents_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_NEventsBest_'] = str(assessLift['_NEventsBest_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Resp_'] = str(assessLift['_Resp_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_RespBest_'] = str(assessLift['_RespBest_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Lift_'] = str(assessLift['_Lift_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_LiftBest_'] = str(assessLift['_LiftBest_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumResp_'] = str(assessLift['_CumResp_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumRespBest_'] = str(assessLift['_CumRespBest_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumLift_'] = str(assessLift['_CumLift_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumLiftBest_'] = str(assessLift['_CumLiftBest_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_PctResp_'] = str(assessLift['_PctResp_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_PctRespBest_'] = str(assessLift['_PctRespBest_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumPctResp_'] = str(assessLift['_CumPctResp_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_CumPctRespBest_'] = str(assessLift['_CumPctRespBest_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_Gain_'] = str(assessLift['_Gain_'][j-1])
+                    nullJSONLiftDict['data'][rowNumber]['dataMap']['_GainBest_'] = str(assessLift['_GainBest_'][j-1])  
+            
+        # If not all partitions are present, clean up the dicts for compliant formatting        
+        if len(dataPartitionExists) < 3:
+            # Remove missing partitions from ROC & Lift dicts
+            for index, row in reversed(list(enumerate(nullJSONLiftDict['data']))):
+                if int(row['rowNumber']) in nullLiftRow:
+                    nullJSONLiftDict['data'].pop(index)
+            for index, row in reversed(list(enumerate(nullJSONROCDict['data']))):
+                if int(row['rowNumber']) in nullROCRow:
+                    nullJSONROCDict['data'].pop(index)
+                    
+            # Reassign the row number values to match what is left in each dict
+            for i, _ in enumerate(nullJSONLiftDict['data']):
+                nullJSONLiftDict['data'][i]['rowNumber'] = i + 1
+            for i, _ in enumerate(nullJSONROCDict['data']):
+                nullJSONROCDict['data'][i]['rowNumber'] = i + 1
         
         with open(Path(jPath) / 'dmcas_roc.json', 'w') as jFile:
             json.dump(nullJSONROCDict, jFile, indent=4) 
