@@ -133,3 +133,28 @@ def test_direct_rest_calls(session, change_dir):
                 # tests
                 pass
 
+
+def test_register_custom_model(session, change_dir):
+    """Ensure the register_custom_model.py example executes successfully."""
+    from pickle import UnpicklingError
+
+    # Mock up Session() to return the Betamax-recorded session
+    def Session(*args, **kwargs):
+        return session
+
+    change_dir('examples')
+    with open('register_custom_model.py') as f:
+        # Remove import of Session to ensure mock function will be used
+        # instead.
+        code = f.read().replace('from sasctl import register_model, Session',
+                                'from sasctl import register_model')
+        try:
+            six.exec_(code)
+        except (UnpicklingError, KeyError) as e:
+            if "'\xef'" in str(e):
+                # Betamax recording adds additional bytes to the content which
+                # breaks unpickling.  Ignore when this happens as correct
+                # handling of binary contents should be validated in integration
+                # tests
+                pass
+
