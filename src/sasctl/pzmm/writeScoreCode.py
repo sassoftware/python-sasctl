@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from pathlib import Path
-import numpy as np
 
 # %%
 class ScoreCode():
@@ -73,7 +72,7 @@ class ScoreCode():
         
         inputVarList = list(inputDF.columns)
         for name in inputVarList:
-            if not str(name).isidentifier():
+            if not name.isidentifier():
                 raise SyntaxError('Invalid column name in inputDF. Columns must be ' +
                                   'valid as Python variables.')
         newVarList = list(inputVarList)
