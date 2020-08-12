@@ -3,8 +3,6 @@
 
 from pathlib import Path
 
-import numpy as np
-
 # %%
 class ScoreCode():
     
@@ -14,30 +12,37 @@ class ScoreCode():
                        pyPath=Path.cwd(), threshPrediction=None,
                        otherVariable=False):
         '''
-        Writes a Python score code file based on training data used to generate the model pickle file. The Python file is included in
-        the ZIP file that is imported or registered into the common model repository. The model can then be used by SAS applications, such as SAS Open Model Manager.
+        Writes a Python score code file based on training data used to generate the model 
+        pickle file. The Python file is included in the ZIP file that is imported or registered 
+        into the common model repository. The model can then be used by SAS applications, 
+        such as SAS Open Model Manager.
         
         The score code that is generated is designed to be a working template for any
-        Python model, but is not guaranteed to work out of the box for scoring, publishing, or validating the model.
+        Python model, but is not guaranteed to work out of the box for scoring, publishing, 
+        or validating the model.
         
-        Note that for categorical variables, the variable is split into
-        the possible categorical values of the variable. Also, by default it does NOT
-        include a catch-all [catVar]_Other variable to store any missing
-        values or any values not found in the training data set. If you have
-        missing values or values not included in your training data set, you
-        must set the OtherVariable option to True.
+        Note that for categorical variables, the variable is split into the possible 
+        categorical values of the variable. Also, by default it does NOT include a catch-all 
+        [catVar]_Other variable to store any missing values or any values not found in the 
+        training data set. If you have missing values or values not included in your training 
+        data set, you must set the OtherVariable option to True.
+        
+        Both the inputDF and targetDF dataframes have the following stipulations:
+        * Column names must be a valid Python variable name.
+        * For categorical columns, the values must be a valid Python variable name.
+        If either of these conditions is broken, an exception is raised.
         
         Parameters
         ---------------
         inputDF : DataFrame
             The `DataFrame` object contains the training data, and includes only the predictor
-            columns. The writeScoreCode function currently only supports int(64), float(64),
-            and str data types for scoring.
+            columns. The writeScoreCode function currently supports int(64), float(64),
+            and string data types for scoring.
         targetDF : DataFrame
             The `DataFrame` object contains the training data for the target variable.
         modelPrefix : string
             The variable for the model name that is used when naming model files.
-            (i.e. hmeqClassTree + [Score.py || .pickle]).      
+            (For example: hmeqClassTree + [Score.py || .pickle]).      
         predictMethod : string
             User-defined prediction method for score testing. This should be
             in a form such that the model and data input can be added using 
@@ -59,13 +64,17 @@ class ScoreCode():
             values or values not found in the training data set. The default setting
             is False.
     			
-    		Yields
-    		---------------
+    	Yields
+    	---------------
         '*Score.py'
             The Python score code file for the model.
         '''       
         
         inputVarList = list(inputDF.columns)
+        for name in inputVarList:
+            if not name.isidentifier():
+                raise SyntaxError('Invalid column name in inputDF. Columns must be ' +
+                                  'valid as Python variables.')
         newVarList = list(inputVarList)
         inputDtypesList = list(inputDF.dtypes)        
     
@@ -78,6 +87,10 @@ import pickle
 import pandas as pd
 import numpy as np
 import settings''')
+            
+            self.pyFile.write('''\n
+with open(settings.pickle_path + '{pickleName}', 'rb') as _pFile:
+    _thisModelFit = pickle.load(_pFile)''')
             
             self.pyFile.write(f'''\n
 def score{modelPrefix}({', '.join(inputVarList)}):
@@ -174,6 +187,9 @@ def score{modelPrefix}({', '.join(inputVarList)}):
         newVarList = []
         for i, uniq in enumerate(uniqueValues):
             uniq = uniq.strip()
+            if not uniq.isidentifier():
+                raise SyntaxError('Invalid column value in inputDF. Values must be ' +
+                                  'valid as Python variables (or easily space strippable).')
             newVarList.append(f'{inputSeries.name}_{uniq}')
             self.pyFile.write(f'''
     {newVarList[i]} = np.where(categoryStr == '{uniq}', 1.0, 0.0)''')
@@ -187,7 +203,7 @@ def score{modelPrefix}({', '.join(inputVarList)}):
     
     def checkIfBinary(self, inputSeries):
         '''
-        Checks a pandas series to determine if the values are binary or nominal.
+        Checks a pandas series to determine whether the values are binary or nominal.
         
         Parameters
         ---------------
