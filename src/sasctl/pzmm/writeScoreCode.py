@@ -122,7 +122,7 @@ class ScoreCode():
         # From the input dataframe columns, create a list of input variables, then check for viability
         inputVarList = list(inputDF.columns)
         for name in inputVarList:
-            if not name.isidentifier():
+            if not str(name).isidentifier():
                 raise SyntaxError('Invalid column name in inputDF. Columns must be ' +
                                   'valid as Python variables.')
         newVarList = list(inputVarList)
