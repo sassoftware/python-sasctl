@@ -385,6 +385,15 @@ class JSONFiles():
                     dataSets[i] = data.transpose().values.tolist()
                 elif type(data) is list:
                     dataSets[i] = data
+                    
+        if len(dataPartitionExists) == 0:
+            try:
+                raise ValueError
+            except ValueError:
+                print('No data was provided. Please provide the actual ' +
+                      'and predicted values for at least one of the ' + 
+                      'partitions (VALIDATE, TRAIN, or TEST).')
+                raise
                             
         for j in dataPartitionExists:
             fitStats = nullJSONDict['data'][j]['dataMap']
