@@ -1,6 +1,7 @@
 Unreleased
 ----------
- -
+ **Bugfixes**
+ - Reworked the `model_repository.get_repository()` to prevent HTTP 403 errors that could occur with some Viya environments.
  
  v1.5.3 (2020-06-25)
  ------------------
