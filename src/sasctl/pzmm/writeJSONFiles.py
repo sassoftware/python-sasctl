@@ -510,8 +510,12 @@ class JSONFiles():
                 elif type(data) is list:
                     dataSets[columns] = np.array(data).transpose()
                 elif type(data) is pd.core.frame.DataFrame:
-                    dataSets[columns[0]] = data.iloc[:,0].values
-                    dataSets[columns[1]] = data.iloc[:,1].values
+                    try:
+                        dataSets[columns[0]] = data.iloc[:,0]
+                        dataSets[columns[1]] = data.iloc[:,1]
+                    except NameError:
+                        dataSets = pd.DataFrame(data=data.iloc[:,0]).rename(columns={data.columns[0]: columns[0]})
+                        dataSets[columns[1]] = data.iloc[:,1]
                     
         if len(dataPartitionExists) == 0:
             try:
