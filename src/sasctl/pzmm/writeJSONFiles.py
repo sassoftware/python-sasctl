@@ -469,13 +469,13 @@ class JSONFiles():
             Model Manager through SWAT authentication.
         validateData : pandas dataframe, numpy array, or list, optional
             Dataframe, array, or list of the validation dataset, including both
-            the actual and predicted values. The default value is None.
+            the actual values and the calculated probabilities. The default value is None.
         trainData : pandas dataframe, numpy array, or list, optional
             Dataframe, array, or list of the train dataset, including both
-            the actual and predicted values. The default value is None.
+            the actual values and the calculated probabilities. The default value is None.
         testData : pandas dataframe, numpy array, or list, optional
             Dataframe, array, or list of the test dataset, including both
-            the actual and predicted values. The default value is None.
+            the actual values and the calculated probabilities. The default value is None.
         jPath : string, optional
             Location for the output JSON file. The default value is the current
             working directory.
@@ -494,56 +494,50 @@ class JSONFiles():
         nullJSONLiftPath = Path(__file__).resolve().parent / 'null_dmcas_lift.json'
         nullJSONLiftDict = self.readJSONFile(nullJSONLiftPath)
                 
-        dataSets = pd.DataFrame()
+        dataSets = [pd.DataFrame(), pd.DataFrame(), pd.DataFrame()]
+        columns = ['actual', 'predict']
 
         dataPartitionExists = []
         # Check if a data partition exists, then convert to a pandas dataframe
         for i, data in enumerate([validateData, trainData, testData]):
             if data is not None:
                 dataPartitionExists.append(i)
-                columns = [f'actual{i}', f'predict{i}']
                 if type(data) is np.ndarray:
                     try:
-                        dataSets[columns] = data
+                        dataSets[i][columns] = data
                     except ValueError:
-                        dataSets[columns] = data.transpose()
+                        dataSets[i][columns] = data.transpose()
                 elif type(data) is list:
-                    dataSets[columns] = np.array(data).transpose()
+                    dataSets[i][columns] = np.array(data).transpose()
                 elif type(data) is pd.core.frame.DataFrame:
                     try:
-                        dataSets[columns[0]] = data.iloc[:,0]
-                        dataSets[columns[1]] = data.iloc[:,1]
+                        dataSets[i][columns[0]] = data.iloc[:,0]
+                        dataSets[i][columns[1]] = data.iloc[:,1]
                     except NameError:
-                        dataSets = pd.DataFrame(data=data.iloc[:,0]).rename(columns={data.columns[0]: columns[0]})
-                        dataSets[columns[1]] = data.iloc[:,1]
+                        dataSets[i] = pd.DataFrame(data=data.iloc[:,0]).rename(columns={data.columns[0]: columns[0]})
+                        dataSets[i][columns[1]] = data.iloc[:,1]
                     
         if len(dataPartitionExists) == 0:
-            try:
-                raise ValueError
-            except ValueError:
-                print('No data was provided. Please provide the actual ' +
-                      'and predicted values for at least one of the ' + 
-                      'partitions (VALIDATE, TRAIN, or TEST).')
-                raise
+            print('No data was provided. Please provide the actual ' +
+                    'and predicted values for at least one of the ' + 
+                    'partitions (VALIDATE, TRAIN, or TEST).')
+            raise ValueError
+
+        nullLiftRow = list(range(1, 64))
+        nullROCRow = list(range(1, 301))
         
         swatConn.loadactionset('percentile')
         
         for i in dataPartitionExists:
-            columns = [f'actual{i}', f'predict{i}']
-            swatConn.read_frame(dataSets[columns],
-                                casout=dict(name='SCOREDVALUES',
-                                            replace=True))
+            swatConn.read_frame(dataSets[i][columns],
+                                casout=dict(name='SCOREDVALUES', replace=True))
             swatConn.percentile.assess(table='SCOREDVALUES',
-                                       inputs=columns[1],
-                                       casout=dict(name='SCOREASSESS',
-                                                   replace=True),
-                                       response=columns[0],
-                                       event=str(targetValue))
+                                        inputs=[columns[1]],
+                                        casout=dict(name='SCOREASSESS', replace=True),
+                                        response=columns[0],
+                                        event=str(targetValue))
             assessROC = swatConn.CASTable('SCOREASSESS_ROC').to_frame()
             assessLift = swatConn.CASTable('SCOREASSESS').to_frame()
-            
-            nullLiftRow = list(range(1, 64))
-            nullROCRow = list(range(1, 301))
 
             for j in range(100):
                 rowNumber = (i*100) + j
