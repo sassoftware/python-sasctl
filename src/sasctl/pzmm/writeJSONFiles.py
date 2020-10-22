@@ -25,7 +25,7 @@ class JSONFiles():
         Parameters
         ---------------
         inputDF : Dataframe
-            Input dataframe containing the training dataset in a 
+            Input dataframe containing the training data set in a 
             pandas.Dataframe format. Columns are used to define predictor and
             prediction variables (ambiguously named "predict").
         isInput : boolean
@@ -119,9 +119,9 @@ class JSONFiles():
         modelPredictors : string list
             List of predictor variables for the model.
         targetEvent : string
-            Model target event (i.e. 1 for a binary event).
+            Model target event (for example, 1 for a binary event).
         numTargetCategories : int
-            Number of possible target categories (i.e. 2 for a binary event).
+            Number of possible target categories (for example, 2 for a binary event).
         eventProbVar : string, optional
             Model prediction metric for scoring. Default is None.
         jPath : string, optional
@@ -189,7 +189,7 @@ class JSONFiles():
         ---------------
         modelPrefix : string
             The variable for the model name that is used when naming model files.
-            (i.e. hmeqClassTree + [Score.py || .pickle]).
+            (for example, hmeqClassTree + [Score.py || .pickle]).
         jPath : string, optional
             Location for the output JSON file. The default value is the current
             working directory.   
@@ -222,7 +222,7 @@ class JSONFiles():
         There are three modes to add fit parameters to the JSON file:
             
             1. Call the function with additional tuple arguments containing
-            the name of the parameter, its value, and the partition it 
+            the name of the parameter, its value, and the partition that it 
             belongs to.
             
             2. Provide line by line user input prompted by the function.
@@ -336,12 +336,12 @@ class JSONFiles():
     def calculateFitStat(self, validateData=None, trainData=None, 
                          testData=None, jPath=Path.cwd()):
         '''
-        Calculates fit statistics from user data and predictions, then writes to
+        Calculates fit statistics from user data and predictions and then writes to
         a JSON file for importing into the common model repository. Note that if
-        no dataset is provided (validate, train, or test), this function raises
+        no data set is provided (validate, train, or test), this function raises
         an error and does not create a JSON file.
         
-        Datasets can be provided in the following forms:
+        Data sets can be provided in the following forms:
         * pandas dataframe; the actual and predicted values are their own columns
         * numpy array; the actual and predicted values are their own columns or rows 
         and ordered such that the actual values come first and the predicted second
@@ -350,13 +350,13 @@ class JSONFiles():
         Parameters
         ---------------
         validateData : pandas dataframe, numpy array, or list, optional
-            Dataframe, array, or list of the validation dataset, including both
+            Dataframe, array, or list of the validation data set, including both
             the actual and predicted values. The default value is None.
         trainData : pandas dataframe, numpy array, or list, optional
-            Dataframe, array, or list of the train dataset, including both
+            Dataframe, array, or list of the train data set, including both
             the actual and predicted values. The default value is None.
         testData : pandas dataframe, numpy array, or list, optional
-            Dataframe, array, or list of the test dataset, including both
+            Dataframe, array, or list of the test data set, including both
             the actual and predicted values. The default value is None.
         jPath : string, optional
             Location for the output JSON file. The default value is the current
@@ -452,10 +452,10 @@ class JSONFiles():
                             validateData=None, trainData=None, testData=None, 
                             jPath=Path.cwd()):
         '''
-        Calculates the ROC & Lift curves from user data and model predictions, then 
+        Calculates the ROC and Lift curves from user data and model predictions and then 
         writes it to JSON files for importing in to the common model repository.
-        ROC & Lift calculations are completed by CAS through a SWAT call. Note that if
-        no dataset is provided (validate, train, or test), this function raises
+        ROC and Lift calculations are completed by CAS through a SWAT call. Note that if
+        no data set is provided (validate, train, or test), this function raises
         an error and does not create any JSON files.
         
         Parameters
@@ -465,16 +465,15 @@ class JSONFiles():
         targetValue: int or float
             Value of target variable that indicates an event.
         swatConn: SWAT connection to CAS
-            Connection object to CAS service in SAS Model Manager or SAS Open 
-            Model Manager through SWAT authentication.
+            Connection object to CAS service in SAS Model Manager or SAS® Open Model Manager through SWAT authentication.
         validateData : pandas dataframe, numpy array, or list, optional
-            Dataframe, array, or list of the validation dataset, including both
+            Dataframe, array, or list of the validation data set, including both
             the actual values and the calculated probabilities. The default value is None.
         trainData : pandas dataframe, numpy array, or list, optional
-            Dataframe, array, or list of the train dataset, including both
+            Dataframe, array, or list of the train data set, including both
             the actual values and the calculated probabilities. The default value is None.
         testData : pandas dataframe, numpy array, or list, optional
-            Dataframe, array, or list of the test dataset, including both
+            Dataframe, array, or list of the test data set, including both
             the actual values and the calculated probabilities. The default value is None.
         jPath : string, optional
             Location for the output JSON file. The default value is the current
@@ -593,7 +592,7 @@ class JSONFiles():
             
         # If not all partitions are present, clean up the dicts for compliant formatting        
         if len(dataPartitionExists) < 3:
-            # Remove missing partitions from ROC & Lift dicts
+            # Remove missing partitions from ROC and Lift dicts
             for index, row in reversed(list(enumerate(nullJSONLiftDict['data']))):
                 if int(row['rowNumber']) in nullLiftRow:
                     nullJSONLiftDict['data'].pop(index)
@@ -625,7 +624,7 @@ class JSONFiles():
         Returns
         -------
         json.load(jFile) : str
-            String contents of json file.
+            String contents of JSON file.
         '''
         
         with open(path) as jFile:
@@ -664,7 +663,7 @@ class JSONFiles():
         Parameters
         ---------------
         dataRole : string or int
-            Identifier of the dataset's role; either TRAIN, TEST, or VALIDATE,
+            Identifier of the data set's role; either TRAIN, TEST, or VALIDATE,
             which correspond to 1, 2, or 3.
             
         Returns
