@@ -1,18 +1,17 @@
 # Copyright (c) 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-# %%
-from pathlib import Path
 import sys
-
 import getpass
 import json
-import pandas as pd
-from sklearn import metrics
-import numpy as np
-from scipy.stats import kendalltau, gamma
+from pathlib import Path
 
-# %%
+import numpy as np
+import pandas as pd
+from scipy.stats import kendalltau, gamma
+from sklearn import metrics
+
+
 class JSONFiles():
         
     def writeVarJSON(self, inputDF, isInput=True,
