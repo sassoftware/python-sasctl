@@ -69,7 +69,7 @@ class ScoreCode():
         newVarList = list(inputVarList)
         inputDtypesList = list(inputDF.dtypes)        
     
-        pyPath = pyPath / (modelPrefix + 'Score.py')
+        pyPath = Path(pyPath) / (modelPrefix + 'Score.py')
         with open(pyPath, 'w') as self.pyFile:
         
             self.pyFile.write('''\

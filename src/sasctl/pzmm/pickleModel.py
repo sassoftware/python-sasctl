@@ -3,14 +3,14 @@
 
 
 # %%
-import os
+from pathlib import Path
 
 import pickle
 
 # %%
 class PickleModel():
     
-    def pickleTrainedModel(self, trainedModel, modelPrefix, pPath=os.getcwd()):
+    def pickleTrainedModel(self, trainedModel, modelPrefix, pPath=Path.cwd()):
         '''
         Write trained model to a binary pickle file. 
         
@@ -31,5 +31,5 @@ class PickleModel():
 			Binary pickle file containing a trained model.
         '''
         
-        with open(os.path.join(pPath, modelPrefix + '.pickle'), 'wb') as pFile:
+        with open(pPath / (modelPrefix + '.pickle'), 'wb') as pFile:
             pickle.dump(trainedModel, pFile)

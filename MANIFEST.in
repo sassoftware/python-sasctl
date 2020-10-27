@@ -6,14 +6,5 @@ include ContributorAgreement.txt
 include SUPPORT.md
 
 include src/sasctl/pzmm/null_dmcas_fitstat.json
-
-# Include documentation files
-recursive-include doc *.bat
-recursive-include doc *.py
-recursive-include doc *.rst
-recursive-include doc Makefile
-
-# Include examples
-recursive-include examples *.csv
-recursive-include examples *.md
-recursive-include examples *.py
+include src/sasctl/pzmm/null_dmcas_roc.json
+include src/sasctl/pzmm/null_dmcas_lift.json

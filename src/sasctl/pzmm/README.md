@@ -1,8 +1,8 @@
-# PZMM Module
+# pzmm Module
 
 ## Overview
 
-The goal of the PZMM (Python Zip Model Management) module is to enable users of SAS Model Manager on SAS Viya and SAS Open Model Manager to zip through the process of importing Python models into the common model repository. In order to facilitate model imports, the module allows the user to complete the following tasks:
+The goal of the pzmm (Python Zip Model Management) module is to enable users of SAS Model Manager on SAS Viya and SAS Open Model Manager to zip through the process of importing Python models into the common model repository. In order to facilitate model imports, the module allows the user to complete the following tasks:
 
 * Writes JSON files to read in the model information, which includes the following files:
   * `fileMetadata.json` specifies the file roles for the names of the input and output variables files, the Python score code file, and the Python pickle file
@@ -29,13 +29,13 @@ Use of this package requires the following:
 
 ## Module Import
 
-Importing the PZMM module is done by running the following line in Python after installation of the python-sasctl package:
+Importing the pzmm module is done by running the following line in Python after installation of the python-sasctl package:
 
 `import sasctl.pzmm as pzmm`
 
 ## Demos
 
-The following demo video walks through the process of importing a Python model in SAS Model Manager in SAS Viya and shows most of the current features of PZMM. (Note that for this release, the module import statement needs to be `import sasctl.pzmm as pzmm` instead of `import pzmm`.) The notebook from the demo is called Fleet_Management_DecisionTree.ipynb and can be found in the [examples folder here.](../../../examples/Fleet_Management_DecisionTree.ipynb)
+The following demo video walks through the process of importing a Python model in SAS Model Manager in SAS Viya and shows most of the current features of pzmm. (Note that for this release, the module import statement needs to be `import sasctl.pzmm as pzmm` instead of `import pzmm`.) The notebook from the demo is called Fleet_Management_DecisionTree.ipynb and can be found in the [examples folder here.](../../../examples/Fleet_Management_DecisionTree.ipynb)
 
 [<img src="pzmmintro.jpg" alt="drawing" width="600"/>](https://players.brightcove.net/3665946608001/default_default/index.html?videoId=6164663310001)
 
