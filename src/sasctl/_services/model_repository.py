@@ -148,8 +148,8 @@ class ModelRepository(Service):
 
         return cls.request_link(link, 'contents')
 
-    @sasctl_command('get')
     @classmethod
+    @sasctl_command('get', 'repositories')
     def get_repository(cls, repository, refresh=False):
         """Return a repository instance.
 
