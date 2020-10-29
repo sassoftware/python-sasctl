@@ -1,5 +1,9 @@
 Unreleased
 ----------
+ -
+ 
+v1.5.3 (2020-10-29)
+ ------------------
  **Improvements**
  - Added the `as_swat` method to the `Session` object, allowing connection to CAS through SWAT without an additional authentication step.
  
