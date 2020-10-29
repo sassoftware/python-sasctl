@@ -1,5 +1,13 @@
 Unreleased
 ----------
+ **Improvements**
+ - Added the `as_swat` method to the `Session` object, allowing connection to CAS through SWAT without an additional authentication step.
+ 
+ **Changes**
+ - Integrated PZMM into `Session` calls and removed redundant function calls in PZMM.
+ - ROC and Lift statistic JSON files created by PZMM are now generated through CAS actionset calls.
+ - Updated the PZMM example notebook, `FleetMaintenance.ipynb`, to include integration of PZMM with sasctl functions.
+ 
  **Bugfixes**
  - Reworked the `model_repository.get_repository()` to prevent HTTP 403 errors that could occur with some Viya environments.
  
