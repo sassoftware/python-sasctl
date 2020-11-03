@@ -385,3 +385,34 @@ def test_str():
 
         assert str(s) == "Session(hostname='hostname', username='username', " \
                          "protocol='https', verify_ssl=True)"
+
+
+def test_as_swat():
+    """Verify correct parameters passed to CAS constructor."""
+    _ = pytest.importorskip('swat')
+
+    HOST = 'example.com'
+    USERNAME = 'username'
+    PASSWORD = 'password'
+
+    with mock.patch('sasctl.core.Session.get_token'):
+        with Session(HOST, USERNAME, PASSWORD) as s:
+            with mock.patch('swat.CAS') as CAS:
+                # Verify default parameters were passed
+                _ = s.as_swat()
+                CAS.assert_called_with(hostname='https://%s/cas-shared-default-http/' % HOST,
+                                       username=USERNAME,
+                                       password=PASSWORD)
+
+                # Verify connection to a non-default CAS instance
+                SERVER_NAME = 'my-cas-server'
+                _ = s.as_swat(SERVER_NAME)
+                CAS.assert_called_with(hostname='https://%s/%s-http/' % (HOST, SERVER_NAME),
+                                       username=USERNAME,
+                                       password=PASSWORD)
+
+                # Verify default parameters can be overridden
+                _ = s.as_swat(username='testuser', password=None)
+                CAS.assert_called_with(hostname='https://%s/cas-shared-default-http/' % HOST,
+                                       username='testuser',
+                                       password=None)

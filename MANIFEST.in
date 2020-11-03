@@ -1,4 +1,10 @@
 include README.md
 include LICENSE
 include CHANGELOG.md
+include CONTRIBUTING.md
+include ContributorAgreement.txt
+include SUPPORT.md
+
 include src/sasctl/pzmm/null_dmcas_fitstat.json
+include src/sasctl/pzmm/null_dmcas_roc.json
+include src/sasctl/pzmm/null_dmcas_lift.json

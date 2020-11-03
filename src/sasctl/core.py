@@ -36,6 +36,7 @@ except ImportError:
         kerberos = None
 
 from .utils.cli import sasctl_command
+from .utils.misc import versionadded
 from . import exceptions
 
 logger = logging.getLogger(__name__)
@@ -244,8 +245,13 @@ class Session(requests.Session):
 
     Attributes
     ----------
-    message_log
-    filters
+    message_log : logging.Logger
+        A log to which all REST request and response messages will be sent.  Attach a handler using
+        `add_logger()` to capture these messages.
+
+    filters : list of callable
+        A collection of functions that will be called with each request and response object *prior* to logging the
+        messages, allowing any sensitive information to be removed first.
 
     """
     def __init__(self, hostname,
@@ -416,6 +422,72 @@ class Session(requests.Session):
 
         """
         return self.add_logger(logging.StreamHandler(), level)
+
+    @versionadded(version='1.6')
+    def as_swat(self, server=None, **kwargs):
+        """Create a SWAT connection to a CAS server.
+
+        Uses the authentication information from the session to establish a CAS connection using SWAT.
+
+        Parameters
+        ----------
+        server : str, optional
+            The logical name of the CAS server, not the hostname.  Defaults to "cas-shared-default".
+        kwargs : any
+            Additional arguments to pass to the `swat.CAS` constructor.  Can be used to override this method's
+            default behavior or customize the CAS session.
+
+        Returns
+        -------
+        swat.CAS
+            An active SWAT connection
+
+        Raises
+        ------
+        RuntimeError
+            If `swat` package is not available.
+
+        Examples
+        --------
+        >>> sess = Session('example.sas.com')
+        >>> with sess.as_swat() as conn:
+        ...    conn.listnodes()
+        CASResults([('nodelist', Node List
+                      name        role connected   IP Address
+        0  example.sas.com  controller       Yes  127.0.0.1)])
+
+        """
+        server = server or 'cas-shared-default'
+
+        if swat is None:
+            raise RuntimeError("The 'swat' package must be installed to create a SWAT connection.")
+
+        # Construct the CAS server's URL
+        url = '{}://{}/{}-http/'.format(self._settings['protocol'],
+                                        self.hostname,
+                                        server)
+
+        # Use this sessions info to connect to CAS unless user has explicitly give a value (even if None)
+        kwargs.setdefault('hostname', url)
+        kwargs.setdefault('username', self.username)
+        kwargs.setdefault('password', self._settings['password'])
+
+        orig_sslreqcert = os.environ.get('SSLREQCERT')
+
+        # If SSL connections to microservices are not being verified, don't attempt
+        # to verify connections to CAS - most likely certs are not in place.
+        if not self.verify:
+            os.environ['SSLREQCERT'] = 'no'
+
+        try:
+            cas = swat.CAS(**kwargs)
+            cas.setsessopt(messagelevel='warning')
+        finally:
+            # Reset environment variable to whatever it's original value was
+            if orig_sslreqcert:
+                os.environ['SSLREQCERT'] = orig_sslreqcert
+
+        return cas
 
     @property
     def username(self):

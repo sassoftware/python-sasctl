@@ -10,7 +10,11 @@ import pickle
 # %%
 class PickleModel():
     
+<<<<<<< HEAD
     def pickleTrainedModel(trainedModel, modelPrefix, pPath=Path.cwd()):
+=======
+    def pickleTrainedModel(self, trainedModel, modelPrefix, pPath=Path.cwd()):
+>>>>>>> 2e9a6dc (Refactor pzmm (#76))
         '''
         Write trained model to a binary pickle file. 
         
@@ -32,4 +36,8 @@ class PickleModel():
         '''
         
         with open(pPath / (modelPrefix + '.pickle'), 'wb') as pFile:
+<<<<<<< HEAD
             pickle.dump(trainedModel, pFile)
+=======
+            pickle.dump(trainedModel, pFile)
+>>>>>>> 2e9a6dc (Refactor pzmm (#76))

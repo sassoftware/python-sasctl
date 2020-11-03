@@ -107,7 +107,7 @@ class TestModels:
 
         # Don't compare to sys.version since cassettes used may have been
         # created by a different version
-        assert re.match('Python \d\.\d', model.tool)
+        assert re.match(r'Python \d\.\d', model.tool)
 
         # Ensure input & output metadata was set
         for col in train_df.columns:
@@ -197,7 +197,7 @@ class TestSklearnLinearModel:
 
         # Don't compare to sys.version since cassettes used may have been
         # created by a different version
-        assert re.match('Python \d\.\d', model.tool)
+        assert re.match(r'Python \d\.\d', model.tool)
 
         # Ensure input & output metadata was set
         for col in X.columns:
