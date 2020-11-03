@@ -40,4 +40,8 @@ class ZipModel():
                 zFile.write(name, arcname=name)
                 
         with open(Path(fileDir) / (modelPrefix + '.zip'), 'rb') as zipFile:
+<<<<<<< HEAD
             return io.BytesIO(zipFile.read())
+=======
+            return io.BytesIO(zipFile.read())
+>>>>>>> ca5a7c6364d6e16a6dac27176dc0b975965ea57a

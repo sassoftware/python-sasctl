@@ -107,9 +107,9 @@ def test_save_performance_project_types():
     # Check projects w/ invalid properties
 
 
-@mock.patch.object(ModelRepository, 'get_repository')
+@mock.patch.object(ModelRepository, 'list_repositories')
 @mock.patch.object(ModelRepository, 'get_project')
-def test_register_model_403_error(get_project, get_repository):
+def test_register_model_403_error(get_project, list_repositories):
     """Verify HTTP 403 is converted to a user-friendly error.
 
     Depending on environment configuration, this can happen when attempting to
@@ -123,7 +123,7 @@ def test_register_model_403_error(get_project, get_repository):
     from sasctl.tasks import register_model
 
     get_project.return_value = {'name': 'Project Name'}
-    get_repository.side_effect = HTTPError(None, 403, None, None, None)
+    list_repositories.side_effect = HTTPError(None, 403, None, None, None)
 
     # HTTP 403 error when getting repository should throw a user-friendly
     # AuthorizationError
@@ -131,7 +131,7 @@ def test_register_model_403_error(get_project, get_repository):
         register_model(None, 'model name', 'project name')
 
     # All other errors should be bubbled up
-    get_repository.side_effect = HTTPError(None, 404, None, None, None)
+    list_repositories.side_effect = HTTPError(None, 404, None, None, None)
     with pytest.raises(HTTPError):
         register_model(None, 'model name', 'project name')
 

@@ -48,6 +48,7 @@ def run_around_tests(session):
 
 
 def test(cas_session, iris_dataset):
+    pytest.skip('Re-enable once MAS publish no longer hangs.')
     cas_session.loadactionset('decisiontree')
 
     tbl = cas_session.upload(iris_dataset).casTable
