@@ -132,15 +132,21 @@ def score{modelPrefix}({', '.join(inputVarList)}):
                     newVarList.remove(inputVarList[i])
                     newVarList.extend(tempVar)
     
-            self.pyFile.write(f'''\n
-    inputArray = pd.DataFrame([[1.0, {', '.join(newVarList)}]],
-                              columns = ['const', {', '.join(f"'{x}'" for x in newVarList)}],
-                              dtype = float)''')
-    
-        # Insert the model into the provided predictMethod call.
+            # Insert the model into the provided predictMethod call.
             predictMethod = predictMethod.format('_thisModelFit', 'inputArray')
             self.pyFile.write(f'''\n
-    prediction = {predictMethod}''')
+    try:
+        inputArray = pd.DataFrame([[{', '.join(newVarList)}]],
+                                columns = [{', '.join(f"'{x}'" for x in newVarList)}],
+                                dtype = float)
+        prediction = {predictMethod}
+    except ValueError:
+    # For models requiring or including an intercept value, a 'const' column is required.
+    # For example, many statsmodels models include an intercept value that must be included for the model prediction.
+        inputArray = pd.DataFrame([[1.0, {', '.join(newVarList)}]],
+                                columns = ['const', {', '.join(f"'{x}'" for x in newVarList)}],
+                                dtype = float)
+        prediction = {predictMethod}''')
             
             self.pyFile.write(f'''\n
     {metrics[0]} = float(prediction)''')
