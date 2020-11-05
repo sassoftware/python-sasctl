@@ -149,7 +149,12 @@ def score{modelPrefix}({', '.join(inputVarList)}):
         prediction = {predictMethod}''')
             
             self.pyFile.write(f'''\n
-    {metrics[0]} = float(prediction)''')
+    try:
+        {metrics[0]} = float(prediction)
+    except TypeError:
+    # If the model expects non-binary responses, a TypeError will be raised.
+    # The except block shifts the prediction to accept a non-binary response.
+        {metrics[0]} = float(prediction[:,1])''')
             if threshPrediction is None:
                 threshPrediction = np.mean(targetDF)
                 self.pyFile.write(f'''\n
