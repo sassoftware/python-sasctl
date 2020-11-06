@@ -655,3 +655,17 @@ class ModelRepository(Service):
         for delfile in filelist:
             modelfileuri = cls.get_link(delfile, rel)
             delete(modelfileuri['uri'])
+            
+    @classmethod
+    def get_API_metadata(cls):
+        """Checks software API metadata associated with the model repository.
+        
+        Parameters
+        ----------
+        
+        Returns
+        -------
+        API response
+            JSON response detailing the API metadata
+        """
+        return cls.get('/apiMeta')
