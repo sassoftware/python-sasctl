@@ -3,6 +3,8 @@
 
 from pathlib import Path
 import numpy as np
+import json
+from uuid import uuid4
 from ..tasks import get_software_version
 
 # %%
@@ -85,6 +87,7 @@ class ScoreCode():
         newVarList = list(inputVarList)
         inputDtypesList = list(inputDF.dtypes)        
     
+        zPath = pyPath
         pyPath = Path(pyPath) / (modelPrefix + 'Score.py')
         with open(pyPath, 'w') as self.pyFile:
         
@@ -112,8 +115,8 @@ def score{modelPrefix}({', '.join(inputVarList)}):
     try:
         _thisModelFit
     except NameError:
-        with open('/models/resources/viya/{modelID}/{pickleName}', 'rb') as _pfile:
-            _thisModelFit = pickle.load(_pfile)''')
+        with open('/models/resources/viya/{modelID}/{pickleName}', 'rb') as _pFile:
+            _thisModelFit = pickle.load(_pFile)''')
             else:
                 self.pyFile.write(f'''\n
     try:
@@ -183,6 +186,105 @@ def score{modelPrefix}({', '.join(inputVarList)}):
             
             self.pyFile.write(f'''\n
     return({metrics[0]}, {metrics[1]})''')
+            
+        if isViya35:
+            self.convertPythonModeltoDS2(Path(zPath) / ('score.sas'), 
+                                         zPath, pyPath, inputVarList,
+                                         inputDtypesList, modelPrefix)
+                
+    def convertPythonModeltoDS2(self, sasPath, zPath, pyPath, inputVarList, inputDtypesList, modelPrefix):
+        
+        pythonCode = []
+        with open(pyPath, 'r') as file:
+            for line in file:
+                pythonCode.append(line)
+        
+        with open(sasPath, 'w') as sasFile:
+            sasFile.write('''
+package pythonScore / overwrite=yes;
+dcl package pymas pm;
+dcl package logger logr('App.tk.MAS');
+dcl varchar(32767) character set utf8 pypgm;
+dcl int resultCode revision;\n''')
+            
+            # Separate input variables between string [varchar(100) in DS2] and not-string [double in DS2],
+            # recombine into a single string, while maintaining argument order from the Python function
+            index = [ind for ind, val in enumerate(inputDtypesList) if val != 'string']
+            for ind, string in enumerate(inputVarList):
+                if ind in index:
+                    inputVarList[ind] = 'double ' + string
+                else:
+                    inputVarList[ind] = 'varchar(100) ' + string
+            methodInputs = ', '.join(inputVarList)
+            resultVar = 'in_out double resultCode'
+            with open(zPath + 'outputVar.json', 'r') as file:
+                outputJSON = json.load(file)
+            methodOutputs = []
+            for var in outputJSON:
+                if var['type'] == 'string':
+                    methodOutputs.append('in_out varchar(100) ' + var['name'])
+                else:
+                    methodOutputs.append('in_out double ' + var['name'])
+            methodOutputs = ', '.join(methodOutputs)
+
+            sasFile.write(f'''\n
+method score({', '.join([methodInputs, resultVar, methodOutputs])});''')
+            
+            execUUID = 'model_exec_' + str(uuid4())
+            sasFile.write(f'''\n
+    resultCode = revision = 0;
+    if null(pm) then do;
+        pm = _new_ pymas();
+        resultCode = pm.useModule('{execUUID}', 1);
+        if resultCode then do;''')
+            
+            for line in pythonCode:
+                sasFile.write(f'''\n
+            ResultCode = pm.appendSrcLine({line})''')
+            
+            sasFile.write(f'''\n
+            revision = pm.publish(pm.getSource(), '{execUUID}');\n\n
+            if (revision < 1) then do;
+                logr.log('e', 'py.publish() failed.');
+                resultCode = -1;
+                return;
+            end;
+        end;
+    end;
+    resultCode = pm.useMethod('{'score' + modelPrefix}');
+    if resultCode then do;
+        logr.log('E', 'useMethod() failed. resultCode=$s', resultCode);
+        return;
+    end;''')
+            
+            for ind, var in enumerate(inputVarList):
+                if ind in index:
+                    sasFile.write(f'''\n
+    resultCode = pm.setDouble('{var}', {var});
+    if resultCode then
+        logr.log('E', 'useMethod() failed.  resultCode=$s', resultCode);''')
+                else:
+                    sasFile.write(f'''\n
+    resultCode = pm.setString('{var}', {var});
+    if resultCode then
+        logr.log('E', 'useMethod() failed.  resultCode=$s', resultCode);''')
+
+            sasFile.write('''\n
+    resultCode = pm.execute();
+    if (resultCode) then put 'Error: pm.execute failed.  resultCode=' resultCode;
+    else do;''')
+            for var in outputJSON:
+                if var['type'] == 'string':
+                    sasFile.write(f'''\n
+        {var['name']} = pm.getString('{var['name']}');''')
+                else:
+                    sasFile.write(f'''\n
+        {var['name']} = pm.getDouble('{var['name']}');''')
+            sasFile.write('''\n
+    end;
+end;
+
+endpackage;''')
             
     def splitStringColumn(self, inputSeries, otherVariable):
         '''
