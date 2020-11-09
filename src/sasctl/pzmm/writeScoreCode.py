@@ -3,6 +3,7 @@
 
 from pathlib import Path
 import numpy as np
+from ..tasks import get_software_version
 
 # %%
 class ScoreCode():
@@ -11,7 +12,7 @@ class ScoreCode():
                        predictMethod, pickleName,
                        metrics=['EM_EVENTPROBABILITY', 'EM_CLASSIFICATION'],
                        pyPath=Path.cwd(), threshPrediction=None,
-                       otherVariable=False):
+                       otherVariable=False, modelID=None):
         '''
         Writes a Python score code file based on training data used to generate the model 
         pickle file. The Python file is included in the ZIP file that is imported or registered 
@@ -71,6 +72,11 @@ class ScoreCode():
             The Python score code file for the model.
         '''       
         
+        isViya35 = (get_software_version() == '3.5')
+        if isViya35 and (modelID == None):
+            raise ValueError('The model UUID is required for score code written for' +
+                             ' SAS Model Manager on SAS Viya 3.5.')
+        
         inputVarList = list(inputDF.columns)
         for name in inputVarList:
             if not str(name).isidentifier():
@@ -88,16 +94,28 @@ import pickle
 import pandas as pd
 import numpy as np
 import settings''')
-            
-            self.pyFile.write('''\n
+
+            if isViya35:
+                self.pyFile.write(f'''\n
+with open('/models/resources/viya/{modelID}/{pickleName}', 'rb') as _pFile:
+    _thisModelFit = pickle.load(_pFile)''')
+            else:
+                self.pyFile.write(f'''\n
 with open(settings.pickle_path + '{pickleName}', 'rb') as _pFile:
     _thisModelFit = pickle.load(_pFile)''')
             
             self.pyFile.write(f'''\n
 def score{modelPrefix}({', '.join(inputVarList)}):
     "Output: {', '.join(metrics)}"''')
-            
-            self.pyFile.write(f'''\n
+            if isViya35:
+                self.pyFile.write(f'''\n
+    try:
+        _thisModelFit
+    except NameError:
+        with open('/models/resources/viya/{modelID}/{pickleName}', 'rb') as _pfile:
+            _thisModelFit = pickle.load(_pfile)''')
+            else:
+                self.pyFile.write(f'''\n
     try:
         _thisModelFit
     except NameError:
