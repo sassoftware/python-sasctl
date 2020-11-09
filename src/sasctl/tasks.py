@@ -729,9 +729,12 @@ def get_software_version():
     response = mr.get_API_metadata()
     buildVersion = response.get('build')['buildVersion']
     
-    if buildVersion[0:4] == '3.7.':
-        return '3.5'
-    elif buildVersion[0:4] == '3.9.':
-        return 'OMM'
-    elif buildVersion[0:4] == '3.10':
-        return '4.0'
+    try:
+        if buildVersion[0:4] == '3.7.':
+            return '3.5'
+        elif buildVersion[0:4] == '3.9.':
+            return 'OMM'
+        elif float(buildVersion[0:4]) >= 3.10:
+            return '4.0'
+    except ValueError:
+        return 'Version could not be found.'
