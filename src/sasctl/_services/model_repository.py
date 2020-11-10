@@ -608,7 +608,7 @@ class ModelRepository(Service):
 
         Copies all of the analytic stores for a model to the pre-defined
         server location (/config/data/modelsvr/astore).
-        To enable publishing a scoring, models that contain analytic stores
+        To enable publishing and scoring, models that contain analytic stores
         need the ASTORE files to be copied to a set location
         (/config/data/modelsrv/astore).  This location is used for
         integration with Event Stream Processing and others. This request
@@ -690,6 +690,11 @@ class ModelRepository(Service):
         model : str or dict
             The name or id of the model, or a dictionary representation of
             the model.
+        
+        Returns
+        -------
+        API response
+            JSON response detailing the API metadata
         '''
         if cls.is_uuid(model):
             id_ = model
