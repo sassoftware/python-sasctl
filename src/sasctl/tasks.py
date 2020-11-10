@@ -734,39 +734,39 @@ def get_software_version():
     except ValueError:
         return 'Version could not be found.'
     
-    def upload_and_copy_score_resources(model, files):
-        '''Upload Python score resources to a model and copy the score resources 
-        to the Compute Server.
-        
-        For SAS Model Manager installations on SAS Viya 3.5, Python score resources
-        are not automatically copied to the Compute server and a valid DS2 wrapper is not
-        automatically generated for Python score code. After registering a new
-        model or attempting to update an old model, pzmm.writeScoreCode.py creates
-        Python score code and the DS2 wrapper, which can then be uploaded to the model and 
-        copied to the Compute Server using this function. 
-        
-        In order to copy score resources to the Compute server, include the role key for
-        each file.
+def upload_and_copy_score_resources(model, files):
+    '''Upload Python score resources to a model and copy the score resources 
+    to the Compute Server.
+    
+    For SAS Model Manager installations on SAS Viya 3.5, Python score resources
+    are not automatically copied to the Compute server and a valid DS2 wrapper is not
+    automatically generated for Python score code. After registering a new
+    model or attempting to update an old model, pzmm.writeScoreCode.py creates
+    Python score code and the DS2 wrapper, which can then be uploaded to the model and 
+    copied to the Compute Server using this function. 
+    
+    In order to copy score resources to the Compute server, include the role key for
+    each file.
 
-        Parameters
-        ----------
-        model : str or dict
-            The name or id of the model, or a dictionary representation of
-            the model.
-        files : list
-            A list of dictionaries of the form {'name': filename, 'file': filecontent}.
-            An optional 'role' key is supported for designating a file as score
-            code, astore, etc.
-            
-        Returns
-        -------
-        response : list of RestObj
-            A list of uploaded file contents as instances of ``RestObj``s.
-        '''        
-        for file in files:
-            if isinstance(file, dict):
-                mr.add_model_content(model, **file)
-        else:
-            mr.add_model_content(model, file)
+    Parameters
+    ----------
+    model : str or dict
+        The name or id of the model, or a dictionary representation of
+        the model.
+    files : list
+        A list of dictionaries of the form {'name': filename, 'file': filecontent}.
+        An optional 'role' key is supported for designating a file as score
+        code, astore, etc.
         
-        return mr.copy_python_resources(model)
+    Returns
+    -------
+    response : list of RestObj
+        A list of uploaded file contents as instances of ``RestObj``s.
+    '''        
+    for file in files:
+        if isinstance(file, dict):
+            mr.add_model_content(model, **file)
+    else:
+        mr.add_model_content(model, file)
+    
+    return mr.copy_python_resources(model)
