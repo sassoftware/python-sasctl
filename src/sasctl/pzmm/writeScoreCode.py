@@ -5,7 +5,8 @@ from pathlib import Path
 import numpy as np
 import json
 from uuid import uuid4
-from ..tasks import get_software_version
+from ..tasks import get_software_version, upload_and_copy_score_resources
+from .._services.model_repository import ModelRepository as modelRepo
 
 # %%
 class ScoreCode():
@@ -14,7 +15,7 @@ class ScoreCode():
                        predictMethod, pickleName,
                        metrics=['EM_EVENTPROBABILITY', 'EM_CLASSIFICATION'],
                        pyPath=Path.cwd(), threshPrediction=None,
-                       otherVariable=False, modelID=None):
+                       otherVariable=False, model=None):
         '''
         Writes a Python score code file based on training data used to generate the model 
         pickle file. The Python file is included in the ZIP file that is imported or registered 
@@ -67,12 +68,23 @@ class ScoreCode():
             The option for having a categorical other value for catching missing
             values or values not found in the training data set. The default setting
             is False.
+        model : str or dict
+            The name or id of the model, or a dictionary representation of
+            the model. The default value is None and is only necessary for models that
+            will be hosted on SAS Viya 3.5.
     			
     	Yields
     	---------------
         '*Score.py'
             The Python score code file for the model.
         '''       
+        if modelRepo.is_uuid(model):
+            modelID = model
+        elif isinstance(model, dict) and 'id' in model:
+            modelID = model['id']
+        else:
+            model = modelRepo.get_model(model)
+            modelID = model['id']
         
         isViya35 = (get_software_version() == '3.5')
         if isViya35 and (modelID == None):
@@ -191,6 +203,10 @@ def score{modelPrefix}({', '.join(inputVarList)}):
             self.convertPythonModeltoDS2(Path(zPath) / ('score.sas'), 
                                          zPath, pyPath, inputVarList,
                                          inputDtypesList, modelPrefix)
+            files = [dict(name=f'{modelPrefix}Score.py', file=pyPath),
+                     dict(name='score.sas', file=Path(zPath) / ('score.sas'),
+                          role='Score code')]
+            upload_and_copy_score_resources(modelID, files)
                 
     def convertPythonModeltoDS2(self, sasPath, zPath, pyPath, inputVarList, inputDtypesList, modelPrefix):
         
