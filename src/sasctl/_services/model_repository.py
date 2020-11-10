@@ -669,3 +669,34 @@ class ModelRepository(Service):
             JSON response detailing the API metadata
         """
         return cls.get('/apiMeta')
+
+    @classmethod
+    def copy_python_resources(cls, model):
+        '''Moves a model's score resources to Compute server.
+
+        Copies all of the analytic stores for a model to the pre-defined
+        server location (/models/resources/viya/<model-UUID>/). To enable 
+        publishing and scoring, models that contain Python scoring resources 
+        need the score resource files to be copied to a set location 
+        (/models/resources/viya/<model-UUID>/). This location is used for
+        integration with Event Stream Processing and others. This request
+        invokes an asynchronous call to copy the score resource files. Check
+        the individual score resource uris to get the completion state:
+        pending, copying, success, failure. Please review the full Model
+        Manager documentation before using.
+        
+        Parameters
+        ----------
+        model : str or dict
+            The name or id of the model, or a dictionary representation of
+            the model.
+        '''
+        if cls.is_uuid(model):
+            id_ = model
+        elif isinstance(model, dict) and 'id' in model:
+            id_ = model['id']
+        else:
+            model = cls.get_model(model)
+            id_ = model['id']
+        
+        return cls.put(f'/models/{id_}/scoreResources')
