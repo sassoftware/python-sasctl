@@ -203,10 +203,12 @@ def score{modelPrefix}({', '.join(inputVarList)}):
             self.convertPythonModeltoDS2(Path(zPath) / ('score.sas'), 
                                          zPath, pyPath, inputVarList,
                                          inputDtypesList, modelPrefix)
-            files = [dict(name=f'{modelPrefix}Score.py', file=pyPath),
-                     dict(name='score.sas', file=Path(zPath) / ('score.sas'),
-                          role='Score code')]
-            upload_and_copy_score_resources(modelID, files)
+            with open(pyPath, 'r') as pFile:
+                with open(Path(zPath) / ('score.sas'), 'r') as sFile:
+                    files = [dict(name=f'{modelPrefix}Score.py', file=pFile),
+                             dict(name='score.sas', file=sFile,
+                                  role='Score code')]
+                    upload_and_copy_score_resources(modelID, files)
                 
     def convertPythonModeltoDS2(self, sasPath, zPath, pyPath, inputVarList, inputDtypesList, modelPrefix):
         
