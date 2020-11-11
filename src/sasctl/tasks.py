@@ -768,7 +768,7 @@ def upload_and_copy_score_resources(model, files):
     for file in files:
         if isinstance(file, dict):
             mr.add_model_content(model, **file)
-    else:
-        mr.add_model_content(model, file)
+        else:
+            mr.add_model_content(model, file)
     
     return mr.copy_python_resources(model)
