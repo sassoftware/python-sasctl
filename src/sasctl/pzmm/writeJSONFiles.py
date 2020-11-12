@@ -203,7 +203,7 @@ class JSONFiles():
         fileMetadata = pd.DataFrame([['inputVariables', 'inputVar.json'],
                                      ['outputVariables', 'outputVar.json'],
                                      ['score', modelPrefix + 'Score.py'],
-                                     ['python pickle',
+                                     ['scoreResource',
                                       modelPrefix + '.pickle']],
                                     columns = ['role', 'name']
                                     )
