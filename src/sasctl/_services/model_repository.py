@@ -704,4 +704,4 @@ class ModelRepository(Service):
             model = cls.get_model(model)
             id_ = model['id']
         
-        return cls.put(f'/models/{id_}/scoreResources')
+        return cls.put(f'/models/{id_}/scoreResources', headers={'Accept': 'application/json'})
