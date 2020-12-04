@@ -78,18 +78,19 @@ class ScoreCode():
         '*Score.py'
             The Python score code file for the model.
         '''       
-        if modelRepo.is_uuid(model):
-            modelID = model
-        elif isinstance(model, dict) and 'id' in model:
-            modelID = model['id']
-        else:
-            model = modelRepo.get_model(model)
-            modelID = model['id']
-        
         isViya35 = (get_software_version() == '3.5')
-        if isViya35 and (modelID == None):
-            raise ValueError('The model UUID is required for score code written for' +
+        
+        if isViya35:
+            if model == None:
+                raise ValueError('The model UUID is required for score code written for' +
                              ' SAS Model Manager on SAS Viya 3.5.')
+            elif modelRepo.is_uuid(model):
+                modelID = model
+            elif isinstance(model, dict) and 'id' in model:
+                modelID = model['id']
+            else:
+                model = modelRepo.get_model(model)
+                modelID = model['id']
         
         inputVarList = list(inputDF.columns)
         for name in inputVarList:
