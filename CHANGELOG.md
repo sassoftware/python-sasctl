@@ -5,8 +5,33 @@ Unreleased
  - overwrite register_model files
  - metrics included by default
  
+v1.5.3 (2020-10-29)
+ ------------------
+ **Improvements**
+ - Added the `as_swat` method to the `Session` object, allowing connection to CAS through SWAT without an additional authentication step.
+ 
+ **Changes**
+ - Integrated PZMM into `Session` calls and removed redundant function calls in PZMM.
+ - ROC and Lift statistic JSON files created by PZMM are now generated through CAS actionset calls.
+ - Updated the PZMM example notebook, `FleetMaintenance.ipynb`, to include integration of PZMM with sasctl functions.
+ 
+ **Bugfixes**
+ - Reworked the `model_repository.get_repository()` to prevent HTTP 403 errors that could occur with some Viya environments.
+ 
+ v1.5.3 (2020-06-25)
+ ------------------
+ **Bugfixes**
+  - Added PZMM fitstat JSON file to manifest.
+ 
+ v1.5.2 (2020-06-22)
+ -------------------
+ **Improvements**
+  - PZMM module moved from a stand-alone [repository](https://github.com/sassoftware/open-model-manager-resources/tree/master/addons/picklezip-mm) to a sasctl submodule.
+  - Introduced deprecation warnings for Python 2 users.
+ 
 v1.5.1 (2020-4-9)
 ----------------
+ **Bugfixes**
  - Fixed PyMAS utilities to correctly work functions not bound to pickled objects.
  - Model target variables should no longer appear as an input variable when registering ASTORE models. 
  
