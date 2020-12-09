@@ -5,7 +5,7 @@ Unreleased
  - overwrite register_model files
  - metrics included by default
  
-v1.5.3 (2020-10-29)
+v1.5.4 (2020-10-29)
  ------------------
  **Improvements**
  - Added the `as_swat` method to the `Session` object, allowing connection to CAS through SWAT without an additional authentication step.
