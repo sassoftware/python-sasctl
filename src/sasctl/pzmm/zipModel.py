@@ -2,33 +2,35 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # %%
-from pathlib import Path
 import zipfile
 import io
+from pathlib import Path
 
 # %%
 
-class ZipModel():
-    
-    def zipFiles(self, fileDir, modelPrefix):
-        '''
+class ZipModel:
+
+    @staticmethod
+    def zipFiles(fileDir, modelPrefix):
+        """
         Combines all JSON files with the model pickle file and associated score code file
         into a single archive ZIP file.
         
         Parameters
-        ---------------
+        ----------
         fileDir : string
             Location of *.json, *.pickle, and *Score.py files.
         modelPrefix : string
             Variable name for the model to be displayed in SAS Open Model Manager 
             (i.e. hmeqClassTree + [Score.py || .pickle]).
             
-        Yields
-        ---------------
+        Notes
+        -----
         '*.zip'
             Archived ZIP file for importing into SAS Open Model Manager. In this form,
             the ZIP file can be imported into SAS Open Model Manager.
-        '''
+
+        """
         
         fileNames = []
         fileNames.extend(sorted(Path(fileDir).glob('*.json')))
