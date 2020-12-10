@@ -8,13 +8,24 @@
 
 import logging
 
-import pandas as pd
-import numpy as np
+try:
+    import pandas as pd
+except ImportError:
+    pd = None
+
+try:
+    import numpy as np
+except ImportError:
+    np = None
 
 from math import sqrt
-from sklearn.metrics import roc_curve, log_loss, roc_auc_score
-from sklearn.metrics import accuracy_score, mean_squared_error
 
+try:
+    import sklearn
+    from sklearn.metrics import roc_curve, log_loss, roc_auc_score
+    from sklearn.metrics import accuracy_score, mean_squared_error
+except ImportError:
+    sklearn = None
 
 log = logging.getLogger(__name__)
 
