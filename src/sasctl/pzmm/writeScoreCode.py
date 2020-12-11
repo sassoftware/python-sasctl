@@ -228,7 +228,7 @@ dcl int resultCode revision;\n''')
             
             # Separate input variables between string [varchar(100) in DS2] and not-string [double in DS2],
             # recombine into a single string, while maintaining argument order from the Python function
-            index = [ind for ind, val in enumerate(inputDtypesList) if val not in ['string', 'object']]
+            index = [ind for ind, val in enumerate(inputDtypesList) if val.name not in ['string', 'object']]
             for ind, string in enumerate(inputVarList):
                 if ind in index:
                     inputVarList[ind] = 'double ' + string
