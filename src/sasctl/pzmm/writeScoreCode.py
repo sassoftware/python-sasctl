@@ -228,7 +228,7 @@ dcl int resultCode revision;\n''')
             
             # Separate input variables between string [varchar(100) in DS2] and not-string [double in DS2],
             # recombine into a single string, while maintaining argument order from the Python function
-            index = [ind for ind, val in enumerate(inputDtypesList) if val != 'string']
+            index = [ind for ind, val in enumerate(inputDtypesList) if val not in ['string', 'object']]
             for ind, string in enumerate(inputVarList):
                 if ind in index:
                     inputVarList[ind] = 'double ' + string
@@ -236,7 +236,7 @@ dcl int resultCode revision;\n''')
                     inputVarList[ind] = 'varchar(100) ' + string
             methodInputs = ', '.join(inputVarList)
             resultVar = 'in_out double resultCode'
-            with open(zPath + 'outputVar.json', 'r') as file:
+            with open(Path(zPath) / 'outputVar.json', 'r') as file:
                 outputJSON = json.load(file)
             methodOutputs = []
             for var in outputJSON:
@@ -255,11 +255,12 @@ method score({', '.join([methodInputs, resultVar, methodOutputs])});''')
     if null(pm) then do;
         pm = _new_ pymas();
         resultCode = pm.useModule('{execUUID}', 1);
-        if resultCode then do;''')
+        if resultCode then do;\n''')
             
             for line in pythonCode:
-                sasFile.write(f'''\n
-            ResultCode = pm.appendSrcLine({line})''')
+                line = line.replace('\'', '\"')
+                sasFile.write(f'''
+            ResultCode = pm.appendSrcLine('{line[:-1]}')''')
             
             sasFile.write(f'''\n
             revision = pm.publish(pm.getSource(), '{execUUID}');\n\n
