@@ -589,7 +589,6 @@ class ModelRepository(Service):
         model : str or dict
             The name, id, or dictionary representation of a model.
 
-
         Returns
         -------
         list
@@ -705,3 +704,43 @@ class ModelRepository(Service):
             id_ = model['id']
         
         return cls.put(f'/models/{id_}/scoreResources', headers={'Accept': 'application/json'})
+    
+    @classmethod
+    def convert_python_to_ds2(cls, model):
+        '''Converts a Python model to DS2
+        
+        For SAS Viya 3.5 Python models on SAS Model Manager, wrap the Python score code in DS2
+        and convert the model score code type to DS2. Models converted in this way are not 
+        scoreable by CAS.
+
+        Parameters
+        ----------
+        model : str or dict
+            The name or id of the model, or a dictionary representation of
+            the model.
+            
+        Returns
+        -------
+        API response
+            JSON response detailing the API metadata
+        '''
+        
+        if cls.is_uuid(model):
+            id_ = model
+        elif isinstance(model, dict) and 'id' in model:
+            id_ = model['id']
+        else:
+            model = cls.get_model(model)
+            id_ = model['id']
+            
+        if isinstance(model, (str, dict)):
+            model = cls.get_model(id_)
+            
+        ETag = model._headers['ETag']
+        accept = 'text/vnd.sas.source.ds2'
+        content = 'application/json'
+        
+        return cls.put(f'/models/{id_}/typeConversion',
+                       headers={'Accept-Item': accept,
+                                'Content-Type': content,
+                                'If-Match': ETag})
