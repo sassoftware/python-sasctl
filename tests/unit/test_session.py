@@ -34,6 +34,19 @@ def test_session_from_url():
     assert s._settings['protocol'] == 'http'
 
 
+def test_http_params():
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('example.com', 'user', 'password', protocol='http')
+        assert s.hostname == 'example.com'
+        assert s._settings['protocol'] == 'http'
+
+    with mock.patch('sasctl.core.Session.get_token'):
+        s = Session('example.com', 'user', 'password', protocol='http', port=8080)
+    assert s.hostname == 'example.com'
+    assert s._settings['protocol'] == 'http'
+    assert s._settings['port'] == 8080
+
+
 def test_from_authinfo(tmpdir_factory):
     filename = str(tmpdir_factory.mktemp('tmp').join('authinfo'))
 
