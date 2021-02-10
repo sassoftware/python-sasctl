@@ -5,15 +5,16 @@ from pathlib import Path
 
 import numpy as np
 
+
 # %%
-class ScoreCode():
+class ScoreCode:
     
     def writeScoreCode(self, inputDF, targetDF, modelPrefix,
                        predictMethod, pickleName,
                        metrics=['EM_EVENTPROBABILITY', 'EM_CLASSIFICATION'],
                        pyPath=Path.cwd(), threshPrediction=None,
                        otherVariable=False):
-        '''
+        """
         Writes a Python score code file based on training data used to generate the model pickle file. The Python file is included in
         the ZIP file that is imported or registered into the common model repository. The model can then be used by SAS applications, such as SAS Open Model Manager.
         
@@ -28,7 +29,7 @@ class ScoreCode():
         must set the OtherVariable option to True.
         
         Parameters
-        ---------------
+        ----------
         inputDF : DataFrame
             The `DataFrame` object contains the training data, and includes only the predictor
             columns. The writeScoreCode function currently only supports int(64), float(64),
@@ -58,13 +59,13 @@ class ScoreCode():
             The option for having a categorical other value for catching missing
             values or values not found in the training data set. The default setting
             is False.
-    			
-    		Yields
-    		---------------
+
+        Notes
+        -----
         '*Score.py'
             The Python score code file for the model.
-        '''       
-        
+
+        """
         inputVarList = list(inputDF.columns)
         newVarList = list(inputVarList)
         inputDtypesList = list(inputDF.dtypes)        

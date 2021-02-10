@@ -24,3 +24,4 @@ Subpackages
 
     sasctl.services
     sasctl.utils
+    sasctl.pzmm

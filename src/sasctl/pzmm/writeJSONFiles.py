@@ -5,7 +5,6 @@
 from pathlib import Path
 import sys
 
-import swat
 import getpass
 import json
 import pandas as pd
@@ -13,17 +12,17 @@ from sklearn import metrics
 import numpy as np
 from scipy.stats import kendalltau, gamma
 
+
 # %%
-class JSONFiles():
+class JSONFiles:
         
     def writeVarJSON(self, inputDF, isInput=True,
                      jPath=Path.cwd(), debug=False):
-        '''
-        Writes a variable descriptor JSON file for input or output variables,
+        """Writes a variable descriptor JSON file for input or output variables,
         based on an input dataframe containing predictor and prediction columns.
         
         Parameters
-        ---------------
+        ----------
         inputDF : Dataframe
             Input dataframe containing the training data set in a 
             pandas.Dataframe format. Columns are used to define predictor and
@@ -36,11 +35,11 @@ class JSONFiles():
         debug : boolean, optional
             Debug mode to check predictor classification. The default is False.
             
-        Yields
-        ---------------
+        Notes
+        -----
         {'inputVar.json', 'outputVar.json'}
             Output JSON file located at jPath.
-        '''
+        """
         
         predictNames = inputDF.columns.values.tolist()
         outputJSON = pd.DataFrame()

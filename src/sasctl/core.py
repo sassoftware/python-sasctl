@@ -423,7 +423,7 @@ class Session(requests.Session):
         """
         return self.add_logger(logging.StreamHandler(), level)
 
-    @versionadded(version='1.6')
+    @versionadded(version='1.5.4')
     def as_swat(self, server=None, **kwargs):
         """Create a SWAT connection to a CAS server.
 
