@@ -673,7 +673,7 @@ class ModelRepository(Service):
     def copy_python_resources(cls, model):
         '''Moves a model's score resources to the Compute server.
 
-        Copies all of the analytic stores for a model to the pre-defined
+        Copies all of the Python score resources for a model to the pre-defined
         server location (/models/resources/viya/<model-UUID>/). To enable 
         publishing and scoring, models that contain Python scoring resources 
         need the score resource files to be copied to a set location 
