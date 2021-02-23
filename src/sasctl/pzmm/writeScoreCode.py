@@ -127,7 +127,7 @@ import pandas as pd
 import numpy as np''')
             # In SAS Viya 4.0 and SAS Open Model Manager, a settings.py file is generated that points to the resource location
             if not isViya35:
-                cls.pyFile.write('''\
+                cls.pyFile.write('''\n
 import settings''')
                 
             # Use a global variable for the model in order to load from memory only once
@@ -183,7 +183,7 @@ def score{modelPrefix}({', '.join(inputVarList)}):
             _thisModelFit = pickle.load(_pFile)''')
             elif not isViya35 and isH2OModel:
                 cls.pyFile.write(f'''
-_thisModelFit = h2o.import_mojo(settings.pickle_path + '{modelFileName[:-4]}' + '.zip')''')
+        _thisModelFit = h2o.import_mojo(settings.pickle_path + '{modelFileName[:-4]}' + '.zip')''')
             
             if missingValues:
                 # For each input variable, impute for missing values based on variable dtype
