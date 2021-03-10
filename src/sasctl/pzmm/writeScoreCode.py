@@ -148,7 +148,7 @@ with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
                 cls.pyFile.write(f'''\n
 with gzip.open('/models/resources/viya/{modelID}/{modelFileName}', 'r') as fileIn, open('/models/resources/viya/{modelID}/{modelFileName[:-4]}' + 'zip', 'wb') as fileOut:
     shutil.copyfileobj(fileIn, fileOut)
-os.chmod('/models/resources/viya/{modelID}/{modelFileName[:-4]}' + '.zip', 0o777)
+os.chmod('/models/resources/viya/{modelID}/{modelFileName[:-4]}' + 'zip', 0o777)
 _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelFileName[:-4]}' + 'zip')''')
             elif not isViya35 and not isH2OModel:
                 cls.pyFile.write(f'''\n
