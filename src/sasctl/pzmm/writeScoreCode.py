@@ -146,20 +146,20 @@ with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
     _thisModelFit = pickle.load(_pFile)''')
             elif isViya35 and isH2OModel:
                 cls.pyFile.write(f'''\n
-with gzip.open('/models/resources/viya/{modelID}/{modelFileName}', 'r') as fileIn, open('/models/resources/viya/{modelID}/{modelFileName[:-4]}' + '.zip', 'wb') as fileOut:
+with gzip.open('/models/resources/viya/{modelID}/{modelFileName}', 'r') as fileIn, open('/models/resources/viya/{modelID}/{modelFileName[:-4]}' + 'zip', 'wb') as fileOut:
     shutil.copyfileobj(fileIn, fileOut)
 os.chmod('/models/resources/viya/{modelID}/{modelFileName[:-4]}' + '.zip', 0o777)
-_thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelFileName[:-4]}' + '.zip')''')
+_thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelFileName[:-4]}' + 'zip')''')
             elif not isViya35 and not isH2OModel:
                 cls.pyFile.write(f'''\n
 with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
     _thisModelFit = pickle.load(_pFile)''')
             elif not isViya35 and isH2OModel:
                 cls.pyFile.write(f'''\n
-with gzip.open(settings.pickle_path + '{modelFileName}', 'r') as fileIn, open(settings.pickle_path + '{modelFileName[:-4]}' + '.zip', 'wb') as fileOut:
+with gzip.open(settings.pickle_path + '{modelFileName}', 'r') as fileIn, open(settings.pickle_path + '{modelFileName[:-4]}' + 'zip', 'wb') as fileOut:
     shutil.copyfileobj(fileIn, fileOut)
-os.chmod(settings.pickle_path + '{modelFileName[:-4]}' + '.zip', 0o777)
-_thisModelFit = h2o.import_mojo(settings.pickle_path + '{modelFileName[:-4]}' + '.zip')''')
+os.chmod(settings.pickle_path + '{modelFileName[:-4]}' + 'zip', 0o777)
+_thisModelFit = h2o.import_mojo(settings.pickle_path + '{modelFileName[:-4]}' + 'zip')''')
             
             # Create the score function with variables from the input dataframe provided and create the output variable line for SAS Model Manager
             cls.pyFile.write(f'''\n
@@ -176,14 +176,14 @@ def score{modelPrefix}({', '.join(inputVarList)}):
             _thisModelFit = pickle.load(_pFile)''')
             elif isViya35 and isH2OModel:
                 cls.pyFile.write(f'''
-        _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelFileName[:-4]}' + '.zip')''')
+        _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelFileName[:-4]}' + 'zip')''')
             elif not isViya35 and not isH2OModel:
                 cls.pyFile.write(f'''
         with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
             _thisModelFit = pickle.load(_pFile)''')
             elif not isViya35 and isH2OModel:
                 cls.pyFile.write(f'''
-        _thisModelFit = h2o.import_mojo(settings.pickle_path + '{modelFileName[:-4]}' + '.zip')''')
+        _thisModelFit = h2o.import_mojo(settings.pickle_path + '{modelFileName[:-4]}' + 'zip')''')
             
             if missingValues:
                 # For each input variable, impute for missing values based on variable dtype
