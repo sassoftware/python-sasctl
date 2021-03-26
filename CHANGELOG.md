@@ -2,7 +2,12 @@ Unreleased
 ----------
  -
  
-v1.5.3 (2020-10-29)
+ v1.5.5 (2021-03-26)
+ -------------------
+ **Bugfixes***
+ - Fixed an issue with JSON parsing that caused the `publish_model` task to fail with Viya 4.0.
+ 
+v1.5.4 (2020-10-29)
  ------------------
  **Improvements**
  - Added the `as_swat` method to the `Session` object, allowing connection to CAS through SWAT without an additional authentication step.
