@@ -736,7 +736,7 @@ def get_software_version():
     except ValueError:
         return 'Version could not be found.'
     
-def upload_and_copy_score_resources(model, files):
+def upload_and_copy_score_resources(model, files, name=None):
     '''Upload Python score resources to a model and copy the score resources 
     to the Compute Server.
     
@@ -759,6 +759,8 @@ def upload_and_copy_score_resources(model, files):
         A list of dictionaries of the form {'name': filename, 'file': filecontent}.
         An optional 'role' key is supported for designating a file as score
         code, astore, etc.
+    name : str
+        Name of the file related to the model. The default is None.
         
     Returns
     -------
@@ -769,6 +771,6 @@ def upload_and_copy_score_resources(model, files):
         if isinstance(file, dict):
             mr.add_model_content(model, **file)
         else:
-            mr.add_model_content(model, file)
+            mr.add_model_content(model, file, name)
     
     return mr.copy_python_resources(model)
