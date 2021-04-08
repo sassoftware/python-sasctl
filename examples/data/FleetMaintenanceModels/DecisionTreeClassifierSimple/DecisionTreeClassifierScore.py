@@ -3,12 +3,12 @@
 import math
 import pickle
 import pandas as pd
-import numpy as npimport settings
+import numpy as np
 
 
 global _thisModelFit
 
-with open(settings.pickle_path + 'DecisionTreeClassifier.pickle', 'rb') as _pFile:
+with open('/models/resources/viya/fc809ba9-11ec-45ad-bc49-ce2cd2a02fd4/DecisionTreeClassifier.pickle', 'rb') as _pFile:
     _thisModelFit = pickle.load(_pFile)
 
 def scoreDecisionTreeClassifier(Speed_sensor, Vibration, Engine_Load, Coolant_Temp, Intake_Pressure, Engine_RPM, Speed_OBD, Intake_Air, Flow_Rate, Throttle_Pos, Voltage, Ambient, Accel, Engine_Oil_Temp, Speed_GPS, GPS_Longitude, GPS_Latitude, GPS_Bearing, GPS_Altitude, Turbo_Boost, Trip_Distance, Litres_Per_km, Accel_Ssor_Total, CO2, Trip_Time, CO_emission, HC_emission, PM_emission, NOx_emission, CO2_emission, Fuel_level, Oil_life, Vibration_alert, VibrationAlert_Total, Vibration_Recent, Turbo_alert, Emission_alert, Fog_control, Engine_control):
@@ -18,7 +18,7 @@ def scoreDecisionTreeClassifier(Speed_sensor, Vibration, Engine_Load, Coolant_Te
         _thisModelFit
     except NameError:
 
-        with open(settings.pickle_path + 'DecisionTreeClassifier.pickle', 'rb') as _pFile:
+        with open('/models/resources/viya/fc809ba9-11ec-45ad-bc49-ce2cd2a02fd4/DecisionTreeClassifier.pickle', 'rb') as _pFile:
             _thisModelFit = pickle.load(_pFile)
 
     try:

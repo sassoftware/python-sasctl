@@ -3,6 +3,7 @@
 
 from pathlib import Path
 import numpy as np
+import re
 from ..tasks import get_software_version, upload_and_copy_score_resources
 from .._services.model_repository import ModelRepository as modelRepo
 
@@ -14,7 +15,8 @@ class ScoreCode():
                        predictMethod, modelFileName,
                        metrics=['EM_EVENTPROBABILITY', 'EM_CLASSIFICATION'],
                        pyPath=Path.cwd(), threshPrediction=None,
-                       otherVariable=False, model=None, isH2OModel=False, missingValues=False):
+                       otherVariable=False, model=None, isH2OModel=False, missingValues=False,
+                       scoreCAS=True):
         '''
         Writes a Python score code file based on training data used to generate the model 
         pickle file. The Python file is included in the ZIP file that is imported or registered 
@@ -76,7 +78,12 @@ class ScoreCode():
         missingValues : boolean, optional
             Sets whether data used for scoring needs to go through imputation for
             missing values before passed to the model. By default false.
-    			
+        scoreCAS : boolean, optional
+    		Sets whether models registered to SAS Viya 3.5 should be able to be scored and
+            validated through both CAS and SAS Micro Analytic Service. By default true. If
+            set to false, then the model will only be able to be scored and validated through
+            SAS Micro Analytic Service.
+
     	Yields
     	------
         '*Score.py'
@@ -111,6 +118,7 @@ class ScoreCode():
         inputDtypesList = list(inputDF.dtypes)        
     
         # Set the location for the Python score file to be written, then open the file
+        zPath = Path(pyPath)
         pyPath = Path(pyPath) / (modelPrefix + 'Score.py')
         with open(pyPath, 'w') as cls.pyFile:
         
@@ -276,8 +284,27 @@ def score{modelPrefix}({', '.join(inputVarList)}):
                 files = [dict(name=f'{modelPrefix}Score.py', file=pFile, role='score')]
                 upload_and_copy_score_resources(modelID, files)
             modelRepo.convert_python_to_ds2(modelID)
+            if scoreCAS:
+                fileContents = modelRepo.get_model_contents(modelID)
+                for item in fileContents:
+                    if item.name == 'score.sas':
+                        masCode = modelRepo.get(f'models/{item.modelId}/contents/{item.id}/content')
+                with open(zPath / 'dmcas_packagescorecode.sas', 'w') as file:
+                    print(masCode, file=file)
+                casCode = cls.convertMAStoCAS(masCode, modelID)
+                with open(zPath / 'dmcas_epscorecode.sas', 'w') as file:
+                    print(casCode, file=file)
+                for scoreCode in ['dmcas_packagescorecode.sas', 'dmcas_epscorecode.sas']:
+                    with open(zPath / scoreCode, 'r') as file:
+                        if scoreCode == 'dmcas_epscorecode.sas':
+                            upload_and_copy_score_resources(modelID, [dict(name=scoreCode, file=file, role='score')])
+                        else:
+                            upload_and_copy_score_resources(modelID, [dict(name=scoreCode, file=file)])
+                model = modelRepo.get_model(modelID)
+                model['scoreCodeType'] = 'ds2MultiType'
+                modelRepo.update_model(model)
             
-    def splitStringColumn(self, inputSeries, otherVariable):
+    def splitStringColumn(cls, inputSeries, otherVariable):
         '''
         Splits a column of string values into a number of new variables equal
         to the number of unique values in the original column (excluding None
@@ -324,7 +351,7 @@ def score{modelPrefix}({', '.join(inputVarList)}):
             
         return newVarList
     
-    def checkIfBinary(self, inputSeries):
+    def checkIfBinary(inputSeries):
         '''
         Checks a pandas series to determine whether the values are binary or nominal.
         
@@ -351,4 +378,28 @@ def score{modelPrefix}({', '.join(inputVarList)}):
                 isBinary = True
                 
         return isBinary
+        
+    def convertMAStoCAS(MASCode, modelId):
+        
+        model = modelRepo.get_model(modelId)
+        outputString = ''
+        for outVar in model['outputVariables']:
+            outputString = outputString + 'dcl '
+            if outVar['type'] == 'string':
+                outputString = outputString + 'varchar(100) '
+            else:
+                outputString = outputString + 'double'
+            outputString = outputString  + outVar['name'] + ';\n'
+        inputList = []
+        for inVar in model['inputVariables']:
+            inputList.append(inVar['name'])
+        inputString = ', '.join(inputList)
+        endBlock = f'method run();\n    set SASEP.IN;\n    score({inputString});\nend;\nenddata;'
+        replaceStrings = {'package pythonScore / overwrite=yes;': 'data sasep.out',
+                          'dcl int resultCode revision': 'dcl double resultCode revision\n' + outputString,
+                          'endpackage;': endBlock}
+        replaceStrings = dict((re.escape(k), v) for k, v in replaceStrings.items())
+        pattern = re.compile('|'.join(replaceStrings.keys()))
+        casCode = pattern.sub(lambda m: replaceStrings[re.escape(m.group(0))], MASCode)
+        return casCode
         

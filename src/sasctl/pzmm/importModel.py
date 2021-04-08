@@ -10,7 +10,7 @@ from .zipModel import ZipModel as zm
 class ImportModel():
     
     @classmethod
-    def pzmm_import_model(cls, zPath, modelPrefix, project, inputDF, targetDF, predictmethod, 
+    def pzmmImportModel(cls, zPath, modelPrefix, project, inputDF, targetDF, predictmethod, 
                           metrics=['EM_EVENTPROBABILITY', 'EM_CLASSIFICATION'], 
                           modelFileName=None, pyPath=None, threshPrediction=None,
                           otherVariable=False, isH2OModel=False):

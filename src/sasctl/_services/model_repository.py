@@ -744,3 +744,31 @@ class ModelRepository(Service):
                        headers={'Accept-Item': accept,
                                 'Content-Type': content,
                                 'If-Match': ETag})
+        
+    @classmethod
+    def get_model_details(cls, model):
+        '''Get model details from SAS Model Manager
+        
+        Get model details that pertain to model properties, model metadata,
+        model input, output, and target variables, and user-defined values.
+
+        Parameters
+        ----------
+        model : str or dict
+            The name or id of the model, or a dictionary representation of
+            the model.
+            
+        Returns
+        -------
+        API response
+            JSON response detailing the model details
+        '''
+        if cls.is_uuid(model):
+            id_ = model
+        elif isinstance(model, dict) and 'id' in model:
+            id_ = model['id']
+        else:
+            model = cls.get_model(model)
+            id_ = model['id']
+            
+        return cls.get(f'/models/{id_}')
