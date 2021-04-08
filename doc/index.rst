@@ -29,6 +29,7 @@ If not already present, these packages will be downloaded and install automatica
 
 - requests
 - six
+- futures (Python 2.7 only)
 
 The following additional packages are recommended for full functionality:
 
@@ -73,40 +74,39 @@ handle all necessary communication with the SAS Viya server::
 
     >>> with Session('example.com', authinfo=<authinfo file>):
     ...    model = lm.LogisticRegression()
-    ...    register_model('Sklearn Model', model, 'My Project')
+    ...    register_model(model, 'Sklearn Model', 'My Project')
 
 
 A slightly more low-level way to interact with the environment is to use the service
 methods directly::
 
-    >>> from pprint import pprint
     >>> from sasctl import Session
     >>> from sasctl.services import folders
 
     >>> with Session(host, username, password):
-    ...    folders = folders.list_folders()
-    ...    pprint(folders)
+    ...    for f in folders.list_folders():
+    ...        print(f)
 
-    {'links': [{'href': '/folders/folders',
-                'method': 'GET',
-                'rel': 'folders',
+    Public
+    Projects
+    ESP Projects
+    Risk Environments
 
     ...  # truncated for clarity
 
-                'rel': 'createSubfolder',
-                'type': 'application/vnd.sas.content.folder',
-                'uri': '/folders/folders?parentFolderUri=/folders/folders/{parentId}'}],
-     'version': 1}
-
+    My Folder
+    My History
+    My Favorites
+    SAS Environment Manager
 
 The most basic way to interact with the server is simply to call REST functions
 directly, though in general, this is not recommended.::
 
     >>> from pprint import pprint
-    >>> from sasctl import Session
+    >>> from sasctl import get, Session
 
-    >>> with Session(host, username, password) as s:
-    ...    folders = s.get('/folders')
+    >>> with Session(host, username, password):
+    ...    folders = get('/folders')
     ...    pprint(folders)
 
     {'links': [{'href': '/folders/folders',
@@ -169,21 +169,63 @@ This also works on individual commands::
 Common Uses
 ++++++++++++
 
-Registering a model built with SWAT.
+Register a SAS model
+~~~~~~~~~~~~~~~~~~~~~~~
 
-.. literalinclude:: ../examples/astore_model.py
-   :caption: examples/astore_model.py
-   :lines: 7-
+  ::
 
-Registering a model built with sci-kit learn.
+    import swat
+    from sasctl import register_model, Session
 
-.. literalinclude:: ../examples/sklearn_model.py
-   :caption: examples/sklearn_model.py
-   :lines: 7-
+    with swat.CAS('hostname', 5570, 'username', 'password') as cas:
+        astore = cas.CASTable('model_astore_table')
+
+        Session('hostname', 'username', 'password'):
+
+        model = register_model(astore, 'Model Name', 'Project Name')
 
 
-- publish a model
-- score a model
+Register a scikit-learn model
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  ::
+
+    from sklearn.linear_model import LogisticRegression
+    from sasctl import register_model, Session
+
+    model = LogisticRegression()
+    model.fit(X, y)
+
+    # Establish a session with Viya
+    with Session('hostname', 'username', 'password'):
+        register_model(model, 'Model Name', 'Project Name', input=X)
+
+
+Publish a model
+~~~~~~~~~~~~~~~
+
+  ::
+
+    from sasctl import publish_model, Session
+    from sasctl.services import model_repository as mr
+
+    model = mr.get_model('Model Name')
+    publish_model(model, 'Destination Name')
+
+
+Execute a model in MAS
+~~~~~~~~~~~~~~~~~~~~~~
+
+  ::
+
+    from sasctl import Session
+    from sasctl.services import microanalytic_score as mas
+
+    module = mas.get_module('Module Name')
+    module = mas.define_steps(module)
+    module.predict(model_inputs)
+
+
 
 See the :file:`examples/` directory in the repository for more complete examples.
 
@@ -274,8 +316,22 @@ by updating this logger, or the ``sasctl.core.session`` logger can be configured
 HATEOAS
 +++++++
 
-Coming soon.
+Many of the SAS microservices follow the `HATEOAS`_ paradigm and the standard is for services to return a links
+collection containing valid operations.  Most **sasctl** operations return one or more instances of :class:`~sasctl.core.RestObj`.  Any
+links related to that object are accessible via the ['links'] key.  Each link is represented as a dictionary containing metadata::
 
+    {'method': 'POST', 'rel':
+     'createFolder',
+      'href': '/folders/folders',
+      'uri': '/folders/folders',
+      'type': 'application/vnd.sas.content.folder'}
+
+However, instead of having to parse this collection to find a link, **sasctl** includes some functions to make this easy:  :func:`~sasctl.core.get_link` and :func:`~sasctl.core.request_link`.
+
+Given an object and a link name (`rel`) :func:`~sasctl.core.get_link` will return the metadata for that link.  Similarly,
+:func:`~sasctl.core.request_link` will make the request to the link and return the response object.
+
+.. _`HATEOAS`: https://restfulapi.net/hateoas/
 
 API Reference
 -------------

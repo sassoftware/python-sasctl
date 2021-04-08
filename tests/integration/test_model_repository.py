@@ -6,10 +6,10 @@
 
 import pytest
 
+from sasctl.core import RestObj
 from sasctl.services import microanalytic_score
 from sasctl.services import model_repository as mr
 from sasctl.tasks import register_model, publish_model
-from sasctl.core import RestObj
 
 # Every test function in the module will automatically receive the session fixture
 pytestmark = pytest.mark.usefixtures('session')
@@ -17,18 +17,19 @@ pytestmark = pytest.mark.usefixtures('session')
 
 @pytest.mark.incremental
 class TestAStoreModel:
-    project_name = 'SASCTL AStore Test Project'
-    model_name = 'AStore Model'
+    PROJECT_NAME = 'SASCTL AStore Test Project'
+    MODEL_NAME = 'AStore Model'
 
-    def test_model_import(self, astore):
+    def test_model_import(self, iris_astore):
         """Import a model from an ASTORE"""
-        model = register_model(astore, self.model_name, self.project_name, force=True)
+        model = register_model(iris_astore, self.MODEL_NAME, self.PROJECT_NAME,
+                               force=True)
 
-        assert self.model_name == model.name
+        assert self.MODEL_NAME == model.name
 
     def test_get_model_contents(self):
         # Resolves https://github.com/sassoftware/python-sasctl/issues/33
-        content = mr.get_model_contents(self.model_name)
+        content = mr.get_model_contents(self.MODEL_NAME)
 
         assert isinstance(content, list)
         assert 'AstoreMetadata.json' in [str(c) for c in content]
@@ -37,14 +38,14 @@ class TestAStoreModel:
         assert 'outputVar.json' in [str(c) for c in content]
 
     def test_create_model_version(self):
-        r = mr.create_model_version(self.model_name)
+        r = mr.create_model_version(self.MODEL_NAME)
         assert r.modelVersionName == '2.0'
 
-        r = mr.create_model_version(self.model_name, minor=True)
+        r = mr.create_model_version(self.MODEL_NAME, minor=True)
         assert r.modelVersionName == '2.1'
 
     def test_get_model_versions(self):
-        versions = mr.list_model_versions(self.model_name)
+        versions = mr.list_model_versions(self.MODEL_NAME)
         assert isinstance(versions, list)
 
         # NOTE: the current version (2.1) is NOT included
@@ -54,26 +55,35 @@ class TestAStoreModel:
 
     def test_copy_astore(self):
         """Copy the ASTORE to filesystem for MAS"""
-        job = mr.copy_analytic_store(self.model_name)
+        job = mr.copy_analytic_store(self.MODEL_NAME)
 
         assert job.state == 'pending'
 
-    def test_model_publish(self):
+    def test_model_publish(self, request):
         """Publish the imported model to MAS"""
 
-        pytest.xfail('Import job pends forever.  Waiting on Support Track #7612766673')
-        module = publish_model(self.model_name, 'maslocal', max_retries=60)
-        self.module_name = module.name
+        module = publish_model(self.MODEL_NAME, 'maslocal',
+                               max_retries=60, replace=True)
 
-        print('done')
+        # SAS module should have a "score" method
+        assert 'score' in module.stepIds
 
-    def test_module_execute(self):
-        response = microanalytic_score.execute_module_step(self.module_name, 'score', Income=1e4, Credit_Limit=4000)
-        print('done')
+        # Store module name so we can retrieve it in later tests
+        request.config.cache.set('CAS_MODULE_NAME', module.name)
+
+    def test_module_execute(self, request, iris_dataset):
+        # Store module name so we can retrieve it in later tests
+        module_name = request.config.cache.get('CAS_MODULE_NAME', None)
+
+        x = iris_dataset.drop('Species', axis=1).iloc[0, :]
+
+        response = microanalytic_score.execute_module_step(module_name, 'score', **x.to_dict())
+
+        assert all(k in response for k in ('P_Species0', 'P_Species1', 'P_Species2', 'I_Species'))
 
     def test_delete_model(self):
         num_models = len(mr.list_models())
-        model = mr.get_model(self.model_name)
+        model = mr.get_model(self.MODEL_NAME)
         mr.delete_model(model)
 
         model = mr.get_model(model.id)
@@ -84,10 +94,10 @@ class TestAStoreModel:
 
     def test_delete_project(self):
         num_projects = len(mr.list_projects())
-        project = mr.get_project(self.project_name)
+        project = mr.get_project(self.PROJECT_NAME)
         mr.delete_project(project)
 
-        project = mr.get_project(self.project_name)
+        project = mr.get_project(self.PROJECT_NAME)
         assert project is None
 
         all_projects = mr.list_projects()

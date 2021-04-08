@@ -279,7 +279,11 @@ def test_ssl_context():
     del os.environ['REQUESTS_CA_BUNDLE']
 
 
-def test_verify_ssl():
+def test_verify_ssl(missing_packages):
+    # Clear environment variables
+    os.environ.pop('SSLREQCERT', None)
+    os.environ.pop('REQUESTS_CA_BUNDLE', None)
+
     with mock.patch('sasctl.core.Session.get_token', return_value='token'):
         # Should verify SSL by default
         s = Session('hostname', 'username', 'password')
@@ -310,6 +314,41 @@ def test_verify_ssl():
         s = Session('hostname', 'username', 'password', verify_ssl=True)
         assert s.verify == True
 
+        with missing_packages('urllib3.util.ssl_'):
+            # IP Address validation should work even if urllib3 import fails
+            s = Session('127.0.0.1', 'username', 'password', verify_ssl=True)
+            assert s.verify == True
+
+    # Clear environment variables
+    os.environ.pop('SSLREQCERT', None)
+    os.environ.pop('REQUESTS_CA_BUNDLE', None)
+
+    # Ensure correct verify_ssl values are passed to requests module
+    with mock.patch('requests.Session.request') as req:
+        req.return_value.status_code = 200
+        s = Session('127.0.0.1', 'username', 'password')
+
+        # Check value passed to verify= parameter
+        assert req.call_args[0][13] == True
+        assert s.verify == True
+
+    with mock.patch('requests.Session.request') as req:
+        req.return_value.status_code = 200
+        s = Session('127.0.0.1', 'username', 'password', verify_ssl=False)
+
+        # Check value passed to verify= parameter
+        assert req.call_args[0][13] == False
+        assert s.verify == False
+
+    with mock.patch('requests.Session.request') as req:
+        # Explicit verify_ssl= flag should take precedence over env vars
+        os.environ['REQUESTS_CA_BUNDLE'] = 'dummy.crt'
+        s = Session('127.0.0.1', 'username', 'password', verify_ssl=False)
+
+        # Check value passed to verify= parameter
+        assert req.call_args[0][13] == False
+        assert s.verify == False
+
 
 def test_kerberos():
     with mock.patch('sasctl.core.Session._get_token_with_kerberos',
@@ -322,6 +361,7 @@ def test_kerberos():
 
         s = Session('hostname', 'username@REALM')
         assert s.auth.token == 'token'
+
 
 def test_authentication_failure():
     from sasctl.exceptions import AuthenticationError
@@ -337,7 +377,7 @@ def test_str():
     import os
 
     # Remove any environment variables disabling SSL verification
-    _ = os.environ.pop('SSLREQCERT')
+    _ = os.environ.pop('SSLREQCERT', None)
 
     with mock.patch('sasctl.core.Session.get_token', return_value='token'):
 
@@ -345,3 +385,34 @@ def test_str():
 
         assert str(s) == "Session(hostname='hostname', username='username', " \
                          "protocol='https', verify_ssl=True)"
+
+
+def test_as_swat():
+    """Verify correct parameters passed to CAS constructor."""
+    _ = pytest.importorskip('swat')
+
+    HOST = 'example.com'
+    USERNAME = 'username'
+    PASSWORD = 'password'
+
+    with mock.patch('sasctl.core.Session.get_token'):
+        with Session(HOST, USERNAME, PASSWORD) as s:
+            with mock.patch('swat.CAS') as CAS:
+                # Verify default parameters were passed
+                _ = s.as_swat()
+                CAS.assert_called_with(hostname='https://%s/cas-shared-default-http/' % HOST,
+                                       username=USERNAME,
+                                       password=PASSWORD)
+
+                # Verify connection to a non-default CAS instance
+                SERVER_NAME = 'my-cas-server'
+                _ = s.as_swat(SERVER_NAME)
+                CAS.assert_called_with(hostname='https://%s/%s-http/' % (HOST, SERVER_NAME),
+                                       username=USERNAME,
+                                       password=PASSWORD)
+
+                # Verify default parameters can be overridden
+                _ = s.as_swat(username='testuser', password=None)
+                CAS.assert_called_with(hostname='https://%s/cas-shared-default-http/' % HOST,
+                                       username='testuser',
+                                       password=None)

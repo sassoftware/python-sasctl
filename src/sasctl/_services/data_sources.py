@@ -4,7 +4,9 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+from ..core import PagedItemIterator
 from .service import Service
+
 
 class DataSources(Service):
     """Enables retrieval of data source metadata.
@@ -68,10 +70,9 @@ class DataSources(Service):
         provider = self.get_provider(provider)
 
         sources = self.request_link(provider, 'dataSources')
-        if isinstance(sources, list):
+        if isinstance(sources, (list, PagedItemIterator)):
             return sources
-        else:
-            return [sources]
+        return [sources]
 
     def get_source(self, provider, source):
         """Returns a data source belonging to a given provider.
@@ -124,8 +125,7 @@ class DataSources(Service):
         params = 'filter={}'.format(filter) if filter is not None else {}
         result = self.request_link(source, 'children', params=params)
 
-        return result if isinstance(result, list) else [result]
-
+        return result if isinstance(result, (list, PagedItemIterator)) else [result]
 
     def get_caslib(self, name, source=None):
         """Get a caslib by name.
@@ -145,10 +145,8 @@ class DataSources(Service):
         source = source or 'cas-shared-default'
         caslibs = self.list_caslibs(source, filter='eq(name, "%s")' % name)
 
-        # caslibs = [c for c in caslibs if c.name == name]
-
-        if len(caslibs):
-            return caslibs.pop()
+        if caslibs:
+            return caslibs[0]
 
     def list_tables(self, caslib, filter=None):
         """List tables available in a caslib.
@@ -177,9 +175,9 @@ class DataSources(Service):
         params = 'filter={}'.format(filter) if filter is not None else {}
         result = self.request_link(caslib, 'tables', params=params)
 
-        return result if isinstance(result, list) else [result]
+        return result if isinstance(result, (list, PagedItemIterator)) else [result]
 
-    def get_table(self, name, caslib, server=None):
+    def get_table(self, name, caslib):
         """Get metadata for a CAS table.
 
         Parameters
@@ -188,8 +186,6 @@ class DataSources(Service):
             Name of the table
         caslib : str or dict
             Name, ID, or dictionary representation of the caslib.
-        server : str
-            Name of the CAS server on which the `caslib` is registered.
 
         Returns
         -------
@@ -198,9 +194,5 @@ class DataSources(Service):
         """
         tables = self.list_tables(caslib, filter='eq(name, "%s")' % name)
 
-        if len(tables):
-            return tables.pop()
-
-
-
-
+        if tables:
+            return tables[0]

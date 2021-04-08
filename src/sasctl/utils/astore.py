@@ -35,7 +35,6 @@ def create_package(table, input=None):
         otherwise a list of column types or a dictionary of column_name: type
         may be provided.
 
-
     Returns
     -------
     BytesIO
@@ -50,13 +49,14 @@ def create_package(table, input=None):
         raise RuntimeError(
             "The 'swat' package is required to work with SAS models.")
 
-    assert isinstance(table, swat.CASTable)
+    if not isinstance(table, swat.CASTable):
+        raise ValueError("Parameter 'table' should be an instance of '%r' but "
+                         "received '%r'." % (swat.CASTable, table))
 
     if 'DataStepSrc' in table.columns:
-        #Input only passed to datastep
+        # Input only passed to datastep
         return create_package_from_datastep(table, input=input)
-    else:
-        return create_package_from_astore(table)
+    return create_package_from_astore(table)
 
 
 def create_package_from_datastep(table, input=None):
@@ -84,9 +84,6 @@ def create_package_from_datastep(table, input=None):
     :meth:`model_repository.import_model_from_zip <.ModelRepository.import_model_from_zip>`
 
     """
-    assert 'DataStepSrc' in table.columns
-    sess = table.session.get_connection()
-
     dscode = table.to_frame().loc[0, 'DataStepSrc']
 
     # Extract inputs if provided
@@ -94,44 +91,43 @@ def create_package_from_datastep(table, input=None):
     # Workaround because sasdataframe does not like to be check if exist
     if str(input) != "None":
         from .pymas.python import ds2_variables
-        vars=None
+        variables = None
         if hasattr(input, 'columns'):
             # Assuming input is a DataFrame representing model inputs.  Use to
             # get input variables
-            vars = ds2_variables(input)
-        elif isinstance(input, type):
-            params = OrderedDict([(k, input)
-                              for k in target_func.__code__.co_varnames])
-            vars = ds2_variables(params)
+            variables = ds2_variables(input)
         elif isinstance(input, dict):
-            vars = ds2_variables(input)
-        if vars:
-            input_vars = [var.as_model_metadata() for var in vars if not var.out]
+            variables = ds2_variables(input)
+        if variables:
+            input_vars = [v.as_model_metadata() for v in variables if not v.out]
 
-    #Find outputs from ds code
-    output_vars=[]
+    # Find outputs from ds code
+    output_vars = []
     for sasline in dscode.split('\n'):
         if sasline.strip().startswith('label'):
-            output_var=dict()
+            output_var = {}
             for tmp in sasline.split('='):
                 if 'label' in tmp:
-                    ovarname=tmp.split('label')[1].strip()
-                    output_var.update({"name":ovarname})
-                    #Determine type of variable is decimal or string
+                    ovarname = tmp.split('label')[1].strip()
+                    output_var.update({"name": ovarname})
+                    # Determine type of variable is decimal or string
                     if "length " + ovarname in dscode:
-                        sastype=dscode.split("length " + ovarname)[1].split(';')[0].strip()
+                        sastype = \
+                        dscode.split("length " + ovarname)[1].split(';')[
+                            0].strip()
                         if "$" in sastype:
-                            output_var.update({"type":"string"})
-                            output_var.update({"length":sastype.split("$")[1]})
+                            output_var.update({"type": "string"})
+                            output_var.update({"length": sastype.split("$")[1]})
                         else:
-                            output_var.update({"type":"decimal"})
-                            output_var.update({"length":sastype})
+                            output_var.update({"type": "decimal"})
+                            output_var.update({"length": sastype})
                     else:
-                        #If no length for varaible, default is decimal, 8
-                        output_var.update({"type":"decimal"})
-                        output_var.update({"length":8})
+                        # If no length for variable, default is decimal, 8
+                        output_var.update({"type": "decimal"})
+                        output_var.update({"length": 8})
                 else:
-                    output_var.update({"description":tmp.split(';')[0].strip().strip("'")})
+                    output_var.update(
+                        {"description": tmp.split(';')[0].strip().strip("'")})
             output_vars.append(output_var) 
 
     file_metadata = [{'role': 'score', 'name': 'dmcas_scorecode.sas'}]
@@ -139,7 +135,7 @@ def create_package_from_datastep(table, input=None):
     zip_file = _build_zip_from_files({
         'fileMetadata.json': file_metadata,
         'dmcas_scorecode.sas': dscode,
-        'ModelProperties.json': {"scoreCodeType":"dataStep"},
+        'ModelProperties.json': {"scoreCodeType": "dataStep"},
         'outputVar.json': output_vars,
         'inputVar.json': input_vars
     })
@@ -178,7 +174,6 @@ def create_files_from_astore(table):
     table : swat.CASTable
         The CAS table containing the ASTORE.
 
-
     Returns
     -------
     dict
@@ -189,7 +184,9 @@ def create_files_from_astore(table):
         raise RuntimeError("The 'swat' package is required to work with "
                            "ASTORE models.")
 
-    assert isinstance(table, swat.CASTable)
+    if not isinstance(table, swat.CASTable):
+        raise ValueError("Parameter 'table' should be an instance of '%r' but "
+                         "received '%r'." % (swat.CASTable, table))
 
     sess = table.session.get_connection()
     sess.loadactionset('astore')
@@ -216,6 +213,7 @@ def create_files_from_astore(table):
     model_properties = _get_model_properties(result)
     input_vars = [get_variable_properties(var)
                   for var in result.InputVariables.itertuples()]
+    input_vars = [v for v in input_vars if v.get('role', '').upper() == 'INPUT']
     output_vars = [get_variable_properties(var)
                    for var in result.OutputVariables.itertuples()]
     astore_filename = '_' + uuid.uuid4().hex[:25].upper()
@@ -313,35 +311,110 @@ def get_variable_properties(var):
 
 
 def _get_model_properties(result):
-    return {
+    properties = {
         "custom properties": [],
         "externalUrl": "",
         "trainTable": "",
         "trainCodeType": "",
         "description": "",
-        "tool": "",
+        "tool": 'SAS Visual Data Mining and Machine Learning',
         "toolVersion": "",
-        "targetVariable": "",
+        "targetVariable": '',
         "scoreCodeType": "ds2MultiType",
         "externalModelId": "",
-        "function": "",
+        "function": '',
         "eventProbVar": "",
         "modeler": "",
         "name": "",
         "targetEvent": "",
         "targetLevel": "",
-        "algorithm": ""
+        "algorithm": ''
     }
+
+    algorithm = result.Description[result.Description.Attribute == 'Analytic Engine']
+    if algorithm.size > 0:
+        algorithm = str(algorithm.Value.iloc[0]).lower()
+    else:
+        algorithm = None
+
+    def classification_target(r):
+        target = r.OutputVariables.Name.str.startswith('I_')
+        target = r.OutputVariables.Name[target].iloc[0]
+        return target.replace('I_', '', 1)
+
+    def regression_target(r):
+        target = r.OutputVariables.Name.str.startswith('P_')
+        target = r.OutputVariables.Name[target].iloc[0]
+        return target.replace('P_', '', 1)
+
+    if algorithm == 'glm':
+        properties['algorithm'] = 'Linear regression'
+        properties['tool'] = 'SAS Visual Analytics'
+        properties['function'] = 'prediction'
+        properties['targetVariable'] = regression_target(result)
+
+    elif algorithm == 'logistic':
+        properties['algorithm'] = 'Logistic regression'
+        properties['tool'] = 'SAS Visual Analytics'
+        properties['function'] = 'classification'
+        properties['targetVariable'] = classification_target(result)
+
+    elif algorithm == 'forest':
+        properties['algorithm'] = 'Random forest'
+
+        if 'Classification' in result.InputVariables.Type.values:
+            properties['function'] = 'classification'
+            properties['targetVariable'] = classification_target(result)
+        else:
+            properties['function'] = 'prediction'
+            properties['targetVariable'] = regression_target(result)
+
+    elif algorithm == 'gradboost':
+        properties['algorithm'] = 'Gradient boosting'
+
+        if 'Classification' in result.InputVariables.Type.values:
+            properties['function'] = 'classification'
+            properties['targetVariable'] = classification_target(result)
+
+            if result.OutputVariables.Name.str.startswith('P_').sum() == 2:
+                properties['targetLevel'] = 'binary'
+        else:
+            properties['function'] = 'prediction'
+            properties['targetVariable'] = regression_target(result)
+
+    elif algorithm == 'svmachine':
+        properties['algorithm'] = 'Support vector machine'
+
+        if 'Classification' in result.InputVariables.Type.values:
+            properties['function'] = 'classification'
+            properties['targetVariable'] = classification_target(result)
+            properties['targetLevel'] = 'binary'
+        else:
+            properties['function'] = 'prediction'
+            properties['targetVariable'] = regression_target(result)
+
+    elif algorithm == 'bnet':
+        properties['algorithm'] = 'Bayesian network'
+        properties['function'] = 'classification'
+        properties['targetVariable'] = classification_target(result)
+
+        if result.OutputVariables.Name.str.startswith('P_').sum() == 2:
+            properties['targetLevel'] = 'binary'
+
+    else:
+        properties['tool'] = ''
+
+    return properties
 
 
 def _generate_package_code(result):
     """Generates package-style DS2 code from EP-style DS2 code."""
 
-    id = '_' + uuid.uuid4().hex  # Random ID for package
+    id_ = '_' + uuid.uuid4().hex  # Random ID for package
     key = result.Key.Key[0]
 
     header = ('package ds2score / overwrite=yes;',
-              '    dcl package score {}();'.format(id))
+              '    dcl package score {}();'.format(id_))
 
     dcl_lines = []
     for line in result.epcode.split('\n'):
@@ -352,34 +425,41 @@ def _generate_package_code(result):
     init_method = ('    varlist allvars [_all_];',
                    ' ',
                    '    method init();',
-                   "       {}.setvars(allvars);".format(id),
-                   "       {}.setkey(n'{}');".format(id, key),
+                   "       {}.setvars(allvars);".format(id_),
+                   "       {}.setkey(n'{}');".format(id_, key),
                    '    end;')
 
     def extract_type(var, out=False):
         # Find the matching variable declarations and extract the type
         var = str(var).strip()
-        l = [l for l in dcl_lines if ' "{}"'.format(var) in l][0]
-        l = l.replace('dcl ', '').strip().split(' ')[0]
+        x = [x for x in dcl_lines if ' "{}"'.format(var) in x][0]
+        x = x.replace('dcl ', '').strip().split(' ')[0]
 
-        # Remove the length component from output variables
-        # Otherwise, compilation warning is raised which prevents publishing to MAS
-        if out and '(' in l:
-            l = l[:l.find('(')]
-        return l
+        # Remove the length component from output variables to prevent
+        # compilation warning which prevents publishing to MAS
+        if out and '(' in x:
+            x = x[:x.find('(')]
+        return x
 
-
-    variables = ['       {} "{}"'.format(extract_type(var), var) for var in result.InputVariables.Name]
+    variables = []
+    # Despite being call "InputVariables" at least some ASTORE models
+    # include the target variable in the list
+    for _, row in result.InputVariables.iterrows():
+        if 'Role' in row and row['Role'].lower() != 'target':
+            name = row['Name']
+            variables.append('       %s "%s"' % (extract_type(name), name))
     variables += ['       IN_OUT {} "{}"'.format(extract_type(var, out=True), var) for var in result.OutputVariables.Name]
 
     score_method = ('    method score(',
                     ',\n'.join(variables),
                     '   );')
-    score_method += tuple('       this."{}" = "{}";'.format(var, var) for var in result.InputVariables.Name)
+    score_method += tuple('       this."{var}" = "{var}";'.format(var=v)
+                          for v in result.InputVariables.Name)
     score_method += (' ',
-                     '       {}.scorerecord();'.format(id),
+                     '       {}.scorerecord();'.format(id_),
                      ' ')
-    score_method += tuple('       "{}" = this."{}";'.format(var, var) for var in result.OutputVariables.Name)
+    score_method += tuple('       "{var}" = this."{var}";'.format(var=v)
+                          for v in result.OutputVariables.Name)
 
     footer = ('    end;',
               'endpackage;')

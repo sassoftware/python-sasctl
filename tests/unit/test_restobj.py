@@ -42,3 +42,14 @@ def test_str():
     assert str(RestObj(name='test', id=1)) == 'test'
     assert str(RestObj(id=1)) == '1'
     assert str({'var': 'test'}) in str(RestObj(var='test'))
+
+
+def test_pickle():
+    import pickle
+
+    obj = RestObj(name='test', id=1)
+
+    pickled = pickle.dumps(obj)
+    new_obj = pickle.loads(pickled)
+
+    assert obj == new_obj

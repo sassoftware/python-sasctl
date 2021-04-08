@@ -87,8 +87,14 @@ def deprecated(reason=None, version=None, removed_in=None):
         if reason is not None:
             directive += '\n  %s' % reason
 
-        # Insert directive into original docstring
-        _wrapper.__doc__ = _insert_docstring_text(func, directive)
+        try:
+            functools.update_wrapper(_wrapper, func)
+
+            # Insert directive into original docstring
+            _wrapper.__doc__ = _insert_docstring_text(func, directive)
+        except AttributeError:
+            # __doc__ is not writable in Py27
+            pass
 
         return _wrapper
 
@@ -120,8 +126,94 @@ def experimental(func):
     type_ = 'class' if isinstance(func, six.class_types) else 'method'
     directive = '.. warning:: This %s is experimental and may be modified or removed without warning.' % type_
 
-    # Insert directive into original docstring
-    _wrapper.__doc__ = _insert_docstring_text(func, directive)
+    try:
+        # Insert directive into original docstring
+        _wrapper.__doc__ = _insert_docstring_text(func, directive)
+    except AttributeError:
+        # __doc__ is not writable in Py27
+        pass
 
     return _wrapper
 
+
+def versionadded(reason=None, version=None):
+    """Decorate a function or class to identify the version it was added.
+
+    Automatically adds a Sphinx '.. versionadded::' directive to the docstring.
+
+    Parameters
+    ----------
+    reason : str, optional
+        User-friendly reason for deprecating.
+    version : str
+        Version in which initially marked as deprecated.
+
+    Returns
+    -------
+    decorator
+
+
+    .. versionadded:: 1.5
+
+    """
+    if version is None:
+        raise ValueError('version must be specified.')
+
+    def decorator(func):
+        # Generate Sphinx deprecated directive
+        directive = '.. versionadded:: %s' % version
+
+        if reason is not None:
+            directive += '\n  %s' % reason
+
+        try:
+            # Insert directive into original docstring
+            func.__doc__ = _insert_docstring_text(func, directive)
+        except AttributeError:
+            # __doc__ is not writable in Py27
+            pass
+
+        return func
+
+    return decorator
+
+
+def versionchanged(reason=None, version=None):
+    """Decorate a function or class to identify the version it was changed.
+
+    Automatically adds a Sphinx '.. versionchanged::' directive to the docstring.
+
+    Parameters
+    ----------
+    reason : str, optional
+        User-friendly reason for deprecating.
+    version : str
+        Version in which initially marked as deprecated.
+
+    Returns
+    -------
+    decorator
+
+    .. versionadded:: 1.5
+
+    """
+    if version is None:
+        raise ValueError('version must be specified.')
+
+    def decorator(func):
+        # Generate Sphinx deprecated directive
+        directive = '.. versionchanged:: %s' % version
+
+        if reason is not None:
+            directive += '\n  %s' % reason
+
+        try:
+            # Insert directive into original docstring
+            func.__doc__ = _insert_docstring_text(func, directive)
+        except AttributeError:
+            # __doc__ is not writable in Py27
+            pass
+
+        return func
+
+    return decorator

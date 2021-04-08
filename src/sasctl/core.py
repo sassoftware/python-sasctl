@@ -4,6 +4,7 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import concurrent.futures
 import copy
 import logging
 import json
@@ -15,7 +16,8 @@ import sys
 import warnings
 from uuid import UUID, uuid4
 
-import requests, requests.exceptions
+import requests
+import requests.exceptions
 from requests.adapters import HTTPAdapter
 from six.moves.urllib.parse import urlsplit, urlunsplit
 from six.moves.urllib.error import HTTPError
@@ -34,6 +36,7 @@ except ImportError:
         kerberos = None
 
 from .utils.cli import sasctl_command
+from .utils.misc import versionadded
 from . import exceptions
 
 logger = logging.getLogger(__name__)
@@ -41,7 +44,7 @@ logger = logging.getLogger(__name__)
 _session = None
 
 
-def pformat(text):
+def _pformat(text):
     from pprint import pformat
 
     try:
@@ -105,13 +108,49 @@ DEFAULT_FILTERS = [
 
 
 def current_session(*args, **kwargs):
-    global _session
+    """Gets and sets the current session.
+
+    If call with no arguments, the current session instance is returned, or
+    None if no session has been created yet.  If called with an existing session
+    instance, that session will be set as the default.  Otherwise, a new
+    `Session` is instantiated using the provided arguments and set as the
+    default.
+
+    Parameters
+    ----------
+    args : any
+    kwargs : any
+
+    Returns
+    -------
+    Session
+
+    Examples
+    --------
+
+    Get the current session
+
+    >>> current_session()
+    <sasctl.core.Session object at 0x1393fc550>
+
+    Clear the current session
+
+    >>> current_session(None)
+
+
+    Make a new session current
+
+    >>> current_session('example.com', 'knight', 'Ni!')
+    <sasctl.core.Session object at 0x15a9df491>
+
+    """
+    global _session  # skipcq PYL-W0603
 
     # Explicitly set or clear the current session
     if len(args) == 1 and (isinstance(args[0], Session) or args[0] is None):
         _session = args[0]
     # Create a new session
-    elif len(args):
+    elif args:
         _session = Session(*args, **kwargs)
 
     return _session
@@ -143,11 +182,11 @@ class RestObj(dict):
 
             if isinstance(result, dict):
                 return RestObj(result)
-            else:
-                return result
-        else:
-            raise AttributeError("'%s' object has no attribute '%s'" % (
-                self.__class__.__name__, item))
+
+            return result
+
+        raise AttributeError("'%s' object has no attribute '%s'" % (
+            self.__class__.__name__, item))
 
     def __repr__(self):
         headers = getattr(self, '_headers', {})
@@ -206,8 +245,13 @@ class Session(requests.Session):
 
     Attributes
     ----------
-    message_log
-    filters
+    message_log : logging.Logger
+        A log to which all REST request and response messages will be sent.  Attach a handler using
+        `add_logger()` to capture these messages.
+
+    filters : list of callable
+        A collection of functions that will be called with each request and response object *prior* to logging the
+        messages, allowing any sensitive information to be removed first.
 
     """
     def __init__(self, hostname,
@@ -240,8 +284,14 @@ class Session(requests.Session):
         if 'REQUESTS_CA_BUNDLE' not in os.environ:
             if verify_ssl:
                 # Skip hostname verification if IP address specified instead
-                # of DNS name.  Prevents error from urllib3
-                from urllib3.util.ssl_ import is_ipaddress
+                # of DNS name.  Prevents error from urllib3.
+                try:
+                    from urllib3.util.ssl_ import is_ipaddress
+                except ImportError:
+                    # is_ipaddres not present in older versions of urllib3
+                    def is_ipaddress(hst):
+                        return re.match(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$", hst)
+
                 verify_hostname = not is_ipaddress(hostname)
                 adapter = SSLContextAdapter(assert_hostname=verify_hostname)
 
@@ -291,10 +341,10 @@ class Session(requests.Session):
             domain = url.hostname or str(hostname)
 
         self._settings = {'protocol': protocol or 'https',
-                         'domain': domain,
-                         'port': port,
-                         'username': username,
-                         'password': password
+                          'domain': domain,
+                          'port': port,
+                          'username': username,
+                          'password': password
                           }
 
         if self._settings['password'] is None:
@@ -308,8 +358,8 @@ class Session(requests.Session):
                 self._settings['password'] = auth.get('password')
 
             # Not able to load credentials using SWAT.  Try Netrc.
-            # TODO: IF a username was specified, verify that the credentials found
-            #       are for that username.
+            # TODO: IF a username was specified, verify that the credentials
+            #       found are for that username.
             if self._settings['password'] is None:
                 try:
                     parser = netrc.netrc(authinfo)
@@ -373,6 +423,72 @@ class Session(requests.Session):
         """
         return self.add_logger(logging.StreamHandler(), level)
 
+    @versionadded(version='1.6')
+    def as_swat(self, server=None, **kwargs):
+        """Create a SWAT connection to a CAS server.
+
+        Uses the authentication information from the session to establish a CAS connection using SWAT.
+
+        Parameters
+        ----------
+        server : str, optional
+            The logical name of the CAS server, not the hostname.  Defaults to "cas-shared-default".
+        kwargs : any
+            Additional arguments to pass to the `swat.CAS` constructor.  Can be used to override this method's
+            default behavior or customize the CAS session.
+
+        Returns
+        -------
+        swat.CAS
+            An active SWAT connection
+
+        Raises
+        ------
+        RuntimeError
+            If `swat` package is not available.
+
+        Examples
+        --------
+        >>> sess = Session('example.sas.com')
+        >>> with sess.as_swat() as conn:
+        ...    conn.listnodes()
+        CASResults([('nodelist', Node List
+                      name        role connected   IP Address
+        0  example.sas.com  controller       Yes  127.0.0.1)])
+
+        """
+        server = server or 'cas-shared-default'
+
+        if swat is None:
+            raise RuntimeError("The 'swat' package must be installed to create a SWAT connection.")
+
+        # Construct the CAS server's URL
+        url = '{}://{}/{}-http/'.format(self._settings['protocol'],
+                                        self.hostname,
+                                        server)
+
+        # Use this sessions info to connect to CAS unless user has explicitly give a value (even if None)
+        kwargs.setdefault('hostname', url)
+        kwargs.setdefault('username', self.username)
+        kwargs.setdefault('password', self._settings['password'])
+
+        orig_sslreqcert = os.environ.get('SSLREQCERT')
+
+        # If SSL connections to microservices are not being verified, don't attempt
+        # to verify connections to CAS - most likely certs are not in place.
+        if not self.verify:
+            os.environ['SSLREQCERT'] = 'no'
+
+        try:
+            cas = swat.CAS(**kwargs)
+            cas.setsessopt(messagelevel='warning')
+        finally:
+            # Reset environment variable to whatever it's original value was
+            if orig_sslreqcert:
+                os.environ['SSLREQCERT'] = orig_sslreqcert
+
+        return cas
+
     @property
     def username(self):
         return self._settings.get('username')
@@ -380,7 +496,6 @@ class Session(requests.Session):
     @property
     def hostname(self):
         return self._settings.get('domain')
-
 
     def send(self, request, **kwargs):
         if self.message_log.isEnabledFor(logging.DEBUG):
@@ -394,7 +509,7 @@ class Session(requests.Session):
                     url=r.url,
                     headers='\n'.join(
                         '{}: {}'.format(k, v) for k, v in r.headers.items()),
-                    body=pformat(r.body)))
+                    body=_pformat(r.body)))
         else:
             self.message_log.info('HTTP/1.1 %s %s', request.method,
                                   request.url)
@@ -412,7 +527,7 @@ class Session(requests.Session):
                     url=r.url,
                     headers='\n'.join(
                         '{}: {}'.format(k, v) for k, v in r.headers.items()),
-                    body=pformat(r.text)))
+                    body=_pformat(r.text)))
         else:
             self.message_log.info('HTTP/1.1 %s %s', response.status_code,
                                   response.url)
@@ -425,6 +540,7 @@ class Session(requests.Session):
                 hooks=None, stream=None, verify=None, cert=None, json=None):
 
         url = self._build_url(url)
+        verify = verify or self.verify
 
         try:
             return super(Session, self).request(method, url, params, data,
@@ -439,8 +555,7 @@ class Session(requests.Session):
                     "environment variable should contain the path to the CA "
                     "certificate.  Alternatively, set verify_ssl=False to "
                     "disable certificate verification.")
-            else:
-                raise e
+            raise e
 
     def get(self, url, **kwargs):
         return self.request('GET', url, **kwargs)
@@ -469,8 +584,8 @@ class Session(requests.Session):
         flags = kerberos.GSS_C_MUTUAL_FLAG | kerberos.GSS_C_SEQUENCE_FLAG
         service = 'HTTP@%s' % self._settings['domain']
 
-        logger.info('Attempting Kerberos authentication to %s as %s'
-                    % (service, user))
+        logger.info('Attempting Kerberos authentication to %s as %s',
+                    service, user)
 
         url = self._build_url(
             '/SASLogon/oauth/authorize?client_id=%s&response_type=token'
@@ -508,13 +623,11 @@ class Session(requests.Session):
 
         # Get the user that was used for authentication
         username = kerberos.authGSSClientUserName(context)
-        logger.info('Authenticated as %s' % username)
+        logger.info('Authenticated as %s', username)
 
         # Drop @REALM from username and store
         if username is not None:
             self._settings['username'] = username.rsplit('@', maxsplit=1)[0]
-
-
 
         # Response to Kerberos challenge with ticket
         r = self.get(url,
@@ -552,8 +665,7 @@ class Session(requests.Session):
 
         if r.status_code == 401:
             raise exceptions.AuthenticationError(username)
-        else:
-            r.raise_for_status()
+        r.raise_for_status()
 
         return r.json().get('access_token')
 
@@ -577,8 +689,7 @@ class Session(requests.Session):
 
         if username is None or password is None:
             return self._get_token_with_kerberos()
-        else:
-            return self._get_token_with_password()
+        return self._get_token_with_password()
 
     def _build_url(self, url):
         """Build a complete URL from a path by substituting in session parameters."""
@@ -602,16 +713,14 @@ class Session(requests.Session):
         super(Session, self).__enter__()
 
         # Make this the current session
-        global _session
-        self._old_session = _session
-        _session = self
+        self._old_session = current_session()
+        current_session(self)
 
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         # Restore previous current session
-        global _session
-        _session = self._old_session
+        current_session(self._old_session)
 
         super(Session, self).__exit__()
 
@@ -624,9 +733,247 @@ class Session(requests.Session):
             protocol=self._settings.get('protocol'),
             verify=self.verify))
 
-def is_uuid(id):
+
+class PageIterator:
+    """Iterates through a collection that must be "paged" from the server.
+
+    Pages contain a batch of items from the overall collection.  Iterates the
+    series of pages and returns a single batch of items each time `next()` is
+    called.
+
+    Parameters
+    ----------
+    obj : RestObj
+        An instance of `RestObj` containing any initial items and a link to
+        retrieve additional items.
+    session : Session
+        The `Session` instance to use for requesting additional items.  Defaults
+        to current_session()
+    threads : int
+        Number of threads allocated to downloading additional pages.
+
+    Yields
+    ------
+    List[RestObj]
+        Items contained in the current page
+
+    """
+    def __init__(self, obj, session=None, threads=4):
+        self._num_threads = threads
+
+        # Session to use when requesting items
+        self._session = session or current_session()
+        self._pool = None
+        self._requested = []
+
+        link = get_link(obj, 'next')
+
+        # Dissect the "next" link so it can be reformatted and used by
+        # parallel threads
+        if link is None:
+            self._min_queue_len = 0
+            self._start = 0
+            self._limit = 0
+        if link is not None:
+            link = link['href']
+            start = re.search(r'(?<=start=)[\d]+', link)
+            limit = re.search(r'(?<=limit=)[\d]+', link)
+
+            # Construct a new link with format params
+            # Result is "/spam/spam?start={start}&limit={limit}"
+            link = link[:start.start()] + '{start}' \
+                   + link[start.end():limit.start()] \
+                   + '{limit}' + link[limit.end():]
+
+            self._start = int(start.group())
+            self._limit = int(limit.group())
+
+            # Length at which to beging requesting new items from the server
+            self._min_queue_len = self._limit
+
+        self._next_link = link
+
+        # Store the current items to iterate over
+        self._obj = obj
+
+    def __next__(self):
+        return self.next()
+
+    def next(self):
+        if self._pool is None:
+            self._pool = concurrent.futures.ThreadPoolExecutor(max_workers=self._num_threads)
+
+        # Send request for new pages if we don't have enough cached
+        num_req_needed = self._num_threads - len(self._requested)
+        for _ in range(num_req_needed):
+            self._requested.append(self._pool.submit(self._request_async, self._start))
+            self._start += self._limit
+
+        # If this is the first time next() has been called, return the items
+        # contained in the initial page.
+        if self._obj is not None:
+            result = [RestObj(x) for x in self._obj['items']]
+            self._obj = None
+            return result
+
+        # Make sure the next page has been received
+        if self._requested:
+            items = self._requested.pop(0).result()
+
+            if not items:
+                raise StopIteration
+
+            return items
+
+        raise StopIteration
+
+    def __iter__(self):
+        # All Iterators are also Iterables
+        return self
+
+    def _request_async(self, start):
+        """Used by worker threads to retrieve next batch of items."""
+
+        if self._next_link is None:
+            return []
+
+        # Format the link to retrieve desired batch
+        link = self._next_link.format(start=start, limit=self._limit)
+        r = get(link, format='json', session=self._session)
+        r = RestObj(r)
+        return [RestObj(x) for x in r['items']]
+
+
+class PagedItemIterator:
+    """Iterates through a collection that must be "paged" from the server.
+
+    Parameters
+    ----------
+    obj : RestObj
+        An instance of `RestObj` containing any initial items and a link to
+        retrieve additional items.
+    session : Session
+        The `Session` instance to use for requesting additional items.  Defaults
+        to current_session()
+    threads : int
+        Number of threads allocated to downloading additional items.
+
+    Yields
+    ------
+    RestObj
+
+    """
+    def __init__(self, obj, session=None, threads=4):
+        # Iterates over whole pages of items
+        self._pager = PageIterator(obj, session, threads)
+
+        # Total number of items to iterate over
+        if 'count' in obj:
+            self._count = int(obj.count)
+        else:
+            self._count = len(obj['items'])
+
+        self._cache = []
+
+    def __len__(self):
+        return self._count
+
+    def __next__(self):
+        return self.next()
+
+    def next(self):
+        # Get next page of items if we're currently out
+        if not self._cache:
+            self._cache = next(self._pager)
+
+        # Return the next item
+        if self._cache:
+            return self._cache.pop(0)
+
+        raise StopIteration
+
+    def __iter__(self):
+        return self
+
+
+class PagedListIterator():
+    def __init__(self, l):
+        self.__list = l
+        self.__index = 0
+
+    def __next__(self):
+        return self.next()
+
+    def next(self):
+        if self.__index >= len(self.__list):
+            raise StopIteration
+
+        item = self.__list[self.__index]
+        self.__index += 1
+        return item
+
+    def __iter__(self):
+        return self
+
+
+class PagedList(list):
+    def __init__(self, obj, **kwargs):
+        super(PagedList, self).__init__()
+        self._pager = PagedItemIterator(obj, **kwargs)
+
+        # Force caching of first page
+        self.append(next(self._pager))
+        items = self._pager._cache
+        self.extend(items)
+
+        # clear the list (py27 compatible)
+        del self._pager._cache[:]
+
+    def __len__(self):
+        return len(self._pager)
+
+    def __iter__(self):
+        # return super(PagedList, self).__iter__()
+        return PagedListIterator(self)
+
+    def __getslice__(self, i, j):
+        # Removed from Py3.x but still implemented in CPython built-in list
+        # Override to ensure __getitem__ is used instead.
+        return self.__getitem__(slice(i, j))
+
+    def __getitem__(self, item):
+        if hasattr(item, 'stop'):
+            # `item` is a slice
+            # if no stop was specified, assume full length
+            idx = item.stop or len(self)
+        else:
+            idx = int(item)
+
+        try:
+            while super(PagedList, self).__len__() <= idx:
+                n = next(self._pager)
+                self.append(n)
+        except StopIteration:
+            # May cause if slice or index extends beyond array
+            # Ignore and let List handle IndexErrors if necessary.
+            pass
+
+        return super(PagedList, self).__getitem__(item)
+
+    def __str__(self):
+        string = super(PagedList, self).__str__()
+
+        # If the list has more "items" than are stored in the underlying list
+        # then there are more downloads to make.
+        if len(self) - super(PagedList, self).__len__() > 0:
+            string = string.rstrip(']') + ', ... ]'
+
+        return string
+
+
+def is_uuid(id_):
     try:
-        UUID(str(id))
+        UUID(str(id_))
         return True
     except (ValueError, TypeError):
         return False
@@ -653,8 +1000,7 @@ def get(path, **kwargs):
     except HTTPError as e:
         if e.code == 404:
             return None  # Resource not found
-        else:
-            raise e
+        raise e
 
 
 def head(path, **kwargs):
@@ -743,11 +1089,50 @@ def delete(path, **kwargs):
     return request('delete', path, **kwargs)
 
 
-def request(verb, path, session=None, raw=False, **kwargs):
+def request(verb, path, session=None, raw=False, format='auto', **kwargs):
+    """Send an HTTP request with a session.
+
+    Parameters
+    ----------
+    verb : str
+        A valid HTTP request verb.
+    path : str
+        Path portion of URL to request.
+    session : Session, optional
+        Defaults to `current_session()`.
+    raw : bool
+        Deprecated. Whether to return the raw `Response` object.
+        Defaults to False.
+    format : {'auto', 'rest', 'response', 'content', 'json', 'text'}
+        The format of the return response.  Defaults to `auto`.
+        rest: `RestObj` constructed from JSON.
+        response: the raw `Response` object.
+        content: Response.content
+        json: Response.json()
+        text: Response.text
+        auto: `RestObj` constructed from JSON if possible, otherwise same as
+              `text`.
+    kwargs : any
+        Additional arguments are passed to the session `request` method.
+
+    Returns
+    -------
+
+    """
     session = session or current_session()
 
     if session is None:
         raise TypeError('No `Session` instance found.')
+
+    if raw:
+        warnings.warn("The 'raw' parameter is deprecated and will be removed in"
+                      " a future version.  Use format='response' instead.",
+                      DeprecationWarning)
+        format = 'response'
+
+    format = 'auto' if format is None else str(format).lower()
+    if format not in ('auto', 'response', 'content', 'text', 'json', 'rest'):
+        raise ValueError
 
     response = session.request(verb, path, **kwargs)
 
@@ -755,18 +1140,27 @@ def request(verb, path, session=None, raw=False, **kwargs):
         raise HTTPError(response.url, response.status_code, response.text,
                         response.headers, None)
 
+    # Return the raw response if requested
+    if format == 'response':
+        return response
+    if format == 'json':
+        return response.json()
+    if format == 'text':
+        return response.text
+    if format == 'content':
+        return response.content
     try:
-        if raw:
-            return response.json()
-        else:
-            obj = _unwrap(response.json())
+        obj = _unwrap(response.json())
 
-            # ETag is required to update any object
-            # May not be returned on all responses (e.g. listing multiple objects)
-            if isinstance(obj, RestObj):
-                setattr(obj, '_headers', response.headers)
-            return obj
+        # ETag is required to update any object
+        # May not be returned on all responses (e.g. listing
+        # multiple objects)
+        if isinstance(obj, RestObj):
+            obj._headers = response.headers
+        return obj
     except ValueError:
+        if format == 'rest':
+            return RestObj()
         return response.text
 
 
@@ -786,13 +1180,15 @@ def get_link(obj, rel):
     if isinstance(obj, dict) and 'links' in obj:
         if isinstance(obj['links'], dict):
             return obj['links'].get(rel)
-        else:
-            links = [l for l in obj.get('links', []) if l.get('rel') == rel]
-            if len(links) == 1:
-                return links[0]
-            elif len(links) > 1:
-                return links
-    elif isinstance(obj, dict) and 'rel' in obj and obj['rel'] == rel:
+
+        links = [l for l in obj.get('links', []) if l.get('rel') == rel]
+        if not links:
+            return None
+        if len(links) == 1:
+            return links[0]
+        return links
+
+    if isinstance(obj, dict) and 'rel' in obj and obj['rel'] == rel:
         # Object is already a link, just return it
         return obj
 
@@ -839,6 +1235,8 @@ def uri_as_str(obj):
         if isinstance(link, dict):
             return link.get('uri')
 
+    return obj
+
 
 def _unwrap(json):
     """Converts a JSON response to one or more `RestObj` instances.
@@ -856,10 +1254,10 @@ def _unwrap(json):
     if 'items' in json:
         if len(json['items']) == 1:
             return RestObj(json['items'][0])
-        elif len(json['items']) > 1:
-            return list(map(RestObj, json['items']))
-        else:
-            return []
+        if len(json['items']) > 1:
+            return PagedList(RestObj(json))
+        return []
+
     return RestObj(json)
 
 
@@ -941,7 +1339,7 @@ def _build_crud_funcs(path, single_term=None, plural_term=None,
 
         # If the input already appears to be the requested object just return it, unless
         # a refresh of the data was explicitly requested.
-        if isinstance(item, dict) and all([k in item for k in ('id', 'name')]):
+        if isinstance(item, dict) and all(k in item for k in ('id', 'name')):
             if refresh:
                 item = item['id']
             else:
@@ -949,23 +1347,20 @@ def _build_crud_funcs(path, single_term=None, plural_term=None,
 
         if is_uuid(item):
             return get(path + '/{id}'.format(id=item))
-        else:
-            results = list_items(filter='eq(name, "{}")'.format(item))
+        results = list_items(filter='eq(name, "{}")'.format(item))
 
-            # Not sure why, but as of 19w04 the filter doesn't seem to work.
-            for result in results:
-                if result['name'] == str(item):
-                    # Make a request for the specific object so that ETag is included, allowing updates.
-                    if get_link(result, 'self'):
-                        return request_link(result, 'self')
-                    else:
-                        id = result.get('id', result['name'])
-                    return get(path + '/{id}'.format(id=id))
+        # Not sure why, but as of 19w04 the filter doesn't seem to work.
+        for result in results:
+            if result['name'] == str(item):
+                # Make a request for the specific object so that ETag is
+                # included, allowing updates.
+                if get_link(result, 'self'):
+                    return request_link(result, 'self')
 
-            return None
+                id_ = result.get('id', result['name'])
+                return get(path + '/{id}'.format(id=id_))
 
-        assert item is None or isinstance(item, dict)
-        return item
+        return None
 
     @sasctl_command('update')
     def update_item(item):
@@ -985,15 +1380,15 @@ def _build_crud_funcs(path, single_term=None, plural_term=None,
         if headers is None or headers.get('etag') is None:
             raise ValueError('Could not find ETag for update of %s.' % item)
 
-        id = getattr(item, 'id', None)
-        if id is None:
+        id_ = getattr(item, 'id', None)
+        if id_ is None:
             raise ValueError(
                 'Could not find property `id` for update of %s.' % item)
 
         headers = {'If-Match': item._headers.get('etag'),
                    'Content-Type': item._headers.get('content-type')}
 
-        return put(path + '/%s' % id, json=item, headers=headers)
+        return put(path + '/%s' % id_, json=item, headers=headers)
 
     @sasctl_command('delete')
     def delete_item(item):
@@ -1018,8 +1413,7 @@ def _build_crud_funcs(path, single_term=None, plural_term=None,
 
         if is_uuid(item):
             return delete(path + '/{id}'.format(id=item))
-        else:
-            raise ValueError("Unrecognized id '%s'" % item)
+        raise ValueError("Unrecognized id '%s'" % item)
 
     # Pull object name from path if unspecified (many paths end in /folders or /repositories).
     plural_term = plural_term or str(path).split('/')[-1]

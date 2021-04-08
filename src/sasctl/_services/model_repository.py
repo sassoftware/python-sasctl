@@ -6,8 +6,10 @@
 
 """The Model Repository service supports registering and managing models."""
 
+import six
+
 from .service import Service
-from ..core import current_session, get, delete
+from ..core import current_session, get, delete, sasctl_command, HTTPError
 
 FUNCTIONS = {'Analytical', 'Classification', 'Clustering', 'Forecasting',
              'Prediction', 'Text categorization', 'Text extraction',
@@ -19,6 +21,7 @@ def _get_filter(x):
     # instead of the default filter= parameter (as of Viya 3.4).
     # Define a custom function for building out the filter
     return dict(properties='(name, %s)' % x)
+
 
 class ModelRepository(Service):
     """Implements the Model Repository REST API.
@@ -35,7 +38,7 @@ class ModelRepository(Service):
 
     _SERVICE_ROOT = '/modelRepository'
 
-    list_repositories, get_repository, update_repository, \
+    list_repositories, _, update_repository, \
         delete_repository = Service._crud_funcs('/repositories', 'repository',
                                                 get_filter=_get_filter)
 
@@ -146,6 +149,67 @@ class ModelRepository(Service):
         return cls.request_link(link, 'contents')
 
     @classmethod
+    @sasctl_command('get', 'repositories')
+    def get_repository(cls, repository, refresh=False):
+        """Return a repository instance.
+
+        Parameters
+        ----------
+        repository : str or dict
+            Name, ID, or dictionary representation of the repository.
+        refresh : bool, optional
+            Obtain an updated copy of the repository.
+
+        Returns
+        -------
+        RestObj or None
+            A dictionary containing the repository attributes or None.
+
+        Notes
+        -------
+        If `repository` is a complete representation of the repository it will be
+        returned unless `refresh` is set.  This prevents unnecessary REST
+        calls when data is already available on the client.
+
+        """
+        # If the input already appears to be the requested object just
+        # return it, unless a refresh of the data was explicitly requested.
+        if isinstance(repository, dict) and all(k in repository for k in ('id', 'name')):
+            if refresh:
+                repository = repository['id']
+            else:
+                return repository
+
+        if cls.is_uuid(repository):
+            try:
+                # Attempt to GET the repository directly.  Access may be restricted, so allow HTTP 403 errors
+                # and fall back to using list_repositories() instead.
+                return cls.get('/repositories/{id}'.format(id=repository))
+            except HTTPError as e:
+                if e.code != 403:
+                    raise e
+
+        results = cls.list_repositories()
+
+        # Not sure why, but as of 19w04 the filter doesn't seem to work
+        for result in results:
+            if result['name'] == str(repository) or result['id'] == str(repository):
+                # Make a request for the specific object so that ETag
+                # is included, allowing updates.
+                try:
+                    if cls.get_link(result, 'self'):
+                        return cls.request_link(result, 'self')
+
+                    id_ = result.get('id', result['name'])
+                    return cls.get('/repositories/{id}'.format(id=id_))
+                except HTTPError as e:
+                    # NOTE: As of Viya 4.0.1 access to GET a repository is restricted to admin users out of the box.
+                    # Try to GET the repository, but ignore any 403 (permission denied) errors.
+                    if e.code != 403:
+                        raise e
+                return result
+
+    @classmethod
     def create_model(cls, model, project,
                      description=None,
                      modeler=None,
@@ -230,7 +294,6 @@ class ModelRepository(Service):
 
         if isinstance(model, str):
             model = {'name': model}
-        assert isinstance(model, dict)
 
         p = cls.get_project(project)
         if p is None:
@@ -276,7 +339,8 @@ class ModelRepository(Service):
             'Content-Type': 'application/vnd.sas.models.model+json'})
 
     @classmethod
-    def add_model_content(cls, model, file, name=None, role=None):
+    def add_model_content(cls, model, file, name, role=None,
+                          content_type=None):
         """Add additional files to the model.
 
         Parameters
@@ -290,7 +354,8 @@ class ModelRepository(Service):
             Name of the file related to the model.
         role : str
             Role of the model file, such as 'Python pickle'.
-
+        content_type : str
+            an HTTP Content-Type value
 
         Returns
         -------
@@ -299,19 +364,25 @@ class ModelRepository(Service):
 
         """
         if cls.is_uuid(model):
-            id = model
+            id_ = model
         elif isinstance(model, dict) and 'id' in model:
-            id = model['id']
+            id_ = model['id']
         else:
             model = cls.get_model(model)
-            id = model['id']
+            id_ = model['id']
 
-        metadata = {'role': role}
-        if name is not None:
-            metadata['name'] = name
+        if content_type is None and isinstance(file, six.binary_type):
+            content_type = 'application/octet-stream'
 
-        return cls.post('/models/{}/contents'.format(id),
-                        files={name: file}, data=metadata)
+        if content_type is not None:
+            files = {name: (name, file, content_type)}
+        else:
+            files = {name: file}
+
+        metadata = {'role': role, 'name': name}
+
+        return cls.post('/models/{}/contents'.format(id_),
+                        files=files, data=metadata)
 
     @classmethod
     def default_repository(cls):
@@ -322,15 +393,20 @@ class ModelRepository(Service):
         RestObj
 
         """
-        repo = cls.get_repository('Repository 1')  # Default in 19w04
-        if repo is None:
-            repo = cls.get_repository('Public')  # Default in 19w21
-        if repo is None:
-            all_repos = cls.list_repositories()
-            if len(all_repos) > 0:
-                repo = cls.list_repositories()[0]
+        all_repos = cls.list_repositories()
 
-        return repo
+        if all_repos:
+            # If nothing else, return the first repository
+            repo = all_repos[0]
+
+            # Check repository names to find a better default.
+            # 'Repository 1' was default in 19w04
+            # 'Public' was default in 19w21
+            for r in all_repos:
+                if r.name in ('Repository 1', 'Public'):
+                    repo = r
+                    break
+            return repo
 
     @classmethod
     def create_project(cls, project, repository, **kwargs):
@@ -361,7 +437,8 @@ class ModelRepository(Service):
         project.update(kwargs)
         return cls.post('/projects', json=project,
                         headers={
-                            'Content-Type': 'application/vnd.sas.models.project+json'})
+                            'Content-Type':
+                                'application/vnd.sas.models.project+json'})
 
     @classmethod
     def import_model_from_zip(cls, name, project, file, description=None,
@@ -375,10 +452,10 @@ class ModelRepository(Service):
         project : str or dict
             The name or id of the model project, or a dictionary
             representation of the project.
-        description : str
-            The description of the model.
         file : bytes
             The ZIP file containing the model and contents.
+        description : str
+            The description of the model.
 
         Returns
         -------
@@ -396,7 +473,7 @@ class ModelRepository(Service):
                   'type': 'ZIP',
                   'projectId': project.id,
                   'versionOption': version}
-        params = '&'.join(['{}={}'.format(k, v) for k, v in params.items()])
+        params = '&'.join('{}={}'.format(k, v) for k, v in params.items())
 
         r = cls.post('/models#octetStream',
                      data=file.read(),
@@ -498,7 +575,6 @@ class ModelRepository(Service):
 
         return cls.request_link(model, 'copyAnalyticStore')
 
-
     @classmethod
     def delete_model_contents(cls, model):
         """Deletes all contents (files) in the model.
@@ -514,7 +590,7 @@ class ModelRepository(Service):
         """
         rel = 'delete'
 
-        filelist=cls.get_model_contents(model)
+        filelist = cls.get_model_contents(model)
         for delfile in filelist:
-            modelfileuri=cls.get_link(delfile, rel)
+            modelfileuri = cls.get_link(delfile, rel)
             delete(modelfileuri['uri'])

@@ -1,8 +1,77 @@
-
 Unreleased
 ----------
+ -
+ 
+ v1.5.5 (2021-03-26)
+ -------------------
+ **Bugfixes***
+ - Fixed an issue with JSON parsing that caused the `publish_model` task to fail with Viya 4.0.
+ 
+v1.5.4 (2020-10-29)
+ ------------------
+ **Improvements**
+ - Added the `as_swat` method to the `Session` object, allowing connection to CAS through SWAT without an additional authentication step.
+ 
+ **Changes**
+ - Integrated PZMM into `Session` calls and removed redundant function calls in PZMM.
+ - ROC and Lift statistic JSON files created by PZMM are now generated through CAS actionset calls.
+ - Updated the PZMM example notebook, `FleetMaintenance.ipynb`, to include integration of PZMM with sasctl functions.
+ 
+ **Bugfixes**
+ - Reworked the `model_repository.get_repository()` to prevent HTTP 403 errors that could occur with some Viya environments.
+ 
+ v1.5.3 (2020-06-25)
+ ------------------
+ **Bugfixes**
+  - Added PZMM fitstat JSON file to manifest.
+ 
+ v1.5.2 (2020-06-22)
+ -------------------
+ **Improvements**
+  - PZMM module moved from a stand-alone [repository](https://github.com/sassoftware/open-model-manager-resources/tree/master/addons/picklezip-mm) to a sasctl submodule.
+  - Introduced deprecation warnings for Python 2 users.
+ 
+v1.5.1 (2020-4-9)
+----------------
+ **Bugfixes**
+ - Fixed PyMAS utilities to correctly work functions not bound to pickled objects.
+ - Model target variables should no longer appear as an input variable when registering ASTORE models. 
+ 
+v1.5 (2020-2-23)
+----------------
+**Improvements**
+ - Registered Python models will now include both `predict` and `predict_proba` methods. 
+ - Added a new Relationships service for managing links between objects.
+ - Added a new Reports service for retrieving SAS Visual Analytics reports.
+ - Added a new Report_Images service for rendering content from reports. 
+ - Additional metadata fields are set when registering an ASTORE model.
+ - Collections of items should now return an instance of `PagedList` for lazy loading of results.
+ - Module steps can now be called using `module.step(df)` where `df` is the row of a DataFrame or Numpy array.
+ - `register_model` sets additional project properties when registering an ASTORE model.
+
+**Changes**
+ - Replaced the `raw` parameter of the `request` methods with a `format` parameter, allowing more control over the
+   returned value.
+ - The `get_file_content` method of the Files service now returns the actual content instead of the file metadata.
+ - JSON output when using `sasctl` from the command line is now formatted correctly.
+ 
+ **Bugfixes**
+ - `model_publish.delete_destination` now works correctly.
+ 
+v1.4.6 (2020-1-24)
+------------------
+**Bugfixes**
+ - Fixed an issue where the `REQUESTS_CA_BUNDLE` environment variable was taking precedence over the `verify_ssl` parameter.
+
+v1.4.5 (2019-12-5)
+------------------
+**Changes**
+ - Saving of package information can now be disabled using the `record_packages` parameter of `register_model`.
+
 **Bugfixes**
  - Added support for uint data types to the `register_model` task.
+ - Fixed an issue where long package names caused `register_model` to fail.
+ - `Session` creation now works with older versions of urllib3.
 
 v1.4.4 (2019-10-31)
 -------------------
