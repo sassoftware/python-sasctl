@@ -6,4 +6,3 @@ from .writeJSONFiles import JSONFiles
 from .zipModel import ZipModel
 from .writeScoreCode import ScoreCode
 from .importModel import ImportModel
-from .compareModels import CompareModels
