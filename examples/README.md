@@ -1,7 +1,9 @@
 
 
-direct_REST_calls.py
---------------------
+Make direct REST API calls
+--------------------------
+[direct_REST_calls.py](direct_REST_calls.py)
+
 Level: Advanced
 
 Demonstrates using `sasctl` to make REST calls over HTTP(S) directly to the SAS microservices.
@@ -12,7 +14,8 @@ Use if you need to customize behavior or use functionality not yet exposed throu
 FleetManagement.ipynb
 ---------------------
 
-Full Model Lifecycle
+
+Full model lifecycle
 --------------------
 [full_lifecycle.py](full_lifecycle.py)
 
@@ -48,6 +51,7 @@ Registers a classification model in SAS Model Manager that was created from a SA
 Use if you've created models using [SWAT](https://github.com/sassoftware/python-swat).
 
 
+
 Register a SAS deep learning model
 ----------------------------------
 [register_sas_dlpy_model.py](register_sas_dlpy_model.py)
@@ -57,15 +61,24 @@ Level: Beginner
 Creates a SAS deep learning model using [dlpy](https://github.com/sassoftware/python-dlpy) and registers the model in SAS Model Manager.
 
 
+Register a SAS regression model
+-------------------------------
+[register_sas_regression_model.py](register_sas_regression_model.py)
 
-register_sas_regression_model.py
---------------------------------
+Level: Beginner
 
-register_scikit_classification_model.py
----------------------------------------
 
-register_scikit_regression_model.py
------------------------------------
+Register a scikit-learn classification model
+--------------------------------------------
+[register_scikit_classification_model.py](register_scikit_classification_model.py)
+
+Level: Beginner
+
+
+Register a scikit-learn regression model
+----------------------------------------
+[register_scikit_regression_model.py](register_scikit_regression_model.py)
+
 
 Modeling in Python & SAS autoML
 -------------------------------
