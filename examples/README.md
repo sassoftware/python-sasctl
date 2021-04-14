@@ -20,7 +20,7 @@ Examples
 
 Register a SAS classification model
 ------------------------------------
-[register_sas_classification_model.py](register_sas_classification_model.py)
+Filename: [register_sas_classification_model.py](register_sas_classification_model.py)
 
 Level: Beginner
 
@@ -30,7 +30,7 @@ Registers a classification model in SAS Model Manager that was created from a SA
 
 Register a SAS regression model
 -------------------------------
-[register_sas_regression_model.py](register_sas_regression_model.py)
+Filename: [register_sas_regression_model.py](register_sas_regression_model.py)
 
 Level: Beginner
 
@@ -40,7 +40,7 @@ Registers a regression model in SAS Model Manager that was created from a SAS al
 
 Register a SAS deep learning model
 ----------------------------------
-[register_sas_dlpy_model.py](register_sas_dlpy_model.py)
+Filename: [register_sas_dlpy_model.py](register_sas_dlpy_model.py)
 
 Level: Beginner
 
@@ -50,7 +50,7 @@ Creates a SAS deep learning model using [dlpy](https://github.com/sassoftware/py
 
 Register a scikit-learn classification model
 --------------------------------------------
-[register_scikit_classification_model.py](register_scikit_classification_model.py)
+Filename: [register_scikit_classification_model.py](register_scikit_classification_model.py)
 
 Level: Beginner
 
@@ -60,7 +60,7 @@ Registers a classification model in SAS Model Manager that was created from a Py
 
 Register a scikit-learn regression model
 ----------------------------------------
-[register_scikit_regression_model.py](register_scikit_regression_model.py)
+Filename: [register_scikit_regression_model.py](register_scikit_regression_model.py)
 
 Level: Beginner
 
@@ -70,7 +70,7 @@ Registers a regression model in SAS Model Manager that was created from a Python
 
 Full model lifecycle
 --------------------
-[full_lifecycle.py](full_lifecycle.py)
+Filename: [full_lifecycle.py](full_lifecycle.py)
 
 Level: Beginner
 
@@ -85,7 +85,7 @@ Demonstrates how `sasctl` can be used throughout the lifecycle of a model by:
 
  Register a custom model
  ------------------------
- [register_custom_model.py](register_custom_model.py)
+ Filename: [register_custom_model.py](register_custom_model.py)
 
  Level: Intermediate
 
@@ -95,7 +95,7 @@ Demonstrates how `sasctl` can be used throughout the lifecycle of a model by:
 
 Register models with model metrics
 ----------------------------------
-[FleetManagement.ipynb](FleetManagement.ipynb)
+Filename: [FleetManagement.ipynb](FleetManagement.ipynb)
 
 Level: Intermediate
 
@@ -105,7 +105,7 @@ Trains multiple tree-based models using [scikit-learn](https://github.com/scikit
 
 Modeling with Python & SAS AutoML
 -------------------------------
-Filename: [Viya 2020 Example.ipynb]()
+Filename: [data_science_pilot.ipynb](data_science_pilot.ipynb)
 
 Level: Intermediate
 
@@ -115,7 +115,7 @@ Uses the [swat](https://github.com/sassoftware/python-swat) package to perform a
 
 Making direct REST API calls
 --------------------------
-[direct_REST_calls.py](direct_REST_calls.py)
+Filename: [direct_REST_calls.py](direct_REST_calls.py)
 
 Level: Advanced
 
