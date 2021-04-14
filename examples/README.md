@@ -1,7 +1,21 @@
 
+Examples
+========
+
 - [Register a SAS classification model](#register-a-sas-classification-model)
 - [Register a SAS regression model](#register-a-sas-regression-model)
+- [Register a SAS deep learning model](#register-a-sas-deep-learning-model)
 
+- [Register a scikit-learn classification model](#register-a-scikit-learn-classification-model)
+- [Register a scikit-learn regression model](#register-a-scikit-learn-regression-model)
+
+- [Full model lifecycle](#full-model-lifecycle)
+- [Register a custom model](#register-a-custom-model)
+- [Register models with model metrics](#register-models-with-model-metrics)
+- [Modeling with Python & SAS AutoML](#modeling-with-python--sas-automl)
+- [Making direct REST API calls](#making-direct-rest-api-calls)
+
+---
 
 
 Register a SAS classification model
@@ -89,7 +103,7 @@ Trains multiple tree-based models using [scikit-learn](https://github.com/scikit
 
 
 
-Modeling in Python & SAS autoML
+Modeling with Python & SAS AutoML
 -------------------------------
 Filename: [Viya 2020 Example.ipynb]()
 
@@ -99,7 +113,7 @@ Uses the [swat](https://github.com/sassoftware/python-swat) package to perform a
 
 
 
-Make direct REST API calls
+Making direct REST API calls
 --------------------------
 [direct_REST_calls.py](direct_REST_calls.py)
 
