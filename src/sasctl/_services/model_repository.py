@@ -589,7 +589,6 @@ class ModelRepository(Service):
         model : str or dict
             The name, id, or dictionary representation of a model.
 
-
         Returns
         -------
         list
@@ -608,7 +607,7 @@ class ModelRepository(Service):
 
         Copies all of the analytic stores for a model to the pre-defined
         server location (/config/data/modelsvr/astore).
-        To enable publishing a scoring, models that contain analytic stores
+        To enable publishing and scoring, models that contain analytic stores
         need the ASTORE files to be copied to a set location
         (/config/data/modelsrv/astore).  This location is used for
         integration with Event Stream Processing and others. This request
@@ -655,3 +654,121 @@ class ModelRepository(Service):
         for delfile in filelist:
             modelfileuri = cls.get_link(delfile, rel)
             delete(modelfileuri['uri'])
+            
+    @classmethod
+    def get_API_metadata(cls):
+        """Checks software API metadata associated with the model repository.
+        
+        Parameters
+        ----------
+        
+        Returns
+        -------
+        API response
+            JSON response detailing the API metadata
+        """
+        return cls.get('/apiMeta')
+
+    @classmethod
+    def copy_python_resources(cls, model):
+        '''Moves a model's score resources to the Compute server.
+
+        Copies all of the Python score resources for a model to the pre-defined
+        server location (/models/resources/viya/<model-UUID>/). To enable 
+        publishing and scoring, models that contain Python scoring resources 
+        need the score resource files to be copied to a set location 
+        (/models/resources/viya/<model-UUID>/). This location is used for
+        integration with Event Stream Processing and others. This request
+        invokes an asynchronous call to copy the score resource files. Check
+        the individual score resource uris to get the completion state:
+        pending, copying, success, failure. Please review the full Model
+        Manager documentation before using.
+        
+        Parameters
+        ----------
+        model : str or dict
+            The name or id of the model, or a dictionary representation of
+            the model.
+        
+        Returns
+        -------
+        API response
+            JSON response detailing the API metadata
+        '''
+        if cls.is_uuid(model):
+            id_ = model
+        elif isinstance(model, dict) and 'id' in model:
+            id_ = model['id']
+        else:
+            model = cls.get_model(model)
+            id_ = model['id']
+        
+        return cls.put(f'/models/{id_}/scoreResources', headers={'Accept': 'application/json'})
+    
+    @classmethod
+    def convert_python_to_ds2(cls, model):
+        '''Converts a Python model to DS2
+        
+        For SAS Viya 3.5 Python models on SAS Model Manager, wrap the Python score code in DS2
+        and convert the model score code type to DS2. Models converted in this way are not 
+        scoreable by CAS.
+
+        Parameters
+        ----------
+        model : str or dict
+            The name or id of the model, or a dictionary representation of
+            the model.
+            
+        Returns
+        -------
+        API response
+            JSON response detailing the API metadata
+        '''
+        
+        if cls.is_uuid(model):
+            id_ = model
+        elif isinstance(model, dict) and 'id' in model:
+            id_ = model['id']
+        else:
+            model = cls.get_model(model)
+            id_ = model['id']
+            
+        if isinstance(model, (str, dict)):
+            model = cls.get_model(id_)
+            
+        ETag = model._headers['ETag']
+        accept = 'text/vnd.sas.source.ds2'
+        content = 'application/json'
+        
+        return cls.put(f'/models/{id_}/typeConversion',
+                       headers={'Accept-Item': accept,
+                                'Content-Type': content,
+                                'If-Match': ETag})
+        
+    @classmethod
+    def get_model_details(cls, model):
+        '''Get model details from SAS Model Manager
+        
+        Get model details that pertain to model properties, model metadata,
+        model input, output, and target variables, and user-defined values.
+
+        Parameters
+        ----------
+        model : str or dict
+            The name or id of the model, or a dictionary representation of
+            the model.
+            
+        Returns
+        -------
+        API response
+            JSON response detailing the model details
+        '''
+        if cls.is_uuid(model):
+            id_ = model
+        elif isinstance(model, dict) and 'id' in model:
+            id_ = model['id']
+        else:
+            model = cls.get_model(model)
+            id_ = model['id']
+            
+        return cls.get(f'/models/{id_}')
