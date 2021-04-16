@@ -1,6 +1,7 @@
 Unreleased
 ----------
- -
+ **Improvements**
+ - `PagedList` handles situations where the server over-estimates the number of items available for paging.
  
  v1.5.5 (2021-03-26)
  -------------------
