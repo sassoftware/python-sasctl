@@ -17,6 +17,7 @@ dirname = os.path.dirname
 DATA_PATH = os.path.join(dirname(dirname(__file__)), 'pyml2ds_data')
 
 
+@pytest.mark.skip('Pickle no longer loads with latest version of sklearn.  Rework to build model instead of loading.')
 def test_xgb2ds():
     pytest.importorskip('xgboost')
 

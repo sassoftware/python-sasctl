@@ -146,12 +146,22 @@ def _find_services(module='sasctl'):
         submodules = pkgutil.iter_modules(getattr(module, '__path__', []))
 
         for submodule in submodules:
-            if hasattr(submodule, 'name'):
-                # ModuleInfo returned py 3.6
-                submodule = import_module('.' + submodule.name, package=module.__name__)
-            else:
-                # Tuple of (module_loader, name, ispkg) returned by older versions
-                submodule = import_module('.' + submodule[1], package=module.__name__)
+
+            # ModuleInfo returned py 3.6 has .name
+            # Tuple of (module_loader, name, ispkg) returned by older versions
+            submodule_name = getattr(submodule, 'name', submodule[1])
+
+            # TODO: Temporary until pzmm fully merged with sasctl
+            if submodule_name == 'pzmm':
+                continue
+
+            submodule = import_module('.' + submodule_name, package=module.__name__)
+            # if hasattr(submodule, 'name'):
+            #     # ModuleInfo returned py 3.6
+            #     submodule = import_module('.' + submodule.name, package=module.__name__)
+            # else:
+            #     # Tuple of (module_loader, name, ispkg) returned by older versions
+            #     submodule = import_module('.' + submodule[1], package=module.__name__)
             services = find_recurse(submodule, services)
 
         return services

@@ -36,6 +36,7 @@ except ImportError:
         kerberos = None
 
 from .utils.cli import sasctl_command
+from .utils.misc import versionadded
 from . import exceptions
 
 logger = logging.getLogger(__name__)
@@ -244,8 +245,13 @@ class Session(requests.Session):
 
     Attributes
     ----------
-    message_log
-    filters
+    message_log : logging.Logger
+        A log to which all REST request and response messages will be sent.  Attach a handler using
+        `add_logger()` to capture these messages.
+
+    filters : list of callable
+        A collection of functions that will be called with each request and response object *prior* to logging the
+        messages, allowing any sensitive information to be removed first.
 
     """
     def __init__(self, hostname,
@@ -416,6 +422,72 @@ class Session(requests.Session):
 
         """
         return self.add_logger(logging.StreamHandler(), level)
+
+    @versionadded(version='1.6')
+    def as_swat(self, server=None, **kwargs):
+        """Create a SWAT connection to a CAS server.
+
+        Uses the authentication information from the session to establish a CAS connection using SWAT.
+
+        Parameters
+        ----------
+        server : str, optional
+            The logical name of the CAS server, not the hostname.  Defaults to "cas-shared-default".
+        kwargs : any
+            Additional arguments to pass to the `swat.CAS` constructor.  Can be used to override this method's
+            default behavior or customize the CAS session.
+
+        Returns
+        -------
+        swat.CAS
+            An active SWAT connection
+
+        Raises
+        ------
+        RuntimeError
+            If `swat` package is not available.
+
+        Examples
+        --------
+        >>> sess = Session('example.sas.com')
+        >>> with sess.as_swat() as conn:
+        ...    conn.listnodes()
+        CASResults([('nodelist', Node List
+                      name        role connected   IP Address
+        0  example.sas.com  controller       Yes  127.0.0.1)])
+
+        """
+        server = server or 'cas-shared-default'
+
+        if swat is None:
+            raise RuntimeError("The 'swat' package must be installed to create a SWAT connection.")
+
+        # Construct the CAS server's URL
+        url = '{}://{}/{}-http/'.format(self._settings['protocol'],
+                                        self.hostname,
+                                        server)
+
+        # Use this sessions info to connect to CAS unless user has explicitly give a value (even if None)
+        kwargs.setdefault('hostname', url)
+        kwargs.setdefault('username', self.username)
+        kwargs.setdefault('password', self._settings['password'])
+
+        orig_sslreqcert = os.environ.get('SSLREQCERT')
+
+        # If SSL connections to microservices are not being verified, don't attempt
+        # to verify connections to CAS - most likely certs are not in place.
+        if not self.verify:
+            os.environ['SSLREQCERT'] = 'no'
+
+        try:
+            cas = swat.CAS(**kwargs)
+            cas.setsessopt(messagelevel='warning')
+        finally:
+            # Reset environment variable to whatever it's original value was
+            if orig_sslreqcert:
+                os.environ['SSLREQCERT'] = orig_sslreqcert
+
+        return cas
 
     @property
     def username(self):
@@ -781,9 +853,6 @@ class PageIterator:
         self._obj = obj
 
     def __next__(self):
-        return self.next()
-
-    def next(self):
         if self._pool is None:
             self._pool = concurrent.futures.ThreadPoolExecutor(max_workers=self._num_threads)
 
@@ -815,6 +884,8 @@ class PageIterator:
         # All Iterators are also Iterables
         return self
 
+    next = __next__        # Python 2 compatible
+
     def _request_async(self, start):
         """Used by worker threads to retrieve next batch of items."""
 
@@ -831,6 +902,9 @@ class PageIterator:
 class PagedItemIterator:
     """Iterates through a collection that must be "paged" from the server.
 
+    Uses `PageIterator` to transparently download pages of items from the server
+    as needed.
+
     Parameters
     ----------
     obj : RestObj
@@ -846,78 +920,135 @@ class PagedItemIterator:
     ------
     RestObj
 
+    Notes
+    -----
+    Value returned by len() is an approximate count of the items available.  The actual
+    number of items returned may be greater than or less than this number.
+
+    See Also
+    --------
+    PageIterator
+
     """
     def __init__(self, obj, session=None, threads=4):
         # Iterates over whole pages of items
         self._pager = PageIterator(obj, session, threads)
 
+        # Store items from latest page that haven't been returned yet.
+        self._cache = []
+
         # Total number of items to iterate over
         if 'count' in obj:
+            # NOTE: "count" may be an (over) estimate of the number of items available
+            #       since some may be inaccessible due to user permissions & won't actually be returned.
             self._count = int(obj.count)
         else:
             self._count = len(obj['items'])
-
-        self._cache = []
 
     def __len__(self):
         return self._count
 
     def __next__(self):
-        return self.next()
-
-    def next(self):
         # Get next page of items if we're currently out
         if not self._cache:
             self._cache = next(self._pager)
 
+            if len(self._cache) < self._pager._limit:
+                print('oops')
+                # number of items returned in page was less than expected
+                # might be last page, or items might have been filtered out by server.
+
         # Return the next item
         if self._cache:
+            self._count -= 1
             return self._cache.pop(0)
 
-        raise StopIteration
+        raise StopIteration()
+        # Out of items and out of pages
+        # self._count = 0
+        # raise StopIteration
 
     def __iter__(self):
         return self
 
+    next = __next__        # Python 2 compatible
 
-class PagedListIterator():
+
+class PagedListIterator:
+    """Iterates over an instance of PagedList
+
+    Parameters
+    ----------
+    l : list-like
+
+    """
     def __init__(self, l):
         self.__list = l
         self.__index = 0
 
     def __next__(self):
-        return self.next()
-
-    def next(self):
         if self.__index >= len(self.__list):
             raise StopIteration
 
-        item = self.__list[self.__index]
-        self.__index += 1
-        return item
+        try:
+            item = self.__list[self.__index]
+            self.__index += 1
+            return item
+        except IndexError:
+            # Because PagedList length is approximate, iterating can result in
+            # indexing outside the array.  Just stop the iteration if that occurs.
+            raise StopIteration
 
     def __iter__(self):
         return self
 
+    next = __next__     # Python 2 compatibility
+
 
 class PagedList(list):
-    def __init__(self, obj, **kwargs):
+    """List that dynamically loads items from the server.
+
+    Parameters
+    ----------
+    obj : RestObj
+        An instance of `RestObj` containing any initial items and a link to
+        retrieve additional items.
+    session : Session, optional
+        The `Session` instance to use for requesting additional items.  Defaults
+        to current_session()
+    threads : int, optional
+        Number of threads allocated to loading additional items.
+
+    Notes
+    -----
+    Value returned by len() is an approximate count of the items available.  The actual
+    length is not known until all items have been pulled from the server.
+
+    See Also
+    --------
+    PagedItemIterator
+
+    """
+    def __init__(self, obj, session=None, threads=4):
         super(PagedList, self).__init__()
-        self._pager = PagedItemIterator(obj, **kwargs)
+        self._pager = PagedItemIterator(obj, session=session, threads=threads)
 
-        # Force caching of first page
-        self.append(next(self._pager))
-        items = self._pager._cache
-        self.extend(items)
+        # Add the first page of items to the list
+        for _ in range(len(self._pager._cache)):
+            self.append(next(self._pager))
 
-        # clear the list (py27 compatible)
-        del self._pager._cache[:]
+        # Assume that server has more items available
+        self._has_more = True
 
     def __len__(self):
-        return len(self._pager)
+        if self._has_more:
+            # Estimate the total length as items downloaded + items still on server
+            return super(PagedList, self).__len__() + len(self._pager)
+        else:
+            # We've pulled everything from the server, so we have an exact length now.
+            return super(PagedList, self).__len__()
 
     def __iter__(self):
-        # return super(PagedList, self).__iter__()
         return PagedListIterator(self)
 
     def __getslice__(self, i, j):
@@ -933,15 +1064,22 @@ class PagedList(list):
         else:
             idx = int(item)
 
+            # Support negative indexing.  Need to load items up to len() - idx.
+            if idx < 0:
+                idx = len(self) + idx
+
         try:
+            # Iterate through server-side pages until we've loaded
+            # the item at the requested index.
             while super(PagedList, self).__len__() <= idx:
                 n = next(self._pager)
                 self.append(n)
-        except StopIteration:
-            # May cause if slice or index extends beyond array
-            # Ignore and let List handle IndexErrors if necessary.
-            pass
 
+        except StopIteration:
+            # We've hit the end of the paging so the server has no more items to retrieve.
+            self._has_more = False
+
+        # Get the item from the list
         return super(PagedList, self).__getitem__(item)
 
     def __str__(self):

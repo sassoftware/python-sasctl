@@ -213,6 +213,7 @@ def create_files_from_astore(table):
     model_properties = _get_model_properties(result)
     input_vars = [get_variable_properties(var)
                   for var in result.InputVariables.itertuples()]
+    input_vars = [v for v in input_vars if v.get('role', '').upper() == 'INPUT']
     output_vars = [get_variable_properties(var)
                    for var in result.OutputVariables.itertuples()]
     astore_filename = '_' + uuid.uuid4().hex[:25].upper()

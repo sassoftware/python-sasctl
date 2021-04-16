@@ -140,12 +140,14 @@ def test_from_pickle(train_data, pickle_file):
 
     X, y = train_data
 
-    with mock.patch('uuid.uuid4') as mocked:
-        mocked.return_value.hex = 'DF74A4B18C9E41A2A34B0053E123AA67'
-        p = from_pickle(pickle_file,
-                        func_name='predict',
-                        input_types=X,
-                        array_input=True)
+    with mock.patch('sasctl.utils.pymas.core.random_string') as mock_rnd_string:
+        mock_rnd_string.return_value = 'randomMethodName'
+        with mock.patch('uuid.uuid4') as mocked:
+            mocked.return_value.hex = 'DF74A4B18C9E41A2A34B0053E123AA67'
+            p = from_pickle(pickle_file,
+                            func_name='predict',
+                            input_types=X,
+                            array_input=True)
 
     target = """
 package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
@@ -169,7 +171,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('except Exception as e:');
                 rc = py.appendSrcLine('    _compile_error = e');
                 rc = py.appendSrcLine('');
-                rc = py.appendSrcLine('def predict(SepalLength, SepalWidth, PetalLength, PetalWidth):');
+                rc = py.appendSrcLine('def _randomMethodName(SepalLength, SepalWidth, PetalLength, PetalWidth):');
                 rc = py.appendSrcLine('    "Output: var1, msg"');
                 rc = py.appendSrcLine('    result = None');
                 rc = py.appendSrcLine('    msg = None');
@@ -219,7 +221,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     
         dcl integer rc;
         dcl varchar(4068) msg;
-        rc = py.useMethod('predict');
+        rc = py.useMethod('_randomMethodName');
         if rc then return;
         rc = py.setDouble('SepalLength', SepalLength);    if rc then return;
         rc = py.setDouble('SepalWidth', SepalWidth);    if rc then return;
@@ -251,10 +253,12 @@ def test_from_pickle_2(train_data, pickle_file):
 
     X, _ = train_data
 
-    with mock.patch('uuid.uuid4') as mocked:
-        mocked.return_value.hex = 'DF74A4B18C9E41A2A34B0053E123AA67'
-        p = from_pickle(pickle_file, func_name=['predict', 'predict_proba'],
-                        input_types=X, array_input=True)
+    with mock.patch('sasctl.utils.pymas.core.random_string') as mock_rnd_string:
+        mock_rnd_string.side_effect = ['randomMethodName1', 'randomMethodName2']
+        with mock.patch('uuid.uuid4') as mocked:
+            mocked.return_value.hex = 'DF74A4B18C9E41A2A34B0053E123AA67'
+            p = from_pickle(pickle_file, func_name=['predict', 'predict_proba'],
+                            input_types=X, array_input=True)
 
     target = """
 package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
@@ -278,7 +282,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('except Exception as e:');
                 rc = py.appendSrcLine('    _compile_error = e');
                 rc = py.appendSrcLine('');
-                rc = py.appendSrcLine('def predict(SepalLength, SepalWidth, PetalLength, PetalWidth):');
+                rc = py.appendSrcLine('def _randomMethodName1(SepalLength, SepalWidth, PetalLength, PetalWidth):');
                 rc = py.appendSrcLine('    "Output: var1, msg"');
                 rc = py.appendSrcLine('    result = None');
                 rc = py.appendSrcLine('    msg = None');
@@ -309,7 +313,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('            result = tuple(None for i in range(1))');
                 rc = py.appendSrcLine('    return result + (msg, )');
                 rc = py.appendSrcLine('');
-                rc = py.appendSrcLine('def predict_proba(SepalLength, SepalWidth, PetalLength, PetalWidth):');
+                rc = py.appendSrcLine('def _randomMethodName2(SepalLength, SepalWidth, PetalLength, PetalWidth):');
                 rc = py.appendSrcLine('    "Output: P_1, P_2, P_3, msg"');
                 rc = py.appendSrcLine('    result = None');
                 rc = py.appendSrcLine('    msg = None');
@@ -359,7 +363,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     
         dcl integer rc;
         dcl varchar(4068) msg;
-        rc = py.useMethod('predict');
+        rc = py.useMethod('_randomMethodName1');
         if rc then return;
         rc = py.setDouble('SepalLength', SepalLength);    if rc then return;
         rc = py.setDouble('SepalWidth', SepalWidth);    if rc then return;
@@ -383,7 +387,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     
         dcl integer rc;
         dcl varchar(4068) msg;
-        rc = py.useMethod('predict_proba');
+        rc = py.useMethod('_randomMethodName2');
         if rc then return;
         rc = py.setDouble('SepalLength', SepalLength);    if rc then return;
         rc = py.setDouble('SepalWidth', SepalWidth);    if rc then return;
@@ -419,11 +423,99 @@ def test_from_pickle_stream(train_data, pickle_stream):
     assert isinstance(p, PyMAS)
 
 
-def test_from_python_file(python_file):
-    from sasctl.utils.pymas import PyMAS, from_python_file
+def test_from_python_file(tmpdir):
+    from sasctl.utils.pymas import from_python_file
 
-    p = from_python_file(python_file, func_name='predict')
-    assert isinstance(p, PyMAS)
+    code = """
+def hello_world():
+    print('Hello World!')
+
+"""
+
+    target = """
+package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
+    dcl package pymas py;
+    dcl package logger logr('App.tk.MAS');
+    dcl varchar(67108864) character set utf8 pycode;
+    dcl int revision;
+
+    method init();
+    
+        dcl integer rc;
+        if null(py) then do;
+            py = _new_ pymas();
+            rc = py.useModule('DF74A4B18C9E41A2A34B0053E123AA67', 1);
+            if rc then do;
+                rc = py.appendSrcLine('try:');
+                rc = py.appendSrcLine('    ');
+                rc = py.appendSrcLine('    def hello_world():');
+                rc = py.appendSrcLine('        print('Hello World!')');
+                rc = py.appendSrcLine('    ');
+                rc = py.appendSrcLine('    _compile_error = None');
+                rc = py.appendSrcLine('except Exception as e:');
+                rc = py.appendSrcLine('    _compile_error = e');
+                rc = py.appendSrcLine('');
+                rc = py.appendSrcLine('def _randomMethodName():');
+                rc = py.appendSrcLine('    "Output: result, msg"');
+                rc = py.appendSrcLine('    result = None');
+                rc = py.appendSrcLine('    msg = None');
+                rc = py.appendSrcLine('    try:');
+                rc = py.appendSrcLine('        global _compile_error');
+                rc = py.appendSrcLine('        if _compile_error is not None:');
+                rc = py.appendSrcLine('            raise _compile_error');
+                rc = py.appendSrcLine('        import numpy as np');
+                rc = py.appendSrcLine('        import pandas as pd');
+                rc = py.appendSrcLine('        result = hello_world()');
+                rc = py.appendSrcLine('        result = tuple(result.ravel()) if hasattr(result, "ravel") else tuple(result)');
+                rc = py.appendSrcLine('        if len(result) == 0:');
+                rc = py.appendSrcLine('            result = tuple(None for i in range(1))');
+                rc = py.appendSrcLine('        elif "numpy" in str(type(result[0])):');
+                rc = py.appendSrcLine('            result = tuple(np.asscalar(i) for i in result)');
+                rc = py.appendSrcLine('    except Exception as e:');
+                rc = py.appendSrcLine('        from traceback import format_exc');
+                rc = py.appendSrcLine('        msg = str(e) + format_exc()');
+                rc = py.appendSrcLine('        if result is None:');
+                rc = py.appendSrcLine('            result = tuple(None for i in range(1))');
+                rc = py.appendSrcLine('    return result + (msg, )');
+                pycode = py.getSource();
+                revision = py.publish(pycode, 'DF74A4B18C9E41A2A34B0053E123AA67');
+                if revision lt 1 then do;
+                    logr.log('e', 'py.publish() failed.');
+                    rc = -1;
+                end;
+            end;
+        end;
+    end;
+    
+    method hello_world(
+        in_out double result
+        );
+    
+        dcl integer rc;
+        dcl varchar(4068) msg;
+        rc = py.useMethod('_randomMethodName');
+        if rc then return;
+        rc = py.execute();    if rc then return;
+        result = py.getDouble('result');
+        msg = py.getString('msg');
+        if not null(msg) then logr.log('e', 'Error executing Python function "hello_world": $s', msg);
+    end;
+    
+endpackage;
+""".lstrip('\n')
+
+    f = tmpdir.join('model.py')
+    f.write(code)
+
+    with mock.patch('sasctl.utils.pymas.core.random_string') as mock_rnd_string:
+        mock_rnd_string.return_value = 'randomMethodName'
+        with mock.patch('uuid.uuid4') as mocked:
+            mocked.return_value.hex = 'DF74A4B18C9E41A2A34B0053E123AA67'
+            p = from_python_file(str(f), 'hello_world')
+
+    result = p.score_code()
+
+    assert result == target
 
 
 def test_with_sklearn_pipeline(train_data, sklearn_pipeline):

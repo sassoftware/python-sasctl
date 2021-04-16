@@ -803,7 +803,9 @@ def _parse_module_url(msg):
         module_url = get_link(details, 'module')
         module_url = module_url.get('href')
     except json.JSONDecodeError:
-        match = re.search(r'(?:rel=module, href=(.*?),)', msg)
+        match = re.search(r'(?:rel=module, href=(.*?),)', msg)               # Vya 3.5
+        if match is None:
+            match = re.search(r'(?:Rel: module URI: (.*?) MediaType)', msg)  # Format changed in Viya 4.0
         module_url = match.group(1) if match else None
 
     return module_url
