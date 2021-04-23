@@ -82,12 +82,16 @@ class ScoreCode():
     		Sets whether models registered to SAS Viya 3.5 should be able to be scored and
             validated through both CAS and SAS Micro Analytic Service. By default true. If
             set to false, then the model will only be able to be scored and validated through
-            SAS Micro Analytic Service.
+            SAS Micro Analytic Service. By default true.
 
     	Yields
     	------
         '*Score.py'
             The Python score code file for the model.
+        'dcmas_epscorecode.sas' (for SAS Viya 3.5 models)
+            Python score code wrapped in DS2 and prepared for CAS scoring or publishing.
+        'dmcas_packagescorecode.sas' (for SAS Viya 3.5 models)
+            Python score code wrapped in DS2 and prepared for SAS Microanalyic Service scoring or publishing.
         '''       
         # Call REST API to check SAS Viya version
         isViya35 = (get_software_version() == '3.5')
@@ -278,12 +282,18 @@ def score{modelPrefix}({', '.join(inputVarList)}):
             
             cls.pyFile.write(f'''\n
     return({metrics[0]}, {metrics[1]})''')
-            
+        
+        # For SAS Viya 3.5, the model is first registered to SAS Model Manager, then the model UUID can be
+        # added to the score code and reuploaded to the model file contents
         if isViya35:
             with open(pyPath, 'r') as pFile:
                 files = [dict(name=f'{modelPrefix}Score.py', file=pFile, role='score')]
                 upload_and_copy_score_resources(modelID, files)
+            # After uploading the score code and migrating score resources, call the wrapper API to create
+            # the Python score code wrapped in DS2
             modelRepo.convert_python_to_ds2(modelID)
+            # Convert the DS2 wrapper code into two separate files: dmcas_epscorecode.sas and dmcas_packagescorecode.sas
+            # The former scores or validates in CAS and the latter in SAS Microanalytic Service
             if scoreCAS:
                 fileContents = modelRepo.get_model_contents(modelID)
                 for item in fileContents:
@@ -380,7 +390,22 @@ def score{modelPrefix}({', '.join(inputVarList)}):
         return isBinary
         
     def convertMAStoCAS(MASCode, modelId):
-        
+        '''Using the generated score.sas code from the Python wrapper API, 
+        convert the SAS Microanalytic Service based code to CAS compatible.
+
+        Parameters
+        ----------
+        MASCode : str
+            String representation of the packagescore.sas DS2 wrapper 
+        modelId : str or dict
+            The name or id of the model, or a dictionary representation of
+            the model
+
+        Returns
+        -------
+        CASCode : str
+            String representation of the epscorecode.sas DS2 wrapper code
+        '''
         model = modelRepo.get_model(modelId)
         outputString = ''
         for outVar in model['outputVariables']:
@@ -388,18 +413,17 @@ def score{modelPrefix}({', '.join(inputVarList)}):
             if outVar['type'] == 'string':
                 outputString = outputString + 'varchar(100) '
             else:
-                outputString = outputString + 'double'
+                outputString = outputString + 'double '
             outputString = outputString  + outVar['name'] + ';\n'
-        inputList = []
-        for inVar in model['inputVariables']:
-            inputList.append(inVar['name'])
-        inputString = ', '.join(inputList)
+        start = MASCode.find('score(')
+        finish = MASCode[start:].find(');')
+        scoreVars = MASCode[start+6:start+finish]
+        inputString = ' '.join([x for x in scoreVars.split(' ') if (x != 'double' and x != 'in_out' and x != 'varchar(100)')])
         endBlock = f'method run();\n    set SASEP.IN;\n    score({inputString});\nend;\nenddata;'
-        replaceStrings = {'package pythonScore / overwrite=yes;': 'data sasep.out',
-                          'dcl int resultCode revision': 'dcl double resultCode revision\n' + outputString,
+        replaceStrings = {'package pythonScore / overwrite=yes;': 'data sasep.out;',
+                          'dcl int resultCode revision;': 'dcl double resultCode revision;\n' + outputString,
                           'endpackage;': endBlock}
         replaceStrings = dict((re.escape(k), v) for k, v in replaceStrings.items())
         pattern = re.compile('|'.join(replaceStrings.keys()))
         casCode = pattern.sub(lambda m: replaceStrings[re.escape(m.group(0))], MASCode)
         return casCode
-        
