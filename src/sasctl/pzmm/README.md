@@ -11,7 +11,7 @@ The goal of the pzmm (Python Zip Model Management) module is to enable users of 
   * `dmcas_fitstat.json` is an optional file that provides the fit statistics that are associated with the imported model, which are either user-generated or data-generated
   * `dmcas_lift.json` and `dmcas_roc.json` are optional files that provide the Lift and ROC plots that are associated with the imported model, which are data-generated
 * Writes the `*score.py` model file that is used for model scoring
-* Serializes a trained model into a binary pickle file
+* Serializes a trained model into a binary pickle file or saves a relevant H2O MOJO file
 * Archives all relevant model files into a ZIP file and imports the model using REST API calls
 
 ## Prerequisites
