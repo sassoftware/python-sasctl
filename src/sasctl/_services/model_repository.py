@@ -513,10 +513,10 @@ class ModelRepository(Service):
         project : str or dict
             The name or id of the model project, or a dictionary
             representation of the project.
-        description : str
-            The description of the model.
         file : bytes
             The ZIP file containing the model and contents.
+        description : str
+            The description of the model.
 
         Returns
         -------
