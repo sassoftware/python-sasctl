@@ -2,6 +2,10 @@ Unreleased
 ----------
  **Improvements**
  - `PagedList` handles situations where the server over-estimates the number of items available for paging.
+ - The version of SAS Viya on the server can now be determined using `sasctl.platform_version()`.
+ 
+ **Bugfixes**
+ - Reworked the `model_repository.get_repository()` to prevent HTTP 403 errors that could occur with some Viya environments.
  
  v1.5.5 (2021-03-26)
  -------------------

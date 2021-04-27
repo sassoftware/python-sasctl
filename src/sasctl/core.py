@@ -1510,3 +1510,26 @@ def _build_is_available_func(service_root):
         response = current_session().head(service_root + '/')
         return response.status_code == 200
     return is_available
+
+
+@versionadded(version='1.5.6')
+def platform_version():
+    """Get the version of the SAS Viya platform to which sasctl is connected.
+
+    Returns
+    -------
+    string : {'3.5', '4.0'}
+
+        SAS Viya version number
+
+    """
+    from .services import model_repository as mr
+    response = mr.info()
+    buildVersion = response.get('build')['buildVersion']
+    try:
+        if buildVersion[0:4] == '3.7.':
+            return '3.5'
+        elif float(buildVersion[0:4]) >= 3.10:
+            return '4.0'
+    except ValueError:
+        pass    # Version could not be found.  Return None instead.

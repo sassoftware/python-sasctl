@@ -181,7 +181,7 @@ class JSONFiles():
                       indent=4,
                       skipkeys=True)
             
-    def writeFileMetadataJSON(self, modelPrefix, jPath=Path.cwd()):
+    def writeFileMetadataJSON(self, modelPrefix, jPath=Path.cwd(), isH2OModel=False):
         '''
         Writes a file metadata JSON file pointing to all relevant files.
         
@@ -193,6 +193,10 @@ class JSONFiles():
         jPath : string, optional
             Location for the output JSON file. The default value is the current
             working directory.   
+        isH2OModel : boolean, optional
+            Sets whether the model metadata is associated with an H2O.ai model.
+            If set as True, the MOJO model file will be set as a score resource.
+            The default value is False.
             
         Yields
         ---------------
@@ -200,13 +204,22 @@ class JSONFiles():
             Output JSON file located at jPath.            
         '''
         
-        fileMetadata = pd.DataFrame([['inputVariables', 'inputVar.json'],
-                                     ['outputVariables', 'outputVar.json'],
-                                     ['score', modelPrefix + 'Score.py'],
-                                     ['python pickle',
-                                      modelPrefix + '.pickle']],
-                                    columns = ['role', 'name']
-                                    )
+        if not isH2OModel:
+            fileMetadata = pd.DataFrame([['inputVariables', 'inputVar.json'],
+                                         ['outputVariables', 'outputVar.json'],
+                                         ['score', modelPrefix + 'Score.py'],
+                                         ['scoreResource',
+                                          modelPrefix + '.pickle']],
+                                        columns = ['role', 'name']
+                                        )
+        else:
+            fileMetadata = pd.DataFrame([['inputVariables', 'inputVar.json'],
+                                         ['outputVariables', 'outputVar.json'],
+                                         ['score', modelPrefix + 'Score.py'],
+                                         ['scoreResource',
+                                          modelPrefix + '.mojo']],
+                                        columns = ['role', 'name']
+                                        )
         
         with open(Path(jPath) / 'fileMetadata.json', 'w') as jFile:
             dfDump = pd.DataFrame.to_dict(fileMetadata.transpose()).values()
@@ -342,6 +355,12 @@ class JSONFiles():
         an error and does not create a JSON file.
         
         Data sets can be provided in the following forms:
+        * pandas dataframe; the actual and predicted values are their own columns
+        * numpy array; the actual and predicted values are their own columns or rows 
+        and ordered such that the actual values come first and the predicted second
+        * list; the actual and predicted values are their own indexed entry
+        
+        Datasets can be provided in the following forms:
         * pandas dataframe; the actual and predicted values are their own columns
         * numpy array; the actual and predicted values are their own columns or rows 
         and ordered such that the actual values come first and the predicted second
