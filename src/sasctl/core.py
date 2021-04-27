@@ -1512,7 +1512,7 @@ def _build_is_available_func(service_root):
     return is_available
 
 
-@versionadded('1.5.6')
+@versionadded(version='1.5.6')
 def platform_version():
     """Get the version of the SAS Viya platform to which sasctl is connected.
 
