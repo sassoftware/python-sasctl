@@ -709,32 +709,7 @@ def _parse_module_url(msg):
 
     return module_url
 
-def get_software_version():
-    """Check for software version server-side.
-    
-    The API metadata from the server-side software can determine which version
-    is being used, which is important for differentiating features between 
-    different SAS Viya versions and SAS Open Model Manager.
-    
-    Returns
-    -------
-    string
-        String value of the software version. Currently only checks for SAS Viya
-        3.5, SAS Viya 4.0, and SAS Open Model Manager.
-    
-    """
-    response = mr.get_API_metadata()
-    buildVersion = response.get('build')['buildVersion']
-    
-    try:
-        if buildVersion[0:4] == '3.7.':
-            return '3.5'
-        elif buildVersion[0:4] == '3.9.':
-            return 'OMM'
-        elif float(buildVersion[0:4]) >= 3.10:
-            return '4.0'
-    except ValueError:
-        return 'Version could not be found.'
+
     
 def upload_and_copy_score_resources(model, files, name=None):
     '''Upload Python score resources to a model and copy the score resources 
