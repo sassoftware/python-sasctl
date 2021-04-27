@@ -654,24 +654,10 @@ class ModelRepository(Service):
         for delfile in filelist:
             modelfileuri = cls.get_link(delfile, rel)
             delete(modelfileuri['uri'])
-            
-    @classmethod
-    def get_API_metadata(cls):
-        """Checks software API metadata associated with the model repository.
-        
-        Parameters
-        ----------
-        
-        Returns
-        -------
-        API response
-            JSON response detailing the API metadata
-        """
-        return cls.get('/apiMeta')
 
     @classmethod
     def copy_python_resources(cls, model):
-        '''Moves a model's score resources to the Compute server.
+        """Moves a model's score resources to the Compute server.
 
         Copies all of the Python score resources for a model to the pre-defined
         server location (/models/resources/viya/<model-UUID>/). To enable 
@@ -692,9 +678,10 @@ class ModelRepository(Service):
         
         Returns
         -------
-        API response
+        RestObj or None
             JSON response detailing the API metadata
-        '''
+
+        """
         if cls.is_uuid(model):
             id_ = model
         elif isinstance(model, dict) and 'id' in model:
@@ -703,11 +690,11 @@ class ModelRepository(Service):
             model = cls.get_model(model)
             id_ = model['id']
         
-        return cls.put(f'/models/{id_}/scoreResources', headers={'Accept': 'application/json'})
+        return cls.put('/models/%s/scoreResources' % id_, headers={'Accept': 'application/json'})
     
     @classmethod
     def convert_python_to_ds2(cls, model):
-        '''Converts a Python model to DS2
+        """Converts a Python model to DS2
         
         For SAS Viya 3.5 Python models on SAS Model Manager, wrap the Python score code in DS2
         and convert the model score code type to DS2. Models converted in this way are not 
@@ -723,8 +710,8 @@ class ModelRepository(Service):
         -------
         API response
             JSON response detailing the API metadata
-        '''
-        
+
+        """
         if cls.is_uuid(model):
             id_ = model
         elif isinstance(model, dict) and 'id' in model:
@@ -740,14 +727,14 @@ class ModelRepository(Service):
         accept = 'text/vnd.sas.source.ds2'
         content = 'application/json'
         
-        return cls.put(f'/models/{id_}/typeConversion',
+        return cls.put('/models/%s/typeConversion' % id_,
                        headers={'Accept-Item': accept,
                                 'Content-Type': content,
                                 'If-Match': ETag})
         
     @classmethod
     def get_model_details(cls, model):
-        '''Get model details from SAS Model Manager
+        """Get model details from SAS Model Manager
         
         Get model details that pertain to model properties, model metadata,
         model input, output, and target variables, and user-defined values.
@@ -762,7 +749,8 @@ class ModelRepository(Service):
         -------
         API response
             JSON response detailing the model details
-        '''
+
+        """
         if cls.is_uuid(model):
             id_ = model
         elif isinstance(model, dict) and 'id' in model:
@@ -771,4 +759,4 @@ class ModelRepository(Service):
             model = cls.get_model(model)
             id_ = model['id']
             
-        return cls.get(f'/models/{id_}')
+        return cls.get('/models/%s' % id_)
