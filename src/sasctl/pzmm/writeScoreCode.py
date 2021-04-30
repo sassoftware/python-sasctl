@@ -4,7 +4,7 @@
 from pathlib import Path
 import numpy as np
 import re
-from ..tasks import get_software_version, upload_and_copy_score_resources
+from ..core import platform_version
 from .._services.model_repository import ModelRepository as modelRepo
 
 # %%
@@ -94,11 +94,18 @@ class ScoreCode():
             Python score code wrapped in DS2 and prepared for SAS Microanalyic Service scoring or publishing.
         '''       
         # Call REST API to check SAS Viya version
-        isViya35 = (get_software_version() == '3.5')
+        isViya35 = (platform_version() == '3.5')
         
         # Initialize modelID to remove unbound variable warnings
         modelID = None
-        
+
+        # Helper method for uploading & migrating files
+        # TODO: Integrate with register_model() or publish_model() task.
+        def upload_and_copy_score_resources(model, files):
+            for file in files:
+                modelRepo.add_model_content(model, **file)
+            return modelRepo.copy_python_resources(model)
+
         # For SAS Viya 3.5, either return an error or return the model UUID as a string
         if isViya35:
             if model == None:
