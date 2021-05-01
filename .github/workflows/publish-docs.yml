@@ -1,8 +1,9 @@
 name: publish-docs
-on: [workflow_dispatch]
+on: workflow_dispatch
 jobs:
   gh-pages:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -11,3 +12,6 @@ jobs:
         uses: ammaraskar/sphinx-action@0.4
         with:
           docs-folder: "doc/"
+          pre-build-command: "pip install six"
+          build-command: "sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html"
+
