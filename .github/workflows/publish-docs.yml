@@ -13,5 +13,4 @@ jobs:
         with:
           docs-folder: "doc/"
           pre-build-command: "pip install six"
-          build-command: "sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html"
 
