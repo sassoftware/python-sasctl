@@ -1,0 +1,12 @@
+name: publish-docs
+on: [workflow_dispatch]
+jobs:
+  gh-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Sphinx Build
+        uses: ammaraskar/sphinx-action@0.4
+
