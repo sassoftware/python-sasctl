@@ -13,7 +13,9 @@
     <img src="https://img.shields.io/badge/Python-2.7%20%7C%203.4%2B-blue.svg" alt="Python Version">
   </a>
 
+  <a>
     <img src="https://travis-ci.com/sassoftware/python-sasctl.svg?branch=master" />
+  </a>
   
   <a href="https://codecov.io/gh/sassoftware/python-sasctl">
     <img src="https://codecov.io/gh/sassoftware/python-sasctl/branch/master/graph/badge.svg?token=mDcvtz2Als"/>
