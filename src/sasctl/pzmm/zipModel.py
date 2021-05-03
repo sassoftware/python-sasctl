@@ -10,7 +10,8 @@ import io
 
 class ZipModel():
     
-    def zipFiles(self, fileDir, modelPrefix):
+    @staticmethod
+    def zipFiles(fileDir, modelPrefix):
         '''
         Combines all JSON files with the model pickle file and associated score code file
         into a single archive ZIP file.
@@ -34,6 +35,7 @@ class ZipModel():
         fileNames.extend(sorted(Path(fileDir).glob('*.json')))
         fileNames.extend(sorted(Path(fileDir).glob('*Score.py')))
         fileNames.extend(sorted(Path(fileDir).glob('*.pickle')))
+        fileNames.extend(sorted(Path(fileDir).glob('*.mojo')))
         
         with zipfile.ZipFile(Path(fileDir) / (modelPrefix + '.zip'), mode='w') as zFile:
             for name in fileNames:
