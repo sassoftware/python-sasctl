@@ -9,7 +9,9 @@ from six.moves import mock
 from sasctl.core import PagedList, RestObj
 from .test_pageiterator import paging
 
+
 def test_len_no_paging():
+    """len() should return the correct # of objects if no paging is required."""
     items = [{'name': 'a'}, {'name': 'b'}, {'name': 'c'}]
     obj = RestObj(items=items, count=len(items))
 
@@ -87,6 +89,80 @@ def test_getitem_paging(paging):
 
     for i, item in enumerate(l):
         assert item.name == RestObj(items[i]).name
+
+
+def test_get_item_inflated_len():
+    """Test behavior when server overestimates the number of items available."""
+    import re
+
+    start = 10
+    limit = 10
+
+    # Only defines 20 items to return
+    pages = [
+        [{'name': x} for x in list('abcdefghi')],
+        [{'name': x} for x in list('klmnopqrs')],
+        [{'name': x} for x in list('uv')],
+    ]
+    actual_num_items = sum(len(page) for page in pages)
+
+    # services (like Files) may overestimate how many items are available.
+    # Simulate that behavior
+    num_items = 23
+
+    obj = RestObj(items=pages[0],
+                  count=num_items,
+                  links=[{'rel': 'next',
+                          'href': '/moaritems?start=%d&limit=%d' % (start, limit)}])
+
+    with mock.patch('sasctl.core.request') as req:
+        def side_effect(_, link, **kwargs):
+            assert 'limit=%d' % limit in link
+            start = int(re.search(r'(?<=start=)[\d]+', link).group())
+            if start == 10:
+                return RestObj(items=pages[1])
+            elif start == 20:
+                return RestObj(items=pages[2])
+            else:
+                return RestObj(items=[])
+
+        req.side_effect = side_effect
+        pager = PagedList(obj, threads=1)
+
+        # Initially, length is estimated based on how many items the server says it has available
+        assert len(pager) == num_items
+
+        # Retrieve all of the items
+        items = [x for x in pager]
+
+    # Should have retrieved all of the items
+    assert len(items) == actual_num_items
+
+    # List length should now be updated to indicate the correct number of items
+    assert len(pager) == actual_num_items
+
+    # Recreate the pager
+    with mock.patch('sasctl.core.request') as req:
+        def side_effect(_, link, **kwargs):
+            assert 'limit=%d' % limit in link
+            start = int(re.search(r'(?<=start=)[\d]+', link).group())
+            if start == 10:
+                return RestObj(items=pages[1])
+            elif start == 20:
+                return RestObj(items=pages[2])
+            else:
+                return RestObj(items=[])
+
+        req.side_effect = side_effect
+
+        pager = PagedList(obj, threads=1)
+
+        # Requesting the last item should work & cause loading of all items
+        last_item = pager[-1]
+
+    # Make sure the last item is correct (even though server inflated item count)
+    assert last_item == pages[-1][-1]
+    assert len(pager) == actual_num_items
 
 
 def test_zip_paging(paging):
