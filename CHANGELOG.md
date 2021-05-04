@@ -1,6 +1,7 @@
 Unreleased
 ----------
- -
+**Bugfixes**
+ - Fixed an import issue that could cause an error while using the `pzmm` submodule.
 
 v1.5.6 (2021-04-30)
 ----------
