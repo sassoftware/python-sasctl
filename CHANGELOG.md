@@ -1,10 +1,14 @@
 Unreleased
 ----------
+ -
+ 
+v1.5.7 (2021-05-04)
+-------------------
 **Bugfixes**
  - Fixed an import issue that could cause an error while using the `pzmm` submodule.
 
 v1.5.6 (2021-04-30)
-----------
+-------------------
 **Improvements**
  - `PagedList` handles situations where the server over-estimates the number of items available for paging.
  - The version of SAS Viya on the server can now be determined using `sasctl.platform_version()`.
