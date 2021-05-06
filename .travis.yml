@@ -25,9 +25,6 @@ matrix:
   include:
     - python: 2.7
       env: TOXENV=py27-tests-codecov TOX_SKIP_MISSING_INTERPRETERS=False
-    - python: 3.4
-      dist: trusty
-      env: TOXENV=py34-tests-codecov TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.5
       env: TOXENV=py35-tests-codecov TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.6
