@@ -3,33 +3,52 @@ Unreleased
  **Bugfixes**
  - Reworked the `model_repository.get_repository()` to prevent HTTP 403 errors that could occur with some Viya environments.
  
-v1.5.3 (2020-10-29)
- ------------------
- **Improvements**
+v1.5.7 (2021-05-04)
+-------------------
+**Bugfixes**
+ - Fixed an import issue that could cause an error while using the `pzmm` submodule.
+
+v1.5.6 (2021-04-30)
+-------------------
+**Improvements**
+ - `PagedList` handles situations where the server over-estimates the number of items available for paging.
+ - The version of SAS Viya on the server can now be determined using `sasctl.platform_version()`.
+ 
+**Bugfixes**
+ - Reworked the `model_repository.get_repository()` to prevent HTTP 403 errors that could occur with some Viya environments.
+ 
+v1.5.5 (2021-03-26)
+-------------------
+**Bugfixes***
+ - Fixed an issue with JSON parsing that caused the `publish_model` task to fail with Viya 4.0.
+ 
+v1.5.4 (2020-10-29)
+------------------
+**Improvements**
  - Added the `as_swat` method to the `Session` object, allowing connection to CAS through SWAT without an additional authentication step.
  
- **Changes**
+**Changes**
  - Integrated PZMM into `Session` calls and removed redundant function calls in PZMM.
  - ROC and Lift statistic JSON files created by PZMM are now generated through CAS actionset calls.
  - Updated the PZMM example notebook, `FleetMaintenance.ipynb`, to include integration of PZMM with sasctl functions.
  
- **Bugfixes**
+**Bugfixes**
  - Reworked the `model_repository.get_repository()` to prevent HTTP 403 errors that could occur with some Viya environments.
  
- v1.5.3 (2020-06-25)
- ------------------
- **Bugfixes**
-  - Added PZMM fitstat JSON file to manifest.
+v1.5.3 (2020-06-25)
+------------------
+**Bugfixes**
+ - Added PZMM fitstat JSON file to manifest.
  
- v1.5.2 (2020-06-22)
- -------------------
- **Improvements**
+v1.5.2 (2020-06-22)
+-------------------
+**Improvements**
   - PZMM module moved from a stand-alone [repository](https://github.com/sassoftware/open-model-manager-resources/tree/master/addons/picklezip-mm) to a sasctl submodule.
   - Introduced deprecation warnings for Python 2 users.
  
 v1.5.1 (2020-4-9)
 ----------------
- **Bugfixes**
+**Bugfixes**
  - Fixed PyMAS utilities to correctly work functions not bound to pickled objects.
  - Model target variables should no longer appear as an input variable when registering ASTORE models. 
  
@@ -51,7 +70,7 @@ v1.5 (2020-2-23)
  - The `get_file_content` method of the Files service now returns the actual content instead of the file metadata.
  - JSON output when using `sasctl` from the command line is now formatted correctly.
  
- **Bugfixes**
+**Bugfixes**
  - `model_publish.delete_destination` now works correctly.
  
 v1.4.6 (2020-1-24)

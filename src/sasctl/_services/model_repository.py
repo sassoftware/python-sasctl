@@ -513,10 +513,10 @@ class ModelRepository(Service):
         project : str or dict
             The name or id of the model project, or a dictionary
             representation of the project.
-        description : str
-            The description of the model.
         file : bytes
             The ZIP file containing the model and contents.
+        description : str
+            The description of the model.
 
         Returns
         -------
@@ -654,6 +654,7 @@ class ModelRepository(Service):
         for delfile in filelist:
             modelfileuri = cls.get_link(delfile, rel)
             delete(modelfileuri['uri'])
+<<<<<<< HEAD
             
     @classmethod
     def get_API_metadata(cls):
@@ -672,6 +673,12 @@ class ModelRepository(Service):
     @classmethod
     def copy_python_resources(cls, model):
         '''Moves a model's score resources to the Compute server.
+=======
+
+    @classmethod
+    def copy_python_resources(cls, model):
+        """Moves a model's score resources to the Compute server.
+>>>>>>> upstream/master
 
         Copies all of the Python score resources for a model to the pre-defined
         server location (/models/resources/viya/<model-UUID>/). To enable 
@@ -692,9 +699,16 @@ class ModelRepository(Service):
         
         Returns
         -------
+<<<<<<< HEAD
         API response
             JSON response detailing the API metadata
         '''
+=======
+        RestObj or None
+            JSON response detailing the API metadata
+
+        """
+>>>>>>> upstream/master
         if cls.is_uuid(model):
             id_ = model
         elif isinstance(model, dict) and 'id' in model:
@@ -703,11 +717,19 @@ class ModelRepository(Service):
             model = cls.get_model(model)
             id_ = model['id']
         
+<<<<<<< HEAD
         return cls.put(f'/models/{id_}/scoreResources', headers={'Accept': 'application/json'})
     
     @classmethod
     def convert_python_to_ds2(cls, model):
         '''Converts a Python model to DS2
+=======
+        return cls.put('/models/%s/scoreResources' % id_, headers={'Accept': 'application/json'})
+    
+    @classmethod
+    def convert_python_to_ds2(cls, model):
+        """Converts a Python model to DS2
+>>>>>>> upstream/master
         
         For SAS Viya 3.5 Python models on SAS Model Manager, wrap the Python score code in DS2
         and convert the model score code type to DS2. Models converted in this way are not 
@@ -723,8 +745,13 @@ class ModelRepository(Service):
         -------
         API response
             JSON response detailing the API metadata
+<<<<<<< HEAD
         '''
         
+=======
+
+        """
+>>>>>>> upstream/master
         if cls.is_uuid(model):
             id_ = model
         elif isinstance(model, dict) and 'id' in model:
@@ -740,14 +767,22 @@ class ModelRepository(Service):
         accept = 'text/vnd.sas.source.ds2'
         content = 'application/json'
         
+<<<<<<< HEAD
         return cls.put(f'/models/{id_}/typeConversion',
+=======
+        return cls.put('/models/%s/typeConversion' % id_,
+>>>>>>> upstream/master
                        headers={'Accept-Item': accept,
                                 'Content-Type': content,
                                 'If-Match': ETag})
         
     @classmethod
     def get_model_details(cls, model):
+<<<<<<< HEAD
         '''Get model details from SAS Model Manager
+=======
+        """Get model details from SAS Model Manager
+>>>>>>> upstream/master
         
         Get model details that pertain to model properties, model metadata,
         model input, output, and target variables, and user-defined values.
@@ -762,7 +797,12 @@ class ModelRepository(Service):
         -------
         API response
             JSON response detailing the model details
+<<<<<<< HEAD
         '''
+=======
+
+        """
+>>>>>>> upstream/master
         if cls.is_uuid(model):
             id_ = model
         elif isinstance(model, dict) and 'id' in model:
@@ -771,4 +811,8 @@ class ModelRepository(Service):
             model = cls.get_model(model)
             id_ = model['id']
             
+<<<<<<< HEAD
         return cls.get(f'/models/{id_}')
+=======
+        return cls.get('/models/%s' % id_)
+>>>>>>> upstream/master

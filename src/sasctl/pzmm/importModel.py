@@ -2,7 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from pathlib import Path
+<<<<<<< HEAD
 from ..tasks import get_software_version
+=======
+from ..core import platform_version
+>>>>>>> upstream/master
 from .._services.model_repository import ModelRepository as mr
 from .writeScoreCode import ScoreCode as sc
 from .zipModel import ZipModel as zm
@@ -79,7 +83,11 @@ class ImportModel():
             else:
                 modelFileName = modelPrefix + '.pickle'
                 
+<<<<<<< HEAD
         isViya35 = (get_software_version() == '3.5')    
+=======
+        isViya35 = (platform_version() == '3.5')
+>>>>>>> upstream/master
         if not isViya35:
             sc.writeScoreCode(inputDF, targetDF, modelPrefix, predictmethod, modelFileName,
                               metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction, 
