@@ -1,6 +1,10 @@
 Unreleased
 ----------
- -
+**Bugfixes**
+ - SSL warnings no longer repeatedly raised when `verify_ssl=False` but `CAS_CLIENT_SSL_CA_LIST` is specified.
+ 
+**Improvements**
+ - All `delete_*()` service methods return `None` instead of empty string.
  
 v1.5.7 (2021-05-04)
 -------------------

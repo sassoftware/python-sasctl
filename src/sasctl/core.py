@@ -303,11 +303,11 @@ class Session(requests.Session):
 
                 self.mount('https://', adapter)
 
-            else:
-                # Every request will generate an InsecureRequestWarning
-                from urllib3.exceptions import InsecureRequestWarning
-
-                warnings.simplefilter('default', InsecureRequestWarning)
+        # If we're skipping SSL verification, urllib3 will raise InsecureRequestWarnings on
+        # every request.  Insert a warning filter so these warnings only appear on the first request.
+        if not verify_ssl:
+            from urllib3.exceptions import InsecureRequestWarning
+            warnings.simplefilter('default', InsecureRequestWarning)
 
         self.filters = DEFAULT_FILTERS
 
