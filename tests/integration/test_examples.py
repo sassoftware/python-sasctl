@@ -134,6 +134,37 @@ def test_direct_rest_calls(session, change_dir):
                 # tests
                 pass
 
+def test_direct_rest_calls_notebook(session, change_dir):
+    """Ensure the direct_REST_calls.ipynb example executes successfully."""
+    from pickle import UnpicklingError
+    from nbconvert import PythonExporter
+
+    # Mock up Session() to return the Betamax-recorded session
+    def Session(*args, **kwargs):
+        return session
+
+    change_dir('examples')
+
+    exporter = PythonExporter()
+    code, _ = exporter.from_filename('direct_REST_calls.ipynb')
+
+    # Replace user-input fields with test values.
+    code = code.replace("input('Username: ')", "None")
+    code = code.replace("getpass('Password: ')", "None")
+
+    # Remove import of Session to ensure mock function will be used
+    # instead.
+    code = code.replace('from sasctl import get, get_link, request_link, Session',
+                            'from sasctl import get, get_link, request_link')
+    try:
+        six.exec_(code)
+    except (UnpicklingError, KeyError) as e:
+        if "'\xef'" in str(e):
+            # Betamax recording adds additional bytes to the content which
+            # breaks unpickling.  Ignore when this happens as correct
+            # handling of binary contents should be validated in integration
+            # tests
+            pass
 
 def test_register_custom_model(session, change_dir):
     """Ensure the register_custom_model.py example executes successfully."""

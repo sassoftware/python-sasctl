@@ -116,7 +116,7 @@ def create_package(model, name, inputs, target, train=None, valid=None, test=Non
         j = pzmm.JSONFiles()
 
         # TODO: for classification only
-        # !!! as of 12/9 pzmm only supposed classification !!!
+        # !!! as of 12/9 pzmm only supports classification !!!
 
         prediction_threshold = 0.5
 

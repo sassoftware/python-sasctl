@@ -31,9 +31,6 @@ matrix:
       env: TOXENV=py37-tests-codecov TOX_SKIP_MISSING_INTERPRETERS=False
     - python: 3.8
       env: TOXENV=py38-tests-codecov TOX_SKIP_MISSING_INTERPRETERS=False
-    - python: 3.9
-      env: TOXENV=py39-tests-codecov TOX_SKIP_MISSING_INTERPRETERS=False
-
 
     - stage: flake8
       python: 3.6
