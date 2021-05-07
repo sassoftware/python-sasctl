@@ -158,7 +158,7 @@ class HTTPBearerAuth(requests.auth.AuthBase):
     # Taken from https://github.com/kennethreitz/requests/issues/4437
 
     def __init__(self, token):
-        super().__init__()
+        super(HTTPBearerAuth, self).__init__()
         self.token = token
 
     def __eq__(self, other):
@@ -833,11 +833,11 @@ class Session(requests.Session):
 
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, *args):
         # Restore previous current session
         current_session(self._old_session)
 
-        super(Session, self).__exit__()
+        super(Session, self).__exit__(*args)
 
     def __str__(self):
         return (
