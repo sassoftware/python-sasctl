@@ -10,7 +10,7 @@
   </a>
         
   <a href="https://www.python.org/">
-    <img src="https://img.shields.io/badge/Python-2.7%20%7C%203.4%2B-blue.svg" alt="Python Version">
+    <img src="https://img.shields.io/badge/Python-3.4%2B-blue.svg" alt="Python Version">
   </a>
 
   <a>
