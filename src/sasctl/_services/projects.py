@@ -13,7 +13,8 @@ class Projects(Service):
     list_projects, get_project, update_project, \
         delete_project = Service._crud_funcs('/projects', 'project')
 
-    def create_project(self, name, description=None, image=None):
+    @classmethod
+    def create_project(cls, name, description=None, image=None):
         """
 
         Parameters
@@ -33,5 +34,5 @@ class Projects(Service):
                 'imageUri': image
                 }
 
-        return self.post('/projects', json=body,
-                         headers={'Content-Type': 'application/vnd.sas.project+json'})
+        return cls.post('/projects', json=body,
+                        headers={'Content-Type': 'application/vnd.sas.project+json'})

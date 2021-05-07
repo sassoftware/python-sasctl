@@ -27,7 +27,8 @@ class TextParsing(Service):
     """
     _SERVICE_ROOT = '/parsing'
 
-    def parse_documents(self,
+    @classmethod
+    def parse_documents(cls,
                         documents,
                         caslib=None,
                         id_column=None,
@@ -154,4 +155,4 @@ class TextParsing(Service):
                 'Accept': 'application/vnd.sas.text.parsing.job+json'
             }
 
-        return self.post(url, json=data, headers=headers)
+        return cls.post(url, json=data, headers=headers)

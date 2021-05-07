@@ -5,7 +5,12 @@ Unreleased
  
 **Improvements**
  - All `delete_*()` service methods return `None` instead of empty string.
- 
+ - `PagedList` handles situations where the server over-estimates the number of items available for paging.
+ - Added `ml_pipeline_automation` service for automated building of machine learning pipelines.
+ - Added a new `build_pipeline` task for creating automated pipelines.
+ - Added an `upload_file` method to the `cas_management` service,
+ - Added a `to_swat` method to `Session` for easily moving between sasctl and SWAT.
+
 v1.5.7 (2021-05-04)
 -------------------
 **Bugfixes**

@@ -158,6 +158,7 @@ class HTTPBearerAuth(requests.auth.AuthBase):
     # Taken from https://github.com/kennethreitz/requests/issues/4437
 
     def __init__(self, token):
+        super(HTTPBearerAuth, self).__init__()
         self.token = token
 
     def __eq__(self, other):
@@ -748,6 +749,61 @@ class Session(requests.Session):
             return self._get_token_with_kerberos()
         return self._get_token_with_password()
 
+    def to_swat(self, server=None, port=None):
+        """Establish a SWAT session to CAS.
+
+        Parameters
+        ----------
+        server : str, optional
+            The hostname of the CAS controller or the CAS cluster logical name.
+            Defaults to current host and 'cas-shared-default'.
+        port : int, optional
+            Port number to connect to CAS.  Defaults to 5570.
+
+        Returns
+        -------
+        swat.CAS
+            Active SWAT connection to the CAS server
+
+        """
+        if swat is None:
+            raise RuntimeError("Cannot create a CAS session unless the SWAT "
+                               "package is installed.  Install with "
+                               "'pip install swat' before continuing.")
+
+        port = port or 5570
+
+        try:
+            # Allow overriding of hostname in case CAS controller is not
+            # co-located with microservices
+            server_name = server or self.hostname
+            cas = swat.CAS(server_name, port, username=self.username,
+                           password=self._settings.get('password'))
+        except ValueError:
+            # Couldn't create a binary connection to CAS.  Attempt a REST
+            # connection.  Since hostname is known, interpret server as the
+            # logical server name for CAS.
+            server_name = server or 'cas-shared-default'
+            server_name += '-http'
+
+            environ = os.environ.copy()
+            try:
+                # Skip SSL validation for CAS if it was requested for sasctl
+                if not self.verify:
+                    os.environ['SSLREQCERT'] = 'no'
+
+                # Create a REST connection to CAS
+                cas = swat.CAS(
+                    'https://%s/%s/' % (self.hostname, server_name),
+                    username=self.username,
+                    password=self._settings.get('password'))
+            finally:
+                # Restore original environment
+                os.environ.clear()
+                os.environ.update(environ)
+
+        return cas
+
     def _build_url(self, url):
         """Build a complete URL from a path by substituting in session parameters."""
         components = urlsplit(url)
@@ -777,11 +833,11 @@ class Session(requests.Session):
 
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, *args):
         # Restore previous current session
         current_session(self._old_session)
 
-        super(Session, self).__exit__()
+        super(Session, self).__exit__(*args)
 
     def __str__(self):
         return (
@@ -1050,8 +1106,9 @@ class PagedList(list):
         self._pager = PagedItemIterator(obj, session=session, threads=threads)
 
         # Add the first page of items to the list
-        for _ in range(len(self._pager._cache)):
-            self.append(next(self._pager))
+        self.extend(self._pager._cache)
+        # for _ in range(len(self._pager._cache)):
+        #     self.append(next(self._pager))
 
         # Assume that server has more items available
         self._has_more = True
@@ -1060,9 +1117,9 @@ class PagedList(list):
         if self._has_more:
             # Estimate the total length as items downloaded + items still on server
             return super(PagedList, self).__len__() + len(self._pager)
-        else:
-            # We've pulled everything from the server, so we have an exact length now.
-            return super(PagedList, self).__len__()
+
+        # We've pulled everything from the server, so we have an exact length now.
+        return super(PagedList, self).__len__()
 
     def __iter__(self):
         return PagedListIterator(self)

@@ -4,13 +4,6 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-
-#!/usr/bin/env python
-# encoding: utf-8
-#
-# Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
-# SPDX-License-Identifier: Apache-2.0
-
 import six
 
 from .service import Service
@@ -23,7 +16,8 @@ class Concepts(Service):
 
     _SERVICE_ROOT = '/concepts'
 
-    def assign_concepts(self,
+    @classmethod
+    def assign_concepts(cls,
                         documents,
                         caslib=None,
                         id_column=None,
@@ -129,4 +123,4 @@ class Concepts(Service):
                 'Accept': 'application/vnd.sas.text.concepts.job+json'
             }
 
-        return self.post(url, json=data, headers=headers)
+        return cls.post(url, json=data, headers=headers)
