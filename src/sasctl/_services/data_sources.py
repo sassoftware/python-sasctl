@@ -251,7 +251,7 @@ class DataSources(Service):
                 username = table.get_connection()._username
                 caslib_name = DEFAULT_CASLIB + '(%s)' % username
 
-            session_id = table.get_connection()._session
+            # session_id = table.get_connection()._session
 
             caslib = cm.get_caslib(caslib_name, server_name)
             table = cm.get_table(table_name, caslib)

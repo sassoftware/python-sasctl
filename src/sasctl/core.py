@@ -158,6 +158,7 @@ class HTTPBearerAuth(requests.auth.AuthBase):
     # Taken from https://github.com/kennethreitz/requests/issues/4437
 
     def __init__(self, token):
+        super().__init__()
         self.token = token
 
     def __eq__(self, other):
@@ -778,7 +779,7 @@ class Session(requests.Session):
             server_name = server or self.hostname
             cas = swat.CAS(server_name, port, username=self.username,
                            password=self._settings.get('password'))
-        except ValueError as e:
+        except ValueError:
             # Couldn't create a binary connection to CAS.  Attempt a REST
             # connection.  Since hostname is known, interpret server as the
             # logical server name for CAS.
@@ -802,7 +803,6 @@ class Session(requests.Session):
                 os.environ.update(environ)
 
         return cas
-
 
     def _build_url(self, url):
         """Build a complete URL from a path by substituting in session parameters."""
@@ -1106,8 +1106,9 @@ class PagedList(list):
         self._pager = PagedItemIterator(obj, session=session, threads=threads)
 
         # Add the first page of items to the list
-        for _ in range(len(self._pager._cache)):
-            self.append(next(self._pager))
+        self.extend(self._pager._cache)
+        # for _ in range(len(self._pager._cache)):
+        #     self.append(next(self._pager))
 
         # Assume that server has more items available
         self._has_more = True
@@ -1116,9 +1117,9 @@ class PagedList(list):
         if self._has_more:
             # Estimate the total length as items downloaded + items still on server
             return super(PagedList, self).__len__() + len(self._pager)
-        else:
-            # We've pulled everything from the server, so we have an exact length now.
-            return super(PagedList, self).__len__()
+
+        # We've pulled everything from the server, so we have an exact length now.
+        return super(PagedList, self).__len__()
 
     def __iter__(self):
         return PagedListIterator(self)
