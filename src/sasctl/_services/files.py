@@ -32,8 +32,8 @@ class Files(Service):
     list_files, get_file, update_file, \
     delete_file = Service._crud_funcs('/files', 'file')
 
-    @sasctl_command('files', 'create')
     @classmethod
+    @sasctl_command('files', 'create')
     def create_file(cls, file, folder=None, filename=None, expiration=None):
         """Create a new file on the server by uploading a local file.
 
@@ -82,8 +82,8 @@ class Files(Service):
         return cls.post('/files#multipartUpload',
                         files={filename: file}, params=params)
 
-    @sasctl_command('files', 'content')
     @classmethod
+    @sasctl_command('files', 'content')
     def get_file_content(cls, file):
         """Download the contents of a file.
 
