@@ -19,6 +19,16 @@ v1.5.7 (2021-05-04)
 -------------------
 **Bugfixes**
  - Fixed an import issue that could cause an error while using the `pzmm` submodule.
+**Bugfixes**
+ - SSL warnings no longer repeatedly raised when `verify_ssl=False` but `CAS_CLIENT_SSL_CA_LIST` is specified.
+ 
+**Improvements**
+ - All `delete_*()` service methods return `None` instead of empty string.
+ 
+v1.5.7 (2021-05-04)
+-------------------
+**Bugfixes**
+ - Fixed an import issue that could cause an error while using the `pzmm` submodule.
 
 v1.5.6 (2021-04-30)
 -------------------
