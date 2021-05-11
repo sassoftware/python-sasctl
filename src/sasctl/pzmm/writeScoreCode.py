@@ -108,7 +108,7 @@ class ScoreCode():
 
         # For SAS Viya 3.5, either return an error or return the model UUID as a string
         if isViya35:
-            if model is None:
+            if model == None:
                 raise ValueError('The model UUID is required for score code written for' +
                                  ' SAS Model Manager on SAS Viya 3.5.')
             elif modelRepo.is_uuid(model):

@@ -16,7 +16,8 @@ class SentimentAnalysis(Service):
     """
     _SERVICE_ROOT = '/sentiment'
 
-    def analyze_sentiment(self,
+    @classmethod
+    def analyze_sentiment(cls,
                           documents,
                           caslib=None,
                           id_column=None,
@@ -114,4 +115,4 @@ class SentimentAnalysis(Service):
                 'Accept': 'application/vnd.sas.text.sentiment.job+json'
             }
 
-        return self.post(url, json=data, headers=headers)
+        return cls.post(url, json=data, headers=headers)

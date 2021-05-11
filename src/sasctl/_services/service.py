@@ -17,7 +17,7 @@ from ..core import HTTPError, PagedItemIterator, sasctl_command
 from ..exceptions import JobTimeoutError
 
 
-class Service(object):  # skipcq PYL-R0205
+class Service(object):                                        # skipcq PYL-R0205
     """Base class for all services.  Should not be used directly."""
 
     _SERVICE_ROOT = None
@@ -320,7 +320,12 @@ class Service(object):  # skipcq PYL-R0205
                 item = item['id']
 
             if cls.is_uuid(item):
-                return cls.delete(path + '/{id}'.format(id=item))
+                response = cls.delete(path + '/{id}'.format(id=item))
+                # Response generally seems to be an empty string.  If so, just return None
+                # BUT, if the service provides an actual response, return it.
+                if response:
+                    return response
+                return
             raise ValueError("Unrecognized id '%s'" % item)
 
         # Pull object name from path if unspecified (many paths end in
@@ -345,7 +350,8 @@ class Service(object):  # skipcq PYL-R0205
     # Compatibility with Python 2.7 requires *args to be after key-words
     # arguments.
     # skipcq: PYL-W1113
-    def _get_rel(self, item, rel, func=None, filter=None, *args):
+    @classmethod
+    def _get_rel(cls, item, rel, func=None, filter=None, *args):
         """Get `item` and request a link.
 
         Parameters
@@ -372,7 +378,7 @@ class Service(object):  # skipcq PYL-R0205
 
         params = 'filter={}'.format(filter) if filter is not None else {}
 
-        resources = self.request_link(obj, rel, params=params)
+        resources = cls.request_link(obj, rel, params=params)
 
         if isinstance(resources, (list, PagedItemIterator)):
             return resources

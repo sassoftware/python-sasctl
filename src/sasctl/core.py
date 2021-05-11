@@ -81,13 +81,15 @@ def _filter_password(r):
 def _filter_token(r):
     # Redact "Bearer <token>" in Authorization headers
     if hasattr(r, 'headers') and 'Authorization' in r.headers:
-        r.headers['Authorization'] = _redact(r'(?<=Bearer ).*', '[redacted]',
-                                             r.headers['Authorization'])
+        r.headers['Authorization'] = _redact(
+            r'(?<=Bearer ).*', '[redacted]', r.headers['Authorization']
+        )
 
     # Redact "Basic <base64 encoded pw> in Authorization headers.  This covers client ids & client secrets.
     if hasattr(r, 'headers') and 'Authorization' in r.headers:
-        r.headers['Authorization'] = _redact(r'(?<=Basic ).*', '[redacted]',
-                                             r.headers['Authorization'])
+        r.headers['Authorization'] = _redact(
+            r'(?<=Basic ).*', '[redacted]', r.headers['Authorization']
+        )
 
     # Redact Consul token from headers.  Should only appear when registering a new client
     if hasattr(r, 'headers') and 'X-Consul-Token' in r.headers:
@@ -95,16 +97,12 @@ def _filter_token(r):
 
     # Redact "access_token":"<token>" in response from Logon service
     if hasattr(r, '_content'):
-        r._content = _redact('(?<=access_token":")[^"]*', '[redacted]',
-                             r._content)
+        r._content = _redact('(?<=access_token":")[^"]*', '[redacted]', r._content)
 
     return r
 
 
-DEFAULT_FILTERS = [
-    _filter_password,
-    _filter_token
-]
+DEFAULT_FILTERS = [_filter_password, _filter_token]
 
 
 def current_session(*args, **kwargs):
@@ -160,6 +158,7 @@ class HTTPBearerAuth(requests.auth.AuthBase):
     # Taken from https://github.com/kennethreitz/requests/issues/4437
 
     def __init__(self, token):
+        super(HTTPBearerAuth, self).__init__()
         self.token = token
 
     def __eq__(self, other):
@@ -185,14 +184,18 @@ class RestObj(dict):
 
             return result
 
-        raise AttributeError("'%s' object has no attribute '%s'" % (
-            self.__class__.__name__, item))
+        raise AttributeError(
+            "'%s' object has no attribute '%s'" % (self.__class__.__name__, item)
+        )
 
     def __repr__(self):
         headers = getattr(self, '_headers', {})
 
         return "%s(headers=%r, data=%s)" % (
-            self.__class__, headers, super(RestObj, self).__repr__())
+            self.__class__,
+            headers,
+            super(RestObj, self).__repr__(),
+        )
 
     def __str__(self):
         if 'name' in self:
@@ -254,13 +257,17 @@ class Session(requests.Session):
         messages, allowing any sensitive information to be removed first.
 
     """
-    def __init__(self, hostname,
-                 username=None,
-                 password=None,
-                 authinfo=None,
-                 protocol=None,
-                 port=None,
-                 verify_ssl=None):
+
+    def __init__(
+        self,
+        hostname,
+        username=None,
+        password=None,
+        authinfo=None,
+        protocol=None,
+        port=None,
+        verify_ssl=None,
+    ):
         super(Session, self).__init__()
 
         # Determine whether or not server SSL certificates should be verified.
@@ -297,10 +304,11 @@ class Session(requests.Session):
 
                 self.mount('https://', adapter)
 
-            else:
-                # Every request will generate an InsecureRequestWarning
-                from urllib3.exceptions import InsecureRequestWarning
-                warnings.simplefilter('default', InsecureRequestWarning)
+        # If we're skipping SSL verification, urllib3 will raise InsecureRequestWarnings on
+        # every request.  Insert a warning filter so these warnings only appear on the first request.
+        if not verify_ssl:
+            from urllib3.exceptions import InsecureRequestWarning
+            warnings.simplefilter('default', InsecureRequestWarning)
 
         self.filters = DEFAULT_FILTERS
 
@@ -309,8 +317,9 @@ class Session(requests.Session):
 
         # Reuse an existing CAS connection if possible
         if swat and isinstance(hostname, swat.CAS):
-            if isinstance(hostname._sw_connection,
-                          swat.cas.rest.connection.REST_CASConnection):
+            if isinstance(
+                hostname._sw_connection, swat.cas.rest.connection.REST_CASConnection
+            ):
                 import base64
 
                 # Use the httpAddress action to retieve information about
@@ -325,12 +334,14 @@ class Session(requests.Session):
                 protocol = address.protocol
                 port = address.port
                 auth = hostname._sw_connection._auth.decode('utf-8').replace(
-                    'Basic ', '')
-                username, password = base64.b64decode(auth).decode(
-                    'utf-8').split(':')
+                    'Basic ', ''
+                )
+                username, password = base64.b64decode(auth).decode('utf-8').split(':')
             else:
-                raise ValueError("A 'swat.CAS' session can only be reused "
-                                 "when it's connected via the REST APIs.")
+                raise ValueError(
+                    "A 'swat.CAS' session can only be reused "
+                    "when it's connected via the REST APIs."
+                )
         else:
             url = urlsplit(hostname)
 
@@ -340,20 +351,22 @@ class Session(requests.Session):
 
             domain = url.hostname or str(hostname)
 
-        self._settings = {'protocol': protocol or 'https',
-                          'domain': domain,
-                          'port': port,
-                          'username': username,
-                          'password': password
-                          }
+        self._settings = {
+            'protocol': protocol or 'https',
+            'domain': domain,
+            'port': port,
+            'username': username,
+            'password': password,
+        }
 
         if self._settings['password'] is None:
             # Try to get credentials from .authinfo or .netrc files.
             # If no file path was specified, the default locations will
             # be checked.
             if 'swat' in sys.modules:
-                auth = swat.utils.authinfo.query_authinfo(domain, user=username,
-                                                          path=authinfo)
+                auth = swat.utils.authinfo.query_authinfo(
+                    domain, user=username, path=authinfo
+                )
                 self._settings['username'] = auth.get('user')
                 self._settings['password'] = auth.get('password')
 
@@ -365,9 +378,11 @@ class Session(requests.Session):
                     parser = netrc.netrc(authinfo)
                     values = parser.authenticators(domain)
                     if values:
-                        self._settings['username'], \
-                        _, \
-                        self._settings['password'] = values
+                        (
+                            self._settings['username'],
+                            _,
+                            self._settings['password'],
+                        ) = values
                 except (OSError, IOError):
                     pass  # netrc throws if $HOME is not set
 
@@ -460,12 +475,14 @@ class Session(requests.Session):
         server = server or 'cas-shared-default'
 
         if swat is None:
-            raise RuntimeError("The 'swat' package must be installed to create a SWAT connection.")
+            raise RuntimeError(
+                "The 'swat' package must be installed to create a SWAT connection."
+            )
 
         # Construct the CAS server's URL
-        url = '{}://{}/{}-http/'.format(self._settings['protocol'],
-                                        self.hostname,
-                                        server)
+        url = '{}://{}/{}-http/'.format(
+            self._settings['protocol'], self.hostname, server
+        )
 
         # Use this sessions info to connect to CAS unless user has explicitly give a value (even if None)
         kwargs.setdefault('hostname', url)
@@ -508,11 +525,13 @@ class Session(requests.Session):
                     verb=r.method,
                     url=r.url,
                     headers='\n'.join(
-                        '{}: {}'.format(k, v) for k, v in r.headers.items()),
-                    body=_pformat(r.body)))
+                        '{}: {}'.format(k, v) for k, v in r.headers.items()
+                    ),
+                    body=_pformat(r.body),
+                )
+            )
         else:
-            self.message_log.info('HTTP/1.1 %s %s', request.method,
-                                  request.url)
+            self.message_log.info('HTTP/1.1 %s %s', request.method, request.url)
 
         response = super(Session, self).send(request, **kwargs)
 
@@ -526,35 +545,66 @@ class Session(requests.Session):
                     status=r.status_code,
                     url=r.url,
                     headers='\n'.join(
-                        '{}: {}'.format(k, v) for k, v in r.headers.items()),
-                    body=_pformat(r.text)))
+                        '{}: {}'.format(k, v) for k, v in r.headers.items()
+                    ),
+                    body=_pformat(r.text),
+                )
+            )
         else:
-            self.message_log.info('HTTP/1.1 %s %s', response.status_code,
-                                  response.url)
+            self.message_log.info('HTTP/1.1 %s %s', response.status_code, response.url)
 
         return response
 
-    def request(self, method, url,
-                params=None, data=None, headers=None, cookies=None, files=None,
-                auth=None, timeout=None, allow_redirects=True, proxies=None,
-                hooks=None, stream=None, verify=None, cert=None, json=None):
+    def request(
+        self,
+        method,
+        url,
+        params=None,
+        data=None,
+        headers=None,
+        cookies=None,
+        files=None,
+        auth=None,
+        timeout=None,
+        allow_redirects=True,
+        proxies=None,
+        hooks=None,
+        stream=None,
+        verify=None,
+        cert=None,
+        json=None,
+    ):
 
         url = self._build_url(url)
         verify = verify or self.verify
 
         try:
-            return super(Session, self).request(method, url, params, data,
-                                                headers, cookies, files, auth,
-                                                timeout, allow_redirects,
-                                                proxies, hooks, stream, verify,
-                                                cert, json)
+            return super(Session, self).request(
+                method,
+                url,
+                params,
+                data,
+                headers,
+                cookies,
+                files,
+                auth,
+                timeout,
+                allow_redirects,
+                proxies,
+                hooks,
+                stream,
+                verify,
+                cert,
+                json,
+            )
         except requests.exceptions.SSLError as e:
             if 'REQUESTS_CA_BUNDLE' not in os.environ:
                 raise RuntimeError(
                     "SSL handshake failed.  The 'REQUESTS_CA_BUNDLE' "
                     "environment variable should contain the path to the CA "
                     "certificate.  Alternatively, set verify_ssl=False to "
-                    "disable certificate verification.")
+                    "disable certificate verification."
+                )
             raise e
 
     def get(self, url, **kwargs):
@@ -575,8 +625,10 @@ class Session(requests.Session):
     def _get_token_with_kerberos(self):
         """Authenticate with a Kerberos ticket."""
         if kerberos is None:
-            raise RuntimeError("Kerberos package not found.  Run 'pip "
-                               "install sasctl[kerberos]' to install.")
+            raise RuntimeError(
+                "Kerberos package not found.  Run 'pip "
+                "install sasctl[kerberos]' to install."
+            )
 
         user = self._settings.get('username')
         # realm = user.rsplit('@', maxsplit=1)[-1] if '@' in user else None
@@ -584,35 +636,36 @@ class Session(requests.Session):
         flags = kerberos.GSS_C_MUTUAL_FLAG | kerberos.GSS_C_SEQUENCE_FLAG
         service = 'HTTP@%s' % self._settings['domain']
 
-        logger.info('Attempting Kerberos authentication to %s as %s',
-                    service, user)
+        logger.info('Attempting Kerberos authentication to %s as %s', service, user)
 
         url = self._build_url(
-            '/SASLogon/oauth/authorize?client_id=%s&response_type=token'
-            % client_id)
+            '/SASLogon/oauth/authorize?client_id=%s&response_type=token' % client_id
+        )
 
         # Get Kerberos challenge
         r = self.get(url, allow_redirects=False, verify=self.verify)
 
         if r.status_code != 401:
-            raise ValueError('Kerberos challenge response not received.  '
-                             'Expected HTTP 401 but received %s' %
-                             r.status_code)
+            raise ValueError(
+                'Kerberos challenge response not received.  '
+                'Expected HTTP 401 but received %s' % r.status_code
+            )
 
         if 'www-authenticate' not in r.headers:
-            raise ValueError("Kerberos challenge response not received.  "
-                             "'WWW-Authenticate' header not received.")
+            raise ValueError(
+                "Kerberos challenge response not received.  "
+                "'WWW-Authenticate' header not received."
+            )
 
         if 'Negotiate' not in r.headers['www-authenticate']:
-            raise ValueError("Kerberos challenge response not received.  "
-                             "'WWW-Authenticate' header contained '%s', "
-                             "expected 'Negotiate'."
-                             % r.headers['www-authenticate'])
+            raise ValueError(
+                "Kerberos challenge response not received.  "
+                "'WWW-Authenticate' header contained '%s', "
+                "expected 'Negotiate'." % r.headers['www-authenticate']
+            )
 
         # Initialize a request to KDC for a ticket to access the service.
-        _, context = kerberos.authGSSClientInit(service,
-                                                principal=user,
-                                                gssflags=flags)
+        _, context = kerberos.authGSSClientInit(service, principal=user, gssflags=flags)
 
         # Send the request.
         # NOTE: empty-string parameter required for initial call.
@@ -630,20 +683,25 @@ class Session(requests.Session):
             self._settings['username'] = username.rsplit('@', maxsplit=1)[0]
 
         # Response to Kerberos challenge with ticket
-        r = self.get(url,
-                     headers={'Authorization': auth_header},
-                     allow_redirects=False,
-                     verify=self.verify)
+        r = self.get(
+            url,
+            headers={'Authorization': auth_header},
+            allow_redirects=False,
+            verify=self.verify,
+        )
 
         if 'Location' not in r.headers:
-            raise ValueError("Invalid authentication response."
-                             "'Location' header not received.")
+            raise ValueError(
+                "Invalid authentication response." "'Location' header not received."
+            )
 
         match = re.search('(?<=access_token=)[^&]*', r.headers['Location'])
 
         if match is None:
-            raise ValueError("Invalid authentication response.  'Location' "
-                             "header does not contain an access token.")
+            raise ValueError(
+                "Invalid authentication response.  'Location' "
+                "header does not contain an access token."
+            )
 
         return match.group(0)
 
@@ -653,15 +711,15 @@ class Session(requests.Session):
         password = self._settings['password']
         url = self._build_url('/SASLogon/oauth/token')
 
-        data = 'grant_type=password&username={}&password={}'.format(username,
-                                                                    password)
-        headers = {'Accept': 'application/json',
-                   'Content-Type': 'application/x-www-form-urlencoded'}
+        data = 'grant_type=password&username={}&password={}'.format(username, password)
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
 
-        r = super(Session, self).post(url,
-                                      data=data,
-                                      headers=headers,
-                                      auth=('sas.ec', ''))
+        r = super(Session, self).post(
+            url, data=data, headers=headers, auth=('sas.ec', '')
+        )
 
         if r.status_code == 401:
             raise exceptions.AuthenticationError(username)
@@ -691,6 +749,61 @@ class Session(requests.Session):
             return self._get_token_with_kerberos()
         return self._get_token_with_password()
 
+    def to_swat(self, server=None, port=None):
+        """Establish a SWAT session to CAS.
+
+        Parameters
+        ----------
+        server : str, optional
+            The hostname of the CAS controller or the CAS cluster logical name.
+            Defaults to current host and 'cas-shared-default'.
+        port : int, optional
+            Port number to connect to CAS.  Defaults to 5570.
+
+        Returns
+        -------
+        swat.CAS
+            Active SWAT connection to the CAS server
+
+        """
+        if swat is None:
+            raise RuntimeError("Cannot create a CAS session unless the SWAT "
+                               "package is installed.  Install with "
+                               "'pip install swat' before continuing.")
+
+        port = port or 5570
+
+        try:
+            # Allow overriding of hostname in case CAS controller is not
+            # co-located with microservices
+            server_name = server or self.hostname
+            cas = swat.CAS(server_name, port, username=self.username,
+                           password=self._settings.get('password'))
+        except ValueError:
+            # Couldn't create a binary connection to CAS.  Attempt a REST
+            # connection.  Since hostname is known, interpret server as the
+            # logical server name for CAS.
+            server_name = server or 'cas-shared-default'
+            server_name += '-http'
+
+            environ = os.environ.copy()
+            try:
+                # Skip SSL validation for CAS if it was requested for sasctl
+                if not self.verify:
+                    os.environ['SSLREQCERT'] = 'no'
+
+                # Create a REST connection to CAS
+                cas = swat.CAS(
+                    'https://%s/%s/' % (self.hostname, server_name),
+                    username=self.username,
+                    password=self._settings.get('password'))
+            finally:
+                # Restore original environment
+                os.environ.clear()
+                os.environ.update(environ)
+
+        return cas
+
     def _build_url(self, url):
         """Build a complete URL from a path by substituting in session parameters."""
         components = urlsplit(url)
@@ -701,13 +814,15 @@ class Session(requests.Session):
         if self._settings['port'] is not None and ':' not in domain:
             domain = '{}:{}'.format(domain, self._settings['port'])
 
-        return urlunsplit([
-            components.scheme or self._settings['protocol'],
-            domain,
-            components.path,
-            components.query,
-            components.fragment
-        ])
+        return urlunsplit(
+            [
+                components.scheme or self._settings['protocol'],
+                domain,
+                components.path,
+                components.query,
+                components.fragment,
+            ]
+        )
 
     def __enter__(self):
         super(Session, self).__enter__()
@@ -718,20 +833,23 @@ class Session(requests.Session):
 
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, *args):
         # Restore previous current session
         current_session(self._old_session)
 
-        super(Session, self).__exit__()
+        super(Session, self).__exit__(*args)
 
     def __str__(self):
-        return ("{class_}(hostname='{hostname}', username='{username}', "
-                "protocol='{protocol}', verify_ssl={verify})".format(
-            class_=type(self).__name__,
-            hostname=self.hostname,
-            username=self.username,
-            protocol=self._settings.get('protocol'),
-            verify=self.verify))
+        return (
+            "{class_}(hostname='{hostname}', username='{username}', "
+            "protocol='{protocol}', verify_ssl={verify})".format(
+                class_=type(self).__name__,
+                hostname=self.hostname,
+                username=self.username,
+                protocol=self._settings.get('protocol'),
+                verify=self.verify,
+            )
+        )
 
 
 class PageIterator:
@@ -758,6 +876,7 @@ class PageIterator:
         Items contained in the current page
 
     """
+
     def __init__(self, obj, session=None, threads=4):
         self._num_threads = threads
 
@@ -781,9 +900,13 @@ class PageIterator:
 
             # Construct a new link with format params
             # Result is "/spam/spam?start={start}&limit={limit}"
-            link = link[:start.start()] + '{start}' \
-                   + link[start.end():limit.start()] \
-                   + '{limit}' + link[limit.end():]
+            link = (
+                link[: start.start()]
+                + '{start}'
+                + link[start.end() : limit.start()]
+                + '{limit}'
+                + link[limit.end() :]
+            )
 
             self._start = int(start.group())
             self._limit = int(limit.group())
@@ -798,7 +921,9 @@ class PageIterator:
 
     def __next__(self):
         if self._pool is None:
-            self._pool = concurrent.futures.ThreadPoolExecutor(max_workers=self._num_threads)
+            self._pool = concurrent.futures.ThreadPoolExecutor(
+                max_workers=self._num_threads
+            )
 
         # Send request for new pages if we don't have enough cached
         num_req_needed = self._num_threads - len(self._requested)
@@ -828,7 +953,7 @@ class PageIterator:
         # All Iterators are also Iterables
         return self
 
-    next = __next__        # Python 2 compatible
+    next = __next__  # Python 2 compatible
 
     def _request_async(self, start):
         """Used by worker threads to retrieve next batch of items."""
@@ -874,6 +999,7 @@ class PagedItemIterator:
     PageIterator
 
     """
+
     def __init__(self, obj, session=None, threads=4):
         # Iterates over whole pages of items
         self._pager = PageIterator(obj, session, threads)
@@ -898,9 +1024,9 @@ class PagedItemIterator:
             self._cache = next(self._pager)
 
             if len(self._cache) < self._pager._limit:
-                print('oops')
                 # number of items returned in page was less than expected
                 # might be last page, or items might have been filtered out by server.
+                pass
 
         # Return the next item
         if self._cache:
@@ -915,7 +1041,7 @@ class PagedItemIterator:
     def __iter__(self):
         return self
 
-    next = __next__        # Python 2 compatible
+    next = __next__  # Python 2 compatible
 
 
 class PagedListIterator:
@@ -926,6 +1052,7 @@ class PagedListIterator:
     l : list-like
 
     """
+
     def __init__(self, l):
         self.__list = l
         self.__index = 0
@@ -946,7 +1073,7 @@ class PagedListIterator:
     def __iter__(self):
         return self
 
-    next = __next__     # Python 2 compatibility
+    next = __next__  # Python 2 compatibility
 
 
 class PagedList(list):
@@ -973,13 +1100,15 @@ class PagedList(list):
     PagedItemIterator
 
     """
+
     def __init__(self, obj, session=None, threads=4):
         super(PagedList, self).__init__()
         self._pager = PagedItemIterator(obj, session=session, threads=threads)
 
         # Add the first page of items to the list
-        for _ in range(len(self._pager._cache)):
-            self.append(next(self._pager))
+        self.extend(self._pager._cache)
+        # for _ in range(len(self._pager._cache)):
+        #     self.append(next(self._pager))
 
         # Assume that server has more items available
         self._has_more = True
@@ -988,9 +1117,9 @@ class PagedList(list):
         if self._has_more:
             # Estimate the total length as items downloaded + items still on server
             return super(PagedList, self).__len__() + len(self._pager)
-        else:
-            # We've pulled everything from the server, so we have an exact length now.
-            return super(PagedList, self).__len__()
+
+        # We've pulled everything from the server, so we have an exact length now.
+        return super(PagedList, self).__len__()
 
     def __iter__(self):
         return PagedListIterator(self)
@@ -1191,9 +1320,11 @@ def request(verb, path, session=None, raw=False, format='auto', **kwargs):
         raise TypeError('No `Session` instance found.')
 
     if raw:
-        warnings.warn("The 'raw' parameter is deprecated and will be removed in"
-                      " a future version.  Use format='response' instead.",
-                      DeprecationWarning)
+        warnings.warn(
+            "The 'raw' parameter is deprecated and will be removed in"
+            " a future version.  Use format='response' instead.",
+            DeprecationWarning,
+        )
         format = 'response'
 
     format = 'auto' if format is None else str(format).lower()
@@ -1203,8 +1334,9 @@ def request(verb, path, session=None, raw=False, format='auto', **kwargs):
     response = session.request(verb, path, **kwargs)
 
     if 400 <= response.status_code <= 599:
-        raise HTTPError(response.url, response.status_code, response.text,
-                        response.headers, None)
+        raise HTTPError(
+            response.url, response.status_code, response.text, response.headers, None
+        )
 
     # Return the raw response if requested
     if format == 'response':
@@ -1327,8 +1459,7 @@ def _unwrap(json):
     return RestObj(json)
 
 
-def _build_crud_funcs(path, single_term=None, plural_term=None,
-                      service_name=None):
+def _build_crud_funcs(path, single_term=None, plural_term=None, service_name=None):
     """Utility method for defining simple functions to perform CRUD operations on a REST endpoint.
 
     Parameters
@@ -1448,11 +1579,12 @@ def _build_crud_funcs(path, single_term=None, plural_term=None,
 
         id_ = getattr(item, 'id', None)
         if id_ is None:
-            raise ValueError(
-                'Could not find property `id` for update of %s.' % item)
+            raise ValueError('Could not find property `id` for update of %s.' % item)
 
-        headers = {'If-Match': item._headers.get('etag'),
-                   'Content-Type': item._headers.get('content-type')}
+        headers = {
+            'If-Match': item._headers.get('etag'),
+            'Content-Type': item._headers.get('content-type'),
+        }
 
         return put(path + '/%s' % id_, json=item, headers=headers)
 
@@ -1509,6 +1641,7 @@ def _build_is_available_func(service_root):
         """
         response = current_session().head(service_root + '/')
         return response.status_code == 200
+
     return is_available
 
 
@@ -1524,6 +1657,7 @@ def platform_version():
 
     """
     from .services import model_repository as mr
+
     response = mr.info()
     buildVersion = response.get('build')['buildVersion']
     try:
@@ -1532,4 +1666,4 @@ def platform_version():
         elif float(buildVersion[0:4]) >= 3.10:
             return '4.0'
     except ValueError:
-        pass    # Version could not be found.  Return None instead.
+        pass  # Version could not be found.  Return None instead.

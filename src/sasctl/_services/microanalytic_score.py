@@ -49,7 +49,8 @@ class MicroAnalyticScore(Service):
     list_modules, get_module, update_module, \
         delete_module = Service._crud_funcs('/modules', 'module')
 
-    def get_module_step(self, module, step):
+    @classmethod
+    def get_module_step(cls, module, step):
         """Details of a single step in a given module.
 
         Parameters
@@ -64,12 +65,13 @@ class MicroAnalyticScore(Service):
         RestObj
 
         """
-        module = self.get_module(module)
+        module = cls.get_module(module)
 
-        r = self.get('/modules/{}/steps/{}'.format(module.id, step))
+        r = cls.get('/modules/{}/steps/{}'.format(module.id, step))
         return r
 
-    def list_module_steps(self, module):
+    @classmethod
+    def list_module_steps(cls, module):
         """List all steps defined for a module.
 
         Parameters
@@ -83,12 +85,13 @@ class MicroAnalyticScore(Service):
             List of :class:`.RestObj` instances representing each step.
 
         """
-        module = self.get_module(module)
+        module = cls.get_module(module)
 
-        steps = self.get('/modules/{}/steps'.format(module.id))
+        steps = cls.get('/modules/{}/steps'.format(module.id))
         return steps if isinstance(steps, list) else [steps]
 
-    def execute_module_step(self, module, step, return_dict=True, **kwargs):
+    @classmethod
+    def execute_module_step(cls, module, step, return_dict=True, **kwargs):
         """Call a module step with the given parameters.
 
         Parameters
@@ -112,7 +115,7 @@ class MicroAnalyticScore(Service):
 
         """
         module_name = module.name if hasattr(module, 'name') else str(module)
-        module = self.get_module(module)
+        module = cls.get_module(module)
 
         if module is None:
             raise ValueError("Module '{}' was not found.".format(module_name))
@@ -140,7 +143,7 @@ class MicroAnalyticScore(Service):
             except TypeError:
                 pass
 
-        r = self.post('/modules/{}/steps/{}'.format(module, step), json=body)
+        r = cls.post('/modules/{}/steps/{}'.format(module, step), json=body)
 
         # Convert list of name/value pair dictionaries to single dict
         outputs = OrderedDict()
@@ -163,7 +166,8 @@ class MicroAnalyticScore(Service):
             return outputs[0]
         return outputs
 
-    def create_module(self, name=None, description=None, source=None,
+    @classmethod
+    def create_module(cls, name=None, description=None, source=None,
                       language='python', scope='public'):
         """Create a new module in MAS.
 
@@ -198,10 +202,11 @@ class MicroAnalyticScore(Service):
                 'source': source,
                 'scope': scope}
 
-        r = self.post('/modules', json=data)
+        r = cls.post('/modules', json=data)
         return r
 
-    def define_steps(self, module):
+    @classmethod
+    def define_steps(cls, module):
         """Map MAS steps to Python methods.
 
         Defines python methods on a module that automatically call the
@@ -220,11 +225,11 @@ class MicroAnalyticScore(Service):
         """
         import types
 
-        module = self.get_module(module)
+        module = cls.get_module(module)
 
         # Define a method for each step of the module
         for id_ in module.get('stepIds', []):
-            step = self.get_module_step(module, id_)
+            step = cls.get_module_step(module, id_)
 
             # Method should have an argument for each parameter of the step
             arguments = [k['name'] for k in step.get('inputs', [])]
@@ -320,12 +325,12 @@ class MicroAnalyticScore(Service):
                     )
 
             code = '\n'.join(code)
-            self.log.debug("Generated code for step '%s' of module '%s':\n%s",
-                           id_, module, code)
+            cls.log.debug("Generated code for step '%s' of module '%s':\n%s",
+                          id_, module, code)
             compiled = compile(code, '<string>', 'exec')
 
             env = globals().copy()
-            env.update({'execute_module_step': self.execute_module_step,
+            env.update({'execute_module_step': cls.execute_module_step,
                         'module': module,
                         'step': step})
 

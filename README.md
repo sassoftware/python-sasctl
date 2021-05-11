@@ -10,11 +10,17 @@
   </a>
         
   <a href="https://www.python.org/">
-    <img src="https://img.shields.io/badge/Python-2.7%20%7C%203.4%2B-blue.svg" alt="Python Version">
+    <img src="https://img.shields.io/badge/Python-3.4%2B-blue.svg" alt="Python Version">
   </a>
 
-   <img src="https://travis-ci.com/sassoftware/python-sasctl.svg?branch=master">
+  <a>
+    <img src="https://travis-ci.com/sassoftware/python-sasctl.svg?branch=master" />
+  </a>
   
+  <a href="https://codecov.io/gh/sassoftware/python-sasctl">
+    <img src="https://codecov.io/gh/sassoftware/python-sasctl/branch/master/graph/badge.svg?token=mDcvtz2Als"/>
+  </a>
+    
 </div>
 
 
@@ -48,6 +54,7 @@ The following additional packages are recommended for full functionality:
 
 ### Installation
 
+Installing the latest version is as easy as:
 ```
 pip install sasctl
 ```
@@ -57,6 +64,11 @@ Functionality that depends on additional packages can be installed using the fol
  - `pip install sasctl[kerberos]`
  - `pip install sasctl[all]`
   
+If you want the latest functionality and can't wait on an official release, you can also
+install the latest source code:
+
+```pip install git+https://github.com/sassoftware/python-sasctl```
+
 
 ## Getting Started
 

@@ -6,6 +6,7 @@
 
 """Commonly used tasks in the analytics life cycle."""
 
+import io
 import json
 import logging
 import math
@@ -15,11 +16,15 @@ import re
 import sys
 import warnings
 
+import six
 from six.moves.urllib.error import HTTPError
 
 from . import utils
 from .core import RestObj, current_session, get, get_link, request_link
-from .exceptions import AuthorizationError
+from .exceptions import AuthorizationError, ServiceUnavailableError
+from .services import cas_management as cm
+from .services import data_sources as ds
+from .services import ml_pipeline_automation as mpa
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
@@ -160,6 +165,102 @@ def _create_project(project_name, model, repo, input_vars=None, output_vars=None
 
     if needs_update:
         project = mr.update_project(project)
+
+    return project
+
+
+def build_pipeline(data, target, name,
+                   description=None,
+                   table_name=None,
+                   caslib=None,
+                   max_models=None):
+    """Automatically build a machine learning pipeline on a dataset.
+
+    Parameters
+    ----------
+    data : str, DataFrame, CASTable or dict
+        Input data for training models.  May be one of the following:
+         - path to a file, in which case file will be uploaded to CAS.
+         - a DataFrame instance, in which case the data will be uploaded to CAS.
+         - an existing CASTable instance.
+         - dict representation of a table as returned by `cas_management` or
+           `data_sources` service.
+    target : str
+        Name of column in `data` containing the target variable.
+    name : str
+        Name of the project.
+    description : str, optional
+        A description of the project.
+    table_name : str, optional
+        Name of table to create in CAS when uploading `data`.  Required if
+        `data` is a file path or DataFrame, otherwise ignored.
+    caslib : str or dict optional
+        caslib in which to table will be created when uploading `data`.
+    max_models : int, optional
+        Maximum number of models to train.
+
+    Returns
+    -------
+    RestObj
+        Project metadata
+
+    Examples
+    --------
+    build_pipeline('examples/data/iris.csv', 'Species', 'Example Iris Pipeline')
+
+    Raises
+    ------
+    ServiceUnavailableError
+        If the ML Pipeline Automation service is unavailable.
+
+    Notes
+    -----
+    The `data` table to be used as input must be globally-scoped (as opposed to
+    session-scoped).
+
+    """
+
+    if data is None:
+        raise ValueError("Parameter 'data' is required.  Received 'None'.")
+
+    if not mpa.is_available():
+        raise ServiceUnavailableError(mpa)
+
+    # Local dataframe (either Pandas or SAS) will have .to_csv().  BUT CASTables
+    # also have a .to_csv(), but there's no reason to download the data from
+    # CAS just to write to CSV and then upload back to CAS.
+    if hasattr(data, 'to_csv') and not hasattr(data, 'get_connection'):
+        buffer = io.BytesIO()
+        buffer.write(data.to_csv(index=False).encode())
+        buffer.seek(0)
+
+        if table_name is None:
+            raise ValueError("'table_name' is a required parameter when "
+                             "uploading a DataFrame.")
+
+        # Upload the table to CAS
+        data = cm.upload_file(buffer, table_name, caslib=caslib, format_='csv')
+
+    # If data is a string, assume it's a path to a file that can be uploaded
+    elif isinstance(data, six.string_types):
+        path = os.path.abspath(os.path.expanduser(data))
+        if os.path.isfile(path):
+
+            # Use the file name as the table name (minus file extension)
+            if table_name is None:
+                filename = os.path.split(path)[-1]
+                table_name = os.path.splitext(filename)[0]
+
+            data = cm.upload_file(data, table_name, caslib=caslib)
+
+    # By now data should be uploaded (if necessary) and `data` should be a dict
+    # or CASTable.  Retrieve the table's URI.
+    table_uri = ds.table_uri(data)
+
+    # Create the project
+    project = mpa.create_project(table_uri, target, name,
+                                 description=description,
+                                 max_models=max_models)
 
     return project
 

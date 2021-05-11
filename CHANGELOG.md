@@ -1,9 +1,24 @@
 Unreleased
 ----------
+**Bugfixes**
+ - SSL warnings no longer repeatedly raised when `verify_ssl=False` but `CAS_CLIENT_SSL_CA_LIST` is specified.
+ 
+**Improvements**
+ - All `delete_*()` service methods return `None` instead of empty string.
+ - `PagedList` handles situations where the server over-estimates the number of items available for paging.
+ - Added `ml_pipeline_automation` service for automated building of machine learning pipelines.
+ - Added a new `build_pipeline` task for creating automated pipelines.
+ - Added an `upload_file` method to the `cas_management` service,
+ - Added a `to_swat` method to `Session` for easily moving between sasctl and SWAT.
  - Added metrics module
  - train, test, valid inputs to register_model
  - overwrite register_model files
  - metrics included by default
+
+v1.5.7 (2021-05-04)
+-------------------
+**Bugfixes**
+ - Fixed an import issue that could cause an error while using the `pzmm` submodule.
 
 v1.5.6 (2021-04-30)
 -------------------
@@ -20,7 +35,7 @@ v1.5.5 (2021-03-26)
  - Fixed an issue with JSON parsing that caused the `publish_model` task to fail with Viya 4.0.
  
 v1.5.4 (2020-10-29)
--------------------
+------------------
 **Improvements**
  - Added the `as_swat` method to the `Session` object, allowing connection to CAS through SWAT without an additional authentication step.
  
@@ -44,7 +59,7 @@ v1.5.2 (2020-06-22)
   - Introduced deprecation warnings for Python 2 users.
  
 v1.5.1 (2020-4-9)
------------------
+----------------
 **Bugfixes**
  - Fixed PyMAS utilities to correctly work functions not bound to pickled objects.
  - Model target variables should no longer appear as an input variable when registering ASTORE models. 
