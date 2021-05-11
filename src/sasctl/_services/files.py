@@ -32,8 +32,9 @@ class Files(Service):
     list_files, get_file, update_file, \
     delete_file = Service._crud_funcs('/files', 'file')
 
+    @classmethod
     @sasctl_command('files', 'create')
-    def create_file(self, file, folder=None, filename=None, expiration=None):
+    def create_file(cls, file, folder=None, filename=None, expiration=None):
         """Create a new file on the server by uploading a local file.
 
         Parameters
@@ -72,17 +73,18 @@ class Files(Service):
             if _folder is None:
                 raise ValueError("Folder '%s' could not be found." % folder)
 
-            params['parentFolderUri'] = self.get_link(_folder, 'self')['href']
+            params['parentFolderUri'] = cls.get_link(_folder, 'self')['href']
 
         if expiration is not None:
             pass
             # TODO: add 'expirationTimeStamp' to params.  Need to determine correct format
 
-        return self.post('/files#multipartUpload',
-                         files={filename: file}, params=params)
+        return cls.post('/files#multipartUpload',
+                        files={filename: file}, params=params)
 
+    @classmethod
     @sasctl_command('files', 'content')
-    def get_file_content(self, file):
+    def get_file_content(cls, file):
         """Download the contents of a file.
 
         Parameters
@@ -95,9 +97,9 @@ class Files(Service):
         content
 
         """
-        file = self.get_file(file)
+        file = cls.get_file(file)
 
-        r = self.request_link(file, 'content', format='response')
+        r = cls.request_link(file, 'content', format='response')
 
         content_type = r.headers.get('Content-Type', '')
 
