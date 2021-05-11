@@ -10,6 +10,10 @@ Unreleased
  - Added a new `build_pipeline` task for creating automated pipelines.
  - Added an `upload_file` method to the `cas_management` service,
  - Added a `to_swat` method to `Session` for easily moving between sasctl and SWAT.
+ - Added metrics module
+ - train, test, valid inputs to register_model
+ - overwrite register_model files
+ - metrics included by default
 
 v1.5.7 (2021-05-04)
 -------------------
