@@ -9,9 +9,6 @@ import re
 from collections import OrderedDict
 from inspect import getfullargspec, getsourcelines
 
-
-import six
-
 from .ds2 import DS2Variable
 from ..decorators import versionchanged
 
@@ -70,7 +67,7 @@ def ds2_variables(input, output_vars=False, names=None):
                 for i in range(1, input.size + 1)
             ]
         )
-    elif six.callable(input):
+    elif callable(input):
         types = parse_type_hints(input)
     else:
         raise RuntimeError(
@@ -78,15 +75,20 @@ def ds2_variables(input, output_vars=False, names=None):
             "instance of type '%s'." % type(input)
         )
 
-    if isinstance(names, six.string_types):
-        names = [names + str(i) for i in range(1, len(types) + 1)]
+    if isinstance(names, str):
+        # Just use the name directly if its a string and there's only one variable
+        if len(types) == 1:
+            names = [names]
+        # Otherwise, use the string as a prefix for each variable
+        else:
+            names = [names + str(i) for i in range(len(types))]
     elif names is None:
         names = list(types.keys())
 
     results = []
-    for v in six.itervalues(types):
+    for v in types.values():
         name = names.pop(0)
-        if isinstance(v, six.string_types):
+        if isinstance(v, str):
             results.append(DS2Variable(name=name, type=v, out=output_vars))
         elif isinstance(v, type):
             results.append(DS2Variable(name=name, type=v.__name__, out=output_vars))
