@@ -5,20 +5,15 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import logging
-from collections import OrderedDict
 import re
+from collections import OrderedDict
+from inspect import getfullargspec, getsourcelines
+
 
 import six
 
 from .ds2 import DS2Variable
 from ..decorators import versionchanged
-
-if six.PY2:
-    # Eliminate DeprecationWarnings.  Only import getargspec if in Python 2.
-    from inspect import getargspec as getfullargspec
-    from inspect import getsourcelines
-else:
-    from inspect import getfullargspec, getsourcelines
 
 
 logger = logging.getLogger(__name__)
@@ -69,16 +64,22 @@ def ds2_variables(input, output_vars=False, names=None):
                 types[col] = (input[col].dtype.name, False)
     elif hasattr(input, 'dtype'):
         # Numpy array?  No column names, but we can at least create dummy vars of the correct type
-        types = OrderedDict([('var{}'.format(i),
-                              (input.dtype.name.replace('object', 'char'), False)) for i in range(1, input.size+1)])
+        types = OrderedDict(
+            [
+                ('var{}'.format(i), (input.dtype.name.replace('object', 'char'), False))
+                for i in range(1, input.size + 1)
+            ]
+        )
     elif six.callable(input):
         types = parse_type_hints(input)
     else:
-        raise RuntimeError("Unable to determine input/ouput types using "
-                           "instance of type '%s'." % type(input))
+        raise RuntimeError(
+            "Unable to determine input/ouput types using "
+            "instance of type '%s'." % type(input)
+        )
 
     if isinstance(names, six.string_types):
-        names = [names + str(i) for i in range(1, len(types)+1)]
+        names = [names + str(i) for i in range(1, len(types) + 1)]
     elif names is None:
         names = list(types.keys())
 
@@ -97,7 +98,6 @@ def ds2_variables(input, output_vars=False, names=None):
             raise RuntimeError('Unable to determine input/ouput types.')
 
     return results
-
 
 
 def parse_type_hints(func, skip_var='self'):
@@ -126,8 +126,9 @@ def parse_type_hints(func, skip_var='self'):
 
     """
 
-    params = OrderedDict([(k, None) for k in \
-                          getfullargspec(func).args if k != skip_var])
+    params = OrderedDict(
+        [(k, None) for k in getfullargspec(func).args if k != skip_var]
+    )
     logger.debug('Params: {}'.format(params))
 
     if getattr(func, '__annotations__', None):
@@ -197,5 +198,3 @@ def parse_type_hints_from_annotations(func, skip_var='self'):
             params[p] = (t.__name__, False)
 
     return params
-
-
