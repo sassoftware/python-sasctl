@@ -469,6 +469,18 @@ class DS2Thread(object):  # skipcq PYL-R0205
 
 
 class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
+    """Defines a variable that will be shared between Python and DS2 runtimes.
+
+    Parameters
+    ----------
+    name : str
+        Name of variable
+    type : {'int', 'float', 'double', 'str', 'uint8', ...}
+        Type of variable
+    out : bool
+        Whether the variable is an output from the DS2 method.
+
+    """
     PY_TYPE_TO_DS2 = OrderedDict([('double64', 'double'),
                                   ('double32', 'double'),
                                   ('double', 'double'),

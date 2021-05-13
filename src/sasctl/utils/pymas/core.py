@@ -14,7 +14,6 @@ import os
 import re
 import sys
 from collections import OrderedDict
-import six
 
 from .ds2 import DS2Thread, DS2Variable, DS2PyMASPackage
 from .python import ds2_variables
@@ -61,6 +60,10 @@ def build_wrapper_function(
     "# Output: <var>, <var>".  Any changes to spelling, capitalization,
     punctuation, or spacing will result in an error when the DS2 code is
     executed.
+
+    An additional return variable named 'msg' is always added.  Since the expected use of this function
+    is to generate Python methods that will be called from DS2, this variable will contain a stack trace in
+    the event an error occurs, allowing it to be logged/exposed by DS2.
 
     """
     if return_msg is not None:
@@ -385,7 +388,7 @@ def from_pickle(
     try:
         # In Python2 str could either be a path or the binary pickle data,
         # so check if its a valid filepath too.
-        is_file_path = isinstance(file, six.string_types) and os.path.isfile(file)
+        is_file_path = isinstance(file, str) and os.path.isfile(file)
     except TypeError:
         is_file_path = False
 
@@ -415,35 +418,55 @@ def from_pickle(
     )
 
 
-def parse_variables(func, input_types):
+def parse_variables(func, input_types, target=None):
+    """Inspect a function to determine names and types for all input and output variables.
+
+    Parameters
+    ----------
+    func : callable
+        Function to inspect
+    input_types
+    target : str or [str]
+        Name(s) of variables output from the model.
+        If `func` outputs a single variable `target` will be used as the name.
+        If `func` outputs multiple variables and `target` is a string, `target` will be used as a prefix for all
+            output variable names.
+        If `func` outputs multiple variables and `target` is a list of strings, output variables will be named
+            according to `target`
+
+    Returns
+    -------
+
+    """
     target_func_name = func.__name__
 
-    # Need to create DS2Variable instances to pass to PyMAS
+    # If model input looks like a Pandas DataFrame then just use the column info.
     if hasattr(input_types, 'columns'):
-        # Assuming input is a DataFrame representing model inputs.  Use to
-        # get input variables
-        vars = ds2_variables(input_types)
+        variables = ds2_variables(input_types)
 
-        # Run one observation through the model and use the result to
-        # determine output variables
+        # Run one observation through the model and use the result to determine output variables
         output = func(input_types.head(1))
-        output_vars = ds2_variables(output, output_vars=True, names=names)
-        vars.extend(output_vars)
+        output_vars = ds2_variables(output, output_vars=True, names=target)
+        variables.extend(output_vars)
+
+    # If model input was a single type, assume all inputs to `func` are of that type.
     elif isinstance(input_types, type):
-        params = OrderedDict(
-            [(k, input_types) for k in func.__code__.co_varnames]
-        )
-        vars = ds2_variables(params)
+        # Inspect the function to extract variable names
+        params = OrderedDict([(k, input_types) for k in func.__code__.co_varnames])
+        variables = ds2_variables(params)
+
     elif isinstance(input_types, dict):
-        vars = ds2_variables(input_types)
+        variables = ds2_variables(input_types)
+
     else:
         # Inspect the Python method to determine arguments
-        vars = ds2_variables(func)
+        variables = ds2_variables(func)
 
-    if not any(v for v in vars if v.out):
-        vars.append(DS2Variable(name='result', type='float', out=True))
+    # If no output variable has been set, create a default one
+    if not any(v for v in variables if v.out):
+        variables.append(DS2Variable(name='result', type='float', out=True))
 
-    return vars
+    return variables
 
 
 def _build_pymas(
@@ -452,7 +475,7 @@ def _build_pymas(
     input_types=None,
     array_input=False,
     func_prefix=None,
-    code=None
+    code=None,
 ):
     """
 
