@@ -16,6 +16,7 @@ __copyright__ = (
 )
 
 import logging
+import warnings
 
 
 from .core import (
@@ -35,6 +36,9 @@ from .tasks import (
     register_model,
     update_model_performance,
 )
+
+# Ensure deprecation warnings are shown to users.
+warnings.filterwarnings('always', category=DeprecationWarning, module=r'^sasctl\.')
 
 
 # Prevent package from emitting log records unless consuming
