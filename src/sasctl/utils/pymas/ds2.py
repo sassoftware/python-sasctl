@@ -10,8 +10,6 @@ import re
 import uuid
 from collections import namedtuple, OrderedDict
 
-import six
-
 from ..decorators import deprecated, versionadded
 
 
@@ -190,7 +188,7 @@ class DS2BaseMethod(object):  # skipcq PYL-R0205
 
         if body is None:
             self._body = []
-        elif isinstance(body, six.string_types):
+        elif isinstance(body, str):
             self._body = body.split('\n')
         else:
             self._body = list(body)
@@ -241,7 +239,7 @@ class DS2PyMASMethod(DS2BaseMethod):
 
         # target = target or 'wrapper'
 
-        if isinstance(python_code, six.string_types):
+        if isinstance(python_code, str):
             python_code = python_code.split('\n')
 
         self.public_variables = variables
@@ -528,7 +526,7 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
         t = str(t).lower().strip()
 
         # Using replace since type could be an array: float[10]
-        for k, v in six.iteritems(mapping):
+        for k, v in mapping.items():
             if t.startswith(k):
                 t = t.replace(k, v)
                 break
