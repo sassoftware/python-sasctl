@@ -67,10 +67,13 @@ def lift_statistics(model, train=None, valid=None, test=None, event=None):
 
     results = []
     row_count = 0
+    class_names = list(model.classes_)
+    num_classes = len(class_names)
+
     if event is None:
-        event = 1
-    elif event in model.classes_:
-        event = 0 if event == model.classes_[0] else 1
+        event = num_classes - 1
+    elif event in class_names:
+        event = class_names.index(event)
     else:
         event = int(event)
 
@@ -81,7 +84,7 @@ def lift_statistics(model, train=None, valid=None, test=None, event=None):
         X, y_true = dataset
 
         target_column = getattr(y_true, 'name', 'Class')
-        proba_columns = ['P_%s%d' % (target_column, i) for i in (0, 1)]
+        proba_columns = ['P_%s%d' % (target_column, i) for i in range(num_classes)]
         event_column = proba_columns[event]
 
         # We need to re-assign int values to the dataset to ensure they match
@@ -337,7 +340,7 @@ def roc_statistics(model, train=None, valid=None, test=None):
     row_count = 0
 
     for idx, dataset in enumerate(datasets):
-        if dataset is None or not hasattr(model, 'classes_'):
+        if dataset is None or not hasattr(model, 'classes_') or len(model.classes_ != 2): # multiclass not supported
             continue
 
         X, y_true = dataset
