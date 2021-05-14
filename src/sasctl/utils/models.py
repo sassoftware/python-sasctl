@@ -12,6 +12,8 @@ from tempfile import TemporaryDirectory
 
 import pandas as pd
 from .. import pzmm
+from .decorators import versionadded
+from .pymas.python import ds2_variables
 
 
 # As of Viya 3.4 model registration fails if character fields are longer
@@ -77,6 +79,135 @@ def _sklearn_to_dict(model):
     )
 
     return result
+
+
+@versionadded(version='1.6')
+class ModelInfo:
+    """Performs static & dynamic analysis of a model to capture its properties.
+
+    Parameters
+    ----------
+    model : object
+        Instance of a Python model to inspect.
+
+    """
+    def __init__(self, model):
+
+        self.instance = model
+        self.name = None
+        self.input_variables = {}
+        self.output_variables = {}
+        self.properties = []
+
+        # Most models take DataFrame or array as input instead of individual variables.
+        self.array_input = True
+
+        if hasattr(model, '_estimator_type') and hasattr(model, 'get_params'):
+            self.__init_scikit__(model)
+
+    def set_variables(self, X, y=None, func_names=None):
+        """
+        X : DataFrame
+        y : DataFrame, Series, str
+        func_names : str or [str]
+
+        """
+        sample_input = None
+        sample_output = None
+
+        if hasattr(X, 'head'):
+            self.sample_input = X.head(1)
+
+        if hasattr(y, 'head'):
+            self.sample_output = y.head(1)
+
+        func_names = func_names or self.function_names
+        if isinstance(func_names, str):
+            func_names = [func_names]
+
+        for name in func_names:
+            self.input_variables[name] = ds2_variables(X)
+
+            if y is None:
+                continue
+
+            if name == 'predict_proba':
+                out_names = ['P_%s' % c for c in self.class_names]
+                out_values = self.instance.predict_proba(self.sample_input)
+                self.output_variables[name] = ds2_variables(out_values, output_vars=True, names=out_names)
+            else:
+                self.output_variables[name] = ds2_variables(y, output_vars=True)
+
+    @property
+    def is_binary_classification(self):
+        return len(self.class_names) == 2
+
+    @property
+    def is_multiclass_classification(self):
+        return len(self.class_names) > 2
+
+    @property
+    def is_regression(self):
+        return self.class_names is None or len(self.class_names) == 0
+
+    def __init_scikit__(self, model):
+        # Convert Scikit-learn values to built-in Model Manager values
+        algorithms = {'LogisticRegression': 'Logistic regression',
+                      'LinearRegression': 'Linear regression',
+                      'SVC': 'Support vector machine',
+                      'GradientBoostingClassifier': 'Gradient boosting',
+                      'GradientBoostingRegressor': 'Gradient boosting',
+                      'XGBClassifier': 'Gradient boosting',
+                      'XGBRegressor': 'Gradient boosting',
+                      'RandomForestClassifier': 'Forest',
+                      'DecisionTreeClassifier': 'Decision tree',
+                      'DecisionTreeRegressor': 'Decision tree'}
+
+        analytic_functions = {'classifier': 'classification',
+                              'regressor': 'prediction'}
+
+        self.tool = 'scikit'
+        self.description = str(model)
+        self.class_names = None
+        self.target_level = None
+        self.function_names = ['predict']
+
+        # Get the last estimator in the pipeline, if it's a pipeline.
+        estimator = getattr(model, '_final_estimator', model)
+        estimator = type(estimator).__name__
+
+        # Standardize algorithm names
+        self.algorithm = algorithms.get(estimator, estimator)
+
+        # Standardize regression/classification terms
+        self.function = analytic_functions.get(model._estimator_type, model._estimator_type)
+
+        # Additional info for classification models
+        if self.function == 'classification':
+            self.class_names = list(model.classes_)
+            self.function_names.append('predict_proba')
+
+    def to_dict(self):
+        """Convert to a dictionary that can be passed to MM create_model()"""
+
+        info = {
+            'name': self.name,
+            'description': self.description,
+            'function': self.function,
+            'algorithm': self.algorithm,
+            'tool': self.tool,
+            'scoreCodeType': 'Python',
+            'trainCodeType': 'Python',
+            'training_table': None,
+            'event_prob_variable': None,
+            'event_target_value': None,
+            'target_variable': None,
+            'properties': self.properties,
+            'input_variables': None,
+            'output_variables': None
+        }
+
+        return info
 
 
 def create_package(model, name, inputs, target, train=None, valid=None, test=None):
