@@ -7,6 +7,7 @@
 """Utilities for converting Python model objects into SAS-compatible formats."""
 
 import sys
+from collections import OrderedDict
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -98,6 +99,8 @@ class ModelInfo:
         self.input_variables = {}
         self.output_variables = {}
         self.properties = []
+        self.sample_input = None
+        self.sample_output = None
 
         # Most models take DataFrame or array as input instead of individual variables.
         self.array_input = True
@@ -106,37 +109,43 @@ class ModelInfo:
             self.__init_scikit__(model)
 
     def set_variables(self, X, y=None, func_names=None):
-        """
+        """Parse model input/output data and store variable information.
+
+        Parameters
+        ----------
         X : DataFrame
-        y : DataFrame, Series, str
+        y : DataFrame or Series
         func_names : str or [str]
+            Only set the variable information for the specified function(s)
 
         """
-        sample_input = None
-        sample_output = None
-
         if hasattr(X, 'head'):
-            self.sample_input = X.head(1)
-
-        if hasattr(y, 'head'):
-            self.sample_output = y.head(1)
+            self.sample_input = X.head(2)
 
         func_names = func_names or self.function_names
         if isinstance(func_names, str):
             func_names = [func_names]
 
         for name in func_names:
-            self.input_variables[name] = ds2_variables(X)
+            self.input_variables[name] = self.parse_variable_types(X)
+            # self.input_variables[name] = ds2_variables(X)
 
+            # if y is str or list of str, use parse_arguments
             if y is None:
                 continue
 
             if name == 'predict_proba':
+                # Generate names for probability output columns
                 out_names = ['P_%s' % c for c in self.class_names]
+
+                # Compute sample output since `y` is assumed to be output for .predict()
                 out_values = self.instance.predict_proba(self.sample_input)
-                self.output_variables[name] = ds2_variables(out_values, output_vars=True, names=out_names)
+
+                variables = self.parse_variable_types(out_values)
+                self.output_variables[name] = OrderedDict(zip(out_names, variables.values()))
             else:
-                self.output_variables[name] = ds2_variables(y, output_vars=True)
+                self.output_variables[name] = self.parse_variable_types(y)
+
 
     @property
     def is_binary_classification(self):
@@ -208,6 +217,46 @@ class ModelInfo:
         }
 
         return info
+
+    @classmethod
+    def parse_variable_types(cls, data):
+        """Determine model input/output data names & types.
+
+        Parameters
+        ----------
+        data : any
+
+        Returns
+        -------
+        OrderedDict
+            Ordered dictionary of name:type pairs.
+            Note: "type" is the string name of the type.
+
+        """
+        if isinstance(data, dict):
+            types = OrderedDict(data)
+        if hasattr(data, 'columns') and hasattr(data, 'dtypes'):
+            # Pandas DataFrame or similar
+            types = OrderedDict((c, data.dtypes[c].name) for c in data.columns)
+        elif hasattr(data, 'name') and hasattr(data, 'dtypes'):
+            # Pandas Series or similar
+            types = OrderedDict([(data.name, data.dtype.name)])
+        elif hasattr(data, 'ndim') and hasattr(data, 'dtype'):
+            # NDArray or similar
+            # No column names, but we can at least create dummy vars of the correct type
+            if data.ndim > 1:
+                # For a 2+D array, variables = columns
+                types = OrderedDict([('var{}'.format(i), data.dtype.name) for i in range(data.shape[1])])
+            else:
+                # For a 1D array, can't use size of array but doesn't matter since there's always only 1 variable.
+                types = OrderedDict([('var0', data.dtype.name)])
+        else:
+            raise RuntimeError(
+                "Unable to determine input/ouput types using "
+                "instance of type '%s'." % type(data)
+            )
+
+        return types
 
 
 def create_package(model, name, inputs, target, train=None, valid=None, test=None):
