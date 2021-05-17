@@ -163,7 +163,7 @@ def build_wrapper_function(
 
 @versionadded(version='1.5')
 def wrap_predict_method(func, variables, **kwargs):
-    """Create a PyMAS wrapper designed for Sci-kit's `.predict` methods.
+    """Create a PyMAS wrapper designed for Scikit's `.predict` methods.
 
     Parameters
     ----------
@@ -193,7 +193,7 @@ def wrap_predict_method(func, variables, **kwargs):
 
 @versionadded(version='1.5')
 def wrap_predict_proba_method(func, variables, **kwargs):
-    """Create a PyMAS wrapper designed for Sci-kit's `.predict_proba` methods.
+    """Create a PyMAS wrapper designed for Scikit's `.predict_proba` methods.
 
     Parameters
     ----------
@@ -228,9 +228,42 @@ def wrap_predict_proba_method(func, variables, **kwargs):
     return re.sub(old_code, new_code, wrapper)
 
 
-@versionchanged('Return code and message are disabled by default.', version='1.5')
+@versionadded(version='1.6')
+def wrap_score_method(func, variables, **kwargs):
+    kwargs.setdefault('array_input', True)
+    kwargs.setdefault('name', 'score')
+
+    wrapper_code = build_wrapper_function(func, variables, **kwargs)
+
+    # Need to find position of indent before 'except' block.
+    match = re.search('\s*except Exception', wrapper_code)
+
+    new_code = """
+        event_index = len(results) - 1
+        class_names = model.classes_
+        class_index = results.index(max(results))
+
+        I_Target = class_names[class_index]
+        EM_CLASSIFICATION = I_Target
+        EM_PROBABILITY = results[class_index]
+        EM_EVENTPROBABILITY = results[event_index]
+
+        results += (I_Target, EM_CLASSIFICATION, EM_EVENTPROBABILITY, EM_PROBABILITY)
+#P_TargetX = result[x] for x in len
+#I_Target = idxmax(result)
+
+#EM_CLASSIFICATION = I_Target
+#EM_EVENTPROBABILITY = P_TargetX where x = event level
+#EM_PROBABILITY = P_TargetX where x = I_Target
+
+"""
+
+    wrapper_code = wrapper_code[:match.start()] + new_code + wrapper_code[match.start():]
+    return wrapper_code
+
+
 def from_inline(
-    func, input_types=None, array_input=False, return_code=None, return_message=None
+    func, input_types=None, array_input=False
 ):
     """Creates a PyMAS wrapper to execute the inline python function.
 
@@ -244,12 +277,6 @@ def from_inline(
     array_input : bool
         Whether the function inputs should be treated as an array instead of
         individual parameters
-    return_code : bool
-        Deprecated.
-        Whether the DS2-generated return code should be included
-    return_message : bool
-        Deprecated.
-        Whether the DS2-generated return message should be included
 
     Returns
     -------
@@ -258,25 +285,15 @@ def from_inline(
 
     """
 
-    if return_code is not None or return_message is not None:
-        raise DeprecationWarning(
-            "The 'return_code' and 'return_message' "
-            "parameters are ignored and will be "
-            "removed completely in a future version"
-        )
-
     obj = pickle.dumps(func)
-    return from_pickle(obj, None, input_types, array_input, return_code, return_message)
+    return from_pickle(obj, None, input_types, array_input)
 
 
-@versionchanged('Return code and message are disabled by default.', version='1.5')
 def from_python_file(
     file,
     func_name=None,
     input_types=None,
-    array_input=False,
-    return_code=None,
-    return_message=None,
+    array_input=False
 ):
     """Creates a PyMAS wrapper to execute a function defined in an
     external .py file.
@@ -293,12 +310,6 @@ def from_python_file(
     array_input : bool
         Whether the function inputs should be treated as an array instead of
         individual parameters
-    return_code : bool
-        Deprecated
-        Whether the DS2-generated return code should be included
-    return_message : bool
-        Deprecated
-        Whether the DS2-generated return message should be included
 
     Returns
     -------
@@ -306,13 +317,6 @@ def from_python_file(
         Generated DS2 code which can be executed in a SAS scoring environment
 
     """
-    if return_code is not None or return_message is not None:
-        raise DeprecationWarning(
-            "The 'return_code' and 'return_message' "
-            "parameters are ignored and will be "
-            "removed completely in a future version"
-        )
-
     if not str(file.lower().endswith('.py')):
         raise ValueError("File {} does not have a .py extension.".format(file))
 
@@ -337,14 +341,50 @@ def from_python_file(
     return _build_pymas(target_func, None, input_types, array_input, code=code)
 
 
-@versionchanged('Return code and message are disabled by default.', version='1.5')
+def from_model_info(info):
+    """Create a deployable DS2 package from a ModelInfo instance.
+
+    Parameters
+    ----------
+    info : ModelInfo
+
+    Returns
+    -------
+    PyMAS
+        Generated DS2 code which can be executed in a SAS scoring environment
+
+    """
+
+    # Encode the pickled data so we can inline it in the DS2 package
+    pkl = base64.b64encode(pickle.dumps(info.instance))
+
+    code = (
+        'import pickle, base64',
+        # Replace b' with " before embedding in DS2.
+        'bytes = {}'.format(pkl).replace("'", '"'),
+        'obj = pickle.loads(base64.b64decode(bytes))',
+    )
+
+    for name in info.function_names:
+
+        if name not in info.input_variables:
+            raise ValueError("Input variable information missing for function '%s'." % name)
+        if name not in info.output_variables:
+            raise ValueError("Output variable information missing for function '%s'." % name)
+
+    # No need to use _build_pymas - already have DS2Variable instances organized by function
+    variables = [info.input_variables[f] + info.output_variables[f] for f in info.function_names]
+
+    return PyMAS(
+        info.function_names, variables, code, array_input=info.array_input, func_prefix='obj.'
+    )
+
+
 def from_pickle(
     file,
     func_name=None,
     input_types=None,
-    array_input=False,
-    return_code=None,
-    return_message=None,
+    array_input=False
 ):
     """Create a deployable DS2 package from a Python pickle file.
 
@@ -366,12 +406,6 @@ def from_pickle(
     array_input : bool
         Whether the function inputs should be treated as an array instead of
         individual parameters
-    return_code : bool
-        Deprecated.
-        Whether the DS2-generated return code should be included
-    return_message : bool
-        Deprecated.
-        Whether the DS2-generated return message should be included
 
     Returns
     -------
@@ -379,12 +413,6 @@ def from_pickle(
         Generated DS2 code which can be executed in a SAS scoring environment
 
     """
-    if return_code is not None or return_message is not None:
-        raise DeprecationWarning(
-            "The 'return_code' and 'return_message' "
-            "parameters are ignored and will be "
-            "removed completely in a future version"
-        )
     try:
         # In Python2 str could either be a path or the binary pickle data,
         # so check if its a valid filepath too.
@@ -418,55 +446,7 @@ def from_pickle(
     )
 
 
-def parse_variables(func, input_types, target=None):
-    """Inspect a function to determine names and types for all input and output variables.
 
-    Parameters
-    ----------
-    func : callable
-        Function to inspect
-    input_types
-    target : str or [str]
-        Name(s) of variables output from the model.
-        If `func` outputs a single variable `target` will be used as the name.
-        If `func` outputs multiple variables and `target` is a string, `target` will be used as a prefix for all
-            output variable names.
-        If `func` outputs multiple variables and `target` is a list of strings, output variables will be named
-            according to `target`
-
-    Returns
-    -------
-
-    """
-    target_func_name = func.__name__
-
-    # If model input looks like a Pandas DataFrame then just use the column info.
-    if hasattr(input_types, 'columns'):
-        variables = ds2_variables(input_types)
-
-        # Run one observation through the model and use the result to determine output variables
-        output = func(input_types.head(1))
-        output_vars = ds2_variables(output, output_vars=True, names=target)
-        variables.extend(output_vars)
-
-    # If model input was a single type, assume all inputs to `func` are of that type.
-    elif isinstance(input_types, type):
-        # Inspect the function to extract variable names
-        params = OrderedDict([(k, input_types) for k in func.__code__.co_varnames])
-        variables = ds2_variables(params)
-
-    elif isinstance(input_types, dict):
-        variables = ds2_variables(input_types)
-
-    else:
-        # Inspect the Python method to determine arguments
-        variables = ds2_variables(func)
-
-    # If no output variable has been set, create a default one
-    if not any(v for v in variables if v.out):
-        variables.append(DS2Variable(name='result', type='float', out=True))
-
-    return variables
 
 
 def _build_pymas(
@@ -570,12 +550,6 @@ class PyMAS:
         The input/ouput variables be declared in the module.
     python_source : str
         Additional Python code to be executed during setup.
-    return_code : bool
-        Deprecated.
-        Whether the DS2-generated return code should be included.
-    return_msg : bool
-        Deprecated.
-        Whether the DS2-generated return message should be included.
     kwargs : any
         Passed to :func:`build_wrapper_function`.
 
@@ -586,18 +560,9 @@ class PyMAS:
         target_function,
         variables,
         python_source,
-        return_code=None,
-        return_msg=None,
         func_prefix=None,
         **kwargs
     ):
-
-        if return_code is not None or return_msg is not None:
-            raise DeprecationWarning(
-                "The 'return_code' and 'return_msg' "
-                "parameters are ignored and will be "
-                "removed completely in a future version"
-            )
 
         func_prefix = func_prefix or ''
 
