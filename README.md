@@ -48,6 +48,7 @@ The following additional packages are recommended for full functionality:
 
 ### Installation
 
+Installing the latest version is as easy as:
 ```
 pip install sasctl
 ```
@@ -57,6 +58,11 @@ Functionality that depends on additional packages can be installed using the fol
  - `pip install sasctl[kerberos]`
  - `pip install sasctl[all]`
   
+If you want the latest functionality and can't wait on an official release, you can also
+install the latest source code:
+
+```pip install git+https://github.com/sassoftware/python-sasctl```
+
 
 ## Getting Started
 

@@ -199,3 +199,16 @@ def test_request_formats():
         assert isinstance(resp, RestObj)
         assert resp.name == 'test'
 
+
+def test_platform_version():
+    from sasctl import platform_version
+
+    with mock.patch('sasctl.services.model_repository.info') as mock_info:
+        mock_info.return_value = {'build': {'buildVersion': '3.7.231'}}
+        version = platform_version()
+    assert version == '3.5'
+
+    with mock.patch('sasctl.services.model_repository.info') as mock_info:
+        mock_info.return_value = {'build': {'buildVersion': '3.12.77'}}
+        version = platform_version()
+    assert version == '4.0'

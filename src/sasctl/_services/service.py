@@ -320,7 +320,12 @@ class Service(object):  # skipcq PYL-R0205
                 item = item['id']
 
             if cls.is_uuid(item):
-                return cls.delete(path + '/{id}'.format(id=item))
+                response = cls.delete(path + '/{id}'.format(id=item))
+                # Response generally seems to be an empty string.  If so, just return None
+                # BUT, if the service provides an actual response, return it.
+                if response:
+                    return response
+                return
             raise ValueError("Unrecognized id '%s'" % item)
 
         # Pull object name from path if unspecified (many paths end in
