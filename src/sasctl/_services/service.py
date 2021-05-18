@@ -60,7 +60,7 @@ class Service(object):                                        # skipcq PYL-R0205
         return cls.get('/apiMeta')
 
     @classmethod
-    def request(cls, verb, path, session=None, raw=False, format='auto', **kwargs):
+    def request(cls, verb, path, session=None, format='auto', **kwargs):
         """Send an HTTP request with a session.
 
         Parameters
@@ -72,9 +72,6 @@ class Service(object):                                        # skipcq PYL-R0205
             `_SERVICE_ROOT`.
         session : Session, optional
             Defaults to `current_session()`.
-        raw : bool
-            Deprecated. Whether to return the raw `Response` object.
-            Defaults to False.
         format : {'auto', 'response', 'content', 'json', 'text'}
             The format of the return response.  Defaults to `auto`.
             response: the raw `Response` object.
@@ -95,7 +92,7 @@ class Service(object):                                        # skipcq PYL-R0205
         else:
             path = cls._SERVICE_ROOT + '/' + path
 
-        return core.request(verb, path, session, raw, format, **kwargs)
+        return core.request(verb, path, session, format, **kwargs)
 
     @classmethod
     def get(cls, *args, **kwargs):
