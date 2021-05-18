@@ -107,7 +107,12 @@ class ModelInfo:
         self.array_input = True
 
     def __new__(cls, model):
+        # Scikit model
         if type(model).__module__.startswith('sklearn.'):
+            return object.__new__(ScikitModelInfo)
+
+        # Old fallback for compatibility - for models that are scikit-like
+        if hasattr(model, '_estimator_type') and hasattr(model, 'get_params'):
             return object.__new__(ScikitModelInfo)
 
         return super().__new__(cls)
