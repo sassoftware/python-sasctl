@@ -93,7 +93,6 @@ class ModelInfo:
 
     """
     def __init__(self, model):
-
         self.instance = model
         self.name = None
         self.input_variables = {}
@@ -105,8 +104,11 @@ class ModelInfo:
         # Most models take DataFrame or array as input instead of individual variables.
         self.array_input = True
 
-        if hasattr(model, '_estimator_type') and hasattr(model, 'get_params'):
-            self.__init_scikit__(model)
+    def __new__(cls, model):
+        if type(model).__module__.startswith('sklearn.'):
+            return object.__new__(ScikitModelInfo)
+
+        return super().__new__(cls)
 
     def set_variables(self, X, y=None, func_names=None):
         """Parse model input/output data and store variable information.
@@ -131,6 +133,7 @@ class ModelInfo:
             # self.input_variables[name] = ds2_variables(X)
 
             # if y is str or list of str, use parse_arguments
+            # if y is None, attempt to score model and parse output
             if y is None:
                 continue
 
@@ -146,7 +149,6 @@ class ModelInfo:
             else:
                 self.output_variables[name] = self.parse_variable_types(y)
 
-
     @property
     def is_binary_classification(self):
         return len(self.class_names) == 2
@@ -158,43 +160,6 @@ class ModelInfo:
     @property
     def is_regression(self):
         return self.class_names is None or len(self.class_names) == 0
-
-    def __init_scikit__(self, model):
-        # Convert Scikit-learn values to built-in Model Manager values
-        algorithms = {'LogisticRegression': 'Logistic regression',
-                      'LinearRegression': 'Linear regression',
-                      'SVC': 'Support vector machine',
-                      'GradientBoostingClassifier': 'Gradient boosting',
-                      'GradientBoostingRegressor': 'Gradient boosting',
-                      'XGBClassifier': 'Gradient boosting',
-                      'XGBRegressor': 'Gradient boosting',
-                      'RandomForestClassifier': 'Forest',
-                      'DecisionTreeClassifier': 'Decision tree',
-                      'DecisionTreeRegressor': 'Decision tree'}
-
-        analytic_functions = {'classifier': 'classification',
-                              'regressor': 'prediction'}
-
-        self.tool = 'scikit'
-        self.description = str(model)
-        self.class_names = None
-        self.target_level = None
-        self.function_names = ['predict']
-
-        # Get the last estimator in the pipeline, if it's a pipeline.
-        estimator = getattr(model, '_final_estimator', model)
-        estimator = type(estimator).__name__
-
-        # Standardize algorithm names
-        self.algorithm = algorithms.get(estimator, estimator)
-
-        # Standardize regression/classification terms
-        self.function = analytic_functions.get(model._estimator_type, model._estimator_type)
-
-        # Additional info for classification models
-        if self.function == 'classification':
-            self.class_names = list(model.classes_)
-            self.function_names.append('predict_proba')
 
     def to_dict(self):
         """Convert to a dictionary that can be passed to MM create_model()"""
@@ -257,6 +222,48 @@ class ModelInfo:
             )
 
         return types
+
+
+@versionadded(version='1.6')
+class ScikitModelInfo(ModelInfo):
+    def __init__(self, model):
+        super().__init__(model)
+
+        # Convert Scikit-learn values to built-in Model Manager values
+        algorithms = {'LogisticRegression': 'Logistic regression',
+                      'LinearRegression': 'Linear regression',
+                      'SVC': 'Support vector machine',
+                      'GradientBoostingClassifier': 'Gradient boosting',
+                      'GradientBoostingRegressor': 'Gradient boosting',
+                      'XGBClassifier': 'Gradient boosting',
+                      'XGBRegressor': 'Gradient boosting',
+                      'RandomForestClassifier': 'Forest',
+                      'DecisionTreeClassifier': 'Decision tree',
+                      'DecisionTreeRegressor': 'Decision tree'}
+
+        analytic_functions = {'classifier': 'classification',
+                              'regressor': 'prediction'}
+
+        self.tool = 'scikit'
+        self.description = str(model)
+        self.class_names = None
+        self.target_level = None
+        self.function_names = ['predict']
+
+        # Get the last estimator in the pipeline, if it's a pipeline.
+        estimator = getattr(model, '_final_estimator', model)
+        estimator = type(estimator).__name__
+
+        # Standardize algorithm names
+        self.algorithm = algorithms.get(estimator, estimator)
+
+        # Standardize regression/classification terms
+        self.function = analytic_functions.get(model._estimator_type, model._estimator_type)
+
+        # Additional info for classification models
+        if self.function == 'classification':
+            self.class_names = list(model.classes_) if hasattr(model, 'classes_') else []
+            self.function_names.append('predict_proba')
 
 
 def create_package(model, name, inputs, target, train=None, valid=None, test=None):
