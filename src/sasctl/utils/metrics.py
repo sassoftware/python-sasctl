@@ -168,7 +168,7 @@ def lift_statistics(model, train=None, valid=None, test=None, event=None):
                            'Acc Lift': cum_response_percent / total_response_percent
                            })
 
-        for index, row in df.iterrows():
+        for _, row in df.iterrows():
             row_count += 1
 
             stats = {'header': None,
@@ -338,9 +338,10 @@ def roc_statistics(model, train=None, valid=None, test=None):
 
     results = []
     row_count = 0
+    num_classes = len(getattr(model, 'classes_', []))
 
     for idx, dataset in enumerate(datasets):
-        if dataset is None or not hasattr(model, 'classes_') or len(model.classes_ != 2): # multiclass not supported
+        if dataset is None or not num_classes == 2: # multiclass not supported
             continue
 
         X, y_true = dataset
