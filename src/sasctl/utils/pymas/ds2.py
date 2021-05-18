@@ -489,6 +489,8 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
                                   ('string', 'char'),
                                   ('str', 'char'),
                                   ('varchar', 'char'),
+                                  ('object', 'char'),
+                                  ('category', 'char'),
                                   ('integer64', 'integer'),
                                   ('integer32', 'integer'),
                                   ('integer', 'integer'),
@@ -500,7 +502,6 @@ class DS2Variable(namedtuple('Ds2Variable', ['name', 'type', 'out'])):
                                   ('uint16', 'integer'),
                                   ('uint32', 'integer'),
                                   ('uint64', 'integer')
-
                                   ])
 
     DS2_TYPE_TO_VIYA = OrderedDict([('double', 'decimal'),

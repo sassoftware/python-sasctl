@@ -717,3 +717,25 @@ def predict_proba(a, b):
 
     assert code == target
 
+
+def test_from_model_info():
+    from sasctl.utils.models import ModelInfo
+    from sasctl.utils.pymas import from_model_info
+
+    # Dummy model info
+    info = ModelInfo(None)
+
+    # Set up function names
+    info.function_names = ['predict', 'predict_proba']
+
+    # Set up function input/output variables.
+    info.input_variables['predict'] = OrderedDict(SepalLength='float64', SepalWidth='float64')
+    info.output_variables['predict'] = OrderedDict(Species='category')
+
+    info.input_variables['predict_proba'] = OrderedDict(SepalLength='float64', SepalWidth='float64')
+    info.output_variables['predict_proba'] = OrderedDict(P_setosa='float64', P_versicolor='float64', P_virginica='float64')
+
+    result = from_model_info(info)
+
+    assert isinstance(result, PyMAS)
+

@@ -341,6 +341,7 @@ def from_python_file(
     return _build_pymas(target_func, None, input_types, array_input, code=code)
 
 
+@versionadded(version='1.6')
 def from_model_info(info):
     """Create a deployable DS2 package from a ModelInfo instance.
 
@@ -366,14 +367,14 @@ def from_model_info(info):
     )
 
     for name in info.function_names:
-
         if name not in info.input_variables:
             raise ValueError("Input variable information missing for function '%s'." % name)
         if name not in info.output_variables:
             raise ValueError("Output variable information missing for function '%s'." % name)
 
-    # No need to use _build_pymas - already have DS2Variable instances organized by function
-    variables = [info.input_variables[f] + info.output_variables[f] for f in info.function_names]
+    # No need to use _build_pymas() - already have variable information by function.
+    # Just need to convert to DS2Variable instances and combine into 1 list per function
+    variables = [ds2_variables(info.input_variables[f]) + ds2_variables(info.output_variables[f], output_vars=True) for f in info.function_names]
 
     return PyMAS(
         info.function_names, variables, code, array_input=info.array_input, func_prefix='obj.'
