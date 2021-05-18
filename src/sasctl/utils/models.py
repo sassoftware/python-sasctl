@@ -6,6 +6,7 @@
 
 """Utilities for converting Python model objects into SAS-compatible formats."""
 
+import logging
 import sys
 from collections import OrderedDict
 from pathlib import Path
@@ -14,7 +15,6 @@ from tempfile import TemporaryDirectory
 import pandas as pd
 from .. import pzmm
 from .decorators import versionadded
-from .pymas.python import ds2_variables
 
 
 # As of Viya 3.4 model registration fails if character fields are longer
@@ -25,6 +25,8 @@ _DESC_MAXLEN = 1024
 # longer than 512 characters.
 _PROP_VALUE_MAXLEN = 512
 _PROP_NAME_MAXLEN = 60
+
+logger = logging.getLogger(__name__)
 
 
 def _property(k, v):
@@ -117,37 +119,39 @@ class ModelInfo:
         ----------
         X : DataFrame
         y : DataFrame or Series
-        func_names : str or [str]
-            Only set the variable information for the specified function(s)
+        func_names : str or [str], optional
+            Only set the variable information for the specified function(s).
+            Defaults to self.function_names.
 
         """
         if hasattr(X, 'head'):
-            self.sample_input = X.head(2)
+            self.sample_input = X.head()
+
+        if hasattr(y, 'head'):
+            self.sample_output = y.head()
 
         func_names = func_names or self.function_names
+
         if isinstance(func_names, str):
             func_names = [func_names]
 
         for name in func_names:
-            self.input_variables[name] = self.parse_variable_types(X)
-            # self.input_variables[name] = ds2_variables(X)
+            self._set_function_variables(name, X, y)
 
-            # if y is str or list of str, use parse_arguments
-            # if y is None, attempt to score model and parse output
-            if y is None:
-                continue
+    def _set_function_variables(self, func_name, X, y):
+        self.input_variables[func_name] = self.parse_variable_types(X)
 
-            if name == 'predict_proba':
-                # Generate names for probability output columns
-                out_names = ['P_%s' % c for c in self.class_names]
+        if y is None:
+            try:
+                func = getattr(self.instance, func_name)
+                y = func(X)
+            except:
+                # Log the issue in case it needs to be investigated.
+                logger.exception("Unable to execute method '%s' on instance '%s' with input of type %s.",
+                                 func_name, self.instance, type(X))
 
-                # Compute sample output since `y` is assumed to be output for .predict()
-                out_values = self.instance.predict_proba(self.sample_input)
-
-                variables = self.parse_variable_types(out_values)
-                self.output_variables[name] = OrderedDict(zip(out_names, variables.values()))
-            else:
-                self.output_variables[name] = self.parse_variable_types(y)
+        if y is not None:
+            self.output_variables[func_name] = self.parse_variable_types(y)
 
     @property
     def is_binary_classification(self):
@@ -265,8 +269,23 @@ class ScikitModelInfo(ModelInfo):
             self.class_names = list(model.classes_) if hasattr(model, 'classes_') else []
             self.function_names.append('predict_proba')
 
+    def _set_function_variables(self, func_name, X, y):
+        if func_name == 'predict_proba':
+            self.input_variables[func_name] = self.parse_variable_types(X)
 
-def create_package(model, name, inputs, target, train=None, valid=None, test=None):
+            # Generate names for probability output columns
+            out_names = ['P_%s' % c for c in self.class_names]
+
+            # Compute sample output since `y` is assumed to be output for .predict()
+            out_values = self.instance.predict_proba(self.sample_input)
+
+            variables = self.parse_variable_types(out_values)
+            self.output_variables[func_name] = OrderedDict(zip(out_names, variables.values()))
+        else:
+            super()._set_function_variables(func_name, X, y)
+
+
+def _create_package(model, name, inputs, target, train=None, valid=None, test=None):
     """
     model : any
         Python object
