@@ -5,8 +5,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import copy
-from six.moves import mock
+from unittest import mock
 
+import pytest
 from sasctl import current_session
 from sasctl.services import model_repository as mr
 
@@ -121,3 +122,35 @@ def test_copy_analytic_store():
             obj, rel = args
             assert obj == get_model.return_value
             assert rel == 'copyAnalyticStore'
+
+
+def test_get_model_by_name():
+    """If multiple models exist with the same name, a warning should be raised.
+
+    From https://github.com/sassoftware/python-sasctl/issues/92
+    """
+
+    MODEL_NAME = 'Test Model'
+
+    # Create a dummy session
+    with mock.patch('sasctl.core.requests.Session.request'):
+        current_session('example.com', 'user', 'password')
+
+    mock_responses = [
+        # First response is for list_items/list_models
+        [
+            {'id': 12345, 'name': MODEL_NAME},
+            {'id': 67890, 'name': MODEL_NAME}
+        ],
+
+        # Second response is mock GET for model details
+        {'id': 12345, 'name': MODEL_NAME}
+    ]
+
+    with mock.patch('sasctl._services.model_repository.ModelRepository.request') as request:
+        request.side_effect = mock_responses
+
+        with pytest.warns(Warning):
+            result = mr.get_model(MODEL_NAME)
+    assert result['id']== 12345
+    assert result['name'] == MODEL_NAME

@@ -144,9 +144,16 @@ class ModelRepository(Service):
             The code designated as the model's score code
 
         """
-        link = cls.get_model_link(model, 'contents', refresh=True)
 
-        return cls.request_link(link, 'contents')
+        link = cls.get_model_link(model, 'contents', refresh=True)
+        contents = cls.request_link(link, 'contents')
+
+        # By default, request_link() will unwrap a length-1 list.
+        # If that happens, re-wrap so a list is always returned.
+        if isinstance(contents, list):
+            return contents
+
+        return [contents]
 
     @classmethod
     @sasctl_command('get', 'repositories')

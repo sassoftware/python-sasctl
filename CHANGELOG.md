@@ -2,9 +2,11 @@ Unreleased
 ----------
 **Bugfixes**
  - SSL warnings no longer repeatedly raised when `verify_ssl=False` but `CAS_CLIENT_SSL_CA_LIST` is specified.
+ - `model_repository.delete_model_contents()` no longer fails when only one file is found.
  
 **Improvements**
  - All `delete_*()` service methods return `None` instead of empty string.
+ - All `get_*()` service methods issue a warning if multiple items are found when retrieving by name.
  
 v1.5.7 (2021-05-04)
 -------------------
