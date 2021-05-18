@@ -115,9 +115,7 @@ def test_put_restobj():
     from sasctl.core import put, RestObj
 
     url = "/jobDefinitions/definitions/717331fa-f650-4e31-b9e2-6e6d49f66bf9"
-    obj = RestObj({
-        '_headers': {'etag': 123, 'content-type': 'spam'}
-    })
+    obj = RestObj({'_headers': {'etag': 123, 'content-type': 'spam'}})
 
     # Base case
     with mock.patch('sasctl.core.request') as req:
@@ -148,8 +146,7 @@ def test_put_restobj():
 
     # Should not overwrite explicit headers
     with mock.patch('sasctl.core.request') as req:
-        put(url, obj, headers={'Content-Type': 'notspam',
-                               'encoding': 'spammy'})
+        put(url, obj, headers={'Content-Type': 'notspam', 'encoding': 'spammy'})
 
     assert req.called
     args = req.call_args[0]
@@ -176,14 +173,6 @@ def test_request_formats():
         resp = request('GET', 'example.com', session=mock_sess, format='response')
         assert mock_sess.request.call_count == 1
         assert isinstance(resp, Response)
-
-        with pytest.warns(DeprecationWarning):
-            resp = request('GET', 'example.com', session=mock_sess, raw=True)
-
-            # Make sure old param is eventually cleaned up
-            if sasctl.__version__.startswith('1.6'):
-                pytest.fail("Deprecated 'raw' parameter should be removed.")
-            assert isinstance(resp, Response)
 
         resp = request('GET', 'example.com', session=mock_sess, format='json')
         assert isinstance(resp, dict)
