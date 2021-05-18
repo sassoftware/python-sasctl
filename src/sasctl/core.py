@@ -173,6 +173,11 @@ class HTTPBearerAuth(requests.auth.AuthBase):
 
 
 class RestObj(dict):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._headers = {}  # Placeholder
+
     def __getattr__(self, item):
         # Only called when __getattribute__ failed to find the attribute
         # Return the item from underlying dictionary if possible.
@@ -189,11 +194,9 @@ class RestObj(dict):
         )
 
     def __repr__(self):
-        headers = getattr(self, '_headers', {})
-
         return "%s(headers=%r, data=%s)" % (
             self.__class__,
-            headers,
+            self._headers,
             super(RestObj, self).__repr__(),
         )
 
@@ -288,21 +291,19 @@ class Session(requests.Session):
         # If certificate path hasn't been specified in either environment
         # variable, replace the default adapter with one that will use the
         # machine's default SSL _settings.
-        if 'REQUESTS_CA_BUNDLE' not in os.environ:
-            if verify_ssl:
-                # Skip hostname verification if IP address specified instead
-                # of DNS name.  Prevents error from urllib3.
-                try:
-                    from urllib3.util.ssl_ import is_ipaddress
-                except ImportError:
-                    # is_ipaddres not present in older versions of urllib3
-                    def is_ipaddress(hst):
-                        return re.match(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$", hst)
+        if 'REQUESTS_CA_BUNDLE' not in os.environ and verify_ssl:
+            # Skip hostname verification if IP address specified instead
+            # of DNS name.  Prevents error from urllib3.
+            try:
+                from urllib3.util.ssl_ import is_ipaddress
+            except ImportError:
+                # is_ipaddres not present in older versions of urllib3
+                def is_ipaddress(hst):
+                    return re.match(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$", hst)
 
-                verify_hostname = not is_ipaddress(hostname)
-                adapter = SSLContextAdapter(assert_hostname=verify_hostname)
-
-                self.mount('https://', adapter)
+            verify_hostname = not is_ipaddress(hostname)
+            adapter = SSLContextAdapter(assert_hostname=verify_hostname)
+            self.mount('https://', adapter)
 
         # If we're skipping SSL verification, urllib3 will raise InsecureRequestWarnings on
         # every request.  Insert a warning filter so these warnings only appear on the first request.

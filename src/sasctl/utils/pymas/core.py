@@ -236,7 +236,7 @@ def wrap_score_method(func, variables, **kwargs):
     wrapper_code = build_wrapper_function(func, variables, **kwargs)
 
     # Need to find position of indent before 'except' block.
-    match = re.search('\s*except Exception', wrapper_code)
+    match = re.search(r'\s*except Exception', wrapper_code)
 
     new_code = """
         event_index = len(results) - 1
@@ -584,7 +584,7 @@ class PyMAS:
 
         self.wrapper = []
         wrapper_names = []
-        for func, vars, code, msg in zip(
+        for func, func_vars, code, msg in zip(
             target_function, variables, return_code, return_msg
         ):
             wrapper_names.append('_' + random_string(20))
@@ -592,7 +592,7 @@ class PyMAS:
             if func.lower() == 'predict':
                 lines = wrap_predict_method(
                     func_prefix + func,
-                    vars,
+                    func_vars,
                     setup=python_source,
                     name=wrapper_names[-1],
                     **kwargs
@@ -600,7 +600,7 @@ class PyMAS:
             elif func.lower() == 'predict_proba':
                 lines = wrap_predict_proba_method(
                     func_prefix + func,
-                    vars,
+                    func_vars,
                     name=wrapper_names[-1],
                     setup=python_source,
                     **kwargs
@@ -608,7 +608,7 @@ class PyMAS:
             else:
                 lines = build_wrapper_function(
                     func_prefix + func,
-                    vars,
+                    func_vars,
                     name=wrapper_names[-1],
                     setup=python_source,
                     **kwargs
@@ -618,9 +618,9 @@ class PyMAS:
             # NOTE: add these *after* wrapper function is generated to prevent
             # double-counting them.
             if code:
-                vars.append(DS2Variable(name='rc', type='int32', out=True))
+                func_vars.append(DS2Variable(name='rc', type='int32', out=True))
             if msg:
-                vars.append(DS2Variable(name='msg', type='char', out=True))
+                func_vars.append(DS2Variable(name='msg', type='char', out=True))
 
             # Clear setup code once it's been added once.  No need to duplicate
             # if multiple functions are defined.

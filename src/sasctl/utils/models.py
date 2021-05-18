@@ -150,7 +150,7 @@ class ModelInfo:
             try:
                 func = getattr(self.instance, func_name)
                 y = func(X)
-            except:
+            except Exception:
                 # Log the issue in case it needs to be investigated.
                 logger.exception("Unable to execute method '%s' on instance '%s' with input of type %s.",
                                  func_name, self.instance, type(X))

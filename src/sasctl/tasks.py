@@ -231,18 +231,18 @@ def build_pipeline(data, target, name,
 
     # Local dataframe (either Pandas or SAS) will have .to_csv().  BUT CASTables
     # also have a .to_csv(), but there's no reason to download the data from
-    # CAS just to write to CSV and then upload back to CAS.
+    # CAS just to write to CSV on disk and then upload back to CAS.
     if hasattr(data, 'to_csv') and not hasattr(data, 'get_connection'):
-        buffer = io.BytesIO()
-        buffer.write(data.to_csv(index=False).encode())
-        buffer.seek(0)
+        csv_buffer = io.BytesIO()
+        csv_buffer.write(data.to_csv(index=False).encode())
+        csv_buffer.seek(0)
 
         if table_name is None:
             raise ValueError("'table_name' is a required parameter when "
                              "uploading a DataFrame.")
 
         # Upload the table to CAS
-        data = cm.upload_file(buffer, table_name, caslib=caslib, format_='csv')
+        data = cm.upload_file(csv_buffer, table_name, caslib=caslib, format_='csv')
 
     # If data is a string, assume it's a path to a file that can be uploaded
     elif isinstance(data, six.string_types):

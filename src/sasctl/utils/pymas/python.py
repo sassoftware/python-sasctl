@@ -17,13 +17,13 @@ logger = logging.getLogger(__name__)
 
 
 @versionchanged('`names` parameter added.', version='1.5')
-def ds2_variables(input, output_vars=False, names=None):
+def ds2_variables(input_info, output_vars=False, names=None):
     """Generate a collection of `DS2Variable` instances corresponding to the input
 
     Parameters
     ----------
-    input : function or OrderedDict<string, tuple> or Pandas DataFrame or Numpy or OrderedDict<string, type>
-        a function or mapping parameter names to (type, is_output)
+    input_info : function or OrderedDict<string, tuple> or Pandas DataFrame or Numpy or OrderedDict<string, type>
+        or a function mapping parameter names to (type, is_output)
 
     output_vars : bool
         Whether or not to treat  all variables from `input` as output variables
@@ -47,41 +47,41 @@ def ds2_variables(input, output_vars=False, names=None):
 
     """
 
-    if isinstance(input, dict):
-        types = input
-    elif hasattr(input, 'columns') and hasattr(input, 'dtypes'):
+    if isinstance(input_info, dict):
+        types = input_info
+    elif hasattr(input_info, 'columns') and hasattr(input_info, 'dtypes'):
         # Pandas DataFrame
         types = OrderedDict()
-        for col in input.columns:
-            if input[col].dtype.name == 'object':
+        for col in input_info.columns:
+            if input_info[col].dtype.name == 'object':
                 types[col] = ('char', False)
-            elif input[col].dtype.name == 'category':
+            elif input_info[col].dtype.name == 'category':
                 types[col] = ('char', False)
             else:
-                types[col] = (input[col].dtype.name, False)
-    elif hasattr(input, 'name') and hasattr(input, 'dtypes'):
+                types[col] = (input_info[col].dtype.name, False)
+    elif hasattr(input_info, 'name') and hasattr(input_info, 'dtypes'):
         # Pandas Series
         types = OrderedDict()
-        if input.dtype.name  == 'object':
-            types[input.name] = ('char', False)
-        elif input.dtype.name == 'category':
-            types[input.name] = ('char', False)
+        if input_info.dtype.name  == 'object':
+            types[input_info.name] = ('char', False)
+        elif input_info.dtype.name == 'category':
+            types[input_info.name] = ('char', False)
         else:
-            types[input.name] = (input.dtype.name, False)
-    elif hasattr(input, 'dtype'):
+            types[input_info.name] = (input_info.dtype.name, False)
+    elif hasattr(input_info, 'dtype'):
         # Numpy array?  No column names, but we can at least create dummy vars of the correct type
         types = OrderedDict(
             [
-                ('var{}'.format(i), (input.dtype.name.replace('object', 'char'), False))
-                for i in range(1, input.size + 1)
+                ('var{}'.format(i), (input_info.dtype.name.replace('object', 'char'), False))
+                for i in range(1, input_info.size + 1)
             ]
         )
-    elif callable(input):
-        types = parse_type_hints(input)
+    elif callable(input_info):
+        types = parse_type_hints(input_info)
     else:
         raise RuntimeError(
             "Unable to determine input/ouput types using "
-            "instance of type '%s'." % type(input)
+            "instance of type '%s'." % type(input_info)
         )
 
     if isinstance(names, str):

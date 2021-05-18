@@ -198,12 +198,12 @@ class DS2BaseMethod(object):  # skipcq PYL-R0205
         return self._name
 
     def code(self):
-        vars = ',\n'.join('    %s' % v.as_parameter() for v in self.variables)
+        variables = ',\n'.join('    %s' % v.as_parameter() for v in self.variables)
 
         # Don't spread signature over multiple lines if there are no variables
-        if vars:
+        if variables:
             func = ('method %s(' % self.name,
-                    vars,
+                    variables,
                     '    );',
                     '')
         else:
