@@ -1,5 +1,9 @@
 Unreleased
 ----------
+ -
+ 
+v1.5.8 (2021-05-18)
+-------------------
 **Bugfixes**
  - SSL warnings no longer repeatedly raised when `verify_ssl=False` but `CAS_CLIENT_SSL_CA_LIST` is specified.
  - `model_repository.delete_model_contents()` no longer fails when only one file is found.
