@@ -173,11 +173,6 @@ class HTTPBearerAuth(requests.auth.AuthBase):
 
 
 class RestObj(dict):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self._headers = {}  # Placeholder
-
     def __getattr__(self, item):
         # Only called when __getattribute__ failed to find the attribute
         # Return the item from underlying dictionary if possible.
@@ -194,9 +189,11 @@ class RestObj(dict):
         )
 
     def __repr__(self):
+        headers = self.get('_headers', {})
+
         return "%s(headers=%r, data=%s)" % (
             self.__class__,
-            self._headers,
+            headers,
             super(RestObj, self).__repr__(),
         )
 
@@ -1290,7 +1287,7 @@ def request(verb, path, session=None, format='auto', **kwargs):
         # May not be returned on all responses (e.g. listing
         # multiple objects)
         if isinstance(obj, RestObj):
-            obj._headers = response.headers
+            obj['_headers'] = response.headers
         return obj
     except ValueError:
         if format == 'rest':
