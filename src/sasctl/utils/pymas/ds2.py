@@ -407,12 +407,12 @@ class DS2Thread(object):  # skipcq PYL-R0205
         self.package = package
 
         # Default to predict() method if present
-        if method is None and any(m.name == 'predict' for m in package.methods):
-            method = next(x for x in package.methods if x.name == 'predict')
+        if method is None:
+            method = next((x for x in package.methods if x.name == 'predict'), None)
 
         # Fall back to score() method if present
-        if method is None and any(m.name == 'score' for m in package.methods):
-            method = next(x for x in package.methods if x.name == 'score')
+        if method is None:
+            method = next((x for x in package.methods if x.name == 'score'), None)
 
         # Assume first method is init(), so fall back to next method
         if method is None and len(package.methods) > 1:
@@ -433,7 +433,7 @@ class DS2Thread(object):  # skipcq PYL-R0205
 
         # If passing column data into Python as an array, need extra assignment statements to set values
         if array_input and self.column_names is not None:
-            array = next(filter(lambda v: v.is_array, self.variables))
+            array = next(filter(lambda v: v.is_array, self.variables), None)
             var_assignments = [
                 '{}[{}] = {};'.format(array.name, i + 1, self.column_names[i])
                 for i in

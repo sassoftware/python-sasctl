@@ -189,7 +189,7 @@ class RestObj(dict):
         )
 
     def __repr__(self):
-        headers = self.get('_headers', {})
+        headers = getattr(self, '_headers', {})
 
         return "%s(headers=%r, data=%s)" % (
             self.__class__,
@@ -1287,7 +1287,7 @@ def request(verb, path, session=None, format='auto', **kwargs):
         # May not be returned on all responses (e.g. listing
         # multiple objects)
         if isinstance(obj, RestObj):
-            obj['_headers'] = response.headers
+            obj._headers = response.headers
         return obj
     except ValueError:
         if format == 'rest':
