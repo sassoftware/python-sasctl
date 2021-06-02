@@ -42,7 +42,10 @@ class JSONFiles():
             Output JSON file located at jPath.
         '''
         
-        predictNames = inputDF.columns.values.tolist()
+        try:
+            predictNames = inputDF.columns.values.tolist()
+        except AttributeError:
+            predictNames = [inputDF.name]
         outputJSON = pd.DataFrame()
         
         # loop through all predict variables to determine their name, length,

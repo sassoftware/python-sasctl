@@ -4,16 +4,12 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-<<<<<<< HEAD
-__version__ = '1.5.4.dev'
-=======
-__version__ = '1.5.7'
->>>>>>> upstream/master
+__version__ = '1.5.8.dev'
 __author__ = 'SAS'
 __credits__ = ['Yi Jian Ching, Lucas De Paula, James Kochuba, Peter Tobac, '
-               'Chris Toth, Jon Walker']
+               'Chris Toth, Jon Walker', 'Scott Lindauer']
 __license__ = 'Apache 2.0'
-__copyright__ = 'Copyright © 2019, SAS Institute Inc., ' \
+__copyright__ = 'Copyright © 2021, SAS Institute Inc., ' \
                 'Cary, NC, USA.  All Rights Reserved.'
 
 import logging
