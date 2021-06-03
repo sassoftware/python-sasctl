@@ -4,7 +4,11 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+<<<<<<< HEAD
 __version__ = '1.5.8'
+=======
+__version__ = '1.5.8.dev'
+>>>>>>> 5f123a90f20d6dfca0508566703647962e8972a8
 __author__ = 'SAS'
 __credits__ = ['Yi Jian Ching, Lucas De Paula, James Kochuba, Peter Tobac, '
                'Chris Toth, Jon Walker', 'Scott Lindauer']
