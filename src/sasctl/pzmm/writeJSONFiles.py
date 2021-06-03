@@ -44,14 +44,19 @@ class JSONFiles():
         
         try:
             predictNames = inputDF.columns.values.tolist()
+            isSeries = False
         except AttributeError:
             predictNames = [inputDF.name]
+            isSeries = True
         outputJSON = pd.DataFrame()
         
         # loop through all predict variables to determine their name, length,
         # type, and level; append each to outputJSON
         for name in predictNames:
-            predict = inputDF[name]
+            if isSeries:
+                predict = inputDF
+            else:
+                predict = inputDF[name]
             firstRow = predict.loc[predict.first_valid_index()]
             dType = predict.dtypes.name
             dKind = predict.dtypes.kind
@@ -153,7 +158,10 @@ class JSONFiles():
             targetLevel = 'BINARY'
             
         if eventProbVar is None:
-            eventProbVar = 'P_' + targetVariable + targetEvent
+            try:
+                eventProbVar = 'P_' + targetVariable + targetEvent
+            except TypeError:
+                eventProbVar = None
         # Replace <myUserID> with the user ID of the modeler that created the model.
         if modeler is None:
             try:
