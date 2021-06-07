@@ -7,7 +7,7 @@
 """The Model Repository service supports registering and managing models."""
 
 import six
-import urllib
+
 from .service import Service
 from ..core import current_session, get, delete, sasctl_command, HTTPError
 
@@ -761,14 +761,14 @@ class ModelRepository(Service):
         # Check if symbolic link for resource directories exists
         try:
             return cls.put('/models/%s/scoreResources' % id_, headers={'Accept': 'application/json'})
-        except urllib.error.HTTPError as error:
-            if error.code == 406:
+        except HTTPError as e:
+            if e.code == 406:
                 raise OSError('The SAS Viya system you are attempting to move score resources with requires an additional' + 
                               ' administrator action in order to complete. Please see the documentation at ' +
                               'https://go.documentation.sas.com/doc/en/calcdc/3.5/calmodels/n10916nn7yro46n119nev9sb912c.htm,' + 
                               'which details the corollary approach for configuring analytic store model files.')
             else:
-                raise error
+                raise e
     
     @classmethod
     def convert_python_to_ds2(cls, model):
