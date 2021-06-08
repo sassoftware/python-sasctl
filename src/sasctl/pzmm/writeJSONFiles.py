@@ -145,12 +145,10 @@ class JSONFiles():
             Output JSON file located at jPath.            
         '''
         
-        description = modelDesc + ' : ' + targetVariable + ' = '
-        # loop through all modelPredictors to write out the model description
-        for counter, predictor in enumerate(modelPredictors):
-            if counter > 0:
-                description = description + ' + '
-            description += predictor
+        # Check if model description provided is smaller than then 1024 character limit
+        if len(modelDesc) > 1024:
+            modelDesc = modelDesc[:1024]
+            print('WARNING: The provided model description was truncated to 1024 characters.')
             
         if numTargetCategories > 2:
             targetLevel = 'NOMINAL'
@@ -177,7 +175,7 @@ class JSONFiles():
                      'targetLevel', 'eventProbVar', 'modeler',
                      'tool', 'toolVersion']
         
-        modelProperties = [modelName, description, 'classification',
+        modelProperties = [modelName, modelDesc, 'classification',
                            'python', ' ', 'Python',
                            modelType, targetVariable, targetEvent,
                            targetLevel, eventProbVar, modeler,
