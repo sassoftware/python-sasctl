@@ -605,10 +605,13 @@ class ModelRepository(Service):
             The API response after importing the model.
 
         """
-        project = cls.get_project(project)
+        projectResponse = cls.get_project(project)
 
-        if project is None:
-            raise ValueError('Project `%s` could not be found.' % str(project))
+        if projectResponse is None:
+            repo = cls.default_repository().get('id')
+            project = cls.create_project(project, repo)
+        else:
+            project = projectResponse
 
         params = {'name': name,
                   'description': description,
