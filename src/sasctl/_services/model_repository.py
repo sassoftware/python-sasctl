@@ -785,7 +785,10 @@ class ModelRepository(Service):
         
         # Check if symbolic link for resource directories exists
         try:
-            return cls.put('/models/%s/scoreResources' % id_, headers={'Accept': 'application/json'})
+            response = cls.put('/models/%s/scoreResources' % id_, headers={'Accept': 'application/json'})
+            if response is None:
+                print('WARNING: No score resource files were found in model {}.'.format(model.name))
+            return response
         except HTTPError as e:
             if e.code == 406:
                 raise OSError('The SAS Viya system you are attempting to move score resources with requires an additional' + 
