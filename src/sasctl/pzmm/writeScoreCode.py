@@ -93,7 +93,6 @@ class ScoreCode():
         'dmcas_packagescorecode.sas' (for SAS Viya 3.5 models)
             Python score code wrapped in DS2 and prepared for SAS Microanalyic Service scoring or publishing.
         '''       
-        import pdb; pdb.set_trace()
         # Call REST API to check SAS Viya version
         isViya35 = (platform_version() == '3.5')
         
@@ -246,7 +245,6 @@ def score{modelPrefix}({inputVarList}):
                                                          otherVariable)
                         newVarList.remove(inputVarList[i])
                         newVarList.extend(tempVar)
-    
             # For non-H2O models, insert the model into the provided predictMethod call
             if not isH2OModel:
                 predictMethod = predictMethod.format('_thisModelFit', 'inputArray')

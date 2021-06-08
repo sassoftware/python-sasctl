@@ -520,7 +520,7 @@ class ModelRepository(Service):
                 modelContents = cls.get_model_contents(id_)
                 for item in modelContents:
                     if item.name == name:
-                        cls.delete('/models/{}/contents/{}').format(id_, item.id)
+                        cls.delete('/models/{}/contents/{}'.format(id_, item.id))
                         return cls.post('/models/{}/contents'.format(id_),
                                         files=files, data=metadata)
             else:
