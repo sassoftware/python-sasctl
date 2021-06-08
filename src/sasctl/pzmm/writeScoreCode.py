@@ -93,6 +93,7 @@ class ScoreCode():
         'dmcas_packagescorecode.sas' (for SAS Viya 3.5 models)
             Python score code wrapped in DS2 and prepared for SAS Microanalyic Service scoring or publishing.
         '''       
+        import pdb; pdb.set_trace()
         # Call REST API to check SAS Viya version
         isViya35 = (platform_version() == '3.5')
         
@@ -159,7 +160,7 @@ global _thisModelFit''')
 h2o.init()''')
 
             # For each case of SAS Viya version and H2O model or not, load the model file as variable _thisModelFit
-            if isViya35 and not isH2OModel:
+            if isViya35 and isH2OModel:
                 cls.pyFile.write('''\n
 with gzip.open('/models/resources/viya/{modelID}/{modelFileName}', 'r') as fileIn, open('/models/resources/viya/{modelID}/{modelZipFileName}', 'wb') as fileOut:
     shutil.copyfileobj(fileIn, fileOut)
@@ -169,6 +170,10 @@ _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelZipFileN
                     modelFileName=modelFileName,
                     modelZipFileName=modelFileName[:-4] + 'zip'
                 ))
+            elif isViya35 and not isH2OModel:
+                cls.pyFile.write('''\n
+with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
+    _thisModelFit = pickle.load(_pfile)'''.format(modelID=modelID, modelFileName=modelFileName))
             elif not isViya35 and not isH2OModel:
                 cls.pyFile.write('''\n
 with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
@@ -179,14 +184,13 @@ with gzip.open(settings.pickle_path + '{modelFileName}', 'r') as fileIn, open(se
     shutil.copyfileobj(fileIn, fileOut)
 os.chmod(settings.pickle_path + '{modelZipFileName}', 0o777)
 _thisModelFit = h2o.import_mojo(settings.pickle_path + '{modelZipFileName}')'''.format(modelFileName=modelFileName,
-                                                                                                 modelZipFileName=modelFileName[:-4] + 'zip'
-                                                                                                 ))
+                                                                                       modelZipFileName=modelFileName[:-4] + 'zip'))
             # Create the score function with variables from the input dataframe provided and create the output variable line for SAS Model Manager
             cls.pyFile.write('''\n
 def score{modelPrefix}({inputVarList}):
     "Output: {metrics}"'''.format(modelPrefix=modelPrefix,
-                                             inputVarList=', '.join(inputVarList),
-                                             metrics=', '.join(metrics)))
+                                  inputVarList=', '.join(inputVarList),
+                                  metrics=', '.join(metrics)))
             # As a check for missing model variables, run a try/except block that reattempts to load the model in as a variable
             cls.pyFile.write('''\n
     try:
