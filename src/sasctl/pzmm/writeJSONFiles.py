@@ -434,7 +434,14 @@ class JSONFiles():
 
             fitStats['_PartInd_'] = j
             
-            fpr, tpr, _ = metrics.roc_curve(dataSets[j][0], dataSets[j][1])
+            # If the data provided is Predicted | Actual instead of Actual | Predicted, catch the error and flip the columns
+            try:
+                fpr, tpr, _ = metrics.roc_curve(dataSets[j][0], dataSets[j][1])
+            except ValueError:
+                tempSet = dataSets[j]
+                dataSets[j][0] = tempSet[1]
+                dataSets[j][1] = tempSet[0]
+                fpr, tpr, _ = metrics.roc_curve(dataSets[j][0], dataSets[j][1])
         
             RASE = np.sqrt(metrics.mean_squared_error(dataSets[j][0], dataSets[j][1]))
             fitStats['_RASE_'] = RASE
