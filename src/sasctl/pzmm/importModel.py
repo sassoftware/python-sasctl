@@ -10,10 +10,10 @@ from .zipModel import ZipModel as zm
 class ImportModel():
     
     @classmethod
-    def pzmmImportModel(cls, zPath, modelPrefix, project, inputDF, targetDF, predictmethod, 
+    def pzmmImportModel(cls, zPath, modelPrefix, project, inputDF, targetDF, predictmethod,
                           metrics=['EM_EVENTPROBABILITY', 'EM_CLASSIFICATION'], 
                           modelFileName=None, pyPath=None, threshPrediction=None,
-                          otherVariable=False, isH2OModel=False):
+                          otherVariable=False, isH2OModel=False, force=False):
         '''Import model to SAS Model Manager using pzmm submodule.
         
         Using pzmm, generate Python score code and import the model files into 
@@ -60,6 +60,8 @@ class ImportModel():
             is False.
         isH2OModel : boolean, optional
             Sets whether the model is an H2O.ai Python model. By default False.
+        force : boolean, optional
+            Sets whether to overwrite models with the same name upon upload. By default False.
             
         Yields
         ------
@@ -85,10 +87,10 @@ class ImportModel():
                               metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction, 
                               otherVariable=otherVariable, isH2OModel=isH2OModel)
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
-            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile)
+            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
         else:
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
-            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile)
+            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
             sc.writeScoreCode(inputDF, targetDF, modelPrefix, predictmethod, modelFileName,
                               metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction, 
                               otherVariable=otherVariable, model=response.id,

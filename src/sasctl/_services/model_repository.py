@@ -583,7 +583,7 @@ class ModelRepository(Service):
                                 'application/vnd.sas.models.project+json'})
 
     @classmethod
-    def import_model_from_zip(cls, name, project, file, description=None,
+    def import_model_from_zip(cls, name, project, file, force=False, description=None,
                               version='latest'):
         """Import a model and contents as a ZIP file into a model project.
 
@@ -607,6 +607,7 @@ class ModelRepository(Service):
         """
         projectResponse = cls.get_project(project)
 
+        # Check if a project exists with the provided name, if not create a new project
         if projectResponse is None:
             repo = cls.default_repository().get('id')
             project = cls.create_project(project, repo)
@@ -619,6 +620,14 @@ class ModelRepository(Service):
                   'projectId': project.id,
                   'versionOption': version}
         params = '&'.join('{}={}'.format(k, v) for k, v in params.items())
+        
+        # Check if a model with the same name already exists in the project
+        model = cls.get_model(name)
+        if model is not None:
+            if force:
+                cls.delete_model(model.id)
+            else:
+                raise ValueError('A model with the same model name exists in project {}.'.format(project.name))
 
         r = cls.post('/models#octetStream',
                      data=file.read(),
