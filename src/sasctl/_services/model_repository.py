@@ -509,9 +509,22 @@ class ModelRepository(Service):
             files = {name: file}
 
         metadata = {'role': role, 'name': name}
-
-        return cls.post('/models/{}/contents'.format(id_),
-                        files=files, data=metadata)
+        
+        # if the file already exists, a 409 error will be returned
+        try:
+            return cls.post('/models/{}/contents'.format(id_),
+                            files=files, data=metadata)
+        # delete the older duplicate model and rerun the API call
+        except HTTPError as e:
+            if e.code == 409:
+                modelContents = cls.get_model_contents(id_)
+                for item in modelContents:
+                    if item.name == name:
+                        cls.delete('/models/{}/contents/{}').format(id_, item.id)
+                        return cls.post('/models/{}/contents'.format(id_),
+                                        files=files, data=metadata)
+            else:
+                raise e
 
     @classmethod
     def default_repository(cls):
