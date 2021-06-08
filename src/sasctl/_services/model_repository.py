@@ -786,7 +786,7 @@ class ModelRepository(Service):
         # Check if symbolic link for resource directories exists
         try:
             response = cls.put('/models/%s/scoreResources' % id_, headers={'Accept': 'application/json'})
-            if response is None:
+            if response == []:
                 print('WARNING: No score resource files were found in model {}.'.format(model.name))
             return response
         except HTTPError as e:
