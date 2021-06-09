@@ -229,34 +229,94 @@ def wrap_predict_proba_method(func, variables, **kwargs):
 
 
 @versionadded(version='1.6')
-def wrap_score_method(func, variables, **kwargs):
+def wrap_classification_score_method(func, variables, class_names, event_level=None, **kwargs):
+    """
+
+    Parameters
+    ----------
+    func
+    variables : list of DS2Variable
+    class_names : list of string
+    event_level : int
+    kwargs : any
+
+    Returns
+    -------
+    str
+
+    """
     kwargs.setdefault('array_input', True)
     kwargs.setdefault('name', 'score')
+
+    # Make sure the extra output variables expected by SAS are present
+    if not any(v.name == 'EM_CLASSIFICATION' for v in variables):
+        variables.extend([
+            DS2Variable('I_Target', 'str', True),
+            DS2Variable('EM_CLASSIFICATION', 'str', True),
+            DS2Variable('EM_PROBABILITY', 'double', True),
+            DS2Variable('EM_EVENTPROBABILITY', 'double', True),
+        ])
 
     wrapper_code = build_wrapper_function(func, variables, **kwargs)
 
     # Need to find position of indent before 'except' block.
     match = re.search(r'\s*except Exception', wrapper_code)
 
+    if event_level is None:
+        event_level = len(class_names) - 1
+
     new_code = """
-        event_index = len(results) - 1
-        class_names = model.classes_
-        class_index = results.index(max(results))
+        event_index = {event}
+        class_names = {classes}
+        class_index = result.index(max(result))
 
         I_Target = class_names[class_index]
         EM_CLASSIFICATION = I_Target
-        EM_PROBABILITY = results[class_index]
-        EM_EVENTPROBABILITY = results[event_index]
+        EM_PROBABILITY = result[class_index]
+        EM_EVENTPROBABILITY = result[event_index]
 
-        results += (I_Target, EM_CLASSIFICATION, EM_EVENTPROBABILITY, EM_PROBABILITY)
-#P_TargetX = result[x] for x in len
-#I_Target = idxmax(result)
+        result += (I_Target, EM_CLASSIFICATION, EM_EVENTPROBABILITY, EM_PROBABILITY)
+    """.format(event=event_level,
+               classes=str(class_names).replace("'", '"'))
 
-#EM_CLASSIFICATION = I_Target
-#EM_EVENTPROBABILITY = P_TargetX where x = event level
-#EM_PROBABILITY = P_TargetX where x = I_Target
+    wrapper_code = wrapper_code[:match.start()] + new_code + wrapper_code[match.start():]
+    return wrapper_code
 
-"""
+
+@versionadded(version='1.6')
+def wrap_regression_score_method(func, variables, **kwargs):
+
+    # EM_PREDICTION
+    # P_MORTDUE (P_TargetName)
+
+    kwargs.setdefault('array_input', True)
+    kwargs.setdefault('name', 'score')
+
+    # Make sure the extra output variables expected by SAS are present
+    if not any(v.name == 'EM_PREDICTION' for v in variables):
+        # There should be exactly 1 output variable defined at this point. (multiple regression current not handled)
+        output_var = [v for v in variables if v.out]
+
+        if len(output_var) != 1:
+            raise ValueError('Unable to find an output variable.')
+        output_var = output_var[0]
+        variables.remove(output_var)
+
+        variables.extend([
+            DS2Variable('P_%s' % output_var.name, 'double', True),
+            DS2Variable('EM_PREDICTION', 'double', True)
+        ])
+
+    wrapper_code = build_wrapper_function(func, variables, **kwargs)
+
+    # Need to find position of indent before 'except' block.
+    match = re.search(r'\s*except Exception', wrapper_code)
+
+    # Have 2 output variables to provide (same) output for, but model only outputs 1 value
+    # Since output will have been converted to tuple, can simply replicate values.
+    new_code = """
+        result *= 2
+    """
 
     wrapper_code = wrapper_code[:match.start()] + new_code + wrapper_code[match.start():]
     return wrapper_code
@@ -545,14 +605,20 @@ class PyMAS:
 
     Parameters
     ----------
-    target_function : str
+    target_function : str or  list
         The Python function to be executed.
-    variables : list of DS2Variable
+    variables : list of DS2Variable  or list of list
         The input/ouput variables be declared in the module.
     python_source : str
         Additional Python code to be executed during setup.
     kwargs : any
         Passed to :func:`build_wrapper_function`.
+
+    Attributes
+    ----------
+    wrapper : str
+        Python code containing generated methods to execute model methods.
+
 
     """
 
@@ -587,6 +653,7 @@ class PyMAS:
         for func, func_vars, code, msg in zip(
             target_function, variables, return_code, return_msg
         ):
+            # Random name to avoid conflict with any existing methods
             wrapper_names.append('_' + random_string(20))
 
             if func.lower() == 'predict':
@@ -614,13 +681,13 @@ class PyMAS:
                     **kwargs
                 )
 
-            # Add DS2 variables for returning error codes/messages
-            # NOTE: add these *after* wrapper function is generated to prevent
-            # double-counting them.
-            if code:
-                func_vars.append(DS2Variable(name='rc', type='int32', out=True))
-            if msg:
-                func_vars.append(DS2Variable(name='msg', type='char', out=True))
+            # # Add DS2 variables for returning error codes/messages
+            # # NOTE: add these *after* wrapper function is generated to prevent
+            # # double-counting them.
+            # if code:
+            #     func_vars.append(DS2Variable(name='rc', type='int32', out=True))
+            # if msg:
+            #     func_vars.append(DS2Variable(name='msg', type='char', out=True))
 
             # Clear setup code once it's been added once.  No need to duplicate
             # if multiple functions are defined.
@@ -631,6 +698,8 @@ class PyMAS:
         self.variables = variables[0]
         # self.return_code = return_code[0]
         self.return_message = return_msg[0]
+
+
 
         self.package = DS2PyMASPackage(self.wrapper)
 
