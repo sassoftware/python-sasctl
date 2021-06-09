@@ -2,6 +2,11 @@ Unreleased
 ----------
  -
  
+v1.5.9 (2021-06-09)
+-------------------
+**Bugfixes**
+ - Fixed an issue that caused score code generation by `pzmm` module to fail with Viya 3.5.
+ 
 v1.5.8 (2021-05-18)
 -------------------
 **Bugfixes**
