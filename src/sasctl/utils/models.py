@@ -96,9 +96,12 @@ class ModelInfo:
     """
     def __init__(self, model):
         self.instance = model
-        self.name = None
+        self.name = type(model).__name__
+        self.description = str(model)
         self.input_variables = {}
         self.output_variables = {}
+        self.class_names = None
+        self.target_level = None
         self.properties = []
         self.sample_input = None
         self.sample_output = None
@@ -110,6 +113,10 @@ class ModelInfo:
         # Scikit model
         if type(model).__module__.startswith('sklearn.'):
             return object.__new__(ScikitModelInfo)
+
+        # PyTorch model
+        if hasattr(model, 'forward') and hasattr(model, 'named_modules'):
+            return object.__new__(PyTorchModelInfo)
 
         # Old fallback for compatibility - for models that are scikit-like
         if hasattr(model, '_estimator_type') and hasattr(model, 'get_params'):
@@ -160,11 +167,15 @@ class ModelInfo:
 
     @property
     def is_binary_classification(self):
-        return len(self.class_names) == 2
+        return self.class_names and len(self.class_names) == 2
 
     @property
     def is_multiclass_classification(self):
-        return len(self.class_names) > 2
+        return self.class_names and len(self.class_names) > 2
+
+    @property
+    def is_classification(self):
+        return self.is_binary_classification or self.is_multiclass_classification
 
     @property
     def is_regression(self):
@@ -254,9 +265,6 @@ class ScikitModelInfo(ModelInfo):
                               'regressor': 'prediction'}
 
         self.tool = 'scikit'
-        self.description = str(model)
-        self.class_names = None
-        self.target_level = None
         self.function_names = ['predict']
 
         # Get the last estimator in the pipeline, if it's a pipeline.
@@ -288,6 +296,13 @@ class ScikitModelInfo(ModelInfo):
             self.output_variables[func_name] = OrderedDict(zip(out_names, variables.values()))
         else:
             super()._set_function_variables(func_name, X, y)
+
+
+class PyTorchModelInfo(ModelInfo):
+    def __init__(self, model):
+        super().__init__(model)
+        self.tool = 'pytorch'
+        self.function_names = ['forward']
 
 
 def _create_package(model, name, inputs, target, train=None, valid=None, test=None):
