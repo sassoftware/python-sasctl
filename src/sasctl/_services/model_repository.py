@@ -605,6 +605,9 @@ class ModelRepository(Service):
             The API response after importing the model.
 
         """
+        if type(name) is dict:
+            name = name['name']
+
         projectResponse = cls.get_project(project)
 
         # Check if a project exists with the provided name, if not create a new project
@@ -622,12 +625,16 @@ class ModelRepository(Service):
         params = '&'.join('{}={}'.format(k, v) for k, v in params.items())
         
         # Check if a model with the same name already exists in the project
-        model = cls.get_model(name)
-        if model is not None:
-            if force:
-                cls.delete_model(model.id)
-            else:
-                raise ValueError('A model with the same model name exists in project {}.'.format(project.name))
+        project = cls.get_project(project)
+        projectId = project['id']
+        projectModels = cls.get('/projects/{}/models'.format(projectId))
+        
+        for model in projectModels:
+            if model['name'] == name:
+                if force:
+                    cls.delete_model(model.id)
+                else:
+                    raise ValueError('A model with the same model name exists in project {}.'.format(project.name))
 
         r = cls.post('/models#octetStream',
                      data=file.read(),
