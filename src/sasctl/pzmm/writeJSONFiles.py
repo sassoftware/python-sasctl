@@ -16,8 +16,7 @@ from scipy.stats import kendalltau, gamma
 # %%
 class JSONFiles():
         
-    def writeVarJSON(self, inputDF, isInput=True,
-                     jPath=Path.cwd(), debug=False):
+    def writeVarJSON(self, inputDF, isInput=True, jPath=Path.cwd()):
         '''
         Writes a variable descriptor JSON file for input or output variables,
         based on an input dataframe containing predictor and prediction columns.
@@ -33,8 +32,6 @@ class JSONFiles():
         jPath : string, optional
             File location for the output JSON file. Default is the current
             working directory.
-        debug : boolean, optional
-            Debug mode to check predictor classification. The default is False.
             
         Yields
         ---------------
@@ -59,29 +56,19 @@ class JSONFiles():
                 predict = inputDF[name]
             firstRow = predict.loc[predict.first_valid_index()]
             dType = predict.dtypes.name
-            dKind = predict.dtypes.kind
-            isNum = pd.api.types.is_numeric_dtype(firstRow)
-            isStr = pd.api.types.is_string_dtype(predict)
-            
-            # in debug mode, print each variables descriptor
-            if debug:
-                print('predictor = ', name)
-                print('dType = ', dType)
-                print('dKind = ', dKind)
-                print('isNum = ', isNum)
-                print('isStr = ', isStr)
+            isStr = type(firstRow) is str
                 
-            if isNum:
+            if isStr:
+                outputLevel = 'nominal'
+                outputType = 'string'
+                outputLength = predict.str.len().max()
+            else:
                 if dType == 'category':
                     outputLevel = 'nominal'
                 else:
                     outputLevel = 'interval'
                 outputType = 'decimal'
                 outputLength = 8
-            elif isStr:
-                outputLevel = 'nominal'
-                outputType = 'string'
-                outputLength = predict.str.len().max()
                 
             outputRow = pd.Series([name,
                                    outputLength,
