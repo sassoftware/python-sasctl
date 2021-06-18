@@ -547,11 +547,11 @@ def register_model(
             )
 
             model['inputVariables'] = [
-                var.as_model_metadata() for var in mas_module.variables if not var.out
+                var.as_model_metadata() for var in mas_module.default_method.variables if not var.out
             ]
 
             model['outputVariables'] = [
-                var.as_model_metadata() for var in mas_module.variables if var.out
+                var.as_model_metadata() for var in mas_module.default_method.variables if var.out
             ]
         except ValueError:
             # PyMAS creation failed, most likely because input data wasn't

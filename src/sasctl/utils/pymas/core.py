@@ -8,6 +8,7 @@
 
 from __future__ import print_function
 import base64
+import gzip
 import importlib
 import pickle  # skipcq BAN-B301
 import os
@@ -436,9 +437,7 @@ def from_model_info(info):
     # Just need to convert to DS2Variable instances and combine into 1 list per function
     variables = [ds2_variables(info.input_variables[f]) + ds2_variables(info.output_variables[f], output_vars=True) for f in info.function_names]
 
-    return PyMAS(
-        info.function_names, variables, code, array_input=info.array_input, func_prefix='obj.'
-    )
+    return PyMAS2(info)
 
 
 def from_pickle(
@@ -765,6 +764,235 @@ class PyMAS:
                 input_table,
                 column_names=columns,
                 return_message=self.return_message,
+                package=self.package,
+            )
+
+            code += (
+                str(thread),
+                'data SASEP.out;',
+                '  dcl thread {} t;'.format(thread.name),
+                '  method run();',
+                '    set from t;',
+                '    output;',
+                '  end;',
+                'enddata;',
+            )
+
+        elif dest == 'PYTHON':
+            # Python code return
+            code = self.package._python_code
+
+        return '\n'.join(code)
+
+
+class PyMAS2:
+    def __init__(self, model_info):
+
+        # init code
+        # score resources
+
+        # Name of DS2 method that is used by default
+        default_method_name = None
+
+        # assume model_init_code() preps an object called 'model'
+        function_prefix = 'model.'
+        lines = []
+        ds2_methods = []
+
+        # Get any init code needed to load/ready the model
+        init_code = self.model_init_code(model_info)
+
+        # Wrap in a try/catch block so we can return errors if necessary
+        init_code = ('try:',) + tuple('    ' + line for line in init_code) + ('    _compile_error = None',
+                                                                              'except Exception as e:',
+                                                                              '    _compile_error = e',
+                                                                              '',
+                                                                              )
+        lines.extend(init_code)
+
+        # Generate wrappers
+        for name in model_info.function_names:
+            # Random name to avoid conflict with any existing methods
+            wrapper_name = '_' + random_string(20)
+
+            variables = ds2_variables(model_info.input_variables[name]) + ds2_variables(
+                model_info.output_variables[name], output_vars=True)
+
+            if name.lower() == 'predict':
+                # Default to .predict if found
+                default_method_name = name
+
+                code = wrap_predict_method(function_prefix + name,
+                                           variables,
+                                           name=wrapper_name
+                                           )
+            elif name.lower() == 'predict_proba':
+                code = wrap_predict_proba_method(function_prefix + name,
+                                                 variables,
+                                                 name=wrapper_name
+                                                 )
+            else:
+                # Use current mystery method only if we haven't found something more standard
+                default_method_name = default_method_name or name.lower()
+
+                code = build_wrapper_function(function_prefix + name,
+                                              variables,
+                                              model_info.array_input,
+                                              name=wrapper_name
+                                              )
+                # Track mapping of Python wrapper method => DS2 method
+            # Will be needed later to generate corresponding DS2 methods
+            ds2_methods.append({
+                'name': name,
+                'target': wrapper_name,
+                'variables': variables
+            })
+
+            # Append code for new wrapper method to list of generated Python code
+            lines.extend(code.split('\n'))
+
+        # Generate a "score" method for classification models
+        if model_info.is_classification and 'predict_proba' in model_info.function_names:
+            name = 'predict_proba'
+            wrapper_name = '_' + random_string(20)
+            variables = ds2_variables(model_info.input_variables[name]) + ds2_variables(
+                model_info.output_variables[name], output_vars=True)
+
+            code = wrap_classification_score_method(function_prefix + name,
+                                                    variables,
+                                                    model_info.class_names,
+                                                    model_info.target_level,
+                                                    name=wrapper_name)
+            ds2_methods.append({
+                'name': 'score',
+                'target': wrapper_name,
+                'variables': variables
+            })
+            lines.extend(code.split('\n'))
+
+            # Use score method if created
+            default_method_name = 'score'
+
+        elif model_info.is_regression and 'predict' in model_info.function_names:
+            name = 'predict'
+            wrapper_name = '_' + random_string(20)
+            variables = ds2_variables(model_info.input_variables[name]) + ds2_variables(
+                model_info.output_variables[name], output_vars=True)
+
+            code = wrap_regression_score_method(function_prefix + name,
+                                                variables,
+                                                name=wrapper_name)
+            ds2_methods.append({
+                'name': 'score',
+                'target': wrapper_name,
+                'variables': variables
+            })
+            lines.extend(code.split('\n'))
+
+            # Use score method if created
+            default_method_name = 'score'
+
+        # Create a DS2 package that automatically loads all of the generated Python code into a PyMAS instance.
+        self.package = DS2PyMASPackage(lines)
+
+        # Just for debugging / inspection
+        self.lines = lines
+
+        self._model_info = model_info
+
+        # Add DS2 methods for each of the wrapped Python functions
+        for method in ds2_methods:
+            self.package.add_method(**method)
+
+        self.default_method = next((m for m in self.package.methods if m.name == default_method_name), None)
+
+    @classmethod
+    def model_init_code(cls, model_info):
+        # attempt to pickle & inline
+        # fall back to file
+        if model_info.tool == 'pytorch':
+            # TODO: import torch
+            # torch.save(temp file name)
+            # return code to load
+            # !! needs model id - hasn't been created yet.  F.
+            pass
+        else:
+            pkl = base64.b64encode(gzip.compress(pickle.dumps(model_info.instance)))
+
+            code = (
+                'import base64, gzip, pickle',
+                # Replace b' with " before embedding in DS2.
+                'bytes = {}'.format(pkl).replace("'", '"'),
+                'model = pickle.loads(gzip.decompress(base64.b64decode(bytes)))',
+            )
+
+        return code
+
+    @versionchanged(version='1.4', reason="Added `dest='Python'` option")
+    def score_code(self, input_table=None, output_table=None, columns=None, dest='MAS', method_name=None):
+        """Generate DS2 score code
+
+        Parameters
+        ----------
+        input_table : str
+            The name of the table to execute the function against
+        output_table : str
+            The name of the table where execution results will be written
+        columns : list of str
+            Names of the columns from `table` that will be passed to `func`
+        dest : str {'MAS', 'EP', 'CAS', 'Python'}
+            Specifies the publishing destination for the score code to ensure
+            that compatible code is generated.
+
+        Returns
+        -------
+        str
+            Score code
+
+        """
+
+        dest = dest.upper()
+
+        # Check for names that could result in DS2 errors.
+        DS2_KEYWORDS = ['input', 'output']
+        for k in DS2_KEYWORDS:
+            if input_table and k == input_table.lower():
+                raise ValueError(
+                    'Input table name `{}` is a reserved term.'.format(input_table)
+                )
+            if output_table and k == output_table.lower():
+                raise ValueError(
+                    'Output table name `{}` is a reserved term.'.format(output_table)
+                )
+
+        # Get package code
+        code = tuple(self.package.code().split('\n'))
+
+        if dest == 'EP':
+            code = (
+                ('data sasep.out;',)
+                + code
+                + (
+                    '   method run();',
+                    '      set SASEP.IN;',
+                    '   end;',
+                    '   method term();',
+                    '   end;',
+                    'enddata;',
+                )
+            )
+        elif dest == 'CAS':
+            if method_name is None:
+                method = self.default_method
+            else:
+                method = next((m for m in self.package.methods if m.name == method_name), None)
+
+            thread = DS2Thread(
+                method.variables,
+                input_table,
+                column_names=columns,
+                return_message=False,
+                method=method,
                 package=self.package,
             )
 
