@@ -228,11 +228,11 @@ class Session(requests.Session):
         Name of the server to connect to or an established swat.CAS session.
     username : str, optional
         Username for authentication.  Not required if `host` is a CAS
-        connection or if Kerberos is used.  If using Kerberos and an explicit
+        connection, if Kerberos is used, or if `token` is provided.  If using Kerberos and an explicit
         username is desired, maybe be a string in 'user@REALM' format.
     password : str, optional
         Password for authentication.  Not required when `host` is a CAS
-        connection, `authinfo` is provided, or Kerberos is used.
+        connection, `authinfo` is provided, `token` is provided, or Kerberos is used.
     authinfo : str, optional
         Path to a .authinfo or .netrc file from which credentials should be
         pulled.
@@ -241,9 +241,11 @@ class Session(requests.Session):
     port : int, optional
         Port number for the connection if a non-standard port is used.
         Defaults to 80 or 443 depending on `protocol`.
-    verify_ssl : bool
+    verify_ssl : bool, optional
         Whether server-side SSL certificates should be verified.  Defaults
         to true.  Ignored for HTTP connections.
+    token : str, optional
+        OAuth token to use for authorization.
 
     Attributes
     ----------
@@ -266,6 +268,7 @@ class Session(requests.Session):
         protocol=None,
         port=None,
         verify_ssl=None,
+        token=None
     ):
         super(Session, self).__init__()
 
@@ -386,7 +389,10 @@ class Session(requests.Session):
                     pass  # netrc throws if $HOME is not set
 
         self.verify = verify_ssl
-        self.auth = HTTPBearerAuth(self.get_token())
+
+        # Get a bearer token for authorization
+        token = token or self.get_token()
+        self.auth = HTTPBearerAuth(token)
 
         if current_session() is None:
             current_session(self)
