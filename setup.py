@@ -47,6 +47,7 @@ setup(
         'scikit-learn',
         'requests',
         'six >= 1.11',
+        'pyyaml',
         'futures ; python_version <= "2.7"'
     ],
     extras_require={

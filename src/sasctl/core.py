@@ -18,6 +18,7 @@ from uuid import UUID, uuid4
 
 import requests
 import requests.exceptions
+import yaml
 from requests.adapters import HTTPAdapter
 from six.moves.urllib.parse import urlsplit, urlunsplit
 from six.moves.urllib.error import HTTPError
@@ -347,10 +348,8 @@ class Session(requests.Session):
         else:
             url = urlsplit(hostname)
 
-            # Extract http/https from domain name if present and protocl not
-            # explicitly given
+            # Extract http/https from domain name if present and protocol not explicitly given
             protocol = protocol or url.scheme
-
             domain = url.hostname or str(hostname)
 
         self._settings = {
@@ -391,6 +390,7 @@ class Session(requests.Session):
         self.verify = verify_ssl
 
         # Get a bearer token for authorization
+        # NOTE: get_token() relies on _settings info, so must be called after values are set.
         token = token or self.get_token()
         self.auth = HTTPBearerAuth(token)
 
@@ -710,6 +710,33 @@ class Session(requests.Session):
 
         return match.group(0)
 
+    def _get_token_with_oauth(self):
+        # Provided an authorization code -> get access token
+        # Otherwise check YAML file for existing token
+        # Otherwise print message w/ URL
+
+        yaml_file = os.path.expanduser('~/.sas/viya-api-profiles.yaml')
+
+        # See if a token has been cached for the hostname
+        if os.path.exists(yaml_file):
+            with open(yaml_file) as f:
+                info = yaml.load(f, Loader=yaml.FullLoader)
+
+            # Check each profile for a hostname match and return token if found
+            for profile in info.get('profiles', []):
+                url = profile.get('baseurl', '')
+                hostname = urlsplit(url).hostname
+
+                if hostname and hostname.lower() == self.hostname:
+                    token = profile.get('oauthtoken', {}).get('accesstoken')
+
+                    # TODO: Check token expiration.  Refresh if needed
+                    if token is not None:
+                        return token
+
+        # No existing tokens found in cache
+        print('Please use a web browser to login at the following URL to get your authorization code:  %s://%s/SASLogon/oauth/authorize?access_type=online&client_id=foo&response_type=code&state=??' % (self._settings['protocol'], self._settings['domain']))
+
     def _get_token_with_password(self):
         """Authenticate with a username and password."""
         username = self._settings['username']
@@ -751,7 +778,12 @@ class Session(requests.Session):
         password = self._settings['password']
 
         if username is None or password is None:
-            return self._get_token_with_kerberos()
+            if kerberos is not None:
+                token = self._get_token_with_kerberos()
+
+            if kerberos is None or token is None:
+                return self._get_token_with_oauth()
+
         return self._get_token_with_password()
 
     def _build_url(self, url):
