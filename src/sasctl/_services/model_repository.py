@@ -630,11 +630,19 @@ class ModelRepository(Service):
         projectModels = cls.get('/projects/{}/models'.format(projectId))
         
         for model in projectModels:
-            if model['name'] == name:
-                if force:
-                    cls.delete_model(model.id)
-                else:
-                    raise ValueError('A model with the same model name exists in project {}.'.format(project.name))
+            # Throws a TypeError if only one model is in the project
+            try:
+                if model['name'] == name:
+                    if force:
+                        cls.delete_model(model.id)
+                    else:
+                        raise ValueError('A model with the same model name exists in project {}.'.format(project.name))
+            except TypeError:
+                if projectModels['name'] == name:
+                    if force:
+                        cls.delete_model(projectModels.id)
+                    else:
+                        raise ValueError('A model with the same model name exists in project {}.'.format(project.name))
 
         r = cls.post('/models#octetStream',
                      data=file.read(),
