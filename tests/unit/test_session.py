@@ -18,17 +18,17 @@ def test_session_from_url():
     """Ensure domains in the format http(s)://hostname.com are handled."""
 
     # Initial session should automatically become the default
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         s = Session('http://example.com', 'user', 'password')
     assert s.hostname == 'example.com'
     assert s._settings['protocol'] == 'http'
 
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         s = Session('http://example.com', 'user', 'password', protocol='https')
     assert s.hostname == 'example.com'
     assert s._settings['protocol'] == 'https'
 
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         s = Session('https://example.com', 'user', 'password', protocol='http')
     assert s.hostname == 'example.com'
     assert s._settings['protocol'] == 'http'
@@ -46,18 +46,17 @@ def test_from_authinfo(tmpdir_factory):
                 % (HOSTNAME, USERNAME, PASSWORD))
 
     # Get username & password from matching hostname
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         s = Session('http://example.com', authinfo=filename)
     assert s.hostname == HOSTNAME
     assert s.username == USERNAME
     assert s._settings['password'] == PASSWORD
 
-
     with open(filename, 'w') as f:
         f.write('host %s user %s password %s'
                 % (HOSTNAME, USERNAME, PASSWORD))
 
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         s = Session('http://example.com', authinfo=filename)
     assert s.hostname == HOSTNAME
     assert s.username == USERNAME
@@ -69,7 +68,7 @@ def test_from_authinfo(tmpdir_factory):
         f.write('host %s user %s password %s\n'
                 % (HOSTNAME, USERNAME, PASSWORD))
 
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         s = Session('http://example.com', username=USERNAME, authinfo=filename)
     assert s.hostname == HOSTNAME
     assert s.username == USERNAME
@@ -83,7 +82,7 @@ def test_new_session(missing_packages):
 
     # Ensure no dependency on swat required
     with missing_packages('swat'):
-        with mock.patch('sasctl.core.Session.get_token'):
+        with mock.patch('sasctl.core.Session.get_auth'):
             s = Session(HOST, USERNAME, PASSWORD)
         assert USERNAME == s.username
         assert HOST == s.hostname
@@ -99,28 +98,28 @@ def test_current_session():
     assert current_session() is None
 
     # Initial session should automatically become the default
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         s = Session('example.com', 'user', 'password')
     assert current_session() == s
 
     # Subsequent sessions should not overwrite the default
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         s2 = Session('example.com', 'user2', 'password')
     assert current_session() != s2
     assert current_session() == s
 
     # Explicitly set new current session
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         s3 = current_session('example.com', 'user3', 'password')
     assert current_session() == s3
 
     # Explicitly change current session
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         s4 = Session('example.com', 'user4', 'password')
     current_session(s4)
     assert 'user4' == current_session().username
 
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         with Session('example.com', 'user5', 'password') as s5:
             with Session('example.com', 'user6', 'password') as s6:
                 assert current_session() == s6
@@ -151,7 +150,7 @@ def test_swat_connection_reuse():
         protocol=PROTOCOL,
         restPrefix='/cas-shared-default-http',
         virtualHost=HOST)
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         with Session(mock_cas) as s:
             # Should reuse port # from SWAT connection
             # Should query CAS to find the HTTP connection _settings
@@ -244,20 +243,20 @@ def test_ssl_context():
     if 'SSLREQCERT' in os.environ: del os.environ['SSLREQCERT']
 
     # Should default to SSLContextAdapter if no certificate paths are set
-    with mock.patch('sasctl.core.Session.get_token', return_value='token'):
+    with mock.patch('sasctl.core.Session.get_auth', return_value='token'):
         s = Session('hostname', 'username', 'password')
     assert isinstance(s.get_adapter('https://'), SSLContextAdapter)
 
     # If only the Requests env variable is set, it should be used
     os.environ['REQUESTS_CA_BUNDLE'] = 'path_for_requests'
-    with mock.patch('sasctl.core.Session.get_token', return_value='token'):
+    with mock.patch('sasctl.core.Session.get_auth', return_value='token'):
         s = Session('hostname', 'username', 'password')
     assert 'CAS_CLIENT_SSL_CA_LIST' not in os.environ
     assert not isinstance(s.get_adapter('https://'), SSLContextAdapter)
 
     # If SWAT env variable is set, it should override the Requests variable
     os.environ['CAS_CLIENT_SSL_CA_LIST'] = 'path_for_swat'
-    with mock.patch('sasctl.core.Session.get_token', return_value='token'):
+    with mock.patch('sasctl.core.Session.get_auth', return_value='token'):
         s = Session('hostname', 'username', 'password')
     assert os.environ['CAS_CLIENT_SSL_CA_LIST'] == os.environ['REQUESTS_CA_BUNDLE']
     assert not isinstance(s.get_adapter('https://'), SSLContextAdapter)
@@ -268,7 +267,7 @@ def test_ssl_context():
 
     # If SWAT env variable is set, it should override the Requests variable
     os.environ['SSLCALISTLOC'] = 'path_for_swat'
-    with mock.patch('sasctl.core.Session.get_token', return_value='token'):
+    with mock.patch('sasctl.core.Session.get_auth', return_value='token'):
         s = Session('hostname', 'username', 'password')
     assert os.environ['SSLCALISTLOC'] == os.environ['REQUESTS_CA_BUNDLE']
     assert 'CAS_CLIENT_SSL_CA_LIST' not in os.environ
@@ -284,7 +283,7 @@ def test_verify_ssl(missing_packages):
     os.environ.pop('SSLREQCERT', None)
     os.environ.pop('REQUESTS_CA_BUNDLE', None)
 
-    with mock.patch('sasctl.core.Session.get_token', return_value='token'):
+    with mock.patch('sasctl.core.Session.get_auth', return_value='token'):
         # Should verify SSL by default
         s = Session('hostname', 'username', 'password')
         assert s.verify == True
@@ -379,7 +378,7 @@ def test_str():
     # Remove any environment variables disabling SSL verification
     _ = os.environ.pop('SSLREQCERT', None)
 
-    with mock.patch('sasctl.core.Session.get_token', return_value='token'):
+    with mock.patch('sasctl.core.Session.get_auth', return_value='token'):
 
         s = Session('hostname', 'username', 'password')
 
@@ -395,7 +394,7 @@ def test_as_swat():
     USERNAME = 'username'
     PASSWORD = 'password'
 
-    with mock.patch('sasctl.core.Session.get_token'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         with Session(HOST, USERNAME, PASSWORD) as s:
             with mock.patch('swat.CAS') as CAS:
                 # Verify default parameters were passed

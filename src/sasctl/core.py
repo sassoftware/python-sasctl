@@ -178,6 +178,8 @@ class HTTPBearerAuth(requests.auth.AuthBase):
 
 
 class OIDCAuth(requests.auth.AuthBase):
+    PROFILE_PATH = '~/.sas/viya-api-profiles.yaml'
+
     def __init__(self, hostname, token=None):
         client_id = os.environ.get('SASCTL_CLIENT_ID')
         client_secret = os.environ.get('SASCTL_CLIENT_SECRET')
@@ -196,18 +198,19 @@ class OIDCAuth(requests.auth.AuthBase):
                     raise Exception('invalid token')
 
         else:
-            # TODO: Check YAML for existing creds
+            # Check the credential cache for any existing tokens for the host
+            # Otherwise, prompt user to authorize.
+            if not self.get_cached_token():
+                # Generate the URL for requesting an auth code.
+                # User must open this URL in a browser and then enter the auth code that's generated.
+                request_url, _, _ = self._client.prepare_authorization_request(self.authorize_url)
+                print(request_url)
+                auth_code = input('Authorization Code:')
 
-            # Generate the URL for requesting an auth code.
-            # User must open this URL in a browser and then enter the auth code that's generated.
-            request_url, _, _ = self._client.prepare_authorization_request(self.authorize_url)
-            print(request_url)
-            auth_code = input('Authorization Code:')
-
-            # Use the authorization code to get an access token & and refresh token
-            headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-            data = self._client.prepare_request_body(code=auth_code, include_client_id=False)
-            r = requests.post(self.token_url, auth=(client_id, client_secret), headers=headers, data=data)
+                # Use the authorization code to get an access token & and refresh token
+                headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+                data = self._client.prepare_request_body(code=auth_code, include_client_id=False)
+                r = requests.post(self.token_url, auth=(client_id, client_secret), headers=headers, data=data)
 
             # TODO: Handle failures.  User may enter code wrong, etc.
             # TODO: Cache tokens
@@ -216,6 +219,38 @@ class OIDCAuth(requests.auth.AuthBase):
 
             if not self.validate_token(hostname):
                 raise Exception('invalid token')
+
+    def get_cached_token(self):
+        """Attempt to load tokens from the credential cache.
+
+        Returns
+        -------
+        bool
+            Whether matching credentials were found.
+
+        """
+        yaml_file = os.path.expanduser(self.PROFILE_PATH)
+
+        # See if a token has been cached for the hostname
+        if os.path.exists(yaml_file):
+            with open(yaml_file) as f:
+                info = yaml.load(f, Loader=yaml.FullLoader)
+
+            # Check each profile for a hostname match and return token if found
+            for profile in info.get('profiles', []):
+                url = profile.get('baseurl', '')
+                hostname = urlsplit(url).hostname
+
+                if hostname and hostname.lower() == self.hostname:
+                    token = profile.get('oauthtoken', {})\
+
+                    self._client.access_token = token.get('accesstoken')
+                    self._client.refresh_token = token.get('refreshtoken')
+                    self._client.token_type = token.get('tokentype')
+                    self._client.expires_in = token.get('expiry')
+
+                    return True
+        return False
 
     def refresh_token(self):
         url, headers, body = self._client.prepare_refresh_token_request(self.token_url)
@@ -467,8 +502,8 @@ class Session(requests.Session):
         # token = token or self.get_token()
         # self.auth = HTTPBearerAuth(token)
 
-        # This is now the current session
-        current_session(self)
+        if current_session() is None:
+            current_session(self)
 
     def add_logger(self, handler, level=None):
         """Log session requests and responses.
