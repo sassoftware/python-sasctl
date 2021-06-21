@@ -36,6 +36,11 @@ except ImportError:
     except ImportError:
         kerberos = None
 
+try:
+    from oauthlib import oauth2
+except ImportError:
+    oauth2 = None
+
 from .utils.cli import sasctl_command
 from .utils.misc import versionadded
 from . import exceptions
@@ -169,6 +174,71 @@ class HTTPBearerAuth(requests.auth.AuthBase):
 
     def __call__(self, r):
         r.headers['Authorization'] = 'Bearer ' + self.token
+        return r
+
+
+class OIDCAuth(requests.auth.AuthBase):
+    def __init__(self, hostname, token=None):
+        client_id = os.environ.get('SASCTL_CLIENT_ID')
+        client_secret = os.environ.get('SASCTL_CLIENT_SECRET')
+
+        self.hostname = hostname
+        self.authorize_url = 'https://%s/SASLogon/oauth/authorize' % hostname
+        self.token_url = 'https://%s/SASLogon/oauth/token' % hostname
+
+        self._client = oauth2.WebApplicationClient(client_id)
+
+        # If token provided, call something to validate
+        if token is not None:
+            if len(token) > 64:
+                self._client.access_token = token
+                if not self.validate_token(hostname):
+                    raise Exception('invalid token')
+
+        else:
+            # TODO: Check YAML for existing creds
+
+            # Generate the URL for requesting an auth code.
+            # User must open this URL in a browser and then enter the auth code that's generated.
+            request_url, _, _ = self._client.prepare_authorization_request(self.authorize_url)
+            print(request_url)
+            auth_code = input('Authorization Code:')
+
+            # Use the authorization code to get an access token & and refresh token
+            headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+            data = self._client.prepare_request_body(code=auth_code, include_client_id=False)
+            r = requests.post(self.token_url, auth=(client_id, client_secret), headers=headers, data=data)
+
+            # TODO: Handle failures.  User may enter code wrong, etc.
+            # TODO: Cache tokens
+            # Let the client parse the response and auto-populate its params with data like token values.
+            self._client.parse_request_body_response(r.text)
+
+            if not self.validate_token(hostname):
+                raise Exception('invalid token')
+
+    def refresh_token(self):
+        url, headers, body = self._client.prepare_refresh_token_request(self.token_url)
+        r = requests.post(self.token_url, headers=headers, data=body)
+        # TODO: Handle failures.  User may enter code wrong, etc.
+        # TODO: Cache tokens
+        self._client.parse_request_body_response(r.text)
+
+    def validate_token(self, hostname):
+        url = 'https://%s/SASDrive/' % hostname
+
+        r = requests.get(url, auth=self)
+
+        try:
+            r.raise_for_status()
+            return True
+        except:
+            return False
+
+    def __call__(self, r):
+        # Let oauthlib determine where/how to add the token.
+        # In practice, this should add a Bearer token to the request headers
+        r.url, r.headers, r.body = self._client.add_token(r.url, http_method=r.method, body=r.body, headers=r.headers)
         return r
 
 
@@ -389,13 +459,16 @@ class Session(requests.Session):
 
         self.verify = verify_ssl
 
-        # Get a bearer token for authorization
-        # NOTE: get_token() relies on _settings info, so must be called after values are set.
-        token = token or self.get_token()
-        self.auth = HTTPBearerAuth(token)
+        # NOTE: get_auth() relies on _settings info, so must be called after values are set.
+        self.auth = self.get_auth()
 
-        if current_session() is None:
-            current_session(self)
+        # # Get a bearer token for authorization
+        # # NOTE: get_token() relies on _settings info, so must be called after values are set.
+        # token = token or self.get_token()
+        # self.auth = HTTPBearerAuth(token)
+
+        # This is now the current session
+        current_session(self)
 
     def add_logger(self, handler, level=None):
         """Log session requests and responses.
@@ -627,6 +700,51 @@ class Session(requests.Session):
     def delete(self, url, **kwargs):
         return self.request('DELETE', url, **kwargs)
 
+    def get_auth(self):
+        """
+
+        Returns
+        -------
+        requests.auth.AuthBase
+
+        """
+        username = self._settings.get('username')
+        password = self._settings.get('password')
+
+        # If explicit username & password were provided, use them.
+        if username is not None and password is not None:
+            return self._get_auth_password()
+
+        # Kerberos doesn't require any interruption to the user, so try that first if username/password
+        # were not provided.
+        try:
+            return self._get_auth_kerberos()
+        except:
+            pass
+
+        # If we got this far, then no password and no kerberos.  Try prompting the user for an OIDC login
+        try:
+            # TODO: What to do if oauthlib not installed?
+            return self._get_auth_oidc()
+        except Exception as e:
+            print(e)
+            pass
+
+        # If we got this far then nothing worked.
+        raise exceptions.AuthenticationError()
+
+
+    def _get_auth_password(self):
+        token = self._get_token_with_password()
+        return HTTPBearerAuth(token)
+
+    def _get_auth_kerberos(self):
+        token = self._get_token_with_kerberos()
+        return HTTPBearerAuth(token)
+
+    def _get_auth_oidc(self):
+        return OIDCAuth(self.hostname)
+
     def _get_token_with_kerberos(self):
         """Authenticate with a Kerberos ticket."""
         if kerberos is None:
@@ -733,6 +851,7 @@ class Session(requests.Session):
                     # TODO: Check token expiration.  Refresh if needed
                     if token is not None:
                         return token
+
 
         # No existing tokens found in cache
         print('Please use a web browser to login at the following URL to get your authorization code:  %s://%s/SASLogon/oauth/authorize?access_type=online&client_id=foo&response_type=code&state=??' % (self._settings['protocol'], self._settings['domain']))
