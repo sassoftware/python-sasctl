@@ -156,14 +156,15 @@ def current_session(*args, **kwargs):
     return _session
 
 
-class OAuth2Auth(requests.auth.AuthBase):
+class OAuth2(requests.auth.AuthBase):
 
     PROFILE_PATH = '~/.sas/viya-api-profiles.yaml'
 
-    def __init__(self, base_url, token=None):
+    def __init__(self, base_url, token=None, verify_ssl=True):
 
         self.client_id = os.environ.get('SASCTL_CLIENT_ID', 'sas.ec')
         self.client_secret = os.environ.get('SASCTL_CLIENT_SECRET', '')
+        self.verify = verify_ssl
 
         url_parts = urlsplit(base_url)
         url_parts = (
@@ -247,6 +248,10 @@ class OAuth2Auth(requests.auth.AuthBase):
         """
         profiles = self._read_profiles()
 
+        # Couldn't read any profiles
+        if profiles is None:
+            return False
+
         # Check each profile for a hostname match and return token if found
         for profile in profiles.get('profiles', []):
             url = profile.get('baseurl', '')
@@ -299,7 +304,7 @@ class OAuth2Auth(requests.auth.AuthBase):
             'grant_type': 'refresh_token',
             'refresh_token': self.refresh_token
         }
-        r = requests.post(self.token_url, auth=(self.client_id, self.client_secret), data=data)
+        r = requests.post(self.token_url, auth=(self.client_id, self.client_secret), data=data, verify=self.verify)
         r.raise_for_status()
         self.parse_token_response(r.json())
         self.cache_token()
@@ -324,9 +329,9 @@ class OAuth2Auth(requests.auth.AuthBase):
         return r
 
 
-class AuthCodeAuth(OAuth2Auth):
-    def __init__(self, base_url):
-        super().__init__(base_url)
+class OAuth2Code(OAuth2):
+    def __init__(self, base_url, **kwargs):
+        super().__init__(base_url, **kwargs)
 
         # No need to request an auth code if we can load credentials from disk
         if self.read_cached_token():
@@ -334,20 +339,22 @@ class AuthCodeAuth(OAuth2Auth):
 
         # User must open this URL in a browser and then enter the auth code that's generated.
         url = self.authorize_url + '?response_type=code&client_id=%s' % self.client_id
-        print(url)
+
+        message = 'Please use a web browser to login at the following URL to get your authorization code:\n' + url
+        print(message)
         auth_code = input('Authorization Code:')
 
         # Use the authorization code to get an access token & and refresh token
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         data = {'code': auth_code, 'grant_type': 'authorization_code'}
-        r = requests.post(self.token_url, auth=(self.client_id, self.client_secret), headers=headers, data=data)
+        r = requests.post(self.token_url, auth=(self.client_id, self.client_secret), headers=headers, data=data, verify=self.verify)
         r.raise_for_status()
         self.parse_token_response(r.json())
 
 
-class PasswordAuth(OAuth2Auth):
-    def __init__(self, base_url, username, password):
-        super().__init__(base_url)
+class OAuth2Password(OAuth2):
+    def __init__(self, base_url, username, password, **kwargs):
+        super().__init__(base_url, **kwargs)
 
         data = {
             'grant_type': 'password',
@@ -360,11 +367,12 @@ class PasswordAuth(OAuth2Auth):
             'Content-Type': 'application/x-www-form-urlencoded',
         }
 
-        r = requests.post(self.token_url, data=data, headers=headers, auth=(self.client_id, self.client_secret))
+        r = requests.post(self.token_url, data=data, headers=headers, auth=(self.client_id, self.client_secret), verify=self.verify)
         if r.status_code == 401:
             raise exceptions.AuthenticationError(username)
         r.raise_for_status()
         self.parse_token_response(r.json())
+
 
 class RestObj(dict):
     def __getattr__(self, item):
@@ -581,7 +589,7 @@ class Session(requests.Session):
         self.verify = verify_ssl
 
         # Find a suitable authentication mechanism and build an auth header
-        self.auth = self.get_auth(self._settings['username'], self._settings['password'], token)
+        self.auth = self.get_auth(self._settings['username'], self._settings['password'], token, verify_ssl)
 
         # Used for context manager
         self._old_session = current_session()
@@ -817,7 +825,7 @@ class Session(requests.Session):
     def delete(self, url, **kwargs):
         return self.request('DELETE', url, **kwargs)
 
-    def get_auth(self, username=None, password=None, token=None):
+    def get_auth(self, username=None, password=None, token=None, verify_ssl=True):
         """Attempt to authenticate with the Viya environment
 
         Returns
@@ -830,23 +838,23 @@ class Session(requests.Session):
 
         # If explicit username & password were provided, use them.
         if username is not None and password is not None:
-            return PasswordAuth(base_url, username, password)
+            return OAuth2Password(base_url, username, password, verify_ssl=verify_ssl)
 
         # If an existing access token was provided, use it
         if token is not None:
-            return OAuth2Auth(base_url, token=token)
+            return OAuth2(base_url, token=token)
 
         # Kerberos doesn't require any interruption to the user, so try that first if username/password
         # were not provided.
         try:
             token = self._get_token_with_kerberos()
-            return OAuth2Auth(base_url, token=token)
+            return OAuth2(base_url, token=token)
         except:
             pass
 
         # If we got this far, then no password and no kerberos.  Try prompting the user for an OIDC login
         try:
-            return AuthCodeAuth(base_url)
+            return OAuth2Code(base_url, verify_ssl=verify_ssl)
         except Exception as e:
             print(e)
             pass

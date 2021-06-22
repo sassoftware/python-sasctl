@@ -9,7 +9,7 @@ from six.moves import mock
 
 
 def test_valid_auth_code():
-    from sasctl.core import AuthCodeAuth
+    from sasctl.core import OAuth2Code
 
     with mock.patch('sasctl.core.requests.post') as mock_post:
         with mock.patch('sasctl.core.input') as mock_input:
@@ -22,7 +22,7 @@ def test_valid_auth_code():
                                                         'access_token': '123',
                                                         'refresh_token': '456'}
 
-            auth = AuthCodeAuth('https://example.com')
+            auth = OAuth2Code('https://example.com')
 
             assert mock_post.call_args[0][0] == 'https://example.com/SASLogon/oauth/token'
             assert mock_post.call_args[1]['data'] == {'code': 'FooBar', 'grant_type': 'authorization_code'}

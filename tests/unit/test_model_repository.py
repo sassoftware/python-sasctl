@@ -19,7 +19,7 @@ def test_create_model():
     PROJECT_ID = '12345'
     USER = 'username'
 
-    with mock.patch('sasctl.core.requests.Session.request'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         current_session('example.com', USER, 'password')
 
     TARGET = {
@@ -118,7 +118,7 @@ def test_create_model():
 
 def test_copy_analytic_store():
     # Create a dummy session
-    with mock.patch('sasctl.core.requests.Session.request'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         current_session('example.com', 'user', 'password')
 
     MODEL_ID = 12345
@@ -154,7 +154,7 @@ def test_get_model_by_name():
     MODEL_NAME = 'Test Model'
 
     # Create a dummy session
-    with mock.patch('sasctl.core.requests.Session.request'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         current_session('example.com', 'user', 'password')
 
     mock_responses = [

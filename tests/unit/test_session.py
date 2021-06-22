@@ -102,11 +102,11 @@ def test_current_session():
         s = Session('example.com', 'user', 'password')
     assert current_session() == s
 
-    # Subsequent sessions should not overwrite the default
+    # Subsequent sessions should become the current session
     with mock.patch('sasctl.core.Session.get_auth'):
         s2 = Session('example.com', 'user2', 'password')
-    assert current_session() != s2
-    assert current_session() == s
+    assert current_session() == s2
+    assert current_session() != s
 
     # Explicitly set new current session
     with mock.patch('sasctl.core.Session.get_auth'):
@@ -199,7 +199,7 @@ def test_log_filtering(caplog):
                       CONSUL_TOKEN]
 
     with mock.patch('requests.Session.send') as mocked:
-        # Response to every request with a response that contains sensitive data
+        # Respond to every request with a response that contains sensitive data
         # Access token should also be used to set session.auth
         mocked.return_value.status_code = 200
         mocked.return_value.raise_for_status.return_value = None
@@ -213,24 +213,22 @@ def test_log_filtering(caplog):
             mocked.return_value.json.return_value)
         mocked.return_value._content = mocked.return_value.body
 
-        with Session(HOST, USERNAME, PASSWORD) as s:
-            assert s.auth is not None
-            assert mocked.return_value == s.get('/fakeurl')
-            assert mocked.return_value == s.post('/fakeurl',
-                                                 headers={
-                                                     'X-Consul-Token': CONSUL_TOKEN},
-                                                 json={
-                                                     'client_id': 'TestClient',
-                                                     'client_secret': CLIENT_SECRET})
+        with mock.patch('sasctl.core.Session.get_auth'):
+            with Session(HOST, USERNAME, PASSWORD) as s:
+                assert s.auth is not None
+                assert mocked.return_value == s.get('/fakeurl')
+                assert mocked.return_value == s.post('/fakeurl',
+                                                     headers={
+                                                         'X-Consul-Token': CONSUL_TOKEN},
+                                                     json={
+                                                         'client_id': 'TestClient',
+                                                         'client_secret': CLIENT_SECRET})
 
-            # Correct token should have been set
-            assert 'secretaccesstoken' == s.auth.token
-
-            # No sensitive information should be contained in the log records
-            assert len(caplog.records) > 0
-            for r in caplog.records:
-                for d in sensitive_data:
-                    assert d not in r.message
+                # No sensitive information should be contained in the log records
+                assert len(caplog.records) > 0
+                for r in caplog.records:
+                    for d in sensitive_data:
+                        assert d not in r.message
 
 
 def test_ssl_context():
@@ -318,54 +316,54 @@ def test_verify_ssl(missing_packages):
             s = Session('127.0.0.1', 'username', 'password', verify_ssl=True)
             assert s.verify == True
 
-    # Clear environment variables
-    os.environ.pop('SSLREQCERT', None)
-    os.environ.pop('REQUESTS_CA_BUNDLE', None)
+        # Clear environment variables
+        os.environ.pop('SSLREQCERT', None)
+        os.environ.pop('REQUESTS_CA_BUNDLE', None)
 
-    # Ensure correct verify_ssl values are passed to requests module
-    with mock.patch('requests.Session.request') as req:
-        req.return_value.status_code = 200
-        s = Session('127.0.0.1', 'username', 'password')
+        # Ensure correct verify_ssl values are passed to requests module
+        with mock.patch('requests.Session.request') as req:
+            req.return_value.status_code = 200
+            s = Session('127.0.0.1', 'username', 'password')
+            s.get('/dummy')
+            # Check value passed to verify= parameter
+            assert req.call_args[0][13] == True
+            assert s.verify == True
 
-        # Check value passed to verify= parameter
-        assert req.call_args[0][13] == True
-        assert s.verify == True
+        with mock.patch('requests.Session.request') as req:
+            req.return_value.status_code = 200
+            s = Session('127.0.0.1', 'username', 'password', verify_ssl=False)
+            s.get('/dummy')
+            # Check value passed to verify= parameter
+            assert req.call_args[0][13] == False
+            assert s.verify == False
 
-    with mock.patch('requests.Session.request') as req:
-        req.return_value.status_code = 200
-        s = Session('127.0.0.1', 'username', 'password', verify_ssl=False)
-
-        # Check value passed to verify= parameter
-        assert req.call_args[0][13] == False
-        assert s.verify == False
-
-    with mock.patch('requests.Session.request') as req:
-        # Explicit verify_ssl= flag should take precedence over env vars
-        os.environ['REQUESTS_CA_BUNDLE'] = 'dummy.crt'
-        s = Session('127.0.0.1', 'username', 'password', verify_ssl=False)
-
-        # Check value passed to verify= parameter
-        assert req.call_args[0][13] == False
-        assert s.verify == False
+        with mock.patch('requests.Session.request') as req:
+            # Explicit verify_ssl= flag should take precedence over env vars
+            os.environ['REQUESTS_CA_BUNDLE'] = 'dummy.crt'
+            s = Session('127.0.0.1', 'username', 'password', verify_ssl=False)
+            s.get('/dummy')
+            # Check value passed to verify= parameter
+            assert req.call_args[0][13] == False
+            assert s.verify == False
 
 
 def test_kerberos():
     with mock.patch('sasctl.core.Session._get_token_with_kerberos',
                     return_value='token'):
         s = Session('hostname')
-        assert s.auth.token == 'token'
+        assert s.auth.access_token == 'token'
 
         s = Session('hostname', 'username')
-        assert s.auth.token == 'token'
+        assert s.auth.access_token == 'token'
 
         s = Session('hostname', 'username@REALM')
-        assert s.auth.token == 'token'
+        assert s.auth.access_token == 'token'
 
 
 def test_authentication_failure():
     from sasctl.exceptions import AuthenticationError
 
-    with mock.patch('sasctl.core.Session.request') as request:
+    with mock.patch('sasctl.core.requests.post') as request:
         request.return_value.status_code = 401
 
         with pytest.raises(AuthenticationError):
