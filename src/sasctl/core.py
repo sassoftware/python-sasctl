@@ -14,13 +14,14 @@ import re
 import ssl
 import sys
 import warnings
+from datetime import datetime, timedelta
 from uuid import UUID, uuid4
 
 import requests
 import requests.exceptions
 import yaml
 from requests.adapters import HTTPAdapter
-from six.moves.urllib.parse import urlsplit, urlunsplit
+from six.moves.urllib.parse import urljoin, urlsplit, urlunsplit
 from six.moves.urllib.error import HTTPError
 
 try:
@@ -160,6 +161,217 @@ def current_session(*args, **kwargs):
     return _session
 
 
+class OAuth2Auth(requests.auth.AuthBase):
+
+    PROFILE_PATH = '~/.sas/viya-api-profiles.yaml'
+
+    def __init__(self, base_url, token=None):
+
+        self.client_id = os.environ.get('SASCTL_CLIENT_ID', 'sas.ec')
+        self.client_secret = os.environ.get('SASCTL_CLIENT_SECRET', '')
+
+        url_parts = urlsplit(base_url)
+        url_parts = (
+            url_parts.scheme or 'https',
+            url_parts.netloc,
+            url_parts.path,
+            None,
+            None
+        )
+
+        self.base_url = urlunsplit(url_parts)
+        self.authorize_url = urljoin(self.base_url, '/SASLogon/oauth/authorize')
+        self.token_url = urljoin(self.base_url, '/SASLogon/oauth/token')
+
+        self.access_token = token
+        self.refresh_token = None
+        self.expiration_date = None
+
+    def _read_profiles(self):
+        """Read cached profiles from disk.
+
+        Returns
+        -------
+        dict or None
+
+        """
+        yaml_file = os.path.expanduser(self.PROFILE_PATH)
+
+        # See if a token has been cached for the hostname
+        if os.path.exists(yaml_file):
+            # Get bit flags indicating access permissions
+            mode = os.stat(yaml_file).st_mode
+            flags = oct(mode)[-3:]
+
+            if flags != '600':
+                raise RuntimeError('Unable to read profile cache.  '
+                                   'The file permissions for %s must be configured so that only the file owner has '
+                                   'read/write permissions (equivalent to 600 on Linux systems).' % yaml_file)
+
+            with open(yaml_file) as f:
+                return yaml.load(f, Loader=yaml.FullLoader)
+
+    def _write_profiles(self, profiles):
+        """
+
+        Parameters
+        ----------
+        profiles : dict
+
+        Returns
+        -------
+        None
+
+        """
+        yaml_file = os.path.expanduser(self.PROFILE_PATH)
+
+        # Create parent .sas folder if needed
+        sas_dir = os.path.dirname(yaml_file)
+        if not os.path.exists(sas_dir):
+            os.mkdir(sas_dir)
+
+        with open(yaml_file, 'w') as f:
+            yaml.dump(profiles, f)
+
+        # Get bit flags indicating access permissions
+        mode = os.stat(yaml_file).st_mode
+        flags = oct(mode)[-3:]
+
+        # Ensure access to file is restricted
+        if flags != '600':
+            os.chmod(yaml_file, 0x600)
+
+    def read_cached_token(self):
+        """Read any cached access tokens from disk
+
+        Returns
+        -------
+        bool
+            Whether a valid token was found.
+
+        """
+        profiles = self._read_profiles()
+
+        # Check each profile for a hostname match and return token if found
+        for profile in profiles.get('profiles', []):
+            url = profile.get('baseurl', '')
+            hostname = urlsplit(url).hostname
+
+            if hostname and hostname.lower() == self.base_url.lower():
+                self.parse_token_response(profile)
+                return True
+        return False
+
+    def cache_token(self):
+        """Cache current token values to disk.
+
+        Returns
+        -------
+        None
+
+        """
+        profiles = self._read_profiles()
+
+        # Top-level structure if no existing file was found
+        if profiles is None:
+            profiles = {'profiles': []}
+
+        # Token values to be cached
+        token = {
+            'accesstoken': self.access_token,
+            'refreshtoken': self.refresh_token,
+            'tokentype': 'bearer',
+            'expiry': self.expiration_date
+        }
+
+        # See if there's an existing profile to update
+        matches = [(i, p) for i, p in enumerate(profiles['profiles']) if p['baseurl'] == self.base_url]
+        if matches:
+            idx, match = matches[0]
+            match['oauthtoken'] = token
+            profiles['profiles'][idx] = match
+        else:
+            profiles['profiles'].append({
+                'baseurl': self.base_url,
+                'name': None,
+                'oauthtoken': token
+            })
+
+        self._write_profiles(profiles)
+
+    def get_refreshed_token(self):
+        data = {
+            'grant_type': 'refresh_token',
+            'refresh_token': self.refresh_token
+        }
+        r = requests.post(self.token_url, auth=(self.client_id, self.client_secret), data=data)
+        r.raise_for_status()
+        self.parse_token_response(r.json())
+        self.cache_token()
+
+    def parse_token_response(self, data):
+        token_type = data.get('token_type')
+
+        if token_type != 'bearer':
+            raise RuntimeError("There was an issue when authorizing the user account.  "
+                               "Received an access token of type '%s' but expected type 'bearer'.  "
+                               "Check with your SAS administrator about alternative authentication methods." % (token_type))
+
+        self.access_token = data.get('access_token')
+        self.refresh_token = data.get('refresh_token')
+
+        seconds_to_live = data.get('expires_in')
+        if seconds_to_live:
+            self.expiration_date = datetime.now() + timedelta(seconds=seconds_to_live)
+
+    def __call__(self, r):
+        r.headers['Authorization'] = 'Bearer ' + self.access_token
+        return r
+
+
+class AuthCodeAuth(OAuth2Auth):
+    def __init__(self, base_url):
+        super().__init__(base_url)
+
+        # No need to request an auth code if we can load credentials from disk
+        if self.read_cached_token():
+            return
+
+        # User must open this URL in a browser and then enter the auth code that's generated.
+        url = self.authorize_url + '?response_type=code&client_id=%s' % self.client_id
+        print(url)
+        auth_code = input('Authorization Code:')
+
+        # Use the authorization code to get an access token & and refresh token
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        data = {'code': auth_code, 'grant_type': 'authorization_code'}
+        r = requests.post(self.token_url, auth=(self.client_id, self.client_secret), headers=headers, data=data)
+        r.raise_for_status()
+        self.parse_token_response(r.json())
+
+
+class PasswordAuth(OAuth2Auth):
+    def __init__(self, base_url, username, password):
+        super().__init__(base_url)
+
+        data = {
+            'grant_type': 'password',
+            'username': username,
+            'password': password
+        }
+
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+
+        r = requests.post(self.token_url, data=data, headers=headers, auth=(self.client_id, self.client_secret))
+        if r.status_code == 401:
+            raise exceptions.AuthenticationError(username)
+        r.raise_for_status()
+        self.parse_token_response(r.json())
+
+
 class HTTPBearerAuth(requests.auth.AuthBase):
     # Taken from https://github.com/kennethreitz/requests/issues/4437
 
@@ -174,106 +386,6 @@ class HTTPBearerAuth(requests.auth.AuthBase):
 
     def __call__(self, r):
         r.headers['Authorization'] = 'Bearer ' + self.token
-        return r
-
-
-class OIDCAuth(requests.auth.AuthBase):
-    PROFILE_PATH = '~/.sas/viya-api-profiles.yaml'
-
-    def __init__(self, hostname, token=None):
-        client_id = os.environ.get('SASCTL_CLIENT_ID')
-        client_secret = os.environ.get('SASCTL_CLIENT_SECRET')
-
-        self.hostname = hostname
-        self.authorize_url = 'https://%s/SASLogon/oauth/authorize' % hostname
-        self.token_url = 'https://%s/SASLogon/oauth/token' % hostname
-
-        self._client = oauth2.WebApplicationClient(client_id)
-
-        # If token provided, call something to validate
-        if token is not None:
-            if len(token) > 64:
-                self._client.access_token = token
-                if not self.validate_token(hostname):
-                    raise Exception('invalid token')
-
-        else:
-            # Check the credential cache for any existing tokens for the host
-            # Otherwise, prompt user to authorize.
-            if not self.get_cached_token():
-                # Generate the URL for requesting an auth code.
-                # User must open this URL in a browser and then enter the auth code that's generated.
-                request_url, _, _ = self._client.prepare_authorization_request(self.authorize_url)
-                print(request_url)
-                auth_code = input('Authorization Code:')
-
-                # Use the authorization code to get an access token & and refresh token
-                headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-                data = self._client.prepare_request_body(code=auth_code, include_client_id=False)
-                r = requests.post(self.token_url, auth=(client_id, client_secret), headers=headers, data=data)
-
-            # TODO: Handle failures.  User may enter code wrong, etc.
-            # TODO: Cache tokens
-            # Let the client parse the response and auto-populate its params with data like token values.
-            self._client.parse_request_body_response(r.text)
-
-            if not self.validate_token(hostname):
-                raise Exception('invalid token')
-
-    def get_cached_token(self):
-        """Attempt to load tokens from the credential cache.
-
-        Returns
-        -------
-        bool
-            Whether matching credentials were found.
-
-        """
-        yaml_file = os.path.expanduser(self.PROFILE_PATH)
-
-        # See if a token has been cached for the hostname
-        if os.path.exists(yaml_file):
-            with open(yaml_file) as f:
-                info = yaml.load(f, Loader=yaml.FullLoader)
-
-            # Check each profile for a hostname match and return token if found
-            for profile in info.get('profiles', []):
-                url = profile.get('baseurl', '')
-                hostname = urlsplit(url).hostname
-
-                if hostname and hostname.lower() == self.hostname:
-                    token = profile.get('oauthtoken', {})\
-
-                    self._client.access_token = token.get('accesstoken')
-                    self._client.refresh_token = token.get('refreshtoken')
-                    self._client.token_type = token.get('tokentype')
-                    self._client.expires_in = token.get('expiry')
-
-                    return True
-        return False
-
-    def refresh_token(self):
-        url, headers, body = self._client.prepare_refresh_token_request(self.token_url)
-        r = requests.post(self.token_url, headers=headers, data=body)
-        # TODO: Handle failures.  User may enter code wrong, etc.
-        # TODO: Cache tokens
-        self._client.parse_request_body_response(r.text)
-
-    def validate_token(self, hostname):
-        url = 'https://%s/SASDrive/' % hostname
-
-        r = requests.get(url, auth=self)
-
-        try:
-            r.raise_for_status()
-            return True
-        except:
-            return False
-
-    def __call__(self, r):
-        # Let oauthlib determine where/how to add the token.
-        # In practice, this should add a Bearer token to the request headers
-        r.url, r.headers, r.body = self._client.add_token(r.url, http_method=r.method, body=r.body, headers=r.headers)
         return r
 
 
@@ -420,9 +532,6 @@ class Session(requests.Session):
 
         self.filters = DEFAULT_FILTERS
 
-        # Used for context manager
-        self._old_session = None
-
         # Reuse an existing CAS connection if possible
         if swat and isinstance(hostname, swat.CAS):
             if isinstance(
@@ -494,16 +603,12 @@ class Session(requests.Session):
 
         self.verify = verify_ssl
 
-        # NOTE: get_auth() relies on _settings info, so must be called after values are set.
-        self.auth = self.get_auth()
+        # Find a suitable authentication mechanism and build an auth header
+        self.auth = self.get_auth(self._settings['username'], self._settings['password'], token)
 
-        # # Get a bearer token for authorization
-        # # NOTE: get_token() relies on _settings info, so must be called after values are set.
-        # token = token or self.get_token()
-        # self.auth = HTTPBearerAuth(token)
-
-        if current_session() is None:
-            current_session(self)
+        # Used for context manager
+        self._old_session = current_session()
+        current_session(self)
 
     def add_logger(self, handler, level=None):
         """Log session requests and responses.
@@ -735,50 +840,42 @@ class Session(requests.Session):
     def delete(self, url, **kwargs):
         return self.request('DELETE', url, **kwargs)
 
-    def get_auth(self):
-        """
+    def get_auth(self, username=None, password=None, token=None):
+        """Attempt to authenticate with the Viya environment
 
         Returns
         -------
         requests.auth.AuthBase
 
         """
-        username = self._settings.get('username')
-        password = self._settings.get('password')
+
+        base_url = self._build_url('')
 
         # If explicit username & password were provided, use them.
         if username is not None and password is not None:
-            return self._get_auth_password()
+            return PasswordAuth(base_url, username, password)
+
+        # If an existing access token was provided, use it
+        if token is not None:
+            return OAuth2Auth(base_url, token=token)
 
         # Kerberos doesn't require any interruption to the user, so try that first if username/password
         # were not provided.
         try:
-            return self._get_auth_kerberos()
+            token = self._get_token_with_kerberos()
+            return OAuth2Auth(base_url, token=token)
         except:
             pass
 
         # If we got this far, then no password and no kerberos.  Try prompting the user for an OIDC login
         try:
-            # TODO: What to do if oauthlib not installed?
-            return self._get_auth_oidc()
+            return AuthCodeAuth(base_url)
         except Exception as e:
             print(e)
             pass
 
         # If we got this far then nothing worked.
-        raise exceptions.AuthenticationError()
-
-
-    def _get_auth_password(self):
-        token = self._get_token_with_password()
-        return HTTPBearerAuth(token)
-
-    def _get_auth_kerberos(self):
-        token = self._get_token_with_kerberos()
-        return HTTPBearerAuth(token)
-
-    def _get_auth_oidc(self):
-        return OIDCAuth(self.hostname)
+        raise exceptions.AuthenticationError(username)
 
     def _get_token_with_kerberos(self):
         """Authenticate with a Kerberos ticket."""
@@ -863,83 +960,6 @@ class Session(requests.Session):
 
         return match.group(0)
 
-    def _get_token_with_oauth(self):
-        # Provided an authorization code -> get access token
-        # Otherwise check YAML file for existing token
-        # Otherwise print message w/ URL
-
-        yaml_file = os.path.expanduser('~/.sas/viya-api-profiles.yaml')
-
-        # See if a token has been cached for the hostname
-        if os.path.exists(yaml_file):
-            with open(yaml_file) as f:
-                info = yaml.load(f, Loader=yaml.FullLoader)
-
-            # Check each profile for a hostname match and return token if found
-            for profile in info.get('profiles', []):
-                url = profile.get('baseurl', '')
-                hostname = urlsplit(url).hostname
-
-                if hostname and hostname.lower() == self.hostname:
-                    token = profile.get('oauthtoken', {}).get('accesstoken')
-
-                    # TODO: Check token expiration.  Refresh if needed
-                    if token is not None:
-                        return token
-
-
-        # No existing tokens found in cache
-        print('Please use a web browser to login at the following URL to get your authorization code:  %s://%s/SASLogon/oauth/authorize?access_type=online&client_id=foo&response_type=code&state=??' % (self._settings['protocol'], self._settings['domain']))
-
-    def _get_token_with_password(self):
-        """Authenticate with a username and password."""
-        username = self._settings['username']
-        password = self._settings['password']
-        url = self._build_url('/SASLogon/oauth/token')
-
-        data = 'grant_type=password&username={}&password={}'.format(username, password)
-        headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
-
-        r = super(Session, self).post(
-            url, data=data, headers=headers, auth=('sas.ec', '')
-        )
-
-        if r.status_code == 401:
-            raise exceptions.AuthenticationError(username)
-        r.raise_for_status()
-
-        return r.json().get('access_token')
-
-    def get_token(self):
-        """Authenticates with the session host and retrieves an
-        authorization token for use by subsequent requests.
-
-        Returns
-        -------
-        str
-            a bearer token for :class:`HTTPBearerAuth`
-
-        Raises
-        ------
-        AuthenticationError
-            authentication with the host failed
-
-        """
-        username = self._settings['username']
-        password = self._settings['password']
-
-        if username is None or password is None:
-            if kerberos is not None:
-                token = self._get_token_with_kerberos()
-
-            if kerberos is None or token is None:
-                return self._get_token_with_oauth()
-
-        return self._get_token_with_password()
-
     def _build_url(self, url):
         """Build a complete URL from a path by substituting in session parameters."""
         components = urlsplit(url)
@@ -964,8 +984,8 @@ class Session(requests.Session):
         super(Session, self).__enter__()
 
         # Make this the current session
-        self._old_session = current_session()
-        current_session(self)
+        # self._old_session = current_session()
+        # current_session(self)
 
         return self
 
