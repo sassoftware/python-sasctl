@@ -304,8 +304,9 @@ def score{modelPrefix}({inputVarList}):
     {} = float(prediction[1][2])
     {} = prediction[1][0]'''.format(metrics[0], metrics[1]))
             
+            metricsList = ', '.join(metrics)
             cls.pyFile.write('''\n
-    return({}, {})'''.format(metrics[0], metrics[1]))
+    return({})'''.format(metricsList))
         
         # For SAS Viya 3.5, the model is first registered to SAS Model Manager, then the model UUID can be
         # added to the score code and reuploaded to the model file contents
