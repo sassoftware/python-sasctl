@@ -54,11 +54,9 @@ setup(
         'swat': ['swat'],
         'kerberos': ['kerberos ; platform_system != "Windows"',
                      'winkerberos ; platform_system == "Windows"'],
-        'oauth': ['oauthlib'],
         'all': ['swat',
                 'kerberos ; platform_system != "Windows"',
-                'winkerberos ; platform_system == "Windows"',
-                'oauthlib'],
+                'winkerberos ; platform_system == "Windows"'],
     },
     entry_points={'console_scripts': ['sasctl = sasctl.utils.cli:main']},
     classifiers=[

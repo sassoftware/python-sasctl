@@ -37,11 +37,6 @@ except ImportError:
     except ImportError:
         kerberos = None
 
-try:
-    from oauthlib import oauth2
-except ImportError:
-    oauth2 = None
-
 from .utils.cli import sasctl_command
 from .utils.misc import versionadded
 from . import exceptions
@@ -370,24 +365,6 @@ class PasswordAuth(OAuth2Auth):
             raise exceptions.AuthenticationError(username)
         r.raise_for_status()
         self.parse_token_response(r.json())
-
-
-class HTTPBearerAuth(requests.auth.AuthBase):
-    # Taken from https://github.com/kennethreitz/requests/issues/4437
-
-    def __init__(self, token):
-        self.token = token
-
-    def __eq__(self, other):
-        return self.token == getattr(other, 'token', None)
-
-    def __ne__(self, other):
-        return not self == other
-
-    def __call__(self, r):
-        r.headers['Authorization'] = 'Bearer ' + self.token
-        return r
-
 
 class RestObj(dict):
     def __getattr__(self, item):
