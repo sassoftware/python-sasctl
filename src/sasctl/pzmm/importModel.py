@@ -86,12 +86,24 @@ class ImportModel():
             sc.writeScoreCode(inputDF, targetDF, modelPrefix, predictmethod, modelFileName,
                               metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction, 
                               otherVariable=otherVariable, isH2OModel=isH2OModel)
+            print('Model score code was written successfully to {}.'.format(Path(pyPath) / (modelPrefix + 'Score.py')))
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
+            print('All model files were zipped to {}.'.format(Path(zPath)))
             response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
+            try:
+                print('Model was successfully imported into SAS Model Manager as {} with UUID: {}.'.format(response.name, response.id))
+            except AttributeError:
+                print('Model failed to import to SAS Model Manager.')
         else:
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
+            print('All model files were zipped to {}.'.format(Path(zPath)))
             response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
+            try:
+                print('Model was successfully imported into SAS Model Manager as {} with UUID: {}.'.format(response.name, response.id))
+            except AttributeError:
+                print('Model failed to import to SAS Model Manager.')
             sc.writeScoreCode(inputDF, targetDF, modelPrefix, predictmethod, modelFileName,
                               metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction, 
                               otherVariable=otherVariable, model=response.id,
                               isH2OModel=isH2OModel)
+            print('Model score code was written successfully to {} and uploaded to SAS Model Manager'.format(Path(pyPath) / (modelPrefix + 'Score.py')))

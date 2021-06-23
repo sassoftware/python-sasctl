@@ -92,6 +92,7 @@ class JSONFiles():
                       jFile,
                       indent=4,
                       skipkeys=True)
+        print('{} was successfully written and saved to {}'.format(fileName, Path(jPath) / fileName))
             
     def writeModelPropertiesJSON(self, modelName, modelDesc, targetVariable,
                                  modelType, modelPredictors, targetEvent,
@@ -176,6 +177,7 @@ class JSONFiles():
                       jFile,
                       indent=4,
                       skipkeys=True)
+        print('{} was successfully written and saved to {}'.format('ModelProperties.json', Path(jPath) / 'ModelProperties.json'))
             
     def writeFileMetadataJSON(self, modelPrefix, jPath=Path.cwd(), isH2OModel=False):
         '''
@@ -223,6 +225,7 @@ class JSONFiles():
                       jFile,
                       indent=4,
                       skipkeys=True)
+        print('{} was successfully written and saved to {}'.format('fileMetaData.json', Path(jPath) / 'fileMetaData.json'))
             
     def writeBaseFitStat(self, csvPath=None, jPath=Path.cwd(),
                          userInput=False, tupleList=None):
@@ -341,6 +344,7 @@ class JSONFiles():
                       jFile,
                       indent=4,
                       skipkeys=True)
+        print('{} was successfully written and saved to {}'.format('dmcas_fitstat.json', Path(jPath) / 'dmcas_fitstat.json'))
             
     def calculateFitStat(self, validateData=None, trainData=None, 
                          testData=None, jPath=Path.cwd()):
@@ -475,6 +479,7 @@ class JSONFiles():
 
         with open(Path(jPath) / 'dmcas_fitstat.json', 'w') as jFile:
             json.dump(nullJSONDict, jFile, indent=4)            
+        print('{} was successfully written and saved to {}'.format('dmcas_fitstat.json', Path(jPath) / 'dmcas_fitstat.json'))
     
     def generateROCLiftStat(self, targetName, targetValue, swatConn, 
                             validateData=None, trainData=None, testData=None, 
@@ -636,9 +641,11 @@ class JSONFiles():
         
         with open(Path(jPath) / 'dmcas_roc.json', 'w') as jFile:
             json.dump(nullJSONROCDict, jFile, indent=4) 
+        print('{} was successfully written and saved to {}'.format('dmcas_roc.json', Path(jPath) / 'dmcas_roc.json'))
             
         with open(Path(jPath) / 'dmcas_lift.json', 'w') as jFile:
             json.dump(nullJSONLiftDict, jFile, indent=4)
+        print('{} was successfully written and saved to {}'.format('dmcas_lift.json', Path(jPath) / 'dmcas_lift.json'))
                         
     def readJSONFile(self, path):
         '''

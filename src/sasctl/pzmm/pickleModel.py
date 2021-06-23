@@ -42,6 +42,10 @@ class PickleModel():
         if not isH2OModel:
             with open(Path(pPath) / (modelPrefix + '.pickle'), 'wb') as pFile:
                 pickle.dump(trainedModel, pFile)
+            print('Model {} was successfully pickled and saved to {}.'.format(modelPrefix,
+                                                                              Path(pPath) / (modelPrefix + '.pickle')))
         else:
             with open(Path(trainedModel), 'rb') as fileIn, gzip.open(Path(pPath) / (modelPrefix + '.mojo'), 'wb') as fileOut:
                 fileOut.writelines(fileIn)
+            print('MOJO model {} was successfully gzipped and saved to {}.'.format(modelPrefix,
+                                                                                   Path(pPath) / (modelPrefix + '.mojo')))
