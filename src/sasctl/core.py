@@ -721,13 +721,12 @@ class Session(requests.Session):
             if "Invalid authorization code" in j.get('error_description', ''):
                 raise exceptions.AuthorizationError("Invalid authorization code: '%s'" % auth_code)
         if r.status_code == 401:
-            if r.json().get('error_description', '').lower() == 'bad credentials':
-                if username is not None:
-                    raise exceptions.AuthenticationError(username)
-                else:
-                    raise exceptions.AuthenticationError(msg='Invalid client id or secret.')
+            if r.json().get('error_description', '').lower() == 'bad credentials' and username is None:
+                raise exceptions.AuthenticationError(msg='Invalid client id or secret.')
             if r.json().get('error', '') == 'invalid_token':
                 raise exceptions.AuthorizationError('Refresh token is incorrect, expired, or revoked.')
+            if username is not None:
+                raise exceptions.AuthenticationError(username)
 
         r.raise_for_status()
 
