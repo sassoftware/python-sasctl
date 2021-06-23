@@ -382,10 +382,11 @@ class Session(requests.Session):
                 except (OSError, IOError):
                     pass  # netrc throws if $HOME is not set
 
+        # Set this prior authentication attempts
         self.verify = verify_ssl
 
         # Find a suitable authentication mechanism and build an auth header
-        self.auth = self.get_auth(self._settings['username'], self._settings['password'], token, verify_ssl)
+        self.auth = self.get_auth(self._settings['username'], self._settings['password'], token)
 
         # Used for context manager
         self._old_session = current_session()
@@ -621,12 +622,27 @@ class Session(requests.Session):
     def delete(self, url, **kwargs):
         return self.request('DELETE', url, **kwargs)
 
-    def get_auth(self, username=None, password=None, token=None, verify_ssl=True):
+    def get_auth(self, username=None, password=None, token=None):
         """Attempt to authenticate with the Viya environment.
+
+        If `username` and `password` or `token` are provided, they will be used exclusively.  If neither of these
+        is specified, Kerberos authorization will be attempted.  If this fails, authorization using an
+        OAuth2 authorization code will be attempted.  Be aware that this requires prompting the user for input and
+        should NOT be used in a non-interactive session.
+
+        Parameters
+        ----------
+        username : str, optional
+            Username to use for authentication.
+        password : str, optional
+            Password to use for authentication.  Required if `username` is provided.
+        token : str, optional
+            An existing OAuth2 access token to use.
 
         Returns
         -------
-        requests.auth.AuthBase
+        OAuth2Token
+            Authorization header to use with requests to the evironent
 
         """
 
@@ -644,31 +660,26 @@ class Session(requests.Session):
             token = self._get_token_with_kerberos()
             return OAuth2Token(token)
         except:
-            pass
+            logger.exception('Failed to connect with Kerberos')
 
         # Try loading cached credentials
         # If we got this far, then no password and no kerberos.  Try prompting the user for an OIDC login
-        try:
-            auth_code = self.prompt_for_auth_code()
-            return self.get_oauth_token(auth_code=auth_code)
-        except Exception as e:
-            print(e)
-            pass
+        auth_code = self.prompt_for_auth_code()
+        return self.get_oauth_token(auth_code=auth_code)
 
-        # If we got this far then nothing worked.
-        raise exceptions.AuthenticationError(username)
-
-    def get_oauth_token(self, username=None, password=None, auth_code=None, client_id=None, client_secret=None):
+    def get_oauth_token(self, username=None, password=None, auth_code=None, refresh_token=None, client_id=None, client_secret=None):
         """Request an OAuth2 access token using either a username & password or an auth token.
 
         Parameters
         ----------
         username : str, optional
-            Username to use for authentication.  Required if `auth_token` is not provided.
+            Username to use for authentication.
         password : str, optional
             Password to use for authentication.  Required if `username` is provided.
         auth_code : str, optional
-            Authorization code to use.  Required if `username` and `password` are not provided.
+            Authorization code to use.
+        refresh_token : str, optinoal
+            Valid refresh token to use.
         client_id : str, optional
             Client ID requesting access.  Use if connection to Viya should be made using a non-default client id.
         client_secret : str, optional
@@ -688,6 +699,8 @@ class Session(requests.Session):
             data = {'grant_type': 'password', 'username': username, 'password': password}
         elif auth_code is not None:
             data = {'grant_type': 'authorization_code', 'code': auth_code}
+        elif refresh_token is not None:
+            data = {'grant_type': 'refresh_token', 'refresh_token': refresh_token}
         else:
             raise ValueError('Either username and password or auth_code parameters must be specified.')
 
@@ -702,8 +715,20 @@ class Session(requests.Session):
         url = self._build_url('/SASLogon/oauth/token')
         r = super(Session, self).post(url, headers=headers, data=data, auth=(client_id, client_secret), verify=self.verify)
 
+        # Raise user-friendly error messages if issue is known
+        if r.status_code == 400 and auth_code is not None:
+            j = r.json()
+            if "Invalid authorization code" in j.get('error_description', ''):
+                raise exceptions.AuthorizationError("Invalid authorization code: '%s'" % auth_code)
         if r.status_code == 401:
-            raise exceptions.AuthenticationError(username)
+            if r.json().get('error_description', '').lower() == 'bad credentials':
+                if username is not None:
+                    raise exceptions.AuthenticationError(username)
+                else:
+                    raise exceptions.AuthenticationError(msg='Invalid client id or secret.')
+            if r.json().get('error', '') == 'invalid_token':
+                raise exceptions.AuthorizationError('Refresh token is incorrect, expired, or revoked.')
+
         r.raise_for_status()
 
         return OAuth2Token(**r.json())
@@ -731,7 +756,6 @@ class Session(requests.Session):
 
         # User must open this URL in a browser and then enter the auth code that's generated.
         url = self._build_url('/SASLogon/oauth/authorize') + '?response_type=code&client_id=' + client_id
-
         message = 'Please use a web browser to login at the following URL to get your authorization code:\n' + url
         print(message)
         auth_code = input('Authorization Code:')
@@ -746,8 +770,7 @@ class Session(requests.Session):
                 "install sasctl[kerberos]' to install."
             )
 
-        user = self._settings.get('username')
-        # realm = user.rsplit('@', maxsplit=1)[-1] if '@' in user else None
+        user = self.username
         client_id = 'sas.tkmtrb'
         flags = kerberos.GSS_C_MUTUAL_FLAG | kerberos.GSS_C_SEQUENCE_FLAG
         service = 'HTTP@%s' % self._settings['domain']
