@@ -156,6 +156,22 @@ def current_session(*args, **kwargs):
     return _session
 
 
+class OAuth2Token(requests.auth.AuthBase):
+    def __init__(self, access_token, refresh_token=None, expiration=None, token_type=None, expires_in=None, **kwargs):
+        self.type = token_type or 'bearer'
+        self.access_token = access_token
+        self.refresh_token = refresh_token
+        self.expiration = expiration
+
+        if expires_in is not None:
+            self.expiration = datetime.now() + timedelta(seconds=expires_in)
+
+    def __call__(self, r):
+        r.headers['Authorization'] = 'Bearer ' + self.access_token
+        return r
+
+
+
 class OAuth2(requests.auth.AuthBase):
 
     PROFILE_PATH = '~/.sas/viya-api-profiles.yaml'
@@ -327,51 +343,6 @@ class OAuth2(requests.auth.AuthBase):
     def __call__(self, r):
         r.headers['Authorization'] = 'Bearer ' + self.access_token
         return r
-
-
-class OAuth2Code(OAuth2):
-    def __init__(self, base_url, **kwargs):
-        super().__init__(base_url, **kwargs)
-
-        # No need to request an auth code if we can load credentials from disk
-        if self.read_cached_token():
-            return
-
-        # User must open this URL in a browser and then enter the auth code that's generated.
-        url = self.authorize_url + '?response_type=code&client_id=%s' % self.client_id
-
-        message = 'Please use a web browser to login at the following URL to get your authorization code:\n' + url
-        print(message)
-        auth_code = input('Authorization Code:')
-
-        # Use the authorization code to get an access token & and refresh token
-        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        data = {'code': auth_code, 'grant_type': 'authorization_code'}
-        r = requests.post(self.token_url, auth=(self.client_id, self.client_secret), headers=headers, data=data, verify=self.verify)
-        r.raise_for_status()
-        self.parse_token_response(r.json())
-
-
-class OAuth2Password(OAuth2):
-    def __init__(self, base_url, username, password, **kwargs):
-        super().__init__(base_url, **kwargs)
-
-        data = {
-            'grant_type': 'password',
-            'username': username,
-            'password': password
-        }
-
-        headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
-
-        r = requests.post(self.token_url, data=data, headers=headers, auth=(self.client_id, self.client_secret), verify=self.verify)
-        if r.status_code == 401:
-            raise exceptions.AuthenticationError(username)
-        r.raise_for_status()
-        self.parse_token_response(r.json())
 
 
 class RestObj(dict):
@@ -834,33 +805,101 @@ class Session(requests.Session):
 
         """
 
-        base_url = self._build_url('')
-
         # If explicit username & password were provided, use them.
         if username is not None and password is not None:
-            return OAuth2Password(base_url, username, password, verify_ssl=verify_ssl)
+            return self.get_oauth_token(username, password)
 
         # If an existing access token was provided, use it
         if token is not None:
-            return OAuth2(base_url, token=token)
+            return OAuth2Token(token)
 
         # Kerberos doesn't require any interruption to the user, so try that first if username/password
         # were not provided.
         try:
             token = self._get_token_with_kerberos()
-            return OAuth2(base_url, token=token)
+            return OAuth2Token(token)
         except:
             pass
 
+        # Try loading cached credentials
         # If we got this far, then no password and no kerberos.  Try prompting the user for an OIDC login
         try:
-            return OAuth2Code(base_url, verify_ssl=verify_ssl)
+            auth_code = self.prompt_for_auth_code()
+            return self.get_oauth_token(auth_code=auth_code)
         except Exception as e:
             print(e)
             pass
 
         # If we got this far then nothing worked.
         raise exceptions.AuthenticationError(username)
+
+    def get_oauth_token(self, username=None, password=None, auth_code=None, client_id=None, client_secret=None):
+        """Request an OAuth2 access token using either a username & password or an auth token.
+
+        Parameters
+        ----------
+        username
+        password
+        auth_code
+        client_id
+        client_secret
+
+        Returns
+        -------
+        OAuth2Token
+
+        See Also
+        --------
+        prompt_for_auth_code()
+
+        """
+
+        if username is not None:
+            data = {'grant_type': 'password', 'username': username, 'password': password}
+        elif auth_code is not None:
+            data = {'grant_type': 'authorization_code', 'code': auth_code}
+        else:
+            raise ValueError('Either username and password or auth_code parameters must be specified.')
+
+        client_id = client_id or os.environ.get('SASCTL_CLIENT_ID', 'sas.ec')
+        client_secret = client_secret or os.environ.get('SASCTL_CLIENT_SECRET', '')
+
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+
+        url = self._build_url('/SASLogon/oauth/token')
+        r = super(Session, self).post(url, headers=headers, data=data, auth=(client_id, client_secret), verify=self.verify)
+
+        if r.status_code == 401:
+            raise exceptions.AuthenticationError(username)
+        r.raise_for_status()
+
+        return OAuth2Token(**r.json())
+
+    def prompt_for_auth_code(self, client_id=None):
+        """Prompt the user open a URL to generate an auth code.
+
+        Parameters
+        ----------
+        client_id : str, optional
+
+        Returns
+        -------
+        str
+
+        """
+        client_id = client_id or os.environ.get('SASCTL_CLIENT_ID', 'sas.ec')
+
+        # User must open this URL in a browser and then enter the auth code that's generated.
+        url = self._build_url('/SASLogon/oauth/authorize') + '?response_type=code&client_id=' + client_id
+
+        message = 'Please use a web browser to login at the following URL to get your authorization code:\n' + url
+        print(message)
+        auth_code = input('Authorization Code:')
+
+        return auth_code
 
     def _get_token_with_kerberos(self):
         """Authenticate with a Kerberos ticket."""
