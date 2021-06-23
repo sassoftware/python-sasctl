@@ -19,9 +19,8 @@ from uuid import UUID, uuid4
 
 import requests
 import requests.exceptions
-import yaml
 from requests.adapters import HTTPAdapter
-from six.moves.urllib.parse import urljoin, urlsplit, urlunsplit
+from six.moves.urllib.parse import urlsplit, urlunsplit
 from six.moves.urllib.error import HTTPError
 
 try:
@@ -165,180 +164,6 @@ class OAuth2Token(requests.auth.AuthBase):
 
         if expires_in is not None:
             self.expiration = datetime.now() + timedelta(seconds=expires_in)
-
-    def __call__(self, r):
-        r.headers['Authorization'] = 'Bearer ' + self.access_token
-        return r
-
-
-
-class OAuth2(requests.auth.AuthBase):
-
-    PROFILE_PATH = '~/.sas/viya-api-profiles.yaml'
-
-    def __init__(self, base_url, token=None, verify_ssl=True):
-
-        self.client_id = os.environ.get('SASCTL_CLIENT_ID', 'sas.ec')
-        self.client_secret = os.environ.get('SASCTL_CLIENT_SECRET', '')
-        self.verify = verify_ssl
-
-        url_parts = urlsplit(base_url)
-        url_parts = (
-            url_parts.scheme or 'https',
-            url_parts.netloc,
-            url_parts.path,
-            None,
-            None
-        )
-
-        self.base_url = urlunsplit(url_parts)
-        self.authorize_url = urljoin(self.base_url, '/SASLogon/oauth/authorize')
-        self.token_url = urljoin(self.base_url, '/SASLogon/oauth/token')
-
-        self.access_token = token
-        self.refresh_token = None
-        self.expiration_date = None
-
-    def _read_profiles(self):
-        """Read cached profiles from disk.
-
-        Returns
-        -------
-        dict or None
-
-        """
-        yaml_file = os.path.expanduser(self.PROFILE_PATH)
-
-        # See if a token has been cached for the hostname
-        if os.path.exists(yaml_file):
-            # Get bit flags indicating access permissions
-            mode = os.stat(yaml_file).st_mode
-            flags = oct(mode)[-3:]
-
-            if flags != '600':
-                raise RuntimeError('Unable to read profile cache.  '
-                                   'The file permissions for %s must be configured so that only the file owner has '
-                                   'read/write permissions (equivalent to 600 on Linux systems).' % yaml_file)
-
-            with open(yaml_file) as f:
-                return yaml.load(f, Loader=yaml.FullLoader)
-
-    def _write_profiles(self, profiles):
-        """
-
-        Parameters
-        ----------
-        profiles : dict
-
-        Returns
-        -------
-        None
-
-        """
-        yaml_file = os.path.expanduser(self.PROFILE_PATH)
-
-        # Create parent .sas folder if needed
-        sas_dir = os.path.dirname(yaml_file)
-        if not os.path.exists(sas_dir):
-            os.mkdir(sas_dir)
-
-        with open(yaml_file, 'w') as f:
-            yaml.dump(profiles, f)
-
-        # Get bit flags indicating access permissions
-        mode = os.stat(yaml_file).st_mode
-        flags = oct(mode)[-3:]
-
-        # Ensure access to file is restricted
-        if flags != '600':
-            os.chmod(yaml_file, 0x600)
-
-    def read_cached_token(self):
-        """Read any cached access tokens from disk
-
-        Returns
-        -------
-        bool
-            Whether a valid token was found.
-
-        """
-        profiles = self._read_profiles()
-
-        # Couldn't read any profiles
-        if profiles is None:
-            return False
-
-        # Check each profile for a hostname match and return token if found
-        for profile in profiles.get('profiles', []):
-            url = profile.get('baseurl', '')
-            hostname = urlsplit(url).hostname
-
-            if hostname and hostname.lower() == self.base_url.lower():
-                self.parse_token_response(profile)
-                return True
-        return False
-
-    def cache_token(self):
-        """Cache current token values to disk.
-
-        Returns
-        -------
-        None
-
-        """
-        profiles = self._read_profiles()
-
-        # Top-level structure if no existing file was found
-        if profiles is None:
-            profiles = {'profiles': []}
-
-        # Token values to be cached
-        token = {
-            'accesstoken': self.access_token,
-            'refreshtoken': self.refresh_token,
-            'tokentype': 'bearer',
-            'expiry': self.expiration_date
-        }
-
-        # See if there's an existing profile to update
-        matches = [(i, p) for i, p in enumerate(profiles['profiles']) if p['baseurl'] == self.base_url]
-        if matches:
-            idx, match = matches[0]
-            match['oauthtoken'] = token
-            profiles['profiles'][idx] = match
-        else:
-            profiles['profiles'].append({
-                'baseurl': self.base_url,
-                'name': None,
-                'oauthtoken': token
-            })
-
-        self._write_profiles(profiles)
-
-    def get_refreshed_token(self):
-        data = {
-            'grant_type': 'refresh_token',
-            'refresh_token': self.refresh_token
-        }
-        r = requests.post(self.token_url, auth=(self.client_id, self.client_secret), data=data, verify=self.verify)
-        r.raise_for_status()
-        self.parse_token_response(r.json())
-        self.cache_token()
-
-    def parse_token_response(self, data):
-        token_type = data.get('token_type')
-
-        if token_type != 'bearer':
-            raise RuntimeError("There was an issue when authorizing the user account.  "
-                               "Received an access token of type '%s' but expected type 'bearer'.  "
-                               "Check with your SAS administrator about alternative authentication methods." % (token_type))
-
-        self.access_token = data.get('access_token')
-        self.refresh_token = data.get('refresh_token')
-
-        seconds_to_live = data.get('expires_in')
-        if seconds_to_live:
-            self.expiration_date = datetime.now() + timedelta(seconds=seconds_to_live)
 
     def __call__(self, r):
         r.headers['Authorization'] = 'Bearer ' + self.access_token
@@ -797,7 +622,7 @@ class Session(requests.Session):
         return self.request('DELETE', url, **kwargs)
 
     def get_auth(self, username=None, password=None, token=None, verify_ssl=True):
-        """Attempt to authenticate with the Viya environment
+        """Attempt to authenticate with the Viya environment.
 
         Returns
         -------
@@ -838,11 +663,16 @@ class Session(requests.Session):
 
         Parameters
         ----------
-        username
-        password
-        auth_code
-        client_id
-        client_secret
+        username : str, optional
+            Username to use for authentication.  Required if `auth_token` is not provided.
+        password : str, optional
+            Password to use for authentication.  Required if `username` is provided.
+        auth_code : str, optional
+            Authorization code to use.  Required if `username` and `password` are not provided.
+        client_id : str, optional
+            Client ID requesting access.  Use if connection to Viya should be made using a non-default client id.
+        client_secret : str, optional
+            Client secret for client requesting access.  Required if `client_id` is provided
 
         Returns
         -------
@@ -850,7 +680,7 @@ class Session(requests.Session):
 
         See Also
         --------
-        prompt_for_auth_code()
+        :meth:`Session.prompt_for_auth_code`
 
         """
 
@@ -881,6 +711,8 @@ class Session(requests.Session):
     def prompt_for_auth_code(self, client_id=None):
         """Prompt the user open a URL to generate an auth code.
 
+        Note that this halts program execution until input is received and should only be used for interactive sessions.
+
         Parameters
         ----------
         client_id : str, optional
@@ -888,6 +720,11 @@ class Session(requests.Session):
         Returns
         -------
         str
+            Authorization code that can be used to acquire an OAuth2 access token.
+
+        See Also
+        --------
+        :meth:`Session.get_oauth_token`
 
         """
         client_id = client_id or os.environ.get('SASCTL_CLIENT_ID', 'sas.ec')

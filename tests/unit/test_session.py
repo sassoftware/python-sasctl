@@ -363,11 +363,11 @@ def test_kerberos():
 def test_authentication_failure():
     from sasctl.exceptions import AuthenticationError
 
-    with mock.patch('sasctl.core.requests.post') as request:
+    with mock.patch('sasctl.core.requests.Session.post') as request:
         request.return_value.status_code = 401
 
         with pytest.raises(AuthenticationError):
-            Session('hostname', 'username', 'password')
+            Session('hostname', 'username', 'password', verify_ssl=False)
 
 
 def test_str():
