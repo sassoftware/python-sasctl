@@ -19,6 +19,7 @@ from uuid import UUID, uuid4
 
 import requests
 import requests.exceptions
+import yaml
 from requests.adapters import HTTPAdapter
 from six.moves.urllib.parse import urlsplit, urlunsplit
 from six.moves.urllib.error import HTTPError
@@ -156,8 +157,7 @@ def current_session(*args, **kwargs):
 
 
 class OAuth2Token(requests.auth.AuthBase):
-    def __init__(self, access_token, refresh_token=None, expiration=None, token_type=None, expires_in=None, **kwargs):
-        self.type = token_type or 'bearer'
+    def __init__(self, access_token, refresh_token=None, expiration=None, expires_in=None, **kwargs):
         self.access_token = access_token
         self.refresh_token = refresh_token
         self.expiration = expiration
@@ -257,6 +257,8 @@ class Session(requests.Session):
         messages, allowing any sensitive information to be removed first.
 
     """
+
+    PROFILE_PATH = '~/.sas/viya-api-profiles.yaml'
 
     def __init__(
         self,
@@ -730,7 +732,9 @@ class Session(requests.Session):
 
         r.raise_for_status()
 
-        return OAuth2Token(**r.json())
+        token = OAuth2Token(**r.json())
+        self.cache_token(token, self.PROFILE_PATH)
+        return token
 
     def prompt_for_auth_code(self, client_id=None):
         """Prompt the user open a URL to generate an auth code.
@@ -760,6 +764,87 @@ class Session(requests.Session):
         auth_code = input('Authorization Code:')
 
         return auth_code
+
+    def cache_token(self, token, path):
+        """Write an OAuth2 token to the cache.
+
+        Parameters
+        ----------
+        token : OAuth2Token
+            Token to be cached.
+        path : str
+            Path to file containing cached tokens.
+
+        Returns
+        -------
+        None
+
+        """
+        profiles = Session._read_token_cache(path)
+        base_url = self._build_url('')
+
+        # Top-level structure if no existing file was found
+        if profiles is None:
+            profiles = {'profiles': []}
+
+        # Token values to be cached
+        token = {
+            'accesstoken': token.access_token,
+            'refreshtoken': token.refresh_token,
+            'tokentype': 'bearer',
+            'expiry': token.expiration
+        }
+
+        # See if there's an existing profile to update
+        matches = [(i, p) for i, p in enumerate(profiles['profiles']) if p['baseurl'] == base_url]
+        if matches:
+            idx, match = matches[0]
+            match['oauthtoken'] = token
+            profiles['profiles'][idx] = match
+        else:
+            profiles['profiles'].append({
+                'baseurl': base_url,
+                'name': None,
+                'oauthtoken': token
+            })
+
+        Session._write_token_cache(profiles, path)
+
+    def read_cached_token(self, path):
+        """Read any cached access tokens from disk
+
+        Parameters
+        ----------
+        path : str
+            Path to file containing cached tokens.
+
+        Returns
+        -------
+        OAuth2Token or None
+
+        """
+        # Map from field names in YAML to fields returned by SASLogon
+        field_mappings = {
+            'accesstoken': 'access_token',
+            'refreshtoken': 'refresh_token',
+            'expiry': 'expiration'
+        }
+
+        profiles = Session._read_token_cache(path)
+        url = self._build_url('')
+
+        # Couldn't read any profiles
+        if profiles is None:
+            return
+
+        # Check each profile for a hostname match and return token if found
+        for profile in profiles.get('profiles', []):
+            baseurl = profile.get('baseurl', '').lower()
+
+            # Return the cached token
+            if baseurl == url.lower():
+                token = {field_mappings[k]: v for k, v in profile if k in field_mappings}
+                return OAuth2Token(**token)
 
     def _get_token_with_kerberos(self):
         """Authenticate with a Kerberos ticket."""
@@ -862,6 +947,73 @@ class Session(requests.Session):
                 components.fragment,
             ]
         )
+
+    @staticmethod
+    def _read_token_cache(path):
+        """Read cached OAuth2 access tokens from disk.
+
+        Parameters
+        ----------
+        path : str
+            Path to file containing cached tokens.
+
+        Returns
+        -------
+        dict or None
+
+        Raises
+        ------
+        RuntimeError
+            If file permissions are too permissive.
+
+        """
+        yaml_file = os.path.expanduser(path)
+
+        # See if a token has been cached for the hostname
+        if os.path.exists(yaml_file):
+            # Get bit flags indicating access permissions
+            mode = os.stat(yaml_file).st_mode
+            flags = oct(mode)[-3:]
+
+            if flags != '600':
+                raise RuntimeError('Unable to read profile cache.  '
+                                   'The file permissions for %s must be configured so that only the file owner has '
+                                   'read/write permissions (equivalent to 600 on Linux systems).' % yaml_file)
+
+            with open(yaml_file) as f:
+                return yaml.load(f, Loader=yaml.FullLoader)
+
+    @staticmethod
+    def _write_token_cache(profiles, path):
+        """
+
+        Parameters
+        ----------
+        profiles : dict
+        path : str
+
+        Returns
+        -------
+        None
+
+        """
+        yaml_file = os.path.expanduser(path)
+
+        # Create parent .sas folder if needed
+        sas_dir = os.path.dirname(yaml_file)
+        if not os.path.exists(sas_dir):
+            os.mkdir(sas_dir)
+
+        with open(yaml_file, 'w') as f:
+            yaml.dump(profiles, f)
+
+        # Get bit flags indicating access permissions
+        mode = os.stat(yaml_file).st_mode
+        flags = oct(mode)[-3:]
+
+        # Ensure access to file is restricted
+        if flags != '600':
+            os.chmod(yaml_file, 0o600)
 
     def __enter__(self):
         super(Session, self).__enter__()
