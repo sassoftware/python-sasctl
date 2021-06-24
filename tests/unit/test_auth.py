@@ -58,30 +58,31 @@ def test_auth_code():
 
     AUTH_CODE = 'supersecretauthcode'
 
-    # Don't write fake token to cache
-    mock.patch('sasctl.core.Session.cache_token').start()
-
     # Kerberos auth has to fail before auth code will be attempted
     with mock.patch('sasctl.core.Session._get_token_with_kerberos', side_effect=ValueError):
 
         # Dont read anything from disk
         with mock.patch('sasctl.core.Session.read_cached_token', return_value=None):
 
+            # Don't actually prompt user to input auth code
             with mock.patch('sasctl.core.input', return_value=AUTH_CODE):
 
-                with mock.patch('sasctl.core.requests.Session.post') as mock_post:
-                    mock_post.return_value.status_code = 200
-                    mock_post.return_value.json.return_value = {'access_token': ACCESS_TOKEN,
-                                                                'refresh_token': REFRESH_TOKEN}
+                # Don't write the fake token to disk
+                with mock.patch('sasctl.core.Session.cache_token'):
 
-                    s = Session('hostname')
+                    with mock.patch('sasctl.core.requests.Session.post') as mock_post:
+                        mock_post.return_value.status_code = 200
+                        mock_post.return_value.json.return_value = {'access_token': ACCESS_TOKEN,
+                                                                    'refresh_token': REFRESH_TOKEN}
 
-                    # POST data
-                    data = mock_post.call_args[1]['data']
-                    assert data['grant_type'] == 'authorization_code'
-                    assert data['code'] == AUTH_CODE
-                    assert s.auth.access_token == ACCESS_TOKEN
-                    assert s.auth.refresh_token == REFRESH_TOKEN
+                        s = Session('hostname')
+
+                        # POST data
+                        data = mock_post.call_args[1]['data']
+                        assert data['grant_type'] == 'authorization_code'
+                        assert data['code'] == AUTH_CODE
+                        assert s.auth.access_token == ACCESS_TOKEN
+                        assert s.auth.refresh_token == REFRESH_TOKEN
 
 
 def test_read_cached_token():
@@ -133,8 +134,13 @@ def test_write_token_cache():
     # Fake file object that will be written to
     mock_open = mock.mock_open()
 
-    with mock.patch('builtins.open', mock_open):
-        Session._write_token_cache(profiles, Session.PROFILE_PATH)
+    # Fake permissions on a (fake) file
+    with mock.patch('os.stat') as mock_stat:
+        mock_stat.return_value.st_mode = 0o600
+
+        # Fake opening a file
+        with mock.patch('builtins.open', mock_open):
+            Session._write_token_cache(profiles, Session.PROFILE_PATH)
 
     mock_open.assert_called_once()
     handle = mock_open()
