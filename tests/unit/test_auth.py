@@ -112,8 +112,16 @@ profiles:
          }}
     ]}
 
-    with mock.patch('sasctl.core.open', mock.mock_open(read_data=fake_yaml)):
-        tokens = Session._read_token_cache(Session.PROFILE_PATH)
+    # Fake file exists
+    with mock.patch('os.path.exists', return_value=True):
+
+        # Fake permissions on a (fake) file
+        with mock.patch('os.stat') as mock_stat:
+            mock_stat.return_value.st_mode = 0o600
+
+            # Open & read fake file
+            with mock.patch('builtins.open', mock.mock_open(read_data=fake_yaml)):
+                tokens = Session._read_token_cache(Session.PROFILE_PATH)
 
     assert tokens == target
 
