@@ -733,7 +733,12 @@ class Session(requests.Session):
         r.raise_for_status()
 
         token = OAuth2Token(**r.json())
-        self.cache_token(token, self.PROFILE_PATH)
+
+        # No reason to cache token if username & password were provided - they'd just be re-provided on future
+        # connections.  Cache for auth code & refresh token to prevent frequent interruptions for the user.
+        if username is None:
+            self.cache_token(token, self.PROFILE_PATH)
+
         return token
 
     def prompt_for_auth_code(self, client_id=None):
