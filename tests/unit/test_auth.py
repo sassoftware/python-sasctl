@@ -82,3 +82,61 @@ def test_auth_code():
                     assert data['code'] == AUTH_CODE
                     assert s.auth.access_token == ACCESS_TOKEN
                     assert s.auth.refresh_token == REFRESH_TOKEN
+
+
+def test_read_cached_token():
+    """Verify that cached tokens are read correctly"""
+
+    # Example YAML file
+    fake_yaml = """
+profiles:
+- baseurl: https://example.sas.com
+  name: Example
+  oauthtoken:
+    accesstoken: abc123
+    expiry: null
+    refreshtoken: xyz
+    tokentype: bearer
+    """
+
+    # Expected response
+    target = {'profiles': [
+        {'baseurl': 'https://example.sas.com',
+         'name': 'Example',
+         'oauthtoken': {
+             'accesstoken': 'abc123',
+             'expiry': None,
+             'refreshtoken': 'xyz',
+             'tokentype': 'bearer'
+         }}
+    ]}
+
+    with mock.patch('builtins.open', mock.mock_open(read_data=fake_yaml)):
+        tokens = Session._read_token_cache(Session.PROFILE_PATH)
+
+    assert tokens == target
+
+
+def test_write_token_cache():
+    """Test writing tokens in YAML format to disk."""
+    profiles = {'profiles': [
+        {'baseurl': 'https://example.sas.com',
+         'name': 'Example',
+         'oauthtoken': {
+             'accesstoken': 'abc123',
+             'expiry': None,
+             'refreshtoken': 'xyz',
+             'tokentype': 'bearer'
+         }}
+    ]}
+
+    # Fake file object that will be written to
+    mock_open = mock.mock_open()
+
+    with mock.patch('builtins.open', mock_open):
+        Session._write_token_cache(profiles, Session.PROFILE_PATH)
+
+    mock_open.assert_called_once()
+    handle = mock_open()
+    handle.write.assert_called()  # called for each line of yaml written
+
