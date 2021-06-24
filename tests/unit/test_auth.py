@@ -112,7 +112,7 @@ profiles:
          }}
     ]}
 
-    with mock.patch('builtins.open', mock.mock_open(read_data=fake_yaml)):
+    with mock.patch('sasctl.core.open', mock.mock_open(read_data=fake_yaml)):
         tokens = Session._read_token_cache(Session.PROFILE_PATH)
 
     assert tokens == target
@@ -139,10 +139,10 @@ def test_write_token_cache():
         mock_stat.return_value.st_mode = 0o600
 
         # Fake opening a file
-        with mock.patch('builtins.open', mock_open):
+        with mock.patch('sasctl.core.open', mock_open):
             Session._write_token_cache(profiles, Session.PROFILE_PATH)
 
-    mock_open.assert_called_once()
+    assert mock_open.call_count == 1
     handle = mock_open()
     handle.write.assert_called()  # called for each line of yaml written
 
