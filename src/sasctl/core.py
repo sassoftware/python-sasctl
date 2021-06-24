@@ -19,6 +19,7 @@ from uuid import UUID, uuid4
 
 import requests
 import requests.exceptions
+import six
 import yaml
 from requests.adapters import HTTPAdapter
 from six.moves.urllib.parse import urlsplit, urlunsplit
@@ -665,7 +666,12 @@ class Session(requests.Session):
             logger.exception('Failed to connect with Kerberos')
 
         # Try loading cached credentials
-        # If we got this far, then no password and no kerberos.  Try prompting the user for an OIDC login
+        token = self.read_cached_token(self.PROFILE_PATH)
+
+        if token is not None:
+            return token
+
+        # If we got this far, then no password and no kerberos.  Try prompting the user for an authorization code.
         auth_code = self.prompt_for_auth_code()
         return self.get_oauth_token(auth_code=auth_code)
 
@@ -848,7 +854,8 @@ class Session(requests.Session):
 
             # Return the cached token
             if baseurl == url.lower():
-                token = {field_mappings[k]: v for k, v in profile if k in field_mappings}
+                data = profile.get('oauthtoken', {})
+                token = {field_mappings[k]: v for k, v in six.iteritems(data) if k in field_mappings}
                 return OAuth2Token(**token)
 
     def _get_token_with_kerberos(self):

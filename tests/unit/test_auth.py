@@ -58,21 +58,27 @@ def test_auth_code():
 
     AUTH_CODE = 'supersecretauthcode'
 
+    # Don't write fake token to cache
+    mock.patch('sasctl.core.Session.cache_token').start()
+
     # Kerberos auth has to fail before auth code will be attempted
     with mock.patch('sasctl.core.Session._get_token_with_kerberos', side_effect=ValueError):
 
-        with mock.patch('sasctl.core.input', return_value=AUTH_CODE):
+        # Dont read anything from disk
+        with mock.patch('sasctl.core.Session.read_cached_token', return_value=None):
 
-            with mock.patch('sasctl.core.requests.Session.post') as mock_post:
-                mock_post.return_value.status_code = 200
-                mock_post.return_value.json.return_value = {'access_token': ACCESS_TOKEN,
-                                                            'refresh_token': REFRESH_TOKEN}
+            with mock.patch('sasctl.core.input', return_value=AUTH_CODE):
 
-                s = Session('hostname')
+                with mock.patch('sasctl.core.requests.Session.post') as mock_post:
+                    mock_post.return_value.status_code = 200
+                    mock_post.return_value.json.return_value = {'access_token': ACCESS_TOKEN,
+                                                                'refresh_token': REFRESH_TOKEN}
 
-                # POST data
-                data = mock_post.call_args[1]['data']
-                assert data['grant_type'] == 'authorization_code'
-                assert data['code'] == AUTH_CODE
-                assert s.auth.access_token == ACCESS_TOKEN
-                assert s.auth.refresh_token == REFRESH_TOKEN
+                    s = Session('hostname')
+
+                    # POST data
+                    data = mock_post.call_args[1]['data']
+                    assert data['grant_type'] == 'authorization_code'
+                    assert data['code'] == AUTH_CODE
+                    assert s.auth.access_token == ACCESS_TOKEN
+                    assert s.auth.refresh_token == REFRESH_TOKEN
