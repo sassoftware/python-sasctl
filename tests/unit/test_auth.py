@@ -154,3 +154,100 @@ def test_write_token_cache():
     handle = mock_open()
     handle.write.assert_called()  # called for each line of yaml written
 
+
+def test_automatic_token_refresh():
+    """Access token should automatically be refreshed on an HTTP 401 indicating expired token."""
+    from sasctl.core import OAuth2Token
+
+    with mock.patch('sasctl.core.requests.Session.request') as mock_request:
+        mock_request.return_value.status_code = 401
+        mock_request.return_value.headers = {'WWW-Authenticate': 'Bearer realm="oauth", error="invalid_token", error_description="Access token expired: abc"'}
+
+        with mock.patch('sasctl.core.Session.get_auth',  return_value=OAuth2Token(access_token='abc', refresh_token='def')):
+            s = Session('example.com')
+
+        assert s.auth.access_token == 'abc'
+        assert s.auth.refresh_token == 'def'
+
+        with mock.patch('sasctl.core.Session.get_oauth_token', return_value=OAuth2Token(access_token='uvw', refresh_token='xyz')) as mock_oauth:
+            s.get('/fakeurl')
+
+        assert s.auth.access_token == 'uvw'
+        assert s.auth.refresh_token == 'xyz'
+
+
+def test_load_expired_token_with_refresh():
+    """If a cached token is loaded but it's expired it should be refreshed.
+
+    1) Session is created with no credentials passed
+    2) Token cache is checked for existing access token
+    3) Cached token is found, but is expired
+    4) Refresh token is used to acquire new access token
+    5) New access token is returned and used by Session
+
+    """
+    from datetime import datetime, timedelta
+    from sasctl.core import OAuth2Token
+
+
+    # Cached profile with an expired access token
+    PROFILES = {'profiles': [
+        {'baseurl': 'https://example.com',
+         'oauthtoken': {
+             'accesstoken': 'abc',
+             'refreshtoken': 'def',
+             'expiry': datetime.now() - timedelta(seconds=1)
+         }}
+    ]}
+
+    # Return fake profiles instead of reading from disk
+    with mock.patch('sasctl.core.Session._read_token_cache', return_value=PROFILES):
+
+        # Fake response for refresh token request.
+        with mock.patch('sasctl.core.Session.get_oauth_token', return_value=OAuth2Token(access_token='xyz')):
+            s = Session('example.com')
+
+        # Cached token is expired, should have refreshed and gotten new token
+        assert s.auth.access_token == 'xyz'
+
+
+def test_load_expired_token_no_refresh():
+    """If a cached token is loaded but it's expired and can't be refreshed, auth code prompt should be shown.
+
+    1) Session is created with no credentials passed
+    2) Token cache is checked for existing access token
+    3) Cached token is found, but is expired
+    4) Refresh token is used to acquire new access token
+    5) Refresh token is found to be expired
+    6) Cached tokens are ignored
+    7) User is prompted for authorization code
+
+    """
+    from datetime import datetime, timedelta
+    from sasctl.core import OAuth2Token
+    from sasctl.exceptions import AuthorizationError
+
+
+    # Cached profile with an expired access token
+    PROFILES = {'profiles': [
+        {'baseurl': 'https://example.com',
+         'oauthtoken': {
+             'accesstoken': 'abc',
+             'refreshtoken': 'def',
+             'expiry': datetime.now() - timedelta(seconds=1)
+         }}
+    ]}
+
+    # Return fake profiles instead of reading from disk
+    with mock.patch('sasctl.core.Session._read_token_cache', return_value=PROFILES):
+
+        # Fake an expired refresh token - AuthorizationError should be raised
+        with mock.patch('sasctl.core.Session.get_oauth_token', side_effect=AuthorizationError):
+
+            # Refresh of expired token failed, so user should be prompted for auth code
+            with mock.patch('sasctl.core.Session.prompt_for_auth_code') as mock_prompt:
+
+                with pytest.raises(AuthorizationError):
+                    s = Session('example.com')
+
+            assert mock_prompt.call_count == 1

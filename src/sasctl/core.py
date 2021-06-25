@@ -171,6 +171,13 @@ class OAuth2Token(requests.auth.AuthBase):
         r.headers['Authorization'] = 'Bearer ' + self.access_token
         return r
 
+    @property
+    def is_expired(self):
+        if self.expiration is None:
+            return False
+
+        return self.expiration < datetime.now()
+
 
 class RestObj(dict):
     def __getattr__(self, item):
@@ -500,7 +507,6 @@ class Session(requests.Session):
             kwargs.setdefault('username', self.username)
             kwargs.setdefault('password', self._settings['password'])
 
-
         orig_sslreqcert = os.environ.get('SSLREQCERT')
 
         # If SSL connections to microservices are not being verified, don't attempt
@@ -591,7 +597,7 @@ class Session(requests.Session):
         verify = verify or self.verify
 
         try:
-            return super(Session, self).request(
+            r = super(Session, self).request(
                 method,
                 url,
                 params,
@@ -607,8 +613,40 @@ class Session(requests.Session):
                 stream,
                 verify,
                 cert,
-                json,
+                json
             )
+
+            if r.status_code == 401:
+                auth_header = r.headers.get('WWW-Authenticate', '').lower()
+
+                # Access token expired, need to refresh it (if we can)
+                if 'access token expired' in auth_header:
+                    try:
+                        self.auth = self.get_oauth_token(refresh_token=self.auth.refresh_token)
+
+                        # Repeat the request
+                        r = super(Session, self).request(
+                            method,
+                            url,
+                            params,
+                            data,
+                            headers,
+                            cookies,
+                            files,
+                            auth,
+                            timeout,
+                            allow_redirects,
+                            proxies,
+                            hooks,
+                            stream,
+                            verify,
+                            cert,
+                            json
+                        )
+                    except exceptions.AuthorizationError:
+                        pass
+
+            return r
         except requests.exceptions.SSLError as e:
             if 'REQUESTS_CA_BUNDLE' not in os.environ:
                 raise RuntimeError(
@@ -865,7 +903,18 @@ class Session(requests.Session):
             if baseurl == url.lower():
                 data = profile.get('oauthtoken', {})
                 token = {field_mappings[k]: v for k, v in six.iteritems(data) if k in field_mappings}
-                return OAuth2Token(**token)
+                token = OAuth2Token(**token)
+
+                # Attempt to refresh if cached token has expired
+                if token.is_expired:
+                    try:
+                        token = self.get_oauth_token(refresh_token=token.refresh_token)
+                    except (exceptions.AuthorizationError, HTTPError):
+                        return
+
+                # If refresh fails, dont return token, allow user to be prompted for login
+                if not token.is_expired:
+                    return token
 
     def _get_token_with_kerberos(self):
         """Authenticate with a Kerberos ticket."""
