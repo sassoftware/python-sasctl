@@ -48,6 +48,7 @@ setup(
         'requests',
         'six >= 1.11',
         'pyyaml',
+        'packaging',
         'futures ; python_version <= "2.7"'
     ],
     extras_require={

@@ -21,6 +21,7 @@ import requests
 import requests.exceptions
 import six
 import yaml
+from packaging import version
 from requests.adapters import HTTPAdapter
 from six.moves.urllib.parse import urlsplit, urlunsplit
 from six.moves.urllib.error import HTTPError
@@ -487,10 +488,18 @@ class Session(requests.Session):
             self._settings['protocol'], self.hostname, server
         )
 
-        # Use this sessions info to connect to CAS unless user has explicitly give a value (even if None)
         kwargs.setdefault('hostname', url)
-        kwargs.setdefault('username', self.username)
-        kwargs.setdefault('password', self._settings['password'])
+
+        # Starting in SWAT v1.8 oauth tokens could be passed directly in the password param.
+        # Otherwise, use the username & password to re-authenticate.
+        if version.parse(swat.__version__) >= version.parse('1.8'):
+            kwargs['username'] = None
+            kwargs['password'] = self.auth.access_token
+        else:
+            # Use this sessions info to connect to CAS unless user has explicitly give a value (even if None)
+            kwargs.setdefault('username', self.username)
+            kwargs.setdefault('password', self._settings['password'])
+
 
         orig_sslreqcert = os.environ.get('SSLREQCERT')
 
