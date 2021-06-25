@@ -630,9 +630,6 @@ def update_model_performance(data, model, label, refresh=True):
                 "set: %s" % ', '.join(missing_cols))
 
     sess = current_session()
-    url = '{}://{}/{}-http/'.format(sess._settings['protocol'],
-                                    sess.hostname,
-                                    cas_id)
     regex = r'{}_(\d+)_.*_{}'.format(table_prefix, model_obj.id)
 
     # Save the current setting before overwriting
@@ -644,9 +641,7 @@ def update_model_performance(data, model, label, refresh=True):
         os.environ['SSLREQCERT'] = 'no'
 
     # Upload the performance data to CAS
-    with swat.CAS(url,
-                  username=sess.username,
-                  password=sess._settings['password']) as s:
+    with sess.as_swat(server=cas_id) as s:
 
         s.setsessopt(messagelevel='warning')
 
