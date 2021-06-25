@@ -1,6 +1,8 @@
 Unreleased
 ----------
- -
+ - `Session` now supports authorization using OAuth2 tokens.  Use the `token=` parameter in the constructor when 
+ an existing access token token is known.  Alternatively, ommitting the `username=` and `password=` parameters
+ will now prompt the user for an auth code.
  
 v1.5.9 (2021-06-09)
 -------------------

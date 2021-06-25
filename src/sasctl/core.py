@@ -14,10 +14,14 @@ import re
 import ssl
 import sys
 import warnings
+from datetime import datetime, timedelta
 from uuid import UUID, uuid4
 
 import requests
 import requests.exceptions
+import six
+import yaml
+from packaging import version
 from requests.adapters import HTTPAdapter
 from six.moves.urllib.parse import urlsplit, urlunsplit
 from six.moves.urllib.error import HTTPError
@@ -154,21 +158,25 @@ def current_session(*args, **kwargs):
     return _session
 
 
-class HTTPBearerAuth(requests.auth.AuthBase):
-    # Taken from https://github.com/kennethreitz/requests/issues/4437
+class OAuth2Token(requests.auth.AuthBase):
+    def __init__(self, access_token, refresh_token=None, expiration=None, expires_in=None, **kwargs):
+        self.access_token = access_token
+        self.refresh_token = refresh_token
+        self.expiration = expiration
 
-    def __init__(self, token):
-        self.token = token
-
-    def __eq__(self, other):
-        return self.token == getattr(other, 'token', None)
-
-    def __ne__(self, other):
-        return not self == other
+        if expires_in is not None:
+            self.expiration = datetime.now() + timedelta(seconds=expires_in)
 
     def __call__(self, r):
-        r.headers['Authorization'] = 'Bearer ' + self.token
+        r.headers['Authorization'] = 'Bearer ' + self.access_token
         return r
+
+    @property
+    def is_expired(self):
+        if self.expiration is None:
+            return False
+
+        return self.expiration < datetime.now()
 
 
 class RestObj(dict):
@@ -228,11 +236,11 @@ class Session(requests.Session):
         Name of the server to connect to or an established swat.CAS session.
     username : str, optional
         Username for authentication.  Not required if `host` is a CAS
-        connection or if Kerberos is used.  If using Kerberos and an explicit
+        connection, if Kerberos is used, or if `token` is provided.  If using Kerberos and an explicit
         username is desired, maybe be a string in 'user@REALM' format.
     password : str, optional
         Password for authentication.  Not required when `host` is a CAS
-        connection, `authinfo` is provided, or Kerberos is used.
+        connection, `authinfo` is provided, `token` is provided, or Kerberos is used.
     authinfo : str, optional
         Path to a .authinfo or .netrc file from which credentials should be
         pulled.
@@ -241,9 +249,11 @@ class Session(requests.Session):
     port : int, optional
         Port number for the connection if a non-standard port is used.
         Defaults to 80 or 443 depending on `protocol`.
-    verify_ssl : bool
+    verify_ssl : bool, optional
         Whether server-side SSL certificates should be verified.  Defaults
         to true.  Ignored for HTTP connections.
+    token : str, optional
+        OAuth token to use for authorization.
 
     Attributes
     ----------
@@ -257,6 +267,8 @@ class Session(requests.Session):
 
     """
 
+    PROFILE_PATH = '~/.sas/viya-api-profiles.yaml'
+
     def __init__(
         self,
         hostname,
@@ -266,6 +278,7 @@ class Session(requests.Session):
         protocol=None,
         port=None,
         verify_ssl=None,
+        token=None
     ):
         super(Session, self).__init__()
 
@@ -311,9 +324,6 @@ class Session(requests.Session):
 
         self.filters = DEFAULT_FILTERS
 
-        # Used for context manager
-        self._old_session = None
-
         # Reuse an existing CAS connection if possible
         if swat and isinstance(hostname, swat.CAS):
             if isinstance(
@@ -344,10 +354,8 @@ class Session(requests.Session):
         else:
             url = urlsplit(hostname)
 
-            # Extract http/https from domain name if present and protocl not
-            # explicitly given
+            # Extract http/https from domain name if present and protocol not explicitly given
             protocol = protocol or url.scheme
-
             domain = url.hostname or str(hostname)
 
         self._settings = {
@@ -385,11 +393,15 @@ class Session(requests.Session):
                 except (OSError, IOError):
                     pass  # netrc throws if $HOME is not set
 
+        # Set this prior authentication attempts
         self.verify = verify_ssl
-        self.auth = HTTPBearerAuth(self.get_token())
 
-        if current_session() is None:
-            current_session(self)
+        # Find a suitable authentication mechanism and build an auth header
+        self.auth = self.get_auth(self._settings['username'], self._settings['password'], token)
+
+        # Used for context manager
+        self._old_session = current_session()
+        current_session(self)
 
     def add_logger(self, handler, level=None):
         """Log session requests and responses.
@@ -437,7 +449,7 @@ class Session(requests.Session):
         """
         return self.add_logger(logging.StreamHandler(), level)
 
-    @versionadded(version='1.6')
+    @versionadded(version='1.5.4')
     def as_swat(self, server=None, **kwargs):
         """Create a SWAT connection to a CAS server.
 
@@ -483,10 +495,17 @@ class Session(requests.Session):
             self._settings['protocol'], self.hostname, server
         )
 
-        # Use this sessions info to connect to CAS unless user has explicitly give a value (even if None)
         kwargs.setdefault('hostname', url)
-        kwargs.setdefault('username', self.username)
-        kwargs.setdefault('password', self._settings['password'])
+
+        # Starting in SWAT v1.8 oauth tokens could be passed directly in the password param.
+        # Otherwise, use the username & password to re-authenticate.
+        if version.parse(swat.__version__) >= version.parse('1.8'):
+            kwargs['username'] = None
+            kwargs['password'] = self.auth.access_token
+        else:
+            # Use this sessions info to connect to CAS unless user has explicitly give a value (even if None)
+            kwargs.setdefault('username', self.username)
+            kwargs.setdefault('password', self._settings['password'])
 
         orig_sslreqcert = os.environ.get('SSLREQCERT')
 
@@ -578,7 +597,7 @@ class Session(requests.Session):
         verify = verify or self.verify
 
         try:
-            return super(Session, self).request(
+            r = super(Session, self).request(
                 method,
                 url,
                 params,
@@ -594,8 +613,40 @@ class Session(requests.Session):
                 stream,
                 verify,
                 cert,
-                json,
+                json
             )
+
+            if r.status_code == 401:
+                auth_header = r.headers.get('WWW-Authenticate', '').lower()
+
+                # Access token expired, need to refresh it (if we can)
+                if 'access token expired' in auth_header:
+                    try:
+                        self.auth = self.get_oauth_token(refresh_token=self.auth.refresh_token)
+
+                        # Repeat the request
+                        r = super(Session, self).request(
+                            method,
+                            url,
+                            params,
+                            data,
+                            headers,
+                            cookies,
+                            files,
+                            auth,
+                            timeout,
+                            allow_redirects,
+                            proxies,
+                            hooks,
+                            stream,
+                            verify,
+                            cert,
+                            json
+                        )
+                    except exceptions.AuthorizationError:
+                        pass
+
+            return r
         except requests.exceptions.SSLError as e:
             if 'REQUESTS_CA_BUNDLE' not in os.environ:
                 raise RuntimeError(
@@ -621,6 +672,250 @@ class Session(requests.Session):
     def delete(self, url, **kwargs):
         return self.request('DELETE', url, **kwargs)
 
+    def get_auth(self, username=None, password=None, token=None):
+        """Attempt to authenticate with the Viya environment.
+
+        If `username` and `password` or `token` are provided, they will be used exclusively.  If neither of these
+        is specified, Kerberos authorization will be attempted.  If this fails, authorization using an
+        OAuth2 authorization code will be attempted.  Be aware that this requires prompting the user for input and
+        should NOT be used in a non-interactive session.
+
+        Parameters
+        ----------
+        username : str, optional
+            Username to use for authentication.
+        password : str, optional
+            Password to use for authentication.  Required if `username` is provided.
+        token : str, optional
+            An existing OAuth2 access token to use.
+
+        Returns
+        -------
+        OAuth2Token
+            Authorization header to use with requests to the evironent
+
+        """
+
+        # If explicit username & password were provided, use them.
+        if username is not None and password is not None:
+            return self.get_oauth_token(username, password)
+
+        # If an existing access token was provided, use it
+        if token is not None:
+            return OAuth2Token(token)
+
+        # Kerberos doesn't require any interruption to the user, so try that first if username/password
+        # were not provided.
+        try:
+            token = self._get_token_with_kerberos()
+            return OAuth2Token(token)
+        except:
+            logger.exception('Failed to connect with Kerberos')
+
+        # Try loading cached credentials
+        token = self.read_cached_token(self.PROFILE_PATH)
+
+        if token is not None:
+            return token
+
+        # If we got this far, then no password and no kerberos.  Try prompting the user for an authorization code.
+        auth_code = self.prompt_for_auth_code()
+        return self.get_oauth_token(auth_code=auth_code)
+
+    def get_oauth_token(self, username=None, password=None, auth_code=None, refresh_token=None, client_id=None, client_secret=None):
+        """Request an OAuth2 access token using either a username & password or an auth token.
+
+        Parameters
+        ----------
+        username : str, optional
+            Username to use for authentication.
+        password : str, optional
+            Password to use for authentication.  Required if `username` is provided.
+        auth_code : str, optional
+            Authorization code to use.
+        refresh_token : str, optinoal
+            Valid refresh token to use.
+        client_id : str, optional
+            Client ID requesting access.  Use if connection to Viya should be made using a non-default client id.
+        client_secret : str, optional
+            Client secret for client requesting access.  Required if `client_id` is provided
+
+        Returns
+        -------
+        OAuth2Token
+
+        See Also
+        --------
+        :meth:`Session.prompt_for_auth_code`
+
+        """
+
+        if username is not None:
+            data = {'grant_type': 'password', 'username': username, 'password': password}
+        elif auth_code is not None:
+            data = {'grant_type': 'authorization_code', 'code': auth_code}
+        elif refresh_token is not None:
+            data = {'grant_type': 'refresh_token', 'refresh_token': refresh_token}
+        else:
+            raise ValueError('Either username and password or auth_code parameters must be specified.')
+
+        client_id = client_id or os.environ.get('SASCTL_CLIENT_ID', 'sas.ec')
+        client_secret = client_secret or os.environ.get('SASCTL_CLIENT_SECRET', '')
+
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+
+        url = self._build_url('/SASLogon/oauth/token')
+        r = super(Session, self).post(url, headers=headers, data=data, auth=(client_id, client_secret), verify=self.verify)
+
+        # Raise user-friendly error messages if issue is known
+        if r.status_code == 400 and auth_code is not None:
+            j = r.json()
+            if "Invalid authorization code" in j.get('error_description', ''):
+                raise exceptions.AuthorizationError("Invalid authorization code: '%s'" % auth_code)
+        if r.status_code == 401:
+            if r.json().get('error_description', '').lower() == 'bad credentials' and username is None:
+                raise exceptions.AuthenticationError(msg='Invalid client id or secret.')
+            if r.json().get('error', '') == 'invalid_token':
+                raise exceptions.AuthorizationError('Refresh token is incorrect, expired, or revoked.')
+            if username is not None:
+                raise exceptions.AuthenticationError(username)
+
+        r.raise_for_status()
+
+        token = OAuth2Token(**r.json())
+
+        # No reason to cache token if username & password were provided - they'd just be re-provided on future
+        # connections.  Cache for auth code & refresh token to prevent frequent interruptions for the user.
+        if username is None:
+            self.cache_token(token, self.PROFILE_PATH)
+
+        return token
+
+    def prompt_for_auth_code(self, client_id=None):
+        """Prompt the user open a URL to generate an auth code.
+
+        Note that this halts program execution until input is received and should only be used for interactive sessions.
+
+        Parameters
+        ----------
+        client_id : str, optional
+
+        Returns
+        -------
+        str
+            Authorization code that can be used to acquire an OAuth2 access token.
+
+        See Also
+        --------
+        :meth:`Session.get_oauth_token`
+
+        """
+        client_id = client_id or os.environ.get('SASCTL_CLIENT_ID', 'sas.ec')
+
+        # User must open this URL in a browser and then enter the auth code that's generated.
+        url = self._build_url('/SASLogon/oauth/authorize') + '?response_type=code&client_id=' + client_id
+        message = 'Please use a web browser to login at the following URL to get your authorization code:\n' + url
+        print(message)
+        auth_code = input('Authorization Code:')
+
+        return auth_code
+
+    def cache_token(self, token, path):
+        """Write an OAuth2 token to the cache.
+
+        Parameters
+        ----------
+        token : OAuth2Token
+            Token to be cached.
+        path : str
+            Path to file containing cached tokens.
+
+        Returns
+        -------
+        None
+
+        """
+        profiles = Session._read_token_cache(path)
+        base_url = self._build_url('')
+
+        # Top-level structure if no existing file was found
+        if profiles is None:
+            profiles = {'profiles': []}
+
+        # Token values to be cached
+        token = {
+            'accesstoken': token.access_token,
+            'refreshtoken': token.refresh_token,
+            'tokentype': 'bearer',
+            'expiry': token.expiration
+        }
+
+        # See if there's an existing profile to update
+        matches = [(i, p) for i, p in enumerate(profiles['profiles']) if p['baseurl'] == base_url]
+        if matches:
+            idx, match = matches[0]
+            match['oauthtoken'] = token
+            profiles['profiles'][idx] = match
+        else:
+            profiles['profiles'].append({
+                'baseurl': base_url,
+                'name': None,
+                'oauthtoken': token
+            })
+
+        Session._write_token_cache(profiles, path)
+
+    def read_cached_token(self, path):
+        """Read any cached access tokens from disk
+
+        Parameters
+        ----------
+        path : str
+            Path to file containing cached tokens.
+
+        Returns
+        -------
+        OAuth2Token or None
+
+        """
+        # Map from field names in YAML to fields returned by SASLogon
+        field_mappings = {
+            'accesstoken': 'access_token',
+            'refreshtoken': 'refresh_token',
+            'expiry': 'expiration'
+        }
+
+        profiles = Session._read_token_cache(path)
+        url = self._build_url('')
+
+        # Couldn't read any profiles
+        if profiles is None:
+            return
+
+        # Check each profile for a hostname match and return token if found
+        for profile in profiles.get('profiles', []):
+            baseurl = profile.get('baseurl', '').lower()
+
+            # Return the cached token
+            if baseurl == url.lower():
+                data = profile.get('oauthtoken', {})
+                token = {field_mappings[k]: v for k, v in six.iteritems(data) if k in field_mappings}
+                token = OAuth2Token(**token)
+
+                # Attempt to refresh if cached token has expired
+                if token.is_expired:
+                    try:
+                        token = self.get_oauth_token(refresh_token=token.refresh_token)
+                    except (exceptions.AuthorizationError, HTTPError):
+                        return
+
+                # If refresh fails, dont return token, allow user to be prompted for login
+                if not token.is_expired:
+                    return token
+
     def _get_token_with_kerberos(self):
         """Authenticate with a Kerberos ticket."""
         if kerberos is None:
@@ -629,8 +924,7 @@ class Session(requests.Session):
                 "install sasctl[kerberos]' to install."
             )
 
-        user = self._settings.get('username')
-        # realm = user.rsplit('@', maxsplit=1)[-1] if '@' in user else None
+        user = self.username
         client_id = 'sas.tkmtrb'
         flags = kerberos.GSS_C_MUTUAL_FLAG | kerberos.GSS_C_SEQUENCE_FLAG
         service = 'HTTP@%s' % self._settings['domain']
@@ -704,50 +998,6 @@ class Session(requests.Session):
 
         return match.group(0)
 
-    def _get_token_with_password(self):
-        """Authenticate with a username and password."""
-        username = self._settings['username']
-        password = self._settings['password']
-        url = self._build_url('/SASLogon/oauth/token')
-
-        data = 'grant_type=password&username={}&password={}'.format(username, password)
-        headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
-
-        r = super(Session, self).post(
-            url, data=data, headers=headers, auth=('sas.ec', '')
-        )
-
-        if r.status_code == 401:
-            raise exceptions.AuthenticationError(username)
-        r.raise_for_status()
-
-        return r.json().get('access_token')
-
-    def get_token(self):
-        """Authenticates with the session host and retrieves an
-        authorization token for use by subsequent requests.
-
-        Returns
-        -------
-        str
-            a bearer token for :class:`HTTPBearerAuth`
-
-        Raises
-        ------
-        AuthenticationError
-            authentication with the host failed
-
-        """
-        username = self._settings['username']
-        password = self._settings['password']
-
-        if username is None or password is None:
-            return self._get_token_with_kerberos()
-        return self._get_token_with_password()
-
     def _build_url(self, url):
         """Build a complete URL from a path by substituting in session parameters."""
         components = urlsplit(url)
@@ -768,12 +1018,79 @@ class Session(requests.Session):
             ]
         )
 
+    @staticmethod
+    def _read_token_cache(path):
+        """Read cached OAuth2 access tokens from disk.
+
+        Parameters
+        ----------
+        path : str
+            Path to file containing cached tokens.
+
+        Returns
+        -------
+        dict or None
+
+        Raises
+        ------
+        RuntimeError
+            If file permissions are too permissive.
+
+        """
+        yaml_file = os.path.expanduser(path)
+
+        # See if a token has been cached for the hostname
+        if os.path.exists(yaml_file):
+            # Get bit flags indicating access permissions
+            mode = os.stat(yaml_file).st_mode
+            flags = oct(mode)[-3:]
+
+            if flags != '600':
+                raise RuntimeError('Unable to read profile cache.  '
+                                   'The file permissions for %s must be configured so that only the file owner has '
+                                   'read/write permissions (equivalent to 600 on Linux systems).' % yaml_file)
+
+            with open(yaml_file) as f:
+                return yaml.load(f, Loader=yaml.FullLoader)
+
+    @staticmethod
+    def _write_token_cache(profiles, path):
+        """
+
+        Parameters
+        ----------
+        profiles : dict
+        path : str
+
+        Returns
+        -------
+        None
+
+        """
+        yaml_file = os.path.expanduser(path)
+
+        # Create parent .sas folder if needed
+        sas_dir = os.path.dirname(yaml_file)
+        if not os.path.exists(sas_dir):
+            os.mkdir(sas_dir)
+
+        with open(yaml_file, 'w') as f:
+            yaml.dump(profiles, f)
+
+        # Get bit flags indicating access permissions
+        mode = os.stat(yaml_file).st_mode
+        flags = oct(mode)[-3:]
+
+        # Ensure access to file is restricted
+        if flags != '600':
+            os.chmod(yaml_file, 0o600)
+
     def __enter__(self):
         super(Session, self).__enter__()
 
         # Make this the current session
-        self._old_session = current_session()
-        current_session(self)
+        # self._old_session = current_session()
+        # current_session(self)
 
         return self
 
