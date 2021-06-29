@@ -909,7 +909,7 @@ class Session(requests.Session):
                 if token.is_expired:
                     try:
                         token = self.get_oauth_token(refresh_token=token.refresh_token)
-                    except (exceptions.AuthorizationError, HTTPError):
+                    except (exceptions.AuthorizationError, requests.exceptions.HTTPError):
                         return
 
                 # If refresh fails, dont return token, allow user to be prompted for login
