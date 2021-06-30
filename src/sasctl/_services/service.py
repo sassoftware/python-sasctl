@@ -95,7 +95,7 @@ class Service(object):  # skipcq PYL-R0205
         else:
             path = cls._SERVICE_ROOT + '/' + path
 
-        return core.request(verb, path, session, raw, format, **kwargs)
+        return core.request(verb, path, session, format, **kwargs)
 
     @classmethod
     def get(cls, *args, **kwargs):

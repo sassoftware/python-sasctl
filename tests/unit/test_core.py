@@ -177,14 +177,6 @@ def test_request_formats():
         assert mock_sess.request.call_count == 1
         assert isinstance(resp, Response)
 
-        with pytest.warns(DeprecationWarning):
-            resp = request('GET', 'example.com', session=mock_sess, raw=True)
-
-            # Make sure old param is eventually cleaned up
-            if sasctl.__version__.startswith('1.6'):
-                pytest.fail("Deprecated 'raw' parameter should be removed.")
-            assert isinstance(resp, Response)
-
         resp = request('GET', 'example.com', session=mock_sess, format='json')
         assert isinstance(resp, dict)
         assert resp['name'] == 'test'

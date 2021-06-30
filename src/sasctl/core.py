@@ -1544,7 +1544,7 @@ def delete(path, **kwargs):
     return request('delete', path, **kwargs)
 
 
-def request(verb, path, session=None, raw=False, format='auto', **kwargs):
+def request(verb, path, session=None, format='auto', **kwargs):
     """Send an HTTP request with a session.
 
     Parameters
@@ -1555,9 +1555,6 @@ def request(verb, path, session=None, raw=False, format='auto', **kwargs):
         Path portion of URL to request.
     session : Session, optional
         Defaults to `current_session()`.
-    raw : bool
-        Deprecated. Whether to return the raw `Response` object.
-        Defaults to False.
     format : {'auto', 'rest', 'response', 'content', 'json', 'text'}
         The format of the return response.  Defaults to `auto`.
         rest: `RestObj` constructed from JSON.
@@ -1578,14 +1575,6 @@ def request(verb, path, session=None, raw=False, format='auto', **kwargs):
 
     if session is None:
         raise TypeError('No `Session` instance found.')
-
-    if raw:
-        warnings.warn(
-            "The 'raw' parameter is deprecated and will be removed in"
-            " a future version.  Use format='response' instead.",
-            DeprecationWarning,
-        )
-        format = 'response'
 
     format = 'auto' if format is None else str(format).lower()
     if format not in ('auto', 'response', 'content', 'text', 'json', 'rest'):

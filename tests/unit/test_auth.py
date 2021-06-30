@@ -152,7 +152,7 @@ def test_write_token_cache():
 
     assert mock_open.call_count == 1
     handle = mock_open()
-    handle.write.assert_called()  # called for each line of yaml written
+    assert handle.write.call_count > 0   # called for each line of yaml written
 
 
 def test_automatic_token_refresh():
