@@ -1,0 +1,842 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sasctl.tasks &#8212; sasctl 1.6.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for sasctl.tasks</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># encoding: utf-8</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
+<span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
+
+<span class="sd">&quot;&quot;&quot;Commonly used tasks in the analytics life cycle.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">pickle</span>  <span class="c1"># skipcq BAN-B301</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">six.moves.urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">.core</span> <span class="kn">import</span> <span class="n">RestObj</span><span class="p">,</span> <span class="n">current_session</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">get_link</span><span class="p">,</span> <span class="n">request_link</span>
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">AuthorizationError</span>
+<span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">model_management</span> <span class="k">as</span> <span class="n">mm</span>
+<span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">model_publish</span> <span class="k">as</span> <span class="n">mp</span>
+<span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">model_repository</span> <span class="k">as</span> <span class="n">mr</span>
+<span class="kn">from</span> <span class="nn">.utils.pymas</span> <span class="kn">import</span> <span class="n">from_pickle</span>
+<span class="kn">from</span> <span class="nn">.utils.misc</span> <span class="kn">import</span> <span class="n">installed_packages</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># As of Viya 3.4 model registration fails if character fields are longer</span>
+<span class="c1"># than 1024 characters</span>
+<span class="n">_DESC_MAXLEN</span> <span class="o">=</span> <span class="mi">1024</span>
+
+<span class="c1"># As of Viya 3.4 model registration fails if user-defined properties are</span>
+<span class="c1"># longer than 512 characters.</span>
+<span class="n">_PROP_VALUE_MAXLEN</span> <span class="o">=</span> <span class="mi">512</span>
+<span class="n">_PROP_NAME_MAXLEN</span> <span class="o">=</span> <span class="mi">60</span>
+
+
+<span class="k">def</span> <span class="nf">_property</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)[:</span><span class="n">_PROP_NAME_MAXLEN</span><span class="p">],</span>
+            <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)[:</span><span class="n">_PROP_VALUE_MAXLEN</span><span class="p">]}</span>
+
+
+<span class="k">def</span> <span class="nf">_sklearn_to_dict</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="c1"># Convert Scikit-learn values to built-in Model Manager values</span>
+    <span class="n">mappings</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;LogisticRegression&#39;</span><span class="p">:</span> <span class="s1">&#39;Logistic regression&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;LinearRegression&#39;</span><span class="p">:</span> <span class="s1">&#39;Linear regression&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;SVC&#39;</span><span class="p">:</span> <span class="s1">&#39;Support vector machine&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;GradientBoostingClassifier&#39;</span><span class="p">:</span> <span class="s1">&#39;Gradient boosting&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;GradientBoostingRegressor&#39;</span><span class="p">:</span> <span class="s1">&#39;Gradient boosting&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;XGBClassifier&#39;</span><span class="p">:</span> <span class="s1">&#39;Gradient boosting&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;XGBRegressor&#39;</span><span class="p">:</span> <span class="s1">&#39;Gradient boosting&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;RandomForestClassifier&#39;</span><span class="p">:</span> <span class="s1">&#39;Forest&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;DecisionTreeClassifier&#39;</span><span class="p">:</span> <span class="s1">&#39;Decision tree&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;DecisionTreeRegressor&#39;</span><span class="p">:</span> <span class="s1">&#39;Decision tree&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;classifier&#39;</span><span class="p">:</span> <span class="s1">&#39;classification&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;regressor&#39;</span><span class="p">:</span> <span class="s1">&#39;prediction&#39;</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;_final_estimator&#39;</span><span class="p">):</span>
+        <span class="n">estimator</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_final_estimator</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">estimator</span> <span class="o">=</span> <span class="n">model</span>
+    <span class="n">estimator</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+
+    <span class="c1"># Standardize algorithm names</span>
+    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">mappings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">estimator</span><span class="p">)</span>
+
+    <span class="c1"># Standardize regression/classification terms</span>
+    <span class="n">analytic_function</span> <span class="o">=</span> <span class="n">mappings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_estimator_type</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">_estimator_type</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">analytic_function</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">and</span> <span class="s1">&#39;logistic&#39;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="n">target_level</span> <span class="o">=</span> <span class="s1">&#39;Binary&#39;</span>
+    <span class="k">elif</span> <span class="n">analytic_function</span> <span class="o">==</span> <span class="s1">&#39;prediction&#39;</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;regressor&#39;</span> <span class="ow">in</span> <span class="n">estimator</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s1">&#39;regression&#39;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()):</span>
+        <span class="n">target_level</span> <span class="o">=</span> <span class="s1">&#39;Interval&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">target_level</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Can tell if multi-class .multi_class</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="p">)[:</span><span class="n">_DESC_MAXLEN</span><span class="p">],</span>
+        <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span>
+        <span class="n">scoreCodeType</span><span class="o">=</span><span class="s1">&#39;ds2MultiType&#39;</span><span class="p">,</span>
+        <span class="n">trainCodeType</span><span class="o">=</span><span class="s1">&#39;Python&#39;</span><span class="p">,</span>
+        <span class="n">targetLevel</span><span class="o">=</span><span class="n">target_level</span><span class="p">,</span>
+        <span class="n">function</span><span class="o">=</span><span class="n">analytic_function</span><span class="p">,</span>
+        <span class="n">tool</span><span class="o">=</span><span class="s1">&#39;Python </span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">&#39;</span>
+             <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">minor</span><span class="p">),</span>
+        <span class="n">properties</span><span class="o">=</span><span class="p">[</span><span class="n">_property</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">_create_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a project based on the model specifications.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    project_name : str</span>
+<span class="sd">        Name of the project to be created</span>
+<span class="sd">    model : dict</span>
+<span class="sd">        Model information</span>
+<span class="sd">    repo : str or dict</span>
+<span class="sd">        Repository in which to create the project</span>
+<span class="sd">    input_vars : list</span>
+<span class="sd">        Input variables formatted as {&#39;name&#39;: &#39;varname&#39;}</span>
+<span class="sd">    output_vars</span>
+<span class="sd">        Output variables formatted as {&#39;name&#39;: &#39;varname&#39;}</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    RestObj</span>
+<span class="sd">        The created project</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">model</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                  <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">model</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;targetLevel&#39;</span><span class="p">)</span>
+                  <span class="p">}</span>
+
+    <span class="n">function</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;algorithm&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="c1"># Get input &amp; output variable lists</span>
+    <span class="c1"># Note: copying lists to avoid altering original</span>
+    <span class="n">input_vars</span> <span class="o">=</span> <span class="n">input_vars</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inputVariables&#39;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">output_vars</span> <span class="o">=</span> <span class="n">output_vars</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;outputVariables&#39;</span><span class="p">,</span> <span class="p">[])[:]</span>
+    <span class="n">input_vars</span> <span class="o">=</span> <span class="n">input_vars</span><span class="p">[:]</span>
+    <span class="n">output_vars</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[:]</span>
+
+    <span class="c1"># Set prediction or eventProbabilityVariable</span>
+    <span class="k">if</span> <span class="n">output_vars</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">function</span> <span class="o">==</span> <span class="s1">&#39;prediction&#39;</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;predictionVariable&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;eventProbabilityVariable&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Set targetLevel</span>
+    <span class="k">if</span> <span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;targetLevel&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">function</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">and</span> <span class="s1">&#39;logistic&#39;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;targetLevel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Binary&#39;</span>
+        <span class="k">elif</span> <span class="n">function</span> <span class="o">==</span> <span class="s1">&#39;prediction&#39;</span> <span class="ow">and</span> <span class="s1">&#39;regression&#39;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;targetLevel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Interval&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;targetLevel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">create_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span>
+                                <span class="n">variables</span><span class="o">=</span><span class="n">input_vars</span> <span class="o">+</span> <span class="n">output_vars</span><span class="p">,</span>
+                                <span class="o">**</span><span class="n">properties</span><span class="p">)</span>
+
+    <span class="c1"># As of Viya 3.4 the &#39;predictionVariable&#39; and &#39;eventProbabilityVariable&#39;</span>
+    <span class="c1"># parameters are not set during project creation.  Update the project if</span>
+    <span class="c1"># necessary.</span>
+    <span class="n">needs_update</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;predictionVariable&#39;</span><span class="p">,</span> <span class="s1">&#39;eventProbabilityVariable&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">!=</span> <span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+            <span class="n">project</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            <span class="n">needs_update</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">needs_update</span><span class="p">:</span>
+        <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">update_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">project</span>
+
+
+<div class="viewcode-block" id="register_model"><a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.register_model">[docs]</a><span class="k">def</span> <span class="nf">register_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                   <span class="n">record_packages</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Register a model in the model repository.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : swat.CASTable or sklearn.BaseEstimator</span>
+<span class="sd">        The model to register.  If an instance of ``swat.CASTable`` the table</span>
+<span class="sd">        is assumed to hold an ASTORE, which will be downloaded and used to</span>
+<span class="sd">        construct the model to register.  If a scikit-learn estimator, the</span>
+<span class="sd">        model will be pickled and uploaded to the registry and score code will</span>
+<span class="sd">        be generated for publishing the model to MAS.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        Designated name for the model in the repository.</span>
+<span class="sd">    project : str or dict</span>
+<span class="sd">        The name or id of the project, or a dictionary representation of</span>
+<span class="sd">        the project.</span>
+<span class="sd">    repository : str or dict, optional</span>
+<span class="sd">        The name or id of the repository, or a dictionary representation of</span>
+<span class="sd">        the repository.  If omitted, the default repository will be used.</span>
+<span class="sd">    input : DataFrame, type, list of type, or dict of str: type, optional</span>
+<span class="sd">        The expected type for each input value of the target function.</span>
+<span class="sd">        Can be omitted if target function includes type hints.  If a DataFrame</span>
+<span class="sd">        is provided, the columns will be inspected to determine type</span>
+<span class="sd">        information.  If a single type is provided, all columns will be assumed</span>
+<span class="sd">        to be that type, otherwise a list of column types or a dictionary of</span>
+<span class="sd">        column_name: type may be provided.</span>
+<span class="sd">    version : {&#39;new&#39;, &#39;latest&#39;, int}, optional</span>
+<span class="sd">        Version number of the project in which the model should be created.</span>
+<span class="sd">        Defaults to &#39;new&#39;.</span>
+<span class="sd">    files : list</span>
+<span class="sd">        A list of dictionaries of the form</span>
+<span class="sd">        {&#39;name&#39;: filename, &#39;file&#39;: filecontent}.</span>
+<span class="sd">        An optional &#39;role&#39; key is supported for designating a file as score</span>
+<span class="sd">        code, astore, etc.</span>
+<span class="sd">    force : bool, optional</span>
+<span class="sd">        Create dependencies such as projects and repositories if they do not</span>
+<span class="sd">        already exist.</span>
+<span class="sd">    record_packages : bool, optional</span>
+<span class="sd">        Capture Python packages registered in the environment.  Defaults to</span>
+<span class="sd">        True.  Ignored if `model` is not a Python object.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    model : RestObj</span>
+<span class="sd">        The newly registered model as an instance of ``RestObj``</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If the specified model is a CAS table the model data and metadata will be</span>
+<span class="sd">    written to a temporary zip file and then imported using</span>
+<span class="sd">    model_repository.import_model_from_zip.</span>
+
+<span class="sd">    If the specified model is from the Scikit-Learn package, the model will be</span>
+<span class="sd">    created using model_repository.create_model and any additional files will</span>
+<span class="sd">    be uploaded as content.</span>
+
+<span class="sd">    .. versionchanged:: v1.3</span>
+<span class="sd">        Create requirements.txt with installed packages.</span>
+
+<span class="sd">    .. versionchanged:: v1.4.5</span>
+<span class="sd">        Added `record_packages` parameter.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO: Create new version if model already exists</span>
+
+    <span class="c1"># If version not specified, default to creating a new version</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="n">version</span> <span class="ow">or</span> <span class="s1">&#39;new&#39;</span>
+
+    <span class="n">files</span> <span class="o">=</span> <span class="n">files</span> <span class="ow">or</span> <span class="p">[]</span>
+
+    <span class="c1"># Find the project if it already exists</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span> <span class="k">if</span> <span class="n">project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="c1"># Do we need to create the project first?</span>
+    <span class="n">create_project</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">force</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">create_project</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Project &#39;</span><span class="si">{}</span><span class="s2">&#39; not found&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project</span><span class="p">))</span>
+
+    <span class="c1"># Use default repository if not specified</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">repository</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">repo_obj</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">default_repository</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">repo_obj</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_repository</span><span class="p">(</span><span class="n">repository</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">403</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AuthorizationError</span><span class="p">(</span><span class="s1">&#39;Unable to register model.  User account &#39;</span>
+                                     <span class="s1">&#39;does not have read permissions for the &#39;</span>
+                                     <span class="s1">&#39;/modelRepository/repositories/ URL. &#39;</span>
+                                     <span class="s1">&#39;Please contact your SAS Viya &#39;</span>
+                                     <span class="s1">&#39;administrator.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">e</span>
+
+    <span class="c1"># Unable to find or create the repo.</span>
+    <span class="k">if</span> <span class="n">repo_obj</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">repository</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to find a default repository&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">repo_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to find repository &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">repository</span><span class="p">))</span>
+
+    <span class="c1"># If model is a CASTable then assume it holds an ASTORE model.</span>
+    <span class="c1"># Import these via a ZIP file.</span>
+    <span class="k">if</span> <span class="s1">&#39;swat.cas.table.CASTable&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">model</span><span class="p">)):</span>
+        <span class="n">zipfile</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">create_package</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="nb">input</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">create_project</span><span class="p">:</span>
+            <span class="n">outvar</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">invar</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="kn">import</span> <span class="nn">zipfile</span> <span class="k">as</span> <span class="nn">zp</span>
+            <span class="kn">import</span> <span class="nn">copy</span>
+            <span class="n">zipfilecopy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">zipfile</span><span class="p">)</span>
+            <span class="n">tmpzip</span> <span class="o">=</span> <span class="n">zp</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zipfilecopy</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;outputVar.json&quot;</span> <span class="ow">in</span> <span class="n">tmpzip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
+                <span class="n">outvar</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">tmpzip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;outputVar.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
+                    <span class="s1">&#39;utf=8&#39;</span><span class="p">))</span>  <span class="c1"># added decode for 3.5 and older</span>
+                <span class="k">for</span> <span class="n">tmp</span> <span class="ow">in</span> <span class="n">outvar</span><span class="p">:</span>
+                    <span class="n">tmp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">})</span>
+            <span class="k">if</span> <span class="s2">&quot;inputVar.json&quot;</span> <span class="ow">in</span> <span class="n">tmpzip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
+                <span class="n">invar</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">tmpzip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;inputVar.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
+                    <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>  <span class="c1"># added decode for 3.5 and older</span>
+                <span class="k">for</span> <span class="n">tmp</span> <span class="ow">in</span> <span class="n">invar</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;role&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;input&#39;</span><span class="p">:</span>
+                        <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;role&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;input&#39;</span>
+
+            <span class="k">if</span> <span class="s1">&#39;ModelProperties.json&#39;</span> <span class="ow">in</span> <span class="n">tmpzip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
+                <span class="n">model_props</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">tmpzip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
+                    <span class="s1">&#39;ModelProperties.json&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">model_props</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="n">project</span> <span class="o">=</span> <span class="n">_create_project</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">model_props</span><span class="p">,</span> <span class="n">repo_obj</span><span class="p">,</span>
+                                      <span class="n">invar</span><span class="p">,</span> <span class="n">outvar</span><span class="p">)</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">import_model_from_zip</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">zipfile</span><span class="p">,</span>
+                                         <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model</span>
+
+    <span class="c1"># If the model is an scikit-learn model, generate the model dictionary</span>
+    <span class="c1"># from it and pickle the model for storage</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="k">for</span> <span class="n">attr</span>
+           <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;_estimator_type&#39;</span><span class="p">,</span> <span class="s1">&#39;get_params&#39;</span><span class="p">]):</span>
+        <span class="c1"># Pickle the model so we can store it</span>
+        <span class="n">model_pkl</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span>
+                      <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">model_pkl</span><span class="p">,</span>
+                      <span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;Python Pickle&#39;</span><span class="p">})</span>
+
+        <span class="n">target_funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;predict&#39;</span><span class="p">,</span> <span class="s1">&#39;predict_proba&#39;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">f</span><span class="p">)]</span>
+
+        <span class="c1"># Extract model properties</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">_sklearn_to_dict</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+
+        <span class="c1"># Get package versions in environment</span>
+        <span class="n">packages</span> <span class="o">=</span> <span class="n">installed_packages</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">record_packages</span> <span class="ow">and</span> <span class="n">packages</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;properties&#39;</span><span class="p">,</span> <span class="p">[])</span>
+
+            <span class="c1"># Define a custom property to capture each package version</span>
+            <span class="c1"># NOTE: some packages may not conform to the &#39;name==version&#39; format</span>
+            <span class="c1">#  expected here (e.g those installed with pip install -e). Such</span>
+            <span class="c1">#  packages also generally contain characters that are not allowed</span>
+            <span class="c1"># in custom properties, so they are excluded here.</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">packages</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;==&#39;</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">n</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;==&#39;</span><span class="p">)</span>
+                    <span class="n">model</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_property</span><span class="p">(</span><span class="s1">&#39;env_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+
+            <span class="c1"># Generate and upload a requirements.txt file</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;requirements.txt&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packages</span><span class="p">)})</span>
+
+        <span class="c1"># Generate PyMAS wrapper</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">mas_module</span> <span class="o">=</span> <span class="n">from_pickle</span><span class="p">(</span><span class="n">model_pkl</span><span class="p">,</span> <span class="n">target_funcs</span><span class="p">,</span>
+                                     <span class="n">input_types</span><span class="o">=</span><span class="nb">input</span><span class="p">,</span> <span class="n">array_input</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># Include score code files from ESP and MAS</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;dmcas_packagescorecode.sas&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">score_code</span><span class="p">(),</span>
+                          <span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;Score Code&#39;</span><span class="p">})</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;dmcas_epscorecode.sas&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">score_code</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="s1">&#39;CAS&#39;</span><span class="p">),</span>
+                          <span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;score&#39;</span><span class="p">})</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;python_wrapper.py&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">score_code</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="s1">&#39;Python&#39;</span><span class="p">)})</span>
+
+            <span class="n">model</span><span class="p">[</span><span class="s1">&#39;inputVariables&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">var</span><span class="o">.</span><span class="n">as_model_metadata</span><span class="p">()</span>
+                                       <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">variables</span>
+                                       <span class="k">if</span> <span class="ow">not</span> <span class="n">var</span><span class="o">.</span><span class="n">out</span><span class="p">]</span>
+
+            <span class="n">model</span><span class="p">[</span><span class="s1">&#39;outputVariables&#39;</span><span class="p">]</span> <span class="o">=</span> \
+                <span class="p">[</span><span class="n">var</span><span class="o">.</span><span class="n">as_model_metadata</span><span class="p">()</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">variables</span>
+                 <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">out</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="c1"># PyMAS creation failed, most likely because input data wasn&#39;t</span>
+            <span class="c1"># provided</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Unable to inspect model </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unable to determine input/output variables. &#39;</span>
+                          <span class="s1">&#39; Model variables will not be specified and some &#39;</span>
+                          <span class="s1">&#39;model functionality may not be available.&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Otherwise, the model better be a dictionary of metadata</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected an instance of &#39;</span><span class="si">%r</span><span class="s2">&#39; but received &#39;</span><span class="si">%r</span><span class="s2">&#39;.&quot;</span>
+                            <span class="o">%</span> <span class="p">({},</span> <span class="n">model</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">create_project</span><span class="p">:</span>
+        <span class="n">project</span> <span class="o">=</span> <span class="n">_create_project</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">repo_obj</span><span class="p">)</span>
+
+    <span class="c1"># If replacing an existing version, make sure the model version exists</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">version</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;new&#39;</span><span class="p">:</span>
+        <span class="c1"># Update an existing model with new files</span>
+        <span class="n">model_obj</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">model_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to update version &#39;</span><span class="si">%s</span><span class="s2">&#39; of model &#39;</span><span class="si">%s</span><span class="s2">.  &quot;</span>
+                             <span class="s2">&quot;Model not found.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">create_model_version</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">mr</span><span class="o">.</span><span class="n">delete_model_contents</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Assume new model to create</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Model should be an instance of &#39;</span><span class="si">%r</span><span class="s2">&#39; but received &#39;</span><span class="si">%r</span><span class="s2">&#39; &quot;</span>
+                        <span class="s2">&quot;instead.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">RestObj</span><span class="p">,</span> <span class="n">model</span><span class="p">))</span>
+
+    <span class="c1"># Upload any additional files</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">mr</span><span class="o">.</span><span class="n">add_model_content</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mr</span><span class="o">.</span><span class="n">add_model_content</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+<div class="viewcode-block" id="publish_model"><a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.publish_model">[docs]</a><span class="k">def</span> <span class="nf">publish_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
+                  <span class="n">destination</span><span class="p">,</span>
+                  <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">max_retries</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+                  <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Publish a model to a configured publishing destination.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : str or dict</span>
+<span class="sd">        The name or id of the model, or a dictionary representation of</span>
+<span class="sd">        the model.</span>
+<span class="sd">    destination : str</span>
+<span class="sd">    code : optional</span>
+<span class="sd">    max_retries : int, optional</span>
+<span class="sd">    replace : bool, optional</span>
+<span class="sd">        Whether to overwrite the model if it already exists in</span>
+<span class="sd">        the `destination`</span>
+<span class="sd">    kwargs : optional</span>
+<span class="sd">        additional arguments will be passed to the underlying publish</span>
+<span class="sd">        functions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    RestObj</span>
+<span class="sd">        The published model</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    If no code is specified, the model is assumed to be already registered in</span>
+<span class="sd">    the model repository and Model Manager&#39;s publishing functionality will be</span>
+<span class="sd">    used.</span>
+
+<span class="sd">    Otherwise, the model publishing API will be used.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :meth:`model_management.publish_model &lt;.ModelManagement.publish_model&gt;`</span>
+<span class="sd">    :meth:`model_publish.publish_model &lt;.ModelPublish.publish_model&gt;`</span>
+
+
+<span class="sd">    .. versionchanged:: 1.1.0</span>
+<span class="sd">       Added `replace` option.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">submit_request</span><span class="p">():</span>
+        <span class="c1"># Submit a publishing request</span>
+        <span class="k">if</span> <span class="n">code</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dest_obj</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">get_destination</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">dest_obj</span> <span class="ow">and</span> <span class="n">dest_obj</span><span class="o">.</span><span class="n">destinationType</span> <span class="o">==</span> <span class="s2">&quot;cas&quot;</span><span class="p">:</span>
+                <span class="n">publish_req</span> <span class="o">=</span> <span class="n">mm</span><span class="o">.</span><span class="n">publish_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span>
+                                               <span class="n">force</span><span class="o">=</span><span class="n">replace</span><span class="p">,</span>
+                                               <span class="n">reload_model_table</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">publish_req</span> <span class="o">=</span> <span class="n">mm</span><span class="o">.</span><span class="n">publish_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span>
+                                               <span class="n">force</span><span class="o">=</span><span class="n">replace</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">publish_req</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">publish_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span>
+                                           <span class="n">code</span><span class="o">=</span><span class="n">code</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># A successfully submitted request doesn&#39;t mean a successfully</span>
+        <span class="c1"># published model.  Response for publish request includes link to</span>
+        <span class="c1"># check publish log</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">_monitor_job</span><span class="p">(</span><span class="n">publish_req</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="c1"># Submit and wait for status</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">submit_request</span><span class="p">()</span>
+
+    <span class="c1"># If model was successfully published and it isn&#39;t a MAS module, we&#39;re done</span>
+    <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;completed&#39;</span> \
+            <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">destinationType</span> <span class="o">!=</span> <span class="s1">&#39;microAnalyticService&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">request_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s1">&#39;self&#39;</span><span class="p">)</span>
+
+    <span class="c1"># If MAS publish failed and replace=True, attempt to delete the module</span>
+    <span class="c1"># and republish</span>
+    <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;failed&#39;</span> <span class="ow">and</span> <span class="n">replace</span> <span class="ow">and</span> \
+            <span class="n">job</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">destinationType</span> <span class="o">==</span> <span class="s1">&#39;microAnalyticService&#39;</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">microanalytic_score</span> <span class="k">as</span> <span class="n">mas</span>
+        <span class="n">mas</span><span class="o">.</span><span class="n">delete_module</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">publishName</span><span class="p">)</span>
+
+        <span class="c1"># Resubmit the request</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">submit_request</span><span class="p">()</span>
+
+    <span class="c1"># Raise exception if still failing</span>
+    <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;failed&#39;</span><span class="p">:</span>
+        <span class="n">log</span> <span class="o">=</span> <span class="n">request_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s1">&#39;publishingLog&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Failed to publish model &#39;</span><span class="si">%s</span><span class="s2">&#39;: </span><span class="si">%s</span><span class="s2">&quot;</span>
+                           <span class="o">%</span> <span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">log</span><span class="o">.</span><span class="n">log</span><span class="p">))</span>
+
+    <span class="c1"># Raise exception if unknown status received</span>
+    <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;completed&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Model publishing job in an unknown state: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span>
+                           <span class="o">%</span> <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+    <span class="n">log</span> <span class="o">=</span> <span class="n">request_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s1">&#39;publishingLog&#39;</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">log</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;SUCCESS===&#39;</span><span class="p">)</span>
+
+    <span class="c1"># As of Viya 3.4 MAS converts module names to lower case.</span>
+    <span class="c1"># Since we can&#39;t rely on the request module name being preserved, try to</span>
+    <span class="c1"># parse the URL out of the response so we can retrieve the created module.</span>
+    <span class="n">module_url</span> <span class="o">=</span> <span class="n">_parse_module_url</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">module_url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Unable to retrieve module URL from publish log.&#39;</span><span class="p">)</span>
+
+    <span class="n">module</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">module_url</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;application/vnd.sas.microanalytic.module&#39;</span> \
+            <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">_headers</span><span class="p">[</span><span class="s1">&#39;content-type&#39;</span><span class="p">]:</span>
+        <span class="c1"># Bind Python methods to the module instance that will execute the</span>
+        <span class="c1"># corresponding MAS module step.</span>
+        <span class="kn">from</span> <span class="nn">sasctl.services</span> <span class="kn">import</span> <span class="n">microanalytic_score</span> <span class="k">as</span> <span class="n">mas</span>
+        <span class="k">return</span> <span class="n">mas</span><span class="o">.</span><span class="n">define_steps</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">module</span></div>
+
+
+<div class="viewcode-block" id="update_model_performance"><a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.update_model_performance">[docs]</a><span class="k">def</span> <span class="nf">update_model_performance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Upload data for calculating model performance metrics.</span>
+
+<span class="sd">    Model performance and data distributions can be tracked over time by</span>
+<span class="sd">    designating one or more tables that contain input data and target values.</span>
+<span class="sd">    Performance metrics can be updated by uploading a data set for a new time</span>
+<span class="sd">    period and executing the performance definition.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : Dataframe</span>
+<span class="sd">    model : str or dict</span>
+<span class="sd">        The name or id of the model, or a dictionary representation of</span>
+<span class="sd">        the model.</span>
+<span class="sd">    label : str</span>
+<span class="sd">        The time period the data is from.  Should be unique and will be</span>
+<span class="sd">        displayed on performance charts.  Examples: &#39;Q1&#39;, &#39;2019&#39;, &#39;APR2019&#39;.</span>
+<span class="sd">    refresh : bool, optional</span>
+<span class="sd">        Whether to execute the performance definition and refresh results with</span>
+<span class="sd">        the new data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    CASTable</span>
+<span class="sd">        The CAS table containing the performance data.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">     :meth:`model_management.create_performance_definition &lt;.ModelManagement.create_performance_definition&gt;`</span>
+
+<span class="sd">    .. versionadded:: v1.3</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">swat</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;The &#39;swat&#39; package is required to save model &quot;</span>
+                           <span class="s2">&quot;performance data.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Default to true</span>
+    <span class="n">refresh</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">refresh</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">refresh</span>
+
+    <span class="n">model_obj</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">model_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Model </span><span class="si">%s</span><span class="s1"> was not found.&#39;</span> <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
+
+    <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">model_obj</span><span class="o">.</span><span class="n">projectId</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;prediction&#39;</span><span class="p">,</span> <span class="s1">&#39;classification&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Performance monitoring is currently supported for &quot;</span>
+                         <span class="s2">&quot;regression and binary classification projects.  &quot;</span>
+                         <span class="s2">&quot;Received project with &#39;</span><span class="si">%s</span><span class="s2">&#39; function.  Should be &quot;</span>
+                         <span class="s2">&quot;&#39;Prediction&#39; or &#39;Classification&#39;.&quot;</span> <span class="o">%</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;targetLevel&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;interval&#39;</span><span class="p">,</span> <span class="s1">&#39;binary&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Performance monitoring is currently supported for &quot;</span>
+                         <span class="s2">&quot;regression and binary classification projects.  &quot;</span>
+                         <span class="s2">&quot;Received project with &#39;</span><span class="si">%s</span><span class="s2">&#39; target level.  Should be &quot;</span>
+                         <span class="s2">&quot;&#39;Interval&#39; or &#39;Binary&#39;.&quot;</span> <span class="o">%</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;targetLevel&#39;</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;predictionVariable&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span>
+                                                                   <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;prediction&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Project &#39;</span><span class="si">%s</span><span class="s2">&#39; does not have a prediction variable &quot;</span>
+                         <span class="s2">&quot;specified.&quot;</span> <span class="o">%</span> <span class="n">project</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;eventProbabilityVariable&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Project &#39;</span><span class="si">%s</span><span class="s2">&#39; does not have an Event Probability variable &quot;</span>
+                         <span class="s2">&quot;specified.&quot;</span> <span class="o">%</span> <span class="n">project</span><span class="p">)</span>
+
+    <span class="c1"># Find the performance definition for the model</span>
+    <span class="c1"># As of Viya 3.4, no way to search by model or project</span>
+    <span class="n">perf_def</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">mm</span><span class="o">.</span><span class="n">list_performance_definitions</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">projectId</span><span class="p">:</span>
+            <span class="n">perf_def</span> <span class="o">=</span> <span class="n">p</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">perf_def</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to find a performance definition for model &quot;</span>
+                         <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
+
+    <span class="c1"># Check where performance datasets should be uploaded</span>
+    <span class="n">cas_id</span> <span class="o">=</span> <span class="n">perf_def</span><span class="p">[</span><span class="s1">&#39;casServerId&#39;</span><span class="p">]</span>
+    <span class="n">caslib</span> <span class="o">=</span> <span class="n">perf_def</span><span class="p">[</span><span class="s1">&#39;dataLibrary&#39;</span><span class="p">]</span>
+    <span class="n">table_prefix</span> <span class="o">=</span> <span class="n">perf_def</span><span class="p">[</span><span class="s1">&#39;dataPrefix&#39;</span><span class="p">]</span>
+
+    <span class="c1"># All input variables must be present</span>
+    <span class="n">missing_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">perf_def</span><span class="o">.</span><span class="n">inputVariables</span> <span class="k">if</span>
+                    <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">missing_cols</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The following columns were expected but not found in &quot;</span>
+                         <span class="s2">&quot;the data set: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_cols</span><span class="p">))</span>
+
+    <span class="c1"># If CAS is not executing the model then the output variables must also be</span>
+    <span class="c1"># provided</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">perf_def</span><span class="o">.</span><span class="n">scoreExecutionRequired</span><span class="p">:</span>
+        <span class="n">missing_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">perf_def</span><span class="o">.</span><span class="n">outputVariables</span> <span class="k">if</span>
+                        <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">missing_cols</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The following columns were expected but not found in the data &quot;</span>
+                <span class="s2">&quot;set: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_cols</span><span class="p">))</span>
+
+    <span class="n">sess</span> <span class="o">=</span> <span class="n">current_session</span><span class="p">()</span>
+    <span class="n">regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_(\d+)_.*_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_prefix</span><span class="p">,</span> <span class="n">model_obj</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+    <span class="c1"># Save the current setting before overwriting</span>
+    <span class="n">orig_sslreqcert</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SSLREQCERT&#39;</span><span class="p">)</span>
+
+    <span class="c1"># If SSL connections to microservices are not being verified, don&#39;t attempt</span>
+    <span class="c1"># to verify connections to CAS - most likely certs are not in place.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">sess</span><span class="o">.</span><span class="n">verify</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;SSLREQCERT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;no&#39;</span>
+
+    <span class="c1"># Upload the performance data to CAS</span>
+    <span class="k">with</span> <span class="n">sess</span><span class="o">.</span><span class="n">as_swat</span><span class="p">(</span><span class="n">server</span><span class="o">=</span><span class="n">cas_id</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+
+        <span class="n">s</span><span class="o">.</span><span class="n">setsessopt</span><span class="p">(</span><span class="n">messagelevel</span><span class="o">=</span><span class="s1">&#39;warning&#39;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">swat</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">exception_on_severity</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">caslib_info</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">tableinfo</span><span class="p">(</span><span class="n">caslib</span><span class="o">=</span><span class="n">caslib</span><span class="p">)</span>
+
+        <span class="n">all_tables</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">caslib_info</span><span class="p">,</span> <span class="s1">&#39;TableInfo&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">all_tables</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Find tables with similar names</span>
+            <span class="n">perf_tables</span> <span class="o">=</span> <span class="n">all_tables</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span>
+                                                      <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">,</span>
+                                                      <span class="n">expand</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># Get last-used sequence number</span>
+            <span class="n">last_seq</span> <span class="o">=</span> <span class="n">perf_tables</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="n">next_seq</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">last_seq</span><span class="p">)</span> <span class="k">else</span> <span class="n">last_seq</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">next_seq</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">table_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{prefix}</span><span class="s1">_</span><span class="si">{sequence}</span><span class="s1">_</span><span class="si">{label}</span><span class="s1">_</span><span class="si">{model}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">prefix</span><span class="o">=</span><span class="n">table_prefix</span><span class="p">,</span>
+            <span class="n">sequence</span><span class="o">=</span><span class="n">next_seq</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model_obj</span><span class="o">.</span><span class="n">id</span>
+        <span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">swat</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">exception_on_severity</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+            <span class="c1"># Table must be promoted so performance jobs can access.</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">casout</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span>
+                                                <span class="n">caslib</span><span class="o">=</span><span class="n">caslib</span><span class="p">,</span>
+                                                <span class="n">promote</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;casTable&#39;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Unable to upload performance data to CAS.&#39;</span><span class="p">)</span>
+
+            <span class="n">tbl</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">casTable</span>
+
+    <span class="c1"># Restore the original value</span>
+    <span class="k">if</span> <span class="n">orig_sslreqcert</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;SSLREQCERT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orig_sslreqcert</span>
+
+    <span class="c1"># Execute the definition if requested</span>
+    <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
+        <span class="n">mm</span><span class="o">.</span><span class="n">execute_performance_definition</span><span class="p">(</span><span class="n">perf_def</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tbl</span></div>
+
+
+<span class="k">def</span> <span class="nf">_parse_module_url</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">details</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">module_url</span> <span class="o">=</span> <span class="n">get_link</span><span class="p">(</span><span class="n">details</span><span class="p">,</span> <span class="s1">&#39;module&#39;</span><span class="p">)</span>
+        <span class="n">module_url</span> <span class="o">=</span> <span class="n">module_url</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(?:rel=module, href=(.*?),)&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>               <span class="c1"># Vya 3.5</span>
+        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(?:Rel: module URI: (.*?) MediaType)&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>  <span class="c1"># Format changed in Viya 4.0</span>
+        <span class="n">module_url</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">match</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">module_url</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">sasctl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/sasctl.html">sasctl package</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Unreleased</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-6-0-2021-06-29">v1.6.0 (2021-06-29)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-9-2021-06-09">v1.5.9 (2021-06-09)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-8-2021-05-18">v1.5.8 (2021-05-18)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-7-2021-05-04">v1.5.7 (2021-05-04)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-6-2021-04-30">v1.5.6 (2021-04-30)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-5-2021-03-26">v1.5.5 (2021-03-26)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-4-2020-10-29">v1.5.4 (2020-10-29)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-3-2020-06-25">v1.5.3 (2020-06-25)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-2-2020-06-22">v1.5.2 (2020-06-22)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-1-2020-4-9">v1.5.1 (2020-4-9)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-2020-2-23">v1.5 (2020-2-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-6-2020-1-24">v1.4.6 (2020-1-24)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-5-2019-12-5">v1.4.5 (2019-12-5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-4-2019-10-31">v1.4.4 (2019-10-31)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-3-2019-10-28">v1.4.3 (2019-10-28)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-2-2019-10-23">v1.4.2 (2019-10-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-1-2019-10-17">v1.4.1 (2019-10-17)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-2019-10-15">v1.4 (2019-10-15)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-3-2019-10-10">v1.3 (2019-10-10)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-5-2019-10-10">v1.2.5 (2019-10-10)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-4-2019-9-20">v1.2.4 (2019-9-20)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-3-2019-8-23">v1.2.3 (2019-8-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-2-2019-8-21">v1.2.2 (2019-8-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-1-2019-8-20">v1.2.1 (2019-8-20)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-0-2019-8-16">v1.2.0 (2019-8-16)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-4-2019-8-16">v1.1.4 (2019-8-16)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-3-2019-8-14">v1.1.3 (2019-8-14)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-2-2019-8-12">v1.1.2 (2019-8-12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-1-2019-8-6">v1.1.1 (2019-8-6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-0-2019-8-5">v1.1.0 (2019-8-5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-0-1-2019-07-31">v1.0.1 (2019-07-31)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-0-0-2019-07-24">v1.0.0 (2019-07-24)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v0-9-7-2019-07-18">v0.9.7 (2019-07-18)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v0-9-6-2019-07-15">v0.9.6 (2019-07-15)</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

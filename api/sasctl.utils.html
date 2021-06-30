@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>sasctl.utils package &#8212; sasctl 1.6.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sasctl.utils.pymas package" href="sasctl.utils.pymas.html" />
+    <link rel="prev" title="sasctl.services.text_parsing" href="services/text_parsing.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="sasctl-utils-package">
+<h1>sasctl.utils package<a class="headerlink" href="#sasctl-utils-package" title="Permalink to this headline">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sasctl.utils.pymas.html">sasctl.utils.pymas package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sasctl.utils.pymas.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sasctl.utils.pymas.html#module-sasctl.utils.pymas.core">sasctl.utils.pymas.core module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sasctl.utils.pymas.html#module-sasctl.utils.pymas.ds2">sasctl.utils.pymas.ds2 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sasctl.utils.pymas.html#module-sasctl.utils.pymas.python">sasctl.utils.pymas.python module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sasctl.utils.pymas.html#module-sasctl.utils.pymas">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sasctl.utils.pyml2ds.html">sasctl.utils.pyml2ds package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sasctl.utils.pyml2ds.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sasctl.utils.pyml2ds.html#sasctl-utils-pyml2ds-pyml2ds-module">sasctl.utils.pyml2ds.pyml2ds module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-sasctl.utils.astore">
+<span id="sasctl-utils-astore-module"></span><h2>sasctl.utils.astore module<a class="headerlink" href="#module-sasctl.utils.astore" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="sasctl.utils.astore.create_files_from_astore">
+<span class="sig-prename descclassname"><span class="pre">sasctl.utils.astore.</span></span><span class="sig-name descname"><span class="pre">create_files_from_astore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/utils/astore.html#create_files_from_astore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.utils.astore.create_files_from_astore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate files for importing a model from an ASTORE.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table</strong> (<em>swat.CASTable</em>) – The CAS table containing the ASTORE.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary of filename: content pairs.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sasctl.utils.astore.create_package">
+<span class="sig-prename descclassname"><span class="pre">sasctl.utils.astore.</span></span><span class="sig-name descname"><span class="pre">create_package</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/utils/astore.html#create_package"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.utils.astore.create_package" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an importable model package from a CAS table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<em>swat.CASTable</em>) – The CAS table containing an ASTORE or score code.</p></li>
+<li><p><strong>input</strong> (<em>DataFrame</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)"><em>type</em></a><em>, </em><em>list of type</em><em>, or </em><em>dict of str: type</em><em>, </em><em>optional</em>) – The expected type for each input value of the target function.
+Can be omitted if target function includes type hints.  If a DataFrame
+is provided, the columns will be inspected to determine type information.
+If a single type is provided, all columns will be assumed to be that type,
+otherwise a list of column types or a dictionary of column_name: type
+may be provided.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A byte stream representing a ZIP archive which can be imported.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>BytesIO</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.import_model_from_zip" title="sasctl._services.model_repository.ModelRepository.import_model_from_zip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">model_repository.import_model_from_zip</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sasctl.utils.astore.create_package_from_astore">
+<span class="sig-prename descclassname"><span class="pre">sasctl.utils.astore.</span></span><span class="sig-name descname"><span class="pre">create_package_from_astore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/utils/astore.html#create_package_from_astore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.utils.astore.create_package_from_astore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an importable model package from an ASTORE.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table</strong> (<em>swat.CASTable</em>) – The CAS table containing the ASTORE.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A byte stream representing a ZIP archive which can be imported.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>BytesIO</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.import_model_from_zip" title="sasctl._services.model_repository.ModelRepository.import_model_from_zip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">model_repository.import_model_from_zip</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sasctl.utils.astore.create_package_from_datastep">
+<span class="sig-prename descclassname"><span class="pre">sasctl.utils.astore.</span></span><span class="sig-name descname"><span class="pre">create_package_from_datastep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/utils/astore.html#create_package_from_datastep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.utils.astore.create_package_from_datastep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an importable model package from a score code table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<em>swat.CASTable</em>) – The CAS table containing the score code.</p></li>
+<li><p><strong>input</strong> (<em>DataFrame</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.9)"><em>type</em></a><em>, </em><em>list of type</em><em>, or </em><em>dict of str: type</em><em>, </em><em>optional</em>) – The expected type for each input value of the target function.
+Can be omitted if target function includes type hints.  If a DataFrame
+is provided, the columns will be inspected to determine type information.
+If a single type is provided, all columns will be assumed to be that type,
+otherwise a list of column types or a dictionary of column_name: type
+may be provided.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A byte stream representing a ZIP archive which can be imported.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>BytesIO</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.import_model_from_zip" title="sasctl._services.model_repository.ModelRepository.import_model_from_zip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">model_repository.import_model_from_zip</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sasctl.utils.astore.get_variable_properties">
+<span class="sig-prename descclassname"><span class="pre">sasctl.utils.astore.</span></span><span class="sig-name descname"><span class="pre">get_variable_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/utils/astore.html#get_variable_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.utils.astore.get_variable_properties" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-sasctl.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sasctl.utils" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">sasctl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sasctl.html">sasctl package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sasctl.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sasctl.html#submodules">Submodules</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sasctl.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html">Unreleased</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-6-0-2021-06-29">v1.6.0 (2021-06-29)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-9-2021-06-09">v1.5.9 (2021-06-09)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-8-2021-05-18">v1.5.8 (2021-05-18)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-7-2021-05-04">v1.5.7 (2021-05-04)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-6-2021-04-30">v1.5.6 (2021-04-30)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-5-2021-03-26">v1.5.5 (2021-03-26)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-4-2020-10-29">v1.5.4 (2020-10-29)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-3-2020-06-25">v1.5.3 (2020-06-25)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-2-2020-06-22">v1.5.2 (2020-06-22)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-1-2020-4-9">v1.5.1 (2020-4-9)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-2020-2-23">v1.5 (2020-2-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-6-2020-1-24">v1.4.6 (2020-1-24)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-5-2019-12-5">v1.4.5 (2019-12-5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-4-2019-10-31">v1.4.4 (2019-10-31)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-3-2019-10-28">v1.4.3 (2019-10-28)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-2-2019-10-23">v1.4.2 (2019-10-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-1-2019-10-17">v1.4.1 (2019-10-17)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-2019-10-15">v1.4 (2019-10-15)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-3-2019-10-10">v1.3 (2019-10-10)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-2-5-2019-10-10">v1.2.5 (2019-10-10)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-2-4-2019-9-20">v1.2.4 (2019-9-20)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-2-3-2019-8-23">v1.2.3 (2019-8-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-2-2-2019-8-21">v1.2.2 (2019-8-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-2-1-2019-8-20">v1.2.1 (2019-8-20)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-2-0-2019-8-16">v1.2.0 (2019-8-16)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-1-4-2019-8-16">v1.1.4 (2019-8-16)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-1-3-2019-8-14">v1.1.3 (2019-8-14)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-1-2-2019-8-12">v1.1.2 (2019-8-12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-1-1-2019-8-6">v1.1.1 (2019-8-6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-1-0-2019-8-5">v1.1.0 (2019-8-5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-0-1-2019-07-31">v1.0.1 (2019-07-31)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-0-0-2019-07-24">v1.0.0 (2019-07-24)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v0-9-7-2019-07-18">v0.9.7 (2019-07-18)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases.html#v0-9-6-2019-07-15">v0.9.6 (2019-07-15)</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="sasctl.html">sasctl package</a><ul>
+      <li>Previous: <a href="services/text_parsing.html" title="previous chapter">sasctl.services.text_parsing</a></li>
+      <li>Next: <a href="sasctl.utils.pymas.html" title="next chapter">sasctl.utils.pymas package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/sasctl.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

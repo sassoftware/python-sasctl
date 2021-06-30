@@ -1,0 +1,571 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sasctl._services.service &#8212; sasctl 1.6.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for sasctl._services.service</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># encoding: utf-8</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
+<span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
+
+<span class="sd">&quot;&quot;&quot;Base functionality for all services.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">six.moves.urllib_parse</span> <span class="kn">import</span> <span class="n">quote</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">core</span>
+<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">HTTPError</span><span class="p">,</span> <span class="n">PagedItemIterator</span><span class="p">,</span> <span class="n">sasctl_command</span>
+<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">JobTimeoutError</span>
+
+
+<span class="k">class</span> <span class="nc">Service</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c1"># skipcq PYL-R0205</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all services.  Should not be used directly.&quot;&quot;&quot;</span>
+
+    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">is_uuid</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">)</span>
+    <span class="n">get_link</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">get_link</span><span class="p">)</span>
+    <span class="n">request_link</span> <span class="o">=</span> <span class="nb">staticmethod</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">request_link</span><span class="p">)</span>
+
+    <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_SERVICE_ROOT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">is_available</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if the service is currently available.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;response&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+        <span class="k">except</span> <span class="n">HTTPError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Version and build information for the service.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/apiMeta&#39;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">verb</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send an HTTP request with a session.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        verb : str</span>
+<span class="sd">            A valid HTTP request verb.</span>
+<span class="sd">        path : str</span>
+<span class="sd">            Path portion of URL to request.  Assumed to be relative to</span>
+<span class="sd">            `_SERVICE_ROOT`.</span>
+<span class="sd">        session : Session, optional</span>
+<span class="sd">            Defaults to `current_session()`.</span>
+<span class="sd">        raw : bool</span>
+<span class="sd">            Deprecated. Whether to return the raw `Response` object.</span>
+<span class="sd">            Defaults to False.</span>
+<span class="sd">        format : {&#39;auto&#39;, &#39;response&#39;, &#39;content&#39;, &#39;json&#39;, &#39;text&#39;}</span>
+<span class="sd">            The format of the return response.  Defaults to `auto`.</span>
+<span class="sd">            response: the raw `Response` object.</span>
+<span class="sd">            content: Response.content</span>
+<span class="sd">            json: Response.json()</span>
+<span class="sd">            text: Response.text</span>
+<span class="sd">            auto: `RestObj` constructed from JSON if possible, otherwise same as</span>
+<span class="sd">                  `text`.</span>
+<span class="sd">        kwargs : any</span>
+<span class="sd">            Additional arguments are passed to the session `request` method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_SERVICE_ROOT</span> <span class="o">+</span> <span class="n">path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_SERVICE_ROOT</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">path</span>
+
+        <span class="k">return</span> <span class="n">core</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">verb</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a GET request.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># Resource not found</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">head</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a HEAD request.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a POST request.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a PUT request.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;put&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a DELETE request.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;delete&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_crud_funcs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                    <span class="n">single_term</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">plural_term</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">service_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">get_filter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Utility method for defining CRUD functions.</span>
+
+<span class="sd">        Can be used to define simple functions that perform CRUD operations</span>
+<span class="sd">        on a REST endpoint.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str</span>
+<span class="sd">            URL path to use for the requests</span>
+<span class="sd">        single_term : str</span>
+<span class="sd">            English name of the item being manipulated.</span>
+<span class="sd">            Defaults to `plural_term`.</span>
+<span class="sd">        plural_term : str</span>
+<span class="sd">            English name of the items being manipulated. Defaults to the last</span>
+<span class="sd">            segment of `path`.</span>
+<span class="sd">        service_name : str</span>
+<span class="sd">            Name of the service under which the command will be listed in</span>
+<span class="sd">            the `sasctl` CLI.  Defaults to `plural_term`.</span>
+<span class="sd">        get_filter : callable, optional</span>
+<span class="sd">            A function that accepts an `item` and returns a dictionary</span>
+<span class="sd">            representing quary parameters to be added to the request for</span>
+<span class="sd">            filtering.  Defaults to filter=eq(name, item.name).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        functions : tuple</span>
+<span class="sd">            tuple of `classmethod` instances representating CRUD functions:</span>
+<span class="sd">            list_items, get_item, update_item, delete_item</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        &gt;&gt;&gt; list_spam, get_spam, update_spam, delete_spam = _build_crud_funcs(&#39;/spam&#39;)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Set a default filter</span>
+        <span class="k">if</span> <span class="n">get_filter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">default_filter</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="s1">&#39;eq(name, &quot;</span><span class="si">%s</span><span class="s1">&quot;)&#39;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+
+            <span class="n">get_filter</span> <span class="o">=</span> <span class="n">default_filter</span>
+
+        <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s1">&#39;list&#39;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">list_items</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;List all {items} available in the environment.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            filter : str, optional</span>
+<span class="sd">            start : int, optional</span>
+<span class="sd">                Zero-based index of the first item to return.  Defaults to 0.</span>
+<span class="sd">            limit : int, optional</span>
+<span class="sd">                The maximum number of items to return.  Defaults to 20.</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            list</span>
+<span class="sd">                A list of dictionaries containing the {items}.</span>
+
+<span class="sd">            Notes</span>
+<span class="sd">            -----</span>
+<span class="sd">            See the filtering_ reference for details on the `filter` parameter.</span>
+
+<span class="sd">            .. _filtering: https://developer.sas.com/reference/filtering/</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;filter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">filter</span>
+            <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;limit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
+
+            <span class="n">params</span> <span class="o">=</span> <span class="s1">&#39;&amp;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">quote</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">safe</span><span class="o">=</span><span class="s1">&#39;/(),&quot;&#39;</span><span class="p">))</span>
+                              <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">kwargs</span><span class="p">))</span>
+
+            <span class="n">results</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">results</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">PagedItemIterator</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">results</span>
+
+            <span class="k">return</span> <span class="p">[</span><span class="n">results</span><span class="p">]</span>
+
+        <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">get_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Return a {item} instance.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            item : str or dict</span>
+<span class="sd">                Name, ID, or dictionary representation of the {item}.</span>
+<span class="sd">            refresh : bool, optional</span>
+<span class="sd">                Obtain an updated copy of the {item}.</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            RestObj or None</span>
+<span class="sd">                A dictionary containing the {item} attributes or None.</span>
+
+<span class="sd">            Notes</span>
+<span class="sd">            -------</span>
+<span class="sd">            If `item` is a complete representation of the {item} it will be</span>
+<span class="sd">            returned unless `refresh` is set.  This prevents unnecessary REST</span>
+<span class="sd">            calls when data is already available on the client.</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># If the input already appears to be the requested object just</span>
+            <span class="c1"># return it, unless a refresh of the data was explicitly requested.</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
+                    <span class="n">k</span> <span class="ow">in</span> <span class="n">item</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
+                    <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">item</span>
+
+            <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">item</span><span class="p">))</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">list_items</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">get_filter</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+
+            <span class="n">match</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                    <span class="c1"># The first result that matches on name should be stored.</span>
+                    <span class="c1"># Will be returned after determining that there aren&#39;t additional</span>
+                    <span class="c1"># matches</span>
+                    <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="c1"># Make a request for the specific object so that ETag</span>
+                        <span class="c1"># is included, allowing updates.</span>
+                        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;self&#39;</span><span class="p">):</span>
+                            <span class="n">match</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;self&#39;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">id_</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+                            <span class="n">match</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">id_</span><span class="p">))</span>
+                    <span class="c1"># We already found a match so this is a duplicate.  Warn the user so they know</span>
+                    <span class="c1"># the item returned may not be the one they were expecting.</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Multiple items found with name &#39;</span><span class="si">%s</span><span class="s2">&#39;.  Only the first result is returned.&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+                        <span class="k">break</span>
+
+            <span class="k">return</span> <span class="n">match</span>
+
+        <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s1">&#39;update&#39;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">update_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Update a {item} instance.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            item : dict</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            None</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">headers</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s1">&#39;_headers&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">headers</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;etag&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s1">&#39;Could not find ETag for update of </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+
+            <span class="n">id_</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">id_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s1">&#39;Could not find property `id` for update of </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+
+            <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;If-Match&#39;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">_headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;etag&#39;</span><span class="p">),</span>
+                       <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">_headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content-type&#39;</span><span class="p">)}</span>
+
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">id_</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">item</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+
+        <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s1">&#39;delete&#39;</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">delete_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Delete a {item} instance.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            item</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            None</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">item_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+            <span class="c1"># Try to find the item if the id can&#39;t be found</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">):</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">get_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Object &#39;</span><span class="si">%s</span><span class="s2">&#39; not found.  Skipping delete.&quot;</span><span class="p">,</span>
+                                 <span class="n">item_name</span><span class="p">)</span>
+                    <span class="k">return</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;/</span><span class="si">{id}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">item</span><span class="p">))</span>
+                <span class="c1"># Response generally seems to be an empty string.  If so, just return None</span>
+                <span class="c1"># BUT, if the service provides an actual response, return it.</span>
+                <span class="k">if</span> <span class="n">response</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">response</span>
+                <span class="k">return</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unrecognized id &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+
+        <span class="c1"># Pull object name from path if unspecified (many paths end in</span>
+        <span class="c1"># nouns like /folders or /repositories).</span>
+        <span class="n">plural_term</span> <span class="o">=</span> <span class="n">plural_term</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">single_term</span> <span class="o">=</span> <span class="n">single_term</span> <span class="ow">or</span> <span class="n">plural_term</span>
+        <span class="n">service_name</span> <span class="o">=</span> <span class="n">service_name</span> <span class="ow">or</span> <span class="n">plural_term</span>
+        <span class="n">service_name</span> <span class="o">=</span> <span class="n">service_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="p">[</span><span class="n">list_items</span><span class="p">,</span> <span class="n">get_item</span><span class="p">,</span> <span class="n">update_item</span><span class="p">,</span> <span class="n">delete_item</span><span class="p">]:</span>
+            <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">single_term</span><span class="p">,</span>
+                                               <span class="n">items</span><span class="o">=</span><span class="n">plural_term</span><span class="p">)</span>
+            <span class="n">func</span><span class="o">.</span><span class="n">_cli_service</span> <span class="o">=</span> <span class="n">service_name</span>
+
+            <span class="n">prefix</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span>
+            <span class="n">suffix</span> <span class="o">=</span> <span class="n">plural_term</span> <span class="k">if</span> <span class="n">prefix</span> <span class="o">==</span> <span class="s1">&#39;list_&#39;</span> <span class="k">else</span> <span class="n">single_term</span>
+            <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">suffix</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="nb">classmethod</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span>
+                <span class="p">(</span><span class="n">list_items</span><span class="p">,</span> <span class="n">get_item</span><span class="p">,</span> <span class="n">update_item</span><span class="p">,</span> <span class="n">delete_item</span><span class="p">)]</span>
+
+    <span class="c1"># Compatibility with Python 2.7 requires *args to be after key-words</span>
+    <span class="c1"># arguments.</span>
+    <span class="c1"># skipcq: PYL-W1113</span>
+    <span class="k">def</span> <span class="nf">_get_rel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get `item` and request a link.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item : str or dict</span>
+<span class="sd">        rel : str</span>
+<span class="sd">        func : function, optional</span>
+<span class="sd">            Callable that takes (item, *args) and returns a RestObj of `item`</span>
+<span class="sd">        filter : str, optional</span>
+
+<span class="sd">        args : any</span>
+<span class="sd">            Passed to `func`</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="s1">&#39;filter=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">filter</span><span class="p">)</span> <span class="k">if</span> <span class="nb">filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+
+        <span class="n">resources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">PagedItemIterator</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">resources</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">resources</span><span class="p">]</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_monitor_job</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Continually poll a job until it reaches the desired status.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        job : dict</span>
+<span class="sd">            Dictionary representation of a currently execution job</span>
+<span class="sd">        max_retries : int</span>
+<span class="sd">            Maximum number of ties to refresh `job` before failing.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        job</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TimeoutError</span>
+<span class="sd">            `max_retries` reached with a successful status check</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">completed</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;completed&#39;</span><span class="p">,</span> <span class="s1">&#39;failed&#39;</span><span class="p">)</span>
+
+        <span class="n">retries</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s1">&#39;self&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Link &#39;self&#39; not found on </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">job</span><span class="p">)</span>
+
+        <span class="c1"># TODO: Log</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">completed</span><span class="p">(</span><span class="n">job</span><span class="p">)</span> <span class="ow">and</span> <span class="n">retries</span> <span class="o">&lt;</span> <span class="n">max_retries</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">retries</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s1">&#39;self&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">completed</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">job</span>
+        <span class="k">raise</span> <span class="n">JobTimeoutError</span><span class="p">(</span><span class="s1">&#39;Timeout while waiting on job </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">job</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">sasctl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/sasctl.html">sasctl package</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Unreleased</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-6-0-2021-06-29">v1.6.0 (2021-06-29)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-9-2021-06-09">v1.5.9 (2021-06-09)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-8-2021-05-18">v1.5.8 (2021-05-18)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-7-2021-05-04">v1.5.7 (2021-05-04)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-6-2021-04-30">v1.5.6 (2021-04-30)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-5-2021-03-26">v1.5.5 (2021-03-26)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-4-2020-10-29">v1.5.4 (2020-10-29)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-3-2020-06-25">v1.5.3 (2020-06-25)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-2-2020-06-22">v1.5.2 (2020-06-22)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-1-2020-4-9">v1.5.1 (2020-4-9)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-2020-2-23">v1.5 (2020-2-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-6-2020-1-24">v1.4.6 (2020-1-24)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-5-2019-12-5">v1.4.5 (2019-12-5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-4-2019-10-31">v1.4.4 (2019-10-31)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-3-2019-10-28">v1.4.3 (2019-10-28)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-2-2019-10-23">v1.4.2 (2019-10-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-1-2019-10-17">v1.4.1 (2019-10-17)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-2019-10-15">v1.4 (2019-10-15)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-3-2019-10-10">v1.3 (2019-10-10)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-2-5-2019-10-10">v1.2.5 (2019-10-10)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-2-4-2019-9-20">v1.2.4 (2019-9-20)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-2-3-2019-8-23">v1.2.3 (2019-8-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-2-2-2019-8-21">v1.2.2 (2019-8-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-2-1-2019-8-20">v1.2.1 (2019-8-20)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-2-0-2019-8-16">v1.2.0 (2019-8-16)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-1-4-2019-8-16">v1.1.4 (2019-8-16)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-1-3-2019-8-14">v1.1.3 (2019-8-14)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-1-2-2019-8-12">v1.1.2 (2019-8-12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-1-1-2019-8-6">v1.1.1 (2019-8-6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-1-0-2019-8-5">v1.1.0 (2019-8-5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-0-1-2019-07-31">v1.0.1 (2019-07-31)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-0-0-2019-07-24">v1.0.0 (2019-07-24)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v0-9-7-2019-07-18">v0.9.7 (2019-07-18)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v0-9-6-2019-07-15">v0.9.6 (2019-07-15)</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

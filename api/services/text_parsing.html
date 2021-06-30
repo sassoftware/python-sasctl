@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>sasctl.services.text_parsing &#8212; sasctl 1.6.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="sasctl.utils package" href="../sasctl.utils.html" />
+    <link rel="prev" title="sasctl.services.text_categorization" href="text_categorization.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-sasctl._services.text_parsing">
+<span id="sasctl-services-text-parsing"></span><h1>sasctl.services.text_parsing<a class="headerlink" href="#module-sasctl._services.text_parsing" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="sasctl._services.text_parsing.TextParsing">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sasctl._services.text_parsing.</span></span><span class="sig-name descname"><span class="pre">TextParsing</span></span><a class="reference internal" href="../../_modules/sasctl/_services/text_parsing.html#TextParsing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.text_parsing.TextParsing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sasctl._services.service.Service</span></code></p>
+<p>The Text Parsing API parses natural language text documents.</p>
+<p>Parsing is a key operation in understanding your data. Parsing a document
+involves the following analyses:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Identifying terms used in the document</p></li>
+<li><p>Recognizing parts of speech for each term</p></li>
+<li><p>Identifying which terms are entities (person, country, and so on)</p></li>
+<li><p>Resolving synonyms, misspellings, and so on</p></li>
+</ul>
+</div></blockquote>
+<p>The output tables that are generated during parsing can also be used in
+downstream analyses such as topic generation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sasctl._services.text_parsing.TextParsing.parse_documents">
+<span class="sig-name descname"><span class="pre">parse_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caslib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_entities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noun_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_doc_count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concept_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_postfix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spell_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synonym_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'en'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/text_parsing.html#TextParsing.parse_documents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.text_parsing.TextParsing.parse_documents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs natural language parsing on the input data.</p>
+<p>Creates a text parsing job that executes asynchronously.  There are two
+different interactions for parsing: parsing documents in CAS tables and
+parsing documents that are uploaded directly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>documents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em> or </em><em>list_like:</em>) – Documents to parse.  May be either the URI to a CAS table where the
+documents are currently stored, or an iterable of strings containing
+the documents’ text.</p></li>
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>, </em><em>optional</em>) – URI of a caslib in which the documents will be stored.  Required if
+<cite>documents</cite> is a list of strings.</p></li>
+<li><p><strong>id_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The column in <cite>documents</cite> that contains a unique id for each
+document.  Required if <cite>documents</cite> is a CAS table URI.</p></li>
+<li><p><strong>text_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – The column in <cite>documents</cite> that contains the document text to parse.
+Required if <cite>documents</cite> is a CAS table URI.</p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Description to add to the text parsing job.</p></li>
+<li><p><strong>standard_entities</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>noun_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>min_doc_count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Minimum number of documents in which a term must appear to be kept.
+Defaults to 10.</p></li>
+<li><p><strong>output_postfix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Text to be added to the end of all output table names.</p></li>
+<li><p><strong>spell_check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether spell checking should be performed during parsing.</p></li>
+<li><p><strong>concept_model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>, </em><em>optional</em>) – URI of a table containing the concept LITI binaries to apply during
+parsing.</p></li>
+<li><p><strong>override_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>, </em><em>optional</em>) – URI of a table containing overrides for the keep and drop terms.</p></li>
+<li><p><strong>language</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>optional</em>) – Two letter
+<a class="reference external" href="https://en.wikipedia.org/wiki/ISO_639">ISO 639-1</a>
+code indicating the source language.  Defaults to ‘en’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The submitted job</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj">RestObj</a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="cas_management.html#sasctl._services.cas_management.CASManagement.get_caslib" title="sasctl._services.cas_management.CASManagement.get_caslib"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cas_management.get_caslib</span></code></a>
+<a class="reference internal" href="cas_management.html#sasctl._services.cas_management.CASManagement.get_table" title="sasctl._services.cas_management.CASManagement.get_table"><code class="xref py py-meth docutils literal notranslate"><span class="pre">cas_management.get_table</span></code></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">sasctl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../sasctl.html">sasctl package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../sasctl.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sasctl.html#submodules">Submodules</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../sasctl.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Unreleased</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-6-0-2021-06-29">v1.6.0 (2021-06-29)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-9-2021-06-09">v1.5.9 (2021-06-09)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-8-2021-05-18">v1.5.8 (2021-05-18)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-7-2021-05-04">v1.5.7 (2021-05-04)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-6-2021-04-30">v1.5.6 (2021-04-30)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-5-2021-03-26">v1.5.5 (2021-03-26)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-4-2020-10-29">v1.5.4 (2020-10-29)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-3-2020-06-25">v1.5.3 (2020-06-25)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-2-2020-06-22">v1.5.2 (2020-06-22)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-1-2020-4-9">v1.5.1 (2020-4-9)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-2020-2-23">v1.5 (2020-2-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-6-2020-1-24">v1.4.6 (2020-1-24)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-5-2019-12-5">v1.4.5 (2019-12-5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-4-2019-10-31">v1.4.4 (2019-10-31)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-3-2019-10-28">v1.4.3 (2019-10-28)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-2-2019-10-23">v1.4.2 (2019-10-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-1-2019-10-17">v1.4.1 (2019-10-17)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-2019-10-15">v1.4 (2019-10-15)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-3-2019-10-10">v1.3 (2019-10-10)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-5-2019-10-10">v1.2.5 (2019-10-10)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-4-2019-9-20">v1.2.4 (2019-9-20)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-3-2019-8-23">v1.2.3 (2019-8-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-2-2019-8-21">v1.2.2 (2019-8-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-1-2019-8-20">v1.2.1 (2019-8-20)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-0-2019-8-16">v1.2.0 (2019-8-16)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-4-2019-8-16">v1.1.4 (2019-8-16)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-3-2019-8-14">v1.1.3 (2019-8-14)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-2-2019-8-12">v1.1.2 (2019-8-12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-1-2019-8-6">v1.1.1 (2019-8-6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-0-2019-8-5">v1.1.0 (2019-8-5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-0-1-2019-07-31">v1.0.1 (2019-07-31)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-0-0-2019-07-24">v1.0.0 (2019-07-24)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v0-9-7-2019-07-18">v0.9.7 (2019-07-18)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v0-9-6-2019-07-15">v0.9.6 (2019-07-15)</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../sasctl.html">sasctl package</a><ul>
+  <li><a href="../sasctl.services.html">sasctl.services package</a><ul>
+      <li>Previous: <a href="text_categorization.html" title="previous chapter">sasctl.services.text_categorization</a></li>
+      <li>Next: <a href="../sasctl.utils.html" title="next chapter">sasctl.utils package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/api/services/text_parsing.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

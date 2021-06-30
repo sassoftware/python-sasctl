@@ -1,0 +1,768 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sasctl.utils.pymas.core &#8212; sasctl 1.6.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for sasctl.utils.pymas.core</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># encoding: utf-8</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
+<span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
+
+<span class="sd">&quot;&quot;&quot;Contains utilities for wrapping Python models in DS2 for publishing.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">pickle</span>                                                                                          <span class="c1"># skipcq BAN-B301</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">import</span> <span class="nn">six</span>
+
+<span class="kn">from</span> <span class="nn">.ds2</span> <span class="kn">import</span> <span class="n">DS2Thread</span><span class="p">,</span> <span class="n">DS2Variable</span><span class="p">,</span> <span class="n">DS2PyMASPackage</span>
+<span class="kn">from</span> <span class="nn">.python</span> <span class="kn">import</span> <span class="n">ds2_variables</span>
+<span class="kn">from</span> <span class="nn">..decorators</span> <span class="kn">import</span> <span class="n">versionadded</span><span class="p">,</span> <span class="n">versionchanged</span>
+<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">random_string</span>
+
+
+<div class="viewcode-block" id="build_wrapper_function"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.build_wrapper_function">[docs]</a><span class="nd">@versionchanged</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="s1">&#39;Added `name` parameter.&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">build_wrapper_function</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">array_input</span><span class="p">,</span>
+                           <span class="n">name</span><span class="o">=</span><span class="s1">&#39;wrapper&#39;</span><span class="p">,</span>
+                           <span class="n">setup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">return_msg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wraps a function to ensure compatibility when called by PyMAS.</span>
+
+<span class="sd">    PyMAS has strict expectations regarding the format of any function called</span>
+<span class="sd">    directly by PyMAS.  Isolating the desired function inside a wrapping</span>
+<span class="sd">    function provides a simple way to ensure that functions called by PyMAS</span>
+<span class="sd">    are compliant.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : function or str</span>
+<span class="sd">        Function name or an instance of Function which will be wrapped</span>
+<span class="sd">    variables : list of DS2Variable</span>
+<span class="sd">    array_input : bool</span>
+<span class="sd">        Whether `variables` should be combined into a single array before</span>
+<span class="sd">        passing to `func`</span>
+<span class="sd">    name : str, optional</span>
+<span class="sd">        Name of the generated wrapper function.  Defaults to &#39;wrapper&#39;.</span>
+<span class="sd">    setup : iterable</span>
+<span class="sd">        Python source code lines to be executed during package setup</span>
+<span class="sd">    return_msg : bool, optional</span>
+<span class="sd">        Deprecated.</span>
+<span class="sd">        Whether error messages will be captured and returned as an additional</span>
+<span class="sd">        output variable.  Defaults to True.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        the Python definition for the wrapper function.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The format for the `# Output: ` is very strict.  It must be exactly</span>
+<span class="sd">    &quot;# Output: &lt;var&gt;, &lt;var&gt;&quot;.  Any changes to spelling, capitalization,</span>
+<span class="sd">    punctuation, or spacing will result in an error when the DS2 code is</span>
+<span class="sd">    executed.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">return_msg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s2">&quot;The &#39;return_msg&#39; parameter is ignored and &quot;</span>
+                                 <span class="s2">&quot;will be removed completely in a future &quot;</span>
+                                 <span class="s2">&quot;version&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Always return an error message out of any Python method call.</span>
+    <span class="n">return_msg</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># need to know func &amp; input/output vars for each func</span>
+    <span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span><span class="p">]</span>
+    <span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span><span class="p">]</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">input_names</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">func</span><span class="p">)</span> <span class="k">else</span> <span class="n">func</span>
+
+    <span class="c1"># HELPER: SAS to python char issue where SAS char have spaces and python string does not.</span>
+    <span class="c1"># NOTE: we assume SAS char always need white space to be trimmed.  This seems to match python model built so far</span>
+    <span class="c1"># Note: Using this string fix to help with None or blank input situation for numerics</span>
+    <span class="n">string_input</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">)</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;char&#39;</span><span class="p">:</span>
+                <span class="n">string_input</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;        if </span><span class="si">{0}</span><span class="s2">: </span><span class="si">{0}</span><span class="s2"> = </span><span class="si">{0}</span><span class="s2">.strip()&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">string_input</span> <span class="o">+=</span> <span class="p">(</span>
+                 <span class="s2">&quot;        if </span><span class="si">{0}</span><span class="s2"> is None: </span><span class="si">{0}</span><span class="s2"> = np.nan&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">name</span><span class="p">),)</span>
+
+    <span class="c1"># Statement to execute the function w/ provided parameters</span>
+    <span class="k">if</span> <span class="n">array_input</span><span class="p">:</span>
+        <span class="n">middle</span> <span class="o">=</span> <span class="n">string_input</span> <span class="o">+</span> \
+                 <span class="p">(</span>
+                  <span class="s1">&#39;        input_array = np.array([</span><span class="si">{}</span><span class="s1">]).reshape((1, -1))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                     <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)),</span>
+                  <span class="s1">&#39;        columns = [</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                     <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="si">{0}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)),</span>
+                  <span class="s1">&#39;        input_df = pd.DataFrame(data=input_array, columns=columns)&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;        result = </span><span class="si">{}</span><span class="s1">(input_df)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">func_call</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+        <span class="n">middle</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;        result = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func_call</span><span class="p">),)</span>
+
+    <span class="k">if</span> <span class="n">setup</span><span class="p">:</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;try:&#39;</span><span class="p">,</span> <span class="p">)</span> <span class="o">+</span> \
+                 <span class="nb">tuple</span><span class="p">(</span><span class="s1">&#39;    &#39;</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">setup</span><span class="p">)</span> <span class="o">+</span> \
+                 <span class="p">(</span><span class="s1">&#39;    _compile_error = None&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;except Exception as e:&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;    _compile_error = e&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">)</span>
+
+    <span class="c1"># NOTE: &#39;Output:&#39; section is required.  All return variables must be listed</span>
+    <span class="c1"># separated by &#39;, &#39;</span>
+    <span class="n">definition</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> \
+                 <span class="p">(</span><span class="s1">&#39;def </span><span class="si">{name}</span><span class="s1">(</span><span class="si">{args}</span><span class="s1">):&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)),</span>
+                  <span class="s1">&#39;    &quot;Output: </span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_names</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">return_msg</span>
+                                            <span class="k">else</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_names</span><span class="p">)),</span>
+                  <span class="s1">&#39;    result = None&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;    msg = None&#39;</span> <span class="k">if</span> <span class="n">return_msg</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;    try:&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;        global _compile_error&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;        if _compile_error is not None:&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;            raise _compile_error&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;        import numpy as np&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;        import pandas as pd&#39;</span><span class="p">)</span> <span class="o">+</span> \
+                 <span class="n">middle</span> <span class="o">+</span> \
+                 <span class="p">(</span>
+                  <span class="s1">&#39;        result = tuple(result.ravel()) if hasattr(result, &#39;</span>
+                  <span class="s1">&#39;&quot;ravel&quot;) else tuple(result)&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;        if len(result) == 0:&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;            result = tuple(None for i in range(</span><span class="si">%s</span><span class="s1">))&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span>
+                      <span class="n">output_names</span><span class="p">),</span>
+                  <span class="s1">&#39;        elif &quot;numpy&quot; in str(type(result[0])):&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;            result = tuple(np.asscalar(i) for i in result)&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;    except Exception as e:&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;        from traceback import format_exc&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;        msg = str(e) + format_exc()&#39;</span> <span class="k">if</span> <span class="n">return_msg</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;        if result is None:&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;            result = tuple(None for i in range(</span><span class="si">%s</span><span class="s1">))&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span>
+                     <span class="n">output_names</span><span class="p">),</span>
+                  <span class="s1">&#39;    return result + (msg, )&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">definition</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="wrap_predict_method"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.wrap_predict_method">[docs]</a><span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">wrap_predict_method</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a PyMAS wrapper designed for Sci-kit&#39;s `.predict` methods.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : function or str</span>
+<span class="sd">        Function name or an instance of Function which will be wrapped.  Assumed</span>
+<span class="sd">        to behave as `.predict()` methods.</span>
+<span class="sd">    variables : list of DS2Variable</span>
+<span class="sd">        Input and output variables for the function</span>
+<span class="sd">    kwargs : any</span>
+<span class="sd">        Will be passed to `build_wrapper_function`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        the Python definition for the wrapper function.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :meth:`build_wrapper_function`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;array_input&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;predict&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">build_wrapper_function</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="wrap_predict_proba_method"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.wrap_predict_proba_method">[docs]</a><span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">wrap_predict_proba_method</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a PyMAS wrapper designed for Sci-kit&#39;s `.predict_proba` methods.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : function or str</span>
+<span class="sd">        Function name or an instance of Function which will be wrapped.  Assumed</span>
+<span class="sd">        to behave as `.predict_proba()` methods.</span>
+<span class="sd">    variables : list of DS2Variable</span>
+<span class="sd">        Input and output variables for the function</span>
+<span class="sd">    kwargs : any</span>
+<span class="sd">        Will be passed to `build_wrapper_function`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        the Python definition for the wrapper function.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :meth:`build_wrapper_function`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;array_input&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;predict_proba&#39;</span><span class="p">)</span>
+
+    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">build_wrapper_function</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">old_code</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;if result.size == 1:\s*result = np.asscalar\(result\)&#39;</span>
+    <span class="n">new_code</span> <span class="o">=</span> <span class="s1">&#39;assert result.shape[0] == 1</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="n">new_code</span> <span class="o">+=</span> <span class="s1">&#39;        result = tuple(result[0].tolist())&#39;</span>
+
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">old_code</span><span class="p">,</span> <span class="n">new_code</span><span class="p">,</span> <span class="n">wrapper</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="from_inline"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_inline">[docs]</a><span class="nd">@versionchanged</span><span class="p">(</span><span class="s1">&#39;Return code and message are disabled by default.&#39;</span><span class="p">,</span>
+                <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">from_inline</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">input_types</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">array_input</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">return_message</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a PyMAS wrapper to execute the inline python function.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : function</span>
+<span class="sd">        A Python function object to be used</span>
+<span class="sd">    input_types : list of type, optional</span>
+<span class="sd">        The expected type for each input value of `func`.  Can be ommitted if</span>
+<span class="sd">        `func` includes type hints.</span>
+<span class="sd">    array_input : bool</span>
+<span class="sd">        Whether the function inputs should be treated as an array instead of</span>
+<span class="sd">        individual parameters</span>
+<span class="sd">    return_code : bool</span>
+<span class="sd">        Deprecated.</span>
+<span class="sd">        Whether the DS2-generated return code should be included</span>
+<span class="sd">    return_message : bool</span>
+<span class="sd">        Deprecated.</span>
+<span class="sd">        Whether the DS2-generated return message should be included</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    PyMAS</span>
+<span class="sd">        Generated DS2 code which can be executed in a SAS scoring environment</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">return_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">return_message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s2">&quot;The &#39;return_code&#39; and &#39;return_message&#39; &quot;</span>
+                                 <span class="s2">&quot;parameters are ignored and will be &quot;</span>
+                                 <span class="s2">&quot;removed completely in a future version&quot;</span><span class="p">)</span>
+
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">from_pickle</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">input_types</span><span class="p">,</span> <span class="n">array_input</span><span class="p">,</span> <span class="n">return_code</span><span class="p">,</span> <span class="n">return_message</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="from_python_file"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_python_file">[docs]</a><span class="nd">@versionchanged</span><span class="p">(</span><span class="s1">&#39;Return code and message are disabled by default.&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">from_python_file</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_types</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">array_input</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">return_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_message</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a PyMAS wrapper to execute a function defined in an</span>
+<span class="sd">    external .py file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file : str</span>
+<span class="sd">        The path to a python source code file</span>
+<span class="sd">    func_name : str</span>
+<span class="sd">        Name of the target function to call</span>
+<span class="sd">    input_types : list of type, optional</span>
+<span class="sd">        The expected type for each input value of the target function.</span>
+<span class="sd">        Can be ommitted if target function includes type hints.</span>
+<span class="sd">    array_input : bool</span>
+<span class="sd">        Whether the function inputs should be treated as an array instead of</span>
+<span class="sd">        individual parameters</span>
+<span class="sd">    return_code : bool</span>
+<span class="sd">        Deprecated</span>
+<span class="sd">        Whether the DS2-generated return code should be included</span>
+<span class="sd">    return_message : bool</span>
+<span class="sd">        Deprecated</span>
+<span class="sd">        Whether the DS2-generated return message should be included</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    PyMAS</span>
+<span class="sd">        Generated DS2 code which can be executed in a SAS scoring environment</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">return_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">return_message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s2">&quot;The &#39;return_code&#39; and &#39;return_message&#39; &quot;</span>
+                                 <span class="s2">&quot;parameters are ignored and will be &quot;</span>
+                                 <span class="s2">&quot;removed completely in a future version&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">{}</span><span class="s2"> does not have a .py extension.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+
+    <span class="c1"># Extract just the filename from the path</span>
+    <span class="n">directory</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="c1"># Drop the file extension to get the module name</span>
+    <span class="n">module_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Temporarily add the module location to Python&#39;s path</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+    <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_name</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">target_func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">target_func</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Could not find a valid function named </span><span class="si">%s</span><span class="s2">&quot;</span>
+                           <span class="o">%</span> <span class="n">func_name</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
+
+    <span class="k">return</span> <span class="n">_build_pymas</span><span class="p">(</span><span class="n">target_func</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">input_types</span><span class="p">,</span> <span class="n">array_input</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="from_pickle"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_pickle">[docs]</a><span class="nd">@versionchanged</span><span class="p">(</span><span class="s1">&#39;Return code and message are disabled by default.&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">from_pickle</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_types</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">array_input</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">return_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_message</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a deployable DS2 package from a Python pickle file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file : str or bytes or file_like</span>
+<span class="sd">        Pickled object to use.  String is assumed to be a path to a picked</span>
+<span class="sd">        file, file_like is assumed to be an open file handle to a pickle</span>
+<span class="sd">        object, and bytes is assumed to be the raw pickled bytes.</span>
+<span class="sd">    func_name : str</span>
+<span class="sd">        Name of the target function to call</span>
+<span class="sd">    input_types : DataFrame, type, list of type, or dict of str: type, optional</span>
+<span class="sd">        The expected type for each input value of the target function.</span>
+<span class="sd">        Can be omitted if target function includes type hints.  If a DataFrame</span>
+<span class="sd">        is provided, the columns will be inspected to determine type information.</span>
+<span class="sd">        If a single type is provided, all columns will be assumed to be that type,</span>
+<span class="sd">        otherwise a list of column types or a dictionary of column_name: type</span>
+<span class="sd">        may be provided.</span>
+<span class="sd">    array_input : bool</span>
+<span class="sd">        Whether the function inputs should be treated as an array instead of</span>
+<span class="sd">        individual parameters</span>
+<span class="sd">    return_code : bool</span>
+<span class="sd">        Deprecated.</span>
+<span class="sd">        Whether the DS2-generated return code should be included</span>
+<span class="sd">    return_message : bool</span>
+<span class="sd">        Deprecated.</span>
+<span class="sd">        Whether the DS2-generated return message should be included</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    PyMAS</span>
+<span class="sd">        Generated DS2 code which can be executed in a SAS scoring environment</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">return_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">return_message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s2">&quot;The &#39;return_code&#39; and &#39;return_message&#39; &quot;</span>
+                                 <span class="s2">&quot;parameters are ignored and will be &quot;</span>
+                                 <span class="s2">&quot;removed completely in a future version&quot;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># In Python2 str could either be a path or the binary pickle data,</span>
+        <span class="c1"># so check if its a valid filepath too.</span>
+        <span class="n">is_file_path</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="n">is_file_path</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Path to a pickle file</span>
+    <span class="k">if</span> <span class="n">is_file_path</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>  <span class="c1"># skipcq BAN-B301</span>
+
+    <span class="c1"># The actual pickled bytes</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>  <span class="c1"># skipcq BAN-B301</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>  <span class="c1"># skipcq BAN-B301</span>
+
+    <span class="c1"># Encode the pickled data so we can inline it in the DS2 package</span>
+    <span class="n">pkl</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
+
+    <span class="n">code</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;import pickle, base64&#39;</span><span class="p">,</span>
+            <span class="c1"># Replace b&#39; with &quot; before embedding in DS2.</span>
+            <span class="s1">&#39;bytes = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkl</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;obj = pickle.loads(base64.b64decode(bytes))&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_build_pymas</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">input_types</span><span class="p">,</span> <span class="n">array_input</span><span class="p">,</span>
+                        <span class="n">func_prefix</span><span class="o">=</span><span class="s1">&#39;obj.&#39;</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_build_pymas</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_types</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">array_input</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">func_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">return_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_message</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    obj</span>
+<span class="sd">    func_name</span>
+<span class="sd">    input_types</span>
+<span class="sd">    array_input</span>
+<span class="sd">    return_code</span>
+<span class="sd">    return_message</span>
+<span class="sd">    code</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">code</span> <span class="ow">or</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">func_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">func_name</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">parse_function</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">func_name</span><span class="p">):</span>
+        <span class="c1"># If the object passed was a function, no need to search for</span>
+        <span class="c1"># target function</span>
+        <span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">callable</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">func_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">func_name</span><span class="p">):</span>
+            <span class="n">target_func</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="k">elif</span> <span class="n">func_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Parameter `func_name` must be specified.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">target_func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">target_func</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Could not find a valid function named </span><span class="si">%s</span><span class="s2">&quot;</span>
+                               <span class="o">%</span> <span class="n">func_name</span><span class="p">)</span>
+
+        <span class="n">target_func_name</span> <span class="o">=</span> <span class="n">target_func</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="k">if</span> <span class="n">target_func_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;predict_proba&#39;</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="s1">&#39;P_&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Need to create DS2Variable instances to pass to PyMAS</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">input_types</span><span class="p">,</span> <span class="s1">&#39;columns&#39;</span><span class="p">):</span>
+            <span class="c1"># Assuming input is a DataFrame representing model inputs.  Use to</span>
+            <span class="c1"># get input variables</span>
+            <span class="nb">vars</span> <span class="o">=</span> <span class="n">ds2_variables</span><span class="p">(</span><span class="n">input_types</span><span class="p">)</span>
+
+            <span class="c1"># Run one observation through the model and use the result to</span>
+            <span class="c1"># determine output variables</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">target_func</span><span class="p">(</span><span class="n">input_types</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">output_vars</span> <span class="o">=</span> <span class="n">ds2_variables</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+            <span class="nb">vars</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">output_vars</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_types</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">input_types</span><span class="p">)</span>
+                                  <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">target_func</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_varnames</span><span class="p">])</span>
+            <span class="nb">vars</span> <span class="o">=</span> <span class="n">ds2_variables</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_types</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="nb">vars</span> <span class="o">=</span> <span class="n">ds2_variables</span><span class="p">(</span><span class="n">input_types</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Inspect the Python method to determine arguments</span>
+            <span class="nb">vars</span> <span class="o">=</span> <span class="n">ds2_variables</span><span class="p">(</span><span class="n">target_func</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">vars</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span><span class="p">):</span>
+            <span class="nb">vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;result&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">target_func_name</span><span class="p">,</span> <span class="nb">vars</span>
+
+    <span class="c1"># Get variables for each function</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="p">[</span><span class="n">parse_function</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">func_name</span><span class="p">]</span>
+    <span class="n">target_func</span><span class="p">,</span> <span class="n">variables</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">temp</span><span class="p">)</span>
+
+    <span class="c1"># Convert from tuples to lists</span>
+    <span class="n">target_func</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">target_func</span><span class="p">)</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">PyMAS</span><span class="p">(</span><span class="n">target_func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span>
+                 <span class="n">array_input</span><span class="o">=</span><span class="n">array_input</span><span class="p">,</span> <span class="n">func_prefix</span><span class="o">=</span><span class="n">func_prefix</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="PyMAS"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.PyMAS">[docs]</a><span class="k">class</span> <span class="nc">PyMAS</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    target_function : str</span>
+<span class="sd">        The Python function to be executed.</span>
+<span class="sd">    variables : list of DS2Variable</span>
+<span class="sd">        The input/ouput variables be declared in the module.</span>
+<span class="sd">    python_source : str</span>
+<span class="sd">        Additional Python code to be executed during setup.</span>
+<span class="sd">    return_code : bool</span>
+<span class="sd">        Deprecated.</span>
+<span class="sd">        Whether the DS2-generated return code should be included.</span>
+<span class="sd">    return_msg : bool</span>
+<span class="sd">        Deprecated.</span>
+<span class="sd">        Whether the DS2-generated return message should be included.</span>
+<span class="sd">    kwargs : any</span>
+<span class="sd">        Passed to :func:`build_wrapper_function`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">target_function</span><span class="p">,</span>
+                 <span class="n">variables</span><span class="p">,</span>
+                 <span class="n">python_source</span><span class="p">,</span>
+                 <span class="n">return_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">return_msg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">func_prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">return_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">return_msg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">DeprecationWarning</span><span class="p">(</span><span class="s2">&quot;The &#39;return_code&#39; and &#39;return_msg&#39; &quot;</span>
+                                     <span class="s2">&quot;parameters are ignored and will be &quot;</span>
+                                     <span class="s2">&quot;removed completely in a future version&quot;</span><span class="p">)</span>
+
+        <span class="n">func_prefix</span> <span class="o">=</span> <span class="n">func_prefix</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_function</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">target_function</span> <span class="o">=</span> <span class="p">[</span><span class="n">target_function</span><span class="p">]</span>
+            <span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="n">variables</span><span class="p">]</span>
+
+        <span class="n">return_code</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">return_msg</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Replicate parameter for each function to be exposed</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_code</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">return_code</span> <span class="o">=</span> <span class="p">[</span><span class="n">return_code</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_function</span><span class="p">)</span>
+
+        <span class="c1"># Replicate parameter for each function to be exposed</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_msg</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="n">return_msg</span> <span class="o">=</span> <span class="p">[</span><span class="n">return_msg</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_function</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapper</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">wrapper_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">msg</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">target_function</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">return_code</span><span class="p">,</span> <span class="n">return_msg</span><span class="p">):</span>
+            <span class="n">wrapper_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">random_string</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;predict&#39;</span><span class="p">:</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="n">wrap_predict_method</span><span class="p">(</span><span class="n">func_prefix</span> <span class="o">+</span> <span class="n">func</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span>
+                                            <span class="n">setup</span><span class="o">=</span><span class="n">python_source</span><span class="p">,</span>
+                                            <span class="n">name</span><span class="o">=</span><span class="n">wrapper_names</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;predict_proba&#39;</span><span class="p">:</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="n">wrap_predict_proba_method</span><span class="p">(</span><span class="n">func_prefix</span> <span class="o">+</span> <span class="n">func</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span>
+                                                  <span class="n">name</span><span class="o">=</span><span class="n">wrapper_names</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                  <span class="n">setup</span><span class="o">=</span><span class="n">python_source</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="n">build_wrapper_function</span><span class="p">(</span><span class="n">func_prefix</span><span class="o">+</span><span class="n">func</span><span class="p">,</span>
+                                               <span class="nb">vars</span><span class="p">,</span>
+                                               <span class="n">name</span><span class="o">=</span><span class="n">wrapper_names</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                               <span class="n">setup</span><span class="o">=</span><span class="n">python_source</span><span class="p">,</span>
+                                               <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="c1"># Add DS2 variables for returning error codes/messages</span>
+            <span class="c1"># NOTE: add these *after* wrapper function is generated to prevent</span>
+            <span class="c1"># double-counting them.</span>
+            <span class="k">if</span> <span class="n">code</span><span class="p">:</span>
+                <span class="nb">vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;rc&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">msg</span><span class="p">:</span>
+                <span class="nb">vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;msg&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;char&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+            <span class="c1"># Clear setup code once it&#39;s been added once.  No need to duplicate</span>
+            <span class="c1"># if multiple functions are defined.</span>
+            <span class="n">python_source</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">wrapper</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">lines</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># self.return_code = return_code[0]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">return_message</span> <span class="o">=</span> <span class="n">return_msg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">package</span> <span class="o">=</span> <span class="n">DS2PyMASPackage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapper</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">target_function</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">add_method</span><span class="p">(</span><span class="n">func</span><span class="p">,</span>
+                                    <span class="n">wrapper_names</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
+                                    <span class="n">variables</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+<div class="viewcode-block" id="PyMAS.score_code"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.PyMAS.score_code">[docs]</a>    <span class="nd">@versionchanged</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.4&#39;</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Added `dest=&#39;Python&#39;` option&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">score_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;MAS&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generate DS2 score code</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        input_table : str</span>
+<span class="sd">            The name of the table to execute the function against</span>
+<span class="sd">        output_table : str</span>
+<span class="sd">            The name of the table where execution results will be written</span>
+<span class="sd">        columns : list of str</span>
+<span class="sd">            Names of the columns from `table` that will be passed to `func`</span>
+<span class="sd">        dest : str {&#39;MAS&#39;, &#39;EP&#39;, &#39;CAS&#39;, &#39;Python&#39;}</span>
+<span class="sd">            Specifies the publishing destination for the score code to ensure</span>
+<span class="sd">            that compatible code is generated.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Score code</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dest</span> <span class="o">=</span> <span class="n">dest</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+        <span class="c1"># Check for names that could result in DS2 errors.</span>
+        <span class="n">DS2_KEYWORDS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">DS2_KEYWORDS</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">input_table</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">==</span> <span class="n">input_table</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Input table name `</span><span class="si">{}</span><span class="s1">` is a reserved term.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_table</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">output_table</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">==</span> <span class="n">output_table</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Output table name `</span><span class="si">{}</span><span class="s1">` is a reserved term.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_table</span><span class="p">))</span>
+
+        <span class="c1"># Get package code</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">code</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">dest</span> <span class="o">==</span> <span class="s1">&#39;EP&#39;</span><span class="p">:</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;data sasep.out;&#39;</span><span class="p">,</span> <span class="p">)</span> <span class="o">+</span> <span class="n">code</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;   method run();&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;      set SASEP.IN;&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;   end;&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;   method term();&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;   end;&#39;</span><span class="p">,</span>
+                                                   <span class="s1">&#39;enddata;&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">dest</span> <span class="o">==</span> <span class="s1">&#39;CAS&#39;</span><span class="p">:</span>
+            <span class="n">thread</span> <span class="o">=</span> <span class="n">DS2Thread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">,</span>
+                               <span class="n">input_table</span><span class="p">,</span>
+                               <span class="n">column_names</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
+                               <span class="n">return_message</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">return_message</span><span class="p">,</span>
+                               <span class="n">package</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="p">)</span>
+
+            <span class="n">code</span> <span class="o">+=</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">thread</span><span class="p">),</span>
+                     <span class="s1">&#39;data SASEP.out;&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;  dcl thread </span><span class="si">{}</span><span class="s1"> t;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                     <span class="s1">&#39;  method run();&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;    set from t;&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;    output;&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;  end;&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;enddata;&#39;</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">dest</span> <span class="o">==</span> <span class="s1">&#39;PYTHON&#39;</span><span class="p">:</span>
+            <span class="c1"># Python code return</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">_python_code</span>
+
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">sasctl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/sasctl.html">sasctl package</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html">Unreleased</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-6-0-2021-06-29">v1.6.0 (2021-06-29)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-9-2021-06-09">v1.5.9 (2021-06-09)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-8-2021-05-18">v1.5.8 (2021-05-18)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-7-2021-05-04">v1.5.7 (2021-05-04)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-6-2021-04-30">v1.5.6 (2021-04-30)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-5-2021-03-26">v1.5.5 (2021-03-26)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-4-2020-10-29">v1.5.4 (2020-10-29)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-3-2020-06-25">v1.5.3 (2020-06-25)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-2-2020-06-22">v1.5.2 (2020-06-22)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-1-2020-4-9">v1.5.1 (2020-4-9)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-2020-2-23">v1.5 (2020-2-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-6-2020-1-24">v1.4.6 (2020-1-24)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-5-2019-12-5">v1.4.5 (2019-12-5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-4-2019-10-31">v1.4.4 (2019-10-31)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-3-2019-10-28">v1.4.3 (2019-10-28)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-2-2019-10-23">v1.4.2 (2019-10-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-1-2019-10-17">v1.4.1 (2019-10-17)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-2019-10-15">v1.4 (2019-10-15)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-3-2019-10-10">v1.3 (2019-10-10)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-2-5-2019-10-10">v1.2.5 (2019-10-10)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-2-4-2019-9-20">v1.2.4 (2019-9-20)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-2-3-2019-8-23">v1.2.3 (2019-8-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-2-2-2019-8-21">v1.2.2 (2019-8-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-2-1-2019-8-20">v1.2.1 (2019-8-20)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-2-0-2019-8-16">v1.2.0 (2019-8-16)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-1-4-2019-8-16">v1.1.4 (2019-8-16)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-1-3-2019-8-14">v1.1.3 (2019-8-14)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-1-2-2019-8-12">v1.1.2 (2019-8-12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-1-1-2019-8-6">v1.1.1 (2019-8-6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-1-0-2019-8-5">v1.1.0 (2019-8-5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-0-1-2019-07-31">v1.0.1 (2019-07-31)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-0-0-2019-07-24">v1.0.0 (2019-07-24)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v0-9-7-2019-07-18">v0.9.7 (2019-07-18)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v0-9-6-2019-07-15">v0.9.6 (2019-07-15)</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Unreleased &#8212; sasctl 1.6.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="sasctl.utils.pyml2ds package" href="api/sasctl.utils.pyml2ds.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="unreleased">
+<h1>Unreleased<a class="headerlink" href="#unreleased" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="v1-6-0-2021-06-29">
+<h1>v1.6.0 (2021-06-29)<a class="headerlink" href="#v1-6-0-2021-06-29" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p><strong>Improvements</strong>
+- <cite>Session</cite> now supports authorization using OAuth2 tokens.  Use the <cite>token=</cite> parameter in the constructor when
+an existing access token token is known.  Alternatively, omitting the <cite>username=</cite> and <cite>password=</cite> parameters
+will now prompt the user for an auth code.</p>
+</div></blockquote>
+<dl>
+<dt><strong>Changes</strong></dt><dd><ul class="simple">
+<li><p><cite>current_session</cite> now stores &amp; returns the <em>most recently created</em> session, not the first created session.  This</p></li>
+</ul>
+<p>was done to alleviate quirks where an old, expired session is implicitly used instead of a newly-created session.
+- Removed deprecated <cite>raw=</cite> parameter from <cite>sasctl.core.request()</cite>.
+- Dropped support for Python 2.</p>
+</dd>
+</dl>
+</section>
+<section id="v1-5-9-2021-06-09">
+<h1>v1.5.9 (2021-06-09)<a class="headerlink" href="#v1-5-9-2021-06-09" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Fixed an issue that caused score code generation by <cite>pzmm</cite> module to fail with Viya 3.5.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-5-8-2021-05-18">
+<h1>v1.5.8 (2021-05-18)<a class="headerlink" href="#v1-5-8-2021-05-18" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>SSL warnings no longer repeatedly raised when <cite>verify_ssl=False</cite> but <cite>CAS_CLIENT_SSL_CA_LIST</cite> is specified.</p></li>
+<li><p><cite>model_repository.delete_model_contents()</cite> no longer fails when only one file is found.</p></li>
+</ul>
+</dd>
+<dt><strong>Improvements</strong></dt><dd><ul class="simple">
+<li><p>All <cite>delete_*()</cite> service methods return <cite>None</cite> instead of empty string.</p></li>
+<li><p>All <cite>get_*()</cite> service methods issue a warning if multiple items are found when retrieving by name.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-5-7-2021-05-04">
+<h1>v1.5.7 (2021-05-04)<a class="headerlink" href="#v1-5-7-2021-05-04" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Fixed an import issue that could cause an error while using the <cite>pzmm</cite> submodule.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-5-6-2021-04-30">
+<h1>v1.5.6 (2021-04-30)<a class="headerlink" href="#v1-5-6-2021-04-30" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Improvements</strong></dt><dd><ul class="simple">
+<li><p><cite>PagedList</cite> handles situations where the server over-estimates the number of items available for paging.</p></li>
+<li><p>The version of SAS Viya on the server can now be determined using <cite>sasctl.platform_version()</cite>.</p></li>
+</ul>
+</dd>
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Reworked the <cite>model_repository.get_repository()</cite> to prevent HTTP 403 errors that could occur with some Viya environments.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-5-5-2021-03-26">
+<h1>v1.5.5 (2021-03-26)<a class="headerlink" href="#v1-5-5-2021-03-26" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes*</strong></dt><dd><ul class="simple">
+<li><p>Fixed an issue with JSON parsing that caused the <cite>publish_model</cite> task to fail with Viya 4.0.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-5-4-2020-10-29">
+<h1>v1.5.4 (2020-10-29)<a class="headerlink" href="#v1-5-4-2020-10-29" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Improvements</strong></dt><dd><ul class="simple">
+<li><p>Added the <cite>as_swat</cite> method to the <cite>Session</cite> object, allowing connection to CAS through SWAT without an additional authentication step.</p></li>
+</ul>
+</dd>
+<dt><strong>Changes</strong></dt><dd><ul class="simple">
+<li><p>Integrated PZMM into <cite>Session</cite> calls and removed redundant function calls in PZMM.</p></li>
+<li><p>ROC and Lift statistic JSON files created by PZMM are now generated through CAS actionset calls.</p></li>
+<li><p>Updated the PZMM example notebook, <cite>FleetMaintenance.ipynb</cite>, to include integration of PZMM with sasctl functions.</p></li>
+</ul>
+</dd>
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Reworked the <cite>model_repository.get_repository()</cite> to prevent HTTP 403 errors that could occur with some Viya environments.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-5-3-2020-06-25">
+<h1>v1.5.3 (2020-06-25)<a class="headerlink" href="#v1-5-3-2020-06-25" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Added PZMM fitstat JSON file to manifest.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-5-2-2020-06-22">
+<h1>v1.5.2 (2020-06-22)<a class="headerlink" href="#v1-5-2-2020-06-22" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Improvements</strong></dt><dd><ul class="simple">
+<li><p>PZMM module moved from a stand-alone [repository](<a class="reference external" href="https://github.com/sassoftware/open-model-manager-resources/tree/master/addons/picklezip-mm">https://github.com/sassoftware/open-model-manager-resources/tree/master/addons/picklezip-mm</a>) to a sasctl submodule.</p></li>
+<li><p>Introduced deprecation warnings for Python 2 users.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-5-1-2020-4-9">
+<h1>v1.5.1 (2020-4-9)<a class="headerlink" href="#v1-5-1-2020-4-9" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Fixed PyMAS utilities to correctly work functions not bound to pickled objects.</p></li>
+<li><p>Model target variables should no longer appear as an input variable when registering ASTORE models.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-5-2020-2-23">
+<h1>v1.5 (2020-2-23)<a class="headerlink" href="#v1-5-2020-2-23" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Improvements</strong></dt><dd><ul class="simple">
+<li><p>Registered Python models will now include both <cite>predict</cite> and <cite>predict_proba</cite> methods.</p></li>
+<li><p>Added a new Relationships service for managing links between objects.</p></li>
+<li><p>Added a new Reports service for retrieving SAS Visual Analytics reports.</p></li>
+<li><p>Added a new Report_Images service for rendering content from reports.</p></li>
+<li><p>Additional metadata fields are set when registering an ASTORE model.</p></li>
+<li><p>Collections of items should now return an instance of <cite>PagedList</cite> for lazy loading of results.</p></li>
+<li><p>Module steps can now be called using <cite>module.step(df)</cite> where <cite>df</cite> is the row of a DataFrame or Numpy array.</p></li>
+<li><p><cite>register_model</cite> sets additional project properties when registering an ASTORE model.</p></li>
+</ul>
+</dd>
+<dt><strong>Changes</strong></dt><dd><ul class="simple">
+<li><p>Replaced the <cite>raw</cite> parameter of the <cite>request</cite> methods with a <cite>format</cite> parameter, allowing more control over the
+returned value.</p></li>
+<li><p>The <cite>get_file_content</cite> method of the Files service now returns the actual content instead of the file metadata.</p></li>
+<li><p>JSON output when using <cite>sasctl</cite> from the command line is now formatted correctly.</p></li>
+</ul>
+</dd>
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p><cite>model_publish.delete_destination</cite> now works correctly.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-4-6-2020-1-24">
+<h1>v1.4.6 (2020-1-24)<a class="headerlink" href="#v1-4-6-2020-1-24" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Fixed an issue where the <cite>REQUESTS_CA_BUNDLE</cite> environment variable was taking precedence over the <cite>verify_ssl</cite> parameter.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-4-5-2019-12-5">
+<h1>v1.4.5 (2019-12-5)<a class="headerlink" href="#v1-4-5-2019-12-5" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Changes</strong></dt><dd><ul class="simple">
+<li><p>Saving of package information can now be disabled using the <cite>record_packages</cite> parameter of <cite>register_model</cite>.</p></li>
+</ul>
+</dd>
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Added support for uint data types to the <cite>register_model</cite> task.</p></li>
+<li><p>Fixed an issue where long package names caused <cite>register_model</cite> to fail.</p></li>
+<li><p><cite>Session</cite> creation now works with older versions of urllib3.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-4-4-2019-10-31">
+<h1>v1.4.4 (2019-10-31)<a class="headerlink" href="#v1-4-4-2019-10-31" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Match performance definitions based on project instead of model.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-4-3-2019-10-28">
+<h1>v1.4.3 (2019-10-28)<a class="headerlink" href="#v1-4-3-2019-10-28" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Model versioning now works correctly for Python models</p></li>
+<li><p>Fixed an issue where <cite>None</cite> values in Python caused issues with MAS models.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-4-2-2019-10-23">
+<h1>v1.4.2 (2019-10-23)<a class="headerlink" href="#v1-4-2-2019-10-23" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Fixed project properties when registering a model from ASTORE.</p></li>
+<li><p>Fixed model metadata when registering a datastep model.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-4-1-2019-10-17">
+<h1>v1.4.1 (2019-10-17)<a class="headerlink" href="#v1-4-1-2019-10-17" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Fixed an issue where string inputs to Python models were incorrectly handled by DS2.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-4-2019-10-15">
+<h1>v1.4 (2019-10-15)<a class="headerlink" href="#v1-4-2019-10-15" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Changes</strong></dt><dd><ul class="simple">
+<li><p><cite>PyMAS.score_code</cite> now supports a <cite>dest=’Python’</cite> option to retrieve the generated Python wrapper code.</p></li>
+<li><p><cite>register_model</cite> task includes a <cite>python_wrapper.py</cite> file when registering a Python model.</p></li>
+<li><p>Improved error message when user lacks required permissions to register a model.</p></li>
+</ul>
+</dd>
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Fixed an issue with CAS/EP score code that caused problems with model performance metrics.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-3-2019-10-10">
+<h1>v1.3 (2019-10-10)<a class="headerlink" href="#v1-3-2019-10-10" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Improvements</strong></dt><dd><ul class="simple">
+<li><p>Added <cite>update_performance</cite> task for easily uploading performance information for a model.</p></li>
+<li><p>New (experimental) pyml2sas sub-package provides utilities for generating SAS code from Python gradient boosting models.</p></li>
+<li><p>New (experimental) methods for managing workflows added to <cite>model_management</cite> service.</p></li>
+</ul>
+</dd>
+<dt><strong>Changes</strong></dt><dd><ul class="simple">
+<li><p><cite>register_model</cite> task automatically captures installed Python packages.</p></li>
+<li><p>All <cite>list_xxx</cite> methods return all matching items unless a <cite>limit</cite> parameter is specified.</p></li>
+<li><p>Improved API documentation.</p></li>
+<li><p>Updated <cite>full_lifecycle</cite> example with performance monitoring.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-2-5-2019-10-10">
+<h1>v1.2.5 (2019-10-10)<a class="headerlink" href="#v1-2-5-2019-10-10" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Changes</strong></dt><dd><ul class="simple">
+<li><p>Registering an ASTORE model now creates an empty ASTORE file in Model Manager to be consistent with Model Studio behavior.</p></li>
+</ul>
+</dd>
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p><cite>microanalytic_score.define_steps</cite> now works with steps having no input parameters.</p></li>
+<li><p>Fixed an issue where score code generated from an ASTORE model lacked output variables.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-2-4-2019-9-20">
+<h1>v1.2.4 (2019-9-20)<a class="headerlink" href="#v1-2-4-2019-9-20" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p><cite>model_repository.get_model_contents</cite> no longer raises an HTTP 406 error.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-2-3-2019-8-23">
+<h1>v1.2.3 (2019-8-23)<a class="headerlink" href="#v1-2-3-2019-8-23" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Changes</strong></dt><dd><ul class="simple">
+<li><p><cite>put</cite> request will take an <cite>item</cite> parameter that’s used to automatically populate headers for updates.</p></li>
+</ul>
+</dd>
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Convert NaN values to null (None) when calling <cite>microanalytic_score.execute_module_step</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-2-2-2019-8-21">
+<h1>v1.2.2 (2019-8-21)<a class="headerlink" href="#v1-2-2-2019-8-21" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p><cite>register_model</cite> task should now correctly identify columns when registering a Sci-kit pipeline.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-2-1-2019-8-20">
+<h1>v1.2.1 (2019-8-20)<a class="headerlink" href="#v1-2-1-2019-8-20" title="Permalink to this headline">¶</a></h1>
+<dl>
+<dt><strong>Improvements</strong></dt><dd><ul class="simple">
+<li><p>Added the ability for <cite>register_model</cite> to correctly handle CAS tables containing data step</p></li>
+</ul>
+<p>score code.</p>
+</dd>
+</dl>
+</section>
+<section id="v1-2-0-2019-8-16">
+<h1>v1.2.0 (2019-8-16)<a class="headerlink" href="#v1-2-0-2019-8-16" title="Permalink to this headline">¶</a></h1>
+<p><strong>Improvements</strong>
+- Added <cite>create_model_version</cite> and <cite>list_model_versions</cite> to <cite>model_repository</cite>
+- Added an explicit <cite>ValueError</cite> when attempting to register an ASTORE that can’t be downloaded.
+- Added <cite>start</cite> and <cite>limit</cite> pagination parameters to all default <cite>list_*</cite> service methods.
+- Added <cite>create_destination</cite>, <cite>create_cas_destination</cite> and <cite>create_mas_destination</cite> methods for <cite>model_publish</cite> service.</p>
+<p><strong>Changes</strong>
+- <cite>Session.add_stderr_logger</cite> default logging level changed to <cite>DEBUG</cite>.</p>
+<p><strong>Bugfixes</strong>
+- Fixed an issue where <cite>model_repository</cite> did not find models, projects, or repositories by name once pagination limits were reached.</p>
+</section>
+<section id="v1-1-4-2019-8-16">
+<h1>v1.1.4 (2019-8-16)<a class="headerlink" href="#v1-1-4-2019-8-16" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>The <cite>register_model</cite> task now generates dmcas_epscorecode.sas files for ASTORE models.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-1-3-2019-8-14">
+<h1>v1.1.3 (2019-8-14)<a class="headerlink" href="#v1-1-3-2019-8-14" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Fixed problem causing <cite>register_model</cite> task to include output variables in the input variables list.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-1-2-2019-8-12">
+<h1>v1.1.2 (2019-8-12)<a class="headerlink" href="#v1-1-2-2019-8-12" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Improvements</strong></dt><dd><ul class="simple">
+<li><p>CAS model table automatically reloaded on <cite>publish_model</cite> task.</p></li>
+</ul>
+</dd>
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>Fixed DS2 score code for CAS that was generated when registering a Python model.</p></li>
+<li><p><cite>PyMAS.score_code(dest=’ESP’)</cite> corrected to <cite>dest=’EP’</cite></p></li>
+<li><p>Fixed an issue where long user-defined properties prevented model registration.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-1-1-2019-8-6">
+<h1>v1.1.1 (2019-8-6)<a class="headerlink" href="#v1-1-1-2019-8-6" title="Permalink to this headline">¶</a></h1>
+<p><strong>Bugfixes</strong>
+- Fixed an issue where usernames were not parsed correctly from .authinfo files, resulting in failed logins.</p>
+</section>
+<section id="v1-1-0-2019-8-5">
+<h1>v1.1.0 (2019-8-5)<a class="headerlink" href="#v1-1-0-2019-8-5" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p><strong>Improvements</strong></p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Added <cite>update_module</cite> and <cite>delete_module</cite> methods to MAS service.</p></li>
+</ul>
+<p><strong>Changed</strong>
+- Added <cite>replace</cite> parameter to <cite>sasctl.tasks.publish_model</cite>
+- <cite>Session</cite> hostname’s can now be specified in HTTP format: ‘<a class="reference external" href="http://example.com">http://example.com</a>’.</p>
+<p><strong>Bugfixes</strong>
+- Renamed <cite>microanalytic_store</cite> service to <cite>microanalytic_score</cite></p>
+</section>
+<section id="v1-0-1-2019-07-31">
+<h1>v1.0.1 (2019-07-31)<a class="headerlink" href="#v1-0-1-2019-07-31" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Changed</strong></dt><dd><ul class="simple">
+<li><p>Exceptions moved from <cite>sasctl.core</cite> to <cite>sasctl.exceptions</cite></p></li>
+<li><p><cite>SWATCASActionError</cite> raised if ASTORE cannot be saved during model registration.</p></li>
+<li><p>Improved handling of MAS calls made via <cite>define_steps()</cite></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v1-0-0-2019-07-24">
+<h1>v1.0.0 (2019-07-24)<a class="headerlink" href="#v1-0-0-2019-07-24" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p><strong>Changed</strong>
+- services are now classes instead of modules.</p>
+<blockquote>
+<div><p>Imports of services in the format <cite>import sasctl.services.model_management as mm</cite> must be
+changed to <cite>from sasctl.services import model_management as mm</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><cite>host</cite> and <cite>user</cite> parameters of <cite>Session</cite> renamed to <cite>hostname</cite> and <cite>username</cite> to align with SWAT.</p></li>
+<li><p>Only <cite>InsecureRequestWarning</cite> is suppred instead of all <cite>HTTPWarning</cite></p></li>
+</ul>
+<p><strong>Improvements</strong>
+- Added <cite>copy_analytic_store</cite> method to <cite>model_repository</cite> service
+- <cite>AuthenticationError</cite> returned instead of <cite>HTTPError</cite> if session authentication fails.</p>
+</div></blockquote>
+</section>
+<section id="v0-9-7-2019-07-18">
+<h1>v0.9.7 (2019-07-18)<a class="headerlink" href="#v0-9-7-2019-07-18" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt><strong>Improvements</strong></dt><dd><ul class="simple">
+<li><p>public_model task also defines methods mapped to MAS module steps when publishing to MAS.</p></li>
+<li><p>SSL verification can be disable with <cite>SSLREQCERT</cite> environment variable.</p></li>
+<li><p>CAs to use for validating SSL certificates can also be specified through the <cite>SSLCALISTLOC</cite> environment variable.</p></li>
+<li><p>Added <cite>execute_performance_task</cite></p></li>
+</ul>
+</dd>
+<dt><strong>Changes</strong></dt><dd><ul class="simple">
+<li><p>Updated method signature for <cite>create_performance_definition</cite> in Model Manager.</p></li>
+</ul>
+</dd>
+<dt><strong>Bugfixes</strong></dt><dd><ul class="simple">
+<li><p>register_model task no longer adds <cite>rc</cite> and <cite>msg</cite> variables from MAS to the project variables.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="v0-9-6-2019-07-15">
+<h1>v0.9.6 (2019-07-15)<a class="headerlink" href="#v0-9-6-2019-07-15" title="Permalink to this headline">¶</a></h1>
+<p>Initial public release.</p>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">sasctl</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/sasctl.html">sasctl package</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Unreleased</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-6-0-2021-06-29">v1.6.0 (2021-06-29)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-5-9-2021-06-09">v1.5.9 (2021-06-09)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-5-8-2021-05-18">v1.5.8 (2021-05-18)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-5-7-2021-05-04">v1.5.7 (2021-05-04)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-5-6-2021-04-30">v1.5.6 (2021-04-30)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-5-5-2021-03-26">v1.5.5 (2021-03-26)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-5-4-2020-10-29">v1.5.4 (2020-10-29)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-5-3-2020-06-25">v1.5.3 (2020-06-25)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-5-2-2020-06-22">v1.5.2 (2020-06-22)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-5-1-2020-4-9">v1.5.1 (2020-4-9)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-5-2020-2-23">v1.5 (2020-2-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-4-6-2020-1-24">v1.4.6 (2020-1-24)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-4-5-2019-12-5">v1.4.5 (2019-12-5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-4-4-2019-10-31">v1.4.4 (2019-10-31)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-4-3-2019-10-28">v1.4.3 (2019-10-28)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-4-2-2019-10-23">v1.4.2 (2019-10-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-4-1-2019-10-17">v1.4.1 (2019-10-17)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-4-2019-10-15">v1.4 (2019-10-15)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-3-2019-10-10">v1.3 (2019-10-10)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-2-5-2019-10-10">v1.2.5 (2019-10-10)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-2-4-2019-9-20">v1.2.4 (2019-9-20)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-2-3-2019-8-23">v1.2.3 (2019-8-23)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-2-2-2019-8-21">v1.2.2 (2019-8-21)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-2-1-2019-8-20">v1.2.1 (2019-8-20)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-2-0-2019-8-16">v1.2.0 (2019-8-16)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-1-4-2019-8-16">v1.1.4 (2019-8-16)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-1-3-2019-8-14">v1.1.3 (2019-8-14)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-1-2-2019-8-12">v1.1.2 (2019-8-12)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-1-1-2019-8-6">v1.1.1 (2019-8-6)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-1-0-2019-8-5">v1.1.0 (2019-8-5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-0-1-2019-07-31">v1.0.1 (2019-07-31)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v1-0-0-2019-07-24">v1.0.0 (2019-07-24)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v0-9-7-2019-07-18">v0.9.7 (2019-07-18)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#v0-9-6-2019-07-15">v0.9.6 (2019-07-15)</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="api/sasctl.utils.pyml2ds.html" title="previous chapter">sasctl.utils.pyml2ds package</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/releases.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
