@@ -40,7 +40,7 @@ matrix:
 
     - stage: create release
       python: 3.6
-      install: pip install sphinx
+      install: pip install sphinx pyyaml
       script:
       - sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
       - pushd ./doc/_build/html ; zip -r ../../../${TRAVIS_TAG}-doc.zip . ; popd
