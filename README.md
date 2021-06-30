@@ -23,12 +23,12 @@
 # Table of Contents
 1. [Overview](#overview)
 2. [Prerequisites](#prerequisites)
-3. [Installation](#nstallation)
+3. [Installation](#installation)
 4. [Getting Started](#getting-started)
 5. [Examples](#examples)
 6. [Contributing](#contributing)
 7. [License](#license)
-8. [Additional Resources](additional-resources)
+8. [Additional Resources](#additional-resources)
 
 
 ## Overview
