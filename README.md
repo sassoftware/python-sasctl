@@ -10,7 +10,7 @@
   </a>
         
   <a href="https://www.python.org/">
-    <img src="https://img.shields.io/badge/Python-2.7%20%7C%203.4%2B-blue.svg" alt="Python Version">
+    <img src="https://img.shields.io/badge/Python-3.5%2B-blue.svg" alt="Python Version">
   </a>
 
    <img src="https://travis-ci.com/sassoftware/python-sasctl.svg?branch=master">
@@ -19,6 +19,17 @@
 
 
 ###### Full documentation:  https://sassoftware.github.io/python-sasctl
+
+# Table of Contents
+1. [Overview](#overview)
+2. [Prerequisites](#prerequisites)
+3. [Installation](#nstallation)
+4. [Getting Started](#getting-started)
+5. [Examples](#examples)
+6. [Contributing](#contributing)
+7. [License](#license)
+8. [Additional Resources](additional-resources)
+
 
 ## Overview
 

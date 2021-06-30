@@ -6,15 +6,13 @@ v1.6.0 (2021-06-29)
 -------------------
  **Improvements**
  - `Session` now supports authorization using OAuth2 tokens.  Use the `token=` parameter in the constructor when 
- an existing access token token is known.  Alternatively, ommitting the `username=` and `password=` parameters
+ an existing access token token is known.  Alternatively, omitting the `username=` and `password=` parameters
  will now prompt the user for an auth code.
  
 **Changes**
  - `current_session` now stores & returns the *most recently created* session, not the first created session.  This
  was done to alleviate quirks where an old, expired session is implicitly used instead of a newly-created session.
- 
  - Removed deprecated `raw=` parameter from `sasctl.core.request()`.
- 
  - Dropped support for Python 2.
  
  
