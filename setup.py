@@ -41,15 +41,14 @@ setup(
     include_package_data=True,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    python_requires='>=2.7',
+    python_requires='>=3.5',
     install_requires=[
         'pandas',
         'scikit-learn',
         'requests',
         'six >= 1.11',
         'pyyaml',
-        'packaging',
-        'futures ; python_version <= "2.7"'
+        'packaging'
     ],
     extras_require={
         'swat': ['swat'],
