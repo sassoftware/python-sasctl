@@ -16,7 +16,7 @@ class ScoreCode():
                        metrics=['EM_EVENTPROBABILITY', 'EM_CLASSIFICATION'],
                        pyPath=Path.cwd(), threshPrediction=None,
                        otherVariable=False, model=None, isH2OModel=False, missingValues=False,
-                       scoreCAS=True):
+                       scoreCAS=True, isBinaryModel=False):
         '''
         Writes a Python score code file based on training data used to generate the model 
         pickle file. The Python file is included in the ZIP file that is imported or registered 
@@ -77,12 +77,14 @@ class ScoreCode():
             Sets whether the model is an H2O.ai Python model. By default False.
         missingValues : boolean, optional
             Sets whether data used for scoring needs to go through imputation for
-            missing values before passed to the model. By default false.
+            missing values before passed to the model. By default False.
         scoreCAS : boolean, optional
     		Sets whether models registered to SAS Viya 3.5 should be able to be scored and
             validated through both CAS and SAS Micro Analytic Service. By default true. If
             set to false, then the model will only be able to be scored and validated through
-            SAS Micro Analytic Service. By default true.
+            SAS Micro Analytic Service. By default True.
+        isBinaryModel : boolean, optional
+            Sets whether the H2O model provided is a binary model or a MOJO model. By default False.
 
     	Yields
     	------
@@ -159,7 +161,7 @@ global _thisModelFit''')
 h2o.init()''')
 
             # For each case of SAS Viya version and H2O model or not, load the model file as variable _thisModelFit
-            if isViya35 and isH2OModel:
+            if (isViya35 and isH2OModel and not isBinaryModel):
                 cls.pyFile.write('''\n
 with gzip.open('/models/resources/viya/{modelID}/{modelFileName}', 'r') as fileIn, open('/models/resources/viya/{modelID}/{modelZipFileName}', 'wb') as fileOut:
     shutil.copyfileobj(fileIn, fileOut)
@@ -173,11 +175,17 @@ _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelZipFileN
                 cls.pyFile.write('''\n
 with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
     _thisModelFit = pickle.load(_pfile)'''.format(modelID=modelID, modelFileName=modelFileName))
+            elif isViya35 and isBinaryModel:
+                cls.pyFile.write('''\n
+_thisModelFit = h2o.load_model('/models/resources/viya/{modelID}/{modelFileName}')'''.format(modelID=modelID, modelFileName=modelFileName))
             elif not isViya35 and not isH2OModel:
                 cls.pyFile.write('''\n
 with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
     _thisModelFit = pickle.load(_pFile)'''.format(modelFileName=modelFileName))
-            elif not isViya35 and isH2OModel:
+            elif not isViya35 and isBinaryModel:
+                cls.pyFile.write('''\n
+_thisModelFit = h2o.load_model(settings.pickle_path + '{}')'''.format(modelFileName=modelFileName))
+            elif not isViya35 and isH2OModel and not isBinaryModel:
                 cls.pyFile.write('''\n
 with gzip.open(settings.pickle_path + '{modelFileName}', 'r') as fileIn, open(settings.pickle_path + '{modelZipFileName}', 'wb') as fileOut:
     shutil.copyfileobj(fileIn, fileOut)
@@ -199,12 +207,13 @@ def score{modelPrefix}({inputVarList}):
                 cls.pyFile.write('''
         with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
             _thisModelFit = pickle.load(_pFile)'''.format(modelID=modelID, modelFileName=modelFileName))
-            elif isViya35 and isH2OModel:
+            elif isViya35 and isH2OModel and not isBinaryModel:
                 cls.pyFile.write('''
         _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelZipFileName}')
-        '''.format(modelID=modelID,
-                   modelZipFileName=modelFileName[:-4] + 'zip'))
-
+        '''.format(modelID=modelID, modelZipFileName=modelFileName[:-4] + 'zip'))
+            elif isViya35 and isBinaryModel:
+                cls.pyFile.write('''
+        _thisModelFit = h2o.load_model('/models/resources/viya/{modelID}/{modelFileName}')'''.format(modelID=modelID, modelFileName=modelFileName))
             elif not isViya35 and not isH2OModel:
                 cls.pyFile.write('''
         with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
@@ -212,7 +221,10 @@ def score{modelPrefix}({inputVarList}):
             elif not isViya35 and isH2OModel:
                 cls.pyFile.write('''
         _thisModelFit = h2o.import_mojo(settings.pickle_path + '{}')'''.format(modelFileName[:-4] + 'zip'))
-            
+            elif not isViya35 and isBinaryModel:
+                                cls.pyFile.write('''\n
+        _thisModelFit = h2o.load_model(settings.pickle_path + '{}')'''.format(modelFileName=modelFileName))
+
             if missingValues:
                 # For each input variable, impute for missing values based on variable dtype
                 for i, dTypes in enumerate(inputDtypesList):

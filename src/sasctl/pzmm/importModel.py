@@ -71,22 +71,44 @@ class ImportModel():
             The zip archive of the relevant model files. In Viya 3.5 the Python score
             code is not present in this initial zip file.
         '''
+        noScoreCode = False
+        binaryModel = False
         if pyPath is None:
             pyPath = Path(zPath)
         else:
             pyPath = Path(pyPath)
+            
+        def getFiles(extensions):
+            allFiles = []
+            for ext in extensions:
+                allFiles.extend(pyPath.glob(ext))
+            return allFiles
+            
         if modelFileName is None:
             if isH2OModel:
+                binaryOrMOJO = getFiles(['*.mojo', '*.pickle'])
+                if len(binaryOrMOJO) == 0:
+                    print('WARNING: An H2O model file was not found at {}. Score code will not be automatically generated.'.format(str(pyPath)))
+                    noScoreCode = True
+                elif len(binaryOrMOJO) == 1:
+                    if str(binaryOrMOJO[0]).endswith('.pickle'):
+                        binaryModel = True
+                else:
+                    print('WARNING: Both a MOJO and binary model file are present at {}. Score code will not be automatically generated.'.format(str(pyPath)))
+                    noScoreCode = True
                 modelFileName = modelPrefix + '.mojo'
             else:
                 modelFileName = modelPrefix + '.pickle'
                 
         isViya35 = (platform_version() == '3.5')
         if not isViya35:
-            sc.writeScoreCode(inputDF, targetDF, modelPrefix, predictmethod, modelFileName,
-                              metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction, 
-                              otherVariable=otherVariable, isH2OModel=isH2OModel)
-            print('Model score code was written successfully to {}.'.format(Path(pyPath) / (modelPrefix + 'Score.py')))
+            if noScoreCode:
+                print('No score code was generated.')
+            else:
+                sc.writeScoreCode(inputDF, targetDF, modelPrefix, predictmethod, modelFileName,
+                                  metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction, 
+                                  otherVariable=otherVariable, isH2OModel=isH2OModel, isBinaryModel=binaryModel)
+                print('Model score code was written successfully to {}.'.format(Path(pyPath) / (modelPrefix + 'Score.py')))
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
             print('All model files were zipped to {}.'.format(Path(zPath)))
             response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
@@ -102,8 +124,11 @@ class ImportModel():
                 print('Model was successfully imported into SAS Model Manager as {} with UUID: {}.'.format(response.name, response.id))
             except AttributeError:
                 print('Model failed to import to SAS Model Manager.')
-            sc.writeScoreCode(inputDF, targetDF, modelPrefix, predictmethod, modelFileName,
-                              metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction, 
-                              otherVariable=otherVariable, model=response.id,
-                              isH2OModel=isH2OModel)
-            print('Model score code was written successfully to {} and uploaded to SAS Model Manager'.format(Path(pyPath) / (modelPrefix + 'Score.py')))
+            if noScoreCode:
+                print('No score code was generated.')
+            else:
+                sc.writeScoreCode(inputDF, targetDF, modelPrefix, predictmethod, modelFileName,
+                                  metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction,
+                                  otherVariable=otherVariable, model=response.id,
+                                  isH2OModel=isH2OModel, isBinaryModel=binaryModel)
+                print('Model score code was written successfully to {} and uploaded to SAS Model Manager'.format(Path(pyPath) / (modelPrefix + 'Score.py')))
