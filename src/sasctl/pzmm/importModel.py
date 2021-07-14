@@ -83,7 +83,7 @@ class ImportModel():
             for ext in extensions:
                 allFiles.extend(pyPath.glob(ext))
             return allFiles
-            
+        import pdb; pdb.set_trace()
         if modelFileName is None:
             if isH2OModel:
                 binaryOrMOJO = getFiles(['*.mojo', '*.pickle'])
@@ -93,10 +93,12 @@ class ImportModel():
                 elif len(binaryOrMOJO) == 1:
                     if str(binaryOrMOJO[0]).endswith('.pickle'):
                         binaryModel = True
+                        modelFileName = modelPrefix + '.pickle'
+                    else:
+                        modelFileName = modelPrefix + '.mojo'
                 else:
                     print('WARNING: Both a MOJO and binary model file are present at {}. Score code will not be automatically generated.'.format(str(pyPath)))
                     noScoreCode = True
-                modelFileName = modelPrefix + '.mojo'
             else:
                 modelFileName = modelPrefix + '.pickle'
                 
