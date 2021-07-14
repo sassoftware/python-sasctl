@@ -41,16 +41,17 @@ class PickleModel():
             Archived H2O.ai MOJO file containing a trained model.
         '''
         
+        # For non-H2O models, pickle the model object
         if not isH2OModel:
             with open(Path(pPath) / (modelPrefix + '.pickle'), 'wb') as pFile:
                 pickle.dump(trainedModel, pFile)
-            print('Model {} was successfully pickled and saved to {}.'.format(modelPrefix,
-                                                                              Path(pPath) / (modelPrefix + '.pickle')))
+            print('Model {} was successfully pickled and saved to {}.'.format(modelPrefix, Path(pPath) / (modelPrefix + '.pickle')))
+        # For H2O models that are binary files, rename the binary file as a pickle file
         elif isBinaryModel:
             binaryFile = Path(pPath) / modelPrefix
             binaryFile.rename(binaryFile.with_suffix('.pickle'))
+        # For H2O models in the MOJO format, gzip the model file and rename it with a .MOJO extension
         else:
             with open(Path(trainedModel), 'rb') as fileIn, gzip.open(Path(pPath) / (modelPrefix + '.mojo'), 'wb') as fileOut:
                 fileOut.writelines(fileIn)
-            print('MOJO model {} was successfully gzipped and saved to {}.'.format(modelPrefix,
-                                                                                   Path(pPath) / (modelPrefix + '.mojo')))
+            print('MOJO model {} was successfully gzipped and saved to {}.'.format(modelPrefix, Path(pPath) / (modelPrefix + '.mojo')))

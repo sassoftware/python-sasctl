@@ -71,19 +71,23 @@ class ImportModel():
             The zip archive of the relevant model files. In Viya 3.5 the Python score
             code is not present in this initial zip file.
         '''
+        # Initialize no score code or binary H2O model flags
         noScoreCode = False
         binaryModel = False
+    
         if pyPath is None:
             pyPath = Path(zPath)
         else:
             pyPath = Path(pyPath)
             
+        # Function to check for MOJO or binary model files in H2O models
         def getFiles(extensions):
             allFiles = []
             for ext in extensions:
                 allFiles.extend(pyPath.glob(ext))
             return allFiles
-        import pdb; pdb.set_trace()
+        
+        # If the model file name is not provided, set a default value depending on H2O and binary model status
         if modelFileName is None:
             if isH2OModel:
                 binaryOrMOJO = getFiles(['*.mojo', '*.pickle'])
@@ -102,7 +106,9 @@ class ImportModel():
             else:
                 modelFileName = modelPrefix + '.pickle'
                 
+        # Check the SAS Viya version number being used
         isViya35 = (platform_version() == '3.5')
+        # For SAS Viya 4, the score code can be written beforehand and imported with all of the model files
         if not isViya35:
             if noScoreCode:
                 print('No score code was generated.')
@@ -118,6 +124,7 @@ class ImportModel():
                 print('Model was successfully imported into SAS Model Manager as {} with UUID: {}.'.format(response.name, response.id))
             except AttributeError:
                 print('Model failed to import to SAS Model Manager.')
+        # For SAS Viya 3.5, the score code is written after upload in order to know the model UUID
         else:
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
             print('All model files were zipped to {}.'.format(Path(zPath)))
