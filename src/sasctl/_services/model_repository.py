@@ -620,7 +620,7 @@ class ModelRepository(Service):
             except ValueError:
                 repo = cls.default_repository().get('id')
                 project = cls.create_project(project, repo)
-                print('A new project named {} was created.'.format(project.id))
+                print('A new project named {} was created.'.format(project.name))
         else:
             project = projectResponse
 
