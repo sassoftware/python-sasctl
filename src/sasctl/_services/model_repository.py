@@ -613,10 +613,10 @@ class ModelRepository(Service):
         # Check if a project exists with the provided name, if not create a new project
         if projectResponse is None:
             try:
-                print('WARNING: No project with the name {} was found.'.format(project))
+                print('WARNING: No project with the name or UUID {} was found.'.format(project))
                 UUID(project)
-                raise OSError('The provided UUID does not match any projects found in SAS Model Manager. ' + 
-                              'Please enter a valid UUID or a new name for a project to be created.')
+                raise SystemError('The provided UUID does not match any projects found in SAS Model Manager. ' +
+                                  'Please enter a valid UUID or a new name for a project to be created.')
             except ValueError:
                 repo = cls.default_repository().get('id')
                 project = cls.create_project(project, repo)
