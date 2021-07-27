@@ -799,8 +799,10 @@ class ModelRepository(Service):
         """
         if cls.is_uuid(model):
             id_ = model
+            model = cls.get_model(model)
         elif isinstance(model, dict) and 'id' in model:
             id_ = model['id']
+            model = cls.get_model(model)
         else:
             model = cls.get_model(model)
             id_ = model['id']
