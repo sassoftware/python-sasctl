@@ -177,7 +177,7 @@ _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelZipFileN
             elif isViya35 and not isH2OModel:
                 cls.pyFile.write('''\n
 with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
-    _thisModelFit = pickle.load(_pfile)'''.format(modelID=modelID, modelFileName=modelFileName))
+    _thisModelFit = pickle.load(_pFile)'''.format(modelID=modelID, modelFileName=modelFileName))
             elif not isViya35 and not isH2OModel:
                 cls.pyFile.write('''\n
 with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
