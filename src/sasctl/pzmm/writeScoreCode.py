@@ -16,7 +16,7 @@ class ScoreCode():
                        metrics=['EM_EVENTPROBABILITY', 'EM_CLASSIFICATION'],
                        pyPath=Path.cwd(), threshPrediction=None,
                        otherVariable=False, model=None, isH2OModel=False, missingValues=False,
-                       scoreCAS=True, isBinaryModel=False):
+                       scoreCAS=True, isBinaryModel=False, binaryString=None):
         '''
         Writes a Python score code file based on training data used to generate the model 
         pickle file. The Python file is included in the ZIP file that is imported or registered 
@@ -85,6 +85,8 @@ class ScoreCode():
             SAS Micro Analytic Service. By default True.
         isBinaryModel : boolean, optional
             Sets whether the H2O model provided is a binary model or a MOJO model. By default False.
+        binaryString : string, optional
+            Binary string representation of the model object. By default None.
 
     	Yields
     	------
@@ -95,6 +97,11 @@ class ScoreCode():
         'dmcas_packagescorecode.sas' (for SAS Viya 3.5 models)
             Python score code wrapped in DS2 and prepared for SAS Microanalyic Service scoring or publishing.
         '''       
+        # Check if binary string model
+        if binaryString is not None:
+            isBinaryString = True
+        else:
+            isBinaryString = False
         # Call REST API to check SAS Viya version
         isViya35 = (platform_version() == '3.5')
         
@@ -140,6 +147,10 @@ class ScoreCode():
                 cls.pyFile.write('''\
 import h2o
 import gzip, shutil, os''')
+            # For binary string models, include the necessary packages
+            if isBinaryString:
+                cls.pyFile.write('''\
+import codecs''')
             # Import math for imputation; pickle for serialized models; pandas for data management; numpy for computation    
             cls.pyFile.write('''\n
 import math
@@ -161,7 +172,11 @@ global _thisModelFit''')
 h2o.init()''')
 
             # For each case of SAS Viya version and H2O model or not, load the model file as variable _thisModelFit
-            if (isViya35 and isH2OModel and not isBinaryModel):
+            if isBinaryString:
+                cls.pyFile.write('''\n
+binaryString = '{binaryString}'
+_thisModelFit = pickle.loads(codecs.decode(pickled.encode(), 'base64'))''').format(binaryString=binaryString)
+            elif (isViya35 and isH2OModel and not isBinaryModel):
                 cls.pyFile.write('''\n
 with gzip.open('/models/resources/viya/{modelID}/{modelFileName}', 'r') as fileIn, open('/models/resources/viya/{modelID}/{modelZipFileName}', 'wb') as fileOut:
     shutil.copyfileobj(fileIn, fileOut)
