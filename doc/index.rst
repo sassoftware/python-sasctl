@@ -4,8 +4,11 @@ sasctl
 
 Version |version|
 
-.. contents::
-    :local:
+.. toctree::
+    :maxdepth: 3
+    :hidden:
+
+    index
 
 Introduction
 ------------
@@ -546,12 +549,4 @@ such as '27' or '36'.
 For additional information on configuring and using Tox, see the official :doc:`documentation <tox:index>` or Sean Hammond's excellent `tutorial`_.
 
 .. _`tutorial`: https://seanh.cc/post/tox-tutorial/
-
-
-Release History
----------------
-
-.. toctree::
-
-   releases
 
