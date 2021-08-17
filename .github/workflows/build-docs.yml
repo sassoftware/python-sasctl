@@ -23,12 +23,12 @@ jobs:
         uses: ammaraskar/sphinx-problem-matcher@master
 
       - name: Build documentation
-        run: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
+        run: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./docs ./docs/_build/html
 
       - name: Debug
         run: |
           pwd
-          ls -lah ./doc
+          ls -lah ./docs
           ls -lah .
 
 #      - name: Deploy to GitHub Pages
