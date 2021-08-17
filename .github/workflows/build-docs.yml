@@ -1,0 +1,44 @@
+name: "Publish Documentation"
+on: workflow_dispatch
+jobs:
+  gh-pages:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
+
+      - name: Setup environment
+        run: |
+          mv doc docs
+          sudo apt-get install build-essential
+          pip install sphinx six
+
+      - name: Check documentation
+        uses: ammaraskar/sphinx-problem-matcher@master
+        run: |
+          cd docs
+          make html
+
+      - name: Build documentation
+        run: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
+
+      - name: Debug
+        run: |
+          pwd
+          ls -lah ./doc
+          ls -lah .
+
+#      - name: Deploy to GitHub Pages
+#        if: success()
+#        uses: crazy-max/ghaction-github-pages@v2
+#        with:
+#          target_branch: gh-pages
+#          build_dir: doc/_build/_html
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
