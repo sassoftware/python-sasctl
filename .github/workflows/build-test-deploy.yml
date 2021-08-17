@@ -53,8 +53,44 @@ jobs:
           codecov
 
 
+
+
+  gh-pages:
+    name: "Build Documentation"
+    runs-on: ubuntu-latest
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/') # run only on tagged commits
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
+
+      - name: Setup environment
+        run: |
+          mv doc docs
+          sudo apt-get install build-essential
+          pip install sphinx six
+
+      - name: Check documentation
+        uses: ammaraskar/sphinx-problem-matcher@master
+
+      - name: Build documentation
+        run: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./docs ./docs/_build/html
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: html-docs
+          path: ./docs/_build/html
+
+
   build:
-    name: "Build"
+    name: "Build Package"
     runs-on: ubuntu-latest
     needs: test
     if: startsWith(github.ref, 'refs/tags/') # run only on tagged commits
@@ -65,17 +101,40 @@ jobs:
 
       - name: Setup Python
         uses: actions/setup-python@v2
-#        with:
-#          python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install setuptools wheel twine
 
+      - name: Build Package
+        run: |
+          python setup.py sdist bdist_wheel
+
+
+  publish:
+    name: "Publish"
+    runs-on: ubuntu-latest
+    needs: [gh-pages, build]
+    steps:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           draft: true
           body: "Test Release"
 
+#      - name: Publish to PyPI
+#        uses: pypa/gh-action-pypi-publish@release/v1
+#        with:
+#          user: __token__
+#          password: ${{ secrets.PYPI_API_TOKEN }}
+#          verbose: true
+
+#      - name: Deploy to GitHub Pages
+#        if: success()
+#        uses: crazy-max/ghaction-github-pages@v2
+#        with:
+#          target_branch: gh-pages
+#          build_dir: ./docs/_build/_html
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
