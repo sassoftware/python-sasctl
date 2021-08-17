@@ -52,8 +52,6 @@ jobs:
           codecov
 
 
-
-
   gh-pages:
     name: "Build Documentation"
     runs-on: ubuntu-latest
@@ -127,6 +125,20 @@ jobs:
           draft: true
           body: "Test Release"
 
+      - name: Download a Documentation
+        uses: actions/download-artifact@v2
+        with:
+          name: html-docs
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
+#      - name: Upload Documentation
+#        uses: crazy-max/ghaction-github-pages@v2
+#        with:
+#          target_branch: gh-pages
+#          build_dir: ./docs/_build/_html
+
 #      - name: Publish to PyPI
 #        uses: pypa/gh-action-pypi-publish@release/v1
 #        with:
@@ -134,11 +146,3 @@ jobs:
 #          password: ${{ secrets.PYPI_API_TOKEN }}
 #          verbose: true
 
-#      - name: Deploy to GitHub Pages
-#        if: success()
-#        uses: crazy-max/ghaction-github-pages@v2
-#        with:
-#          target_branch: gh-pages
-#          build_dir: ./docs/_build/_html
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
