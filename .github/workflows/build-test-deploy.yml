@@ -17,12 +17,13 @@ jobs:
 
   test:
     name: "Test"
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os-version }}
     env:
       LANG: en_US.UTF-8
     strategy:
       matrix:
         python-version: [3.5, 3.6, 3.7, 3.8, 3.9]
+        os-version: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - name: Checkout repository
@@ -33,19 +34,17 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
+      - name: Install dependencies (Ubuntu)
+        if: matrix.os-version == 'ubuntu-latest'
         run: |
-          # Setup tox
           sudo apt-get update
           sudo apt-get install build-essential libkrb5-dev
+
+      - name: Install dependencies (Common)
+        run: |
+          # Setup tox
           pip install --upgrade pip
           pip install tox tox-gh-actions codecov
-
-          # Configure environment to use UTF8 - otherwise tox execution will fail.
-          #apt-get -yqq update
-          #apt-get -yqq install locales build-essential libkrb5-dev
-          #locale-gen en_US.UTF-8
-          #update-locale LANG=en_US.UTF-8
 
       - name: Run Tests
         run: |
@@ -88,7 +87,6 @@ jobs:
           name: html-docs
           path: ./docs/_build/html
 
-
   build:
     name: "Build Package"
     runs-on: ubuntu-latest
@@ -111,6 +109,12 @@ jobs:
         run: |
           python setup.py sdist bdist_wheel
 
+      - name: Archive artifacts
+        # Archive distribution files for use by auto (or manual) PyPI upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: pypi-dist
+          path: ./dist
 
   publish:
     name: "Publish"
