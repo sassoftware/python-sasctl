@@ -31,7 +31,8 @@ jobs:
       - name: Install dependencies
         run: |
           # Setup tox
-          sudo apt-get install krb5-user
+          sudo apt-get update
+          sudo apt-get install build-essential libkrb5-dev
           pip install --upgrade pip
           pip install tox tox-gh-actions
 
