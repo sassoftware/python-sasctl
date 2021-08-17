@@ -31,13 +31,14 @@ jobs:
       - name: Install dependencies
         run: |
           # Setup tox
+          pip install --upgrade pip
           pip install tox tox-gh-actions
 
           # Configure environment to use UTF8 - otherwise tox execution will fail.
-          apt-get -yqq update
-          apt-get -yqq install locales build-essential libkrb5-dev
-          locale-gen en_US.UTF-8
-          update-locale LANG=en_US.UTF-8
+          #apt-get -yqq update
+          #apt-get -yqq install locales build-essential libkrb5-dev
+          #locale-gen en_US.UTF-8
+          #update-locale LANG=en_US.UTF-8
 
       - name: Run Tests
         run: tox
