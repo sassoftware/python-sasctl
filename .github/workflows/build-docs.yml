@@ -1,5 +1,5 @@
 name: "Publish Documentation"
-on: workflow_dispatch
+on: [push, workflow_dispatch]
 jobs:
   gh-pages:
     runs-on: ubuntu-latest
