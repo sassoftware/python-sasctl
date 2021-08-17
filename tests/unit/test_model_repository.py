@@ -5,8 +5,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import copy
-from six.moves import mock
 
+import pytest
+from six.moves import mock
 from sasctl import current_session
 from sasctl.services import model_repository as mr
 
@@ -18,59 +19,70 @@ def test_create_model():
     PROJECT_ID = '12345'
     USER = 'username'
 
-    with mock.patch('sasctl.core.requests.Session.request'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         current_session('example.com', USER, 'password')
 
-    TARGET = {'name': MODEL_NAME,
-              'projectId': PROJECT_ID,
-              'modeler': USER,
-              'description': 'model description',
-              'function': 'Classification',
-              'algorithm': 'Dummy Algorithm',
-              'tool': 'pytest',
-              'champion': True,
-              'role': 'champion',
-              'immutable': True,
-              'retrainable': True,
-              'scoreCodeType': None,
-              'targetVariable': None,
-              'trainTable': None,
-              'classificationEventProbabilityVariableName': None,
-              'classificationTargetEventValue': None,
-              'location': None,
-              'properties': [{'name': 'custom1', 'value': 123},
-                             {'name': 'custom2', 'value': 'somevalue'}],
-              'inputVariables': [],
-              'outputVariables': [],
-              'version': '2'}
+    TARGET = {
+        'name': MODEL_NAME,
+        'projectId': PROJECT_ID,
+        'modeler': USER,
+        'description': 'model description',
+        'function': 'Classification',
+        'algorithm': 'Dummy Algorithm',
+        'tool': 'pytest',
+        'champion': True,
+        'role': 'champion',
+        'immutable': True,
+        'retrainable': True,
+        'scoreCodeType': None,
+        'targetVariable': None,
+        'trainTable': None,
+        'classificationEventProbabilityVariableName': None,
+        'classificationTargetEventValue': None,
+        'location': None,
+        'properties': [
+            {'name': 'custom1', 'value': 123},
+            {'name': 'custom2', 'value': 'somevalue'},
+        ],
+        'inputVariables': [],
+        'outputVariables': [],
+        'version': '2',
+    }
 
     # Passed params should be set correctly
     target = copy.deepcopy(TARGET)
-    with mock.patch('sasctl._services.model_repository.ModelRepository.get_project') as get_project:
-        with mock.patch('sasctl._services.model_repository.ModelRepository''.get_model') as get_model:
-            with mock.patch('sasctl._services.model_repository.ModelRepository.post') as post:
+    with mock.patch(
+        'sasctl._services.model_repository.ModelRepository.get_project'
+    ) as get_project:
+        with mock.patch(
+            'sasctl._services.model_repository.ModelRepository' '.get_model'
+        ) as get_model:
+            with mock.patch(
+                'sasctl._services.model_repository.ModelRepository.post'
+            ) as post:
                 get_project.return_value = {'id': PROJECT_ID}
                 get_model.return_value = None
-                _ = mr.create_model(MODEL_NAME,
-                                    PROJECT_NAME,
-                                    description=target['description'],
-                                    function=target['function'],
-                                    algorithm=target['algorithm'],
-                                    tool=target['tool'],
-                                    is_champion=True,
-                                    is_immutable=True,
-                                    is_retrainable=True,
-                                    properties=dict(custom1=123, custom2='somevalue'))
+                _ = mr.create_model(
+                    MODEL_NAME,
+                    PROJECT_NAME,
+                    description=target['description'],
+                    function=target['function'],
+                    algorithm=target['algorithm'],
+                    tool=target['tool'],
+                    is_champion=True,
+                    is_immutable=True,
+                    is_retrainable=True,
+                    properties=dict(custom1=123, custom2='somevalue'),
+                )
                 assert post.call_count == 1
             url, data = post.call_args
 
             # dict isn't guaranteed to preserve order
             # so k/v pairs of properties=dict() may be
             # returned in a different order
-            assert sorted(target['properties'],
-                          key=lambda d: d['name']) \
-                   == sorted(data['json']['properties'],
-                             key=lambda d: d['name'])
+            assert sorted(target['properties'], key=lambda d: d['name']) == sorted(
+                data['json']['properties'], key=lambda d: d['name']
+            )
 
             target.pop('properties')
             data['json'].pop('properties')
@@ -79,12 +91,20 @@ def test_create_model():
     # Model dict w/ parameters already specified should be allowed
     # Explicit overrides should be respected.
     target = copy.deepcopy(TARGET)
-    with mock.patch('sasctl._services.model_repository.ModelRepository.get_project') as get_project:
-        with mock.patch('sasctl._services.model_repository.ModelRepository''.get_model') as get_model:
-            with mock.patch('sasctl._services.model_repository.ModelRepository.post') as post:
+    with mock.patch(
+        'sasctl._services.model_repository.ModelRepository.get_project'
+    ) as get_project:
+        with mock.patch(
+            'sasctl._services.model_repository.ModelRepository' '.get_model'
+        ) as get_model:
+            with mock.patch(
+                'sasctl._services.model_repository.ModelRepository.post'
+            ) as post:
                 get_project.return_value = {'id': PROJECT_ID}
                 get_model.return_value = None
-                _ = mr.create_model(copy.deepcopy(target), PROJECT_NAME, description='Updated Model')
+                _ = mr.create_model(
+                    copy.deepcopy(target), PROJECT_NAME, description='Updated Model'
+                )
             target['description'] = 'Updated Model'
             assert post.call_count == 1
             url, data = post.call_args
@@ -98,15 +118,17 @@ def test_create_model():
 
 def test_copy_analytic_store():
     # Create a dummy session
-    with mock.patch('sasctl.core.requests.Session.request'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         current_session('example.com', 'user', 'password')
 
     MODEL_ID = 12345
     # Intercept calls to lookup the model & call the "copyAnalyticStore" link
-    with mock.patch('sasctl._services.model_repository.ModelRepository'
-                    '.get_model') as get_model:
-        with mock.patch('sasctl._services.model_repository.ModelRepository'
-                        '.request_link') as request_link:
+    with mock.patch(
+        'sasctl._services.model_repository.ModelRepository' '.get_model'
+    ) as get_model:
+        with mock.patch(
+            'sasctl._services.model_repository.ModelRepository' '.request_link'
+        ) as request_link:
 
             # Return a dummy Model with a static id
             get_model.return_value = {'id': MODEL_ID}
@@ -121,3 +143,33 @@ def test_copy_analytic_store():
             obj, rel = args
             assert obj == get_model.return_value
             assert rel == 'copyAnalyticStore'
+
+
+def test_get_model_by_name():
+    """If multiple models exist with the same name, a warning should be raised.
+
+    From https://github.com/sassoftware/python-sasctl/issues/92
+    """
+
+    MODEL_NAME = 'Test Model'
+
+    # Create a dummy session
+    with mock.patch('sasctl.core.Session.get_auth'):
+        current_session('example.com', 'user', 'password')
+
+    mock_responses = [
+        # First response is for list_items/list_models
+        [{'id': 12345, 'name': MODEL_NAME}, {'id': 67890, 'name': MODEL_NAME}],
+        # Second response is mock GET for model details
+        {'id': 12345, 'name': MODEL_NAME},
+    ]
+
+    with mock.patch(
+        'sasctl._services.model_repository.ModelRepository.request'
+    ) as request:
+        request.side_effect = mock_responses
+
+        with pytest.warns(Warning):
+            result = mr.get_model(MODEL_NAME)
+    assert result['id'] == 12345
+    assert result['name'] == MODEL_NAME

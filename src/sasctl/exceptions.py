@@ -8,8 +8,13 @@
 class AuthenticationError(ValueError):
     """A user could not be authenticated."""
 
-    def __init__(self, username, *args, **kwargs):
-        msg = "Authentication failed for user '%s'." % username
+    def __init__(self, username=None, msg=None, *args, **kwargs):
+        if msg is None:
+            if username:
+                msg = "Authentication failed for user '%s'." % username
+            else:
+                msg = "Unable to authenticate the user."
+
         super(AuthenticationError, self).__init__(msg, *args, **kwargs)
 
 

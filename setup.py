@@ -26,7 +26,7 @@ def get_file(filename):
 
 setup(
     name='sasctl',
-    description='SAS Viya REST Client',
+    description='SAS Viya Python Client',
     long_description=get_file('README.md'),
     long_description_content_type='text/markdown',
     version=read_dunder('version'),
@@ -41,13 +41,14 @@ setup(
     include_package_data=True,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    python_requires='>=2.7',
+    python_requires='>=3.5',
     install_requires=[
         'pandas',
         'scikit-learn',
         'requests',
         'six >= 1.11',
-        'futures ; python_version <= "2.7"'
+        'pyyaml',
+        'packaging'
     ],
     extras_require={
         'swat': ['swat'],
@@ -65,13 +66,11 @@ setup(
         'Intended Audience :: Science/Research',
         'Intended Audience :: Developers',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Topic :: Software Development',
         'Topic :: Scientific/Engineering',
         'Operating System :: OS Independent'

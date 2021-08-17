@@ -19,7 +19,7 @@ def test_create_performance_definition():
     MODEL = RestObj({'name': 'Test Model', 'id': '12345', 'projectId': PROJECT['id']})
     USER = 'username'
 
-    with mock.patch('sasctl.core.requests.Session.request'):
+    with mock.patch('sasctl.core.Session.get_auth'):
         current_session('example.com', USER, 'password')
 
     with mock.patch('sasctl._services.model_repository.ModelRepository'

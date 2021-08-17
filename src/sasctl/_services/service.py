@@ -8,6 +8,7 @@
 
 import logging
 import time
+import warnings
 
 import six
 from six.moves.urllib_parse import quote
@@ -94,7 +95,7 @@ class Service(object):  # skipcq PYL-R0205
         else:
             path = cls._SERVICE_ROOT + '/' + path
 
-        return core.request(verb, path, session, raw, format, **kwargs)
+        return core.request(verb, path, session, format, **kwargs)
 
     @classmethod
     def get(cls, *args, **kwargs):
@@ -252,18 +253,27 @@ class Service(object):  # skipcq PYL-R0205
                 return cls.get(path + '/{id}'.format(id=item))
             results = list_items(cls, **get_filter(item))
 
-            # Not sure why, but as of 19w04 the filter doesn't seem to work
+            match = None
             for result in results:
                 if result['name'] == str(item):
-                    # Make a request for the specific object so that ETag
-                    # is included, allowing updates.
-                    if cls.get_link(result, 'self'):
-                        return cls.request_link(result, 'self')
+                    # The first result that matches on name should be stored.
+                    # Will be returned after determining that there aren't additional
+                    # matches
+                    if match is None:
+                        # Make a request for the specific object so that ETag
+                        # is included, allowing updates.
+                        if cls.get_link(result, 'self'):
+                            match = cls.request_link(result, 'self')
+                        else:
+                            id_ = result.get('id', result['name'])
+                            match = cls.get(path + '/{id}'.format(id=id_))
+                    # We already found a match so this is a duplicate.  Warn the user so they know
+                    # the item returned may not be the one they were expecting.
+                    else:
+                        warnings.warn("Multiple items found with name '%s'.  Only the first result is returned." % item)
+                        break
 
-                    id_ = result.get('id', result['name'])
-                    return cls.get(path + '/{id}'.format(id=id_))
-
-            return None
+            return match
 
         @sasctl_command('update')
         def update_item(cls, item):
