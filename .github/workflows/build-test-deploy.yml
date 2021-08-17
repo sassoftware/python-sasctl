@@ -1,4 +1,4 @@
-name: "Build & Test"
+name: "Test & Build"
 on: [push, workflow_dispatch]
 jobs:
   codeanalysis:
@@ -15,7 +15,7 @@ jobs:
         with:
           python-root-list: "src"
 
-  build:
+  test:
     name: "Test"
     runs-on: ubuntu-latest
     env:
@@ -53,4 +53,16 @@ jobs:
           codecov
 
 
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') # run only on tagged commits
 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+# build
+# subset changelog
+# create release
+#
