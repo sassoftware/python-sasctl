@@ -1,0 +1,44 @@
+name: build-test-deploy
+on: [push]
+jobs:
+  codeanalysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Flake
+        uses: ricardochaves/python-lint@v1.4.0
+
+  build:
+    runs-on: ubuntu-latest
+    env:
+      LANG: en_US.UTF-8
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8, 3.9]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          # Setup tox
+          pip install tox tox-gh-actions
+
+          # Configure environment to use UTF8 - otherwise tox execution will fail.
+          apt-get -yqq update
+          apt-get -yqq install locales build-essential libkrb5-dev
+          locale-gen en_US.UTF-8
+          update-locale LANG=en_US.UTF-8
+
+      - name: Run Tests
+        run: tox
+
