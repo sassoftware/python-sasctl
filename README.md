@@ -13,9 +13,12 @@
     <img src="https://img.shields.io/badge/Python-3.5%2B-blue.svg" alt="Python Version">
   </a>
 
-   <img src="https://travis-ci.com/sassoftware/python-sasctl.svg?branch=master">
+  <a href="https://github.com/sassoftware/python-sasctl/actions/workflows/build-test-deploy.yml">
+    <img src="https://github.com/sassoftware/python-sasctl/actions/workflows/build-test-deploy.yml/badge.svg" />
+  </a>
   
 </div>
+
 
 
 ###### Full documentation:  https://sassoftware.github.io/python-sasctl
