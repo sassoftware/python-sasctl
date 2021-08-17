@@ -39,7 +39,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install build-essential libkrb5-dev
           pip install --upgrade pip
-          pip install tox tox-gh-actions
+          pip install tox tox-gh-actions codecov
 
           # Configure environment to use UTF8 - otherwise tox execution will fail.
           #apt-get -yqq update
@@ -48,5 +48,9 @@ jobs:
           #update-locale LANG=en_US.UTF-8
 
       - name: Run Tests
-        run: tox
+        run: |
+          tox
+          codecov
+
+
 
