@@ -21,9 +21,6 @@ jobs:
 
       - name: Check documentation
         uses: ammaraskar/sphinx-problem-matcher@master
-        run: |
-          cd docs
-          make html
 
       - name: Build documentation
         run: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./doc ./doc/_build/html
