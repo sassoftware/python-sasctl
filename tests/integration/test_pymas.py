@@ -8,12 +8,12 @@ import pickle
 import warnings
 
 import pytest
-from six.moves import mock
+from unittest import mock
 
 
 def dummy_function(x1, x2):
     # type: (float, float) -> (float, float)
-    return x1+x2, x1-x2
+    return x1 + x2, x1 - x2
 
 
 def domath1(w, x):
@@ -25,7 +25,7 @@ def domath1(w, x):
 
 @pytest.fixture
 def train_data():
-    """Returns the Iris data set as (X, y) """
+    """Returns the Iris data set as (X, y)"""
 
     try:
         import pandas as pd
@@ -48,7 +48,7 @@ def train_data():
 
 @pytest.fixture
 def sklearn_model(train_data):
-    """Returns a simple Scikit-Learn model """
+    """Returns a simple Scikit-Learn model"""
 
     try:
         from sklearn.linear_model import LogisticRegression
@@ -73,19 +73,15 @@ def sklearn_pipeline(train_data):
 
     X, y = train_data
 
-    numeric_transformer = Pipeline([
-        ('imputer', SimpleImputer(strategy='median')),
-        ('scaler', StandardScaler())
-    ])
+    numeric_transformer = Pipeline(
+        [('imputer', SimpleImputer(strategy='median')), ('scaler', StandardScaler())]
+    )
 
-    preprocessor = ColumnTransformer([
-        ('num', numeric_transformer, X.columns)
-    ])
+    preprocessor = ColumnTransformer([('num', numeric_transformer, X.columns)])
 
-    pipe = Pipeline([
-        ('preprocess', preprocessor),
-        ('classifier', GradientBoostingClassifier())
-    ])
+    pipe = Pipeline(
+        [('preprocess', preprocessor), ('classifier', GradientBoostingClassifier())]
+    )
 
     pipe.fit(X, y)
 
@@ -94,7 +90,7 @@ def sklearn_pipeline(train_data):
 
 @pytest.fixture
 def pickle_file(tmpdir_factory, sklearn_model):
-    """Returns the path to a file containing a pickled Scikit-Learn model """
+    """Returns the path to a file containing a pickled Scikit-Learn model"""
     import os
 
     sklearn_model
@@ -112,9 +108,12 @@ def python_file(tmpdir_factory):
 
     filename = str(tmpdir_factory.mktemp('models').join('model.py'))
     with open(filename, 'w') as f:
-        f.writelines(['def predict(a, b, c, d):\n',
-                      '    # types: (int, int, int, int) -> double\n'
-                      '    pass\n'])
+        f.writelines(
+            [
+                'def predict(a, b, c, d):\n',
+                '    # types: (int, int, int, int) -> double\n' '    pass\n',
+            ]
+        )
 
     yield str(filename)
     os.remove(filename)
@@ -122,7 +121,7 @@ def python_file(tmpdir_factory):
 
 @pytest.fixture
 def pickle_stream(sklearn_model):
-    """Returns a byte stream containing a pickled Scikit-Learn model """
+    """Returns a byte stream containing a pickled Scikit-Learn model"""
 
     return pickle.dumps(sklearn_model)
 
@@ -144,10 +143,9 @@ def test_from_pickle(train_data, pickle_file):
         mock_rnd_string.return_value = 'randomMethodName'
         with mock.patch('uuid.uuid4') as mocked:
             mocked.return_value.hex = 'DF74A4B18C9E41A2A34B0053E123AA67'
-            p = from_pickle(pickle_file,
-                            func_name='predict',
-                            input_types=X,
-                            array_input=True)
+            p = from_pickle(
+                pickle_file, func_name='predict', input_types=X, array_input=True
+            )
 
     target = """
 package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
@@ -234,7 +232,9 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     end;
     
 endpackage;
-""".lstrip('\n')
+""".lstrip(
+        '\n'
+    )
 
     assert isinstance(p, PyMAS)
 
@@ -257,8 +257,12 @@ def test_from_pickle_2(train_data, pickle_file):
         mock_rnd_string.side_effect = ['randomMethodName1', 'randomMethodName2']
         with mock.patch('uuid.uuid4') as mocked:
             mocked.return_value.hex = 'DF74A4B18C9E41A2A34B0053E123AA67'
-            p = from_pickle(pickle_file, func_name=['predict', 'predict_proba'],
-                            input_types=X, array_input=True)
+            p = from_pickle(
+                pickle_file,
+                func_name=['predict', 'predict_proba'],
+                input_types=X,
+                array_input=True,
+            )
 
     target = """
 package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
@@ -402,7 +406,9 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     end;
     
 endpackage;
-""".lstrip('\n')
+""".lstrip(
+        '\n'
+    )
 
     assert isinstance(p, PyMAS)
 
@@ -502,7 +508,9 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     end;
     
 endpackage;
-""".lstrip('\n')
+""".lstrip(
+        '\n'
+    )
 
     f = tmpdir.join('model.py')
     f.write(code)
@@ -522,9 +530,7 @@ def test_with_sklearn_pipeline(train_data, sklearn_pipeline):
     from sasctl.utils.pymas import PyMAS, from_pickle
 
     X, y = train_data
-    p = from_pickle(pickle.dumps(sklearn_pipeline),
-                    func_name='predict',
-                    input_types=X)
+    p = from_pickle(pickle.dumps(sklearn_pipeline), func_name='predict', input_types=X)
 
     assert isinstance(p, PyMAS)
     assert len(p.variables) > 4  # 4 input features in Iris data set
@@ -555,4 +561,3 @@ def test_publish_and_execute(tmpdir, boston_dataset):
     assert round(result['var1'], 3) == 30.004
 
     mas.delete_module('sasctl_test')
-

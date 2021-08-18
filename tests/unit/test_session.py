@@ -7,10 +7,9 @@
 import json
 import logging
 import os
+from unittest import mock
 
 import pytest
-from six.moves import mock
-
 from sasctl import Session, current_session
 
 
@@ -42,8 +41,7 @@ def test_from_authinfo(tmpdir_factory):
     PASSWORD = 'iaminvincible!'
 
     with open(filename, 'w') as f:
-        f.write('machine %s login %s password %s'
-                % (HOSTNAME, USERNAME, PASSWORD))
+        f.write('machine %s login %s password %s' % (HOSTNAME, USERNAME, PASSWORD))
 
     # Get username & password from matching hostname
     with mock.patch('sasctl.core.Session.get_auth'):
@@ -53,8 +51,7 @@ def test_from_authinfo(tmpdir_factory):
     assert s._settings['password'] == PASSWORD
 
     with open(filename, 'w') as f:
-        f.write('host %s user %s password %s'
-                % (HOSTNAME, USERNAME, PASSWORD))
+        f.write('host %s user %s password %s' % (HOSTNAME, USERNAME, PASSWORD))
 
     with mock.patch('sasctl.core.Session.get_auth'):
         s = Session('http://example.com', authinfo=filename)
@@ -63,10 +60,10 @@ def test_from_authinfo(tmpdir_factory):
     assert s._settings['password'] == PASSWORD
 
     with open(filename, 'w') as f:
-        f.write('host %s user %s password %s\n'
-                % (HOSTNAME, 'Arthur', 'kingofthebrittons'))
-        f.write('host %s user %s password %s\n'
-                % (HOSTNAME, USERNAME, PASSWORD))
+        f.write(
+            'host %s user %s password %s\n' % (HOSTNAME, 'Arthur', 'kingofthebrittons')
+        )
+        f.write('host %s user %s password %s\n' % (HOSTNAME, USERNAME, PASSWORD))
 
     with mock.patch('sasctl.core.Session.get_auth'):
         s = Session('http://example.com', username=USERNAME, authinfo=filename)
@@ -131,6 +128,7 @@ def test_current_session():
 
 def test_swat_connection_reuse():
     import base64
+
     swat = pytest.importorskip('swat')
 
     HOST = 'example.com'
@@ -142,14 +140,17 @@ def test_swat_connection_reuse():
     mock_cas = mock.Mock(spec=swat.CAS)
     mock_cas._hostname = 'casserver.com'
     mock_cas._sw_connection = mock.Mock(
-        spec=swat.cas.rest.connection.REST_CASConnection)
+        spec=swat.cas.rest.connection.REST_CASConnection
+    )
     mock_cas._sw_connection._auth = base64.b64encode(
-        (USERNAME + ':' + PASSWORD).encode())
+        (USERNAME + ':' + PASSWORD).encode()
+    )
     mock_cas.get_action.return_value = lambda: swat.cas.results.CASResults(
         port=PORT,
         protocol=PROTOCOL,
         restPrefix='/cas-shared-default-http',
-        virtualHost=HOST)
+        virtualHost=HOST,
+    )
     with mock.patch('sasctl.core.Session.get_auth'):
         with Session(mock_cas) as s:
             # Should reuse port # from SWAT connection
@@ -159,29 +160,31 @@ def test_swat_connection_reuse():
             assert PROTOCOL == s._settings['protocol']
             assert USERNAME == s._settings['username']
             assert PASSWORD == s._settings['password']
-            assert '{}://{}:{}/test'.format(PROTOCOL, HOST,
-                                            PORT) == s._build_url('/test')
+            assert '{}://{}:{}/test'.format(PROTOCOL, HOST, PORT) == s._build_url(
+                '/test'
+            )
 
-        with Session(HOST, username=USERNAME, password=PASSWORD, protocol=PROTOCOL,
-                     port=PORT) as s:
+        with Session(
+            HOST, username=USERNAME, password=PASSWORD, protocol=PROTOCOL, port=PORT
+        ) as s:
             assert HOST == s._settings['domain']
             assert PORT == s._settings['port']
             assert PROTOCOL == s._settings['protocol']
             assert USERNAME == s._settings['username']
             assert PASSWORD == s._settings['password']
-            assert '{}://{}:{}/test'.format(PROTOCOL, HOST,
-                                            PORT) == s._build_url('/test')
+            assert '{}://{}:{}/test'.format(PROTOCOL, HOST, PORT) == s._build_url(
+                '/test'
+            )
 
-        with Session(HOST, username=USERNAME, password=PASSWORD,
-                     protocol=PROTOCOL) as s:
+        with Session(
+            HOST, username=USERNAME, password=PASSWORD, protocol=PROTOCOL
+        ) as s:
             assert HOST == s._settings['domain']
-            assert s._settings[
-                       'port'] is None  # Let Requests determine default port
+            assert s._settings['port'] is None  # Let Requests determine default port
             assert PROTOCOL == s._settings['protocol']
             assert USERNAME == s._settings['username']
             assert PASSWORD == s._settings['password']
-            assert '{}://{}/test'.format(PROTOCOL, HOST) == s._build_url(
-                '/test')
+            assert '{}://{}/test'.format(PROTOCOL, HOST) == s._build_url('/test')
 
 
 def test_log_filtering(caplog):
@@ -195,8 +198,13 @@ def test_log_filtering(caplog):
     CLIENT_SECRET = 'clientpassword'
     CONSUL_TOKEN = 'supersecretconsultoken!'
 
-    sensitive_data = [PASSWORD, ACCESS_TOKEN, REFRESH_TOKEN, CLIENT_SECRET,
-                      CONSUL_TOKEN]
+    sensitive_data = [
+        PASSWORD,
+        ACCESS_TOKEN,
+        REFRESH_TOKEN,
+        CLIENT_SECRET,
+        CONSUL_TOKEN,
+    ]
 
     with mock.patch('requests.Session.send') as mocked:
         # Respond to every request with a response that contains sensitive data
@@ -205,24 +213,22 @@ def test_log_filtering(caplog):
         mocked.return_value.raise_for_status.return_value = None
         mocked.return_value.json.return_value = {
             'access_token': ACCESS_TOKEN,
-            'refresh_token': REFRESH_TOKEN
+            'refresh_token': REFRESH_TOKEN,
         }
         mocked.return_value.url = 'http://' + HOST
         mocked.return_value.headers = {}
-        mocked.return_value.body = json.dumps(
-            mocked.return_value.json.return_value)
+        mocked.return_value.body = json.dumps(mocked.return_value.json.return_value)
         mocked.return_value._content = mocked.return_value.body
 
         with mock.patch('sasctl.core.Session.get_auth'):
             with Session(HOST, USERNAME, PASSWORD) as s:
                 assert s.auth is not None
                 assert mocked.return_value == s.get('/fakeurl')
-                assert mocked.return_value == s.post('/fakeurl',
-                                                     headers={
-                                                         'X-Consul-Token': CONSUL_TOKEN},
-                                                     json={
-                                                         'client_id': 'TestClient',
-                                                         'client_secret': CLIENT_SECRET})
+                assert mocked.return_value == s.post(
+                    '/fakeurl',
+                    headers={'X-Consul-Token': CONSUL_TOKEN},
+                    json={'client_id': 'TestClient', 'client_secret': CLIENT_SECRET},
+                )
 
                 # No sensitive information should be contained in the log records
                 assert len(caplog.records) > 0
@@ -236,9 +242,12 @@ def test_ssl_context():
     from sasctl.core import SSLContextAdapter
 
     # Cleanup any env vars currently set
-    if 'CAS_CLIENT_SSL_CA_LIST' in os.environ: del os.environ['CAS_CLIENT_SSL_CA_LIST']
-    if 'REQUESTS_CA_BUNDLE' in os.environ: del os.environ['REQUESTS_CA_BUNDLE']
-    if 'SSLREQCERT' in os.environ: del os.environ['SSLREQCERT']
+    if 'CAS_CLIENT_SSL_CA_LIST' in os.environ:
+        del os.environ['CAS_CLIENT_SSL_CA_LIST']
+    if 'REQUESTS_CA_BUNDLE' in os.environ:
+        del os.environ['REQUESTS_CA_BUNDLE']
+    if 'SSLREQCERT' in os.environ:
+        del os.environ['SSLREQCERT']
 
     # Should default to SSLContextAdapter if no certificate paths are set
     with mock.patch('sasctl.core.Session.get_auth', return_value='token'):
@@ -348,8 +357,9 @@ def test_verify_ssl(missing_packages):
 
 
 def test_kerberos():
-    with mock.patch('sasctl.core.Session._get_token_with_kerberos',
-                    return_value='token'):
+    with mock.patch(
+        'sasctl.core.Session._get_token_with_kerberos', return_value='token'
+    ):
         s = Session('hostname')
         assert s.auth.access_token == 'token'
 
@@ -380,8 +390,10 @@ def test_str():
 
         s = Session('hostname', 'username', 'password')
 
-        assert str(s) == "Session(hostname='hostname', username='username', " \
-                         "protocol='https', verify_ssl=True)"
+        assert (
+            str(s) == "Session(hostname='hostname', username='username', "
+            "protocol='https', verify_ssl=True)"
+        )
 
 
 def test_as_swat():
@@ -397,19 +409,25 @@ def test_as_swat():
             with mock.patch('swat.CAS') as CAS:
                 # Verify default parameters were passed
                 _ = s.as_swat()
-                CAS.assert_called_with(hostname='https://%s/cas-shared-default-http/' % HOST,
-                                       username=USERNAME,
-                                       password=PASSWORD)
+                CAS.assert_called_with(
+                    hostname='https://%s/cas-shared-default-http/' % HOST,
+                    username=USERNAME,
+                    password=PASSWORD,
+                )
 
                 # Verify connection to a non-default CAS instance
                 SERVER_NAME = 'my-cas-server'
                 _ = s.as_swat(SERVER_NAME)
-                CAS.assert_called_with(hostname='https://%s/%s-http/' % (HOST, SERVER_NAME),
-                                       username=USERNAME,
-                                       password=PASSWORD)
+                CAS.assert_called_with(
+                    hostname='https://%s/%s-http/' % (HOST, SERVER_NAME),
+                    username=USERNAME,
+                    password=PASSWORD,
+                )
 
                 # Verify default parameters can be overridden
                 _ = s.as_swat(username='testuser', password=None)
-                CAS.assert_called_with(hostname='https://%s/cas-shared-default-http/' % HOST,
-                                       username='testuser',
-                                       password=None)
+                CAS.assert_called_with(
+                    hostname='https://%s/cas-shared-default-http/' % HOST,
+                    username='testuser',
+                    password=None,
+                )

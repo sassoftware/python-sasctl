@@ -9,9 +9,7 @@
 import logging
 import time
 import warnings
-
-import six
-from six.moves.urllib_parse import quote
+from urllib.parse import quote
 
 from .. import core
 from ..core import HTTPError, PagedItemIterator, sasctl_command
@@ -128,11 +126,9 @@ class Service(object):  # skipcq PYL-R0205
         return cls.request('delete', *args, **kwargs)
 
     @staticmethod
-    def _crud_funcs(path,
-                    single_term=None,
-                    plural_term=None,
-                    service_name=None,
-                    get_filter=None):
+    def _crud_funcs(
+        path, single_term=None, plural_term=None, service_name=None, get_filter=None
+    ):
         """Utility method for defining CRUD functions.
 
         Can be used to define simple functions that perform CRUD operations
@@ -170,6 +166,7 @@ class Service(object):  # skipcq PYL-R0205
         """
         # Set a default filter
         if get_filter is None:
+
             def default_filter(item):
                 return dict(filter='eq(name, "%s")' % item)
 
@@ -206,8 +203,9 @@ class Service(object):  # skipcq PYL-R0205
             if limit is not None:
                 kwargs['limit'] = int(limit)
 
-            params = '&'.join('%s=%s' % (k, quote(str(v), safe='/(),"'))
-                              for k, v in six.iteritems(kwargs))
+            params = '&'.join(
+                '%s=%s' % (k, quote(str(v), safe='/(),"')) for k, v in kwargs.items()
+            )
 
             results = cls.get(path, params=params)
             if results is None:
@@ -242,8 +240,7 @@ class Service(object):  # skipcq PYL-R0205
             """
             # If the input already appears to be the requested object just
             # return it, unless a refresh of the data was explicitly requested.
-            if isinstance(item, dict) and all(
-                    k in item for k in ('id', 'name')):
+            if isinstance(item, dict) and all(k in item for k in ('id', 'name')):
                 if refresh:
                     item = item['id']
                 else:
@@ -270,7 +267,10 @@ class Service(object):  # skipcq PYL-R0205
                     # We already found a match so this is a duplicate.  Warn the user so they know
                     # the item returned may not be the one they were expecting.
                     else:
-                        warnings.warn("Multiple items found with name '%s'.  Only the first result is returned." % item)
+                        warnings.warn(
+                            "Multiple items found with name '%s'.  Only the first result is returned."
+                            % item
+                        )
                         break
 
             return match
@@ -290,16 +290,18 @@ class Service(object):  # skipcq PYL-R0205
             """
             headers = getattr(item, '_headers', None)
             if headers is None or headers.get('etag') is None:
-                raise ValueError(
-                    'Could not find ETag for update of %s.' % item)
+                raise ValueError('Could not find ETag for update of %s.' % item)
 
             id_ = getattr(item, 'id', None)
             if id_ is None:
                 raise ValueError(
-                    'Could not find property `id` for update of %s.' % item)
+                    'Could not find property `id` for update of %s.' % item
+                )
 
-            headers = {'If-Match': item._headers.get('etag'),
-                       'Content-Type': item._headers.get('content-type')}
+            headers = {
+                'If-Match': item._headers.get('etag'),
+                'Content-Type': item._headers.get('content-type'),
+            }
 
             return cls.put(path + '/%s' % id_, json=item, headers=headers)
 
@@ -322,8 +324,7 @@ class Service(object):  # skipcq PYL-R0205
             if not (isinstance(item, dict) and 'id' in item):
                 item = get_item(cls, item)
                 if item is None:
-                    cls.log.info("Object '%s' not found.  Skipping delete.",
-                                 item_name)
+                    cls.log.info("Object '%s' not found.  Skipping delete.", item_name)
                     return
 
             if isinstance(item, dict) and 'id' in item:
@@ -346,16 +347,16 @@ class Service(object):  # skipcq PYL-R0205
         service_name = service_name.replace(' ', '_')
 
         for func in [list_items, get_item, update_item, delete_item]:
-            func.__doc__ = func.__doc__.format(item=single_term,
-                                               items=plural_term)
+            func.__doc__ = func.__doc__.format(item=single_term, items=plural_term)
             func._cli_service = service_name
 
             prefix = func.__name__.split('_')[0] + '_'
             suffix = plural_term if prefix == 'list_' else single_term
             func.__name__ = prefix + suffix
 
-        return [classmethod(f) for f in
-                (list_items, get_item, update_item, delete_item)]
+        return [
+            classmethod(f) for f in (list_items, get_item, update_item, delete_item)
+        ]
 
     # Compatibility with Python 2.7 requires *args to be after key-words
     # arguments.
@@ -415,6 +416,7 @@ class Service(object):  # skipcq PYL-R0205
             `max_retries` reached with a successful status check
 
         """
+
         def completed(job):
             return job['state'].lower() in ('completed', 'failed')
 

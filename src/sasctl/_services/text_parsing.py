@@ -4,7 +4,6 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import six
 
 from .service import Service
 from sasctl.core import uri_as_str
@@ -25,25 +24,28 @@ class TextParsing(Service):
     downstream analyses such as topic generation.
 
     """
+
     _SERVICE_ROOT = '/parsing'
 
-    def parse_documents(self,
-                        documents,
-                        caslib=None,
-                        id_column=None,
-                        text_column=None,
-                        description=None,
-                        standard_entities=False,
-                        noun_groups=False,
-                        min_doc_count=10,
-                        concept_model=None,
-                        output_postfix=None,
-                        spell_check=False,
-                        override_list=None,
-                        stop_list=None,
-                        start_list=None,
-                        synonym_list=None,
-                        language='en'):
+    def parse_documents(
+        self,
+        documents,
+        caslib=None,
+        id_column=None,
+        text_column=None,
+        description=None,
+        standard_entities=False,
+        noun_groups=False,
+        min_doc_count=10,
+        concept_model=None,
+        output_postfix=None,
+        spell_check=False,
+        override_list=None,
+        stop_list=None,
+        start_list=None,
+        synonym_list=None,
+        language='en',
+    ):
         """Performs natural language parsing on the input data.
 
         Creates a text parsing job that executes asynchronously.  There are two
@@ -101,34 +103,36 @@ class TextParsing(Service):
         if documents is None:
             raise TypeError('`documents` cannot be None.')
 
-        if isinstance(documents, (dict, six.string_types)):
+        if isinstance(documents, (dict, str)):
             data = {
                 "inputUri": uri_as_str(documents),
                 "documentIdVariable": id_column,
                 "textVariable": text_column,
-                "version": 1
+                "version": 1,
             }
         else:
             data = {
                 'caslibUri': uri_as_str(caslib),
                 'documents': documents,
-                'version': 1
+                'version': 1,
             }
 
-        data.update({
-            "description": description,
-            "language": language,
-            "includeStandardEntities": standard_entities,
-            "includeNounGroups": noun_groups,
-            "startListUri": uri_as_str(start_list),
-            "stopListUri": uri_as_str(stop_list),
-            "synonymListUri": uri_as_str(synonym_list),
-            "minimumDocumentCount": min_doc_count,
-            "conceptModelUri": uri_as_str(concept_model),
-            "outputTableNamePostfix": output_postfix,
-            "enableSpellChecking": spell_check,
-            "overrideListUri": uri_as_str(override_list),
-        })
+        data.update(
+            {
+                "description": description,
+                "language": language,
+                "includeStandardEntities": standard_entities,
+                "includeNounGroups": noun_groups,
+                "startListUri": uri_as_str(start_list),
+                "stopListUri": uri_as_str(stop_list),
+                "synonymListUri": uri_as_str(synonym_list),
+                "minimumDocumentCount": min_doc_count,
+                "conceptModelUri": uri_as_str(concept_model),
+                "outputTableNamePostfix": output_postfix,
+                "enableSpellChecking": spell_check,
+                "overrideListUri": uri_as_str(override_list),
+            }
+        )
 
         # Optional fields are not ignored if None so explicitly remove before
         # sending.
@@ -142,16 +146,13 @@ class TextParsing(Service):
         if 'documents' in data:
             url += '#data'
             headers = {
-                'Content-Type':
-                    'application/vnd.sas.text.parsing.job.request.documents+json',
-                'Accept': 'application/vnd.sas.text.parsing.job+json'
-
+                'Content-Type': 'application/vnd.sas.text.parsing.job.request.documents+json',
+                'Accept': 'application/vnd.sas.text.parsing.job+json',
             }
         else:
             headers = {
-                'Content-Type':
-                    'application/vnd.sas.text.parsing.job.request+json',
-                'Accept': 'application/vnd.sas.text.parsing.job+json'
+                'Content-Type': 'application/vnd.sas.text.parsing.job.request+json',
+                'Accept': 'application/vnd.sas.text.parsing.job+json',
             }
 
         return self.post(url, json=data, headers=headers)

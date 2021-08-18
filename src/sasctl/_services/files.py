@@ -5,7 +5,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
-import six
 
 from .folders import Folders
 from .service import Service
@@ -29,8 +28,9 @@ class Files(Service):
 
     _SERVICE_ROOT = '/files'
 
-    list_files, get_file, update_file, \
-    delete_file = Service._crud_funcs('/files', 'file')
+    list_files, get_file, update_file, delete_file = Service._crud_funcs(
+        '/files', 'file'
+    )
 
     @sasctl_command('files', 'create')
     def create_file(self, file, folder=None, filename=None, expiration=None):
@@ -53,14 +53,16 @@ class Files(Service):
             A dictionary containing the file attributes.
 
         """
-        if isinstance(file, six.string_types):
+        if isinstance(file, str):
             filename = filename or os.path.splitext(os.path.split(file)[1])[0]
 
             with open(file, 'rb') as f:
                 file = f.read()
         else:
             if filename is None:
-                raise ValueError('`filename` must be specified if `file` is not a path.')
+                raise ValueError(
+                    '`filename` must be specified if `file` is not a path.'
+                )
 
             file = file.read()
 
@@ -78,8 +80,9 @@ class Files(Service):
             pass
             # TODO: add 'expirationTimeStamp' to params.  Need to determine correct format
 
-        return self.post('/files#multipartUpload',
-                         files={filename: file}, params=params)
+        return self.post(
+            '/files#multipartUpload', files={filename: file}, params=params
+        )
 
     @sasctl_command('files', 'content')
     def get_file_content(self, file):

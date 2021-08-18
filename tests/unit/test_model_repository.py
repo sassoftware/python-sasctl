@@ -5,9 +5,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import copy
+from unittest import mock
 
 import pytest
-from six.moves import mock
 from sasctl import current_session
 from sasctl.services import model_repository as mr
 

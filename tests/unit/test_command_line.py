@@ -4,8 +4,7 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import six
-from six.moves import mock
+from unittest import mock
 
 
 def test_build_parser():
@@ -57,7 +56,7 @@ def test_service_names():
 
     services = _find_services()
 
-    assert all(isinstance(service, six.string_types) for service in services)
+    assert all(isinstance(service, str) for service in services)
 
     for service in ['folders', 'models', 'projects', 'repositories']:
         assert service in services

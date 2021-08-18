@@ -4,7 +4,7 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-from six.moves import mock
+from unittest import mock
 
 from sasctl.core import PagedList, RestObj
 from .test_pageiterator import paging
@@ -43,24 +43,32 @@ def test_getitem_no_paging():
 
 def test_str():
     """Check str formatting of list."""
-    source_items = [{'name': 'a'}, {'name': 'b'}, {'name': 'c'},
-                    {'name': 'd'}, {'name': 'e'}, {'name': 'f'}]
+    source_items = [
+        {'name': 'a'},
+        {'name': 'b'},
+        {'name': 'c'},
+        {'name': 'd'},
+        {'name': 'e'},
+        {'name': 'f'},
+    ]
 
     start = 2
     limit = 2
 
     with mock.patch('sasctl.core.request') as req:
-        obj = RestObj(items=source_items[:2],
-                      count=len(source_items),
-                      links=[{'rel': 'next',
-                              'href': '/moaritems?start=%d&limit=%d' % (
-                                  start, limit)}])
+        obj = RestObj(
+            items=source_items[:2],
+            count=len(source_items),
+            links=[
+                {'rel': 'next', 'href': '/moaritems?start=%d&limit=%d' % (start, limit)}
+            ],
+        )
 
         def side_effect(_, link, **kwargs):
             if 'start=2' in link:
-                result = source_items[1:1+limit]
+                result = source_items[1 : 1 + limit]
             elif 'start=4' in link:
-                result =  source_items[3:3+limit]
+                result = source_items[3 : 3 + limit]
             return RestObj(items=result)
 
         req.side_effect = side_effect
@@ -110,12 +118,16 @@ def test_get_item_inflated_len():
     # Simulate that behavior
     num_items = 23
 
-    obj = RestObj(items=pages[0],
-                  count=num_items,
-                  links=[{'rel': 'next',
-                          'href': '/moaritems?start=%d&limit=%d' % (start, limit)}])
+    obj = RestObj(
+        items=pages[0],
+        count=num_items,
+        links=[
+            {'rel': 'next', 'href': '/moaritems?start=%d&limit=%d' % (start, limit)}
+        ],
+    )
 
     with mock.patch('sasctl.core.request') as req:
+
         def side_effect(_, link, **kwargs):
             assert 'limit=%d' % limit in link
             start = int(re.search(r'(?<=start=)[\d]+', link).group())
@@ -143,6 +155,7 @@ def test_get_item_inflated_len():
 
     # Recreate the pager
     with mock.patch('sasctl.core.request') as req:
+
         def side_effect(_, link, **kwargs):
             assert 'limit=%d' % limit in link
             start = int(re.search(r'(?<=start=)[\d]+', link).group())

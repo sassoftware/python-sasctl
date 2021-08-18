@@ -4,9 +4,9 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import pytest
-from six.moves import mock
+from unittest import mock
 
+import pytest
 from sasctl import Session
 from sasctl.exceptions import AuthenticationError
 
@@ -20,7 +20,10 @@ def test_username_password_success():
 
     with mock.patch('sasctl.core.requests.Session.post') as mock_post:
         mock_post.return_value.status_code = 200
-        mock_post.return_value.json.return_value = {'access_token': ACCESS_TOKEN, 'refresh_token': REFRESH_TOKEN}
+        mock_post.return_value.json.return_value = {
+            'access_token': ACCESS_TOKEN,
+            'refresh_token': REFRESH_TOKEN,
+        }
 
         s = Session('hostname', 'username', 'password')
 
@@ -39,7 +42,10 @@ def test_username_password_failure():
 
     with mock.patch('sasctl.core.requests.Session.post') as mock_post:
         mock_post.return_value.status_code = 401
-        mock_post.return_value.json.return_value = {'access_token': ACCESS_TOKEN, 'refresh_token': REFRESH_TOKEN}
+        mock_post.return_value.json.return_value = {
+            'access_token': ACCESS_TOKEN,
+            'refresh_token': REFRESH_TOKEN,
+        }
 
         with pytest.raises(AuthenticationError):
             s = Session('hostname', 'username', 'password')
@@ -59,7 +65,9 @@ def test_auth_code():
     AUTH_CODE = 'supersecretauthcode'
 
     # Kerberos auth has to fail before auth code will be attempted
-    with mock.patch('sasctl.core.Session._get_token_with_kerberos', side_effect=ValueError):
+    with mock.patch(
+        'sasctl.core.Session._get_token_with_kerberos', side_effect=ValueError
+    ):
 
         # Dont read anything from disk
         with mock.patch('sasctl.core.Session.read_cached_token', return_value=None):
@@ -72,8 +80,10 @@ def test_auth_code():
 
                     with mock.patch('sasctl.core.requests.Session.post') as mock_post:
                         mock_post.return_value.status_code = 200
-                        mock_post.return_value.json.return_value = {'access_token': ACCESS_TOKEN,
-                                                                    'refresh_token': REFRESH_TOKEN}
+                        mock_post.return_value.json.return_value = {
+                            'access_token': ACCESS_TOKEN,
+                            'refresh_token': REFRESH_TOKEN,
+                        }
 
                         s = Session('hostname')
 
@@ -101,16 +111,20 @@ profiles:
     """
 
     # Expected response
-    target = {'profiles': [
-        {'baseurl': 'https://example.sas.com',
-         'name': 'Example',
-         'oauthtoken': {
-             'accesstoken': 'abc123',
-             'expiry': None,
-             'refreshtoken': 'xyz',
-             'tokentype': 'bearer'
-         }}
-    ]}
+    target = {
+        'profiles': [
+            {
+                'baseurl': 'https://example.sas.com',
+                'name': 'Example',
+                'oauthtoken': {
+                    'accesstoken': 'abc123',
+                    'expiry': None,
+                    'refreshtoken': 'xyz',
+                    'tokentype': 'bearer',
+                },
+            }
+        ]
+    }
 
     # Fake file exists
     with mock.patch('os.path.exists', return_value=True):
@@ -128,16 +142,20 @@ profiles:
 
 def test_write_token_cache():
     """Test writing tokens in YAML format to disk."""
-    profiles = {'profiles': [
-        {'baseurl': 'https://example.sas.com',
-         'name': 'Example',
-         'oauthtoken': {
-             'accesstoken': 'abc123',
-             'expiry': None,
-             'refreshtoken': 'xyz',
-             'tokentype': 'bearer'
-         }}
-    ]}
+    profiles = {
+        'profiles': [
+            {
+                'baseurl': 'https://example.sas.com',
+                'name': 'Example',
+                'oauthtoken': {
+                    'accesstoken': 'abc123',
+                    'expiry': None,
+                    'refreshtoken': 'xyz',
+                    'tokentype': 'bearer',
+                },
+            }
+        ]
+    }
 
     # Fake file object that will be written to
     mock_open = mock.mock_open()
@@ -152,7 +170,7 @@ def test_write_token_cache():
 
     assert mock_open.call_count == 1
     handle = mock_open()
-    assert handle.write.call_count > 0   # called for each line of yaml written
+    assert handle.write.call_count > 0  # called for each line of yaml written
 
 
 def test_automatic_token_refresh():
@@ -161,15 +179,23 @@ def test_automatic_token_refresh():
 
     with mock.patch('sasctl.core.requests.Session.request') as mock_request:
         mock_request.return_value.status_code = 401
-        mock_request.return_value.headers = {'WWW-Authenticate': 'Bearer realm="oauth", error="invalid_token", error_description="Access token expired: abc"'}
+        mock_request.return_value.headers = {
+            'WWW-Authenticate': 'Bearer realm="oauth", error="invalid_token", error_description="Access token expired: abc"'
+        }
 
-        with mock.patch('sasctl.core.Session.get_auth',  return_value=OAuth2Token(access_token='abc', refresh_token='def')):
+        with mock.patch(
+            'sasctl.core.Session.get_auth',
+            return_value=OAuth2Token(access_token='abc', refresh_token='def'),
+        ):
             s = Session('example.com')
 
         assert s.auth.access_token == 'abc'
         assert s.auth.refresh_token == 'def'
 
-        with mock.patch('sasctl.core.Session.get_oauth_token', return_value=OAuth2Token(access_token='uvw', refresh_token='xyz')) as mock_oauth:
+        with mock.patch(
+            'sasctl.core.Session.get_oauth_token',
+            return_value=OAuth2Token(access_token='uvw', refresh_token='xyz'),
+        ) as mock_oauth:
             s.get('/fakeurl')
 
         assert s.auth.access_token == 'uvw'
@@ -189,22 +215,28 @@ def test_load_expired_token_with_refresh():
     from datetime import datetime, timedelta
     from sasctl.core import OAuth2Token
 
-
     # Cached profile with an expired access token
-    PROFILES = {'profiles': [
-        {'baseurl': 'https://example.com',
-         'oauthtoken': {
-             'accesstoken': 'abc',
-             'refreshtoken': 'def',
-             'expiry': datetime.now() - timedelta(seconds=1)
-         }}
-    ]}
+    PROFILES = {
+        'profiles': [
+            {
+                'baseurl': 'https://example.com',
+                'oauthtoken': {
+                    'accesstoken': 'abc',
+                    'refreshtoken': 'def',
+                    'expiry': datetime.now() - timedelta(seconds=1),
+                },
+            }
+        ]
+    }
 
     # Return fake profiles instead of reading from disk
     with mock.patch('sasctl.core.Session._read_token_cache', return_value=PROFILES):
 
         # Fake response for refresh token request.
-        with mock.patch('sasctl.core.Session.get_oauth_token', return_value=OAuth2Token(access_token='xyz')):
+        with mock.patch(
+            'sasctl.core.Session.get_oauth_token',
+            return_value=OAuth2Token(access_token='xyz'),
+        ):
             s = Session('example.com')
 
         # Cached token is expired, should have refreshed and gotten new token
@@ -227,22 +259,27 @@ def test_load_expired_token_no_refresh():
     from sasctl.core import OAuth2Token
     from sasctl.exceptions import AuthorizationError
 
-
     # Cached profile with an expired access token
-    PROFILES = {'profiles': [
-        {'baseurl': 'https://example.com',
-         'oauthtoken': {
-             'accesstoken': 'abc',
-             'refreshtoken': 'def',
-             'expiry': datetime.now() - timedelta(seconds=1)
-         }}
-    ]}
+    PROFILES = {
+        'profiles': [
+            {
+                'baseurl': 'https://example.com',
+                'oauthtoken': {
+                    'accesstoken': 'abc',
+                    'refreshtoken': 'def',
+                    'expiry': datetime.now() - timedelta(seconds=1),
+                },
+            }
+        ]
+    }
 
     # Return fake profiles instead of reading from disk
     with mock.patch('sasctl.core.Session._read_token_cache', return_value=PROFILES):
 
         # Fake an expired refresh token - AuthorizationError should be raised
-        with mock.patch('sasctl.core.Session.get_oauth_token', side_effect=AuthorizationError):
+        with mock.patch(
+            'sasctl.core.Session.get_oauth_token', side_effect=AuthorizationError
+        ):
 
             # Refresh of expired token failed, so user should be prompted for auth code
             with mock.patch('sasctl.core.Session.prompt_for_auth_code') as mock_prompt:

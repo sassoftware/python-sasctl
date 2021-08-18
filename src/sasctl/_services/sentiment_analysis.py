@@ -4,7 +4,6 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import six
 
 from .service import Service
 from ..core import uri_as_str
@@ -70,7 +69,7 @@ class SentimentAnalysis(Service):
         if documents is None:
             raise TypeError('`documents` cannot be None.')
 
-        if isinstance(documents, (dict, six.string_types)):
+        if isinstance(documents, (dict, str)):
             data = {
                 'inputUri': uri_as_str(documents),
                 'documentIdVariable': id_column,

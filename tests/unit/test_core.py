@@ -4,8 +4,9 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+from unittest import mock
+
 import pytest
-from six.moves import mock
 
 
 def test_request():
@@ -115,9 +116,7 @@ def test_put_restobj():
     from sasctl.core import put, RestObj
 
     url = "/jobDefinitions/definitions/717331fa-f650-4e31-b9e2-6e6d49f66bf9"
-    obj = RestObj({
-        '_headers': {'etag': 123, 'content-type': 'spam'}
-    })
+    obj = RestObj({'_headers': {'etag': 123, 'content-type': 'spam'}})
 
     # Base case
     with mock.patch('sasctl.core.request') as req:
@@ -148,8 +147,7 @@ def test_put_restobj():
 
     # Should not overwrite explicit headers
     with mock.patch('sasctl.core.request') as req:
-        put(url, obj, headers={'Content-Type': 'notspam',
-                               'encoding': 'spammy'})
+        put(url, obj, headers={'Content-Type': 'notspam', 'encoding': 'spammy'})
 
     assert req.called
     args = req.call_args[0]

@@ -31,8 +31,7 @@ Prerequisites
 If not already present, these packages will be downloaded and install automatically.
 
 - requests
-- six
-- futures (Python 2.7 only)
+- pyyaml
 
 The following additional packages are recommended for full functionality:
 

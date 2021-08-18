@@ -46,7 +46,6 @@ setup(
         'pandas',
         'scikit-learn',
         'requests',
-        'six >= 1.11',
         'pyyaml',
         'packaging'
     ],

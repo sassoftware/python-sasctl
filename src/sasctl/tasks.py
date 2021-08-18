@@ -15,7 +15,7 @@ import re
 import sys
 import warnings
 
-from six.moves.urllib.error import HTTPError
+from urllib.error import HTTPError
 
 from . import utils
 from .core import RestObj, current_session, get, get_link, request_link
