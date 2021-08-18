@@ -929,7 +929,7 @@ class Session(requests.Session):
         flags = kerberos.GSS_C_MUTUAL_FLAG | kerberos.GSS_C_SEQUENCE_FLAG
         service = 'HTTP@%s' % self._settings['domain']
 
-        logger.info('Attempting Kerberos authentication to %s as %s', service, user)
+        logger.info('Attempting Kerberos authentication to %s', service)
 
         url = self._build_url(
             '/SASLogon/oauth/authorize?client_id=%s&response_type=token' % client_id
@@ -969,7 +969,6 @@ class Session(requests.Session):
 
         # Get the user that was used for authentication
         username = kerberos.authGSSClientUserName(context)
-        logger.info('Authenticated as %s', username)
 
         # Drop @REALM from username and store
         if username is not None:
