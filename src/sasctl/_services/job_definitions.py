@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from .service import Service
+from ..core import RestObj
 
 
 class JobDefinitions(Service):
@@ -38,5 +39,70 @@ class JobDefinitions(Service):
     def get_headers(self):
         raise NotImplementedError()
 
-    def create_definition(self):
-        raise NotImplementedError()
+    @classmethod
+    def create_definition(
+        cls,
+        name: str = None,
+        description: str = None,
+        type_: str = None,
+        code: str = None,
+        parameters=None,
+        properties: dict = None,
+    ) -> RestObj:
+        """
+
+        Parameters
+        ----------
+        name
+        description
+        type_
+        code
+        parameters
+        properties
+
+        Returns
+        -------
+        RestObj
+
+        """
+
+        # Convert name:value pairs of properties to separate "name" & "value" fields.
+        properties = properties or {}
+        properties = [{'name': k, 'value': v} for k, v in properties.items()]
+
+        clean_parameters = []
+        for param in parameters:
+            param_type = str(param.get('type', '')).upper()
+            if param_type not in ('TABLE', 'NUMERIC', 'DATE', 'CHARACTER'):
+                # TODO: warn/raise
+                continue
+
+            new_param = {
+                'version': 1,
+                'name': str(param.get('name', ''))[
+                    :100
+                ],  # Max length of 100 characters
+                'type': param_type,
+                'label': str(param.get('label', ''))[
+                    :250
+                ],  # Max length of 250 characters
+                'required': bool(param.get('required')),
+                'defaultValue': param.get('defaultValue'),
+            }
+            clean_parameters.append(new_param)
+
+        definition = {
+            'version': 2,
+            'name': name,
+            'description': description,
+            'type': type_,
+            'code': code,
+            'parameters': clean_parameters,
+            'properties': properties,
+        }
+
+        return cls.post(
+            '/definitions',
+            json=definition,
+            headers={'Accept': 'application/vnd.sas.job.definition+json'},
+        )
