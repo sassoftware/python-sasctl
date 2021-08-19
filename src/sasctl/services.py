@@ -18,6 +18,8 @@ concepts = _instantiate('sasctl._services.concepts.Concepts')
 data_sources = _instantiate('sasctl._services.data_sources.DataSources')
 files = _instantiate('sasctl._services.files.Files')
 folders = _instantiate('sasctl._services.folders.Folders')
+job_definitions = _instantiate('sasctl._services.job_definitions.JobDefinitions')
+job_execution = _instantiate('sasctl._services.job_execution.JobExecution')
 microanalytic_score = _instantiate(
     'sasctl._services.microanalytic_score.MicroAnalyticScore')
 model_management = _instantiate(
