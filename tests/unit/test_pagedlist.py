@@ -15,8 +15,13 @@ def test_len_no_paging():
     items = [{'name': 'a'}, {'name': 'b'}, {'name': 'c'}]
     obj = RestObj(items=items, count=len(items))
 
+    # PagedList should end up effectively identical to a standard list since no paging required.
+    target = [RestObj(x) for x in items]
+
     with mock.patch('sasctl.core.request') as request:
         l = PagedList(obj)
+        assert str(l) == str(target)
+        assert repr(l) == repr(target)
         assert len(l) == 3
 
         for i, o in enumerate(l):
@@ -82,9 +87,9 @@ def test_str():
             if i < len(source_items) - 1:
                 # Ellipses should indicate unfetched results unless we're
                 # at the end of the list
-                assert str(l).endswith(', ... ]')
+                assert str(l).endswith(', ...]')
             else:
-                assert not str(l).endswith(', ... ]')
+                assert not str(l).endswith(', ...]')
 
 
 def test_getitem_paging(paging):
@@ -95,8 +100,15 @@ def test_getitem_paging(paging):
     # length of list should equal total # of items
     assert len(l) == len(items)
 
+    # If number of items on first page don't match total number of items then
+    # some paging is required, so repr() should contain elipses indicating more data.
+    if len(obj['items']) < obj.count:
+        assert str(l).endswith(', ...]')
+
     for i, item in enumerate(l):
         assert item.name == RestObj(items[i]).name
+
+    assert not str(l).endswith(', ...]')
 
 
 def test_get_item_inflated_len():
