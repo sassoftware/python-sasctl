@@ -1,10 +1,14 @@
 Unreleased
 ----------
- - 
+**Improvements**
+ - `model_repository.add_model_content()` will now overwrite existing files instead of failing.
+ 
+**Bugfixes**
+ - `PagedList.__repr__()` no longer appears to be an empty list. 
 
 v1.6.0 (2021-06-29)
 -------------------
- **Improvements**
+**Improvements**
  - `Session` now supports authorization using OAuth2 tokens.  Use the `token=` parameter in the constructor when 
  an existing access token token is known.  Alternatively, omitting the `username=` and `password=` parameters
  will now prompt the user for an auth code.

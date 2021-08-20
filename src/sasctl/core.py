@@ -1268,8 +1268,6 @@ class PageIterator:
         # All Iterators are also Iterables
         return self
 
-    next = __next__  # Python 2 compatible
-
     def _request_async(self, start):
         """Used by worker threads to retrieve next batch of items."""
 
@@ -1338,25 +1336,15 @@ class PagedItemIterator:
         if not self._cache:
             self._cache = next(self._pager)
 
-            if len(self._cache) < self._pager._limit:
-                # number of items returned in page was less than expected
-                # might be last page, or items might have been filtered out by server.
-                pass
-
         # Return the next item
         if self._cache:
             self._count -= 1
             return self._cache.pop(0)
 
         raise StopIteration()
-        # Out of items and out of pages
-        # self._count = 0
-        # raise StopIteration
 
     def __iter__(self):
         return self
-
-    next = __next__  # Python 2 compatible
 
 
 class PagedListIterator:
@@ -1388,8 +1376,6 @@ class PagedListIterator:
     def __iter__(self):
         return self
 
-    next = __next__  # Python 2 compatibility
-
 
 class PagedList(list):
     """List that dynamically loads items from the server.
@@ -1418,11 +1404,12 @@ class PagedList(list):
 
     def __init__(self, obj, session=None, threads=4):
         super(PagedList, self).__init__()
-        self._pager = PagedItemIterator(obj, session=session, threads=threads)
+        self._paged_items = PagedItemIterator(obj, session=session, threads=threads)
 
-        # Add the first page of items to the list
-        for _ in range(len(self._pager._cache)):
-            self.append(next(self._pager))
+        # Go ahead and add the items that were initially returned.
+        # Do this by "paging" so iterator remains at the correct spot.
+        for _ in range(len(obj['items'])):
+            self.append(next(self._paged_items))
 
         # Assume that server has more items available
         self._has_more = True
@@ -1430,7 +1417,7 @@ class PagedList(list):
     def __len__(self):
         if self._has_more:
             # Estimate the total length as items downloaded + items still on server
-            return super(PagedList, self).__len__() + len(self._pager)
+            return super(PagedList, self).__len__() + len(self._paged_items)
         else:
             # We've pulled everything from the server, so we have an exact length now.
             return super(PagedList, self).__len__()
@@ -1459,7 +1446,7 @@ class PagedList(list):
             # Iterate through server-side pages until we've loaded
             # the item at the requested index.
             while super(PagedList, self).__len__() <= idx:
-                n = next(self._pager)
+                n = next(self._paged_items)
                 self.append(n)
 
         except StopIteration:
@@ -1469,13 +1456,13 @@ class PagedList(list):
         # Get the item from the list
         return super(PagedList, self).__getitem__(item)
 
-    def __str__(self):
-        string = super(PagedList, self).__str__()
+    def __repr__(self):
+        string = super(PagedList, self).__repr__()
 
         # If the list has more "items" than are stored in the underlying list
         # then there are more downloads to make.
         if len(self) - super(PagedList, self).__len__() > 0:
-            string = string.rstrip(']') + ', ... ]'
+            string = string.rstrip(']') + ', ...]'
 
         return string
 
