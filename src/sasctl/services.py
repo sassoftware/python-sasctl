@@ -14,6 +14,7 @@ def _instantiate(name):
     return cls()
 
 cas_management = _instantiate('sasctl._services.cas_management.CASManagement')
+compute = _instantiate('sasctl._services.compute.Compute')
 concepts = _instantiate('sasctl._services.concepts.Concepts')
 data_sources = _instantiate('sasctl._services.data_sources.DataSources')
 files = _instantiate('sasctl._services.files.Files')
