@@ -17,3 +17,20 @@ class JobExecution(Service):
     """
 
     _SERVICE_ROOT = '/jobExecution'
+
+    @classmethod
+    def create_job(cls, definition, name=None, description=None, parameters=None):
+
+        # TODO: parameters
+        # TODO: definition id not RestObj passed
+        # TODO: get link fails
+        uri = cls.get_link(definition, 'self')['uri']
+
+        data = {
+            'jobDefinitionUri': uri
+        }
+
+        headers = {
+            'Accept': 'application/vnd.sas.job.execution.job+json'
+        }
+        return cls.post('/jobs', headers=headers, json=data)

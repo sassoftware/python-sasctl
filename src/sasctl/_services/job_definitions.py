@@ -70,6 +70,8 @@ class JobDefinitions(Service):
         properties = properties or {}
         properties = [{'name': k, 'value': v} for k, v in properties.items()]
 
+        parameters = parameters or []
+
         clean_parameters = []
         for param in parameters:
             param_type = str(param.get('type', '')).upper()
