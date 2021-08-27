@@ -13,7 +13,8 @@ class ImportModel():
     def pzmmImportModel(cls, zPath, modelPrefix, project, inputDF, targetDF, predictmethod,
                           metrics=['EM_EVENTPROBABILITY', 'EM_CLASSIFICATION'], 
                           modelFileName=None, pyPath=None, threshPrediction=None,
-                          otherVariable=False, isH2OModel=False, force=False):
+                          otherVariable=False, isH2OModel=False, force=False,
+                          binaryString=None):
         '''Import model to SAS Model Manager using pzmm submodule.
         
         Using pzmm, generate Python score code and import the model files into 
@@ -62,6 +63,8 @@ class ImportModel():
             Sets whether the model is an H2O.ai Python model. By default False.
         force : boolean, optional
             Sets whether to overwrite models with the same name upon upload. By default False.
+        binaryString : string, optional
+            Binary string representation of the model object. By default None.
             
         Yields
         ------
@@ -115,7 +118,8 @@ class ImportModel():
             else:
                 sc.writeScoreCode(inputDF, targetDF, modelPrefix, predictmethod, modelFileName,
                                   metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction, 
-                                  otherVariable=otherVariable, isH2OModel=isH2OModel, isBinaryModel=binaryModel)
+                                  otherVariable=otherVariable, isH2OModel=isH2OModel, isBinaryModel=binaryModel,
+                                  binaryString=binaryString)
                 print('Model score code was written successfully to {}.'.format(Path(pyPath) / (modelPrefix + 'Score.py')))
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
             print('All model files were zipped to {}.'.format(Path(zPath)))
@@ -139,5 +143,6 @@ class ImportModel():
                 sc.writeScoreCode(inputDF, targetDF, modelPrefix, predictmethod, modelFileName,
                                   metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction,
                                   otherVariable=otherVariable, model=response.id,
-                                  isH2OModel=isH2OModel, isBinaryModel=binaryModel)
+                                  isH2OModel=isH2OModel, isBinaryModel=binaryModel,
+                                  binaryString=binaryString)
                 print('Model score code was written successfully to {} and uploaded to SAS Model Manager'.format(Path(pyPath) / (modelPrefix + 'Score.py')))

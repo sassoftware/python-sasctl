@@ -174,8 +174,8 @@ h2o.init()''')
             # For each case of SAS Viya version and H2O model or not, load the model file as variable _thisModelFit
             if isBinaryString:
                 cls.pyFile.write('''\n
-binaryString = '{binaryString}'
-_thisModelFit = pickle.loads(codecs.decode(pickled.encode(), 'base64'))''').format(binaryString=binaryString)
+binaryString = """{binaryString}"""
+_thisModelFit = pickle.loads(codecs.decode(binaryString.encode(), 'base64'))'''.format(binaryString=binaryString))
             elif (isViya35 and isH2OModel and not isBinaryModel):
                 cls.pyFile.write('''\n
 with gzip.open('/models/resources/viya/{modelID}/{modelFileName}', 'r') as fileIn, open('/models/resources/viya/{modelID}/{modelZipFileName}', 'wb') as fileOut:
@@ -214,30 +214,31 @@ def score{modelPrefix}({inputVarList}):
                                   inputVarList=', '.join(inputVarList),
                                   metrics=', '.join(metrics)))
             # As a check for missing model variables, run a try/except block that reattempts to load the model in as a variable
-            cls.pyFile.write('''\n
+            if binaryString is None:
+                cls.pyFile.write('''\n
     try:
         _thisModelFit
     except NameError:\n''')
-            if isViya35 and not isH2OModel:
-                cls.pyFile.write('''
+                if isViya35 and not isH2OModel:
+                    cls.pyFile.write('''
         with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
             _thisModelFit = pickle.load(_pFile)'''.format(modelID=modelID, modelFileName=modelFileName))
-            elif isViya35 and isH2OModel and not isBinaryModel:
-                cls.pyFile.write('''
+                elif isViya35 and isH2OModel and not isBinaryModel:
+                    cls.pyFile.write('''
         _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelZipFileName}')
         '''.format(modelID=modelID, modelZipFileName=modelFileName[:-4] + 'zip'))
-            elif isViya35 and isBinaryModel:
-                cls.pyFile.write('''
+                elif isViya35 and isBinaryModel:
+                    cls.pyFile.write('''
         _thisModelFit = h2o.load_model('/models/resources/viya/{modelID}/{modelFileName}')'''.format(modelID=modelID, modelFileName=modelFileName))
-            elif not isViya35 and not isH2OModel:
-                cls.pyFile.write('''
+                elif not isViya35 and not isH2OModel:
+                    cls.pyFile.write('''
         with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
             _thisModelFit = pickle.load(_pFile)'''.format(modelFileName=modelFileName))
-            elif not isViya35 and isH2OModel:
-                cls.pyFile.write('''
+                elif not isViya35 and isH2OModel:
+                    cls.pyFile.write('''
         _thisModelFit = h2o.import_mojo(settings.pickle_path + '{}')'''.format(modelFileName[:-4] + 'zip'))
-            elif not isViya35 and isBinaryModel:
-                                cls.pyFile.write('''\n
+                elif not isViya35 and isBinaryModel:
+                    cls.pyFile.write('''\n
         _thisModelFit = h2o.load_model(settings.pickle_path + '{}')'''.format(modelFileName=modelFileName))
 
             if missingValues:

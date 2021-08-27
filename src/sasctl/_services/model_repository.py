@@ -145,7 +145,8 @@ class ModelRepository(Service):
 
         """
 
-        link = cls.get_model_link(model, 'contents', refresh=True)
+        #link = cls.get_model_link(model, 'contents', refresh=True)
+        link = cls.get_model(model)
         contents = cls.request_link(link, 'contents')
 
         # By default, request_link() will unwrap a length-1 list.
