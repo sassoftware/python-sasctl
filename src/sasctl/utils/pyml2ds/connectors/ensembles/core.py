@@ -1,10 +1,7 @@
 import abc
 
-import six
 
-
-@six.add_metaclass(abc.ABCMeta)
-class EnsembleParser:
+class EnsembleParser(metaclass=abc.ABCMeta):
     """Abstract class for parsing decision tree ensembles.
 
     Attributes
@@ -27,8 +24,9 @@ class EnsembleParser:
 
     @classmethod
     def _aggregate(cls, booster_count):
-        return "treeValue = sum({});\n".format(', '.join(
-            "treeValue%d" % i for i in range(booster_count)))
+        return "treeValue = sum({});\n".format(
+            ', '.join("treeValue%d" % i for i in range(booster_count))
+        )
 
     def translate(self, file):
         """Translate a gradient boosting model and write SAS scoring code to
@@ -50,5 +48,8 @@ class EnsembleParser:
 
         file.write("/* Getting target probability */\n")
         file.write(self._aggregate(booster_id + 1))
-        file.write("{} = {};\n".format(self.out_var_name,
-                                       self.out_transform.format("treeValue")))
+        file.write(
+            "{} = {};\n".format(
+                self.out_var_name, self.out_transform.format("treeValue")
+            )
+        )

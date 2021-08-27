@@ -10,8 +10,6 @@ import re
 from collections import OrderedDict
 from math import isnan
 
-import six
-
 from .service import Service
 
 
@@ -46,8 +44,9 @@ class MicroAnalyticScore(Service):
         # MAS id.
         return re.match('^[_a-z][_a-z0-9]+$', id_) is not None
 
-    list_modules, get_module, update_module, \
-        delete_module = Service._crud_funcs('/modules', 'module')
+    list_modules, get_module, update_module, delete_module = Service._crud_funcs(
+        '/modules', 'module'
+    )
 
     def get_module_step(self, module, step):
         """Details of a single step in a given module.
@@ -129,8 +128,7 @@ class MicroAnalyticScore(Service):
             elif type_name == 'int64':
                 kwargs[k] = int(kwargs[k])
 
-        body = {'inputs': [{'name': k, 'value': v}
-                           for k, v in six.iteritems(kwargs)]}
+        body = {'inputs': [{'name': k, 'value': v} for k, v in kwargs.items()]}
 
         # Convert NaN to None (null) before calling MAS
         for i in body['inputs']:
@@ -163,8 +161,14 @@ class MicroAnalyticScore(Service):
             return outputs[0]
         return outputs
 
-    def create_module(self, name=None, description=None, source=None,
-                      language='python', scope='public'):
+    def create_module(
+        self,
+        name=None,
+        description=None,
+        source=None,
+        language='python',
+        scope='public',
+    ):
         """Create a new module in MAS.
 
         Parameters
@@ -189,14 +193,15 @@ class MicroAnalyticScore(Service):
         elif language == 'ds2':
             t = 'text/vnd.sas.source.ds2'
         else:
-            raise ValueError('Unrecognized source code language `%s`.'
-                             % language)
+            raise ValueError('Unrecognized source code language `%s`.' % language)
 
-        data = {'id': name,
-                'type': t,
-                'description': description,
-                'source': source,
-                'scope': scope}
+        data = {
+            'id': name,
+            'type': t,
+            'description': description,
+            'source': source,
+            'scope': scope,
+        }
 
         r = self.post('/modules', json=data)
         return r
@@ -240,8 +245,7 @@ class MicroAnalyticScore(Service):
             # Default all params to None to allow method(DataFrame) execution
             input_params = [a for a in arguments] + ['**kwargs']
             method_name = '_%s_%s' % (module.id, step.id)
-            signature = 'def %s(%s):' \
-                        % (method_name, ', '.join(input_params))
+            signature = 'def %s(%s):' % (method_name, ', '.join(input_params))
 
             # If the module step takes arguments, then we perform a number
             # of additional checks to make the allowed input as wide as possible
@@ -266,7 +270,7 @@ class MicroAnalyticScore(Service):
                     '    is_numpy = False',
                     'if is_pandas:',
                     '    assert len(first_input.shape) == 1',
-                    '    for k in first_input.keys():'
+                    '    for k in first_input.keys():',
                 ]
 
                 for arg in arguments:
@@ -274,12 +278,14 @@ class MicroAnalyticScore(Service):
                     arg_checks.append("            %s = first_input[k]" % arg)
                     arg_checks.append("            continue")
 
-                arg_checks.extend([
-                    'elif is_numpy:',
-                    '    if len(first_input.shape) > 1:',
-                    '        assert first_input.shape[0] == 1',
-                    '    first_input = first_input.ravel()'
-                ])
+                arg_checks.extend(
+                    [
+                        'elif is_numpy:',
+                        '    if len(first_input.shape) > 1:',
+                        '        assert first_input.shape[0] == 1',
+                        '    first_input = first_input.ravel()',
+                    ]
+                )
 
                 for i, arg in enumerate(arguments):
                     arg_checks.append('    %s = first_input[%d]' % (arg, i))
@@ -307,31 +313,38 @@ class MicroAnalyticScore(Service):
 
             # Full method source code
             # Drops 'rc' and 'msg' from return values
-            code = (signature,
-                    type_string,
-                    '    """Execute step \'%s\' of module \'%s\'."""' % (step, module),
-                    '\n'.join('    %s' % a for a in arg_checks),
-                    '    r = execute_module_step(%s)' % ', '.join(['module', 'step'] + call_params),
-                    '    r.pop("rc", None)',
-                    '    r.pop("msg", None)',
-                    '    if len(r) == 1:',
-                    '        return r.popitem()[1]',
-                    '    return tuple(v for v in r.values())'
-                    )
+            code = (
+                signature,
+                type_string,
+                '    """Execute step \'%s\' of module \'%s\'."""' % (step, module),
+                '\n'.join('    %s' % a for a in arg_checks),
+                '    r = execute_module_step(%s)'
+                % ', '.join(['module', 'step'] + call_params),
+                '    r.pop("rc", None)',
+                '    r.pop("msg", None)',
+                '    if len(r) == 1:',
+                '        return r.popitem()[1]',
+                '    return tuple(v for v in r.values())',
+            )
 
             code = '\n'.join(code)
-            self.log.debug("Generated code for step '%s' of module '%s':\n%s",
-                           id_, module, code)
+            self.log.debug(
+                "Generated code for step '%s' of module '%s':\n%s", id_, module, code
+            )
             compiled = compile(code, '<string>', 'exec')
 
             env = globals().copy()
-            env.update({'execute_module_step': self.execute_module_step,
-                        'module': module,
-                        'step': step})
+            env.update(
+                {
+                    'execute_module_step': self.execute_module_step,
+                    'module': module,
+                    'step': step,
+                }
+            )
 
-            func = types.FunctionType(compiled.co_consts[0],
-                                      env,
-                                      argdefs=tuple(None for x in arguments))
+            func = types.FunctionType(
+                compiled.co_consts[0], env, argdefs=tuple(None for x in arguments)
+            )
 
             setattr(module, step.id, func)
 

@@ -4,9 +4,9 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import pytest
-from six.moves import mock
+from unittest import mock
 
+import pytest
 from sasctl.services import cas_management as cm
 
 
@@ -16,8 +16,7 @@ pytestmark = pytest.mark.usefixtures('session')
 def test_is_available():
     assert cm.is_available()
 
-    with mock.patch('sasctl._services.cas_management.CASManagement.head') as \
-            mocked:
+    with mock.patch('sasctl._services.cas_management.CASManagement.head') as mocked:
         mocked.return_value.status_code = 404
         assert not cm.is_available()
 

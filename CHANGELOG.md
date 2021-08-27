@@ -1,5 +1,6 @@
 Unreleased
 ----------
+<<<<<<< HEAD
  **Bugfixes**
  - Reworked the `model_repository.get_repository()` to prevent HTTP 403 errors that could occur with some Viya environments.
  
@@ -20,6 +21,32 @@ v1.5.4 (2020-10-29)
  
 **Bugfixes**
  - Reworked the `model_repository.get_repository()` to prevent HTTP 403 errors that could occur with some Viya environments.
+=======
+**Improvements**
+ - `model_repository.add_model_content()` will now overwrite existing files instead of failing.
+ 
+**Bugfixes**
+ - `PagedList.__repr__()` no longer appears to be an empty list. 
+
+v1.6.0 (2021-06-29)
+-------------------
+**Improvements**
+ - `Session` now supports authorization using OAuth2 tokens.  Use the `token=` parameter in the constructor when 
+ an existing access token token is known.  Alternatively, omitting the `username=` and `password=` parameters
+ will now prompt the user for an auth code.
+ 
+**Changes**
+ - `current_session` now stores & returns the *most recently created* session, not the first created session.  This
+ was done to alleviate quirks where an old, expired session is implicitly used instead of a newly-created session.
+ - Removed deprecated `raw=` parameter from `sasctl.core.request()`.
+ - Dropped support for Python 2.
+ 
+ 
+v1.5.9 (2021-06-09)
+-------------------
+**Bugfixes**
+ - Fixed an issue that caused score code generation by `pzmm` module to fail with Viya 3.5.
+>>>>>>> upstream/master
  
 v1.5.8 (2021-05-18)
 -------------------

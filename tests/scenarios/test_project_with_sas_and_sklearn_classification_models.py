@@ -19,7 +19,6 @@ Performs the following steps:
 """
 
 import pytest
-import six
 
 from sasctl import publish_model, register_model
 from sasctl.services import model_repository as mr

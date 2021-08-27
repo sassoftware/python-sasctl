@@ -5,16 +5,16 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import pickle
+from unittest import mock
 
 import pytest
-from six.moves import mock
-
 from sasctl import RestObj
 from sasctl.services import files
 
 pytestmark = pytest.mark.usefixtures('session')
 
 FILENAME = 'dummy_file'
+
 
 @pytest.fixture
 def dummy_file(tmpdir):
@@ -37,8 +37,7 @@ class TestTextFile:
         # Requests uses os.urandom(16) to generate boundaries for multi-part
         # form uploads.  Mock the output to ensure a consistent value so
         # that body request/responses always match.
-        with mock.patch('os.urandom',
-                        return_value='abcdefghijklmnop'.encode('utf-8')):
+        with mock.patch('os.urandom', return_value='abcdefghijklmnop'.encode('utf-8')):
 
             """Create a file with an explicitly set filename."""
             file = files.create_file(dummy_file, filename=self.filename)
@@ -74,8 +73,7 @@ class TestTextFile:
         # Requests uses os.urandom(16) to generate boundaries for multi-part
         # form uploads.  Mock the output to ensure a consistent value so
         # that body request/responses always match.
-        with mock.patch('os.urandom',
-                        return_value='abcdefghijklmnop'.encode('utf-8')):
+        with mock.patch('os.urandom', return_value='abcdefghijklmnop'.encode('utf-8')):
             file = files.create_file(dummy_file)
 
         assert isinstance(file, RestObj)
@@ -106,8 +104,9 @@ class TestTextFile:
             # Requests uses os.urandom(16) to generate boundaries for multi-part
             # form uploads.  Mock the output to ensure a consistent value so
             # that body request/responses always match.
-            with mock.patch('os.urandom',
-                            return_value='abcdefghijklmnop'.encode('utf-8')):
+            with mock.patch(
+                'os.urandom', return_value='abcdefghijklmnop'.encode('utf-8')
+            ):
                 file = files.create_file(f, filename=self.filename)
 
         assert isinstance(file, RestObj)
@@ -138,8 +137,7 @@ class TestPickleFile:
         # Requests uses os.urandom(16) to generate boundaries for multi-part
         # form uploads.  Mock the output to ensure a consistent value so
         # that body request/responses always match.
-        with mock.patch('os.urandom',
-                        return_value='abcdefghijklmnop'.encode('utf-8')):
+        with mock.patch('os.urandom', return_value='abcdefghijklmnop'.encode('utf-8')):
 
             # Read the file contents and pickle
             with open(dummy_file, 'r') as f:
@@ -187,8 +185,7 @@ class TestPickleFile:
         # Requests uses os.urandom(16) to generate boundaries for multi-part
         # form uploads.  Mock the output to ensure a consistent value so
         # that body request/responses always match.
-        with mock.patch('os.urandom',
-                        return_value='abcdefghijklmnop'.encode('utf-8')):
+        with mock.patch('os.urandom', return_value='abcdefghijklmnop'.encode('utf-8')):
             file = files.create_file(dummy_file)
 
         assert isinstance(file, RestObj)
@@ -219,8 +216,9 @@ class TestPickleFile:
             # Requests uses os.urandom(16) to generate boundaries for multi-part
             # form uploads.  Mock the output to ensure a consistent value so
             # that body request/responses always match.
-            with mock.patch('os.urandom',
-                            return_value='abcdefghijklmnop'.encode('utf-8')):
+            with mock.patch(
+                'os.urandom', return_value='abcdefghijklmnop'.encode('utf-8')
+            ):
                 file = files.create_file(f, filename=self.filename)
 
         assert isinstance(file, RestObj)
