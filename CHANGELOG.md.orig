@@ -1,27 +1,5 @@
 Unreleased
 ----------
-<<<<<<< HEAD
- **Bugfixes**
- - Reworked the `model_repository.get_repository()` to prevent HTTP 403 errors that could occur with some Viya environments.
- 
-v1.5.5 (2021-03-26)
--------------------
-**Bugfixes***
- - Fixed an issue with JSON parsing that caused the `publish_model` task to fail with Viya 4.0.
- 
-v1.5.4 (2020-10-29)
-------------------
-**Improvements**
- - Added the `as_swat` method to the `Session` object, allowing connection to CAS through SWAT without an additional authentication step.
- 
-**Changes**
- - Integrated PZMM into `Session` calls and removed redundant function calls in PZMM.
- - ROC and Lift statistic JSON files created by PZMM are now generated through CAS actionset calls.
- - Updated the PZMM example notebook, `FleetMaintenance.ipynb`, to include integration of PZMM with sasctl functions.
- 
-**Bugfixes**
- - Reworked the `model_repository.get_repository()` to prevent HTTP 403 errors that could occur with some Viya environments.
-=======
 **Improvements**
  - `model_repository.add_model_content()` will now overwrite existing files instead of failing.
  
@@ -46,7 +24,6 @@ v1.5.9 (2021-06-09)
 -------------------
 **Bugfixes**
  - Fixed an issue that caused score code generation by `pzmm` module to fail with Viya 3.5.
->>>>>>> upstream/master
  
 v1.5.8 (2021-05-18)
 -------------------
