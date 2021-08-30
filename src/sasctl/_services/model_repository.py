@@ -6,7 +6,6 @@
 
 """The Model Repository service supports registering and managing models."""
 
-from uuid import UUID
 from .service import Service
 from ..core import current_session, get, delete, sasctl_command, HTTPError
 
@@ -155,8 +154,7 @@ class ModelRepository(Service):
 
         """
 
-        #link = cls.get_model_link(model, 'contents', refresh=True)
-        link = cls.get_model(model)
+        link = cls.get_model_link(model, 'contents', refresh=True)
         contents = cls.request_link(link, 'contents')
 
         # By default, request_link() will unwrap a length-1 list.
@@ -195,128 +193,6 @@ class ModelRepository(Service):
         if isinstance(repository, dict) and all(
             k in repository for k in ('id', 'name')
         ):
-            if refresh:
-                repository = repository['id']
-            else:
-                return repository
-
-        if cls.is_uuid(repository):
-            try:
-                # Attempt to GET the repository directly.  Access may be restricted, so allow HTTP 403 errors
-                # and fall back to using list_repositories() instead.
-                return cls.get('/repositories/{id}'.format(id=repository))
-            except HTTPError as e:
-                if e.code != 403:
-                    raise e
-
-        results = cls.list_repositories()
-
-        # Not sure why, but as of 19w04 the filter doesn't seem to work
-        for result in results:
-            if result['name'] == str(repository) or result['id'] == str(repository):
-                # Make a request for the specific object so that ETag
-                # is included, allowing updates.
-                try:
-                    if cls.get_link(result, 'self'):
-                        return cls.request_link(result, 'self')
-
-                    id_ = result.get('id', result['name'])
-                    return cls.get('/repositories/{id}'.format(id=id_))
-                except HTTPError as e:
-                    # NOTE: As of Viya 4.0.1 access to GET a repository is restricted to admin users out of the box.
-                    # Try to GET the repository, but ignore any 403 (permission denied) errors.
-                    if e.code != 403:
-                        raise e
-                return result
-
-    @sasctl_command('get')
-    @classmethod
-    def get_repository(cls, repository, refresh=False):
-        """Return a repository instance.
-
-        Parameters
-        ----------
-        repository : str or dict
-            Name, ID, or dictionary representation of the repository.
-        refresh : bool, optional
-            Obtain an updated copy of the repository.
-
-        Returns
-        -------
-        RestObj or None
-            A dictionary containing the repository attributes or None.
-
-        Notes
-        -------
-        If `repository` is a complete representation of the repository it will be
-        returned unless `refresh` is set.  This prevents unnecessary REST
-        calls when data is already available on the client.
-
-        """
-        # If the input already appears to be the requested object just
-        # return it, unless a refresh of the data was explicitly requested.
-        if isinstance(repository, dict) and all(k in repository for k in ('id', 'name')):
-            if refresh:
-                repository = repository['id']
-            else:
-                return repository
-
-        if cls.is_uuid(repository):
-            try:
-                # Attempt to GET the repository directly.  Access may be restricted, so allow HTTP 403 errors
-                # and fall back to using list_repositories() instead.
-                return cls.get('/repositories/{id}'.format(id=repository))
-            except HTTPError as e:
-                if e.code != 403:
-                    raise e
-
-        results = cls.list_repositories()
-
-        # Not sure why, but as of 19w04 the filter doesn't seem to work
-        for result in results:
-            if result['name'] == str(repository) or result['id'] == str(repository):
-                # Make a request for the specific object so that ETag
-                # is included, allowing updates.
-                try:
-                    if cls.get_link(result, 'self'):
-                        return cls.request_link(result, 'self')
-
-                    id_ = result.get('id', result['name'])
-                    return cls.get('/repositories/{id}'.format(id=id_))
-                except HTTPError as e:
-                    # NOTE: As of Viya 4.0.1 access to GET a repository is restricted to admin users out of the box.
-                    # Try to GET the repository, but ignore any 403 (permission denied) errors.
-                    if e.code != 403:
-                        raise e
-                return result
-
-    @classmethod
-    @sasctl_command('get', 'repositories')
-    def get_repository(cls, repository, refresh=False):
-        """Return a repository instance.
-
-        Parameters
-        ----------
-        repository : str or dict
-            Name, ID, or dictionary representation of the repository.
-        refresh : bool, optional
-            Obtain an updated copy of the repository.
-
-        Returns
-        -------
-        RestObj or None
-            A dictionary containing the repository attributes or None.
-
-        Notes
-        -------
-        If `repository` is a complete representation of the repository it will be
-        returned unless `refresh` is set.  This prevents unnecessary REST
-        calls when data is already available on the client.
-
-        """
-        # If the input already appears to be the requested object just
-        # return it, unless a refresh of the data was explicitly requested.
-        if isinstance(repository, dict) and all(k in repository for k in ('id', 'name')):
             if refresh:
                 repository = repository['id']
             else:
@@ -636,7 +512,6 @@ class ModelRepository(Service):
         if projectResponse is None:
             try:
                 print('WARNING: No project with the name or UUID {} was found.'.format(project))
-                UUID(project)
                 raise SystemError('The provided UUID does not match any projects found in SAS Model Manager. ' +
                                   'Please enter a valid UUID or a new name for a project to be created.')
             except ValueError:
