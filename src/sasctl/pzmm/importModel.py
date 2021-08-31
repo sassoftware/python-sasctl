@@ -7,20 +7,110 @@ from .._services.model_repository import ModelRepository as mr
 from .writeScoreCode import ScoreCode as sc
 from .zipModel import ZipModel as zm
 
-class ImportModel():
-    
+
+def _import_model_from_zip(
+    name, project, file, force=False, description=None, version='latest'
+):
+    """Import a model and contents as a ZIP file into a model project.
+
+    Parameters
+    ----------
+    name : str or dict
+        The name of the model.
+    project : str or dict
+        The name or id of the model project, or a dictionary
+        representation of the project.
+    file : bytes
+        The ZIP file containing the model and contents.
+    description : str
+        The description of the model.
+
+    Returns
+    -------
+    RestObj
+        The API response after importing the model.
+
+    """
+    if type(name) is dict:
+        name = name['name']
+
+    projectResponse = mr.get_project(project)
+
+    # Check if a project exists with the provided name, if not create a new project
+    if projectResponse is None:
+        try:
+            print(
+                'WARNING: No project with the name or UUID {} was found.'.format(
+                    project
+                )
+            )
+            raise SystemError(
+                'The provided UUID does not match any projects found in SAS Model Manager. '
+                + 'Please enter a valid UUID or a new name for a project to be created.'
+            )
+        except ValueError:
+            repo = mr.default_repository().get('id')
+            project = mr.create_project(project, repo)
+            print('A new project named {} was created.'.format(project.name))
+    else:
+        project = projectResponse
+
+    # Check if a model with the same name already exists in the project
+    project = mr.get_project(project)
+    projectId = project['id']
+    projectModels = mr.get('/projects/{}/models'.format(projectId))
+
+    for model in projectModels:
+        # Throws a TypeError if only one model is in the project
+        try:
+            if model['name'] == name:
+                if force:
+                    mr.delete_model(model.id)
+                else:
+                    raise ValueError(
+                        'A model with the same model name exists in project {}. Include the force=True argument to '
+                        'overwrite models with the same name.'.format(project.name)
+                    )
+        except TypeError:
+            if projectModels['name'] == name:
+                if force:
+                    mr.delete_model(projectModels.id)
+                else:
+                    raise ValueError(
+                        'A model with the same model name exists in project {}. Include the force=True argument to '
+                        'overwrite models with the same name.'.format(project.name)
+                    )
+
+    return mr.import_model_from_zip(
+        name=name, project=project, description=description, file=file, version=version
+    )
+
+
+class ImportModel:
     @classmethod
-    def pzmmImportModel(cls, zPath, modelPrefix, project, inputDF, targetDF, predictmethod,
-                          metrics=['EM_EVENTPROBABILITY', 'EM_CLASSIFICATION'], 
-                          modelFileName=None, pyPath=None, threshPrediction=None,
-                          otherVariable=False, isH2OModel=False, force=False,
-                          binaryString=None):
+    def pzmmImportModel(
+        cls,
+        zPath,
+        modelPrefix,
+        project,
+        inputDF,
+        targetDF,
+        predictmethod,
+        metrics=['EM_EVENTPROBABILITY', 'EM_CLASSIFICATION'],
+        modelFileName=None,
+        pyPath=None,
+        threshPrediction=None,
+        otherVariable=False,
+        isH2OModel=False,
+        force=False,
+        binaryString=None,
+    ):
         '''Import model to SAS Model Manager using pzmm submodule.
-        
-        Using pzmm, generate Python score code and import the model files into 
+
+        Using pzmm, generate Python score code and import the model files into
         SAS Model Manager. This function automatically checks the version of SAS
         Viya being used through the sasctl Session object and creates the appropriate
-        score code and API calls required for the model and its associated content to 
+        score code and API calls required for the model and its associated content to
         be registered in SAS Model Manager.
 
         Parameters
@@ -41,12 +131,12 @@ class ImportModel():
             The `DataFrame` object contains the training data for the target variable.
         predictMethod : string
             User-defined prediction method for score testing. This should be
-            in a form such that the model and data input can be added using 
-            the format() command. 
+            in a form such that the model and data input can be added using
+            the format() command.
             For example: '{}.predict_proba({})'.
         metrics : string list, optional
             The scoring metrics for the model. The default is a set of two
-            metrics: EM_EVENTPROBABILITY and EM_CLASSIFICATION.        
+            metrics: EM_EVENTPROBABILITY and EM_CLASSIFICATION.
         modelFileName : string, optional
             Name of the model file that contains the model. By default None and assigned as
             modelPrefix + '.pickle'.
@@ -65,7 +155,7 @@ class ImportModel():
             Sets whether to overwrite models with the same name upon upload. By default False.
         binaryString : string, optional
             Binary string representation of the model object. By default None.
-            
+
         Yields
         ------
         '*Score.py'
@@ -77,25 +167,29 @@ class ImportModel():
         # Initialize no score code or binary H2O model flags
         noScoreCode = False
         binaryModel = False
-    
+
         if pyPath is None:
             pyPath = Path(zPath)
         else:
             pyPath = Path(pyPath)
-            
+
         # Function to check for MOJO or binary model files in H2O models
         def getFiles(extensions):
             allFiles = []
             for ext in extensions:
                 allFiles.extend(pyPath.glob(ext))
             return allFiles
-        
+
         # If the model file name is not provided, set a default value depending on H2O and binary model status
         if modelFileName is None:
             if isH2OModel:
                 binaryOrMOJO = getFiles(['*.mojo', '*.pickle'])
                 if len(binaryOrMOJO) == 0:
-                    print('WARNING: An H2O model file was not found at {}. Score code will not be automatically generated.'.format(str(pyPath)))
+                    print(
+                        'WARNING: An H2O model file was not found at {}. Score code will not be automatically generated.'.format(
+                            str(pyPath)
+                        )
+                    )
                     noScoreCode = True
                 elif len(binaryOrMOJO) == 1:
                     if str(binaryOrMOJO[0]).endswith('.pickle'):
@@ -104,45 +198,85 @@ class ImportModel():
                     else:
                         modelFileName = modelPrefix + '.mojo'
                 else:
-                    print('WARNING: Both a MOJO and binary model file are present at {}. Score code will not be automatically generated.'.format(str(pyPath)))
+                    print(
+                        'WARNING: Both a MOJO and binary model file are present at {}. Score code will not be automatically generated.'.format(
+                            str(pyPath)
+                        )
+                    )
                     noScoreCode = True
             else:
                 modelFileName = modelPrefix + '.pickle'
-                
+
         # Check the SAS Viya version number being used
-        isViya35 = (platform_version() == '3.5')
+        isViya35 = platform_version() == '3.5'
         # For SAS Viya 4, the score code can be written beforehand and imported with all of the model files
         if not isViya35:
             if noScoreCode:
                 print('No score code was generated.')
             else:
-                sc.writeScoreCode(inputDF, targetDF, modelPrefix, predictmethod, modelFileName,
-                                  metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction, 
-                                  otherVariable=otherVariable, isH2OModel=isH2OModel, isBinaryModel=binaryModel,
-                                  binaryString=binaryString)
-                print('Model score code was written successfully to {}.'.format(Path(pyPath) / (modelPrefix + 'Score.py')))
+                sc.writeScoreCode(
+                    inputDF,
+                    targetDF,
+                    modelPrefix,
+                    predictmethod,
+                    modelFileName,
+                    metrics=metrics,
+                    pyPath=pyPath,
+                    threshPrediction=threshPrediction,
+                    otherVariable=otherVariable,
+                    isH2OModel=isH2OModel,
+                    isBinaryModel=binaryModel,
+                    binaryString=binaryString,
+                )
+                print(
+                    'Model score code was written successfully to {}.'.format(
+                        Path(pyPath) / (modelPrefix + 'Score.py')
+                    )
+                )
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
             print('All model files were zipped to {}.'.format(Path(zPath)))
-            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
+            response = _import_model_from_zip(modelPrefix, project, zipIOFile, force)
             try:
-                print('Model was successfully imported into SAS Model Manager as {} with UUID: {}.'.format(response.name, response.id))
+                print(
+                    'Model was successfully imported into SAS Model Manager as {} with UUID: {}.'.format(
+                        response.name, response.id
+                    )
+                )
             except AttributeError:
                 print('Model failed to import to SAS Model Manager.')
         # For SAS Viya 3.5, the score code is written after upload in order to know the model UUID
         else:
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
             print('All model files were zipped to {}.'.format(Path(zPath)))
-            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
+            response = _import_model_from_zip(modelPrefix, project, zipIOFile, force)
             try:
-                print('Model was successfully imported into SAS Model Manager as {} with UUID: {}.'.format(response.name, response.id))
+                print(
+                    'Model was successfully imported into SAS Model Manager as {} with UUID: {}.'.format(
+                        response.name, response.id
+                    )
+                )
             except AttributeError:
                 print('Model failed to import to SAS Model Manager.')
             if noScoreCode:
                 print('No score code was generated.')
             else:
-                sc.writeScoreCode(inputDF, targetDF, modelPrefix, predictmethod, modelFileName,
-                                  metrics=metrics, pyPath=pyPath, threshPrediction=threshPrediction,
-                                  otherVariable=otherVariable, model=response.id,
-                                  isH2OModel=isH2OModel, isBinaryModel=binaryModel,
-                                  binaryString=binaryString)
-                print('Model score code was written successfully to {} and uploaded to SAS Model Manager'.format(Path(pyPath) / (modelPrefix + 'Score.py')))
+                sc.writeScoreCode(
+                    inputDF,
+                    targetDF,
+                    modelPrefix,
+                    predictmethod,
+                    modelFileName,
+                    metrics=metrics,
+                    pyPath=pyPath,
+                    threshPrediction=threshPrediction,
+                    otherVariable=otherVariable,
+                    model=response.id,
+                    isH2OModel=isH2OModel,
+                    isBinaryModel=binaryModel,
+                    binaryString=binaryString,
+                )
+                print(
+                    'Model score code was written successfully to {} and uploaded to SAS Model Manager'.format(
+                        Path(pyPath) / (modelPrefix + 'Score.py')
+                    )
+                )
