@@ -409,8 +409,9 @@ class ModelRepository(Service):
 
         # if the file already exists, a 409 error will be returned
         try:
-            return cls.post('/models/{}/contents'.format(id_),
-                            files=files, data=metadata)
+            return cls.post(
+                '/models/{}/contents'.format(id_), files=files, data=metadata
+            )
         # delete the older duplicate model and rerun the API call
         except HTTPError as e:
             if e.code == 409:
@@ -418,8 +419,11 @@ class ModelRepository(Service):
                 for item in model_contents:
                     if item.name == name:
                         cls.delete('/models/{}/contents/{}'.format(id_, item.id))
-                        return cls.post('/models/{}/contents'.format(id_),
-                                        files=files, data=metadata)
+                        return cls.post(
+                            '/models/{}/contents'.format(id_),
+                            files=files,
+                            data=metadata,
+                        )
             else:
                 raise e
 
@@ -481,8 +485,9 @@ class ModelRepository(Service):
         )
 
     @classmethod
-    def import_model_from_zip(cls, name, project, file, force=False, description=None,
-                              version='latest'):
+    def import_model_from_zip(
+        cls, name, project, file, description=None, version='latest'
+    ):
         """Import a model and contents as a ZIP file into a model project.
 
         Parameters
@@ -503,23 +508,10 @@ class ModelRepository(Service):
             The API response after importing the model.
 
         """
-        if type(name) is dict:
-            name = name['name']
+        project = cls.get_project(project)
 
-        projectResponse = cls.get_project(project)
-
-        # Check if a project exists with the provided name, if not create a new project
-        if projectResponse is None:
-            try:
-                print('WARNING: No project with the name or UUID {} was found.'.format(project))
-                raise SystemError('The provided UUID does not match any projects found in SAS Model Manager. ' +
-                                  'Please enter a valid UUID or a new name for a project to be created.')
-            except ValueError:
-                repo = cls.default_repository().get('id')
-                project = cls.create_project(project, repo)
-                print('A new project named {} was created.'.format(project.name))
-        else:
-            project = projectResponse
+        if project is None:
+            raise ValueError('Project `%s` could not be found.' % str(project))
 
         params = {
             'name': name,
@@ -529,26 +521,6 @@ class ModelRepository(Service):
             'versionOption': version,
         }
         params = '&'.join('{}={}'.format(k, v) for k, v in params.items())
-        
-        # Check if a model with the same name already exists in the project
-        project = cls.get_project(project)
-        projectId = project['id']
-        projectModels = cls.get('/projects/{}/models'.format(projectId))
-        
-        for model in projectModels:
-            # Throws a TypeError if only one model is in the project
-            try:
-                if model['name'] == name:
-                    if force:
-                        cls.delete_model(model.id)
-                    else:
-                        raise ValueError('A model with the same model name exists in project {}. Include the force=True argument to overwrite models with the same name.'.format(project.name))
-            except TypeError:
-                if projectModels['name'] == name:
-                    if force:
-                        cls.delete_model(projectModels.id)
-                    else:
-                        raise ValueError('A model with the same model name exists in project {}. Include the force=True argument to overwrite models with the same name.'.format(project.name))
 
         r = cls.post(
             '/models#octetStream',
@@ -705,22 +677,31 @@ class ModelRepository(Service):
         else:
             model = cls.get_model(model)
             id_ = model['id']
-        
+
         # Check if symbolic link for resource directories exists
         try:
-            response = cls.put('/models/%s/scoreResources' % id_, headers={'Accept': 'application/json'})
+            response = cls.put(
+                '/models/%s/scoreResources' % id_,
+                headers={'Accept': 'application/json'},
+            )
             if response == []:
-                print('WARNING: No score resource files were found in model {}.'.format(model.name))
+                print(
+                    'WARNING: No score resource files were found in model {}.'.format(
+                        model.name
+                    )
+                )
             return response
         except HTTPError as e:
             if e.code == 406:
-                raise OSError('The SAS Viya system you are attempting to move score resources with requires an additional' + 
-                              ' administrator action in order to complete. Please see the documentation at ' +
-                              'https://go.documentation.sas.com/doc/en/calcdc/3.5/calmodels/n10916nn7yro46n119nev9sb912c.htm,' + 
-                              'which details the corollary approach for configuring analytic store model files.')
+                raise OSError(
+                    'The SAS Viya system you are attempting to move score resources with requires an additional'
+                    + ' administrator action in order to complete. Please see the documentation at '
+                    + 'https://go.documentation.sas.com/doc/en/calcdc/3.5/calmodels/n10916nn7yro46n119nev9sb912c.htm,'
+                    + 'which details the corollary approach for configuring analytic store model files.'
+                )
             else:
                 raise e
-    
+
     @classmethod
     def convert_python_to_ds2(cls, model):
         """Converts a Python model to DS2
