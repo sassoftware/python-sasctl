@@ -40,24 +40,25 @@ _PROP_NAME_MAXLEN = 60
 
 
 def _property(k, v):
-    return {'name': str(k)[:_PROP_NAME_MAXLEN],
-            'value': str(v)[:_PROP_VALUE_MAXLEN]}
+    return {'name': str(k)[:_PROP_NAME_MAXLEN], 'value': str(v)[:_PROP_VALUE_MAXLEN]}
 
 
 def _sklearn_to_dict(model):
     # Convert Scikit-learn values to built-in Model Manager values
-    mappings = {'LogisticRegression': 'Logistic regression',
-                'LinearRegression': 'Linear regression',
-                'SVC': 'Support vector machine',
-                'GradientBoostingClassifier': 'Gradient boosting',
-                'GradientBoostingRegressor': 'Gradient boosting',
-                'XGBClassifier': 'Gradient boosting',
-                'XGBRegressor': 'Gradient boosting',
-                'RandomForestClassifier': 'Forest',
-                'DecisionTreeClassifier': 'Decision tree',
-                'DecisionTreeRegressor': 'Decision tree',
-                'classifier': 'classification',
-                'regressor': 'prediction'}
+    mappings = {
+        'LogisticRegression': 'Logistic regression',
+        'LinearRegression': 'Linear regression',
+        'SVC': 'Support vector machine',
+        'GradientBoostingClassifier': 'Gradient boosting',
+        'GradientBoostingRegressor': 'Gradient boosting',
+        'XGBClassifier': 'Gradient boosting',
+        'XGBRegressor': 'Gradient boosting',
+        'RandomForestClassifier': 'Forest',
+        'DecisionTreeClassifier': 'Decision tree',
+        'DecisionTreeRegressor': 'Decision tree',
+        'classifier': 'classification',
+        'regressor': 'prediction',
+    }
 
     if hasattr(model, '_final_estimator'):
         estimator = model._final_estimator
@@ -73,7 +74,9 @@ def _sklearn_to_dict(model):
 
     if analytic_function == 'classification' and 'logistic' in algorithm.lower():
         target_level = 'Binary'
-    elif analytic_function == 'prediction' and ('regressor' in estimator.lower() or 'regression' in algorithm.lower()):
+    elif analytic_function == 'prediction' and (
+        'regressor' in estimator.lower() or 'regression' in algorithm.lower()
+    ):
         target_level = 'Interval'
     else:
         target_level = None
@@ -86,16 +89,14 @@ def _sklearn_to_dict(model):
         trainCodeType='Python',
         targetLevel=target_level,
         function=analytic_function,
-        tool='Python %s.%s'
-             % (sys.version_info.major, sys.version_info.minor),
-        properties=[_property(k, v) for k, v in model.get_params().items()]
+        tool='Python %s.%s' % (sys.version_info.major, sys.version_info.minor),
+        properties=[_property(k, v) for k, v in model.get_params().items()],
     )
 
     return result
 
 
-def _create_project(project_name, model, repo, input_vars=None,
-                    output_vars=None):
+def _create_project(project_name, model, repo, input_vars=None, output_vars=None):
     """Creates a project based on the model specifications.
 
     Parameters
@@ -116,9 +117,7 @@ def _create_project(project_name, model, repo, input_vars=None,
     RestObj
         The created project
     """
-    properties = {k: model[k]
-                  for k in model if k in ('function', 'targetLevel')
-                  }
+    properties = {k: model[k] for k in model if k in ('function', 'targetLevel')}
 
     function = model.get('function', '').lower()
     algorithm = model.get('algorithm', '').lower()
@@ -146,9 +145,9 @@ def _create_project(project_name, model, repo, input_vars=None,
         else:
             properties['targetLevel'] = None
 
-    project = mr.create_project(project_name, repo,
-                                variables=input_vars + output_vars,
-                                **properties)
+    project = mr.create_project(
+        project_name, repo, variables=input_vars + output_vars, **properties
+    )
 
     # As of Viya 3.4 the 'predictionVariable' and 'eventProbabilityVariable'
     # parameters are not set during project creation.  Update the project if
@@ -165,9 +164,17 @@ def _create_project(project_name, model, repo, input_vars=None,
     return project
 
 
-def register_model(model, name, project, repository=None, input=None,
-                   version=None, files=None, force=False,
-                   record_packages=True):
+def register_model(
+    model,
+    name,
+    project,
+    repository=None,
+    input=None,
+    version=None,
+    files=None,
+    force=False,
+    record_packages=True,
+):
     """Register a model in the model repository.
 
     Parameters
@@ -254,11 +261,13 @@ def register_model(model, name, project, repository=None, input=None,
             repo_obj = mr.get_repository(repository)
     except HTTPError as e:
         if e.code == 403:
-            raise AuthorizationError('Unable to register model.  User account '
-                                     'does not have read permissions for the '
-                                     '/modelRepository/repositories/ URL. '
-                                     'Please contact your SAS Viya '
-                                     'administrator.')
+            raise AuthorizationError(
+                'Unable to register model.  User account '
+                'does not have read permissions for the '
+                '/modelRepository/repositories/ URL. '
+                'Please contact your SAS Viya '
+                'administrator.'
+            )
         raise e
 
     # Unable to find or create the repo.
@@ -278,45 +287,43 @@ def register_model(model, name, project, repository=None, input=None,
             invar = []
             import zipfile as zp
             import copy
+
             zipfilecopy = copy.deepcopy(zipfile)
             tmpzip = zp.ZipFile(zipfilecopy)
             if "outputVar.json" in tmpzip.namelist():
-                outvar = json.loads(tmpzip.read("outputVar.json").decode(
-                    'utf=8'))  # added decode for 3.5 and older
+                outvar = json.loads(
+                    tmpzip.read("outputVar.json").decode('utf=8')
+                )  # added decode for 3.5 and older
                 for tmp in outvar:
                     tmp.update({'role': 'output'})
             if "inputVar.json" in tmpzip.namelist():
-                invar = json.loads(tmpzip.read("inputVar.json").decode(
-                    'utf-8'))  # added decode for 3.5 and older
+                invar = json.loads(
+                    tmpzip.read("inputVar.json").decode('utf-8')
+                )  # added decode for 3.5 and older
                 for tmp in invar:
                     if tmp['role'] != 'input':
                         tmp['role'] = 'input'
 
             if 'ModelProperties.json' in tmpzip.namelist():
-                model_props = json.loads(tmpzip.read(
-                    'ModelProperties.json').decode('utf-8'))
+                model_props = json.loads(
+                    tmpzip.read('ModelProperties.json').decode('utf-8')
+                )
             else:
                 model_props = {}
 
-            project = _create_project(project, model_props, repo_obj,
-                                      invar, outvar)
+            project = _create_project(project, model_props, repo_obj, invar, outvar)
 
-        model = mr.import_model_from_zip(name, project, zipfile,
-                                         version=version)
+        model = mr.import_model_from_zip(name, project, zipfile, version=version)
         return model
 
     # If the model is an scikit-learn model, generate the model dictionary
     # from it and pickle the model for storage
-    if all(hasattr(model, attr) for attr
-           in ['_estimator_type', 'get_params']):
+    if all(hasattr(model, attr) for attr in ['_estimator_type', 'get_params']):
         # Pickle the model so we can store it
         model_pkl = pickle.dumps(model)
-        files.append({'name': 'model.pkl',
-                      'file': model_pkl,
-                      'role': 'Python Pickle'})
+        files.append({'name': 'model.pkl', 'file': model_pkl, 'role': 'Python Pickle'})
 
-        target_funcs = [f for f in ('predict', 'predict_proba')
-                        if hasattr(model, f)]
+        target_funcs = [f for f in ('predict', 'predict_proba') if hasattr(model, f)]
 
         # Extract model properties
         model = _sklearn_to_dict(model)
@@ -338,44 +345,59 @@ def register_model(model, name, project, repository=None, input=None,
                     model['properties'].append(_property('env_%s' % n, v))
 
             # Generate and upload a requirements.txt file
-            files.append({'name': 'requirements.txt',
-                          'file': '\n'.join(packages)})
+            files.append({'name': 'requirements.txt', 'file': '\n'.join(packages)})
 
         # Generate PyMAS wrapper
         try:
-            mas_module = from_pickle(model_pkl, target_funcs,
-                                     input_types=input, array_input=True)
+            mas_module = from_pickle(
+                model_pkl, target_funcs, input_types=input, array_input=True
+            )
 
             # Include score code files from ESP and MAS
-            files.append({'name': 'dmcas_packagescorecode.sas',
-                          'file': mas_module.score_code(),
-                          'role': 'Score Code'})
-            files.append({'name': 'dmcas_epscorecode.sas',
-                          'file': mas_module.score_code(dest='CAS'),
-                          'role': 'score'})
-            files.append({'name': 'python_wrapper.py',
-                          'file': mas_module.score_code(dest='Python')})
+            files.append(
+                {
+                    'name': 'dmcas_packagescorecode.sas',
+                    'file': mas_module.score_code(),
+                    'role': 'Score Code',
+                }
+            )
+            files.append(
+                {
+                    'name': 'dmcas_epscorecode.sas',
+                    'file': mas_module.score_code(dest='CAS'),
+                    'role': 'score',
+                }
+            )
+            files.append(
+                {
+                    'name': 'python_wrapper.py',
+                    'file': mas_module.score_code(dest='Python'),
+                }
+            )
 
-            model['inputVariables'] = [var.as_model_metadata()
-                                       for var in mas_module.variables
-                                       if not var.out]
+            model['inputVariables'] = [
+                var.as_model_metadata() for var in mas_module.variables if not var.out
+            ]
 
-            model['outputVariables'] = \
-                [var.as_model_metadata() for var in mas_module.variables
-                 if var.out]
+            model['outputVariables'] = [
+                var.as_model_metadata() for var in mas_module.variables if var.out
+            ]
         except ValueError:
             # PyMAS creation failed, most likely because input data wasn't
             # provided
             logger.exception('Unable to inspect model %s', model)
 
-            warnings.warn('Unable to determine input/output variables. '
-                          ' Model variables will not be specified and some '
-                          'model functionality may not be available.')
+            warnings.warn(
+                'Unable to determine input/output variables. '
+                ' Model variables will not be specified and some '
+                'model functionality may not be available.'
+            )
     else:
         # Otherwise, the model better be a dictionary of metadata
         if not isinstance(model, dict):
-            raise TypeError("Expected an instance of '%r' but received '%r'."
-                            % ({}, model))
+            raise TypeError(
+                "Expected an instance of '%r' but received '%r'." % ({}, model)
+            )
 
     if create_project:
         project = _create_project(project, model, repo_obj)
@@ -385,8 +407,10 @@ def register_model(model, name, project, repository=None, input=None,
         # Update an existing model with new files
         model_obj = mr.get_model(name)
         if model_obj is None:
-            raise ValueError("Unable to update version '%s' of model '%s.  "
-                             "Model not found." % (version, name))
+            raise ValueError(
+                "Unable to update version '%s' of model '%s.  "
+                "Model not found." % (version, name)
+            )
         model = mr.create_model_version(name)
         mr.delete_model_contents(model)
     else:
@@ -394,8 +418,10 @@ def register_model(model, name, project, repository=None, input=None,
         model = mr.create_model(model, project)
 
     if not isinstance(model, RestObj):
-        raise TypeError("Model should be an instance of '%r' but received '%r' "
-                        "instead." % (RestObj, model))
+        raise TypeError(
+            "Model should be an instance of '%r' but received '%r' "
+            "instead." % (RestObj, model)
+        )
 
     # Upload any additional files
     for file in files:
@@ -407,11 +433,9 @@ def register_model(model, name, project, repository=None, input=None,
     return model
 
 
-def publish_model(model,
-                  destination,
-                  code=None,
-                  max_retries=60,
-                  replace=False, **kwargs):
+def publish_model(
+    model, destination, code=None, max_retries=60, replace=False, **kwargs
+):
     """Publish a model to a configured publishing destination.
 
     Parameters
@@ -452,21 +476,20 @@ def publish_model(model,
        Added `replace` option.
 
     """
+
     def submit_request():
         # Submit a publishing request
         if code is None:
             dest_obj = mp.get_destination(destination)
 
             if dest_obj and dest_obj.destinationType == "cas":
-                publish_req = mm.publish_model(model, destination,
-                                               force=replace,
-                                               reload_model_table=True)
+                publish_req = mm.publish_model(
+                    model, destination, force=replace, reload_model_table=True
+                )
             else:
-                publish_req = mm.publish_model(model, destination,
-                                               force=replace)
+                publish_req = mm.publish_model(model, destination, force=replace)
         else:
-            publish_req = mp.publish_model(model, destination,
-                                           code=code, **kwargs)
+            publish_req = mp.publish_model(model, destination, code=code, **kwargs)
 
         # A successfully submitted request doesn't mean a successfully
         # published model.  Response for publish request includes link to
@@ -478,15 +501,21 @@ def publish_model(model,
     job = submit_request()
 
     # If model was successfully published and it isn't a MAS module, we're done
-    if job.state.lower() == 'completed' \
-            and job.destination.destinationType != 'microAnalyticService':
+    if (
+        job.state.lower() == 'completed'
+        and job.destination.destinationType != 'microAnalyticService'
+    ):
         return request_link(job, 'self')
 
     # If MAS publish failed and replace=True, attempt to delete the module
     # and republish
-    if job.state.lower() == 'failed' and replace and \
-            job.destination.destinationType == 'microAnalyticService':
+    if (
+        job.state.lower() == 'failed'
+        and replace
+        and job.destination.destinationType == 'microAnalyticService'
+    ):
         from .services import microanalytic_score as mas
+
         mas.delete_module(job.publishName)
 
         # Resubmit the request
@@ -495,13 +524,13 @@ def publish_model(model,
     # Raise exception if still failing
     if job.state.lower() == 'failed':
         log = request_link(job, 'publishingLog')
-        raise RuntimeError("Failed to publish model '%s': %s"
-                           % (model, log.log))
+        raise RuntimeError("Failed to publish model '%s': %s" % (model, log.log))
 
     # Raise exception if unknown status received
     if job.state.lower() != 'completed':
-        raise RuntimeError("Model publishing job in an unknown state: '%s'"
-                           % job.state.lower())
+        raise RuntimeError(
+            "Model publishing job in an unknown state: '%s'" % job.state.lower()
+        )
 
     log = request_link(job, 'publishingLog')
     msg = log.get('log').lstrip('SUCCESS===')
@@ -515,11 +544,11 @@ def publish_model(model,
 
     module = get(module_url)
 
-    if 'application/vnd.sas.microanalytic.module' \
-            in module._headers['content-type']:
+    if 'application/vnd.sas.microanalytic.module' in module._headers['content-type']:
         # Bind Python methods to the module instance that will execute the
         # corresponding MAS module step.
         from sasctl.services import microanalytic_score as mas
+
         return mas.define_steps(module)
     return module
 
@@ -560,8 +589,9 @@ def update_model_performance(data, model, label, refresh=True):
     try:
         import swat
     except ImportError:
-        raise RuntimeError("The 'swat' package is required to save model "
-                           "performance data.")
+        raise RuntimeError(
+            "The 'swat' package is required to save model " "performance data."
+        )
 
     # Default to true
     refresh = True if refresh is None else refresh
@@ -574,26 +604,37 @@ def update_model_performance(data, model, label, refresh=True):
     project = mr.get_project(model_obj.projectId)
 
     if project.get('function', '').lower() not in ('prediction', 'classification'):
-        raise ValueError("Performance monitoring is currently supported for "
-                         "regression and binary classification projects.  "
-                         "Received project with '%s' function.  Should be "
-                         "'Prediction' or 'Classification'." % project.get('function'))
+        raise ValueError(
+            "Performance monitoring is currently supported for "
+            "regression and binary classification projects.  "
+            "Received project with '%s' function.  Should be "
+            "'Prediction' or 'Classification'." % project.get('function')
+        )
 
     if project.get('targetLevel', '').lower() not in ('interval', 'binary'):
-        raise ValueError("Performance monitoring is currently supported for "
-                         "regression and binary classification projects.  "
-                         "Received project with '%s' target level.  Should be "
-                         "'Interval' or 'Binary'." % project.get('targetLevel'))
+        raise ValueError(
+            "Performance monitoring is currently supported for "
+            "regression and binary classification projects.  "
+            "Received project with '%s' target level.  Should be "
+            "'Interval' or 'Binary'." % project.get('targetLevel')
+        )
 
-    if project.get('predictionVariable', '') == '' and project.get('function',
-                                                                   '').lower() == 'prediction':
-        raise ValueError("Project '%s' does not have a prediction variable "
-                         "specified." % project)
+    if (
+        project.get('predictionVariable', '') == ''
+        and project.get('function', '').lower() == 'prediction'
+    ):
+        raise ValueError(
+            "Project '%s' does not have a prediction variable " "specified." % project
+        )
 
-    if project.get('eventProbabilityVariable', '') == '' and project.get(
-            'function', '').lower() == 'classification':
-        raise ValueError("Project '%s' does not have an Event Probability variable "
-                         "specified." % project)
+    if (
+        project.get('eventProbabilityVariable', '') == ''
+        and project.get('function', '').lower() == 'classification'
+    ):
+        raise ValueError(
+            "Project '%s' does not have an Event Probability variable "
+            "specified." % project
+        )
 
     # Find the performance definition for the model
     # As of Viya 3.4, no way to search by model or project
@@ -604,8 +645,9 @@ def update_model_performance(data, model, label, refresh=True):
             break
 
     if perf_def is None:
-        raise ValueError("Unable to find a performance definition for model "
-                         "'%s'" % model)
+        raise ValueError(
+            "Unable to find a performance definition for model " "'%s'" % model
+        )
 
     # Check where performance datasets should be uploaded
     cas_id = perf_def['casServerId']
@@ -613,21 +655,24 @@ def update_model_performance(data, model, label, refresh=True):
     table_prefix = perf_def['dataPrefix']
 
     # All input variables must be present
-    missing_cols = [col for col in perf_def.inputVariables if
-                    col not in data.columns]
+    missing_cols = [col for col in perf_def.inputVariables if col not in data.columns]
     if missing_cols:
-        raise ValueError("The following columns were expected but not found in "
-                         "the data set: %s" % ', '.join(missing_cols))
+        raise ValueError(
+            "The following columns were expected but not found in "
+            "the data set: %s" % ', '.join(missing_cols)
+        )
 
     # If CAS is not executing the model then the output variables must also be
     # provided
     if not perf_def.scoreExecutionRequired:
-        missing_cols = [col for col in perf_def.outputVariables if
-                        col not in data.columns]
+        missing_cols = [
+            col for col in perf_def.outputVariables if col not in data.columns
+        ]
         if missing_cols:
             raise ValueError(
                 "The following columns were expected but not found in the data "
-                "set: %s" % ', '.join(missing_cols))
+                "set: %s" % ', '.join(missing_cols)
+            )
 
     sess = current_session()
     regex = r'{}_(\d+)_.*_{}'.format(table_prefix, model_obj.id)
@@ -651,9 +696,9 @@ def update_model_performance(data, model, label, refresh=True):
         all_tables = getattr(caslib_info, 'TableInfo', None)
         if all_tables is not None:
             # Find tables with similar names
-            perf_tables = all_tables.Name.str.extract(regex,
-                                                      flags=re.IGNORECASE,
-                                                      expand=False)
+            perf_tables = all_tables.Name.str.extract(
+                regex, flags=re.IGNORECASE, expand=False
+            )
 
             # Get last-used sequence number
             last_seq = perf_tables.dropna().astype(int).max()
@@ -662,17 +707,14 @@ def update_model_performance(data, model, label, refresh=True):
             next_seq = 1
 
         table_name = '{prefix}_{sequence}_{label}_{model}'.format(
-            prefix=table_prefix,
-            sequence=next_seq,
-            label=label,
-            model=model_obj.id
+            prefix=table_prefix, sequence=next_seq, label=label, model=model_obj.id
         )
 
         with swat.options(exception_on_severity=2):
             # Table must be promoted so performance jobs can access.
-            result = s.upload(data, casout=dict(name=table_name,
-                                                caslib=caslib,
-                                                promote=True))
+            result = s.upload(
+                data, casout=dict(name=table_name, caslib=caslib, promote=True)
+            )
 
             if not hasattr(result, 'casTable'):
                 raise RuntimeError('Unable to upload performance data to CAS.')
@@ -697,75 +739,11 @@ def _parse_module_url(msg):
         module_url = get_link(details, 'module')
         module_url = module_url.get('href')
     except json.JSONDecodeError:
-        match = re.search(r'(?:rel=module, href=(.*?),)', msg)               # Vya 3.5
+        match = re.search(r'(?:rel=module, href=(.*?),)', msg)  # Vya 3.5
         if match is None:
-            match = re.search(r'(?:Rel: module URI: (.*?) MediaType)', msg)  # Format changed in Viya 4.0
+            match = re.search(
+                r'(?:Rel: module URI: (.*?) MediaType)', msg
+            )  # Format changed in Viya 4.0
         module_url = match.group(1) if match else None
 
     return module_url
-
-def get_software_version():
-    """Check for software version server-side.
-    
-    The API metadata from the server-side software can determine which version
-    is being used, which is important for differentiating features between 
-    different SAS Viya versions and SAS Open Model Manager.
-    
-    Returns
-    -------
-    string
-        String value of the software version. Currently only checks for SAS Viya
-        3.5, SAS Viya 4.0, and SAS Open Model Manager.
-    
-    """
-    response = mr.get_API_metadata()
-    buildVersion = response.get('build')['buildVersion']
-    
-    try:
-        if buildVersion[0:4] == '3.7.':
-            return '3.5'
-        elif buildVersion[0:4] == '3.9.':
-            return 'OMM'
-        elif float(buildVersion[0:4]) >= 3.10:
-            return '4.0'
-    except ValueError:
-        return 'Version could not be found.'
-    
-def upload_and_copy_score_resources(model, files, name=None):
-    '''Upload Python score resources to a model and copy the score resources 
-    to the Compute Server.
-    
-    For SAS Model Manager installations on SAS Viya 3.5, Python score resources
-    are not automatically copied to the Compute server and a valid DS2 wrapper is not
-    automatically generated for Python score code. After registering a new
-    model or attempting to update an old model, pzmm.writeScoreCode.py creates
-    Python score code and the DS2 wrapper, which can then be uploaded to the model and 
-    copied to the Compute Server using this function. 
-    
-    In order to copy score resources to the Compute server, include the role key for
-    each file.
-
-    Parameters
-    ----------
-    model : str or dict
-        The name or id of the model, or a dictionary representation of
-        the model.
-    files : list
-        A list of dictionaries of the form {'name': filename, 'file': filecontent}.
-        An optional 'role' key is supported for designating a file as score
-        code, astore, etc.
-    name : str
-        Name of the file related to the model. The default is None.
-        
-    Returns
-    -------
-    response : list of RestObj
-        A list of uploaded file contents as instances of ``RestObj``s.
-    '''        
-    for file in files:
-        if isinstance(file, dict):
-            mr.add_model_content(model, **file)
-        else:
-            mr.add_model_content(model, file, name)
-    
-    return mr.copy_python_resources(model)
