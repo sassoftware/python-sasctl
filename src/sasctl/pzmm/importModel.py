@@ -3,71 +3,70 @@
 
 from pathlib import Path
 from uuid import UUID
+from warnings import warn
 
 from ..core import platform_version
 from .._services.model_repository import ModelRepository as mr
 from .writeScoreCode import ScoreCode as sc
 from .zipModel import ZipModel as zm
 
-
-def _import_model_from_zip(
-    name, project, file, force=False, description=None, version='latest'
-):
-    """Import a model and contents as a ZIP file into a model project.
+def project_exists(response, project):
+    '''Checks if project exists on SAS Viya. If the project does not exist, then a new
+    project is created or an error is raised.
 
     Parameters
     ----------
-    name : str or dict
-        The name of the model.
-    project : str or dict
-        The name or id of the model project, or a dictionary
-        representation of the project.
-    file : bytes
-        The ZIP file containing the model and contents.
-    description : str
-        The description of the model.
+    response : dict
+        JSON response of the get_project() call to model repository service.
+    project : string or dict
+        The name or id of the model project, or a dictionary representation of the project.
 
     Returns
     -------
-    RestObj
-        The API response after importing the model.
+    response : dict
+        JSON response of the get_project() call to model repository service.
 
-    """
-    if type(name) is dict:
-        name = name['name']
-
-    projectResponse = mr.get_project(project)
-
-    # Check if a project exists with the provided name, if not create a new project
-    if projectResponse is None:
+    Raises
+    ------
+    SystemError
+        Alerts user that API calls cannot continue until a valid project is provided.
+    '''
+    if response is None:
         try:
-            print(
-                'WARNING: No project with the name or UUID {} was found.'.format(
-                    project
-                )
-            )
-
-            # Check if project was specified as a name or an id.
-            # If a name, ValueError will be raised and handled below.
-            _ = UUID(project)
-
-            raise SystemError(
-                'The provided UUID does not match any projects found in SAS Model Manager. '
-                + 'Please enter a valid UUID or a new name for a project to be created.'
-            )
+            warn('No project with the name or UUID {} was found.'.format(project))
+            UUID(project)
+            raise SystemError('The provided UUID does not match any projects found in SAS Model Manager. ' +
+                              'Please enter a valid UUID or a new name for a project to be created.')
         except ValueError:
-            # Project name was specified but doesn't exist - create it.
             repo = mr.default_repository().get('id')
-            project = mr.create_project(project, repo)
-            print('A new project named {} was created.'.format(project.name))
+            response = mr.create_project(project, repo)
+            print('A new project named {} was created.'.format(response.name))
+            return response
     else:
-        project = projectResponse
+        return response
 
-    # Check if a model with the same name already exists in the project
+def model_exists(project, name, force):
+    '''Checks if model already exists and either raises an error or deletes the redundant model.
+
+    Parameters
+    ----------
+    project : string or dict
+        The name or id of the model project, or a dictionary representation of the project.
+    name : str or dict
+        The name of the model.
+    force : bool, optional
+        Sets whether to overwrite models with the same name upon upload.
+
+    Raises
+    ------
+    ValueError
+        Model repository API cannot overwrite an already existing model with the upload model call.
+        Alerts user of the force argument to allow multi-call API overwriting.
+    '''
     project = mr.get_project(project)
     projectId = project['id']
     projectModels = mr.get('/projects/{}/models'.format(projectId))
-
+    
     for model in projectModels:
         # Throws a TypeError if only one model is in the project
         try:
@@ -75,24 +74,13 @@ def _import_model_from_zip(
                 if force:
                     mr.delete_model(model.id)
                 else:
-                    raise ValueError(
-                        'A model with the same model name exists in project {}. Include the force=True argument to '
-                        'overwrite models with the same name.'.format(project.name)
-                    )
+                    raise ValueError('A model with the same model name exists in project {}. Include the force=True argument to overwrite models with the same name.'.format(project.name))
         except TypeError:
             if projectModels['name'] == name:
                 if force:
                     mr.delete_model(projectModels.id)
                 else:
-                    raise ValueError(
-                        'A model with the same model name exists in project {}. Include the force=True argument to '
-                        'overwrite models with the same name.'.format(project.name)
-                    )
-
-    return mr.import_model_from_zip(
-        name=name, project=project, description=description, file=file, version=version
-    )
-
+                    raise ValueError('A model with the same model name exists in project {}. Include the force=True argument to overwrite models with the same name.'.format(project.name))
 
 class ImportModel:
     @classmethod
@@ -243,7 +231,15 @@ class ImportModel:
                 )
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
             print('All model files were zipped to {}.'.format(Path(zPath)))
-            response = _import_model_from_zip(modelPrefix, project, zipIOFile, force)
+            
+            # Check if project name provided exists and raise an error or create a new project
+            projectResponse = mr.get_project(project)
+            project = project_exists(projectResponse, project)
+            
+            # Check if model with same name already exists in project.
+            model_exists(project, project.name, force)
+        
+            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile)
             try:
                 print(
                     'Model was successfully imported into SAS Model Manager as {} with UUID: {}.'.format(
@@ -256,7 +252,15 @@ class ImportModel:
         else:
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
             print('All model files were zipped to {}.'.format(Path(zPath)))
-            response = _import_model_from_zip(modelPrefix, project, zipIOFile, force)
+            
+            # Check if project name provided exists and raise an error or create a new project
+            projectResponse = mr.get_project(project)
+            project = project_exists(projectResponse, project)
+            
+            # Check if model with same name already exists in project.
+            model_exists(project, project.name, force)
+            
+            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
             try:
                 print(
                     'Model was successfully imported into SAS Model Manager as {} with UUID: {}.'.format(
