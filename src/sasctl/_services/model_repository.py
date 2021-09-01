@@ -488,7 +488,7 @@ class ModelRepository(Service):
 
     @classmethod
     def import_model_from_zip(
-        cls, name, project, file, description=None, force=False, version='latest'
+        cls, name, project, file, description=None, version='latest'
     ):
         """Import a model and contents as a ZIP file into a model project.
 
@@ -503,8 +503,6 @@ class ModelRepository(Service):
             The ZIP file containing the model and contents.
         description : str
             The description of the model.
-        force : bool, optional
-            Sets whether to overwrite models with the same name upon upload. By default False.
 
         Returns
         -------
@@ -513,7 +511,7 @@ class ModelRepository(Service):
 
         """
         project = cls.get_project(project)
-        
+
         params = {
             'name': name,
             'description': description,
