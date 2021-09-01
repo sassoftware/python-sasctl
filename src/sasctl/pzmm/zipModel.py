@@ -35,11 +35,12 @@ class ZipModel():
         fileNames.extend(sorted(Path(fileDir).glob('*.json')))
         fileNames.extend(sorted(Path(fileDir).glob('*Score.py')))
         fileNames.extend(sorted(Path(fileDir).glob('*.pickle')))
+        # Include H2O.ai MOJO files 
         fileNames.extend(sorted(Path(fileDir).glob('*.mojo')))
         
         with zipfile.ZipFile(Path(fileDir) / (modelPrefix + '.zip'), mode='w') as zFile:
-            for name in fileNames:
-                zFile.write(name, arcname=name)
+            for file in fileNames:
+                zFile.write(file, arcname=file.name)
                 
         with open(Path(fileDir) / (modelPrefix + '.zip'), 'rb') as zipFile:
             return io.BytesIO(zipFile.read())

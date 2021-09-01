@@ -1,0 +1,16 @@
+{
+    "name": "RandomForest",
+    "description": "",
+    "function": "classification",
+    "scoreCodeType": "python",
+    "trainTable": " ",
+    "trainCodeType": "Python",
+    "algorithm": "",
+    "targetVariable": "BAD",
+    "targetEvent": 1,
+    "targetLevel": "BINARY",
+    "eventProbVar": "EM_EVENTPROBABILITY",
+    "modeler": "sasdemo",
+    "tool": "Python 3",
+    "toolVersion": "3.8.3"
+}
