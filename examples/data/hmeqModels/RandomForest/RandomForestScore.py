@@ -5,20 +5,22 @@ import pickle
 import pandas as pd
 import numpy as np
 
+import settings
 
-global _thisModelFit
 
-with open('/models/resources/viya/256cb2d0-b91a-4a39-a5c2-3548a527a26a/RandomForest.pickle', 'rb') as _pFile:
-    _thisModelFit = pickle.load(_pfile)
+_thisModelFit
+
+with open(settings.pickle_path + 'RandomForest.pickle', 'rb') as _pFile:
+    _thisModelFit = pickle.load(_pFile)
 
 def scoreRandomForest(LOAN, MORTDUE, VALUE, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC):
     "Output: EM_EVENTPROBABILITY, EM_CLASSIFICATION"
 
     try:
-        _thisModelFit
+        global _thisModelFit
     except NameError:
 
-        with open('/models/resources/viya/256cb2d0-b91a-4a39-a5c2-3548a527a26a/RandomForest.pickle', 'rb') as _pFile:
+        with open(settings.pickle_path + 'RandomForest.pickle', 'rb') as _pFile:
             _thisModelFit = pickle.load(_pFile)
 
     try:

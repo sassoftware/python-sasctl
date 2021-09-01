@@ -5,20 +5,22 @@ import pickle
 import pandas as pd
 import numpy as np
 
+import settings
 
-global _thisModelFit
 
-with open('/models/resources/viya/45b956e1-1aed-4c7a-a8dd-82e8676c2a23/GradientBoosting.pickle', 'rb') as _pFile:
-    _thisModelFit = pickle.load(_pfile)
+_thisModelFit
+
+with open(settings.pickle_path + 'GradientBoosting.pickle', 'rb') as _pFile:
+    _thisModelFit = pickle.load(_pFile)
 
 def scoreGradientBoosting(LOAN, MORTDUE, VALUE, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC):
     "Output: EM_EVENTPROBABILITY, EM_CLASSIFICATION"
 
     try:
-        _thisModelFit
+        global _thisModelFit
     except NameError:
 
-        with open('/models/resources/viya/45b956e1-1aed-4c7a-a8dd-82e8676c2a23/GradientBoosting.pickle', 'rb') as _pFile:
+        with open(settings.pickle_path + 'GradientBoosting.pickle', 'rb') as _pFile:
             _thisModelFit = pickle.load(_pFile)
 
     try:

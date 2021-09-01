@@ -237,7 +237,7 @@ class ImportModel:
             project = project_exists(projectResponse, project)
             
             # Check if model with same name already exists in project.
-            model_exists(project, project.name, force)
+            model_exists(project, modelPrefix, force)
         
             response = mr.import_model_from_zip(modelPrefix, project, zipIOFile)
             try:
@@ -258,7 +258,7 @@ class ImportModel:
             project = project_exists(projectResponse, project)
             
             # Check if model with same name already exists in project.
-            model_exists(project, project.name, force)
+            model_exists(project, modelPrefix, force)
             
             response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
             try:

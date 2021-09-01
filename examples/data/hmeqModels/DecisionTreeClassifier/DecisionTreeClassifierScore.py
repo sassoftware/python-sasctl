@@ -5,20 +5,22 @@ import pickle
 import pandas as pd
 import numpy as np
 
+import settings
 
-global _thisModelFit
 
-with open('/models/resources/viya/4b35a11a-275a-4bb9-9622-f1f3e716696f/DecisionTreeClassifier.pickle', 'rb') as _pFile:
-    _thisModelFit = pickle.load(_pfile)
+_thisModelFit
+
+with open(settings.pickle_path + 'DecisionTreeClassifier.pickle', 'rb') as _pFile:
+    _thisModelFit = pickle.load(_pFile)
 
 def scoreDecisionTreeClassifier(LOAN, MORTDUE, VALUE, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC):
     "Output: EM_EVENTPROBABILITY, EM_CLASSIFICATION"
 
     try:
-        _thisModelFit
+        global _thisModelFit
     except NameError:
 
-        with open('/models/resources/viya/4b35a11a-275a-4bb9-9622-f1f3e716696f/DecisionTreeClassifier.pickle', 'rb') as _pFile:
+        with open(settings.pickle_path + 'DecisionTreeClassifier.pickle', 'rb') as _pFile:
             _thisModelFit = pickle.load(_pFile)
 
     try:

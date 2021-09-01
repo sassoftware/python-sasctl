@@ -166,7 +166,7 @@ import settings''')
 
             # Use a global variable for the model in order to load from memory only once
             cls.pyFile.write('''\n\n
-global _thisModelFit''')
+_thisModelFit''')
 
             # For H2O models, include the server initialization, or h2o.connect() call to use an H2O server
             if isH2OModel:
@@ -221,7 +221,7 @@ def score{modelPrefix}({inputVarList}):
             if binaryString is None:
                 cls.pyFile.write('''\n
     try:
-        _thisModelFit
+        global _thisModelFit
     except NameError:\n''')
                 if isViya35 and not isH2OModel:
                     cls.pyFile.write('''
