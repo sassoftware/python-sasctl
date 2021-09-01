@@ -21,9 +21,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">sasctl</a></h1>
 
-    <div class="document">
+
+
+<p class="blurb">Python package and CLI for user-friendly integration with SAS Viya</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">sasctl</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/sasctl.html">sasctl package</a></li>
+</ul>
+
+
+        </div>
+      </div>
       <div class="documentwrapper">
         <div class="bodywrapper">
           
@@ -38,20 +71,12 @@
 <span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 <span class="kn">import</span> <span class="nn">re</span>
-
-<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">getfullargspec</span><span class="p">,</span> <span class="n">getsourcelines</span>
 
 <span class="kn">from</span> <span class="nn">.ds2</span> <span class="kn">import</span> <span class="n">DS2Variable</span>
 <span class="kn">from</span> <span class="nn">..decorators</span> <span class="kn">import</span> <span class="n">versionchanged</span>
-
-<span class="k">if</span> <span class="n">six</span><span class="o">.</span><span class="n">PY2</span><span class="p">:</span>
-    <span class="c1"># Eliminate DeprecationWarnings.  Only import getargspec if in Python 2.</span>
-    <span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">getargspec</span> <span class="k">as</span> <span class="n">getfullargspec</span>
-    <span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">getsourcelines</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">getfullargspec</span><span class="p">,</span> <span class="n">getsourcelines</span>
 
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -102,23 +127,29 @@
                 <span class="n">types</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">input</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">):</span>
         <span class="c1"># Numpy array?  No column names, but we can at least create dummy vars of the correct type</span>
-        <span class="n">types</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="s1">&#39;var</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
-                              <span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="s1">&#39;char&#39;</span><span class="p">),</span> <span class="kc">False</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">input</span><span class="o">.</span><span class="n">size</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
-    <span class="k">elif</span> <span class="n">six</span><span class="o">.</span><span class="n">callable</span><span class="p">(</span><span class="nb">input</span><span class="p">):</span>
+        <span class="n">types</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;var</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="p">(</span><span class="nb">input</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="s1">&#39;char&#39;</span><span class="p">),</span> <span class="kc">False</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">input</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">callable</span><span class="p">(</span><span class="nb">input</span><span class="p">):</span>
         <span class="n">types</span> <span class="o">=</span> <span class="n">parse_type_hints</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unable to determine input/ouput types using &quot;</span>
-                           <span class="s2">&quot;instance of type &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="nb">input</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="s2">&quot;Unable to determine input/ouput types using &quot;</span>
+            <span class="s2">&quot;instance of type &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+        <span class="p">)</span>
 
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">names</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">types</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">names</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">types</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
     <span class="k">elif</span> <span class="n">names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">types</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
     <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">itervalues</span><span class="p">(</span><span class="n">types</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">types</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">output_vars</span><span class="p">))</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
             <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">v</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">output_vars</span><span class="p">))</span>
@@ -130,7 +161,6 @@
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Unable to determine input/ouput types.&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">results</span></div>
-
 
 
 <div class="viewcode-block" id="parse_type_hints"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.python.parse_type_hints">[docs]</a><span class="k">def</span> <span class="nf">parse_type_hints</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">skip_var</span><span class="o">=</span><span class="s1">&#39;self&#39;</span><span class="p">):</span>
@@ -159,8 +189,9 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">params</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> \
-                          <span class="n">getfullargspec</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="o">.</span><span class="n">args</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">skip_var</span><span class="p">])</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
+        <span class="p">[(</span><span class="n">k</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">getfullargspec</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="o">.</span><span class="n">args</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">skip_var</span><span class="p">]</span>
+    <span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Params: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s1">&#39;__annotations__&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
@@ -230,103 +261,19 @@
             <span class="n">params</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">params</span></div>
-
-
 </pre></div>
 
           </div>
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../../../index.html">sasctl</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api/sasctl.html">sasctl package</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html">Unreleased</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-6-0-2021-06-29">v1.6.0 (2021-06-29)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-9-2021-06-09">v1.5.9 (2021-06-09)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-8-2021-05-18">v1.5.8 (2021-05-18)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-7-2021-05-04">v1.5.7 (2021-05-04)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-6-2021-04-30">v1.5.6 (2021-04-30)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-5-2021-03-26">v1.5.5 (2021-03-26)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-4-2020-10-29">v1.5.4 (2020-10-29)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-3-2020-06-25">v1.5.3 (2020-06-25)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-2-2020-06-22">v1.5.2 (2020-06-22)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-1-2020-4-9">v1.5.1 (2020-4-9)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-5-2020-2-23">v1.5 (2020-2-23)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-6-2020-1-24">v1.4.6 (2020-1-24)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-5-2019-12-5">v1.4.5 (2019-12-5)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-4-2019-10-31">v1.4.4 (2019-10-31)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-3-2019-10-28">v1.4.3 (2019-10-28)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-2-2019-10-23">v1.4.2 (2019-10-23)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-1-2019-10-17">v1.4.1 (2019-10-17)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-4-2019-10-15">v1.4 (2019-10-15)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-3-2019-10-10">v1.3 (2019-10-10)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-2-5-2019-10-10">v1.2.5 (2019-10-10)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-2-4-2019-9-20">v1.2.4 (2019-9-20)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-2-3-2019-8-23">v1.2.3 (2019-8-23)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-2-2-2019-8-21">v1.2.2 (2019-8-21)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-2-1-2019-8-20">v1.2.1 (2019-8-20)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-2-0-2019-8-16">v1.2.0 (2019-8-16)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-1-4-2019-8-16">v1.1.4 (2019-8-16)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-1-3-2019-8-14">v1.1.3 (2019-8-14)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-1-2-2019-8-12">v1.1.2 (2019-8-12)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-1-1-2019-8-6">v1.1.1 (2019-8-6)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-1-0-2019-8-5">v1.1.0 (2019-8-5)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-0-1-2019-07-31">v1.0.1 (2019-07-31)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v1-0-0-2019-07-24">v1.0.0 (2019-07-24)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v0-9-7-2019-07-18">v0.9.7 (2019-07-18)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../releases.html#v0-9-6-2019-07-15">v0.9.6 (2019-07-15)</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../../../index.html">Documentation overview</a><ul>
-  <li><a href="../../../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
       &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

@@ -24,9 +24,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">sasctl</a></h1>
 
-    <div class="document">
+
+
+<p class="blurb">Python package and CLI for user-friendly integration with SAS Viya</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">sasctl</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#user-guide">User Guide</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#api-reference">API Reference</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="sasctl.html">sasctl package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#environment-variables">Environment Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#contributor-guide">Contributor Guide</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="sasctl.html">sasctl package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="sasctl.html#module-contents">Module contents</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sasctl.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sasctl.html#subpackages">Subpackages</a></li>
+</ul>
+</li>
+</ul>
+
+
+        </div>
+      </div>
       <div class="documentwrapper">
         <div class="bodywrapper">
           
@@ -38,7 +89,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.OAuth2Token">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">OAuth2Token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expires_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#OAuth2Token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.OAuth2Token" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.auth.AuthBase" title="(in Requests v2.25.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.auth.AuthBase</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.auth.AuthBase" title="(in Requests v2.26.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.auth.AuthBase</span></code></a></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="sasctl.core.OAuth2Token.is_expired">
 <em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_expired</span></span><a class="headerlink" href="#sasctl.core.OAuth2Token.is_expired" title="Permalink to this definition">¶</a></dt>
@@ -68,11 +119,6 @@ to current_session()</p></li>
 <dd class="field-even"><p><em>List[RestObj]</em> – Items contained in the current page</p>
 </dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="sasctl.core.PageIterator.next">
-<span class="sig-name descname"><span class="pre">next</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sasctl.core.PageIterator.next" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -103,11 +149,6 @@ number of items returned may be greater than or less than this number.</p>
 <p class="admonition-title">See also</p>
 <p><a class="reference internal" href="#sasctl.core.PageIterator" title="sasctl.core.PageIterator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PageIterator</span></code></a></p>
 </div>
-<dl class="py method">
-<dt class="sig sig-object py" id="sasctl.core.PagedItemIterator.next">
-<span class="sig-name descname"><span class="pre">next</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sasctl.core.PagedItemIterator.next" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -145,11 +186,6 @@ length is not known until all items have been pulled from the server.</p>
 <dd class="field-odd"><p><strong>l</strong> (<em>list-like</em>) – </p>
 </dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="sasctl.core.PagedListIterator.next">
-<span class="sig-name descname"><span class="pre">next</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sasctl.core.PagedListIterator.next" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -161,7 +197,7 @@ length is not known until all items have been pulled from the server.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.SSLContextAdapter">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">SSLContextAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#SSLContextAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.SSLContextAdapter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.adapters.HTTPAdapter" title="(in Requests v2.25.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.adapters.HTTPAdapter</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.adapters.HTTPAdapter" title="(in Requests v2.26.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">requests.adapters.HTTPAdapter</span></code></a></p>
 <p>HTTPAdapter that uses the default SSL context on the machine.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.SSLContextAdapter.init_poolmanager">
@@ -169,7 +205,7 @@ length is not known until all items have been pulled from the server.</p>
 <dd><p>Initializes a urllib3 PoolManager.</p>
 <p>This method should not be called from user code, and is only
 exposed for use when subclassing the
-<a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.adapters.HTTPAdapter" title="(in Requests v2.25.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPAdapter</span></code></a>.</p>
+<a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.adapters.HTTPAdapter" title="(in Requests v2.26.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPAdapter</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -348,7 +384,7 @@ default behavior or customize the CAS session.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.25.1)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.26.0)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -365,7 +401,7 @@ default behavior or customize the CAS session.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.25.1)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.26.0)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -435,7 +471,7 @@ should NOT be used in a non-interactive session.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.25.1)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.26.0)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -460,7 +496,7 @@ object to send in the body of the <code class="xref py py-class docutils literal
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.25.1)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.26.0)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -501,7 +537,7 @@ object to send in the body of the <code class="xref py py-class docutils literal
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.25.1)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.26.0)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -548,7 +584,7 @@ for multipart encoding upload.</p></li>
 <li><p><strong>auth</strong> – (optional) Auth tuple or callable to enable
 Basic/Digest/Custom HTTP Auth.</p></li>
 <li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a>) – (optional) How long to wait for the server to send
-data before giving up, as a float, or a <a class="reference external" href="https://2.python-requests.org/en/master/user/advanced/#timeouts" title="(in Requests v2.25.1)"><span class="xref std std-ref">(connect timeout,
+data before giving up, as a float, or a <a class="reference external" href="https://2.python-requests.org/en/master/user/advanced/#timeouts" title="(in Requests v2.26.0)"><span class="xref std std-ref">(connect timeout,
 read timeout)</span></a> tuple.</p></li>
 <li><p><strong>allow_redirects</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – (optional) Set to True by default.</p></li>
 <li><p><strong>proxies</strong> – (optional) Dictionary mapping protocol or protocol and
@@ -568,7 +604,7 @@ If Tuple, (‘cert’, ‘key’) pair.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.25.1)">requests.Response</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.26.0)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -579,7 +615,7 @@ If Tuple, (‘cert’, ‘key’) pair.</p></li>
 <dd><p>Send a given PreparedRequest.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.25.1)">requests.Response</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://2.python-requests.org/en/master/api/#requests.Response" title="(in Requests v2.26.0)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -842,102 +878,13 @@ objects will be checked for a <cite>self</cite> URI and returned if found.</p>
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">sasctl</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="sasctl.html">sasctl package</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="sasctl.html#module-contents">Module contents</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="sasctl.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sasctl.html#subpackages">Subpackages</a></li>
-</ul>
-</li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html">Unreleased</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-6-0-2021-06-29">v1.6.0 (2021-06-29)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-9-2021-06-09">v1.5.9 (2021-06-09)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-8-2021-05-18">v1.5.8 (2021-05-18)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-7-2021-05-04">v1.5.7 (2021-05-04)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-6-2021-04-30">v1.5.6 (2021-04-30)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-5-2021-03-26">v1.5.5 (2021-03-26)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-4-2020-10-29">v1.5.4 (2020-10-29)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-3-2020-06-25">v1.5.3 (2020-06-25)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-2-2020-06-22">v1.5.2 (2020-06-22)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-1-2020-4-9">v1.5.1 (2020-4-9)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-5-2020-2-23">v1.5 (2020-2-23)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-6-2020-1-24">v1.4.6 (2020-1-24)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-5-2019-12-5">v1.4.5 (2019-12-5)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-4-2019-10-31">v1.4.4 (2019-10-31)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-3-2019-10-28">v1.4.3 (2019-10-28)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-2-2019-10-23">v1.4.2 (2019-10-23)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-1-2019-10-17">v1.4.1 (2019-10-17)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-4-2019-10-15">v1.4 (2019-10-15)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-3-2019-10-10">v1.3 (2019-10-10)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-2-5-2019-10-10">v1.2.5 (2019-10-10)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-2-4-2019-9-20">v1.2.4 (2019-9-20)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-2-3-2019-8-23">v1.2.3 (2019-8-23)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-2-2-2019-8-21">v1.2.2 (2019-8-21)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-2-1-2019-8-20">v1.2.1 (2019-8-20)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-2-0-2019-8-16">v1.2.0 (2019-8-16)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-1-4-2019-8-16">v1.1.4 (2019-8-16)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-1-3-2019-8-14">v1.1.3 (2019-8-14)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-1-2-2019-8-12">v1.1.2 (2019-8-12)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-1-1-2019-8-6">v1.1.1 (2019-8-6)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-1-0-2019-8-5">v1.1.0 (2019-8-5)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-0-1-2019-07-31">v1.0.1 (2019-07-31)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v1-0-0-2019-07-24">v1.0.0 (2019-07-24)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v0-9-7-2019-07-18">v0.9.7 (2019-07-18)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releases.html#v0-9-6-2019-07-15">v0.9.6 (2019-07-15)</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-  <li><a href="sasctl.html">sasctl package</a><ul>
-      <li>Previous: <a href="sasctl.current_session.html" title="previous chapter">current_session</a></li>
-      <li>Next: <a href="sasctl.tasks.html" title="next chapter">sasctl.tasks</a></li>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
       &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

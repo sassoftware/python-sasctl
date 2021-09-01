@@ -21,9 +21,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">sasctl</a></h1>
 
-    <div class="document">
+
+
+<p class="blurb">Python package and CLI for user-friendly integration with SAS Viya</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">sasctl</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/sasctl.html">sasctl package</a></li>
+</ul>
+
+
+        </div>
+      </div>
       <div class="documentwrapper">
         <div class="bodywrapper">
           
@@ -52,12 +85,11 @@
 
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">requests.exceptions</span>
-<span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
 <span class="kn">from</span> <span class="nn">packaging</span> <span class="kn">import</span> <span class="n">version</span>
 <span class="kn">from</span> <span class="nn">requests.adapters</span> <span class="kn">import</span> <span class="n">HTTPAdapter</span>
-<span class="kn">from</span> <span class="nn">six.moves.urllib.parse</span> <span class="kn">import</span> <span class="n">urlsplit</span><span class="p">,</span> <span class="n">urlunsplit</span>
-<span class="kn">from</span> <span class="nn">six.moves.urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlsplit</span><span class="p">,</span> <span class="n">urlunsplit</span>
+<span class="kn">from</span> <span class="nn">urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">swat</span>
@@ -192,7 +224,14 @@
 
 
 <div class="viewcode-block" id="OAuth2Token"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.OAuth2Token">[docs]</a><span class="k">class</span> <span class="nc">OAuth2Token</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">AuthBase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">access_token</span><span class="p">,</span> <span class="n">refresh_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">expiration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">expires_in</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">access_token</span><span class="p">,</span>
+        <span class="n">refresh_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">expiration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">expires_in</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">access_token</span> <span class="o">=</span> <span class="n">access_token</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">refresh_token</span> <span class="o">=</span> <span class="n">refresh_token</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">expiration</span> <span class="o">=</span> <span class="n">expiration</span>
@@ -311,7 +350,7 @@
         <span class="n">protocol</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">verify_ssl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">token</span><span class="o">=</span><span class="kc">None</span>
+        <span class="n">token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
@@ -353,6 +392,7 @@
         <span class="c1"># every request.  Insert a warning filter so these warnings only appear on the first request.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">verify_ssl</span><span class="p">:</span>
             <span class="kn">from</span> <span class="nn">urllib3.exceptions</span> <span class="kn">import</span> <span class="n">InsecureRequestWarning</span>
+
             <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">InsecureRequestWarning</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="n">DEFAULT_FILTERS</span>
@@ -430,7 +470,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">verify</span> <span class="o">=</span> <span class="n">verify_ssl</span>
 
         <span class="c1"># Find a suitable authentication mechanism and build an auth header</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_auth</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">],</span> <span class="n">token</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_auth</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">],</span> <span class="n">token</span>
+        <span class="p">)</span>
 
         <span class="c1"># Used for context manager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_old_session</span> <span class="o">=</span> <span class="n">current_session</span><span class="p">()</span>
@@ -646,7 +688,7 @@
                 <span class="n">stream</span><span class="p">,</span>
                 <span class="n">verify</span><span class="p">,</span>
                 <span class="n">cert</span><span class="p">,</span>
-                <span class="n">json</span>
+                <span class="n">json</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
@@ -655,7 +697,9 @@
                 <span class="c1"># Access token expired, need to refresh it (if we can)</span>
                 <span class="k">if</span> <span class="s1">&#39;access token expired&#39;</span> <span class="ow">in</span> <span class="n">auth_header</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_oauth_token</span><span class="p">(</span><span class="n">refresh_token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_oauth_token</span><span class="p">(</span>
+                            <span class="n">refresh_token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">refresh_token</span>
+                        <span class="p">)</span>
 
                         <span class="c1"># Repeat the request</span>
                         <span class="n">r</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
@@ -674,7 +718,7 @@
                             <span class="n">stream</span><span class="p">,</span>
                             <span class="n">verify</span><span class="p">,</span>
                             <span class="n">cert</span><span class="p">,</span>
-                            <span class="n">json</span>
+                            <span class="n">json</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="k">except</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthorizationError</span><span class="p">:</span>
                         <span class="k">pass</span>
@@ -755,7 +799,15 @@
         <span class="n">auth_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt_for_auth_code</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_oauth_token</span><span class="p">(</span><span class="n">auth_code</span><span class="o">=</span><span class="n">auth_code</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Session.get_oauth_token"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.get_oauth_token">[docs]</a>    <span class="k">def</span> <span class="nf">get_oauth_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">auth_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refresh_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">client_secret</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Session.get_oauth_token"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.get_oauth_token">[docs]</a>    <span class="k">def</span> <span class="nf">get_oauth_token</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">auth_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">refresh_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">client_secret</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Request an OAuth2 access token using either a username &amp; password or an auth token.</span>
 
 <span class="sd">        Parameters</span>
@@ -784,13 +836,19 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">username</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;grant_type&#39;</span><span class="p">:</span> <span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="n">password</span><span class="p">}</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;grant_type&#39;</span><span class="p">:</span> <span class="s1">&#39;password&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span>
+                <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="n">password</span><span class="p">,</span>
+            <span class="p">}</span>
         <span class="k">elif</span> <span class="n">auth_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;grant_type&#39;</span><span class="p">:</span> <span class="s1">&#39;authorization_code&#39;</span><span class="p">,</span> <span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="n">auth_code</span><span class="p">}</span>
         <span class="k">elif</span> <span class="n">refresh_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;grant_type&#39;</span><span class="p">:</span> <span class="s1">&#39;refresh_token&#39;</span><span class="p">,</span> <span class="s1">&#39;refresh_token&#39;</span><span class="p">:</span> <span class="n">refresh_token</span><span class="p">}</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Either username and password or auth_code parameters must be specified.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Either username and password or auth_code parameters must be specified.&#39;</span>
+            <span class="p">)</span>
 
         <span class="n">client_id</span> <span class="o">=</span> <span class="n">client_id</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SASCTL_CLIENT_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;sas.ec&#39;</span><span class="p">)</span>
         <span class="n">client_secret</span> <span class="o">=</span> <span class="n">client_secret</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SASCTL_CLIENT_SECRET&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
@@ -801,18 +859,31 @@
         <span class="p">}</span>
 
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_url</span><span class="p">(</span><span class="s1">&#39;/SASLogon/oauth/token&#39;</span><span class="p">)</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">),</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verify</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+            <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">),</span>
+            <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verify</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># Raise user-friendly error messages if issue is known</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span> <span class="ow">and</span> <span class="n">auth_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">j</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
             <span class="k">if</span> <span class="s2">&quot;Invalid authorization code&quot;</span> <span class="ow">in</span> <span class="n">j</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;error_description&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthorizationError</span><span class="p">(</span><span class="s2">&quot;Invalid authorization code: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">auth_code</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthorizationError</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid authorization code: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">auth_code</span>
+                <span class="p">)</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;error_description&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;bad credentials&#39;</span> <span class="ow">and</span> <span class="n">username</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;error_description&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;bad credentials&#39;</span>
+                <span class="ow">and</span> <span class="n">username</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="p">):</span>
                 <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthenticationError</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;Invalid client id or secret.&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;invalid_token&#39;</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthorizationError</span><span class="p">(</span><span class="s1">&#39;Refresh token is incorrect, expired, or revoked.&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthorizationError</span><span class="p">(</span>
+                    <span class="s1">&#39;Refresh token is incorrect, expired, or revoked.&#39;</span>
+                <span class="p">)</span>
             <span class="k">if</span> <span class="n">username</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthenticationError</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
 
@@ -849,8 +920,15 @@
         <span class="n">client_id</span> <span class="o">=</span> <span class="n">client_id</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SASCTL_CLIENT_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;sas.ec&#39;</span><span class="p">)</span>
 
         <span class="c1"># User must open this URL in a browser and then enter the auth code that&#39;s generated.</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_url</span><span class="p">(</span><span class="s1">&#39;/SASLogon/oauth/authorize&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;?response_type=code&amp;client_id=&#39;</span> <span class="o">+</span> <span class="n">client_id</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;Please use a web browser to login at the following URL to get your authorization code:</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">url</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_build_url</span><span class="p">(</span><span class="s1">&#39;/SASLogon/oauth/authorize&#39;</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s1">&#39;?response_type=code&amp;client_id=&#39;</span>
+            <span class="o">+</span> <span class="n">client_id</span>
+        <span class="p">)</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;Please use a web browser to login at the following URL to get your authorization code:</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="o">+</span> <span class="n">url</span>
+        <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
         <span class="n">auth_code</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Authorization Code:&#39;</span><span class="p">)</span>
 
@@ -883,21 +961,23 @@
             <span class="s1">&#39;accesstoken&#39;</span><span class="p">:</span> <span class="n">token</span><span class="o">.</span><span class="n">access_token</span><span class="p">,</span>
             <span class="s1">&#39;refreshtoken&#39;</span><span class="p">:</span> <span class="n">token</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">,</span>
             <span class="s1">&#39;tokentype&#39;</span><span class="p">:</span> <span class="s1">&#39;bearer&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;expiry&#39;</span><span class="p">:</span> <span class="n">token</span><span class="o">.</span><span class="n">expiration</span>
+            <span class="s1">&#39;expiry&#39;</span><span class="p">:</span> <span class="n">token</span><span class="o">.</span><span class="n">expiration</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="c1"># See if there&#39;s an existing profile to update</span>
-        <span class="n">matches</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">profiles</span><span class="p">[</span><span class="s1">&#39;profiles&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;baseurl&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">base_url</span><span class="p">]</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">profiles</span><span class="p">[</span><span class="s1">&#39;profiles&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;baseurl&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">base_url</span>
+        <span class="p">]</span>
         <span class="k">if</span> <span class="n">matches</span><span class="p">:</span>
             <span class="n">idx</span><span class="p">,</span> <span class="n">match</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">match</span><span class="p">[</span><span class="s1">&#39;oauthtoken&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">token</span>
             <span class="n">profiles</span><span class="p">[</span><span class="s1">&#39;profiles&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">match</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">profiles</span><span class="p">[</span><span class="s1">&#39;profiles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-                <span class="s1">&#39;baseurl&#39;</span><span class="p">:</span> <span class="n">base_url</span><span class="p">,</span>
-                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                <span class="s1">&#39;oauthtoken&#39;</span><span class="p">:</span> <span class="n">token</span>
-            <span class="p">})</span>
+            <span class="n">profiles</span><span class="p">[</span><span class="s1">&#39;profiles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;baseurl&#39;</span><span class="p">:</span> <span class="n">base_url</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;oauthtoken&#39;</span><span class="p">:</span> <span class="n">token</span><span class="p">}</span>
+            <span class="p">)</span>
 
         <span class="n">Session</span><span class="o">.</span><span class="n">_write_token_cache</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
 
@@ -918,7 +998,7 @@
         <span class="n">field_mappings</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;accesstoken&#39;</span><span class="p">:</span> <span class="s1">&#39;access_token&#39;</span><span class="p">,</span>
             <span class="s1">&#39;refreshtoken&#39;</span><span class="p">:</span> <span class="s1">&#39;refresh_token&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;expiry&#39;</span><span class="p">:</span> <span class="s1">&#39;expiration&#39;</span>
+            <span class="s1">&#39;expiry&#39;</span><span class="p">:</span> <span class="s1">&#39;expiration&#39;</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="n">profiles</span> <span class="o">=</span> <span class="n">Session</span><span class="o">.</span><span class="n">_read_token_cache</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -935,14 +1015,19 @@
             <span class="c1"># Return the cached token</span>
             <span class="k">if</span> <span class="n">baseurl</span> <span class="o">==</span> <span class="n">url</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;oauthtoken&#39;</span><span class="p">,</span> <span class="p">{})</span>
-                <span class="n">token</span> <span class="o">=</span> <span class="p">{</span><span class="n">field_mappings</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">field_mappings</span><span class="p">}</span>
+                <span class="n">token</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="n">field_mappings</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">field_mappings</span>
+                <span class="p">}</span>
                 <span class="n">token</span> <span class="o">=</span> <span class="n">OAuth2Token</span><span class="p">(</span><span class="o">**</span><span class="n">token</span><span class="p">)</span>
 
                 <span class="c1"># Attempt to refresh if cached token has expired</span>
                 <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">is_expired</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_oauth_token</span><span class="p">(</span><span class="n">refresh_token</span><span class="o">=</span><span class="n">token</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">)</span>
-                    <span class="k">except</span> <span class="p">(</span><span class="n">exceptions</span><span class="o">.</span><span class="n">AuthorizationError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">):</span>
+                    <span class="k">except</span> <span class="p">(</span>
+                        <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthorizationError</span><span class="p">,</span>
+                        <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">,</span>
+                    <span class="p">):</span>
                         <span class="k">return</span>
 
                 <span class="c1"># If refresh fails, dont return token, allow user to be prompted for login</span>
@@ -962,7 +1047,7 @@
         <span class="n">flags</span> <span class="o">=</span> <span class="n">kerberos</span><span class="o">.</span><span class="n">GSS_C_MUTUAL_FLAG</span> <span class="o">|</span> <span class="n">kerberos</span><span class="o">.</span><span class="n">GSS_C_SEQUENCE_FLAG</span>
         <span class="n">service</span> <span class="o">=</span> <span class="s1">&#39;HTTP@</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s1">&#39;domain&#39;</span><span class="p">]</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Attempting Kerberos authentication to </span><span class="si">%s</span><span class="s1"> as </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">service</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Attempting Kerberos authentication to </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">service</span><span class="p">)</span>
 
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_url</span><span class="p">(</span>
             <span class="s1">&#39;/SASLogon/oauth/authorize?client_id=</span><span class="si">%s</span><span class="s1">&amp;response_type=token&#39;</span> <span class="o">%</span> <span class="n">client_id</span>
@@ -1002,7 +1087,6 @@
 
         <span class="c1"># Get the user that was used for authentication</span>
         <span class="n">username</span> <span class="o">=</span> <span class="n">kerberos</span><span class="o">.</span><span class="n">authGSSClientUserName</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Authenticated as </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
 
         <span class="c1"># Drop @REALM from username and store</span>
         <span class="k">if</span> <span class="n">username</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1079,9 +1163,12 @@
             <span class="n">flags</span> <span class="o">=</span> <span class="nb">oct</span><span class="p">(</span><span class="n">mode</span><span class="p">)[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>
 
             <span class="k">if</span> <span class="n">flags</span> <span class="o">!=</span> <span class="s1">&#39;600&#39;</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Unable to read profile cache.  &#39;</span>
-                                   <span class="s1">&#39;The file permissions for </span><span class="si">%s</span><span class="s1"> must be configured so that only the file owner has &#39;</span>
-                                   <span class="s1">&#39;read/write permissions (equivalent to 600 on Linux systems).&#39;</span> <span class="o">%</span> <span class="n">yaml_file</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s1">&#39;Unable to read profile cache.  &#39;</span>
+                    <span class="s1">&#39;The file permissions for </span><span class="si">%s</span><span class="s1"> must be configured so that only the file owner has &#39;</span>
+                    <span class="s1">&#39;read/write permissions (equivalent to 600 on Linux systems).&#39;</span>
+                    <span class="o">%</span> <span class="n">yaml_file</span>
+                <span class="p">)</span>
 
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">FullLoader</span><span class="p">)</span>
@@ -1247,8 +1334,6 @@
         <span class="c1"># All Iterators are also Iterables</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="nb">next</span> <span class="o">=</span> <span class="fm">__next__</span>  <span class="c1"># Python 2 compatible</span>
-
     <span class="k">def</span> <span class="nf">_request_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Used by worker threads to retrieve next batch of items.&quot;&quot;&quot;</span>
 
@@ -1317,25 +1402,15 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pager</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pager</span><span class="o">.</span><span class="n">_limit</span><span class="p">:</span>
-                <span class="c1"># number of items returned in page was less than expected</span>
-                <span class="c1"># might be last page, or items might have been filtered out by server.</span>
-                <span class="k">pass</span>
-
         <span class="c1"># Return the next item</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">-=</span> <span class="mi">1</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">()</span>
-        <span class="c1"># Out of items and out of pages</span>
-        <span class="c1"># self._count = 0</span>
-        <span class="c1"># raise StopIteration</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="nb">next</span> <span class="o">=</span> <span class="fm">__next__</span>  <span class="c1"># Python 2 compatible</span></div>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 
 <div class="viewcode-block" id="PagedListIterator"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PagedListIterator">[docs]</a><span class="k">class</span> <span class="nc">PagedListIterator</span><span class="p">:</span>
@@ -1365,9 +1440,7 @@
             <span class="k">raise</span> <span class="ne">StopIteration</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="nb">next</span> <span class="o">=</span> <span class="fm">__next__</span>  <span class="c1"># Python 2 compatibility</span></div>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 
 <div class="viewcode-block" id="PagedList"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PagedList">[docs]</a><span class="k">class</span> <span class="nc">PagedList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
@@ -1397,11 +1470,12 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pager</span> <span class="o">=</span> <span class="n">PagedItemIterator</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_paged_items</span> <span class="o">=</span> <span class="n">PagedItemIterator</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
 
-        <span class="c1"># Add the first page of items to the list</span>
-        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pager</span><span class="o">.</span><span class="n">_cache</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pager</span><span class="p">))</span>
+        <span class="c1"># Go ahead and add the items that were initially returned.</span>
+        <span class="c1"># Do this by &quot;paging&quot; so iterator remains at the correct spot.</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">])):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paged_items</span><span class="p">))</span>
 
         <span class="c1"># Assume that server has more items available</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_has_more</span> <span class="o">=</span> <span class="kc">True</span>
@@ -1409,7 +1483,7 @@
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_more</span><span class="p">:</span>
             <span class="c1"># Estimate the total length as items downloaded + items still on server</span>
-            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pager</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paged_items</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># We&#39;ve pulled everything from the server, so we have an exact length now.</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span>
@@ -1438,7 +1512,7 @@
             <span class="c1"># Iterate through server-side pages until we&#39;ve loaded</span>
             <span class="c1"># the item at the requested index.</span>
             <span class="k">while</span> <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">idx</span><span class="p">:</span>
-                <span class="n">n</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pager</span><span class="p">)</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paged_items</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
@@ -1448,13 +1522,13 @@
         <span class="c1"># Get the item from the list</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">string</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
 
         <span class="c1"># If the list has more &quot;items&quot; than are stored in the underlying list</span>
         <span class="c1"># then there are more downloads to make.</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-</span> <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;, ... ]&#39;</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;, ...]&#39;</span>
 
         <span class="k">return</span> <span class="n">string</span></div>
 
@@ -1955,95 +2029,13 @@
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../index.html">sasctl</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../api/sasctl.html">sasctl package</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html">Unreleased</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-6-0-2021-06-29">v1.6.0 (2021-06-29)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-9-2021-06-09">v1.5.9 (2021-06-09)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-8-2021-05-18">v1.5.8 (2021-05-18)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-7-2021-05-04">v1.5.7 (2021-05-04)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-6-2021-04-30">v1.5.6 (2021-04-30)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-5-2021-03-26">v1.5.5 (2021-03-26)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-4-2020-10-29">v1.5.4 (2020-10-29)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-3-2020-06-25">v1.5.3 (2020-06-25)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-2-2020-06-22">v1.5.2 (2020-06-22)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-1-2020-4-9">v1.5.1 (2020-4-9)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-5-2020-2-23">v1.5 (2020-2-23)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-6-2020-1-24">v1.4.6 (2020-1-24)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-5-2019-12-5">v1.4.5 (2019-12-5)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-4-2019-10-31">v1.4.4 (2019-10-31)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-3-2019-10-28">v1.4.3 (2019-10-28)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-2-2019-10-23">v1.4.2 (2019-10-23)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-1-2019-10-17">v1.4.1 (2019-10-17)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-4-2019-10-15">v1.4 (2019-10-15)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-3-2019-10-10">v1.3 (2019-10-10)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-5-2019-10-10">v1.2.5 (2019-10-10)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-4-2019-9-20">v1.2.4 (2019-9-20)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-3-2019-8-23">v1.2.3 (2019-8-23)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-2-2019-8-21">v1.2.2 (2019-8-21)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-1-2019-8-20">v1.2.1 (2019-8-20)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-2-0-2019-8-16">v1.2.0 (2019-8-16)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-4-2019-8-16">v1.1.4 (2019-8-16)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-3-2019-8-14">v1.1.3 (2019-8-14)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-2-2019-8-12">v1.1.2 (2019-8-12)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-1-2019-8-6">v1.1.1 (2019-8-6)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-1-0-2019-8-5">v1.1.0 (2019-8-5)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-0-1-2019-07-31">v1.0.1 (2019-07-31)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v1-0-0-2019-07-24">v1.0.0 (2019-07-24)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v0-9-7-2019-07-18">v0.9.7 (2019-07-18)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../releases.html#v0-9-6-2019-07-15">v0.9.6 (2019-07-15)</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
       &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

@@ -21,9 +21,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">sasctl</a></h1>
 
-    <div class="document">
+
+
+<p class="blurb">Python package and CLI for user-friendly integration with SAS Viya</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">sasctl</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/sasctl.html">sasctl package</a></li>
+</ul>
+
+
+        </div>
+      </div>
       <div class="documentwrapper">
         <div class="bodywrapper">
           
@@ -39,14 +72,23 @@
 
 <span class="sd">&quot;&quot;&quot;The Model Repository service supports registering and managing models.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
 <span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">current_session</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">sasctl_command</span><span class="p">,</span> <span class="n">HTTPError</span>
 
-<span class="n">FUNCTIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Analytical&#39;</span><span class="p">,</span> <span class="s1">&#39;Classification&#39;</span><span class="p">,</span> <span class="s1">&#39;Clustering&#39;</span><span class="p">,</span> <span class="s1">&#39;Forecasting&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;Prediction&#39;</span><span class="p">,</span> <span class="s1">&#39;Text categorization&#39;</span><span class="p">,</span> <span class="s1">&#39;Text extraction&#39;</span><span class="p">,</span>
-             <span class="s1">&#39;Text sentiment&#39;</span><span class="p">,</span> <span class="s1">&#39;Text topics&#39;</span><span class="p">,</span> <span class="s1">&#39;Sentiment&#39;</span><span class="p">}</span>
+<span class="n">FUNCTIONS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Analytical&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Classification&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Clustering&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Forecasting&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Prediction&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Text categorization&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Text extraction&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Text sentiment&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Text topics&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Sentiment&#39;</span><span class="p">,</span>
+<span class="p">}</span>
 
 
 <span class="k">def</span> <span class="nf">_get_filter</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -71,17 +113,17 @@
 
     <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s1">&#39;/modelRepository&#39;</span>
 
-    <span class="n">list_repositories</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">update_repository</span><span class="p">,</span> \
-        <span class="n">delete_repository</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span><span class="s1">&#39;/repositories&#39;</span><span class="p">,</span> <span class="s1">&#39;repository&#39;</span><span class="p">,</span>
-                                                <span class="n">get_filter</span><span class="o">=</span><span class="n">_get_filter</span><span class="p">)</span>
+    <span class="n">list_repositories</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">update_repository</span><span class="p">,</span> <span class="n">delete_repository</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span>
+        <span class="s1">&#39;/repositories&#39;</span><span class="p">,</span> <span class="s1">&#39;repository&#39;</span><span class="p">,</span> <span class="n">get_filter</span><span class="o">=</span><span class="n">_get_filter</span>
+    <span class="p">)</span>
 
-    <span class="n">list_projects</span><span class="p">,</span> <span class="n">get_project</span><span class="p">,</span> <span class="n">update_project</span><span class="p">,</span> \
-        <span class="n">delete_project</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span><span class="s1">&#39;/projects&#39;</span><span class="p">,</span> <span class="s1">&#39;project&#39;</span><span class="p">,</span>
-                                             <span class="n">get_filter</span><span class="o">=</span><span class="n">_get_filter</span><span class="p">)</span>
+    <span class="n">list_projects</span><span class="p">,</span> <span class="n">get_project</span><span class="p">,</span> <span class="n">update_project</span><span class="p">,</span> <span class="n">delete_project</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span>
+        <span class="s1">&#39;/projects&#39;</span><span class="p">,</span> <span class="s1">&#39;project&#39;</span><span class="p">,</span> <span class="n">get_filter</span><span class="o">=</span><span class="n">_get_filter</span>
+    <span class="p">)</span>
 
-    <span class="n">list_models</span><span class="p">,</span> <span class="n">get_model</span><span class="p">,</span> <span class="n">update_model</span><span class="p">,</span> \
-        <span class="n">delete_model</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span><span class="s1">&#39;/models&#39;</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">,</span>
-                                           <span class="n">get_filter</span><span class="o">=</span><span class="n">_get_filter</span><span class="p">)</span>
+    <span class="n">list_models</span><span class="p">,</span> <span class="n">get_model</span><span class="p">,</span> <span class="n">update_model</span><span class="p">,</span> <span class="n">delete_model</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span>
+        <span class="s1">&#39;/models&#39;</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">get_filter</span><span class="o">=</span><span class="n">_get_filter</span>
+    <span class="p">)</span>
 
 <div class="viewcode-block" id="ModelRepository.get_astore"><a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_astore">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_astore</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
@@ -158,8 +200,10 @@
 
         <span class="k">if</span> <span class="n">link</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">scorecode_uri</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">get</span><span class="p">(</span><span class="n">scorecode_uri</span><span class="p">,</span>
-                       <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;text/vnd.sas.models.score.code.ds2package&#39;</span><span class="p">})</span></div>
+            <span class="k">return</span> <span class="n">get</span><span class="p">(</span>
+                <span class="n">scorecode_uri</span><span class="p">,</span>
+                <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;text/vnd.sas.models.score.code.ds2package&#39;</span><span class="p">},</span>
+            <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ModelRepository.get_model_contents"><a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_contents">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_model_contents</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
@@ -214,7 +258,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># If the input already appears to be the requested object just</span>
         <span class="c1"># return it, unless a refresh of the data was explicitly requested.</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">repository</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">repository</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">repository</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="n">k</span> <span class="ow">in</span> <span class="n">repository</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span>
+        <span class="p">):</span>
             <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
                 <span class="n">repository</span> <span class="o">=</span> <span class="n">repository</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
@@ -250,25 +296,29 @@
                 <span class="k">return</span> <span class="n">result</span></div>
 
 <div class="viewcode-block" id="ModelRepository.create_model"><a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.create_model">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span>
-                     <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">modeler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">algorithm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">tool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">score_code_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">training_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">event_prob_variable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">event_target_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">is_champion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                     <span class="n">is_challenger</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                     <span class="n">location</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">target_variable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">is_retrainable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                     <span class="n">is_immutable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                     <span class="n">properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">input_variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">output_variables</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">project</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">modeler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">algorithm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">tool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">score_code_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">training_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">event_prob_variable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">event_target_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">is_champion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">is_challenger</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">location</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">target_variable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">is_retrainable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">is_immutable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">input_variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">output_variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a model in an existing project or folder.</span>
 
 <span class="sd">        Parameters</span>
@@ -342,8 +392,7 @@
         <span class="c1"># Use any explicitly passed parameter value first.</span>
         <span class="c1"># Fall back to values in the model dict.</span>
         <span class="n">model</span><span class="p">[</span><span class="s1">&#39;projectId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
-        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;modeler&#39;</span><span class="p">]</span> <span class="o">=</span> \
-            <span class="n">modeler</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;modeler&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">current_session</span><span class="p">()</span><span class="o">.</span><span class="n">username</span>
+        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;modeler&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">modeler</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;modeler&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">current_session</span><span class="p">()</span><span class="o">.</span><span class="n">username</span>
         <span class="n">model</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">)</span>
         <span class="n">model</span><span class="p">[</span><span class="s1">&#39;function&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">function</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">)</span>
         <span class="n">model</span><span class="p">[</span><span class="s1">&#39;algorithm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">algorithm</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;algorithm&#39;</span><span class="p">)</span>
@@ -355,32 +404,35 @@
         <span class="k">elif</span> <span class="n">is_challenger</span><span class="p">:</span>
             <span class="n">model</span><span class="p">[</span><span class="s1">&#39;role&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;challenger&#39;</span>
 
-        <span class="n">model</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;properties&#39;</span><span class="p">,</span> <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">v</span><span class="p">}</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span>
-                                        <span class="n">properties</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span>
+            <span class="s1">&#39;properties&#39;</span><span class="p">,</span> <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">v</span><span class="p">}</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">properties</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+        <span class="p">)</span>
         <span class="n">model</span><span class="p">[</span><span class="s1">&#39;scoreCodeType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">score_code_type</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scoreCodeType&#39;</span><span class="p">)</span>
         <span class="n">model</span><span class="p">[</span><span class="s1">&#39;trainTable&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">training_table</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;trainTable&#39;</span><span class="p">)</span>
-        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;classificationEventProbabilityVariableName&#39;</span><span class="p">]</span> <span class="o">=</span> \
-            <span class="n">event_prob_variable</span> \
-            <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;classificationEventProbabilityVariableName&#39;</span><span class="p">)</span>
-        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;classificationTargetEventValue&#39;</span><span class="p">]</span> <span class="o">=</span> \
-            <span class="n">event_target_value</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;classificationTargetEventValue&#39;</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span>
+            <span class="s1">&#39;classificationEventProbabilityVariableName&#39;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">event_prob_variable</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s1">&#39;classificationEventProbabilityVariableName&#39;</span>
+        <span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;classificationTargetEventValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">event_target_value</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s1">&#39;classificationTargetEventValue&#39;</span>
+        <span class="p">)</span>
         <span class="n">model</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">location</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">)</span>
-        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;targetVariable&#39;</span><span class="p">]</span> <span class="o">=</span> \
-            <span class="n">target_variable</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;targetVariable&#39;</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;targetVariable&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_variable</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;targetVariable&#39;</span><span class="p">)</span>
         <span class="n">model</span><span class="p">[</span><span class="s1">&#39;retrainable&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_retrainable</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;retrainable&#39;</span><span class="p">)</span>
         <span class="n">model</span><span class="p">[</span><span class="s1">&#39;immutable&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_immutable</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;immutable&#39;</span><span class="p">)</span>
-        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;inputVariables&#39;</span><span class="p">]</span> <span class="o">=</span> \
-            <span class="n">input_variables</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inputVariables&#39;</span><span class="p">,</span> <span class="p">[])</span>
-        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;outputVariables&#39;</span><span class="p">]</span> <span class="o">=</span> \
-            <span class="n">output_variables</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;outputVariables&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;inputVariables&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_variables</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inputVariables&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;outputVariables&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_variables</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;outputVariables&#39;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="n">model</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;2&#39;</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/models&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
-            <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/vnd.sas.models.model+json&#39;</span><span class="p">})</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s1">&#39;/models&#39;</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/vnd.sas.models.model+json&#39;</span><span class="p">},</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ModelRepository.add_model_content"><a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.add_model_content">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">add_model_content</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                          <span class="n">content_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_model_content</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add additional files to the model.</span>
 
 <span class="sd">        Parameters</span>
@@ -411,7 +463,7 @@
             <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
             <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">content_type</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">binary_type</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">content_type</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
             <span class="n">content_type</span> <span class="o">=</span> <span class="s1">&#39;application/octet-stream&#39;</span>
 
         <span class="k">if</span> <span class="n">content_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -421,8 +473,27 @@
 
         <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="n">role</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">}</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/models/</span><span class="si">{}</span><span class="s1">/contents&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">),</span>
-                        <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span></div>
+        <span class="c1"># return cls.post(&#39;/models/{}/contents&#39;.format(id_), files=files, data=metadata)</span>
+
+        <span class="c1"># if the file already exists, a 409 error will be returned</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="s1">&#39;/models/</span><span class="si">{}</span><span class="s1">/contents&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">),</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">metadata</span>
+            <span class="p">)</span>
+        <span class="c1"># delete the older duplicate model and rerun the API call</span>
+        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">409</span><span class="p">:</span>
+                <span class="n">model_contents</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_contents</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">model_contents</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                        <span class="bp">cls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">&#39;/models/</span><span class="si">{}</span><span class="s1">/contents/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+                        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                            <span class="s1">&#39;/models/</span><span class="si">{}</span><span class="s1">/contents&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">),</span>
+                            <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span>
+                            <span class="n">data</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+                        <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span></div>
 
 <div class="viewcode-block" id="ModelRepository.default_repository"><a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.default_repository">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">default_repository</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -475,14 +546,16 @@
         <span class="n">project</span><span class="p">[</span><span class="s1">&#39;folderId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">repository</span><span class="p">[</span><span class="s1">&#39;folderId&#39;</span><span class="p">]</span>
 
         <span class="n">project</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/projects&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
-                        <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
-                            <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span>
-                                <span class="s1">&#39;application/vnd.sas.models.project+json&#39;</span><span class="p">})</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s1">&#39;/projects&#39;</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/vnd.sas.models.project+json&#39;</span><span class="p">},</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ModelRepository.import_model_from_zip"><a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.import_model_from_zip">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">import_model_from_zip</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                              <span class="n">version</span><span class="o">=</span><span class="s1">&#39;latest&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">import_model_from_zip</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;latest&#39;</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Import a model and contents as a ZIP file into a model project.</span>
 
 <span class="sd">        Parameters</span>
@@ -505,20 +578,21 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">project</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">project</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Project `</span><span class="si">%s</span><span class="s1">` could not be found.&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">project</span><span class="p">))</span>
-
-        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
-                  <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
-                  <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ZIP&#39;</span><span class="p">,</span>
-                  <span class="s1">&#39;projectId&#39;</span><span class="p">:</span> <span class="n">project</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-                  <span class="s1">&#39;versionOption&#39;</span><span class="p">:</span> <span class="n">version</span><span class="p">}</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ZIP&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;projectId&#39;</span><span class="p">:</span> <span class="n">project</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="s1">&#39;versionOption&#39;</span><span class="p">:</span> <span class="n">version</span><span class="p">,</span>
+        <span class="p">}</span>
         <span class="n">params</span> <span class="o">=</span> <span class="s1">&#39;&amp;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/models#octetStream&#39;</span><span class="p">,</span>
-                     <span class="n">data</span><span class="o">=</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
-                     <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
-                     <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">})</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s1">&#39;/models#octetStream&#39;</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="p">},</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">r</span></div>
 
 <div class="viewcode-block" id="ModelRepository.create_model_version"><a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.create_model_version">[docs]</a>    <span class="nd">@classmethod</span>
@@ -546,8 +620,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">model_obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s1">&#39;addModelVersion&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to create a new version for model &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span>
-                             <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to create a new version for model &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
 
         <span class="n">option</span> <span class="o">=</span> <span class="s1">&#39;minor&#39;</span> <span class="k">if</span> <span class="n">minor</span> <span class="k">else</span> <span class="s1">&#39;major&#39;</span>
 
@@ -575,8 +648,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;modelVersions&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve versions for model &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span>
-                             <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve versions for model &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;modelVersions&#39;</span><span class="p">)</span></div>
 
@@ -639,44 +711,65 @@
         <span class="sd">&quot;&quot;&quot;Moves a model&#39;s score resources to the Compute server.</span>
 
 <span class="sd">        Copies all of the Python score resources for a model to the pre-defined</span>
-<span class="sd">        server location (/models/resources/viya/&lt;model-UUID&gt;/). To enable </span>
-<span class="sd">        publishing and scoring, models that contain Python scoring resources </span>
-<span class="sd">        need the score resource files to be copied to a set location </span>
+<span class="sd">        server location (/models/resources/viya/&lt;model-UUID&gt;/). To enable</span>
+<span class="sd">        publishing and scoring, models that contain Python scoring resources</span>
+<span class="sd">        need the score resource files to be copied to a set location</span>
 <span class="sd">        (/models/resources/viya/&lt;model-UUID&gt;/). This location is used for</span>
 <span class="sd">        integration with Event Stream Processing and others. This request</span>
 <span class="sd">        invokes an asynchronous call to copy the score resource files. Check</span>
 <span class="sd">        the individual score resource uris to get the completion state:</span>
 <span class="sd">        pending, copying, success, failure. Please review the full Model</span>
 <span class="sd">        Manager documentation before using.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        model : str or dict</span>
 <span class="sd">            The name or id of the model, or a dictionary representation of</span>
 <span class="sd">            the model.</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        RestObj or None</span>
 <span class="sd">            JSON response detailing the API metadata</span>
 
+<span class="sd">        Warns</span>
+<span class="sd">        -----</span>
+<span class="sd">        UserWarning</span>
+<span class="sd">            If no score resources exist for the model.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
-            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
-            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
-        
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;/models/</span><span class="si">%s</span><span class="s1">/scoreResources&#39;</span> <span class="o">%</span> <span class="n">id_</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">})</span></div>
-    
+
+        <span class="n">model_obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">model_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No model &#39;</span><span class="si">{}</span><span class="s2">&#39; found.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">))</span>
+
+        <span class="c1"># Check if symbolic link for resource directories exists</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+                <span class="s1">&#39;/models/</span><span class="si">%s</span><span class="s1">/scoreResources&#39;</span> <span class="o">%</span> <span class="n">model_obj</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span>
+                <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">},</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No score resources found for model &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_obj</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">response</span>
+        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">406</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span>
+                    <span class="s1">&#39;The SAS Viya system you are attempting to move score resources with requires an additional&#39;</span>
+                    <span class="o">+</span> <span class="s1">&#39; administrator action in order to complete. Please see the documentation at &#39;</span>
+                    <span class="o">+</span> <span class="s1">&#39;https://go.documentation.sas.com/doc/en/calcdc/3.5/calmodels/n10916nn7yro46n119nev9sb912c.htm,&#39;</span>
+                    <span class="o">+</span> <span class="s1">&#39;which details the corollary approach for configuring analytic store model files.&#39;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span></div>
+
 <div class="viewcode-block" id="ModelRepository.convert_python_to_ds2"><a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.convert_python_to_ds2">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">convert_python_to_ds2</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Converts a Python model to DS2</span>
-<span class="sd">        </span>
+
 <span class="sd">        For SAS Viya 3.5 Python models on SAS Model Manager, wrap the Python score code in DS2</span>
-<span class="sd">        and convert the model score code type to DS2. Models converted in this way are not </span>
+<span class="sd">        and convert the model score code type to DS2. Models converted in this way are not</span>
 <span class="sd">        scoreable by CAS.</span>
 
 <span class="sd">        Parameters</span>
@@ -684,7 +777,7 @@
 <span class="sd">        model : str or dict</span>
 <span class="sd">            The name or id of the model, or a dictionary representation of</span>
 <span class="sd">            the model.</span>
-<span class="sd">            </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        API response</span>
@@ -698,23 +791,23 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
             <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
-            
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
             <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span>
-            
+
         <span class="n">ETag</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_headers</span><span class="p">[</span><span class="s1">&#39;ETag&#39;</span><span class="p">]</span>
         <span class="n">accept</span> <span class="o">=</span> <span class="s1">&#39;text/vnd.sas.source.ds2&#39;</span>
         <span class="n">content</span> <span class="o">=</span> <span class="s1">&#39;application/json&#39;</span>
-        
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;/models/</span><span class="si">%s</span><span class="s1">/typeConversion&#39;</span> <span class="o">%</span> <span class="n">id_</span><span class="p">,</span>
-                       <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Accept-Item&#39;</span><span class="p">:</span> <span class="n">accept</span><span class="p">,</span>
-                                <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="n">content</span><span class="p">,</span>
-                                <span class="s1">&#39;If-Match&#39;</span><span class="p">:</span> <span class="n">ETag</span><span class="p">})</span></div>
-        
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s1">&#39;/models/</span><span class="si">%s</span><span class="s1">/typeConversion&#39;</span> <span class="o">%</span> <span class="n">id_</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Accept-Item&#39;</span><span class="p">:</span> <span class="n">accept</span><span class="p">,</span> <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="n">content</span><span class="p">,</span> <span class="s1">&#39;If-Match&#39;</span><span class="p">:</span> <span class="n">ETag</span><span class="p">},</span>
+        <span class="p">)</span></div>
+
 <div class="viewcode-block" id="ModelRepository.get_model_details"><a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_details">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_model_details</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get model details from SAS Model Manager</span>
-<span class="sd">        </span>
+
 <span class="sd">        Get model details that pertain to model properties, model metadata,</span>
 <span class="sd">        model input, output, and target variables, and user-defined values.</span>
 
@@ -723,7 +816,7 @@
 <span class="sd">        model : str or dict</span>
 <span class="sd">            The name or id of the model, or a dictionary representation of</span>
 <span class="sd">            the model.</span>
-<span class="sd">            </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        API response</span>
@@ -737,7 +830,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
             <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
-            
+
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/models/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">id_</span><span class="p">)</span></div></div>
 </pre></div>
 
@@ -745,95 +838,13 @@
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../../index.html">sasctl</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/sasctl.html">sasctl package</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html">Unreleased</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-6-0-2021-06-29">v1.6.0 (2021-06-29)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-9-2021-06-09">v1.5.9 (2021-06-09)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-8-2021-05-18">v1.5.8 (2021-05-18)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-7-2021-05-04">v1.5.7 (2021-05-04)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-6-2021-04-30">v1.5.6 (2021-04-30)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-5-2021-03-26">v1.5.5 (2021-03-26)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-4-2020-10-29">v1.5.4 (2020-10-29)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-3-2020-06-25">v1.5.3 (2020-06-25)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-2-2020-06-22">v1.5.2 (2020-06-22)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-1-2020-4-9">v1.5.1 (2020-4-9)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-5-2020-2-23">v1.5 (2020-2-23)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-6-2020-1-24">v1.4.6 (2020-1-24)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-5-2019-12-5">v1.4.5 (2019-12-5)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-4-2019-10-31">v1.4.4 (2019-10-31)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-3-2019-10-28">v1.4.3 (2019-10-28)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-2-2019-10-23">v1.4.2 (2019-10-23)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-1-2019-10-17">v1.4.1 (2019-10-17)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-4-2019-10-15">v1.4 (2019-10-15)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-3-2019-10-10">v1.3 (2019-10-10)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-2-5-2019-10-10">v1.2.5 (2019-10-10)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-2-4-2019-9-20">v1.2.4 (2019-9-20)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-2-3-2019-8-23">v1.2.3 (2019-8-23)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-2-2-2019-8-21">v1.2.2 (2019-8-21)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-2-1-2019-8-20">v1.2.1 (2019-8-20)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-2-0-2019-8-16">v1.2.0 (2019-8-16)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-1-4-2019-8-16">v1.1.4 (2019-8-16)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-1-3-2019-8-14">v1.1.3 (2019-8-14)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-1-2-2019-8-12">v1.1.2 (2019-8-12)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-1-1-2019-8-6">v1.1.1 (2019-8-6)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-1-0-2019-8-5">v1.1.0 (2019-8-5)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-0-1-2019-07-31">v1.0.1 (2019-07-31)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v1-0-0-2019-07-24">v1.0.0 (2019-07-24)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v0-9-7-2019-07-18">v0.9.7 (2019-07-18)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../releases.html#v0-9-6-2019-07-15">v0.9.6 (2019-07-15)</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../../index.html">Documentation overview</a><ul>
-  <li><a href="../../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
       &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
