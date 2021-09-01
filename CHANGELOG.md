@@ -1,5 +1,9 @@
 Unreleased
 ----------
+ -
+ 
+v1.6.1 (2021-09-01)
+-------------------
 **Improvements**
  - `model_repository.add_model_content()` will now overwrite existing files instead of failing.
  
@@ -18,7 +22,6 @@ v1.6.0 (2021-06-29)
  was done to alleviate quirks where an old, expired session is implicitly used instead of a newly-created session.
  - Removed deprecated `raw=` parameter from `sasctl.core.request()`.
  - Dropped support for Python 2.
- 
  
 v1.5.9 (2021-06-09)
 -------------------
