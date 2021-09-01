@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from pathlib import Path
+from uuid import UUID
+
 from ..core import platform_version
 from .._services.model_repository import ModelRepository as mr
 from .writeScoreCode import ScoreCode as sc
@@ -44,11 +46,17 @@ def _import_model_from_zip(
                     project
                 )
             )
+
+            # Check if project was specified as a name or an id.
+            # If a name, ValueError will be raised and handled below.
+            _ = UUID(project)
+
             raise SystemError(
                 'The provided UUID does not match any projects found in SAS Model Manager. '
                 + 'Please enter a valid UUID or a new name for a project to be created.'
             )
         except ValueError:
+            # Project name was specified but doesn't exist - create it.
             repo = mr.default_repository().get('id')
             project = mr.create_project(project, repo)
             print('A new project named {} was created.'.format(project.name))
