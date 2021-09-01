@@ -146,17 +146,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./html-docs
 
-
-#      - name: Upload Documentation
-#        uses: crazy-max/ghaction-github-pages@v2
-#        with:
-#          target_branch: gh-pages
-#          build_dir: ./html-docs
-
-#      - name: Publish to PyPI
-#        uses: pypa/gh-action-pypi-publish@release/v1
-#        with:
-#          user: __token__
-#          password: ${{ secrets.PYPI_API_TOKEN }}
-#          verbose: true
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          verbose: true
 
