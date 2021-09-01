@@ -125,19 +125,26 @@ jobs:
           draft: true
           body: "Test Release"
 
-      - name: Download a Documentation
+      - name: Download built documentation
         uses: actions/download-artifact@v2
         with:
           name: html-docs
+          path: ./html-docs
+
+      - name: Download built release
+        uses: actions/download-artifact@v2
+        with:
+          name: pypi-dist
+          path: ./dist
 
       - name: Display structure of downloaded files
         run: ls -R
 
-#      - name: Upload Documentation
-#        uses: crazy-max/ghaction-github-pages@v2
-#        with:
-#          target_branch: gh-pages
-#          build_dir: ./docs/_build/_html
+      - name: Upload Documentation
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: ./html-docs
 
 #      - name: Publish to PyPI
 #        uses: pypa/gh-action-pypi-publish@release/v1
