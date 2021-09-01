@@ -6,6 +6,8 @@
 
 """The Model Repository service supports registering and managing models."""
 
+from warnings import warn
+
 from .service import Service
 from ..core import current_session, get, delete, sasctl_command, HTTPError
 
@@ -667,29 +669,26 @@ class ModelRepository(Service):
         RestObj or None
             JSON response detailing the API metadata
 
+        Warns
+        -----
+        UserWarning
+            If no score resources exist for the model.
+
         """
-        if cls.is_uuid(model):
-            id_ = model
-            model = cls.get_model(model)
-        elif isinstance(model, dict) and 'id' in model:
-            id_ = model['id']
-            model = cls.get_model(model)
-        else:
-            model = cls.get_model(model)
-            id_ = model['id']
+
+        model_obj = cls.get_model(model)
+
+        if model_obj is None:
+            raise ValueError("No model '{}' found.".format(model))
 
         # Check if symbolic link for resource directories exists
         try:
             response = cls.put(
-                '/models/%s/scoreResources' % id_,
+                '/models/%s/scoreResources' % model_obj['id'],
                 headers={'Accept': 'application/json'},
             )
-            if response == []:
-                print(
-                    'WARNING: No score resource files were found in model {}.'.format(
-                        model.name
-                    )
-                )
+            if not response:
+                warn("No score resources found for model '{}'".format(model_obj.name))
             return response
         except HTTPError as e:
             if e.code == 406:
