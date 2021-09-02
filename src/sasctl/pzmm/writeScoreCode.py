@@ -163,10 +163,6 @@ import numpy as np''')
                 cls.pyFile.write('''\n
 import settings''')
 
-            # Use a global variable for the model in order to load from memory only once
-            cls.pyFile.write('''\n\n
-_thisModelFit''')
-
             # For H2O models, include the server initialization, or h2o.connect() call to use an H2O server
             if isH2OModel:
                 cls.pyFile.write('''\n
