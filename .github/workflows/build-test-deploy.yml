@@ -133,6 +133,7 @@ jobs:
       - name: Archive changelog artifacts
         uses: actions/upload-artifact@v2
         with:
+          name: release_notes
           path: release_notes.md
 
 
