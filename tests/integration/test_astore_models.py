@@ -215,6 +215,37 @@ def test_forest_regression(cas_session, boston_dataset):
     check_input_variables(files, BOSTON_INPUT_VARS)
 
 
+def test_forest_regression_with_nominals(cas_session, boston_dataset):
+    target = {
+        'tool': 'SAS Visual Data Mining and Machine Learning',
+        'targetVariable': 'Price',
+        'scoreCodeType': 'ds2MultiType',
+        'function': 'prediction',
+        'algorithm': 'Random forest',
+    }
+
+    cas_session.loadactionset('decisiontree')
+    cas_session.loadactionset('astore')
+
+    tbl = cas_session.upload(boston_dataset).casTable
+
+    tbl.decisiontree.foresttrain(
+        target='Price',
+        inputs=list(boston_dataset.columns[:-1]),
+        nominals=['chas'],
+        saveState='astore',
+    )
+
+    desc = cas_session.astore.describe(rstore='astore', epcode=True)
+    props = _get_model_properties(desc)
+
+    for k, v in target.items():
+        assert props[k] == v
+
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, BOSTON_INPUT_VARS)
+
+
 def test_gradboost_binary_classification(cas_session, cancer_dataset):
     target = {
         'tool': 'SAS Visual Data Mining and Machine Learning',
@@ -288,6 +319,37 @@ def test_gradboost_regression(cas_session, boston_dataset):
 
     tbl.decisiontree.gbtreetrain(
         target='Price', inputs=list(boston_dataset.columns[:-1]), savestate='astore'
+    )
+
+    desc = cas_session.astore.describe(rstore='astore', epcode=True)
+    props = _get_model_properties(desc)
+
+    for k, v in target.items():
+        assert props[k] == v
+
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, BOSTON_INPUT_VARS)
+
+
+def test_gradboost_regression_with_nominals(cas_session, boston_dataset):
+    target = {
+        'tool': 'SAS Visual Data Mining and Machine Learning',
+        'targetVariable': 'Price',
+        'scoreCodeType': 'ds2MultiType',
+        'function': 'prediction',
+        'algorithm': 'Gradient boosting',
+    }
+
+    cas_session.loadactionset('decisiontree')
+    cas_session.loadactionset('astore')
+
+    tbl = cas_session.upload(boston_dataset).casTable
+
+    tbl.decisiontree.gbtreetrain(
+        target='Price',
+        inputs=list(boston_dataset.columns[:-1]),
+        nominals=['chas'],
+        savestate='astore',
     )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
@@ -381,6 +443,34 @@ def test_svm_regression(cas_session, boston_dataset):
 
     tbl.svm.svmTrain(
         target='Price', inputs=list(boston_dataset.columns[:-1]), saveState='astore'
+    )
+
+    desc = cas_session.astore.describe(rstore='astore', epcode=True)
+    props = _get_model_properties(desc)
+
+    for k, v in target.items():
+        assert props[k] == v
+
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, BOSTON_INPUT_VARS)
+
+
+def test_svm_regression_with_nominals(cas_session, boston_dataset):
+    target = {
+        'tool': 'SAS Visual Data Mining and Machine Learning',
+        'targetVariable': 'Price',
+        'scoreCodeType': 'ds2MultiType',
+        'function': 'prediction',
+        'algorithm': 'Support vector machine',
+    }
+
+    cas_session.loadactionset('svm')
+    cas_session.loadactionset('astore')
+
+    tbl = cas_session.upload(boston_dataset).casTable
+
+    tbl.svm.svmTrain(
+        target='Price', inputs=list(boston_dataset.columns[:-1]), nominals=['chas'], saveState='astore'
     )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
