@@ -108,6 +108,7 @@ jobs:
           python setup.py sdist bdist_wheel
 
       - name: Extract Changes
+        shell: python
         run: |
           import os, re
           tag_name = os.environ['GITHUB_REF'].replace('refs/tags/', '')
