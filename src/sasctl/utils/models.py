@@ -105,6 +105,7 @@ class ModelInfo:
         self.properties = []
         self.sample_input = None
         self.sample_output = None
+        self.tool = None
 
         # Most models take DataFrame or array as input instead of individual variables.
         self.array_input = True

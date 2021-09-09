@@ -721,7 +721,7 @@ def predict_proba(a, b):
 def test_from_model_info():
     from sasctl.utils.models import ModelInfo
     from sasctl.utils.pymas import from_model_info
-
+    from sasctl.utils.pymas.core import PyMAS2
     # Dummy model info
     info = ModelInfo(None)
 
@@ -737,5 +737,5 @@ def test_from_model_info():
 
     result = from_model_info(info)
 
-    assert isinstance(result, PyMAS)
+    assert isinstance(result, PyMAS2)
 
