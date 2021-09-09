@@ -1,5 +1,9 @@
 Unreleased
 ----------
+ -
+ 
+v1.6.2 (2021-09-09)
+-------------------
 **Bugfixes**
  - Fixed an issue with `register_model()` where random forest, gradient boosting, and SVM regression models with 
  nominal inputs where incorrectly treated as classification models. 
