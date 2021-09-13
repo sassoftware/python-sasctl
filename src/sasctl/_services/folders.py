@@ -15,10 +15,12 @@ class Folders(Service):
     use a URI to point back to those resources.
 
     """
+
     _SERVICE_ROOT = '/folders'
 
-    list_folders, get_folder, update_folder, \
-    delete_folder = Service._crud_funcs('/folders', 'folder')
+    list_folders, get_folder, update_folder, delete_folder = Service._crud_funcs(
+        '/folders', 'folder'
+    )
 
     @classmethod
     @sasctl_command('folders', 'create')
@@ -41,11 +43,15 @@ class Folders(Service):
         """
         parent = cls.get_folder(parent)
 
-        body = {'name': name,
-                'description': description,
-                'folderType': 'folder',
-                'parentFolderUri': parent.id if parent else None }
+        body = {
+            'name': name,
+            'description': description,
+            'folderType': 'folder',
+            'parentFolderUri': parent.id if parent else None,
+        }
 
-        return cls.post('/folders',
-                        json=body,
-                        headers={'Content-Type': 'application/vnd.sas.content.folder+json'})
+        return cls.post(
+            '/folders',
+            json=body,
+            headers={'Content-Type': 'application/vnd.sas.content.folder+json'},
+        )

@@ -58,7 +58,7 @@ class Service(object):                                        # skipcq PYL-R0205
         return cls.get('/apiMeta')
 
     @classmethod
-    def request(cls, verb, path, session=None, format='auto', **kwargs):
+    def request(cls, verb, path, session=None, format_='auto', **kwargs):
         """Send an HTTP request with a session.
 
         Parameters
@@ -70,7 +70,7 @@ class Service(object):                                        # skipcq PYL-R0205
             `_SERVICE_ROOT`.
         session : Session, optional
             Defaults to `current_session()`.
-        format : {'auto', 'response', 'content', 'json', 'text'}
+        format_ : {'auto', 'response', 'content', 'json', 'text'}
             The format of the return response.  Defaults to `auto`.
             response: the raw `Response` object.
             content: Response.content
@@ -90,7 +90,7 @@ class Service(object):                                        # skipcq PYL-R0205
         else:
             path = cls._SERVICE_ROOT + '/' + path
 
-        return core.request(verb, path, session, format, **kwargs)
+        return core.request(verb, path, session, format_, **kwargs)
 
     @classmethod
     def get(cls, *args, **kwargs):
@@ -359,7 +359,7 @@ class Service(object):                                        # skipcq PYL-R0205
     # arguments.
     # skipcq: PYL-W1113
     @classmethod
-    def _get_rel(cls, item, rel, func=None, filter=None, *args):
+    def _get_rel(cls, item, rel, func=None, filter_=None, *args):
         """Get `item` and request a link.
 
         Parameters
@@ -368,7 +368,7 @@ class Service(object):                                        # skipcq PYL-R0205
         rel : str
         func : function, optional
             Callable that takes (item, *args) and returns a RestObj of `item`
-        filter : str, optional
+        filter_ : str, optional
 
         args : any
             Passed to `func`
@@ -382,9 +382,9 @@ class Service(object):                                        # skipcq PYL-R0205
             obj = func(item, *args)
 
         if obj is None:
-            return
+            return None
 
-        params = 'filter={}'.format(filter) if filter is not None else {}
+        params = 'filter={}'.format(filter_) if filter_ is not None else {}
 
         resources = cls.request_link(obj, rel, params=params)
 

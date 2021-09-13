@@ -22,14 +22,14 @@ class CASManagement(Service):
     list_servers, get_server, _, _ = Service._crud_funcs('/servers', 'server')
 
     @classmethod
-    def list_caslibs(cls, server, filter=None):
+    def list_caslibs(cls, server, filter_=None):
         """List caslibs available on a server.
 
         Parameters
         ----------
         server : str or dict
             Name, ID, or dictionary representation of the server.
-        filter : str, optional
+        filter_ : str, optional
             A `formatted <https://developer.sas.com/reference/filtering>`_
             filter string.
 
@@ -39,8 +39,9 @@ class CASManagement(Service):
             A collection of :class:`.RestObj` instances.
 
         """
-        return cls._get_rel(server, 'caslibs', func=cls.get_server,
-                            filter=filter) or []
+        return (
+            cls._get_rel(server, 'caslibs', func=cls.get_server, filter_=filter_) or []
+        )
 
     @classmethod
     def get_caslib(cls, name, server=None):
@@ -59,14 +60,14 @@ class CASManagement(Service):
 
         """
         server = server or DEFAULT_SERVER
-        caslibs = cls.list_caslibs(server,
-                                   filter='eq($primary,name, "%s")' % name)
+        caslibs = cls.list_caslibs(server, filter_='eq($primary,name, "%s")' % name)
 
         if caslibs:
             return caslibs[0]
+        return None
 
     @classmethod
-    def list_tables(cls, caslib, server=None, filter=None):
+    def list_tables(cls, caslib, server=None, filter_=None):
         """List tables available in a caslib.
 
         Parameters
@@ -75,7 +76,7 @@ class CASManagement(Service):
             Name, ID, or dictionary representation of the caslib.
         server : str, optional
             Server where the `caslib` is registered.
-        filter : str, optional
+        filter_ : str, optional
             Filter string in the `https://developer.sas.com/reference/filtering
             /` format.
 
@@ -85,8 +86,7 @@ class CASManagement(Service):
             A collection of :class:`.RestObj` instances.
 
         """
-        return cls._get_rel(caslib, 'tables', cls.get_caslib, filter,
-                            server) or []
+        return cls._get_rel(caslib, 'tables', cls.get_caslib, filter_, server) or []
 
     @classmethod
     def get_table(cls, name, caslib=None, server=None):
@@ -108,16 +108,18 @@ class CASManagement(Service):
 
         """
         caslib = caslib or DEFAULT_CASLIB
-        tables = cls.list_tables(caslib,
-                                 server=server,
-                                 filter='eq($primary,name, "%s")' % name)
+        tables = cls.list_tables(
+            caslib, server=server, filter_='eq($primary,name, "%s")' % name
+        )
 
         if tables:
             return tables[0]
+        return None
 
     @classmethod
-    def upload_file(cls, file, name, caslib=None, server=None, header=None,
-                    format_=None):
+    def upload_file(
+        cls, file, name, caslib=None, server=None, header=None, format_=None
+    ):
         """Upload a file to a CAS table.
 
         Uploads the contents of a CSV, XLS, XLSX, SAS7BDT or SASHDAT file to a
@@ -160,8 +162,7 @@ class CASManagement(Service):
             # Extension should be supported & needs to be explicitly set in
             # the "format" parameter to avoid errors.
             if format_ not in ('csv', 'xls', 'xlsx', 'sas7bdat', 'sashdat'):
-                raise ValueError("File '%s' has an unsupported file type." %
-                                 file)
+                raise ValueError("File '%s' has an unsupported file type." % file)
 
             with open(path, 'rb') as f:
                 file = f.read()
@@ -174,9 +175,9 @@ class CASManagement(Service):
         if format_ is not None:
             data['format'] = format_
 
-        tbl = cls.post('/servers/%s/caslibs/%s/tables' % (server, caslib),
-                       data=data,
-                       files={
-                           name: file
-                       })
+        tbl = cls.post(
+            '/servers/%s/caslibs/%s/tables' % (server, caslib),
+            data=data,
+            files={name: file},
+        )
         return tbl

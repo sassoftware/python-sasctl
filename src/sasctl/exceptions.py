@@ -20,7 +20,6 @@ class AuthenticationError(ValueError):
 
 class AuthorizationError(RuntimeError):
     """A user lacks permission to perform an action."""
-    pass
 
 
 class JobTimeoutError(RuntimeError):

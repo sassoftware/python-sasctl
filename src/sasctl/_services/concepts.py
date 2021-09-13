@@ -16,17 +16,19 @@ class Concepts(Service):
     _SERVICE_ROOT = '/concepts'
 
     @classmethod
-    def assign_concepts(cls,
-                        documents,
-                        caslib=None,
-                        id_column=None,
-                        text_column=None,
-                        description=None,
-                        model=None,
-                        output_postfix=None,
-                        match_type=None,
-                        enable_facts=False,
-                        language='en'):
+    def assign_concepts(
+        cls,
+        documents,
+        caslib=None,
+        id_column=None,
+        text_column=None,
+        description=None,
+        model=None,
+        output_postfix=None,
+        match_type=None,
+        enable_facts=False,
+        language='en',
+    ):
         """Performs sentiment analysis on the input data.
 
         Creates a setiment analysis task that executes asynchronously.  There
