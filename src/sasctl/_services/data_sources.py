@@ -250,6 +250,7 @@ class DataSources(Service):
             # Build the default caslib name (data_sources and cas_management
             # services currently require username to be explicitly included)
             if caslib_name == {}:
+                # skipcq: PYL-W0212
                 username = table.get_connection()._username
                 caslib_name = DEFAULT_CASLIB + '(%s)' % username
 
