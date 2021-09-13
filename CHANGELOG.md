@@ -1,13 +1,6 @@
 Unreleased
 ----------
-**Improvements**
- - Added `ml_pipeline_automation` service for automated building of machine learning pipelines.
- - Added a new `build_pipeline` task for creating automated pipelines.
- - Added an `upload_file` method to the `cas_management` service,
- - Added metrics module
- - train, test, valid inputs to register_model
- - overwrite register_model files
- - metrics included by default
+ -
  
 v1.6.2 (2021-09-09)
 -------------------
@@ -234,19 +227,19 @@ v1.2.0 (2019-8-16)
 
 
 v1.1.4 (2019-8-16)
-------------------
+-----------------
 **Bugfixes**
  - The `register_model` task now generates dmcas_epscorecode.sas files for ASTORE models.
   
 
 v1.1.3 (2019-8-14)
-------------------
+-----------------
 **Bugfixes**
  - Fixed problem causing `register_model` task to include output variables in the input variables list.
  
  
 v1.1.2 (2019-8-12)
-------------------
+-----------------
 **Improvements**
  - CAS model table automatically reloaded on `publish_model` task.
  

@@ -14,8 +14,6 @@ from ._services.files import Files as files
 from ._services.folders import Folders as folders
 from ._services.microanalytic_score import \
     MicroAnalyticScore as microanalytic_score
-from ._services.ml_pipeline_automation import \
-    MLPipelineAutomation as ml_pipeline_automation
 from ._services.model_management import ModelManagement as model_management
 from ._services.model_publish import ModelPublish as model_publish
 from ._services.model_repository import ModelRepository as model_repository
