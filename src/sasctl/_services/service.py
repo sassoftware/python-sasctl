@@ -41,7 +41,7 @@ class Service(object):                                        # skipcq PYL-R0205
 
         """
         try:
-            response = cls.head('/', format='response')
+            response = cls.head('/', format_='response')
             return response.status_code == 200
         except HTTPError:
             return False
