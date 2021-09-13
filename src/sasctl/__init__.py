@@ -28,7 +28,6 @@ from .core import (
 )
 from .core import RestObj, Session, HTTPError
 from .tasks import (
-    build_pipeline,
     publish_model,
     register_model,
     update_model_performance,

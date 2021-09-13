@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import pytest
-from six.moves import mock
+from unittest import mock
 
 from sasctl.utils import metrics
 

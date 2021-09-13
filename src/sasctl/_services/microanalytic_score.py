@@ -166,7 +166,7 @@ class MicroAnalyticScore(Service):
 
     @classmethod
     def create_module(
-        self,
+        cls,
         name=None,
         description=None,
         source=None,
