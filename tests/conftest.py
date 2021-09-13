@@ -4,22 +4,21 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import builtins
 import os
 import re
 import warnings
+from unittest import mock
+from urllib.parse import urlsplit
 
 import betamax
 from betamax_serializers import pretty_json
 from betamax.cassette.cassette import Placeholder
 import pytest
-import six
-from six.moves.urllib.parse import urlsplit
+
 from sasctl import Session
 
 from .matcher import RedactedPathMatcher
-
-# Register 'mock' for easy importing in test modules
-six.add_move(six.MovedModule('mock', 'mock', 'unittest.mock'))
 
 
 def redact(interaction, cassette):
@@ -40,8 +39,14 @@ def redact(interaction, cassette):
     # request.
     for origin in interaction.data['response']['headers'].get('Origin', []):
         host = urlsplit(origin).netloc
-        if host != '' and Placeholder(placeholder='hostname.com', replace=host) not in cassette.placeholders:
-            cassette.placeholders.append(Placeholder(placeholder='hostname.com', replace=host))
+        if (
+            host != ''
+            and Placeholder(placeholder='hostname.com', replace=host)
+            not in cassette.placeholders
+        ):
+            cassette.placeholders.append(
+                Placeholder(placeholder='hostname.com', replace=host)
+            )
 
     def add_placeholder(pattern, string, placeholder, group):
         if isinstance(string, bytes):
@@ -50,27 +55,42 @@ def redact(interaction, cassette):
         match = re.search(pattern, string)
         if match:
             old_text = match.group(group)
-            cassette.placeholders.append(Placeholder(placeholder=placeholder, replace=old_text))
+            cassette.placeholders.append(
+                Placeholder(placeholder=placeholder, replace=old_text)
+            )
 
     if 'string' in interaction.data['request']['body']:
-        add_placeholder(r"(?<=&password=)([^&]*)\b", interaction.data['request']['body']['string'], '*****', 1)
+        add_placeholder(
+            r"(?<=&password=)([^&]*)\b",
+            interaction.data['request']['body']['string'],
+            '*****',
+            1,
+        )
 
     if 'string' in interaction.data['response']['body']:
-        add_placeholder('(?<=access_token":")[^"]*', interaction.data['response']['body']['string'], '[redacted]', 0)
+        add_placeholder(
+            '(?<=access_token":")[^"]*',
+            interaction.data['response']['body']['string'],
+            '[redacted]',
+            0,
+        )
 
-    for index, header in enumerate(interaction.data['request']['headers'].get('Authorization', [])):
+    for index, header in enumerate(
+        interaction.data['request']['headers'].get('Authorization', [])
+    ):
         # Betamax tries to replace Placeholders on all headers.  Mixed str/bytes headers will cause Betamax to break.
         if isinstance(header, bytes):
             header = header.decode('utf-8')
             interaction.data['request']['headers']['Authorization'][index] = header
-        add_placeholder(r'(?<=Basic ).*', header, '[redacted]', 0)      # swat
-        add_placeholder(r'(?<=Bearer ).*', header, '[redacted]', 0)     # sasctl
+        add_placeholder(r'(?<=Basic ).*', header, '[redacted]', 0)  # swat
+        add_placeholder(r'(?<=Bearer ).*', header, '[redacted]', 0)  # sasctl
 
 
 betamax.Betamax.register_serializer(pretty_json.PrettyJSONSerializer)
 betamax.Betamax.register_request_matcher(RedactedPathMatcher)
 
 from .matcher import PartialBodyMatcher
+
 betamax.Betamax.register_request_matcher(PartialBodyMatcher)
 
 # Replay cassettes only by default
@@ -79,8 +99,13 @@ betamax.Betamax.register_request_matcher(PartialBodyMatcher)
 # NOTE: We've added a custom "live" record mode that bypasses all cassettes
 #       and allows test suite to be run against a live server.
 os.environ.setdefault('SASCTL_RECORD_MODE', 'once')
-if os.environ['SASCTL_RECORD_MODE'] \
-        not in ('once', 'new_episodes', 'all', 'none', 'live'):
+if os.environ['SASCTL_RECORD_MODE'] not in (
+    'once',
+    'new_episodes',
+    'all',
+    'none',
+    'live',
+):
     os.environ['SASCTL_RECORD_MODE'] = 'once'
 
 # Set a flag to indicate whether bypassing Betamax altogether.
@@ -94,12 +119,13 @@ else:
 
 with betamax.Betamax.configure() as config:
     config.cassette_library_dir = "tests/cassettes"
-    config.default_cassette_options['record_mode'] = os.environ[
-        'SASCTL_RECORD_MODE']
-    config.default_cassette_options['match_requests_on'] = ['method',
-                                                            'redacted_path',
-                                                            # 'partial_body',
-                                                            'query']
+    config.default_cassette_options['record_mode'] = os.environ['SASCTL_RECORD_MODE']
+    config.default_cassette_options['match_requests_on'] = [
+        'method',
+        'redacted_path',
+        # 'partial_body',
+        'query',
+    ]
     config.before_record(callback=redact)
     config.before_playback(callback=redact)
 
@@ -121,21 +147,19 @@ with betamax.Betamax.configure() as config:
     for hostname in hostnames:
         config.define_cassette_placeholder('hostname.com', hostname)
 
-    config.define_cassette_placeholder('hostname.com',
-                                       os.environ['SASCTL_SERVER_NAME'])
-    config.define_cassette_placeholder('USERNAME',
-                                       os.environ['SASCTL_USER_NAME'])
-    config.define_cassette_placeholder('*****',
-                                       os.environ['SASCTL_PASSWORD'])
+    config.define_cassette_placeholder('hostname.com', os.environ['SASCTL_SERVER_NAME'])
+    config.define_cassette_placeholder('USERNAME', os.environ['SASCTL_USER_NAME'])
+    config.define_cassette_placeholder('*****', os.environ['SASCTL_PASSWORD'])
 
 
 @pytest.fixture(scope='session', params=hostnames)
 def credentials(request):
-    auth = {'hostname': request.param,
-            'username': os.environ['SASCTL_USER_NAME'],
-            'password': os.environ['SASCTL_PASSWORD'],
-            'verify_ssl': False
-            }
+    auth = {
+        'hostname': request.param,
+        'username': os.environ['SASCTL_USER_NAME'],
+        'password': os.environ['SASCTL_PASSWORD'],
+        'verify_ssl': False,
+    }
 
     if 'SASCTL_AUTHINFO' in os.environ:
         auth['authinfo'] = os.path.expanduser(os.environ['SASCTL_AUTHINFO'])
@@ -146,7 +170,6 @@ def credentials(request):
 @pytest.fixture(scope='function')
 def session(request, credentials):
     import warnings
-    from six.moves import mock
     from betamax.fixtures.pytest import _casette_name
     from sasctl import current_session
 
@@ -168,8 +191,9 @@ def session(request, credentials):
         recorded_session = Session()
         super(Session, recorded_session).__init__()
 
-    with betamax.Betamax(recorded_session).use_cassette(cassette_name,
-                                                        serialize_with='prettyjson') as recorder:
+    with betamax.Betamax(recorded_session).use_cassette(
+        cassette_name, serialize_with='prettyjson'
+    ) as recorder:
         recorder.start()
 
         # Manually run the sasctl.Session constructor.  Mock out calls to
@@ -197,7 +221,7 @@ def missing_packages():
 
     """
 
-    from six.moves import mock
+    from unittest import mock
     from contextlib import contextmanager
 
     @contextmanager
@@ -215,7 +239,7 @@ def missing_packages():
             return builtin_import(name, *args, **kwargs)
 
         try:
-            with mock.patch(six.moves.builtins.__name__ + '.__import__', side_effect=_import):
+            with mock.patch(builtins.__name__ + '.__import__', side_effect=_import):
                 yield
         finally:
             pass
@@ -227,15 +251,17 @@ def missing_packages():
 def cas_session(request, credentials):
     import requests
     from betamax.fixtures.pytest import _casette_name
-    from six.moves import mock
+    from unittest import mock
+
     swat = pytest.importorskip('swat')
     from swat.exceptions import SWATError
 
     if SKIP_REPLAY:
-        with swat.CAS('https://{}/cas-shared-default-http/'.format(
-                credentials['hostname']),
-                username=credentials['username'],
-                password=credentials['password']) as s:
+        with swat.CAS(
+            'https://{}/cas-shared-default-http/'.format(credentials['hostname']),
+            username=credentials['username'],
+            password=credentials['password'],
+        ) as s:
             yield s
         return
 
@@ -247,7 +273,9 @@ def cas_session(request, credentials):
     # Must have an existing Session for Betamax to record
     recorded_session = requests.Session()
 
-    with betamax.Betamax(recorded_session).use_cassette(cassette_name, serialize_with='prettyjson') as recorder:
+    with betamax.Betamax(recorded_session).use_cassette(
+        cassette_name, serialize_with='prettyjson'
+    ) as recorder:
         recorder.start()
 
         # CAS connection tries to create its own Session instance.
@@ -256,10 +284,13 @@ def cas_session(request, credentials):
             mocked.return_value = recorded_session
             s = None
             try:
-                s = swat.CAS('https://{}/cas-shared-default-http/'.format(
-                    credentials['hostname']),
+                s = swat.CAS(
+                    'https://{}/cas-shared-default-http/'.format(
+                        credentials['hostname']
+                    ),
                     username=credentials['username'],
-                    password=credentials['password'])
+                    password=credentials['password'],
+                )
 
                 # Strip out the session id from requests & responses.
                 recorder.config.define_cassette_placeholder('[session id]', s._session)
@@ -290,18 +321,21 @@ def iris_astore(cas_session):
     iris.columns = ['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth', 'Species']
 
     tbl = cas_session.upload(iris).casTable
-    _ = tbl.decisiontree.gbtreetrain(target='Species',
-                                     inputs=['SepalLength', 'SepalWidth',
-                                             'PetalLength', 'PetalWidth'],
-                                     nominal=['Species'],
-                                     ntree=10,
-                                     savestate=ASTORE_NAME)
+    _ = tbl.decisiontree.gbtreetrain(
+        target='Species',
+        inputs=['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth'],
+        nominal=['Species'],
+        ntree=10,
+        savestate=ASTORE_NAME,
+    )
     return cas_session.CASTable(ASTORE_NAME)
 
 
 def pytest_configure(config):
-    config.addinivalue_line("markers",
-                            "incremental: tests should be executed in order and xfail if previous test fails.")
+    config.addinivalue_line(
+        "markers",
+        "incremental: tests should be executed in order and xfail if previous test fails.",
+    )
 
 
 def pytest_runtest_makereport(item, call):
@@ -324,8 +358,18 @@ def airline_dataset():
     pd = pytest.importorskip('pandas')
 
     df = pd.read_csv('examples/data/airline_tweets.csv')
-    df = df[['airline_sentiment', 'airline', 'name', 'tweet_location',
-             'tweet_id', 'tweet_created', 'retweet_count', 'text']]
+    df = df[
+        [
+            'airline_sentiment',
+            'airline',
+            'name',
+            'tweet_location',
+            'tweet_id',
+            'tweet_created',
+            'retweet_count',
+            'text',
+        ]
+    ]
     return df
 
 

@@ -5,8 +5,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import re
+from urllib.parse import urlsplit
 
-from six.moves.urllib.parse import urlsplit
 from betamax.matchers.path import PathMatcher
 
 class RedactedPathMatcher(PathMatcher):

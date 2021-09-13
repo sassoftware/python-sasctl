@@ -102,16 +102,17 @@ class DataSources(Service):
         for s in sources:
             if source in (s.name, s.id):
                 return s
+        return None
 
     @classmethod
-    def list_caslibs(cls, source='cas-shared-default', filter=None):
+    def list_caslibs(cls, source='cas-shared-default', filter_=None):
         """Get all caslibs registered with the given CAS server.
 
         Parameters
         ----------
         source : str, optional
             Name of the CAS server.  Defaults to `cas-shared-default`.
-        filter : str, optional
+        filter_ : str, optional
 
         Returns
         -------
@@ -127,7 +128,7 @@ class DataSources(Service):
         """
         source = cls.get_source('cas', source)
 
-        params = 'filter={}'.format(filter) if filter is not None else {}
+        params = 'filter={}'.format(filter_) if filter_ is not None else {}
         result = cls.request_link(source, 'children', params=params)
 
         return result if isinstance(result, (list, PagedItemIterator)) else [result]
@@ -149,20 +150,21 @@ class DataSources(Service):
 
         """
         source = source or 'cas-shared-default'
-        caslibs = cls.list_caslibs(source, filter='eq(name, "%s")' % name)
+        caslibs = cls.list_caslibs(source, filter_='eq(name, "%s")' % name)
 
         if caslibs:
             return caslibs[0]
+        return None
 
     @classmethod
-    def list_tables(cls, caslib, filter=None, session_id=None):
+    def list_tables(cls, caslib, filter_=None, session_id=None):
         """List tables available in a caslib.
 
         Parameters
         ----------
         caslib : str or dict
             Name, ID, or dictionary representation of the caslib.
-        filter : str, optional
+        filter_ : str, optional
         session_id : str, optional
             ID of an existing CAS session to use.  Otherwise a new session will
             be created.
@@ -184,8 +186,8 @@ class DataSources(Service):
 
         params = {}
 
-        if filter is not None:
-            params['filter'] = str(filter)
+        if filter_ is not None:
+            params['filter'] = str(filter_)
         if session_id is not None:
             params['sessionId'] = str(session_id)
 
@@ -211,12 +213,13 @@ class DataSources(Service):
         RestObj
 
         """
-        tables = cls.list_tables(caslib,
-                                 filter='eq(name, "%s")' % name,
-                                 session_id=session_id)
+        tables = cls.list_tables(
+            caslib, filter_='eq(name, "%s")' % name, session_id=session_id
+        )
 
         if tables:
             return tables[0]
+        return None
 
     @classmethod
     def table_uri(cls, table):
@@ -238,8 +241,7 @@ class DataSources(Service):
             from .cas_management import CASManagement as cm
 
             server_http = table.builtins.httpAddress()
-            server_name = server_http['restPrefix'].lstrip('/').rsplit('-http')[
-                0]
+            server_name = server_http['restPrefix'].lstrip('/').rsplit('-http')[0]
 
             table_name = table.name
             caslib_name = table.caslib
@@ -248,6 +250,7 @@ class DataSources(Service):
             # Build the default caslib name (data_sources and cas_management
             # services currently require username to be explicitly included)
             if caslib_name == {}:
+                # skipcq: PYL-W0212
                 username = table.get_connection()._username
                 caslib_name = DEFAULT_CASLIB + '(%s)' % username
 

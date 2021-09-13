@@ -4,7 +4,7 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-from six.moves import mock
+from unittest import mock
 
 from sasctl.core import PagedItemIterator, RestObj
 from .test_pageiterator import paging
@@ -88,12 +88,16 @@ def test_paging_inflated_count():
     # Simulate that behavior
     num_items = 23
 
-    obj = RestObj(items=pages[0],
-                  count=num_items,
-                  links=[{'rel': 'next',
-                          'href': '/moaritems?start=%d&limit=%d' % (start, limit)}])
+    obj = RestObj(
+        items=pages[0],
+        count=num_items,
+        links=[
+            {'rel': 'next', 'href': '/moaritems?start=%d&limit=%d' % (start, limit)}
+        ],
+    )
 
     with mock.patch('sasctl.core.request') as req:
+
         def side_effect(_, link, **kwargs):
             assert 'limit=%d' % limit in link
             start = int(re.search(r'(?<=start=)[\d]+', link).group())

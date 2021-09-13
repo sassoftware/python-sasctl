@@ -1,0 +1,18 @@
+[
+    {
+        "role": "inputVariables",
+        "name": "inputVar.json"
+    },
+    {
+        "role": "outputVariables",
+        "name": "outputVar.json"
+    },
+    {
+        "role": "score",
+        "name": "RandomForestScore.py"
+    },
+    {
+        "role": "scoreResource",
+        "name": "RandomForest.pickle"
+    }
+]

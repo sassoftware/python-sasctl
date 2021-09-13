@@ -4,8 +4,11 @@ sasctl
 
 Version |version|
 
-.. contents::
-    :local:
+.. toctree::
+    :maxdepth: 3
+    :hidden:
+
+    index
 
 Introduction
 ------------
@@ -28,8 +31,7 @@ Prerequisites
 If not already present, these packages will be downloaded and install automatically.
 
 - requests
-- six
-- futures (Python 2.7 only)
+- pyyaml
 
 The following additional packages are recommended for full functionality:
 
@@ -270,6 +272,9 @@ can be instantiated using simply the hostname:
 
     >>> s = Session(hostname)
 
+If a username and password are not provided, and the SAS Viya server has **not** been configured for Kerberos then
+**sasctl** will attempt to connect using OAuth2 authorization codes.  In this situation, you may be prompted to open
+a URL in your browser, retrieve an authorization code, and then enter it before sasctl can connect.
 
 The final method for supplying credentials is also simple and straight-forward: environment variables.
 
@@ -278,7 +283,8 @@ The final method for supplying credentials is also simple and straight-forward: 
  - :envvar:`SASCTL_SERVER_NAME`
  - :envvar:`SASCTL_USER_NAME`
  - :envvar:`SASCTL_PASSWORD`
-
+ - :envvar:`SASCTL_CLIENT_ID`
+ - :envvar:`SASCTL_CLIENT_SECRET`
 
 
 
@@ -373,6 +379,16 @@ The name of the user that will be used when creating the :class:`.Session` insta
 .. envvar:: SASCTL_PASSWORD
 
 Password for authentication to the SAS Viya server.
+
+.. envvar:: SASCTL_CLIENT_ID
+
+OAuth2 client ID used during authorization.
+
+.. envvar:: SASCTL_CLIENT_SECRET
+
+OAuth2 client secret used during authorization.
+
+
 
 
 Contributor Guide
@@ -532,12 +548,4 @@ such as '27' or '36'.
 For additional information on configuring and using Tox, see the official :doc:`documentation <tox:index>` or Sean Hammond's excellent `tutorial`_.
 
 .. _`tutorial`: https://seanh.cc/post/tox-tutorial/
-
-
-Release History
----------------
-
-.. toctree::
-
-   releases
 

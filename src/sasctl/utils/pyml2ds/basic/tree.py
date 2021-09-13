@@ -1,12 +1,8 @@
 import abc
-import sys
 import unicodedata
 
-import six
 
-
-@six.add_metaclass(abc.ABCMeta)
-class TreeParser:
+class TreeParser(metaclass=abc.ABCMeta):
     """Abstract class for parsing decision tree.
 
     Attributes
@@ -20,6 +16,7 @@ class TreeParser:
         Name used for output variable.
 
     """
+
     def __init__(self):
         self.d = {}
         self._indent = 4
@@ -93,13 +90,7 @@ class TreeParser:
 
     @staticmethod
     def _remove_diacritic(input):
-        if sys.hexversion >= 0x3000000:
-            output = unicodedata.normalize('NFKD', input).encode('ASCII', 'ignore').decode()
-        else:
-            # On Python < 3.0.0
-            if isinstance(input, str):
-                input = six.text_type(input, 'ISO-8859-1')
-            output = unicodedata.normalize('NFKD', input).encode('ASCII', 'ignore')
+        output = unicodedata.normalize('NFKD', input).encode('ASCII', 'ignore').decode()
 
         return output
 
@@ -139,13 +130,16 @@ class TreeParser:
             elif self._go_right():
                 cond = "not missing({}) and ".format(var)
             else:
-                f.write(self._get_indent() + "if (missing(%s)) then do;\n"
-                        % var)
+                f.write(self._get_indent() + "if (missing(%s)) then do;\n" % var)
                 self.parse_node(f, node=self._missing_node())
                 f.write(self._get_indent() + "end;\n")
 
-            f.write(self._get_indent() + "if ({}{} {} {}) then do;\n".format(
-                cond, var, self._decision_type(), split_value))
+            f.write(
+                self._get_indent()
+                + "if ({}{} {} {}) then do;\n".format(
+                    cond, var, self._decision_type(), split_value
+                )
+            )
             self.parse_node(f, node=self._left_node())
             f.write(self._get_indent() + "end;\n")
             f.write(self._get_indent() + "else do;\n")
@@ -154,8 +148,9 @@ class TreeParser:
         else:
             leaf_value = self._leaf_value()
 
-            f.write(self._get_indent() + "treeValue%s = %s;\n"
-                    % (self._tree_id, leaf_value))
+            f.write(
+                self._get_indent() + "treeValue%s = %s;\n" % (self._tree_id, leaf_value)
+            )
 
         self._node = pnode
         self._depth -= 1

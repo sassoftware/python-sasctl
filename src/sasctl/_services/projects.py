@@ -10,8 +10,9 @@ from .service import Service
 class Projects(Service):
     _SERVICE_ROOT = '/projects'
 
-    list_projects, get_project, update_project, \
-        delete_project = Service._crud_funcs('/projects', 'project')
+    list_projects, get_project, update_project, delete_project = Service._crud_funcs(
+        '/projects', 'project'
+    )
 
     @classmethod
     def create_project(cls, name, description=None, image=None):
@@ -29,10 +30,10 @@ class Projects(Service):
         RestObj
 
         """
-        body = {'name': name,
-                'description': description,
-                'imageUri': image
-                }
+        body = {'name': name, 'description': description, 'imageUri': image}
 
-        return cls.post('/projects', json=body,
-                        headers={'Content-Type': 'application/vnd.sas.project+json'})
+        return cls.post(
+            '/projects',
+            json=body,
+            headers={'Content-Type': 'application/vnd.sas.project+json'},
+        )

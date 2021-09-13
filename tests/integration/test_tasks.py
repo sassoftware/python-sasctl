@@ -6,6 +6,7 @@
 
 import re
 import warnings
+from unittest import mock
 
 import pytest
 
@@ -72,9 +73,9 @@ class TestModels:
         from sasctl import RestObj
 
         # Register model and ensure attributes are set correctly
-        model = register_model(iris_astore, ASTORE_MODEL_NAME,
-                               project=PROJECT_NAME,
-                               force=True)
+        model = register_model(
+            iris_astore, ASTORE_MODEL_NAME, project=PROJECT_NAME, force=True
+        )
         assert isinstance(model, RestObj)
         assert ASTORE_MODEL_NAME == model.name
 
@@ -92,10 +93,13 @@ class TestModels:
         sk_model, train_df = sklearn_logistic_model
 
         # Register model and ensure attributes are set correctly
-        model = register_model(sk_model, SCIKIT_MODEL_NAME,
-                               project=PROJECT_NAME,
-                               input=train_df,
-                               force=True)
+        model = register_model(
+            sk_model,
+            SCIKIT_MODEL_NAME,
+            project=PROJECT_NAME,
+            input=train_df,
+            force=True,
+        )
         assert isinstance(model, RestObj)
         assert SCIKIT_MODEL_NAME == model.name
         assert 'classification' == model.function.lower()
@@ -111,11 +115,17 @@ class TestModels:
 
         # Ensure input & output metadata was set
         for col in train_df.columns:
-            assert 1 == len([v for v in model.inputVariables
-                             + model.outputVariables if v.get('name') == col])
+            assert 1 == len(
+                [
+                    v
+                    for v in model.inputVariables + model.outputVariables
+                    if v.get('name') == col
+                ]
+            )
 
         # Ensure model files were created
         from sasctl.services import model_repository as mr
+
         files = mr.get_model_contents(model)
         filenames = [f.name for f in files]
         assert 'model.pkl' in filenames
@@ -179,11 +189,9 @@ class TestSklearnLinearModel:
         sk_model, X, _ = sklearn_linear_model
 
         # Register model and ensure attributes are set correctly
-        model = register_model(sk_model,
-                               self.MODEL_NAME,
-                               project=self.PROJECT_NAME,
-                               input=X,
-                               force=True)
+        model = register_model(
+            sk_model, self.MODEL_NAME, project=self.PROJECT_NAME, input=X, force=True
+        )
 
         assert isinstance(model, RestObj)
         assert self.MODEL_NAME == model.name
@@ -201,11 +209,17 @@ class TestSklearnLinearModel:
 
         # Ensure input & output metadata was set
         for col in X.columns:
-            assert 1 == len([v for v in model.inputVariables
-                             + model.outputVariables if v.get('name') == col])
+            assert 1 == len(
+                [
+                    v
+                    for v in model.inputVariables + model.outputVariables
+                    if v.get('name') == col
+                ]
+            )
 
         # Ensure model files were created
         from sasctl.services import model_repository as mr
+
         files = mr.get_model_contents(model)
         filenames = [f.name for f in files]
         assert 'model.pkl' in filenames
@@ -227,7 +241,6 @@ class TestSklearnLinearModel:
         mm.create_performance_definition(self.MODEL_NAME, 'Public', 'boston')
 
     def test_update_model_performance(self, sklearn_linear_model, cas_session):
-        from six.moves import mock
         from sasctl.tasks import update_model_performance
 
         lm, X, y = sklearn_linear_model
