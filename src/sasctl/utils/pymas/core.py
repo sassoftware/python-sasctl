@@ -8,13 +8,13 @@
 
 from __future__ import print_function
 import base64
+import gzip
 import importlib
 import pickle  # skipcq BAN-B301
 import os
 import re
 import sys
 from collections import OrderedDict
-
 
 from .ds2 import DS2Thread, DS2Variable, DS2PyMASPackage
 from .python import ds2_variables
@@ -61,6 +61,10 @@ def build_wrapper_function(
     "# Output: <var>, <var>".  Any changes to spelling, capitalization,
     punctuation, or spacing will result in an error when the DS2 code is
     executed.
+
+    An additional return variable named 'msg' is always added.  Since the expected use of this function
+    is to generate Python methods that will be called from DS2, this variable will contain a stack trace in
+    the event an error occurs, allowing it to be logged/exposed by DS2.
 
     """
     if return_msg is not None:
@@ -160,7 +164,7 @@ def build_wrapper_function(
 
 @versionadded(version='1.5')
 def wrap_predict_method(func, variables, **kwargs):
-    """Create a PyMAS wrapper designed for Sci-kit's `.predict` methods.
+    """Create a PyMAS wrapper designed for Scikit's `.predict` methods.
 
     Parameters
     ----------
@@ -190,7 +194,7 @@ def wrap_predict_method(func, variables, **kwargs):
 
 @versionadded(version='1.5')
 def wrap_predict_proba_method(func, variables, **kwargs):
-    """Create a PyMAS wrapper designed for Sci-kit's `.predict_proba` methods.
+    """Create a PyMAS wrapper designed for Scikit's `.predict_proba` methods.
 
     Parameters
     ----------
@@ -217,6 +221,7 @@ def wrap_predict_proba_method(func, variables, **kwargs):
 
     wrapper = build_wrapper_function(func, variables, **kwargs)
 
+    # Expecting output to be ndarray of probabilities instead of single value
     old_code = r'if result.size == 1:\s*result = np.asscalar\(result\)'
     new_code = 'assert result.shape[0] == 1\n'
     new_code += '        result = tuple(result[0].tolist())'
@@ -224,9 +229,102 @@ def wrap_predict_proba_method(func, variables, **kwargs):
     return re.sub(old_code, new_code, wrapper)
 
 
-@versionchanged('Return code and message are disabled by default.', version='1.5')
+@versionadded(version='1.6')
+def wrap_classification_score_method(func, variables, class_names, event_level=None, **kwargs):
+    """
+
+    Parameters
+    ----------
+    func
+    variables : list of DS2Variable
+    class_names : list of string
+    event_level : int
+    kwargs : any
+
+    Returns
+    -------
+    str
+
+    """
+    kwargs.setdefault('array_input', True)
+    kwargs.setdefault('name', 'score')
+
+    # Make sure the extra output variables expected by SAS are present
+    if not any(v.name == 'EM_CLASSIFICATION' for v in variables):
+        variables.extend([
+            DS2Variable('I_Target', 'str', True),
+            DS2Variable('EM_CLASSIFICATION', 'str', True),
+            DS2Variable('EM_PROBABILITY', 'double', True),
+            DS2Variable('EM_EVENTPROBABILITY', 'double', True),
+        ])
+
+    wrapper_code = build_wrapper_function(func, variables, **kwargs)
+
+    # Need to find position of indent before 'except' block.
+    match = re.search(r'\s*except Exception', wrapper_code)
+
+    if event_level is None:
+        event_level = len(class_names) - 1
+
+    new_code = """
+        event_index = {event}
+        class_names = {classes}
+        class_index = result.index(max(result))
+
+        I_Target = class_names[class_index]
+        EM_CLASSIFICATION = I_Target
+        EM_PROBABILITY = result[class_index]
+        EM_EVENTPROBABILITY = result[event_index]
+
+        result += (I_Target, EM_CLASSIFICATION, EM_EVENTPROBABILITY, EM_PROBABILITY)
+    """.format(event=event_level,
+               classes=str(class_names).replace("'", '"'))
+
+    wrapper_code = wrapper_code[:match.start()] + new_code + wrapper_code[match.start():]
+    return wrapper_code
+
+
+@versionadded(version='1.6')
+def wrap_regression_score_method(func, variables, **kwargs):
+
+    # EM_PREDICTION
+    # P_MORTDUE (P_TargetName)
+
+    kwargs.setdefault('array_input', True)
+    kwargs.setdefault('name', 'score')
+
+    # Make sure the extra output variables expected by SAS are present
+    if not any(v.name == 'EM_PREDICTION' for v in variables):
+        # There should be exactly 1 output variable defined at this point. (multiple regression current not handled)
+        output_var = [v for v in variables if v.out]
+
+        if len(output_var) != 1:
+            raise ValueError('Unable to find an output variable.')
+        output_var = output_var[0]
+        variables.remove(output_var)
+
+        variables.extend([
+            DS2Variable('P_%s' % output_var.name, 'double', True),
+            DS2Variable('EM_PREDICTION', 'double', True)
+        ])
+
+    wrapper_code = build_wrapper_function(func, variables, **kwargs)
+
+    # Need to find position of indent before 'except' block.
+    match = re.search(r'\s*except Exception', wrapper_code)
+
+    # Have 2 output variables to provide (same) output for, but model only outputs 1 value
+    # Since output will have been converted to tuple, can simply replicate values.
+    new_code = """
+        result *= 2
+    """
+
+    wrapper_code = wrapper_code[:match.start()] + new_code + wrapper_code[match.start():]
+    return wrapper_code
+
+
 def from_inline(
-    func, input_types=None, array_input=False, return_code=None, return_message=None
+    func, input_types=None, array_input=False
 ):
     """Creates a PyMAS wrapper to execute the inline python function.
 
@@ -240,12 +338,6 @@ def from_inline(
     array_input : bool
         Whether the function inputs should be treated as an array instead of
         individual parameters
-    return_code : bool
-        Deprecated.
-        Whether the DS2-generated return code should be included
-    return_message : bool
-        Deprecated.
-        Whether the DS2-generated return message should be included
 
     Returns
     -------
@@ -254,25 +346,15 @@ def from_inline(
 
     """
 
-    if return_code is not None or return_message is not None:
-        raise DeprecationWarning(
-            "The 'return_code' and 'return_message' "
-            "parameters are ignored and will be "
-            "removed completely in a future version"
-        )
-
     obj = pickle.dumps(func)
-    return from_pickle(obj, None, input_types, array_input, return_code, return_message)
+    return from_pickle(obj, None, input_types, array_input)
 
 
-@versionchanged('Return code and message are disabled by default.', version='1.5')
 def from_python_file(
     file,
     func_name=None,
     input_types=None,
-    array_input=False,
-    return_code=None,
-    return_message=None,
+    array_input=False
 ):
     """Creates a PyMAS wrapper to execute a function defined in an
     external .py file.
@@ -289,12 +371,6 @@ def from_python_file(
     array_input : bool
         Whether the function inputs should be treated as an array instead of
         individual parameters
-    return_code : bool
-        Deprecated
-        Whether the DS2-generated return code should be included
-    return_message : bool
-        Deprecated
-        Whether the DS2-generated return message should be included
 
     Returns
     -------
@@ -302,13 +378,6 @@ def from_python_file(
         Generated DS2 code which can be executed in a SAS scoring environment
 
     """
-    if return_code is not None or return_message is not None:
-        raise DeprecationWarning(
-            "The 'return_code' and 'return_message' "
-            "parameters are ignored and will be "
-            "removed completely in a future version"
-        )
-
     if not str(file.lower().endswith('.py')):
         raise ValueError("File {} does not have a .py extension.".format(file))
 
@@ -333,14 +402,49 @@ def from_python_file(
     return _build_pymas(target_func, None, input_types, array_input, code=code)
 
 
-@versionchanged('Return code and message are disabled by default.', version='1.5')
+@versionadded(version='1.6')
+def from_model_info(info):
+    """Create a deployable DS2 package from a ModelInfo instance.
+
+    Parameters
+    ----------
+    info : ModelInfo
+
+    Returns
+    -------
+    PyMAS
+        Generated DS2 code which can be executed in a SAS scoring environment
+
+    """
+
+    # Encode the pickled data so we can inline it in the DS2 package
+    pkl = base64.b64encode(pickle.dumps(info.instance))
+
+    code = (
+        'import pickle, base64',
+        # Replace b' with " before embedding in DS2.
+        'bytes = {}'.format(pkl).replace("'", '"'),
+        'obj = pickle.loads(base64.b64decode(bytes))',
+    )
+
+    for name in info.function_names:
+        if name not in info.input_variables:
+            raise ValueError("Input variable information missing for function '%s'." % name)
+        if name not in info.output_variables:
+            raise ValueError("Output variable information missing for function '%s'." % name)
+
+    # No need to use _build_pymas() - already have variable information by function.
+    # Just need to convert to DS2Variable instances and combine into 1 list per function
+    variables = [ds2_variables(info.input_variables[f]) + ds2_variables(info.output_variables[f], output_vars=True) for f in info.function_names]
+
+    return PyMAS2(info)
+
+
 def from_pickle(
     file,
     func_name=None,
     input_types=None,
-    array_input=False,
-    return_code=None,
-    return_message=None,
+    array_input=False
 ):
     """Create a deployable DS2 package from a Python pickle file.
 
@@ -362,12 +466,6 @@ def from_pickle(
     array_input : bool
         Whether the function inputs should be treated as an array instead of
         individual parameters
-    return_code : bool
-        Deprecated.
-        Whether the DS2-generated return code should be included
-    return_message : bool
-        Deprecated.
-        Whether the DS2-generated return message should be included
 
     Returns
     -------
@@ -375,12 +473,6 @@ def from_pickle(
         Generated DS2 code which can be executed in a SAS scoring environment
 
     """
-    if return_code is not None or return_message is not None:
-        raise DeprecationWarning(
-            "The 'return_code' and 'return_message' "
-            "parameters are ignored and will be "
-            "removed completely in a future version"
-        )
     try:
         # In Python2 str could either be a path or the binary pickle data,
         # so check if its a valid filepath too.
@@ -414,14 +506,15 @@ def from_pickle(
     )
 
 
+
+
+
 def _build_pymas(
     obj,
     func_name=None,
     input_types=None,
     array_input=False,
     func_prefix=None,
-    return_code=None,
-    return_message=None,
     code=None,
 ):
     """
@@ -438,6 +531,7 @@ def _build_pymas(
 
     Returns
     -------
+    PyMAS
 
     """
     code = code or []
@@ -510,20 +604,20 @@ class PyMAS:
 
     Parameters
     ----------
-    target_function : str
+    target_function : str or  list
         The Python function to be executed.
-    variables : list of DS2Variable
+    variables : list of DS2Variable  or list of list
         The input/ouput variables be declared in the module.
     python_source : str
         Additional Python code to be executed during setup.
-    return_code : bool
-        Deprecated.
-        Whether the DS2-generated return code should be included.
-    return_msg : bool
-        Deprecated.
-        Whether the DS2-generated return message should be included.
     kwargs : any
         Passed to :func:`build_wrapper_function`.
+
+    Attributes
+    ----------
+    wrapper : str
+        Python code containing generated methods to execute model methods.
+
 
     """
 
@@ -532,18 +626,9 @@ class PyMAS:
         target_function,
         variables,
         python_source,
-        return_code=None,
-        return_msg=None,
         func_prefix=None,
         **kwargs
     ):
-
-        if return_code is not None or return_msg is not None:
-            raise DeprecationWarning(
-                "The 'return_code' and 'return_msg' "
-                "parameters are ignored and will be "
-                "removed completely in a future version"
-            )
 
         func_prefix = func_prefix or ''
 
@@ -564,15 +649,16 @@ class PyMAS:
 
         self.wrapper = []
         wrapper_names = []
-        for func, vars, code, msg in zip(
+        for func, func_vars, code, msg in zip(
             target_function, variables, return_code, return_msg
         ):
+            # Random name to avoid conflict with any existing methods
             wrapper_names.append('_' + random_string(20))
 
             if func.lower() == 'predict':
                 lines = wrap_predict_method(
                     func_prefix + func,
-                    vars,
+                    func_vars,
                     setup=python_source,
                     name=wrapper_names[-1],
                     **kwargs
@@ -580,7 +666,7 @@ class PyMAS:
             elif func.lower() == 'predict_proba':
                 lines = wrap_predict_proba_method(
                     func_prefix + func,
-                    vars,
+                    func_vars,
                     name=wrapper_names[-1],
                     setup=python_source,
                     **kwargs
@@ -588,19 +674,19 @@ class PyMAS:
             else:
                 lines = build_wrapper_function(
                     func_prefix + func,
-                    vars,
+                    func_vars,
                     name=wrapper_names[-1],
                     setup=python_source,
                     **kwargs
                 )
 
-            # Add DS2 variables for returning error codes/messages
-            # NOTE: add these *after* wrapper function is generated to prevent
-            # double-counting them.
-            if code:
-                vars.append(DS2Variable(name='rc', type='int32', out=True))
-            if msg:
-                vars.append(DS2Variable(name='msg', type='char', out=True))
+            # # Add DS2 variables for returning error codes/messages
+            # # NOTE: add these *after* wrapper function is generated to prevent
+            # # double-counting them.
+            # if code:
+            #     func_vars.append(DS2Variable(name='rc', type='int32', out=True))
+            # if msg:
+            #     func_vars.append(DS2Variable(name='msg', type='char', out=True))
 
             # Clear setup code once it's been added once.  No need to duplicate
             # if multiple functions are defined.
@@ -611,6 +697,8 @@ class PyMAS:
         self.variables = variables[0]
         # self.return_code = return_code[0]
         self.return_message = return_msg[0]
+
+
 
         self.package = DS2PyMASPackage(self.wrapper)
 
@@ -676,6 +764,235 @@ class PyMAS:
                 input_table,
                 column_names=columns,
                 return_message=self.return_message,
+                package=self.package,
+            )
+
+            code += (
+                str(thread),
+                'data SASEP.out;',
+                '  dcl thread {} t;'.format(thread.name),
+                '  method run();',
+                '    set from t;',
+                '    output;',
+                '  end;',
+                'enddata;',
+            )
+
+        elif dest == 'PYTHON':
+            # Python code return
+            code = self.package._python_code
+
+        return '\n'.join(code)
+
+
+class PyMAS2:
+    def __init__(self, model_info):
+
+        # init code
+        # score resources
+
+        # Name of DS2 method that is used by default
+        default_method_name = None
+
+        # assume model_init_code() preps an object called 'model'
+        function_prefix = 'model.'
+        lines = []
+        ds2_methods = []
+
+        # Get any init code needed to load/ready the model
+        init_code = self.model_init_code(model_info)
+
+        # Wrap in a try/catch block so we can return errors if necessary
+        init_code = ('try:',) + tuple('    ' + line for line in init_code) + ('    _compile_error = None',
+                                                                              'except Exception as e:',
+                                                                              '    _compile_error = e',
+                                                                              '',
+                                                                              )
+        lines.extend(init_code)
+
+        # Generate wrappers
+        for name in model_info.function_names:
+            # Random name to avoid conflict with any existing methods
+            wrapper_name = '_' + random_string(20)
+
+            variables = ds2_variables(model_info.input_variables[name]) + ds2_variables(
+                model_info.output_variables[name], output_vars=True)
+
+            if name.lower() == 'predict':
+                # Default to .predict if found
+                default_method_name = name
+
+                code = wrap_predict_method(function_prefix + name,
+                                           variables,
+                                           name=wrapper_name
+                                           )
+            elif name.lower() == 'predict_proba':
+                code = wrap_predict_proba_method(function_prefix + name,
+                                                 variables,
+                                                 name=wrapper_name
+                                                 )
+            else:
+                # Use current mystery method only if we haven't found something more standard
+                default_method_name = default_method_name or name.lower()
+
+                code = build_wrapper_function(function_prefix + name,
+                                              variables,
+                                              model_info.array_input,
+                                              name=wrapper_name
+                                              )
+                # Track mapping of Python wrapper method => DS2 method
+            # Will be needed later to generate corresponding DS2 methods
+            ds2_methods.append({
+                'name': name,
+                'target': wrapper_name,
+                'variables': variables
+            })
+
+            # Append code for new wrapper method to list of generated Python code
+            lines.extend(code.split('\n'))
+
+        # Generate a "score" method for classification models
+        if model_info.is_classification and 'predict_proba' in model_info.function_names:
+            name = 'predict_proba'
+            wrapper_name = '_' + random_string(20)
+            variables = ds2_variables(model_info.input_variables[name]) + ds2_variables(
+                model_info.output_variables[name], output_vars=True)
+
+            code = wrap_classification_score_method(function_prefix + name,
+                                                    variables,
+                                                    model_info.class_names,
+                                                    model_info.target_level,
+                                                    name=wrapper_name)
+            ds2_methods.append({
+                'name': 'score',
+                'target': wrapper_name,
+                'variables': variables
+            })
+            lines.extend(code.split('\n'))
+
+            # Use score method if created
+            default_method_name = 'score'
+
+        elif model_info.is_regression and 'predict' in model_info.function_names:
+            name = 'predict'
+            wrapper_name = '_' + random_string(20)
+            variables = ds2_variables(model_info.input_variables[name]) + ds2_variables(
+                model_info.output_variables[name], output_vars=True)
+
+            code = wrap_regression_score_method(function_prefix + name,
+                                                variables,
+                                                name=wrapper_name)
+            ds2_methods.append({
+                'name': 'score',
+                'target': wrapper_name,
+                'variables': variables
+            })
+            lines.extend(code.split('\n'))
+
+            # Use score method if created
+            default_method_name = 'score'
+
+        # Create a DS2 package that automatically loads all of the generated Python code into a PyMAS instance.
+        self.package = DS2PyMASPackage(lines)
+
+        # Just for debugging / inspection
+        self.lines = lines
+
+        self._model_info = model_info
+
+        # Add DS2 methods for each of the wrapped Python functions
+        for method in ds2_methods:
+            self.package.add_method(**method)
+
+        self.default_method = next((m for m in self.package.methods if m.name == default_method_name), None)
+
+    @classmethod
+    def model_init_code(cls, model_info):
+        # attempt to pickle & inline
+        # fall back to file
+        if model_info.tool == 'pytorch':
+            # TODO: import torch
+            # torch.save(temp file name)
+            # return code to load
+            # !! needs model id - hasn't been created yet.  F.
+            pass
+        else:
+            pkl = base64.b64encode(gzip.compress(pickle.dumps(model_info.instance)))
+
+            code = (
+                'import base64, gzip, pickle',
+                # Replace b' with " before embedding in DS2.
+                'bytes = {}'.format(pkl).replace("'", '"'),
+                'model = pickle.loads(gzip.decompress(base64.b64decode(bytes)))',
+            )
+
+        return code
+
+    @versionchanged(version='1.4', reason="Added `dest='Python'` option")
+    def score_code(self, input_table=None, output_table=None, columns=None, dest='MAS', method_name=None):
+        """Generate DS2 score code
+
+        Parameters
+        ----------
+        input_table : str
+            The name of the table to execute the function against
+        output_table : str
+            The name of the table where execution results will be written
+        columns : list of str
+            Names of the columns from `table` that will be passed to `func`
+        dest : str {'MAS', 'EP', 'CAS', 'Python'}
+            Specifies the publishing destination for the score code to ensure
+            that compatible code is generated.
+
+        Returns
+        -------
+        str
+            Score code
+
+        """
+
+        dest = dest.upper()
+
+        # Check for names that could result in DS2 errors.
+        DS2_KEYWORDS = ['input', 'output']
+        for k in DS2_KEYWORDS:
+            if input_table and k == input_table.lower():
+                raise ValueError(
+                    'Input table name `{}` is a reserved term.'.format(input_table)
+                )
+            if output_table and k == output_table.lower():
+                raise ValueError(
+                    'Output table name `{}` is a reserved term.'.format(output_table)
+                )
+
+        # Get package code
+        code = tuple(self.package.code().split('\n'))
+
+        if dest == 'EP':
+            code = (
+                ('data sasep.out;',)
+                + code
+                + (
+                    '   method run();',
+                    '      set SASEP.IN;',
+                    '   end;',
+                    '   method term();',
+                    '   end;',
+                    'enddata;',
+                )
+            )
+        elif dest == 'CAS':
+            if method_name is None:
+                method = self.default_method
+            else:
+                method = next((m for m in self.package.methods if m.name == method_name), None)
+
+            thread = DS2Thread(
+                method.variables,
+                input_table,
+                column_names=columns,
+                return_message=False,
+                method=method,
                 package=self.package,
             )
 

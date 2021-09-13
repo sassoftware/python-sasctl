@@ -6,6 +6,7 @@
 
 """Commonly used tasks in the analytics life cycle."""
 
+import io
 import json
 import logging
 import math
@@ -14,17 +15,24 @@ import os
 import re
 import sys
 import warnings
+from collections.abc import Sequence
 
-from urllib.error import HTTPError
+import six
+from six.moves.urllib.error import HTTPError
 
 from . import utils
 from .core import RestObj, current_session, get, get_link, request_link
-from .exceptions import AuthorizationError
+from .exceptions import AuthorizationError, ServiceUnavailableError
+from .services import cas_management as cm
+from .services import data_sources as ds
+from .services import ml_pipeline_automation as mpa
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
 from .utils.pymas import from_pickle
 from .utils.misc import installed_packages
+from .utils.metrics import lift_statistics, roc_statistics, fit_statistics
+from .utils.models import ModelInfo
 
 
 logger = logging.getLogger(__name__)
@@ -164,6 +172,102 @@ def _create_project(project_name, model, repo, input_vars=None, output_vars=None
     return project
 
 
+def build_pipeline(data, target, name,
+                   description=None,
+                   table_name=None,
+                   caslib=None,
+                   max_models=None):
+    """Automatically build a machine learning pipeline on a dataset.
+
+    Parameters
+    ----------
+    data : str, DataFrame, CASTable or dict
+        Input data for training models.  May be one of the following:
+         - path to a file, in which case file will be uploaded to CAS.
+         - a DataFrame instance, in which case the data will be uploaded to CAS.
+         - an existing CASTable instance.
+         - dict representation of a table as returned by `cas_management` or
+           `data_sources` service.
+    target : str
+        Name of column in `data` containing the target variable.
+    name : str
+        Name of the project.
+    description : str, optional
+        A description of the project.
+    table_name : str, optional
+        Name of table to create in CAS when uploading `data`.  Required if
+        `data` is a file path or DataFrame, otherwise ignored.
+    caslib : str or dict optional
+        caslib in which to table will be created when uploading `data`.
+    max_models : int, optional
+        Maximum number of models to train.
+
+    Returns
+    -------
+    RestObj
+        Project metadata
+
+    Examples
+    --------
+    build_pipeline('examples/data/iris.csv', 'Species', 'Example Iris Pipeline')
+
+    Raises
+    ------
+    ServiceUnavailableError
+        If the ML Pipeline Automation service is unavailable.
+
+    Notes
+    -----
+    The `data` table to be used as input must be globally-scoped (as opposed to
+    session-scoped).
+
+    """
+
+    if data is None:
+        raise ValueError("Parameter 'data' is required.  Received 'None'.")
+
+    if not mpa.is_available():
+        raise ServiceUnavailableError(mpa)
+
+    # Local dataframe (either Pandas or SAS) will have .to_csv().  BUT CASTables
+    # also have a .to_csv(), but there's no reason to download the data from
+    # CAS just to write to CSV on disk and then upload back to CAS.
+    if hasattr(data, 'to_csv') and not hasattr(data, 'get_connection'):
+        csv_buffer = io.BytesIO()
+        csv_buffer.write(data.to_csv(index=False).encode())
+        csv_buffer.seek(0)
+
+        if table_name is None:
+            raise ValueError("'table_name' is a required parameter when "
+                             "uploading a DataFrame.")
+
+        # Upload the table to CAS
+        data = cm.upload_file(csv_buffer, table_name, caslib=caslib, format_='csv')
+
+    # If data is a string, assume it's a path to a file that can be uploaded
+    elif isinstance(data, six.string_types):
+        path = os.path.abspath(os.path.expanduser(data))
+        if os.path.isfile(path):
+
+            # Use the file name as the table name (minus file extension)
+            if table_name is None:
+                filename = os.path.split(path)[-1]
+                table_name = os.path.splitext(filename)[0]
+
+            data = cm.upload_file(data, table_name, caslib=caslib)
+
+    # By now data should be uploaded (if necessary) and `data` should be a dict
+    # or CASTable.  Retrieve the table's URI.
+    table_uri = ds.table_uri(data)
+
+    # Create the project
+    project = mpa.create_project(table_uri, target, name,
+                                 description=description,
+                                 max_models=max_models)
+
+    return project
+
+
 def register_model(
     model,
     name,
@@ -173,6 +277,10 @@ def register_model(
     version=None,
     files=None,
     force=False,
+    data=None,
+    train=None,
+    test=None,
+    valid=None,
     record_packages=True,
 ):
     """Register a model in the model repository.
@@ -211,6 +319,15 @@ def register_model(
     force : bool, optional
         Create dependencies such as projects and repositories if they do not
         already exist.
+    data : array_like or (array_like, array_like), optional
+        Example input or (input, output) data for the model.  Required to determine model
+        input and output variables and to enable model execution by SAS.
+    train : (array_like, array_like), optional
+        A tuple of the training inputs and target output.
+    valid : (array_like, array_like), optional
+        A tuple of the validation inputs and target output.
+    test : (array_like, array_like), optional
+        A tuple of the test inputs and target output.
     record_packages : bool, optional
         Capture Python packages registered in the environment.  Defaults to
         True.  Ignored if `model` is not a Python object.
@@ -236,7 +353,21 @@ def register_model(
     .. versionchanged:: v1.4.5
         Added `record_packages` parameter.
 
+    .. versionchanged:: v1.6
+        Added `data` parameter
+
     """
+    if input is not None:
+        warnings.warn("The 'input' parameter has been deprecated and will be removed in a "
+                      "future version.  Please use the 'data' parameter instead.",
+                      DeprecationWarning)
+        if data is None:
+            data = input
+
+    # If passed X or (X, ) instead of (X, y), convert to (X, None)
+    if not isinstance(data, Sequence) or len(data) == 1:
+        data = (data, None)
+
     # TODO: Create new version if model already exists
 
     # If version not specified, default to creating a new version
@@ -280,7 +411,7 @@ def register_model(
     # If model is a CASTable then assume it holds an ASTORE model.
     # Import these via a ZIP file.
     if 'swat.cas.table.CASTable' in str(type(model)):
-        zipfile = utils.create_package(model, input=input)
+        zipfile = utils.create_package(model, input=data)
 
         if create_project:
             outvar = []
@@ -316,6 +447,11 @@ def register_model(
         model = mr.import_model_from_zip(name, project, zipfile, version=version)
         return model
 
+    if isinstance(model, ModelInfo):
+        # TODO: allow input of ModelInfo instance
+        pass
+
+
     # If the model is an scikit-learn model, generate the model dictionary
     # from it and pickle the model for storage
     if all(hasattr(model, attr) for attr in ['_estimator_type', 'get_params']):
@@ -323,35 +459,70 @@ def register_model(
         model_pkl = pickle.dumps(model)
         files.append({'name': 'model.pkl', 'file': model_pkl, 'role': 'Python Pickle'})
 
-        target_funcs = [f for f in ('predict', 'predict_proba') if hasattr(model, f)]
+        # Save actual model instance
+        model_obj = model
+        model_info = ModelInfo(model)
+        model_info.name = name
 
-        # Extract model properties
-        model = _sklearn_to_dict(model)
-        model['name'] = name
+        if any(x is not None for x in (train, test, valid)):
+            for ds in (train, test, valid):
+                if ds is not None:
+                    model_info.set_variables(*ds)
+
+                    if data is None:
+                        data = ds
+                    break
+        else:
+            model_info.set_variables(*data)
+
+        model = model_info.to_dict()
+        model['scoreCodeType'] = 'ds2MultiType'  # Change from Python since sasctl current doing conversion.
+
+        # Calculate and include various model statistics.
+        if any(x is not None for x in (train, test, valid)):
+            for name, func in (
+                ('dmcas_lift.json', lift_statistics),
+                ('dmcas_fitstat.json', fit_statistics),
+                ('dmcas_roc.json', roc_statistics),
+            ):
+                if not any(f['name'] == name for f in files):
+                    logger.debug(
+                        'Calling %s with train=%s, test=%s, valid=%s',
+                        func,
+                        type(train),
+                        type(test),
+                        type(valid),
+                    )
+                    stats = func(model_obj, train=train, test=test, valid=valid)
+                    logger.debug('Writing model statistics to %s:  %s', name, stats)
+                    files.append({'name': name, 'file': json.dumps(stats, indent=2)})
 
         # Get package versions in environment
-        packages = installed_packages()
-        if record_packages and packages is not None:
-            model.setdefault('properties', [])
+        if record_packages and not any(f['name'] == 'requirements.txt' for f in files):
+            packages = installed_packages()
+            if packages is not None:
+                model.setdefault('properties', [])
 
-            # Define a custom property to capture each package version
-            # NOTE: some packages may not conform to the 'name==version' format
-            #  expected here (e.g those installed with pip install -e). Such
-            #  packages also generally contain characters that are not allowed
-            # in custom properties, so they are excluded here.
-            for p in packages:
-                if '==' in p:
-                    n, v = p.split('==')
-                    model['properties'].append(_property('env_%s' % n, v))
+                # Define a custom property to capture each package version
+                # NOTE: some packages may not conform to the 'name==version' format
+                #  expected here (e.g those installed with pip install -e). Such
+                #  packages also generally contain characters that are not allowed
+                # in custom properties, so they are excluded here.
+                for p in packages:
+                    if '==' in p:
+                        n, v = p.split('==')
+                        model['properties'].append(_property('env_%s' % n, v))
 
-            # Generate and upload a requirements.txt file
-            files.append({'name': 'requirements.txt', 'file': '\n'.join(packages)})
+                # Generate and upload a requirements.txt file
+                files.append({'name': 'requirements.txt', 'file': '\n'.join(packages)})
 
         # Generate PyMAS wrapper
         try:
-            mas_module = from_pickle(
-                model_pkl, target_funcs, input_types=input, array_input=True
-            )
+            from .utils.pymas.core import from_model_info
+            mas_module = from_model_info(model_info)
+            # mas_module = from_pickle(
+            #     model_pkl, model_info.function_names, input_types=data[0], array_input=True
+            # )
 
             # Include score code files from ESP and MAS
             files.append(
@@ -376,11 +547,11 @@ def register_model(
             )
 
             model['inputVariables'] = [
-                var.as_model_metadata() for var in mas_module.variables if not var.out
+                var.as_model_metadata() for var in mas_module.default_method.variables if not var.out
             ]
 
             model['outputVariables'] = [
-                var.as_model_metadata() for var in mas_module.variables if var.out
+                var.as_model_metadata() for var in mas_module.default_method.variables if var.out
             ]
         except ValueError:
             # PyMAS creation failed, most likely because input data wasn't
@@ -675,6 +846,7 @@ def update_model_performance(data, model, label, refresh=True):
             )
 
     sess = current_session()
+    url = '{}://{}/{}-http/'.format(sess._settings['protocol'], sess.hostname, cas_id)
     regex = r'{}_(\d+)_.*_{}'.format(table_prefix, model_obj.id)
 
     # Save the current setting before overwriting
@@ -686,7 +858,9 @@ def update_model_performance(data, model, label, refresh=True):
         os.environ['SSLREQCERT'] = 'no'
 
     # Upload the performance data to CAS
-    with sess.as_swat(server=cas_id) as s:
+    with swat.CAS(
+        url, username=sess.username, password=sess._settings['password']
+    ) as s:
 
         s.setsessopt(messagelevel='warning')
 
@@ -739,11 +913,9 @@ def _parse_module_url(msg):
         module_url = get_link(details, 'module')
         module_url = module_url.get('href')
     except json.JSONDecodeError:
-        match = re.search(r'(?:rel=module, href=(.*?),)', msg)  # Vya 3.5
+        match = re.search(r'(?:rel=module, href=(.*?),)', msg)               # Vya 3.5
         if match is None:
-            match = re.search(
-                r'(?:Rel: module URI: (.*?) MediaType)', msg
-            )  # Format changed in Viya 4.0
+            match = re.search(r'(?:Rel: module URI: (.*?) MediaType)', msg)  # Format changed in Viya 4.0
         module_url = match.group(1) if match else None
 
     return module_url

@@ -4,13 +4,16 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-__version__ = '1.6.2'
+__version__ = '1.6.0'
 __author__ = 'SAS'
-__credits__ = ['Yi Jian Ching', 'Lucas De Paula', 'James Kochuba', 'Peter Tobac',
-               'Chris Toth', 'Jon Walker', 'Scott Lindauer']
+__credits__ = [
+    'Yi Jian Ching, Lucas De Paula, James Kochuba, Peter Tobac, '
+    'Chris Toth, Jon Walker'
+]
 __license__ = 'Apache 2.0'
-__copyright__ = 'Copyright © 2019, SAS Institute Inc., ' \
-                'Cary, NC, USA.  All Rights Reserved.'
+__copyright__ = (
+    'Copyright © 2019, SAS Institute Inc., ' 'Cary, NC, USA.  All Rights Reserved.'
+)
 
 import logging
 import warnings
@@ -28,6 +31,7 @@ from .core import (
 )
 from .core import RestObj, Session, HTTPError
 from .tasks import (
+    build_pipeline,
     publish_model,
     register_model,
     update_model_performance,
