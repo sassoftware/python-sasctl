@@ -15,8 +15,9 @@ class Concepts(Service):
 
     _SERVICE_ROOT = '/concepts'
 
+    @classmethod
     def assign_concepts(
-        self,
+        cls,
         documents,
         caslib=None,
         id_column=None,
@@ -123,4 +124,4 @@ class Concepts(Service):
                 'Accept': 'application/vnd.sas.text.concepts.job+json',
             }
 
-        return self.post(url, json=data, headers=headers)
+        return cls.post(url, json=data, headers=headers)

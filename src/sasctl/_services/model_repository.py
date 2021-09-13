@@ -510,15 +510,16 @@ class ModelRepository(Service):
             The API response after importing the model.
 
         """
-        project = cls.get_project(project)
+        project_info = cls.get_project(project)
 
-        params = {
-            'name': name,
-            'description': description,
-            'type': 'ZIP',
-            'projectId': project.id,
-            'versionOption': version,
-        }
+        if project_info is None:
+            raise ValueError('Project `%s` could not be found.' % str(project))
+
+        params = {'name': name,
+                  'description': description,
+                  'type': 'ZIP',
+                  'projectId': project_info.id,
+                  'versionOption': version}
         params = '&'.join('{}={}'.format(k, v) for k, v in params.items())
 
         r = cls.post(
