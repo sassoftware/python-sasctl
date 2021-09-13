@@ -7,7 +7,7 @@
 from collections import OrderedDict
 
 import pytest
-from six.moves import mock
+from unittest import mock
 
 from sasctl.utils.pymas.core import build_wrapper_function, PyMAS
 from sasctl.utils.pymas.ds2 import DS2Variable

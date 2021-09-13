@@ -8,7 +8,7 @@ import pickle
 import warnings
 
 import pytest
-from six.moves import mock
+from unittest import mock
 
 
 def dummy_function(x1, x2):
