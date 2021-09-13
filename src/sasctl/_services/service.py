@@ -359,19 +359,18 @@ class Service(object):                                        # skipcq PYL-R0205
     # arguments.
     # skipcq: PYL-W1113
     @classmethod
-    def _get_rel(cls, item, rel, func=None, filter_=None, *args):
+    def _get_rel(cls, item, rel, *args, func=None, filter_=None):
         """Get `item` and request a link.
 
         Parameters
         ----------
         item : str or dict
         rel : str
+        args : any
+            Passed to `func`
         func : function, optional
             Callable that takes (item, *args) and returns a RestObj of `item`
         filter_ : str, optional
-
-        args : any
-            Passed to `func`
 
         Returns
         -------

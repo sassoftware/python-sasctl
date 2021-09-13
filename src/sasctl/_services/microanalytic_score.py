@@ -248,7 +248,7 @@ class MicroAnalyticScore(Service):
 
             # Method signature
             # Default all params to None to allow method(DataFrame) execution
-            input_params = [a for a in arguments] + ['**kwargs']
+            input_params = arguments + ['**kwargs']
             method_name = '_%s_%s' % (module.id, step.id)
             signature = 'def %s(%s):' % (method_name, ', '.join(input_params))
 

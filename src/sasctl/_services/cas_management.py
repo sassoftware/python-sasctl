@@ -86,7 +86,7 @@ class CASManagement(Service):
             A collection of :class:`.RestObj` instances.
 
         """
-        return cls._get_rel(caslib, 'tables', cls.get_caslib, filter_, server) or []
+        return cls._get_rel(caslib, 'tables', server, func=cls.get_caslib, filter_=filter_) or []
 
     @classmethod
     def get_table(cls, name, caslib=None, server=None):
