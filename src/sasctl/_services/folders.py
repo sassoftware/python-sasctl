@@ -20,8 +20,9 @@ class Folders(Service):
     list_folders, get_folder, update_folder, \
     delete_folder = Service._crud_funcs('/folders', 'folder')
 
+    @classmethod
     @sasctl_command('folders', 'create')
-    def create_folder(self, name, parent=None, description=None):
+    def create_folder(cls, name, parent=None, description=None):
         """
 
         Parameters
@@ -38,13 +39,13 @@ class Folders(Service):
         -------
 
         """
-        parent = self.get_folder(parent)
+        parent = cls.get_folder(parent)
 
         body = {'name': name,
                 'description': description,
                 'folderType': 'folder',
                 'parentFolderUri': parent.id if parent else None }
 
-        return self.post('/folders',
-                         json=body,
-                         headers={'Content-Type': 'application/vnd.sas.content.folder+json'})
+        return cls.post('/folders',
+                        json=body,
+                        headers={'Content-Type': 'application/vnd.sas.content.folder+json'})

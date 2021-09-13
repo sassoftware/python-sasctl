@@ -318,7 +318,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
                 rc = py.appendSrcLine('    return result + (msg, )');
                 rc = py.appendSrcLine('');
                 rc = py.appendSrcLine('def _randomMethodName2(SepalLength, SepalWidth, PetalLength, PetalWidth):');
-                rc = py.appendSrcLine('    "Output: P_1, P_2, P_3, msg"');
+                rc = py.appendSrcLine('    "Output: P_0, P_1, P_2, msg"');
                 rc = py.appendSrcLine('    result = None');
                 rc = py.appendSrcLine('    msg = None');
                 rc = py.appendSrcLine('    try:');
@@ -384,9 +384,9 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
         double SepalWidth,
         double PetalLength,
         double PetalWidth,
+        in_out double P_0,
         in_out double P_1,
-        in_out double P_2,
-        in_out double P_3
+        in_out double P_2
         );
     
         dcl integer rc;
@@ -398,9 +398,9 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
         rc = py.setDouble('PetalLength', PetalLength);    if rc then return;
         rc = py.setDouble('PetalWidth', PetalWidth);    if rc then return;
         rc = py.execute();    if rc then return;
+        P_0 = py.getDouble('P_0');
         P_1 = py.getDouble('P_1');
         P_2 = py.getDouble('P_2');
-        P_3 = py.getDouble('P_3');
         msg = py.getString('msg');
         if not null(msg) then logr.log('e', 'Error executing Python function "predict_proba": $s', msg);
     end;

@@ -15,19 +15,18 @@ class Concepts(Service):
 
     _SERVICE_ROOT = '/concepts'
 
-    def assign_concepts(
-        self,
-        documents,
-        caslib=None,
-        id_column=None,
-        text_column=None,
-        description=None,
-        model=None,
-        output_postfix=None,
-        match_type=None,
-        enable_facts=False,
-        language='en',
-    ):
+    @classmethod
+    def assign_concepts(cls,
+                        documents,
+                        caslib=None,
+                        id_column=None,
+                        text_column=None,
+                        description=None,
+                        model=None,
+                        output_postfix=None,
+                        match_type=None,
+                        enable_facts=False,
+                        language='en'):
         """Performs sentiment analysis on the input data.
 
         Creates a setiment analysis task that executes asynchronously.  There
@@ -123,4 +122,4 @@ class Concepts(Service):
                 'Accept': 'application/vnd.sas.text.concepts.job+json',
             }
 
-        return self.post(url, json=data, headers=headers)
+        return cls.post(url, json=data, headers=headers)
