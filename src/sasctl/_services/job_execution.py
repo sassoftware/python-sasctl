@@ -20,17 +20,41 @@ class JobExecution(Service):
 
     @classmethod
     def create_job(cls, definition, name=None, description=None, parameters=None):
+        """Execute a job from an existing job definition.
 
-        # TODO: parameters
+        Parameters
+        ----------
+        definition : str or RestObj
+        name : str, optional
+            Name for the requested job.
+        description : str, optional
+            Description of the requested job
+        parameters : dict, optional
+            Parameter name/value pairs used to overwrite default parameters defined in job definition.
+
+        Returns
+        -------
+        RestObj
+            Job request details
+
+        """
+
         # TODO: definition id not RestObj passed
         # TODO: get link fails
         uri = cls.get_link(definition, 'self')['uri']
 
+        parameters = parameters or {}
+        # TODO: expiresAfter - set to reasonable default
+
         data = {
-            'jobDefinitionUri': uri
+            'name': name,
+            'description': description,
+            'jobDefinitionUri': uri,
+            'arguments': parameters
         }
 
         headers = {
-            'Accept': 'application/vnd.sas.job.execution.job+json'
+            'Accept': 'application/vnd.sas.job.execution.job+json',
+            'Content-Type': 'application/vnd.sas.job.execution.job.request+json'
         }
         return cls.post('/jobs', headers=headers, json=data)
