@@ -1,0 +1,192 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2021-09-14T20:49:33",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "62"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIyM2I3NDJhOS1jN2IyLTRkNGUtYjBlYy0xZDJhNjdjNjIwOTMiLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE2MzE2ODg1NzMsImlhdCI6MTYzMTY1MjU3MywiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJKb25hdGhhbi5XYWxrZXJAc2FzLmNvbSIsInppZCI6InVhYSIsIm9yaWdpbiI6ImxkYXAiLCJqdGkiOiJlYzNjYTA0OTAzZTk0YTc4ODI4MjJkNTc4YTExYzJjYiIsInByZXZpb3VzX2xvZ29uX3RpbWUiOjE2MzE2NTI0NDE4MDgsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50X2lkIjoic2FzLmVjIiwiY2lkIjoic2FzLmVjIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoiam96d2FsIiwicmV2X3NpZyI6ImUxODA1M2MiLCJhdXRoX3RpbWUiOjE2MzE2NTI1NzMsInVzZXJfaWQiOiIyM2I3NDJhOS1jN2IyLTRkNGUtYjBlYy0xZDJhNjdjNjIwOTMifQ.b0KeW46rt0nLj62byclH9dNVZmLAhggYXZ3qa1H28qV7M4abWqwM0a1dStAvnTrm-Pn-Q3LmhRHcwN312LUnLsUdvnLl1o_u8C5dEAvivg1VOKCiIw8HQbsmRsEYlhZF60KQyhNDGSJUeu64GSBVHJCVj3i5y0ietqoIEIZnJGz7cbbdo_fzz7dUOduZEGP9mwciRHsJSlE0195GEARqUhPwPmJdDwY72-DeJHORfhO8muIfLjrd7ahVjvHdE2U4xAGiYcJw6gQYuFjT79uTYeQMN7WaP0PpJUAL9wWwggSe1YKqCmV2E8ZsRl3RnCT-yuwHMw_1oAm4ybTxmzRO0Q\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess sviusrs SCR viyapython mismakeordertstval CARYEMPS SAS_Visa_TE esvanemeainstructorconsumers harrisindirectreports rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess orcoevasrv02 COESRV tksem AWSSandboxAccount01 cloudacadusers modelmanager uaa.resource otggenrnd RNDSIMSUsers openid domainemps1 gelupdates OR_RD_COE scim.read sasvspusers esvakmcriskconsumers SASAdministrators OneDriveUsers openstackusers CASDiscussion scr_us acoe_server_group scr_ci esvarndperftestconsumers esvakmcorionconsultforecastconsumers intcawebcertreq ANALYSIS cooallamer esvakmcorionriskconsumers CTRYUNITEDSTATES tisurvey gtt_users intcausers BLDGR HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit rdtcaccess Safari_list RDAnnounce DSCIENCE unix_r&d TACCDevelopment SAS_TE AWSsalesenableAccount csatechxchange USemps rdanncauto SIMSView Weekly_Wrap defsusers opsglobalorion DomainEmployees AWS-TAM-Call esvanemeaeduconsumers bryanharrisALLemps esvakmcorionriskaccess exnet.simsview KSA_mail_list SSODLPUsers revegyusercommunity uaa.admin clients.admin AMTX esvakmcorionconsumers AMPSX USSAS esvanemeaeduadmins Skypeplugin TSDATASTORUSERS lanpanfilter exnet.simsedit SalesXchange ORE EMINERS sas92_install techoffice COOALLSTAFF sviadms scr_edu rdengineering allamazonusers R&DUS UDSREPORTS clients.read WWMGlobalBanking atlassiangroups aideas hrsb jaredpetersonallreports BLDALL TESSAUSERS KSA_ADGroup birdrace scr_psd R&D-AAD ITatSAS orclus05 scr_og R5TH scr_ga democenterusers HADOOP-L RE_PYTHON clients.write ts-tba-test scim.write ORCLUS08_USERS\",\"jti\":\"ec3ca04903e94a7882822d578a11c2cb\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Tue, 14 Sep 2021 20:49:32 GMT"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2021-09-14T20:49:33",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"version\": 2, \"name\": \"sasctl_test_job\", \"description\": \"Test Job Definition from sasctl\", \"type\": \"Compute\", \"code\": \"proc print data=&TABLE;\", \"parameters\": [{\"version\": 1, \"name\": \"_contextName\", \"type\": \"CHARACTER\", \"label\": \"Context Name\", \"required\": false, \"defaultValue\": \"SAS Studio compute context\"}, {\"version\": 1, \"name\": \"TABLE\", \"type\": \"CHARACTER\", \"label\": \"Table Name\", \"required\": true, \"defaultValue\": null}], \"properties\": []}"
+        },
+        "headers": {
+          "Accept": [
+            "application/vnd.sas.job.definition+json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "447"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/jobDefinitions/definitions"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"creationTimeStamp\":\"2021-09-14T20:49:33.350Z\",\"modifiedTimeStamp\":\"2021-09-14T20:49:33.351Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"version\":2,\"id\":\"6e2c5006-d32a-4c85-ae39-b5325e2a1eff\",\"name\":\"sasctl_test_job\",\"description\":\"Test Job Definition from sasctl\",\"type\":\"Compute\",\"parameters\":[{\"version\":1,\"name\":\"_contextName\",\"defaultValue\":\"SAS Studio compute context\",\"type\":\"CHARACTER\",\"label\":\"Context Name\",\"required\":false},{\"version\":1,\"name\":\"TABLE\",\"type\":\"CHARACTER\",\"label\":\"Table Name\",\"required\":true}],\"code\":\"proc print data=&TABLE;\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/jobDefinitions/definitions/6e2c5006-d32a-4c85-ae39-b5325e2a1eff\",\"uri\":\"/jobDefinitions/definitions/6e2c5006-d32a-4c85-ae39-b5325e2a1eff\",\"type\":\"application/vnd.sas.job.definition\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/jobDefinitions/definitions/6e2c5006-d32a-4c85-ae39-b5325e2a1eff\",\"uri\":\"/jobDefinitions/definitions/6e2c5006-d32a-4c85-ae39-b5325e2a1eff\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/jobDefinitions/definitions/6e2c5006-d32a-4c85-ae39-b5325e2a1eff\",\"uri\":\"/jobDefinitions/definitions/6e2c5006-d32a-4c85-ae39-b5325e2a1eff\",\"type\":\"application/vnd.sas.job.definition\",\"responseType\":\"application/vnd.sas.job.definition\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/jobDefinitions/definitions/6e2c5006-d32a-4c85-ae39-b5325e2a1eff\",\"uri\":\"/jobDefinitions/definitions/6e2c5006-d32a-4c85-ae39-b5325e2a1eff\"}],\"properties\":[]}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.job.definition+json"
+          ],
+          "Date": [
+            "Tue, 14 Sep 2021 20:49:32 GMT"
+          ],
+          "ETag": [
+            "\"ktkjtb53\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Last-Modified": [
+            "Tue, 14 Sep 2021 20:49:33 GMT"
+          ],
+          "Location": [
+            "/jobDefinitions/definitions/6e2c5006-d32a-4c85-ae39-b5325e2a1eff"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/jobDefinitions/definitions"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}

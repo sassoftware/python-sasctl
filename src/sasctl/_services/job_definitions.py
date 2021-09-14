@@ -30,15 +30,6 @@ class JobDefinitions(Service):
         delete_definition,
     ) = Service._crud_funcs('/definitions')
 
-    # def get_definition(self, ):
-    #     raise NotImplementedError()
-
-    def get_summary(self):
-        raise NotImplementedError()
-
-    def get_headers(self):
-        raise NotImplementedError()
-
     @classmethod
     def create_definition(
         cls,
@@ -49,14 +40,19 @@ class JobDefinitions(Service):
         parameters=None,
         properties: dict = None,
     ) -> RestObj:
-        """
+        """Define a new job that can be run in the SAS environment
 
         Parameters
         ----------
-        name
-        description
-        type_
-        code
+        name : str
+            Job name
+        description : str
+            Job description
+        type_ : {'casl', 'Compute'}
+            Indicates type of code specified by `code`.  Use 'casl' if `code` is CASL or 'Compute' if `code` is
+            data step.
+        code : str
+            Code to be executed whenever this job is run.
         parameters
         properties
 
