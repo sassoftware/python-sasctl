@@ -40,3 +40,21 @@ class TestJobDefinitions:
         assert isinstance(definition, RestObj)
         assert definition['name'] == params['name']
         assert definition['description'] == params['description']
+
+    def test_create_definition_bad_param(self):
+        params = dict(
+            name='sasctl_test_job',
+            type_='Compute',
+            code='proc print data=&TABLE;',
+            parameters=[
+                dict(name='TABLE',
+                     type='decimal',
+                     label='Table Name',
+                     required=True)
+            ]
+        )
+
+        with pytest.raises(ValueError) as e:
+            job_definitions.create_definition(**params)
+
+        assert "'DECIMAL'" in str(e.value)

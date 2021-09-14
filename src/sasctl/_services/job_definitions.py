@@ -53,8 +53,20 @@ class JobDefinitions(Service):
             data step.
         code : str
             Code to be executed whenever this job is run.
-        parameters
-        properties
+        parameters : list of dict
+            List of parameters used by the job.  Each entry in the list should be a dictionary with the following items:
+             - name : str
+                parameter name
+             - type : {'character', 'date', 'numeric', 'table'}
+                parameter type
+             - label : str
+                human-readable label for parameter
+             - required : bool
+                is it required to specify a parameter value when running the job
+             - defaultValue : any
+                parameter's default value if not specified when running job
+        properties : dict
+            An arbitrary collection of name/value pairs to associate with the job definition.
 
         Returns
         -------
@@ -72,8 +84,12 @@ class JobDefinitions(Service):
         for param in parameters:
             param_type = str(param.get('type', '')).upper()
             if param_type not in ('TABLE', 'NUMERIC', 'DATE', 'CHARACTER'):
-                # TODO: warn/raise
-                continue
+                raise ValueError(
+                    "Type '{}' for parameter '{}' is invalid.  "
+                    "Expected one of ('TABLE', 'NUMERIC', 'DATE', 'CHARACTER')".format(
+                        param_type, param['name']
+                    )
+                )
 
             new_param = {
                 'version': 1,
