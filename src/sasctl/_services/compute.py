@@ -149,3 +149,96 @@ class Compute(Service):
         context = cls.get_context(context)
 
         return cls.request_link(context, 'createSession')
+
+    @classmethod
+    def get_listing(cls, job=None, session=None):
+        """Retrieve the SAS listing (program output) for a job or an entire session.
+
+        Parameters
+        ----------
+        job : dict, optional
+            Dictionary representation of an existing job.
+        session : dict, optional
+            Dictionary representation of an active session.
+
+        Returns
+        -------
+        list of RestObj
+
+        Raises
+        ------
+        ValueError
+            If neither `job` nor `session` are provided.
+
+        """
+        if job is None and session is None:
+            raise ValueError("Either a job or a session must be specified.")
+
+        if job:
+            uri = '/sessions/%s/jobs/%s/listing' % (job['sessionId'], job['id'])
+        else:
+            uri = '/sessions/%s/listing' % session['id']
+
+        return cls.get(uri)
+
+    @classmethod
+    def get_log(cls, job=None, session=None):
+        """Retrieve the SAS log for a job or an entire session.
+
+        Parameters
+        ----------
+        job : dict, optional
+            Dictionary representation of an existing job.
+        session : dict, optional
+            Dictionary representation of an active session.
+
+        Returns
+        -------
+        list of RestObj
+
+        Raises
+        ------
+        ValueError
+            If neither `job` nor `session` are provided.
+
+        """
+        if job is None and session is None:
+            raise ValueError("Either a job or a session must be specified.")
+
+        if job:
+            uri = '/sessions/%s/jobs/%s/log' % (job['sessionId'], job['id'])
+        else:
+            uri = '/sessions/%s/log' % session['id']
+
+        return cls.get(uri)
+
+    @classmethod
+    def get_results(cls, job=None, session=None):
+        """Retrieve the output files for a job or an entire session.
+
+        Parameters
+        ----------
+        job : dict, optional
+            Dictionary representation of an existing job.
+        session : dict, optional
+            Dictionary representation of an active session.
+
+        Returns
+        -------
+        list of RestObj
+
+        Raises
+        ------
+        ValueError
+            If neither `job` nor `session` are provided.
+
+        """
+        if job is None and session is None:
+            raise ValueError("Either a job or a session must be specified.")
+
+        if job:
+            uri = '/sessions/%s/jobs/%s/results' % (job['sessionId'], job['id'])
+        else:
+            uri = '/sessions/%s/results' % session['id']
+
+        return cls.get(uri)
