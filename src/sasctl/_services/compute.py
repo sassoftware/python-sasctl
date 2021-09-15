@@ -94,8 +94,8 @@ class Compute(Service):
 
         Parameters
         ----------
-        session
-        code
+        session : str or dict
+        code : str
         name
         description
         environment
@@ -111,10 +111,13 @@ class Compute(Service):
         # TODO: if code is URI pass in codeUri field.
         code = code.split('\n')
 
-        variables = variables or []
+        uri = '/sessions/%s/jobs' % session['id']
+
+        # NOTE: variables must be None not []
         resources = resources or []
         environment = environment or {}
         attributes = attributes or {}
+
         data = {
             'version': 3,
             'name': name,
@@ -126,7 +129,8 @@ class Compute(Service):
             'attributes': attributes,
         }
 
-        return cls.request_link(session, 'execute', json=data)
+        return cls.post(uri, json=data)
+        # return cls.request_link(session, 'execute', json=data)
 
     @classmethod
     def create_session(cls, context):
