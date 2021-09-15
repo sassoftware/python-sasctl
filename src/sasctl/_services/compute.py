@@ -19,9 +19,64 @@ class Compute(Service):
         '/contexts'
     )
 
-    list_servers, _, _, _ = Service._crud_funcs('/servers')
+    list_servers, get_server, _, stop_server = Service._crud_funcs('/servers')
 
-    list_sessions, _, _, _ = Service._crud_funcs('/sessions')
+    _, _, _, delete_session = Service._crud_funcs('/sessions')
+
+    @classmethod
+    def list_sessions(cls, server=None):
+        """List currently active sessions.
+
+        Parameters
+        ----------
+        server : str or dict, optional
+            The name or id of the server, or a dictionary representation of the server.  If specified, only sessions
+            for that server will be returned.  Otherwise, sessions for all running servers are returned.
+
+        Returns
+        -------
+        list of RestObj
+
+        Raises
+        ------
+        ValueError
+            If `server` is specified but not found.
+
+        """
+        if server is not None:
+            server_obj = cls.get_server(server)
+            if server_obj is None:
+                raise ValueError("Unable to find server '%s'." % server)
+            uri = '/servers/%s/sessions' % server_obj['id']
+        else:
+            uri = '/sessions'
+
+        results = cls.get(uri)
+        if isinstance(results, list):
+            return results
+
+        return [results]
+
+    @classmethod
+    def get_server_state(cls, server):
+        """
+
+        Parameters
+        ----------
+        server : str or dict
+            The name or id of the server, or a dictionary representation of the server.
+
+
+        Returns
+        -------
+        str
+            {'running', 'stopped'}
+
+        """
+        server_obj = cls.get_server(server)
+        uri = '/servers/%s/state' % server_obj['id']
+
+        return cls.get(uri)
 
     @classmethod
     def create_job(
@@ -89,6 +144,7 @@ class Compute(Service):
         -------
         RestObj
             Session details
+
         """
         context = cls.get_context(context)
 
