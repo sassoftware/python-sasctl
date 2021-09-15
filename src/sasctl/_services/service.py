@@ -16,7 +16,7 @@ from ..core import HTTPError, PagedItemIterator, sasctl_command
 from ..exceptions import JobTimeoutError
 
 
-class Service(object):  # skipcq PYL-R0205
+class Service(object):                                        # skipcq PYL-R0205
     """Base class for all services.  Should not be used directly."""
 
     _SERVICE_ROOT = None
@@ -41,7 +41,7 @@ class Service(object):  # skipcq PYL-R0205
 
         """
         try:
-            response = cls.head('/', format='response')
+            response = cls.head('/', format_='response')
             return response.status_code == 200
         except HTTPError:
             return False
@@ -58,7 +58,7 @@ class Service(object):  # skipcq PYL-R0205
         return cls.get('/apiMeta')
 
     @classmethod
-    def request(cls, verb, path, session=None, raw=False, format='auto', **kwargs):
+    def request(cls, verb, path, session=None, format_='auto', **kwargs):
         """Send an HTTP request with a session.
 
         Parameters
@@ -70,10 +70,7 @@ class Service(object):  # skipcq PYL-R0205
             `_SERVICE_ROOT`.
         session : Session, optional
             Defaults to `current_session()`.
-        raw : bool
-            Deprecated. Whether to return the raw `Response` object.
-            Defaults to False.
-        format : {'auto', 'response', 'content', 'json', 'text'}
+        format_ : {'auto', 'response', 'content', 'json', 'text'}
             The format of the return response.  Defaults to `auto`.
             response: the raw `Response` object.
             content: Response.content
@@ -93,7 +90,7 @@ class Service(object):  # skipcq PYL-R0205
         else:
             path = cls._SERVICE_ROOT + '/' + path
 
-        return core.request(verb, path, session, format, **kwargs)
+        return core.request(verb, path, session, format_, **kwargs)
 
     @classmethod
     def get(cls, *args, **kwargs):
@@ -361,19 +358,19 @@ class Service(object):  # skipcq PYL-R0205
     # Compatibility with Python 2.7 requires *args to be after key-words
     # arguments.
     # skipcq: PYL-W1113
-    def _get_rel(self, item, rel, func=None, filter=None, *args):
+    @classmethod
+    def _get_rel(cls, item, rel, *args, func=None, filter_=None):
         """Get `item` and request a link.
 
         Parameters
         ----------
         item : str or dict
         rel : str
-        func : function, optional
-            Callable that takes (item, *args) and returns a RestObj of `item`
-        filter : str, optional
-
         args : any
             Passed to `func`
+        func : function, optional
+            Callable that takes (item, *args) and returns a RestObj of `item`
+        filter_ : str, optional
 
         Returns
         -------
@@ -384,11 +381,11 @@ class Service(object):  # skipcq PYL-R0205
             obj = func(item, *args)
 
         if obj is None:
-            return
+            return None
 
-        params = 'filter={}'.format(filter) if filter is not None else {}
+        params = 'filter={}'.format(filter_) if filter_ is not None else {}
 
-        resources = self.request_link(obj, rel, params=params)
+        resources = cls.request_link(obj, rel, params=params)
 
         if isinstance(resources, (list, PagedItemIterator)):
             return resources

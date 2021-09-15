@@ -6,6 +6,7 @@
 
 """The Model Repository service supports registering and managing models."""
 
+from warnings import warn
 
 from .service import Service
 from ..core import current_session, get, delete, sasctl_command, HTTPError
@@ -406,7 +407,27 @@ class ModelRepository(Service):
 
         metadata = {'role': role, 'name': name}
 
-        return cls.post('/models/{}/contents'.format(id_), files=files, data=metadata)
+        # return cls.post('/models/{}/contents'.format(id_), files=files, data=metadata)
+
+        # if the file already exists, a 409 error will be returned
+        try:
+            return cls.post(
+                '/models/{}/contents'.format(id_), files=files, data=metadata
+            )
+        # delete the older duplicate model and rerun the API call
+        except HTTPError as e:
+            if e.code == 409:
+                model_contents = cls.get_model_contents(id_)
+                for item in model_contents:
+                    if item.name == name:
+                        cls.delete('/models/{}/contents/{}'.format(id_, item.id))
+                        return cls.post(
+                            '/models/{}/contents'.format(id_),
+                            files=files,
+                            data=metadata,
+                        )
+            else:
+                raise e
 
     @classmethod
     def default_repository(cls):
@@ -489,18 +510,16 @@ class ModelRepository(Service):
             The API response after importing the model.
 
         """
-        project = cls.get_project(project)
+        project_info = cls.get_project(project)
 
-        if project is None:
+        if project_info is None:
             raise ValueError('Project `%s` could not be found.' % str(project))
 
-        params = {
-            'name': name,
-            'description': description,
-            'type': 'ZIP',
-            'projectId': project.id,
-            'versionOption': version,
-        }
+        params = {'name': name,
+                  'description': description,
+                  'type': 'ZIP',
+                  'projectId': project_info.id,
+                  'versionOption': version}
         params = '&'.join('{}={}'.format(k, v) for k, v in params.items())
 
         r = cls.post(
@@ -648,18 +667,37 @@ class ModelRepository(Service):
         RestObj or None
             JSON response detailing the API metadata
 
-        """
-        if cls.is_uuid(model):
-            id_ = model
-        elif isinstance(model, dict) and 'id' in model:
-            id_ = model['id']
-        else:
-            model = cls.get_model(model)
-            id_ = model['id']
+        Warns
+        -----
+        UserWarning
+            If no score resources exist for the model.
 
-        return cls.put(
-            '/models/%s/scoreResources' % id_, headers={'Accept': 'application/json'}
-        )
+        """
+
+        model_obj = cls.get_model(model)
+
+        if model_obj is None:
+            raise ValueError("No model '{}' found.".format(model))
+
+        # Check if symbolic link for resource directories exists
+        try:
+            response = cls.put(
+                '/models/%s/scoreResources' % model_obj['id'],
+                headers={'Accept': 'application/json'},
+            )
+            if not response:
+                warn("No score resources found for model '{}'".format(model_obj.name))
+            return response
+        except HTTPError as e:
+            if e.code == 406:
+                raise OSError(
+                    'The SAS Viya system you are attempting to move score resources with requires an additional'
+                    + ' administrator action in order to complete. Please see the documentation at '
+                    + 'https://go.documentation.sas.com/doc/en/calcdc/3.5/calmodels/n10916nn7yro46n119nev9sb912c.htm,'
+                    + 'which details the corollary approach for configuring analytic store model files.'
+                )
+            else:
+                raise e
 
     @classmethod
     def convert_python_to_ds2(cls, model):

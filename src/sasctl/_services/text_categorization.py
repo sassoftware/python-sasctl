@@ -16,16 +16,15 @@ class TextCategorization(Service):
 
     _SERVICE_ROOT = '/categorization'
 
-    def categorize(
-        self,
-        documents,
-        model,
-        caslib=None,
-        id_column=None,
-        text_column=None,
-        description=None,
-        output_postfix=None,
-    ):
+    @classmethod
+    def categorize(cls,
+                   documents,
+                   model,
+                   caslib=None,
+                   id_column=None,
+                   text_column=None,
+                   description=None,
+                   output_postfix=None):
         """
 
         Parameters
@@ -106,4 +105,4 @@ class TextCategorization(Service):
             if data[k] is None:
                 del data[k]
 
-        return self.post(url, json=data, headers=headers)
+        return cls.post(url, json=data, headers=headers)

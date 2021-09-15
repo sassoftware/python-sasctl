@@ -350,12 +350,19 @@ def _get_model_properties(result):
     else:
         algorithm = None
 
+    def is_classification(r):
+        """Determine if the ASTORE model describes a classification model."""
+        return classification_target(r) is not None
+
     def classification_target(r):
-        target = r.OutputVariables.Name.str.startswith('I_')
-        target = r.OutputVariables.Name[target].iloc[0]
-        return target.replace('I_', '', 1)
+        """Get the name of the classification target variable."""
+        target = r.OutputVariables.Name[r.OutputVariables.Name.str.startswith('I_')]
+        if target.shape[0] > 0:
+            return target.iloc[0].replace('I_', '', 1)
+        return None
 
     def regression_target(r):
+        """Get the name of the regression target variable."""
         target = r.OutputVariables.Name.str.startswith('P_')
         target = r.OutputVariables.Name[target].iloc[0]
         return target.replace('P_', '', 1)
@@ -375,7 +382,7 @@ def _get_model_properties(result):
     elif algorithm == 'forest':
         properties['algorithm'] = 'Random forest'
 
-        if 'Classification' in result.InputVariables.Type.values:
+        if is_classification(result):
             properties['function'] = 'classification'
             properties['targetVariable'] = classification_target(result)
         else:
@@ -385,7 +392,7 @@ def _get_model_properties(result):
     elif algorithm == 'gradboost':
         properties['algorithm'] = 'Gradient boosting'
 
-        if 'Classification' in result.InputVariables.Type.values:
+        if is_classification(result):
             properties['function'] = 'classification'
             properties['targetVariable'] = classification_target(result)
 
@@ -398,7 +405,7 @@ def _get_model_properties(result):
     elif algorithm == 'svmachine':
         properties['algorithm'] = 'Support vector machine'
 
-        if 'Classification' in result.InputVariables.Type.values:
+        if is_classification(result):
             properties['function'] = 'classification'
             properties['targetVariable'] = classification_target(result)
             properties['targetLevel'] = 'binary'
