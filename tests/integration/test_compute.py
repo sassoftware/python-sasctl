@@ -41,6 +41,17 @@ class TestJobDefinitions:
         assert job.sessionId == sess.id
         assert job.state == 'pending'
 
+    def test_get_listing(self):
+        with pytest.raises(ValueError):
+            compute.get_listing()
+
+    def test_get_log(self):
+        with pytest.raises(ValueError):
+            compute.get_log()
+
+    def test_get_results(self):
+        with pytest.raises(ValueError):
+            compute.get_results()
 
 
 
