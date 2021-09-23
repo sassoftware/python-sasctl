@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.microanalytic_score &#8212; sasctl 1.6.2 documentation</title>
+    <title>sasctl._services.microanalytic_score &#8212; sasctl 1.6.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -114,7 +114,8 @@
         <span class="s1">&#39;/modules&#39;</span><span class="p">,</span> <span class="s1">&#39;module&#39;</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="MicroAnalyticScore.get_module_step"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.get_module_step">[docs]</a>    <span class="k">def</span> <span class="nf">get_module_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+<div class="viewcode-block" id="MicroAnalyticScore.get_module_step"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.get_module_step">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_module_step</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Details of a single step in a given module.</span>
 
 <span class="sd">        Parameters</span>
@@ -129,12 +130,13 @@
 <span class="sd">        RestObj</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
 
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/modules/</span><span class="si">{}</span><span class="s1">/steps/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/modules/</span><span class="si">{}</span><span class="s1">/steps/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">r</span></div>
 
-<div class="viewcode-block" id="MicroAnalyticScore.list_module_steps"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.list_module_steps">[docs]</a>    <span class="k">def</span> <span class="nf">list_module_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">):</span>
+<div class="viewcode-block" id="MicroAnalyticScore.list_module_steps"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.list_module_steps">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">list_module_steps</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List all steps defined for a module.</span>
 
 <span class="sd">        Parameters</span>
@@ -148,12 +150,13 @@
 <span class="sd">            List of :class:`.RestObj` instances representing each step.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
 
-        <span class="n">steps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/modules/</span><span class="si">{}</span><span class="s1">/steps&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/modules/</span><span class="si">{}</span><span class="s1">/steps&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">steps</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">steps</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="MicroAnalyticScore.execute_module_step"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.execute_module_step">[docs]</a>    <span class="k">def</span> <span class="nf">execute_module_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="MicroAnalyticScore.execute_module_step"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.execute_module_step">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">execute_module_step</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Call a module step with the given parameters.</span>
 
 <span class="sd">        Parameters</span>
@@ -177,7 +180,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">module_name</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
-        <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">module</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Module &#39;</span><span class="si">{}</span><span class="s2">&#39; was not found.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module_name</span><span class="p">))</span>
@@ -204,7 +207,7 @@
             <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
                 <span class="k">pass</span>
 
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/modules/</span><span class="si">{}</span><span class="s1">/steps/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">step</span><span class="p">),</span> <span class="n">json</span><span class="o">=</span><span class="n">body</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/modules/</span><span class="si">{}</span><span class="s1">/steps/</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">step</span><span class="p">),</span> <span class="n">json</span><span class="o">=</span><span class="n">body</span><span class="p">)</span>
 
         <span class="c1"># Convert list of name/value pair dictionaries to single dict</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
@@ -227,8 +230,9 @@
             <span class="k">return</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">outputs</span></div>
 
-<div class="viewcode-block" id="MicroAnalyticScore.create_module"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.create_module">[docs]</a>    <span class="k">def</span> <span class="nf">create_module</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="MicroAnalyticScore.create_module"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.create_module">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create_module</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
         <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -266,13 +270,14 @@
             <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span>
             <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
             <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
-            <span class="s1">&#39;scope&#39;</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span>
+            <span class="s1">&#39;scope&#39;</span><span class="p">:</span> <span class="n">scope</span>
         <span class="p">}</span>
 
-        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/modules&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/modules&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">r</span></div>
 
-<div class="viewcode-block" id="MicroAnalyticScore.define_steps"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.define_steps">[docs]</a>    <span class="k">def</span> <span class="nf">define_steps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">):</span>
+<div class="viewcode-block" id="MicroAnalyticScore.define_steps"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.define_steps">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">define_steps</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Map MAS steps to Python methods.</span>
 
 <span class="sd">        Defines python methods on a module that automatically call the</span>
@@ -291,11 +296,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">import</span> <span class="nn">types</span>
 
-        <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+        <span class="n">module</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
 
         <span class="c1"># Define a method for each step of the module</span>
         <span class="k">for</span> <span class="n">id_</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;stepIds&#39;</span><span class="p">,</span> <span class="p">[]):</span>
-            <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_module_step</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">id_</span><span class="p">)</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_module_step</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">id_</span><span class="p">)</span>
 
             <span class="c1"># Method should have an argument for each parameter of the step</span>
             <span class="n">arguments</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">step</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inputs&#39;</span><span class="p">,</span> <span class="p">[])]</span>
@@ -309,7 +314,7 @@
 
             <span class="c1"># Method signature</span>
             <span class="c1"># Default all params to None to allow method(DataFrame) execution</span>
-            <span class="n">input_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">arguments</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;**kwargs&#39;</span><span class="p">]</span>
+            <span class="n">input_params</span> <span class="o">=</span> <span class="n">arguments</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;**kwargs&#39;</span><span class="p">]</span>
             <span class="n">method_name</span> <span class="o">=</span> <span class="s1">&#39;_</span><span class="si">%s</span><span class="s1">_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">step</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
             <span class="n">signature</span> <span class="o">=</span> <span class="s1">&#39;def </span><span class="si">%s</span><span class="s1">(</span><span class="si">%s</span><span class="s1">):&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_params</span><span class="p">))</span>
 
@@ -394,7 +399,7 @@
             <span class="p">)</span>
 
             <span class="n">code</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="s2">&quot;Generated code for step &#39;</span><span class="si">%s</span><span class="s2">&#39; of module &#39;</span><span class="si">%s</span><span class="s2">&#39;:</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">id_</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">code</span>
             <span class="p">)</span>
             <span class="n">compiled</span> <span class="o">=</span> <span class="nb">compile</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="s1">&#39;&lt;string&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;exec&#39;</span><span class="p">)</span>
@@ -402,9 +407,9 @@
             <span class="n">env</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="n">env</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
                 <span class="p">{</span>
-                    <span class="s1">&#39;execute_module_step&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute_module_step</span><span class="p">,</span>
+                    <span class="s1">&#39;execute_module_step&#39;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">execute_module_step</span><span class="p">,</span>
                     <span class="s1">&#39;module&#39;</span><span class="p">:</span> <span class="n">module</span><span class="p">,</span>
-                    <span class="s1">&#39;step&#39;</span><span class="p">:</span> <span class="n">step</span><span class="p">,</span>
+                    <span class="s1">&#39;step&#39;</span><span class="p">:</span> <span class="n">step</span>
                 <span class="p">}</span>
             <span class="p">)</span>
 
@@ -427,7 +432,7 @@
       &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
