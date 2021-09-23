@@ -107,23 +107,41 @@ jobs:
         run: |
           python setup.py sdist bdist_wheel
 
-      - name: Archive artifacts
+      - name: Extract Changes
+        shell: python
+        run: |
+          import os, re
+          tag_name = os.environ['GITHUB_REF'].replace('refs/tags/', '')
+          changes = ''
+          with open('CHANGELOG.md') as f:
+              lines = f.read()
+          match = re.search('%s [()\d\-\s]*' % tag_name, lines)
+          if match:
+              lines = lines[match.end():]
+              changes = re.split('-----+', lines)[0].split('\n')
+              changes = '\n'.join(changes[:-2])
+          with open('release_notes.md', 'w') as f:
+              f.write(changes)
+
+      - name: Archive distribution artifacts
         # Archive distribution files for use by auto (or manual) PyPI upload
         uses: actions/upload-artifact@v2
         with:
           name: pypi-dist
           path: ./dist
 
+      - name: Archive changelog artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release_notes
+          path: release_notes.md
+
+
   publish:
     name: "Publish"
     runs-on: ubuntu-latest
     needs: [gh-pages, build]
     steps:
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          draft: true
-          body: "Test Release"
 
       - name: Download documentation
         uses: actions/download-artifact@v2
@@ -137,8 +155,25 @@ jobs:
           name: pypi-dist
           path: ./dist
 
+      - name: Download release notes
+        uses: actions/download-artifact@v2
+        with:
+          name: release_notes
+
+      - name: Zip Documentation
+        run: zip -r documentation.zip ./html-docs
+
       - name: Display structure of downloaded files
         run: ls -R
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          body_path: release_notes.md
+          body: ""
+          files: documentation.zip
 
       - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3
@@ -152,4 +187,11 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
           verbose: true
+
+      - name: Publish release
+        uses: StuYarrow/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          id: ${{ steps.create_release.outputs.id }}
 

@@ -27,25 +27,24 @@ class TextParsing(Service):
 
     _SERVICE_ROOT = '/parsing'
 
-    def parse_documents(
-        self,
-        documents,
-        caslib=None,
-        id_column=None,
-        text_column=None,
-        description=None,
-        standard_entities=False,
-        noun_groups=False,
-        min_doc_count=10,
-        concept_model=None,
-        output_postfix=None,
-        spell_check=False,
-        override_list=None,
-        stop_list=None,
-        start_list=None,
-        synonym_list=None,
-        language='en',
-    ):
+    @classmethod
+    def parse_documents(cls,
+                        documents,
+                        caslib=None,
+                        id_column=None,
+                        text_column=None,
+                        description=None,
+                        standard_entities=False,
+                        noun_groups=False,
+                        min_doc_count=10,
+                        concept_model=None,
+                        output_postfix=None,
+                        spell_check=False,
+                        override_list=None,
+                        stop_list=None,
+                        start_list=None,
+                        synonym_list=None,
+                        language='en'):
         """Performs natural language parsing on the input data.
 
         Creates a text parsing job that executes asynchronously.  There are two
@@ -155,4 +154,4 @@ class TextParsing(Service):
                 'Accept': 'application/vnd.sas.text.parsing.job+json',
             }
 
-        return self.post(url, json=data, headers=headers)
+        return cls.post(url, json=data, headers=headers)
