@@ -1,6 +1,11 @@
 Unreleased
 ----------
  -
+
+v1.6.3 (2021-09-23)
+-------------------
+**Bugfixes**
+ - Fix an issue where `pzmm.ZipModel.zipFiles()` threw an error on Python 3.6.1 and earlier.
  
 v1.6.2 (2021-09-09)
 -------------------
