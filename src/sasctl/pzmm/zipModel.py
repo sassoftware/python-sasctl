@@ -38,9 +38,9 @@ class ZipModel():
         # Include H2O.ai MOJO files 
         fileNames.extend(sorted(Path(fileDir).glob('*.mojo')))
         
-        with zipfile.ZipFile(Path(fileDir) / (modelPrefix + '.zip'), mode='w') as zFile:
+        with zipfile.ZipFile(str(Path(fileDir) / (modelPrefix + '.zip')), mode='w') as zFile:
             for file in fileNames:
-                zFile.write(file, arcname=file.name)
+                zFile.write(str(file), arcname=file.name)
                 
-        with open(Path(fileDir) / (modelPrefix + '.zip'), 'rb') as zipFile:
+        with open(str(Path(fileDir) / (modelPrefix + '.zip')), 'rb') as zipFile:
             return io.BytesIO(zipFile.read())
