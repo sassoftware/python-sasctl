@@ -8,7 +8,7 @@ method score(double LOAN, double MORTDUE, double VALUE, varchar(100) REASON, var
    resultCode = revision = 0;
    if null(pm) then do;
       pm = _new_ pymas();
-      resultCode = pm.useModule('model_exec_abdc9fb5-243b-4979-b244-9c698579af04', 1);
+      resultCode = pm.useModule('model_exec_0f38bb00-011c-414e-991b-822e1e1460f7', 1);
       if resultCode then do;
          resultCode = pm.appendSrcLine('import h2o');
          resultCode = pm.appendSrcLine('import gzip, shutil, os');
@@ -18,21 +18,18 @@ method score(double LOAN, double MORTDUE, double VALUE, varchar(100) REASON, var
          resultCode = pm.appendSrcLine('import pandas as pd');
          resultCode = pm.appendSrcLine('import numpy as np');
          resultCode = pm.appendSrcLine('');
-         resultCode = pm.appendSrcLine('');
-         resultCode = pm.appendSrcLine('global _thisModelFit');
-         resultCode = pm.appendSrcLine('');
          resultCode = pm.appendSrcLine('h2o.init()');
          resultCode = pm.appendSrcLine('');
-         resultCode = pm.appendSrcLine('_thisModelFit = h2o.load_model("/models/resources/viya/cd6cd3c5-174f-4f51-9f43-92a1d695b0e7/glmFit.pickle")');
+         resultCode = pm.appendSrcLine('_thisModelFit = h2o.load_model("/models/resources/viya/e34d30a4-66dd-4648-ad75-c6e92f0b01f1/glmFit.pickle")');
          resultCode = pm.appendSrcLine('');
          resultCode = pm.appendSrcLine('def scoreglmFit(LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC):');
          resultCode = pm.appendSrcLine('    "Output: EM_EVENTPROBABILITY, EM_CLASSIFICATION"');
          resultCode = pm.appendSrcLine('');
          resultCode = pm.appendSrcLine('    try:');
-         resultCode = pm.appendSrcLine('        _thisModelFit');
+         resultCode = pm.appendSrcLine('        global _thisModelFit');
          resultCode = pm.appendSrcLine('    except NameError:');
          resultCode = pm.appendSrcLine('');
-         resultCode = pm.appendSrcLine('        _thisModelFit = h2o.load_model("/models/resources/viya/cd6cd3c5-174f-4f51-9f43-92a1d695b0e7/glmFit.pickle")');
+         resultCode = pm.appendSrcLine('        _thisModelFit = h2o.load_model("/models/resources/viya/e34d30a4-66dd-4648-ad75-c6e92f0b01f1/glmFit.pickle")');
          resultCode = pm.appendSrcLine('');
          resultCode = pm.appendSrcLine('    inputArray = pd.DataFrame([[LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC]],');
          resultCode = pm.appendSrcLine('                              columns=["LOAN", "MORTDUE", "VALUE", "REASON", "JOB", "YOJ", "DEROG", "DELINQ", "CLAGE", "NINQ", "CLNO", "DEBTINC"],');
@@ -46,7 +43,7 @@ method score(double LOAN, double MORTDUE, double VALUE, varchar(100) REASON, var
          resultCode = pm.appendSrcLine('    EM_CLASSIFICATION = prediction[1][0]');
          resultCode = pm.appendSrcLine('');
          resultCode = pm.appendSrcLine('    return(EM_EVENTPROBABILITY, EM_CLASSIFICATION)');
-         revision = pm.publish(pm.getSource(), 'model_exec_abdc9fb5-243b-4979-b244-9c698579af04');
+         revision = pm.publish(pm.getSource(), 'model_exec_0f38bb00-011c-414e-991b-822e1e1460f7');
 
          if ( revision < 1 ) then do;
             logr.log( 'e', 'py.publish() failed.');

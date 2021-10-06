@@ -6,21 +6,18 @@ import pickle
 import pandas as pd
 import numpy as np
 
-
-global _thisModelFit
-
 h2o.init()
 
-_thisModelFit = h2o.load_model('/models/resources/viya/cd6cd3c5-174f-4f51-9f43-92a1d695b0e7/glmFit.pickle')
+_thisModelFit = h2o.load_model('/models/resources/viya/e34d30a4-66dd-4648-ad75-c6e92f0b01f1/glmFit.pickle')
 
 def scoreglmFit(LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC):
     "Output: EM_EVENTPROBABILITY, EM_CLASSIFICATION"
 
     try:
-        _thisModelFit
+        global _thisModelFit
     except NameError:
 
-        _thisModelFit = h2o.load_model('/models/resources/viya/cd6cd3c5-174f-4f51-9f43-92a1d695b0e7/glmFit.pickle')
+        _thisModelFit = h2o.load_model('/models/resources/viya/e34d30a4-66dd-4648-ad75-c6e92f0b01f1/glmFit.pickle')
 
     inputArray = pd.DataFrame([[LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC]],
                               columns=['LOAN', 'MORTDUE', 'VALUE', 'REASON', 'JOB', 'YOJ', 'DEROG', 'DELINQ', 'CLAGE', 'NINQ', 'CLNO', 'DEBTINC'],
