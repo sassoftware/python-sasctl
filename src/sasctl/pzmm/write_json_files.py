@@ -8,6 +8,12 @@ import getpass
 import json
 import pandas as pd
 import math
+import numpy as np
+from scipy.stats import kendalltau, gamma
+import types
+import pickle
+import pickletools
+from pipreqs import pipreqs
 
 
 class JSONFiles:
@@ -950,3 +956,178 @@ class JSONFiles:
             conversion = 1
 
         return conversion
+
+    def get_imports(self):
+        """[summary]
+
+        Yields
+        -------
+        [type]
+            [description]
+        """
+
+        for name, val in globals().items():
+            if isinstance(val, types.ModuleType):
+                # Split ensures you get root package, not just imported function
+                name = val.__name__.split(".")[0]
+                yield name
+            elif isinstance(val, type):
+                name = val.__module__.split(".")[0]
+                yield name
+
+    def get_pickle_file(self, pPath):
+        """[summary]
+
+        Parameters
+        ----------
+        pPath : [type]
+            [description]
+        """
+        fileNames = []
+        fileNames.extend(sorted(Path(pPath).glob("*.pickle")))
+
+    def get_modules_from_pickle_file(self, pickle_file):
+        """[summary]
+
+        Parameters
+        ----------
+        pickle_file : [type]
+            [description]
+
+        Returns
+        -------
+        [type]
+            [description]
+        """
+        with (open(pickle_file, "rb")) as openfile:
+            obj = pickle.load(openfile)
+            dumps = pickle.dumps(obj)
+
+        modules = {mod.split(".")[0] for mod, _ in self.get_names(dumps)}
+        return modules
+
+    def createRequirementsJSON(self, jPath=Path.cwd()):
+        """[summary]
+
+        Parameters
+        ----------
+        jPath : [type], optional
+            [description], by default Path.cwd()
+        """
+
+        imports = list(set(self.get_imports()))
+
+        with open("./imports.py", "w") as file:
+            for item in imports:
+                file.write("import %s\n" % item)
+
+        pipreqs.init(
+            {
+                "<path>": jPath,
+                "--savepath": None,
+                "--print": False,
+                "--use-local": None,
+                "--force": True,
+                "--proxy": None,
+                "--pypi-server": None,
+                "--diff": None,
+                "--clean": None,
+            }
+        )
+
+        module_version_map = {}
+        pickle_file = self.get_pickle_file(jPath)
+        filename = "./requirements.txt"
+        with open(filename, "r") as f:
+            modules_requirements_txt = set()
+            modules_pickle = self.get_modules_from_pickle_file(pickle_file)
+            for line in f:
+                module_parts = line.rstrip().split("==")
+                module = module_parts[0]
+                version = module_parts[1]
+                module_version_map[module] = version
+                modules_requirements_txt.add(module)
+            pip_name_list = list(modules_requirements_txt.union(modules_pickle))
+
+        for item in pip_name_list:
+            if item in module_version_map:
+                if module_version_map[item] == "0.0.0":
+                    print(
+                        "Warning: No pip install name found for package: "
+                        + item.split("==")[0]
+                    )
+                    pip_name_list.remove(item)
+
+        j = json.dumps(
+            [
+                {
+                    "step": "install " + i,
+                    "command": "pip install " + i + "==" + module_version_map[i],
+                }
+                if i in module_version_map
+                else {"step": "install " + i, "command": "pip install " + i}
+                for i in pip_name_list
+            ],
+            indent=4,
+        )
+        with open("./requirements.json", "w") as file:
+            print(j, file=file)
+
+    def get_names(self, stream):
+        """Generates (module, qualname) tuples from a pickle stream
+
+        Credit: https://stackoverflow.com/questions/64850179/inspecting-a-pickle-dump-for-dependencies
+
+        Parameters
+        ----------
+        stream : [type]
+            [description]
+
+        Yields
+        -------
+        [type]
+            [description]
+        """
+
+        stack, markstack, memo = [], [], []
+        mo = pickletools.markobject
+
+        for op, arg, pos in pickletools.genops(stream):
+            # simulate the pickle stack and marking scheme, insofar
+            # necessary to allow us to retrieve the names used by STACK_GLOBAL
+
+            before, after = op.stack_before, op.stack_after
+            numtopop = len(before)
+
+            if op.name == "GLOBAL":
+                yield tuple(arg.split(1, None))
+            elif op.name == "STACK_GLOBAL":
+                yield (stack[-2], stack[-1])
+
+            elif mo in before or (op.name == "POP" and stack and stack[-1] is mo):
+                markpos = markstack.pop()
+                while stack[-1] is not mo:
+                    stack.pop()
+                stack.pop()
+                try:
+                    numtopop = before.index(mo)
+                except ValueError:
+                    numtopop = 0
+            elif op.name in {"PUT", "BINPUT", "LONG_BINPUT", "MEMOIZE"}:
+                if op.name == "MEMOIZE":
+                    memo.append(stack[-1])
+                else:
+                    memo[arg] = stack[-1]
+                numtopop, after = 0, []  # memoize and put do not pop the stack
+            elif op.name in {"GET", "BINGET", "LONG_BINGET"}:
+                arg = memo[arg]
+
+            if numtopop:
+                del stack[-numtopop:]
+            if mo in after:
+                markstack.append(pos)
+
+            if len(after) == 1 and op.arg is not None:
+                stack.append(arg)
+            else:
+                stack.extend(after)
