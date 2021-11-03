@@ -1,0 +1,16 @@
+{
+    "name": "LinearRegression",
+    "description": "",
+    "function": "classification",
+    "scoreCodeType": "python",
+    "trainTable": " ",
+    "trainCodeType": "Python",
+    "algorithm": "",
+    "targetVariable": "Price",
+    "targetEvent": null,
+    "targetLevel": "BINARY",
+    "eventProbVar": "EM_PREDICTION",
+    "modeler": "sasdemo",
+    "tool": "Python 3",
+    "toolVersion": "3.8.3"
+}
