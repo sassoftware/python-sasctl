@@ -12,7 +12,7 @@ from .zipModel import ZipModel as zm
 
 
 def project_exists(response, project):
-    '''Checks if project exists on SAS Viya. If the project does not exist, then a new
+    """Checks if project exists on SAS Viya. If the project does not exist, then a new
     project is created or an error is raised.
 
     Parameters
@@ -31,26 +31,26 @@ def project_exists(response, project):
     ------
     SystemError
         Alerts user that API calls cannot continue until a valid project is provided.
-    '''
+    """
     if response is None:
         try:
-            warn('No project with the name or UUID {} was found.'.format(project))
+            warn("No project with the name or UUID {} was found.".format(project))
             UUID(project)
             raise SystemError(
-                'The provided UUID does not match any projects found in SAS Model Manager. '
-                + 'Please enter a valid UUID or a new name for a project to be created.'
+                "The provided UUID does not match any projects found in SAS Model Manager. "
+                + "Please enter a valid UUID or a new name for a project to be created."
             )
         except ValueError:
-            repo = mr.default_repository().get('id')
+            repo = mr.default_repository().get("id")
             response = mr.create_project(project, repo)
-            print('A new project named {} was created.'.format(response.name))
+            print("A new project named {} was created.".format(response.name))
             return response
     else:
         return response
 
 
 def model_exists(project, name, force):
-    '''Checks if model already exists and either raises an error or deletes the redundant model.
+    """Checks if model already exists and either raises an error or deletes the redundant model.
 
     Parameters
     ----------
@@ -66,30 +66,30 @@ def model_exists(project, name, force):
     ValueError
         Model repository API cannot overwrite an already existing model with the upload model call.
         Alerts user of the force argument to allow multi-call API overwriting.
-    '''
+    """
     project = mr.get_project(project)
-    projectId = project['id']
-    projectModels = mr.get('/projects/{}/models'.format(projectId))
+    projectId = project["id"]
+    projectModels = mr.get("/projects/{}/models".format(projectId))
 
     for model in projectModels:
         # Throws a TypeError if only one model is in the project
         try:
-            if model['name'] == name:
+            if model["name"] == name:
                 if force:
                     mr.delete_model(model.id)
                 else:
                     raise ValueError(
-                        'A model with the same model name exists in project {}. Include the force=True argument to overwrite models with the same name.'.format(
+                        "A model with the same model name exists in project {}. Include the force=True argument to overwrite models with the same name.".format(
                             project.name
                         )
                     )
         except TypeError:
-            if projectModels['name'] == name:
+            if projectModels["name"] == name:
                 if force:
                     mr.delete_model(projectModels.id)
                 else:
                     raise ValueError(
-                        'A model with the same model name exists in project {}. Include the force=True argument to overwrite models with the same name.'.format(
+                        "A model with the same model name exists in project {}. Include the force=True argument to overwrite models with the same name.".format(
                             project.name
                         )
                     )
@@ -105,7 +105,7 @@ class ImportModel:
         inputDF,
         targetDF,
         predictmethod,
-        metrics=['EM_EVENTPROBABILITY', 'EM_CLASSIFICATION'],
+        metrics=["EM_EVENTPROBABILITY", "EM_CLASSIFICATION"],
         modelFileName=None,
         pyPath=None,
         threshPrediction=None,
@@ -114,7 +114,7 @@ class ImportModel:
         force=False,
         binaryString=None,
     ):
-        '''Import model to SAS Model Manager using pzmm submodule.
+        """Import model to SAS Model Manager using pzmm submodule.
 
         Using pzmm, generate Python score code and import the model files into
         SAS Model Manager. This function automatically checks the version of SAS
@@ -172,7 +172,7 @@ class ImportModel:
             Sets whether to overwrite models with the same name upon upload. By default False.
         binaryString : string, optional
             Binary string representation of the model object. By default None.
-        '''
+        """
         # Initialize no score code or binary H2O model flags
         noScoreCode = False
         binaryModel = False
@@ -192,36 +192,36 @@ class ImportModel:
         # If the model file name is not provided, set a default value depending on H2O and binary model status
         if modelFileName is None:
             if isH2OModel:
-                binaryOrMOJO = getFiles(['*.mojo', '*.pickle'])
+                binaryOrMOJO = getFiles(["*.mojo", "*.pickle"])
                 if len(binaryOrMOJO) == 0:
                     print(
-                        'WARNING: An H2O model file was not found at {}. Score code will not be automatically generated.'.format(
+                        "WARNING: An H2O model file was not found at {}. Score code will not be automatically generated.".format(
                             str(pyPath)
                         )
                     )
                     noScoreCode = True
                 elif len(binaryOrMOJO) == 1:
-                    if str(binaryOrMOJO[0]).endswith('.pickle'):
+                    if str(binaryOrMOJO[0]).endswith(".pickle"):
                         binaryModel = True
-                        modelFileName = modelPrefix + '.pickle'
+                        modelFileName = modelPrefix + ".pickle"
                     else:
-                        modelFileName = modelPrefix + '.mojo'
+                        modelFileName = modelPrefix + ".mojo"
                 else:
                     print(
-                        'WARNING: Both a MOJO and binary model file are present at {}. Score code will not be automatically generated.'.format(
+                        "WARNING: Both a MOJO and binary model file are present at {}. Score code will not be automatically generated.".format(
                             str(pyPath)
                         )
                     )
                     noScoreCode = True
             else:
-                modelFileName = modelPrefix + '.pickle'
+                modelFileName = modelPrefix + ".pickle"
 
         # Check the SAS Viya version number being used
-        isViya35 = platform_version() == '3.5'
+        isViya35 = platform_version() == "3.5"
         # For SAS Viya 4, the score code can be written beforehand and imported with all of the model files
         if not isViya35:
             if noScoreCode:
-                print('No score code was generated.')
+                print("No score code was generated.")
             else:
                 sc.writeScoreCode(
                     inputDF,
@@ -238,12 +238,12 @@ class ImportModel:
                     binaryString=binaryString,
                 )
                 print(
-                    'Model score code was written successfully to {}.'.format(
-                        Path(pyPath) / (modelPrefix + 'Score.py')
+                    "Model score code was written successfully to {}.".format(
+                        Path(pyPath) / (modelPrefix + "Score.py")
                     )
                 )
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
-            print('All model files were zipped to {}.'.format(Path(zPath)))
+            print("All model files were zipped to {}.".format(Path(zPath)))
 
             # Check if project name provided exists and raise an error or create a new project
             projectResponse = mr.get_project(project)
@@ -255,16 +255,16 @@ class ImportModel:
             response = mr.import_model_from_zip(modelPrefix, project, zipIOFile)
             try:
                 print(
-                    'Model was successfully imported into SAS Model Manager as {} with UUID: {}.'.format(
+                    "Model was successfully imported into SAS Model Manager as {} with UUID: {}.".format(
                         response.name, response.id
                     )
                 )
             except AttributeError:
-                print('Model failed to import to SAS Model Manager.')
+                print("Model failed to import to SAS Model Manager.")
         # For SAS Viya 3.5, the score code is written after upload in order to know the model UUID
         else:
             zipIOFile = zm.zipFiles(Path(zPath), modelPrefix)
-            print('All model files were zipped to {}.'.format(Path(zPath)))
+            print("All model files were zipped to {}.".format(Path(zPath)))
 
             # Check if project name provided exists and raise an error or create a new project
             projectResponse = mr.get_project(project)
@@ -276,14 +276,14 @@ class ImportModel:
             response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
             try:
                 print(
-                    'Model was successfully imported into SAS Model Manager as {} with UUID: {}.'.format(
+                    "Model was successfully imported into SAS Model Manager as {} with UUID: {}.".format(
                         response.name, response.id
                     )
                 )
             except AttributeError:
-                print('Model failed to import to SAS Model Manager.')
+                print("Model failed to import to SAS Model Manager.")
             if noScoreCode:
-                print('No score code was generated.')
+                print("No score code was generated.")
             else:
                 sc.writeScoreCode(
                     inputDF,
@@ -301,7 +301,7 @@ class ImportModel:
                     binaryString=binaryString,
                 )
                 print(
-                    'Model score code was written successfully to {} and uploaded to SAS Model Manager'.format(
-                        Path(pyPath) / (modelPrefix + 'Score.py')
+                    "Model score code was written successfully to {} and uploaded to SAS Model Manager".format(
+                        Path(pyPath) / (modelPrefix + "Score.py")
                     )
                 )
