@@ -1016,7 +1016,7 @@ class JSONFiles:
 
     def createRequirementsJSON(self, jPath=Path.cwd()):
         """
-        Searches a directory for all Python modules and writes them to a requirements.json file.
+        Searches the root of the project for all Python modules and writes them to a requirements.json file.
 
         Parameters
         ----------
