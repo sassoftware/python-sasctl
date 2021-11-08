@@ -17,7 +17,7 @@ import pickletools
 import os
 from pipreqs import pipreqs
 
-
+# %%
 class JSONFiles:
     def writeVarJSON(self, inputDF, isInput=True, jPath=Path.cwd()):
         """
@@ -56,7 +56,6 @@ class JSONFiles:
                 predict = inputDF
             else:
                 predict = inputDF[name]
-            print(predict)
             firstRow = predict.loc[predict.first_valid_index()]
             dType = predict.dtypes.name
             isStr = type(firstRow) is str
@@ -1028,7 +1027,6 @@ class JSONFiles:
         
         # Delete requirements.txt file after requirements.json has been written.
         os.remove(requirements_txt_file)
-        print('removed!')
 
     def get_names(self, stream):
         """
@@ -1090,4 +1088,4 @@ class JSONFiles:
                 stack.append(arg)
             else:
                 stack.extend(after)
-# %%
+
