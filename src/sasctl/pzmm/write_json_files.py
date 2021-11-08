@@ -13,6 +13,7 @@ from scipy.stats import kendalltau, gamma
 import types
 import pickle
 import pickletools
+import os
 from pipreqs import pipreqs
 
 
@@ -57,7 +58,24 @@ class JSONFiles:
                     else:
                         isStr = False
 
-                if isStr:
+        # loop through all predict variables to determine their name, length,
+        # type, and level; append each to outputJSON
+        for name in predictNames:
+            if isSeries:
+                predict = inputDF
+            else:
+                predict = inputDF[name]
+            print(predict)
+            firstRow = predict.loc[predict.first_valid_index()]
+            dType = predict.dtypes.name
+            isStr = type(firstRow) is str
+
+            if isStr:
+                outputLevel = "nominal"
+                outputType = "string"
+                outputLength = predict.str.len().max()
+            else:
+                if dType == "category":
                     outputLevel = "nominal"
                     outputType = "string"
                     outputLength = 8
@@ -975,7 +993,7 @@ class JSONFiles:
             elif isinstance(val, type):
                 name = val.__module__.split(".")[0]
                 yield name
-
+                
     def get_pickle_file(self, pPath):
         """
         Given a file path, retrieve the pickle file(s).
@@ -985,10 +1003,16 @@ class JSONFiles:
         pPath : str
             File location for the input pickle file. Default is the current
             working directory.
+        
+        Returns
+        -------
+        list
+            A list of pickle files.
         """
-
+        
         fileNames = []
         fileNames.extend(sorted(Path(pPath).glob("*.pickle")))
+        return fileNames
 
     def get_modules_from_pickle_file(self, pickle_file):
         """
@@ -1024,11 +1048,11 @@ class JSONFiles:
             The path to a Python project, by default Path.cwd().
         """
 
-        imports = list(set(self.get_imports()))
+        # imports = list(set(self.get_imports()))
 
-        with open("./imports.py", "w") as file:
-            for item in imports:
-                file.write("import %s\n" % item)
+        # with open(os.path.join(jPath, "imports.py"), "w") as file:
+        #     for item in imports:
+        #         file.write("import %s\n" % item)
 
         pipreqs.init(
             {
@@ -1045,17 +1069,18 @@ class JSONFiles:
         )
 
         module_version_map = {}
-        pickle_file = self.get_pickle_file(jPath)
-        filename = "./requirements.txt"
-        with open(filename, "r") as f:
+        pickle_files = self.get_pickle_file(jPath)
+        requirements_txt_file = os.path.join(jPath, "requirements.txt")
+        with open(requirements_txt_file, "r") as f:
             modules_requirements_txt = set()
-            modules_pickle = self.get_modules_from_pickle_file(pickle_file)
-            for line in f:
-                module_parts = line.rstrip().split("==")
-                module = module_parts[0]
-                version = module_parts[1]
-                module_version_map[module] = version
-                modules_requirements_txt.add(module)
+            for pickle_file in pickle_files: 
+                modules_pickle = self.get_modules_from_pickle_file(pickle_file)
+                for line in f:
+                    module_parts = line.rstrip().split("==")
+                    module = module_parts[0]
+                    version = module_parts[1]
+                    module_version_map[module] = version
+                    modules_requirements_txt.add(module)
             pip_name_list = list(modules_requirements_txt.union(modules_pickle))
 
         for item in pip_name_list:
@@ -1079,8 +1104,12 @@ class JSONFiles:
             ],
             indent=4,
         )
-        with open("./requirements.json", "w") as file:
+        with open(os.path.join(jPath, "requirements.json"), "w") as file:
             print(j, file=file)
+        
+        # Delete requirements.txt file after requirements.json has been written.
+        os.remove(requirements_txt_file)
+        print('removed!')
 
     def get_names(self, stream):
         """
@@ -1142,3 +1171,4 @@ class JSONFiles:
                 stack.append(arg)
             else:
                 stack.extend(after)
+# %%
