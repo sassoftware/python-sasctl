@@ -28,6 +28,7 @@ class ScoreCode:
         scoreCAS=True,
         isBinaryModel=False,
         binaryString=None,
+        pickleType=None
     ):
         """
         Writes a Python score code file based on training data used to generate the model
@@ -107,6 +108,8 @@ class ScoreCode:
             Sets whether the H2O model provided is a binary model or a MOJO model. By default False.
         binaryString : string, optional
             Binary string representation of the model object. By default None.
+        pickleType : string optional
+            Indicator for MLFlow models, which may pickle by non-standard methods. By default None.
         """
         # Check if binary string model
         if binaryString is not None:
@@ -174,10 +177,10 @@ import codecs"""
             cls.pyFile.write(
                 """\n
 import math
-import pickle
+import {pickleType}
 import pandas as pd
 import numpy as np"""
-            )
+            ).format(pickleType=pickleType)
             # In SAS Viya 4.0 and SAS Open Model Manager, a settings.py file is generated that points to the resource
             # location
             if not isViya35:
@@ -226,8 +229,8 @@ _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelZipFileN
                 cls.pyFile.write(
                     """\n
 with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
-    _thisModelFit = pickle.load(_pFile)""".format(
-                        modelID=modelID, modelFileName=modelFileName
+    _thisModelFit = {pickleType}.load(_pFile)""".format(
+                        modelID=modelID, modelFileName=modelFileName, pickleType=pickleType
                     )
                 )
             elif isViya35 and isBinaryModel:
@@ -241,8 +244,8 @@ _thisModelFit = h2o.load_model('/models/resources/viya/{modelID}/{modelFileName}
                 cls.pyFile.write(
                     """\n
 with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
-    _thisModelFit = pickle.load(_pFile)""".format(
-                        modelFileName=modelFileName
+    _thisModelFit = {pickleType}.load(_pFile)""".format(
+                        modelFileName=modelFileName, pickleType=pickleType
                     )
                 )
             elif not isViya35 and isBinaryModel:
@@ -286,8 +289,8 @@ def score{modelPrefix}({inputVarList}):
                     cls.pyFile.write(
                         """
         with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
-            _thisModelFit = pickle.load(_pFile)""".format(
-                            modelID=modelID, modelFileName=modelFileName
+            _thisModelFit = {pickleType}.load(_pFile)""".format(
+                            modelID=modelID, modelFileName=modelFileName, pickleType = pickleType
                         )
                     )
                 elif isViya35 and isH2OModel and not isBinaryModel:
@@ -309,8 +312,8 @@ def score{modelPrefix}({inputVarList}):
                     cls.pyFile.write(
                         """
         with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
-            _thisModelFit = pickle.load(_pFile)""".format(
-                            modelFileName=modelFileName
+            _thisModelFit = {pickleType}.load(_pFile)""".format(
+                            modelFileName=modelFileName, pickleType=pickleType
                         )
                     )
                 elif not isViya35 and isH2OModel:
