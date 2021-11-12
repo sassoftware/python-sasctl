@@ -15,7 +15,7 @@ from scipy.stats import kendalltau, gamma
 
 # %%
 class JSONFiles:
-    def writeVarJSON(self, inputDF, isInput=True, jPath=Path.cwd()):
+    def writeVarJSON(self, inputData, isInput=True, jPath=Path.cwd()):
         """
         Writes a variable descriptor JSON file for input or output variables,
         based on an input dataframe containing predictor and prediction columns.
@@ -26,53 +26,80 @@ class JSONFiles:
 
         Parameters
         ---------------
-        inputDF : Dataframe
+        inputData : Dataframe or dict
             Input dataframe containing the training data set in a
             pandas.Dataframe format. Columns are used to define predictor and
-            prediction variables (ambiguously named "predict").
+            prediction variables (ambiguously named "predict"). Providing a dict
+            object signals that the model files are being created from an MLFlow model.
         isInput : boolean
             Boolean to check if generating the input or output variable JSON.
         jPath : string, optional
             File location for the output JSON file. Default is the current
             working directory.
         """
-
-        try:
-            predictNames = inputDF.columns.values.tolist()
-            isSeries = False
-        except AttributeError:
-            predictNames = [inputDF.name]
-            isSeries = True
         outputJSON = pd.DataFrame()
+        if isinstance(inputData, dict):
+            predictNames = [var["name"] for var in inputData]
+            for i, name in enumerate(predictNames):
+                if inputData[i]["type"] == "string":
+                    isStr = True
+                elif inputData[i]["type"] in ["double", "integer", "float", "long"]:
+                    isStr = False
+                elif inputData[i]["type"] == "tensor":
+                    if inputData[i]["tensor-spec"]["dtype"] in "string":
+                        isStr = True
+                    else:
+                        isStr = False
 
-        # loop through all predict variables to determine their name, length,
-        # type, and level; append each to outputJSON
-        for name in predictNames:
-            if isSeries:
-                predict = inputDF
-            else:
-                predict = inputDF[name]
-            firstRow = predict.loc[predict.first_valid_index()]
-            dType = predict.dtypes.name
-            isStr = type(firstRow) is str
-
-            if isStr:
-                outputLevel = "nominal"
-                outputType = "string"
-                outputLength = predict.str.len().max()
-            else:
-                if dType == "category":
+                if isStr:
                     outputLevel = "nominal"
+                    outputType = "string"
+                    outputLength = 8
                 else:
                     outputLevel = "interval"
-                outputType = "decimal"
-                outputLength = 8
+                    outputType = "decimal"
+                    outputLength = 8
+                outputRow = pd.Series(
+                    [name, outputLength, outputType, outputLevel],
+                    index=["name", "length", "type", "level"],
+                )
+                outputJSON = outputJSON.append([outputRow], ignore_index=True)
+        else:
+            try:
+                predictNames = inputData.columns.values.tolist()
+                isSeries = False
+            except AttributeError:
+                predictNames = [inputData.name]
+                isSeries = True
 
-            outputRow = pd.Series(
-                [name, outputLength, outputType, outputLevel],
-                index=["name", "length", "type", "level"],
-            )
-            outputJSON = outputJSON.append([outputRow], ignore_index=True)
+            # loop through all predict variables to determine their name, length,
+            # type, and level; append each to outputJSON
+            for name in predictNames:
+                if isSeries:
+                    predict = inputData
+                else:
+                    predict = inputData[name]
+                firstRow = predict.loc[predict.first_valid_index()]
+                dType = predict.dtypes.name
+                isStr = type(firstRow) is str
+
+                if isStr:
+                    outputLevel = "nominal"
+                    outputType = "string"
+                    outputLength = predict.str.len().max()
+                else:
+                    if dType == "category":
+                        outputLevel = "nominal"
+                    else:
+                        outputLevel = "interval"
+                    outputType = "decimal"
+                    outputLength = 8
+
+                outputRow = pd.Series(
+                    [name, outputLength, outputType, outputLevel],
+                    index=["name", "length", "type", "level"],
+                )
+                outputJSON = outputJSON.append([outputRow], ignore_index=True)
 
         if isInput:
             fileName = "inputVar.json"
