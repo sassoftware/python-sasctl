@@ -113,6 +113,7 @@ class ImportModel:
         isH2OModel=False,
         force=False,
         binaryString=None,
+        mlFlowDetails=None
     ):
         """Import model to SAS Model Manager using pzmm submodule.
 
@@ -172,10 +173,16 @@ class ImportModel:
             Sets whether to overwrite models with the same name upon upload. By default False.
         binaryString : string, optional
             Binary string representation of the model object. By default None.
+        mlFlowDetails : dict, optional
+            Model details from an MLFlow model. This dictionary is created by the readMLModelFile function.
+            By default None.       
         """
         # Initialize no score code or binary H2O model flags
         noScoreCode = False
         binaryModel = False
+        
+        if mlFlowDetails is None:
+            mlFlowDetails = {'serialization_format': 'pickle'} 
 
         if pyPath is None:
             pyPath = Path(zPath)
@@ -236,6 +243,7 @@ class ImportModel:
                     isH2OModel=isH2OModel,
                     isBinaryModel=binaryModel,
                     binaryString=binaryString,
+                    pickleType=mlFlowDetails['serialization_format']
                 )
                 print(
                     "Model score code was written successfully to {}.".format(
@@ -299,6 +307,7 @@ class ImportModel:
                     isH2OModel=isH2OModel,
                     isBinaryModel=binaryModel,
                     binaryString=binaryString,
+                    pickleType=mlFlowDetails['serialization_format']
                 )
                 print(
                     "Model score code was written successfully to {} and uploaded to SAS Model Manager".format(
