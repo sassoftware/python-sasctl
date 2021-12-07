@@ -4,9 +4,9 @@
 from pathlib import Path
 import json
 
-class mlflowModel:
+class MLFlowModel:
     def readMLmodelFile(self, mPath=Path.cwd()):
-        with open(mPath, 'r') as mFile:
+        with open(Path(mPath) / 'MLmodel', 'r') as mFile:
             mLines = mFile.readlines()
         
         # More verbose substring acceptance is needed for each possible model type
@@ -24,7 +24,7 @@ class mlflowModel:
                 raise ValueError('This MLFlow model type is not currently supported.')
             varList[i] = {varList[i]: mLines[index[0]].strip().split(' ')[1]}
             
-        varDict = {k: v for d in varList for k, v in d.items}
+        varDict = {k: v for d in varList for k, v in d.items()}
         varDict['mlflowPath'] = mPath
         
         indIn = [i for i, s in enumerate(mLines) if 'inputs:' in s]

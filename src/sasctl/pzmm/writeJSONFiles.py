@@ -26,11 +26,11 @@ class JSONFiles:
 
         Parameters
         ---------------
-        inputData : Dataframe or dict
+        inputData : dataframe or list of dicts
             Input dataframe containing the training data set in a
             pandas.Dataframe format. Columns are used to define predictor and
-            prediction variables (ambiguously named "predict"). Providing a dict
-            object signals that the model files are being created from an MLFlow model.
+            prediction variables (ambiguously named "predict"). Providing a list of dict
+            objects signals that the model files are being created from an MLFlow model.
         isInput : boolean
             Boolean to check if generating the input or output variable JSON.
         jPath : string, optional
@@ -38,8 +38,11 @@ class JSONFiles:
             working directory.
         """
         outputJSON = pd.DataFrame()
-        if isinstance(inputData, dict):
-            predictNames = [var["name"] for var in inputData]
+        if isinstance(inputData, list):
+            try:
+                predictNames = [var["name"] for var in inputData]
+            except KeyError:
+                predictNames = [var["type"] for var in inputData]
             for i, name in enumerate(predictNames):
                 if inputData[i]["type"] == "string":
                     isStr = True
