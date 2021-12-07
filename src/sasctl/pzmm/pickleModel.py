@@ -68,9 +68,8 @@ class PickleModel:
                 Path(mlFlowDetails["mlflowPath"]) / mlFlowDetails["model_path"]
             )
             shutil.copy(mlPicklePath, pPath)
-            Path(pPath + mlFlowDetails["model_path"]).rename(
-                Path(pPath) / (modelPrefix + ".pickle")
-            )
+            pzmmPicklePath = pPath / mlFlowDetails["model_path"]
+            pzmmPicklePath.rename(Path(pPath) / (modelPrefix + ".pickle"))
         else:
             # For non-H2O models, pickle the model object
             if not isH2OModel:
