@@ -489,7 +489,9 @@ def score{modelPrefix}({inputVarList}):
             elif not isH2OModel and isMLFlow:
                 cls.pyFile.write(
                     """\n
-    {} = prediction""".format(metrics[0])
+    {0} = prediction
+    if isinstance({0}, np.ndarray):
+        {0} = prediction.item(0)""".format(metrics[0])
                 )
 
             metricsList = ", ".join(metrics)
