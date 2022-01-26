@@ -1,0 +1,18 @@
+[
+    {
+        "role": "inputVariables",
+        "name": "inputVar.json"
+    },
+    {
+        "role": "outputVariables",
+        "name": "outputVar.json"
+    },
+    {
+        "role": "score",
+        "name": "MLFlowTest2Score.py"
+    },
+    {
+        "role": "scoreResource",
+        "name": "MLFlowTest2.pickle"
+    }
+]
