@@ -381,7 +381,14 @@ def score{modelPrefix}({inputVarList}):
                         newVarList.extend(tempVar)
             # For non-H2O models, insert the model into the provided predictMethod call
             if not isH2OModel:
-                predictMethod = predictMethod.format("_thisModelFit", "inputArray")
+                try:
+                    predictMethod = predictMethod.format("_thisModelFit", "inputArray")
+                except AttributeError:
+                    raise ValueError(
+                        "The following is not a valid model to register in this format. "
+                        + "Please verify that the appropriate arguments have been provided "
+                        + "to the import model function."
+                    )
                 cls.pyFile.write(
                     """\n
     try:
