@@ -203,18 +203,25 @@ _thisModelFit = pickle.loads(codecs.decode(binaryString.encode(), 'base64'))'''.
                     )
                 )
             elif isViya35 and isH2OModel and not isBinaryModel:
-                cls.pyFile.write(
-                    """\n
+                try:
+                    cls.pyFile.write(
+                        """\n
 with gzip.open('/models/resources/viya/{modelID}/{modelFileName}', 'r') as fileIn, open('/models/resources/viya/{
 modelID}/{modelZipFileName}', 'wb') as fileOut:
     shutil.copyfileobj(fileIn, fileOut)
 os.chmod('/models/resources/viya/{modelID}/{modelZipFileName}', 0o777)
 _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelZipFileName}')""".format(
-                        modelID=modelID,
-                        modelFileName=modelFileName,
-                        modelZipFileName=modelFileName[:-4] + "zip",
+                            modelID=modelID,
+                            modelFileName=modelFileName,
+                            modelZipFileName=modelFileName[:-4] + "zip",
+                        )
                     )
-                )
+                except AttributeError:
+                    raise ValueError(
+                        "The following is not a valid model to register in this format. "
+                        + "Please verify that the appropriate arguments have been provided "
+                        + "to the import model function."
+                    )
             elif isViya35 and not isH2OModel:
                 cls.pyFile.write(
                     """\n
