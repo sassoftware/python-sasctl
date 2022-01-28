@@ -275,7 +275,7 @@ def score{modelPrefix}({inputVarList}):
                 )
             )
             # As a check for missing model variables, run a try/except block that reattempts to load the model in as a variable
-            if binaryString is None:
+            if not isBinaryString:
                 cls.pyFile.write(
                     """\n
     try:

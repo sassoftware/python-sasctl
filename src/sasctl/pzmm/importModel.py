@@ -113,6 +113,7 @@ class ImportModel:
         isH2OModel=False,
         force=False,
         binaryString=None,
+        missingValues=False
     ):
         """Import model to SAS Model Manager using pzmm submodule.
 
@@ -172,6 +173,9 @@ class ImportModel:
             Sets whether to overwrite models with the same name upon upload. By default False.
         binaryString : string, optional
             Binary string representation of the model object. By default None.
+        missingValues : boolean, optional
+            Sets whether data used for scoring needs to go through imputation for
+            missing values before passed to the model. By default False.
         """
         # Initialize no score code or binary H2O model flags
         noScoreCode = False
@@ -236,6 +240,7 @@ class ImportModel:
                     isH2OModel=isH2OModel,
                     isBinaryModel=binaryModel,
                     binaryString=binaryString,
+                    missingValues=missingValues
                 )
                 print(
                     "Model score code was written successfully to {}.".format(
