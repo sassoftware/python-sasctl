@@ -304,6 +304,7 @@ class ImportModel:
                     isH2OModel=isH2OModel,
                     isBinaryModel=binaryModel,
                     binaryString=binaryString,
+                    missingValues=missingValues
                 )
                 print(
                     "Model score code was written successfully to {} and uploaded to SAS Model Manager".format(
