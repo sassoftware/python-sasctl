@@ -403,7 +403,7 @@ class ModelRepository(Service):
         if content_type is not None:
             files = {name: (name, file, content_type)}
         else:
-            files = {name: file.read()}
+            files = {name: file}
 
         metadata = {'role': role, 'name': name}
 
