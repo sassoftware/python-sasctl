@@ -4,17 +4,9 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-
-#!/usr/bin/env python
-# encoding: utf-8
-#
-# Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
-# SPDX-License-Identifier: Apache-2.0
-
-import six
-
 from .service import Service
 from ..core import uri_as_str
+
 
 class Concepts(Service):
     """Assigns concepts to natural language text documents according to a
@@ -23,17 +15,20 @@ class Concepts(Service):
 
     _SERVICE_ROOT = '/concepts'
 
-    def assign_concepts(self,
-                        documents,
-                        caslib=None,
-                        id_column=None,
-                        text_column=None,
-                        description=None,
-                        model=None,
-                        output_postfix=None,
-                        match_type=None,
-                        enable_facts=False,
-                        language='en'):
+    @classmethod
+    def assign_concepts(
+        cls,
+        documents,
+        caslib=None,
+        id_column=None,
+        text_column=None,
+        description=None,
+        model=None,
+        output_postfix=None,
+        match_type=None,
+        enable_facts=False,
+        language='en',
+    ):
         """Performs sentiment analysis on the input data.
 
         Creates a setiment analysis task that executes asynchronously.  There
@@ -84,28 +79,30 @@ class Concepts(Service):
         if documents is None:
             raise TypeError('`documents` cannot be None.')
 
-        if isinstance(documents, (dict, six.string_types)):
+        if isinstance(documents, (dict, str)):
             data = {
                 'inputUri': uri_as_str(documents),
                 'documentIdVariable': id_column,
                 'textVariable': text_column,
-                'version': 1
+                'version': 1,
             }
         else:
             data = {
                 'caslibUri': uri_as_str(caslib),
                 'documents': documents,
-                'version': 1
+                'version': 1,
             }
 
-        data.update({
-            'description': description,
-            'language': language,
-            'modelUri': uri_as_str(model),
-            'outputTableNamePostfix': output_postfix,
-            'matchType': match_type,
-            'enableFacts': enable_facts
-        })
+        data.update(
+            {
+                'description': description,
+                'language': language,
+                'modelUri': uri_as_str(model),
+                'outputTableNamePostfix': output_postfix,
+                'matchType': match_type,
+                'enableFacts': enable_facts,
+            }
+        )
 
         # Optional fields are not ignored if None. Explicitly remove before sending
         for k in list(data.keys()):
@@ -118,15 +115,13 @@ class Concepts(Service):
         if 'documents' in data:
             url += '#data'
             headers = {
-                'Content-Type':
-                    'application/vnd.sas.text.concepts.job.request.documents+json',
-                'Accept': 'application/vnd.sas.text.concepts.job+json'
+                'Content-Type': 'application/vnd.sas.text.concepts.job.request.documents+json',
+                'Accept': 'application/vnd.sas.text.concepts.job+json',
             }
         else:
             headers = {
-                'Content-Type':
-                    'application/vnd.sas.text.concepts.job.request+json',
-                'Accept': 'application/vnd.sas.text.concepts.job+json'
+                'Content-Type': 'application/vnd.sas.text.concepts.job.request+json',
+                'Accept': 'application/vnd.sas.text.concepts.job+json',
             }
 
-        return self.post(url, json=data, headers=headers)
+        return cls.post(url, json=data, headers=headers)

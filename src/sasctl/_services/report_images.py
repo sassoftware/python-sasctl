@@ -4,7 +4,6 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import six
 
 from .service import Service
 from ..core import RestObj
@@ -13,11 +12,7 @@ LOW = 0
 MEDIUM = 1
 HIGH = 2
 
-_LOD_VALUES = {
-    LOW: 'thumbnail',
-    MEDIUM: 'normal',
-    HIGH: 'entireSection'
-}
+_LOD_VALUES = {LOW: 'thumbnail', MEDIUM: 'normal', HIGH: 'entireSection'}
 
 
 class ReportImages(Service):
@@ -91,8 +86,9 @@ class ReportImages(Service):
         lod = lod or HIGH
 
         if lod not in _LOD_VALUES.keys():
-            raise ValueError("LOD value of '%s' is invalid.  Expected one of "
-                             "LOW, MEDIUM, HIGH.")
+            raise ValueError(
+                "LOD value of '%s' is invalid.  Expected one of " "LOW, MEDIUM, HIGH."
+            )
 
         # LOD.HIGH will render the entire section
         # If request is to render individual elements, we must reduce LOD.
@@ -108,7 +104,7 @@ class ReportImages(Service):
             selection = 'visualElements'
 
             # In the case where a single element was passed, wrap it in a list
-            if isinstance(elements, (six.string_types, dict)):
+            if isinstance(elements, (str, dict)):
                 elements = [elements]
 
             # In the case where a single tuple was passed, wrap it in a list
@@ -140,15 +136,17 @@ class ReportImages(Service):
         else:
             selection = 'perSection'
 
-        job = cls.post('/jobs#requestBody',
-                       json={
-                            'reportUri': report,
-                            'layoutType': lod,
-                            'selectionType': selection,
-                            'size': size,
-                            'specificVisualElements': formatted_elements,
-                            'sectionIndex': section
-                       })
+        job = cls.post(
+            '/jobs#requestBody',
+            json={
+                'reportUri': report,
+                'layoutType': lod,
+                'selectionType': selection,
+                'size': size,
+                'specificVisualElements': formatted_elements,
+                'sectionIndex': section,
+            },
+        )
 
         return job
 
@@ -209,12 +207,14 @@ class ReportImages(Service):
         [b'<svg>Deceased</svg>']
 
         """
-        job = cls.get_images_async(report=report, section=section,
-                                   elements=elements, size=size, lod=lod)
+        job = cls.get_images_async(
+            report=report, section=section, elements=elements, size=size, lod=lod
+        )
 
         result = cls._monitor_job(job)
 
-        images = [cls.request_link(img, 'image', format='content')
-                  for img in result.images]
+        images = [
+            cls.request_link(img, 'image', format='content') for img in result.images
+        ]
 
         return images

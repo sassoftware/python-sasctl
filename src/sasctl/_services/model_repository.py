@@ -6,14 +6,23 @@
 
 """The Model Repository service supports registering and managing models."""
 
-import six
+from warnings import warn
 
 from .service import Service
 from ..core import current_session, get, delete, sasctl_command, HTTPError
 
-FUNCTIONS = {'Analytical', 'Classification', 'Clustering', 'Forecasting',
-             'Prediction', 'Text categorization', 'Text extraction',
-             'Text sentiment', 'Text topics', 'Sentiment'}
+FUNCTIONS = {
+    'Analytical',
+    'Classification',
+    'Clustering',
+    'Forecasting',
+    'Prediction',
+    'Text categorization',
+    'Text extraction',
+    'Text sentiment',
+    'Text topics',
+    'Sentiment',
+}
 
 
 def _get_filter(x):
@@ -38,17 +47,17 @@ class ModelRepository(Service):
 
     _SERVICE_ROOT = '/modelRepository'
 
-    list_repositories, _, update_repository, \
-        delete_repository = Service._crud_funcs('/repositories', 'repository',
-                                                get_filter=_get_filter)
+    list_repositories, _, update_repository, delete_repository = Service._crud_funcs(
+        '/repositories', 'repository', get_filter=_get_filter
+    )
 
-    list_projects, get_project, update_project, \
-        delete_project = Service._crud_funcs('/projects', 'project',
-                                             get_filter=_get_filter)
+    list_projects, get_project, update_project, delete_project = Service._crud_funcs(
+        '/projects', 'project', get_filter=_get_filter
+    )
 
-    list_models, get_model, update_model, \
-        delete_model = Service._crud_funcs('/models', 'model',
-                                           get_filter=_get_filter)
+    list_models, get_model, update_model, delete_model = Service._crud_funcs(
+        '/models', 'model', get_filter=_get_filter
+    )
 
     @classmethod
     def get_astore(cls, model):
@@ -125,8 +134,10 @@ class ModelRepository(Service):
 
         if link is not None:
             scorecode_uri = link.get('href')
-            return get(scorecode_uri,
-                       headers={'Accept': 'text/vnd.sas.models.score.code.ds2package'})
+            return get(
+                scorecode_uri,
+                headers={'Accept': 'text/vnd.sas.models.score.code.ds2package'},
+            )
 
     @classmethod
     def get_model_contents(cls, model):
@@ -144,9 +155,16 @@ class ModelRepository(Service):
             The code designated as the model's score code
 
         """
-        link = cls.get_model_link(model, 'contents', refresh=True)
 
-        return cls.request_link(link, 'contents')
+        link = cls.get_model_link(model, 'contents', refresh=True)
+        contents = cls.request_link(link, 'contents')
+
+        # By default, request_link() will unwrap a length-1 list.
+        # If that happens, re-wrap so a list is always returned.
+        if isinstance(contents, list):
+            return contents
+
+        return [contents]
 
     @classmethod
     @sasctl_command('get', 'repositories')
@@ -174,7 +192,9 @@ class ModelRepository(Service):
         """
         # If the input already appears to be the requested object just
         # return it, unless a refresh of the data was explicitly requested.
-        if isinstance(repository, dict) and all(k in repository for k in ('id', 'name')):
+        if isinstance(repository, dict) and all(
+            k in repository for k in ('id', 'name')
+        ):
             if refresh:
                 repository = repository['id']
             else:
@@ -210,25 +230,29 @@ class ModelRepository(Service):
                 return result
 
     @classmethod
-    def create_model(cls, model, project,
-                     description=None,
-                     modeler=None,
-                     function=None,
-                     algorithm=None,
-                     tool=None,
-                     score_code_type=None,
-                     training_table=None,
-                     event_prob_variable=None,
-                     event_target_value=None,
-                     is_champion=False,
-                     is_challenger=False,
-                     location=None,
-                     target_variable=None,
-                     is_retrainable=False,
-                     is_immutable=False,
-                     properties=None,
-                     input_variables=None,
-                     output_variables=None):
+    def create_model(
+        cls,
+        model,
+        project,
+        description=None,
+        modeler=None,
+        function=None,
+        algorithm=None,
+        tool=None,
+        score_code_type=None,
+        training_table=None,
+        event_prob_variable=None,
+        event_target_value=None,
+        is_champion=False,
+        is_challenger=False,
+        location=None,
+        target_variable=None,
+        is_retrainable=False,
+        is_immutable=False,
+        properties=None,
+        input_variables=None,
+        output_variables=None,
+    ):
         """Create a model in an existing project or folder.
 
         Parameters
@@ -302,8 +326,7 @@ class ModelRepository(Service):
         # Use any explicitly passed parameter value first.
         # Fall back to values in the model dict.
         model['projectId'] = p['id']
-        model['modeler'] = \
-            modeler or model.get('modeler') or current_session().username
+        model['modeler'] = modeler or model.get('modeler') or current_session().username
         model['description'] = description or model.get('description')
         model['function'] = function or model.get('function')
         model['algorithm'] = algorithm or model.get('algorithm')
@@ -315,32 +338,35 @@ class ModelRepository(Service):
         elif is_challenger:
             model['role'] = 'challenger'
 
-        model.setdefault('properties', [{'name': k, 'value': v} for k, v in
-                                        properties.items()])
+        model.setdefault(
+            'properties', [{'name': k, 'value': v} for k, v in properties.items()]
+        )
         model['scoreCodeType'] = score_code_type or model.get('scoreCodeType')
         model['trainTable'] = training_table or model.get('trainTable')
-        model['classificationEventProbabilityVariableName'] = \
-            event_prob_variable \
-            or model.get('classificationEventProbabilityVariableName')
-        model['classificationTargetEventValue'] = \
-            event_target_value or model.get('classificationTargetEventValue')
+        model[
+            'classificationEventProbabilityVariableName'
+        ] = event_prob_variable or model.get(
+            'classificationEventProbabilityVariableName'
+        )
+        model['classificationTargetEventValue'] = event_target_value or model.get(
+            'classificationTargetEventValue'
+        )
         model['location'] = location or model.get('location')
-        model['targetVariable'] = \
-            target_variable or model.get('targetVariable')
+        model['targetVariable'] = target_variable or model.get('targetVariable')
         model['retrainable'] = is_retrainable or model.get('retrainable')
         model['immutable'] = is_immutable or model.get('immutable')
-        model['inputVariables'] = \
-            input_variables or model.get('inputVariables', [])
-        model['outputVariables'] = \
-            output_variables or model.get('outputVariables', [])
+        model['inputVariables'] = input_variables or model.get('inputVariables', [])
+        model['outputVariables'] = output_variables or model.get('outputVariables', [])
         model['version'] = '2'
 
-        return cls.post('/models', json=model, headers={
-            'Content-Type': 'application/vnd.sas.models.model+json'})
+        return cls.post(
+            '/models',
+            json=model,
+            headers={'Content-Type': 'application/vnd.sas.models.model+json'},
+        )
 
     @classmethod
-    def add_model_content(cls, model, file, name, role=None,
-                          content_type=None):
+    def add_model_content(cls, model, file, name, role=None, content_type=None):
         """Add additional files to the model.
 
         Parameters
@@ -371,18 +397,37 @@ class ModelRepository(Service):
             model = cls.get_model(model)
             id_ = model['id']
 
-        if content_type is None and isinstance(file, six.binary_type):
+        if content_type is None and isinstance(file, bytes):
             content_type = 'application/octet-stream'
 
         if content_type is not None:
             files = {name: (name, file, content_type)}
         else:
-            files = {name: file}
+            files = {name: file.read()}
 
         metadata = {'role': role, 'name': name}
 
-        return cls.post('/models/{}/contents'.format(id_),
-                        files=files, data=metadata)
+        # return cls.post('/models/{}/contents'.format(id_), files=files, data=metadata)
+
+        # if the file already exists, a 409 error will be returned
+        try:
+            return cls.post(
+                '/models/{}/contents'.format(id_), files=files, data=metadata
+            )
+        # delete the older duplicate model and rerun the API call
+        except HTTPError as e:
+            if e.code == 409:
+                model_contents = cls.get_model_contents(id_)
+                for item in model_contents:
+                    if item.name == name:
+                        cls.delete('/models/{}/contents/{}'.format(id_, item.id))
+                        return cls.post(
+                            '/models/{}/contents'.format(id_),
+                            files=files,
+                            data=metadata,
+                        )
+            else:
+                raise e
 
     @classmethod
     def default_repository(cls):
@@ -435,14 +480,16 @@ class ModelRepository(Service):
         project['folderId'] = repository['folderId']
 
         project.update(kwargs)
-        return cls.post('/projects', json=project,
-                        headers={
-                            'Content-Type':
-                                'application/vnd.sas.models.project+json'})
+        return cls.post(
+            '/projects',
+            json=project,
+            headers={'Content-Type': 'application/vnd.sas.models.project+json'},
+        )
 
     @classmethod
-    def import_model_from_zip(cls, name, project, file, description=None,
-                              version='latest'):
+    def import_model_from_zip(
+        cls, name, project, file, description=None, version='latest'
+    ):
         """Import a model and contents as a ZIP file into a model project.
 
         Parameters
@@ -463,22 +510,24 @@ class ModelRepository(Service):
             The API response after importing the model.
 
         """
-        project = cls.get_project(project)
+        project_info = cls.get_project(project)
 
-        if project is None:
+        if project_info is None:
             raise ValueError('Project `%s` could not be found.' % str(project))
 
         params = {'name': name,
                   'description': description,
                   'type': 'ZIP',
-                  'projectId': project.id,
+                  'projectId': project_info.id,
                   'versionOption': version}
         params = '&'.join('{}={}'.format(k, v) for k, v in params.items())
 
-        r = cls.post('/models#octetStream',
-                     data=file.read(),
-                     params=params,
-                     headers={'Content-Type': 'application/octet-stream'})
+        r = cls.post(
+            '/models#octetStream',
+            data=file.read(),
+            params=params,
+            headers={'Content-Type': 'application/octet-stream'},
+        )
         return r
 
     @classmethod
@@ -506,8 +555,7 @@ class ModelRepository(Service):
         """
         model_obj = cls.get_model(model)
         if cls.get_model_link(model_obj, 'addModelVersion') is None:
-            raise ValueError("Unable to create a new version for model '%s'"
-                             % model)
+            raise ValueError("Unable to create a new version for model '%s'" % model)
 
         option = 'minor' if minor else 'major'
 
@@ -535,8 +583,7 @@ class ModelRepository(Service):
         """
         model = cls.get_model(model)
         if cls.get_model_link(model, 'modelVersions') is None:
-            raise ValueError("Unable to retrieve versions for model '%s'"
-                             % model)
+            raise ValueError("Unable to retrieve versions for model '%s'" % model)
 
         return cls.request_link(model, 'modelVersions')
 
@@ -599,44 +646,65 @@ class ModelRepository(Service):
         """Moves a model's score resources to the Compute server.
 
         Copies all of the Python score resources for a model to the pre-defined
-        server location (/models/resources/viya/<model-UUID>/). To enable 
-        publishing and scoring, models that contain Python scoring resources 
-        need the score resource files to be copied to a set location 
+        server location (/models/resources/viya/<model-UUID>/). To enable
+        publishing and scoring, models that contain Python scoring resources
+        need the score resource files to be copied to a set location
         (/models/resources/viya/<model-UUID>/). This location is used for
         integration with Event Stream Processing and others. This request
         invokes an asynchronous call to copy the score resource files. Check
         the individual score resource uris to get the completion state:
         pending, copying, success, failure. Please review the full Model
         Manager documentation before using.
-        
+
         Parameters
         ----------
         model : str or dict
             The name or id of the model, or a dictionary representation of
             the model.
-        
+
         Returns
         -------
         RestObj or None
             JSON response detailing the API metadata
 
+        Warns
+        -----
+        UserWarning
+            If no score resources exist for the model.
+
         """
-        if cls.is_uuid(model):
-            id_ = model
-        elif isinstance(model, dict) and 'id' in model:
-            id_ = model['id']
-        else:
-            model = cls.get_model(model)
-            id_ = model['id']
-        
-        return cls.put('/models/%s/scoreResources' % id_, headers={'Accept': 'application/json'})
-    
+
+        model_obj = cls.get_model(model)
+
+        if model_obj is None:
+            raise ValueError("No model '{}' found.".format(model))
+
+        # Check if symbolic link for resource directories exists
+        try:
+            response = cls.put(
+                '/models/%s/scoreResources' % model_obj['id'],
+                headers={'Accept': 'application/json'},
+            )
+            if not response:
+                warn("No score resources found for model '{}'".format(model_obj.name))
+            return response
+        except HTTPError as e:
+            if e.code == 406:
+                raise OSError(
+                    'The SAS Viya system you are attempting to move score resources with requires an additional'
+                    + ' administrator action in order to complete. Please see the documentation at '
+                    + 'https://go.documentation.sas.com/doc/en/calcdc/3.5/calmodels/n10916nn7yro46n119nev9sb912c.htm,'
+                    + 'which details the corollary approach for configuring analytic store model files.'
+                )
+            else:
+                raise e
+
     @classmethod
     def convert_python_to_ds2(cls, model):
         """Converts a Python model to DS2
-        
+
         For SAS Viya 3.5 Python models on SAS Model Manager, wrap the Python score code in DS2
-        and convert the model score code type to DS2. Models converted in this way are not 
+        and convert the model score code type to DS2. Models converted in this way are not
         scoreable by CAS.
 
         Parameters
@@ -644,7 +712,7 @@ class ModelRepository(Service):
         model : str or dict
             The name or id of the model, or a dictionary representation of
             the model.
-            
+
         Returns
         -------
         API response
@@ -658,23 +726,23 @@ class ModelRepository(Service):
         else:
             model = cls.get_model(model)
             id_ = model['id']
-            
+
         if isinstance(model, (str, dict)):
             model = cls.get_model(id_)
-            
+
         ETag = model._headers['ETag']
         accept = 'text/vnd.sas.source.ds2'
         content = 'application/json'
-        
-        return cls.put('/models/%s/typeConversion' % id_,
-                       headers={'Accept-Item': accept,
-                                'Content-Type': content,
-                                'If-Match': ETag})
-        
+
+        return cls.put(
+            '/models/%s/typeConversion' % id_,
+            headers={'Accept-Item': accept, 'Content-Type': content, 'If-Match': ETag},
+        )
+
     @classmethod
     def get_model_details(cls, model):
         """Get model details from SAS Model Manager
-        
+
         Get model details that pertain to model properties, model metadata,
         model input, output, and target variables, and user-defined values.
 
@@ -683,7 +751,7 @@ class ModelRepository(Service):
         model : str or dict
             The name or id of the model, or a dictionary representation of
             the model.
-            
+
         Returns
         -------
         API response
@@ -697,5 +765,5 @@ class ModelRepository(Service):
         else:
             model = cls.get_model(model)
             id_ = model['id']
-            
+
         return cls.get('/models/%s' % id_)

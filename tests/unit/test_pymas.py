@@ -7,7 +7,7 @@
 from collections import OrderedDict
 
 import pytest
-from six.moves import mock
+from unittest import mock
 
 from sasctl.utils.pymas.core import build_wrapper_function, PyMAS
 from sasctl.utils.pymas.ds2 import DS2Variable
@@ -16,6 +16,7 @@ from sasctl.utils.pymas.python import ds2_variables, parse_type_hints
 
 class DummyClass:
     """Used for pickling tests."""
+
     def func(self, x1, x2):
         # type: (str, int) -> (float)
         pass
@@ -54,25 +55,43 @@ def test_from_inline():
         _ = from_inline(dummy_func)
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [[DS2Variable('x1', 'str', False),
+        assert [
+            [
+                DS2Variable('x1', 'str', False),
                 DS2Variable('x2', 'int', False),
-                DS2Variable('out1', 'float', True)]] == call_args[1]   # Variables
+                DS2Variable('out1', 'float', True),
+            ]
+        ] == call_args[
+            1
+        ]  # Variables
 
     with mock.patch('sasctl.utils.pymas.core.PyMAS', autospec=True) as mocked:
         _ = from_inline(dummy_func, input_types=int)
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [[DS2Variable('x1', 'int', False),
+        assert [
+            [
+                DS2Variable('x1', 'int', False),
                 DS2Variable('x2', 'int', False),
-                DS2Variable('result', 'float', True)]] == call_args[1]   # Variables
+                DS2Variable('result', 'float', True),
+            ]
+        ] == call_args[
+            1
+        ]  # Variables
 
     with mock.patch('sasctl.utils.pymas.core.PyMAS', autospec=True) as mocked:
         _ = from_inline(dummy_func, input_types=OrderedDict([('a', int), ('b', float)]))
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [[DS2Variable('a', 'int', False),
+        assert [
+            [
+                DS2Variable('a', 'int', False),
                 DS2Variable('b', 'double', False),
-                DS2Variable('result', 'float', True)]] == call_args[1]   # Variables
+                DS2Variable('result', 'float', True),
+            ]
+        ] == call_args[
+            1
+        ]  # Variables
 
 
 def test_from_pickle_with_func():
@@ -87,9 +106,15 @@ def test_from_pickle_with_func():
         result = from_pickle(data)
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [[DS2Variable('x1', 'str', False),
+        assert [
+            [
+                DS2Variable('x1', 'str', False),
                 DS2Variable('x2', 'int', False),
-                DS2Variable('out1', 'float', True)]] == call_args[1]   # Variables
+                DS2Variable('out1', 'float', True),
+            ]
+        ] == call_args[
+            1
+        ]  # Variables
 
     assert isinstance(result, PyMAS)
 
@@ -109,9 +134,15 @@ def test_from_pickle_with_class():
         result = from_pickle(data, 'func')
         assert 1 == mocked.call_count
         call_args = mocked.call_args[0]
-        assert [[DS2Variable('x1', 'str', False),
+        assert [
+            [
+                DS2Variable('x1', 'str', False),
                 DS2Variable('x2', 'int', False),
-                DS2Variable('out1', 'float', True)]] == call_args[1]   # Variables
+                DS2Variable('out1', 'float', True),
+            ]
+        ] == call_args[
+            1
+        ]  # Variables
 
     assert isinstance(result, PyMAS)
 
@@ -121,9 +152,11 @@ def test_build_wrapper_function():
         return a, b
 
     # Actual function inputs & DS2 variables current dont have to match.
-    result = build_wrapper_function(func, [DS2Variable('a', 'int', False),
-                                           DS2Variable('x', 'float', True)],
-                                    array_input=False)
+    result = build_wrapper_function(
+        func,
+        [DS2Variable('a', 'int', False), DS2Variable('x', 'float', True)],
+        array_input=False,
+    )
     assert isinstance(result, str)
     assert '"Output: x' in result
 
@@ -183,47 +216,59 @@ def test_ds2_int():
 
 
 def test_ds2_variables_dict_input():
-    target = [DS2Variable(name='x1', type='double', out=False),
-              DS2Variable(name='x2', type='double', out=False)]
+    target = [
+        DS2Variable(name='x1', type='double', out=False),
+        DS2Variable(name='x2', type='double', out=False),
+    ]
 
     # Standard input
-    result = ds2_variables(OrderedDict([('x1', ('double', False)), ('x2', ('double', False))]))
+    result = ds2_variables(
+        OrderedDict([('x1', ('double', False)), ('x2', ('double', False))])
+    )
     assert result == target
 
     # No return value flag
     result = ds2_variables(OrderedDict([('x1', 'double'), ('x2', 'double')]))
     assert result == target
 
+    assert [
+        DS2Variable('a', 'int', False),
+        DS2Variable('b', 'char', False),
+        DS2Variable('c', 'double', False),
+    ] == ds2_variables(OrderedDict([('a', int), ('b', str), ('c', float)]))
 
-    assert [DS2Variable('a', 'int', False),
-            DS2Variable('b', 'char', False),
-            DS2Variable('c', 'double', False)] == ds2_variables(OrderedDict([('a', int), ('b', str), ('c', float)]))
+    assert [DS2Variable('x', 'str', True)] == ds2_variables(
+        OrderedDict(x=str), output_vars=True
+    )
 
-    assert [DS2Variable('x', 'str', True)] == ds2_variables(OrderedDict(x=str), output_vars=True)
+    assert [
+        DS2Variable('a', 'int', False),
+        DS2Variable('b', 'char', False),
+        DS2Variable('x', 'double', True),
+    ] == ds2_variables(OrderedDict([('a', int), ('b', str), ('x', (float, True))]))
 
-    assert [DS2Variable('a', 'int', False),
-            DS2Variable('b', 'char', False),
-            DS2Variable('x', 'double', True)] == ds2_variables(OrderedDict([('a', int),
-                                                                            ('b', str),
-                                                                            ('x', (float, True))]))
-
-    assert [DS2Variable('a', 'uint8', False),
-            DS2Variable('b', 'uint16', False),
-            DS2Variable('c', 'uint32', False),
-            DS2Variable('d', 'uint64', False)] == ds2_variables(OrderedDict([('a', int),
-                                                                            ('b', int),
-                                                                            ('c', int),
-                                                                            ('d', int)]))
+    assert [
+        DS2Variable('a', 'uint8', False),
+        DS2Variable('b', 'uint16', False),
+        DS2Variable('c', 'uint32', False),
+        DS2Variable('d', 'uint64', False),
+    ] == ds2_variables(OrderedDict([('a', int), ('b', int), ('c', int), ('d', int)]))
 
 
 def test_ds2_variables_func_input():
-    target = [DS2Variable(name='x1', type='double', out=False),
-              DS2Variable(name='x2', type='double', out=False)]
+    target = [
+        DS2Variable(name='x1', type='double', out=False),
+        DS2Variable(name='x2', type='double', out=False),
+    ]
 
     # Only function as input
     with mock.patch('sasctl.utils.pymas.python.parse_type_hints') as mocked:
-        mocked.return_value = OrderedDict([('x1', ('double', False)), ('x2', ('double', False))])
-        result = ds2_variables(lambda x: x)     # Input function doesn't matter since response is mocked
+        mocked.return_value = OrderedDict(
+            [('x1', ('double', False)), ('x2', ('double', False))]
+        )
+        result = ds2_variables(
+            lambda x: x
+        )  # Input function doesn't matter since response is mocked
         assert 1 == mocked.call_count
     assert result == target
 
@@ -231,12 +276,14 @@ def test_ds2_variables_func_input():
 def test_ds2_variables_pandas_input():
     pd = pytest.importorskip('pandas')
 
-    target = [DS2Variable('a', 'int', False),
-              DS2Variable('b', 'char', False),
-              DS2Variable('c', 'double', False)]
+    target = [
+        DS2Variable('a', 'int', False),
+        DS2Variable('b', 'char', False),
+        DS2Variable('c', 'double', False),
+    ]
 
-    df = pd.DataFrame(dict(a=[1,2,3], b=['1', '2', '3'], c=[1., 2., 3.]))
-    df = df[['a', 'b', 'c']]    # Ensure columns are ordered correctly
+    df = pd.DataFrame(dict(a=[1, 2, 3], b=['1', '2', '3'], c=[1.0, 2.0, 3.0]))
+    df = df[['a', 'b', 'c']]  # Ensure columns are ordered correctly
 
     assert target == ds2_variables(df)
 
@@ -244,13 +291,16 @@ def test_ds2_variables_pandas_input():
 def test_ds2_variables_numpy_input():
     np = pytest.importorskip('numpy')
 
+    assert [
+        DS2Variable('var1', 'int', False),
+        DS2Variable('var2', 'int', False),
+        DS2Variable('var3', 'int', False),
+    ] == ds2_variables(np.array([1, 2, 3]))
 
-    assert [DS2Variable('var1', 'int', False),
-            DS2Variable('var2', 'int', False),
-            DS2Variable('var3', 'int', False)] == ds2_variables(np.array([1, 2, 3]))
-
-    assert [DS2Variable('var1', 'double', False),
-            DS2Variable('var2', 'double', False)] == ds2_variables(np.array([1., 2.]))
+    assert [
+        DS2Variable('var1', 'double', False),
+        DS2Variable('var2', 'double', False),
+    ] == ds2_variables(np.array([1.0, 2.0]))
 
 
 def test_parse_type_hints_source():
@@ -263,38 +313,58 @@ def test_parse_type_hints_source():
     def func1(x1, x2):
         # type: (str, int) -> (float, bool)
         pass
+
     result = parse_type_hints(func1)
-    assert result == OrderedDict([('x1', ('str', False)), ('x2', ('int', False)),
-                                   ('out1', ('float', True)), ('out2', ('bool', True))])
+    assert result == OrderedDict(
+        [
+            ('x1', ('str', False)),
+            ('x2', ('int', False)),
+            ('out1', ('float', True)),
+            ('out2', ('bool', True)),
+        ]
+    )
 
     def func2(x1, x2):
         # type: float, float -> float
         pass
+
     result = parse_type_hints(func2)
-    assert result == OrderedDict([('x1', ('float', False)), ('x2', ('float', False)), ('out1', ('float', True))])
+    assert result == OrderedDict(
+        [('x1', ('float', False)), ('x2', ('float', False)), ('out1', ('float', True))]
+    )
 
     def func3(x1, x2):
         # type: float, float -> float, int
         pass
+
     result = parse_type_hints(func3)
-    assert result == OrderedDict([('x1', ('float', False)), ('x2', ('float', False)),
-                                  ('out1', ('float', True)), ('out2', ('int', True))])
+    assert result == OrderedDict(
+        [
+            ('x1', ('float', False)),
+            ('x2', ('float', False)),
+            ('out1', ('float', True)),
+            ('out2', ('int', True)),
+        ]
+    )
 
     def func4(x1, x2):
         # type: str, int
         pass
+
     result = parse_type_hints(func4)
     assert result == OrderedDict([('x1', ('str', False)), ('x2', ('int', False))])
 
     def func5(x1, x2):
         # type: (str, int)
         pass
+
     result = parse_type_hints(func5)
     assert result == OrderedDict([('x1', ('str', False)), ('x2', ('int', False))])
 
     def func6(self, x1, x2):
         # type: (str, int)
         pass
+
     result = parse_type_hints(func6)
     assert result == OrderedDict([('x1', ('str', False)), ('x2', ('int', False))])
 
@@ -302,6 +372,7 @@ def test_parse_type_hints_source():
         def func(self, x1, x2):
             # type: (str, int)
             pass
+
     result = parse_type_hints(TestClass().func)
     assert result == OrderedDict([('x1', ('str', False)), ('x2', ('int', False))])
 
@@ -311,6 +382,7 @@ def test_type_hint_annotations():
     # To enable testing on all supported runtimes, fake the annotations by setting __annotations__ directly
     def annotated_func(x1, x2):
         pass
+
     annotated_func.__annotations__ = {'x1': int, 'x2': int}
     result = parse_type_hints(annotated_func)
     assert result == dict(x1=('int', False), x2=('int', False))
@@ -363,16 +435,19 @@ method score(
     d = py.getDouble('d');
 end;
 """
-    method = DS2PyMASMethod('mypymodule',[
-        DS2Variable('a', 'double', False),
-        DS2Variable('b', 'double', False),
-        DS2Variable('c', 'double', True),
-        DS2Variable('d', 'double', True)
-    ],
+    method = DS2PyMASMethod(
+        'mypymodule',
+        [
+            DS2Variable('a', 'double', False),
+            DS2Variable('b', 'double', False),
+            DS2Variable('c', 'double', True),
+            DS2Variable('d', 'double', True),
+        ],
         source.strip('\n'),
         return_code=True,
         return_message=False,
-        target='domath')
+        target='domath',
+    )
 
     result = method.code()
     assert target.lstrip('\n') == result
@@ -394,18 +469,19 @@ method testmethod(
 
 end;
 """
-    method = DS2BaseMethod('testmethod',
-                           [
-                               DS2Variable('a', 'double', False),
-                               DS2Variable('b', 'double', False),
-                               DS2Variable('c', 'double', True),
-                               DS2Variable('d', 'double', True)
-                           ])
+    method = DS2BaseMethod(
+        'testmethod',
+        [
+            DS2Variable('a', 'double', False),
+            DS2Variable('b', 'double', False),
+            DS2Variable('c', 'double', True),
+            DS2Variable('d', 'double', True),
+        ],
+    )
 
     result = method.code()
     assert target.lstrip('\n') == result
     assert '\t' not in result
-
 
     # Generate a method with an arbitrary body
     target = """
@@ -420,17 +496,16 @@ method testmethod(
         return
 end;
 """
-    method = DS2BaseMethod('testmethod',
-                           [
-                               DS2Variable('a', 'double', False),
-                               DS2Variable('b', 'double', False),
-                               DS2Variable('c', 'double', True),
-                               DS2Variable('d', 'double', True)
-                           ],
-                           [
-                               'if parrot.is_dead:',
-                               '    return'
-                           ])
+    method = DS2BaseMethod(
+        'testmethod',
+        [
+            DS2Variable('a', 'double', False),
+            DS2Variable('b', 'double', False),
+            DS2Variable('c', 'double', True),
+            DS2Variable('d', 'double', True),
+        ],
+        ['if parrot.is_dead:', '    return'],
+    )
 
     result = method.code()
     assert target.lstrip('\n') == result
@@ -504,7 +579,8 @@ def domath(a, b):
             ],
             source.strip('\n'),
             target='domath',
-            return_message=False)
+            return_message=False,
+        )
 
     result = package.code()
     assert target.lstrip('\n') == result
@@ -520,20 +596,28 @@ def test_bugfix_27():
     import io
     from sasctl.core import RestObj
     from sasctl.services import microanalytic_score as mas
+
     pd = pytest.importorskip('pandas')
 
-    df = pd.read_csv(io.StringIO('\n'.join([
-        u'BAD,LOAN,MORTDUE,VALUE,REASON,JOB,YOJ,DEROG,DELINQ,CLAGE,NINQ,CLNO,DEBTINC',
-        u'0,1.0,1100.0,25860.0,39025.0,HomeImp,Other,10.5,0.0,0.0,94.36666667,1.0,9.0,',
-        u'1,1.0,1300.0,70053.0,68400.0,HomeImp,Other,7.0,0.0,2.0,121.8333333,0.0,14.0,'
-    ])))
+    df = pd.read_csv(
+        io.StringIO(
+            '\n'.join(
+                [
+                    u'BAD,LOAN,MORTDUE,VALUE,REASON,JOB,YOJ,DEROG,DELINQ,CLAGE,NINQ,CLNO,DEBTINC',
+                    u'0,1.0,1100.0,25860.0,39025.0,HomeImp,Other,10.5,0.0,0.0,94.36666667,1.0,9.0,',
+                    u'1,1.0,1300.0,70053.0,68400.0,HomeImp,Other,7.0,0.0,2.0,121.8333333,0.0,14.0,',
+                ]
+            )
+        )
+    )
 
-    with mock.patch('sasctl._services.microanalytic_score.MicroAnalyticScore.get_module') as get_module:
-        get_module.return_value = RestObj({
-            'name': 'Mock Module',
-            'id': 'mockmodule'
-        })
-        with mock.patch('sasctl._services.microanalytic_score.MicroAnalyticScore.post') as post:
+    with mock.patch(
+        'sasctl._services.microanalytic_score.MicroAnalyticScore.get_module'
+    ) as get_module:
+        get_module.return_value = RestObj({'name': 'Mock Module', 'id': 'mockmodule'})
+        with mock.patch(
+            'sasctl._services.microanalytic_score.MicroAnalyticScore.post'
+        ) as post:
             x = df.iloc[0, :]
             mas.execute_module_step('module', 'step', **x)
 
@@ -582,10 +666,15 @@ def wrapper(a, b):
     return result + (msg, )
     """.rstrip()
 
-    code = build_wrapper_function(dummy_func, [DS2Variable('a', float, False),
-                                             DS2Variable('b', float, False),
-                                             DS2Variable('c', float, True)],
-                                array_input=True)
+    code = build_wrapper_function(
+        dummy_func,
+        [
+            DS2Variable('a', float, False),
+            DS2Variable('b', float, False),
+            DS2Variable('c', float, True),
+        ],
+        array_input=True,
+    )
 
     assert code == target
 
@@ -624,11 +713,16 @@ def renamed_wrapper(a, b):
     return result + (msg, )
         """.rstrip()
 
-    code = build_wrapper_function(dummy_func, [DS2Variable('a', float, False),
-                                                DS2Variable('b', float, False),
-                                                DS2Variable('c', float, True)],
-                                   array_input=True,
-                                   name='renamed_wrapper')
+    code = build_wrapper_function(
+        dummy_func,
+        [
+            DS2Variable('a', float, False),
+            DS2Variable('b', float, False),
+            DS2Variable('c', float, True),
+        ],
+        array_input=True,
+        name='renamed_wrapper',
+    )
 
     assert code == target
 
@@ -668,9 +762,14 @@ def predict(a, b):
     return result + (msg, )
         """.rstrip()
 
-    code = wrap_predict_method(dummy_func, [DS2Variable('a', float, False),
-                                                DS2Variable('b', float, False),
-                                                DS2Variable('c', float, True)])
+    code = wrap_predict_method(
+        dummy_func,
+        [
+            DS2Variable('a', float, False),
+            DS2Variable('b', float, False),
+            DS2Variable('c', float, True),
+        ],
+    )
 
     assert code == target
 
@@ -710,10 +809,13 @@ def predict_proba(a, b):
     return result + (msg, )
         """.rstrip()
 
-    code = wrap_predict_proba_method(dummy_func,
-                                     [DS2Variable('a', float, False),
-                                      DS2Variable('b', float, False),
-                                      DS2Variable('c', float, True)])
+    code = wrap_predict_proba_method(
+        dummy_func,
+        [
+            DS2Variable('a', float, False),
+            DS2Variable('b', float, False),
+            DS2Variable('c', float, True),
+        ],
+    )
 
     assert code == target
-

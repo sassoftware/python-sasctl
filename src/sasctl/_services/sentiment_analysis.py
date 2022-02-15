@@ -4,7 +4,6 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import six
 
 from .service import Service
 from ..core import uri_as_str
@@ -16,7 +15,8 @@ class SentimentAnalysis(Service):
     """
     _SERVICE_ROOT = '/sentiment'
 
-    def analyze_sentiment(self,
+    @classmethod
+    def analyze_sentiment(cls,
                           documents,
                           caslib=None,
                           id_column=None,
@@ -70,7 +70,7 @@ class SentimentAnalysis(Service):
         if documents is None:
             raise TypeError('`documents` cannot be None.')
 
-        if isinstance(documents, (dict, six.string_types)):
+        if isinstance(documents, (dict, str)):
             data = {
                 'inputUri': uri_as_str(documents),
                 'documentIdVariable': id_column,
@@ -114,4 +114,4 @@ class SentimentAnalysis(Service):
                 'Accept': 'application/vnd.sas.text.sentiment.job+json'
             }
 
-        return self.post(url, json=data, headers=headers)
+        return cls.post(url, json=data, headers=headers)

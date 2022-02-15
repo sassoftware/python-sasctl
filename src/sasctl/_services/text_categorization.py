@@ -5,10 +5,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-import six
-
 from .service import Service
 from ..core import uri_as_str
+
 
 class TextCategorization(Service):
     """Categorizes natural language text documents according to a prebuilt or
@@ -17,7 +16,8 @@ class TextCategorization(Service):
 
     _SERVICE_ROOT = '/categorization'
 
-    def categorize(self,
+    @classmethod
+    def categorize(cls,
                    documents,
                    model,
                    caslib=None,
@@ -67,42 +67,42 @@ class TextCategorization(Service):
 
         url = '/jobs'
 
-        if isinstance(documents, (dict, six.string_types)):
+        if isinstance(documents, (dict, str)):
             # Input is caslib
             data = {
                 'inputUri': uri_as_str(documents),
                 'documentIdVariable': id_column,
                 'textVariable': text_column,
-                'version': 1
+                'version': 1,
             }
             headers = {
-                'Content-Type':
-                    'application/vnd.sas.text.categorization.job.request+json',
-                'Accept': 'application/vnd.sas.text.categorization.job+json'
+                'Content-Type': 'application/vnd.sas.text.categorization.job.request+json',
+                'Accept': 'application/vnd.sas.text.categorization.job+json',
             }
         else:
             # Input is inline documents
             data = {
                 'caslibUri': uri_as_str(caslib),
                 'documents': documents,
-                'version': 1
+                'version': 1,
             }
             url += '#data'
             headers = {
-                'Content-Type':
-                    'application/vnd.sas.text.categorization.job.request.documents+json',
-                'Accept': 'application/vnd.sas.text.categorization.job+json'
+                'Content-Type': 'application/vnd.sas.text.categorization.job.request.documents+json',
+                'Accept': 'application/vnd.sas.text.categorization.job+json',
             }
 
-        data.update({
-            'description': description,
-            'modelUri': uri_as_str(model),
-            'outputTableNamePostfix': output_postfix
-        })
+        data.update(
+            {
+                'description': description,
+                'modelUri': uri_as_str(model),
+                'outputTableNamePostfix': output_postfix,
+            }
+        )
 
         # Optional fields are not ignored if None. Explicitly remove before sending
         for k in list(data.keys()):
             if data[k] is None:
                 del data[k]
 
-        return self.post(url, json=data, headers=headers)
+        return cls.post(url, json=data, headers=headers)

@@ -5,29 +5,57 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import pytest
-import six
-
-
-
-# general additive model  (gamSelect)
-# clustering        (fastKnn)
-# svdd?
-# deep neural
-# bayes net
-# factmac
-# forecast
-# text?
 
 from sasctl.utils.astore import _get_model_properties, create_files_from_astore
 
 
-BOSTON_INPUT_VARS = ('CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT')
-CANCER_INPUT_VARS = ('mean radius', 'mean texture', 'mean perimeter', 'mean area', 'mean smoothness', 'mean compactness',
-                     'mean concavity', 'mean concave points', 'mean symmetry', 'mean fractal dimension', 'radius error',
-                     'texture error', 'perimeter error', 'area error', 'smoothness error', 'compactness error', 'concavity error',
-                     'concave points error', 'symmetry error', 'fractal dimension error', 'worst radius', 'worst texture',
-                     'worst perimeter', 'worst area', 'worst smoothness', 'worst compactness', 'worst concavity',
-                     'worst concave points', 'worst symmetry', 'worst fractal dimension')
+BOSTON_INPUT_VARS = (
+    'CRIM',
+    'ZN',
+    'INDUS',
+    'CHAS',
+    'NOX',
+    'RM',
+    'AGE',
+    'DIS',
+    'RAD',
+    'TAX',
+    'PTRATIO',
+    'B',
+    'LSTAT',
+)
+CANCER_INPUT_VARS = (
+    'mean radius',
+    'mean texture',
+    'mean perimeter',
+    'mean area',
+    'mean smoothness',
+    'mean compactness',
+    'mean concavity',
+    'mean concave points',
+    'mean symmetry',
+    'mean fractal dimension',
+    'radius error',
+    'texture error',
+    'perimeter error',
+    'area error',
+    'smoothness error',
+    'compactness error',
+    'concavity error',
+    'concave points error',
+    'symmetry error',
+    'fractal dimension error',
+    'worst radius',
+    'worst texture',
+    'worst perimeter',
+    'worst area',
+    'worst smoothness',
+    'worst compactness',
+    'worst concavity',
+    'worst concave points',
+    'worst symmetry',
+    'worst fractal dimension',
+)
 IRIS_INPUT_VARS = ('SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth')
 
 
@@ -48,7 +76,7 @@ def test_glm(cas_session, boston_dataset):
         'targetVariable': 'Price',
         'scoreCodeType': 'ds2MultiType',
         'function': 'prediction',
-        'algorithm': 'Linear regression'
+        'algorithm': 'Linear regression',
     }
 
     cas_session.loadactionset('regression')
@@ -56,15 +84,15 @@ def test_glm(cas_session, boston_dataset):
 
     tbl = cas_session.upload(boston_dataset).casTable
 
-    tbl.regression.glm(target='Price',
-                       inputs=list(boston_dataset.columns[:-1]),
-                       savestate='astore')
+    tbl.regression.glm(
+        target='Price', inputs=list(boston_dataset.columns[:-1]), savestate='astore'
+    )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
     # Verify properties are set
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))
@@ -77,7 +105,7 @@ def test_logistic(cas_session, iris_dataset):
         'targetVariable': 'Species',
         'scoreCodeType': 'ds2MultiType',
         'function': 'classification',
-        'algorithm': 'Logistic regression'
+        'algorithm': 'Logistic regression',
     }
 
     cas_session.loadactionset('regression')
@@ -85,14 +113,14 @@ def test_logistic(cas_session, iris_dataset):
 
     tbl = cas_session.upload(iris_dataset).casTable
 
-    tbl.regression.logistic(target='Species',
-                                inputs=list(iris_dataset.columns[:-1]),
-                                savestate='astore')
+    tbl.regression.logistic(
+        target='Species', inputs=list(iris_dataset.columns[:-1]), savestate='astore'
+    )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))
@@ -105,7 +133,7 @@ def test_dtree_regression(cas_session, boston_dataset):
         'targetVariable': 'Price',
         'scoreCodeType': 'ds2MultiType',
         'function': 'prediction',
-        'algorithm': 'Decision tree'
+        'algorithm': 'Decision tree',
     }
 
     cas_session.loadactionset('decisiontree')
@@ -113,19 +141,18 @@ def test_dtree_regression(cas_session, boston_dataset):
 
     tbl = cas_session.upload(boston_dataset).casTable
 
-    tbl.decisiontree.dtreetrain(target='Price',
-                                inputs=list(boston_dataset.columns[:-1]),
-                                casout='tree')
+    tbl.decisiontree.dtreetrain(
+        target='Price', inputs=list(boston_dataset.columns[:-1]), casout='tree'
+    )
 
     pytest.skip('Implement.  How to get an astore?')
 
-    cas_session.decisiontree.dtreeExportModel(modelTable='tree',
-                                         casout='astore')
+    cas_session.decisiontree.dtreeExportModel(modelTable='tree', casout='astore')
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))
@@ -138,7 +165,7 @@ def test_forest_classification(cas_session, iris_dataset):
         'targetVariable': 'Species',
         'scoreCodeType': 'ds2MultiType',
         'function': 'classification',
-        'algorithm': 'Random forest'
+        'algorithm': 'Random forest',
     }
 
     cas_session.loadactionset('decisiontree')
@@ -146,14 +173,14 @@ def test_forest_classification(cas_session, iris_dataset):
 
     tbl = cas_session.upload(iris_dataset).casTable
 
-    tbl.decisiontree.foresttrain(target='Species',
-                                 inputs=list(iris_dataset.columns[:-1]),
-                                 saveState='astore')
+    tbl.decisiontree.foresttrain(
+        target='Species', inputs=list(iris_dataset.columns[:-1]), saveState='astore'
+    )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))
@@ -166,7 +193,7 @@ def test_forest_regression(cas_session, boston_dataset):
         'targetVariable': 'Price',
         'scoreCodeType': 'ds2MultiType',
         'function': 'prediction',
-        'algorithm': 'Random forest'
+        'algorithm': 'Random forest',
     }
 
     cas_session.loadactionset('decisiontree')
@@ -174,14 +201,45 @@ def test_forest_regression(cas_session, boston_dataset):
 
     tbl = cas_session.upload(boston_dataset).casTable
 
-    tbl.decisiontree.foresttrain(target='Price',
-                                 inputs=list(boston_dataset.columns[:-1]),
-                                 saveState='astore')
+    tbl.decisiontree.foresttrain(
+        target='Price', inputs=list(boston_dataset.columns[:-1]), saveState='astore'
+    )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
+        assert props[k] == v
+
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, BOSTON_INPUT_VARS)
+
+
+def test_forest_regression_with_nominals(cas_session, boston_dataset):
+    target = {
+        'tool': 'SAS Visual Data Mining and Machine Learning',
+        'targetVariable': 'Price',
+        'scoreCodeType': 'ds2MultiType',
+        'function': 'prediction',
+        'algorithm': 'Random forest',
+    }
+
+    cas_session.loadactionset('decisiontree')
+    cas_session.loadactionset('astore')
+
+    tbl = cas_session.upload(boston_dataset).casTable
+
+    tbl.decisiontree.foresttrain(
+        target='Price',
+        inputs=list(boston_dataset.columns[:-1]),
+        nominals=['chas'],
+        saveState='astore',
+    )
+
+    desc = cas_session.astore.describe(rstore='astore', epcode=True)
+    props = _get_model_properties(desc)
+
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))
@@ -195,7 +253,7 @@ def test_gradboost_binary_classification(cas_session, cancer_dataset):
         'scoreCodeType': 'ds2MultiType',
         'function': 'classification',
         'algorithm': 'Gradient boosting',
-        'targetLevel': 'binary'
+        'targetLevel': 'binary',
     }
 
     cas_session.loadactionset('decisiontree')
@@ -203,14 +261,14 @@ def test_gradboost_binary_classification(cas_session, cancer_dataset):
 
     tbl = cas_session.upload(cancer_dataset).casTable
 
-    tbl.decisiontree.gbtreetrain(target='Type',
-                                 inputs=list(cancer_dataset.columns[:-1]),
-                                 savestate='astore')
+    tbl.decisiontree.gbtreetrain(
+        target='Type', inputs=list(cancer_dataset.columns[:-1]), savestate='astore'
+    )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))
@@ -223,7 +281,7 @@ def test_gradboost_classification(cas_session, iris_dataset):
         'targetVariable': 'Species',
         'scoreCodeType': 'ds2MultiType',
         'function': 'classification',
-        'algorithm': 'Gradient boosting'
+        'algorithm': 'Gradient boosting',
     }
 
     cas_session.loadactionset('decisiontree')
@@ -231,14 +289,14 @@ def test_gradboost_classification(cas_session, iris_dataset):
 
     tbl = cas_session.upload(iris_dataset).casTable
 
-    tbl.decisiontree.gbtreetrain(target='Species',
-                                inputs=list(iris_dataset.columns[:-1]),
-                                savestate='astore')
+    tbl.decisiontree.gbtreetrain(
+        target='Species', inputs=list(iris_dataset.columns[:-1]), savestate='astore'
+    )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))
@@ -251,7 +309,7 @@ def test_gradboost_regression(cas_session, boston_dataset):
         'targetVariable': 'Price',
         'scoreCodeType': 'ds2MultiType',
         'function': 'prediction',
-        'algorithm': 'Gradient boosting'
+        'algorithm': 'Gradient boosting',
     }
 
     cas_session.loadactionset('decisiontree')
@@ -259,14 +317,45 @@ def test_gradboost_regression(cas_session, boston_dataset):
 
     tbl = cas_session.upload(boston_dataset).casTable
 
-    tbl.decisiontree.gbtreetrain(target='Price',
-                                 inputs=list(boston_dataset.columns[:-1]),
-                                 savestate='astore')
+    tbl.decisiontree.gbtreetrain(
+        target='Price', inputs=list(boston_dataset.columns[:-1]), savestate='astore'
+    )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
+        assert props[k] == v
+
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, BOSTON_INPUT_VARS)
+
+
+def test_gradboost_regression_with_nominals(cas_session, boston_dataset):
+    target = {
+        'tool': 'SAS Visual Data Mining and Machine Learning',
+        'targetVariable': 'Price',
+        'scoreCodeType': 'ds2MultiType',
+        'function': 'prediction',
+        'algorithm': 'Gradient boosting',
+    }
+
+    cas_session.loadactionset('decisiontree')
+    cas_session.loadactionset('astore')
+
+    tbl = cas_session.upload(boston_dataset).casTable
+
+    tbl.decisiontree.gbtreetrain(
+        target='Price',
+        inputs=list(boston_dataset.columns[:-1]),
+        nominals=['chas'],
+        savestate='astore',
+    )
+
+    desc = cas_session.astore.describe(rstore='astore', epcode=True)
+    props = _get_model_properties(desc)
+
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))
@@ -279,7 +368,7 @@ def test_neuralnet_regression(cas_session, boston_dataset):
         'targetVariable': 'Price',
         'scoreCodeType': 'ds2MultiType',
         'function': 'prediction',
-        'algorithm': 'Neural network'
+        'algorithm': 'Neural network',
     }
 
     cas_session.loadactionset('neuralnet')
@@ -287,20 +376,22 @@ def test_neuralnet_regression(cas_session, boston_dataset):
 
     tbl = cas_session.upload(boston_dataset).casTable
 
-    tbl.neuralNet.annTrain(target='Price',
-                           inputs=list(boston_dataset.columns[:-1]),
-                           # modelTable='network',
-                           arch='MLP',
-                           hiddens=[2],
-                           combs=['linear'],
-                           casout='network')
-                           # savestate='astore')
+    tbl.neuralNet.annTrain(
+        target='Price',
+        inputs=list(boston_dataset.columns[:-1]),
+        # modelTable='network',
+        arch='MLP',
+        hiddens=[2],
+        combs=['linear'],
+        casout='network',
+    )
+    # savestate='astore')
 
     pytest.skip('Implement.  How to get an astore?')
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))
@@ -314,7 +405,7 @@ def test_svm_classification(cas_session, cancer_dataset):
         'scoreCodeType': 'ds2MultiType',
         'function': 'classification',
         'algorithm': 'Support vector machine',
-        'targetLevel': 'binary'
+        'targetLevel': 'binary',
     }
 
     cas_session.loadactionset('svm')
@@ -322,14 +413,14 @@ def test_svm_classification(cas_session, cancer_dataset):
 
     tbl = cas_session.upload(cancer_dataset).casTable
 
-    tbl.svm.svmTrain(target='Type',
-                     inputs=list(cancer_dataset.columns[:-1]),
-                     saveState='astore')
+    tbl.svm.svmTrain(
+        target='Type', inputs=list(cancer_dataset.columns[:-1]), saveState='astore'
+    )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))
@@ -342,7 +433,7 @@ def test_svm_regression(cas_session, boston_dataset):
         'targetVariable': 'Price',
         'scoreCodeType': 'ds2MultiType',
         'function': 'prediction',
-        'algorithm': 'Support vector machine'
+        'algorithm': 'Support vector machine',
     }
 
     cas_session.loadactionset('svm')
@@ -350,14 +441,42 @@ def test_svm_regression(cas_session, boston_dataset):
 
     tbl = cas_session.upload(boston_dataset).casTable
 
-    tbl.svm.svmTrain(target='Price',
-                     inputs=list(boston_dataset.columns[:-1]),
-                     saveState='astore')
+    tbl.svm.svmTrain(
+        target='Price', inputs=list(boston_dataset.columns[:-1]), saveState='astore'
+    )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
+        assert props[k] == v
+
+    files = create_files_from_astore(cas_session.CASTable('astore'))
+    check_input_variables(files, BOSTON_INPUT_VARS)
+
+
+def test_svm_regression_with_nominals(cas_session, boston_dataset):
+    target = {
+        'tool': 'SAS Visual Data Mining and Machine Learning',
+        'targetVariable': 'Price',
+        'scoreCodeType': 'ds2MultiType',
+        'function': 'prediction',
+        'algorithm': 'Support vector machine',
+    }
+
+    cas_session.loadactionset('svm')
+    cas_session.loadactionset('astore')
+
+    tbl = cas_session.upload(boston_dataset).casTable
+
+    tbl.svm.svmTrain(
+        target='Price', inputs=list(boston_dataset.columns[:-1]), nominals=['chas'], saveState='astore'
+    )
+
+    desc = cas_session.astore.describe(rstore='astore', epcode=True)
+    props = _get_model_properties(desc)
+
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))
@@ -371,7 +490,7 @@ def test_bayesnet_binary_classification(cas_session, cancer_dataset):
         'scoreCodeType': 'ds2MultiType',
         'function': 'classification',
         'algorithm': 'Bayesian network',
-        'targetLevel': 'binary'
+        'targetLevel': 'binary',
     }
 
     cas_session.loadactionset('bayesianNetClassifier')
@@ -379,14 +498,14 @@ def test_bayesnet_binary_classification(cas_session, cancer_dataset):
 
     tbl = cas_session.upload(cancer_dataset).casTable
 
-    tbl.bayesianNetClassifier.bnet(target='Type',
-                                   inputs=list(cancer_dataset.columns[:-1]),
-                                   saveState='astore')
+    tbl.bayesianNetClassifier.bnet(
+        target='Type', inputs=list(cancer_dataset.columns[:-1]), saveState='astore'
+    )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))
@@ -399,7 +518,7 @@ def test_bayesnet_classification(cas_session, iris_dataset):
         'targetVariable': 'Species',
         'scoreCodeType': 'ds2MultiType',
         'function': 'classification',
-        'algorithm': 'Bayesian network'
+        'algorithm': 'Bayesian network',
     }
 
     cas_session.loadactionset('bayesianNetClassifier')
@@ -407,14 +526,14 @@ def test_bayesnet_classification(cas_session, iris_dataset):
 
     tbl = cas_session.upload(iris_dataset).casTable
 
-    tbl.bayesianNetClassifier.bnet(target='Species',
-                                inputs=list(iris_dataset.columns[:-1]),
-                                savestate='astore')
+    tbl.bayesianNetClassifier.bnet(
+        target='Species', inputs=list(iris_dataset.columns[:-1]), savestate='astore'
+    )
 
     desc = cas_session.astore.describe(rstore='astore', epcode=True)
     props = _get_model_properties(desc)
 
-    for k, v in six.iteritems(target):
+    for k, v in target.items():
         assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable('astore'))

@@ -8,11 +8,10 @@ import functools
 import textwrap
 import warnings
 
-import six
-
 
 class ExperimentalWarning(UserWarning):
     """Warning raised by @experimental decorator."""
+
     pass
 
 
@@ -64,7 +63,6 @@ def deprecated(reason=None, version=None, removed_in=None):
         raise ValueError('version must be specified.')
 
     def decorator(func):
-
         @functools.wraps(func)
         def _wrapper(*args, **kwargs):
             warning = '%s is deprecated since version %s' % (func.__name__, version)
@@ -77,8 +75,7 @@ def deprecated(reason=None, version=None, removed_in=None):
             if reason is not None:
                 warning = warning + '  ' + reason
 
-            warnings.warn(warning,
-                          category=DeprecationWarning, stacklevel=2)
+            warnings.warn(warning, category=DeprecationWarning, stacklevel=2)
             return func(*args, **kwargs)
 
         # Generate Sphinx deprecated directive
@@ -116,15 +113,21 @@ def experimental(func):
     func
 
     """
+
     @functools.wraps(func)
     def _wrapper(*args, **kwargs):
-        warning = '%s is experimental and may be modified or removed without warning.' % func.__name__
-        warnings.warn(warning,
-                      category=ExperimentalWarning, stacklevel=2)
+        warning = (
+            '%s is experimental and may be modified or removed without warning.'
+            % func.__name__
+        )
+        warnings.warn(warning, category=ExperimentalWarning, stacklevel=2)
         return func(*args, **kwargs)
 
-    type_ = 'class' if isinstance(func, six.class_types) else 'method'
-    directive = '.. warning:: This %s is experimental and may be modified or removed without warning.' % type_
+    type_ = 'class' if isinstance(func, type) else 'method'
+    directive = (
+        '.. warning:: This %s is experimental and may be modified or removed without warning.'
+        % type_
+    )
 
     try:
         # Insert directive into original docstring
