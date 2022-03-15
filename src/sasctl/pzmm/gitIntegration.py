@@ -352,7 +352,6 @@ class GitIntegrate:
         projectResponse = mr.get_project(project)
         project = project_exists(projectResponse, project)
         projectName = project.name
-
         # Check if project exists in git path and create it if it does not
         pPath = Path(gPath) / projectName
         if not pPath.exists():
