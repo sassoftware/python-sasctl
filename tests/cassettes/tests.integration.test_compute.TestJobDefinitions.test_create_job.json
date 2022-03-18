@@ -1,0 +1,376 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2021-09-15T21:33:06",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "62"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIyM2I3NDJhOS1jN2IyLTRkNGUtYjBlYy0xZDJhNjdjNjIwOTMiLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE2MzE3Nzc1ODcsImlhdCI6MTYzMTc0MTU4NywiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJKb25hdGhhbi5XYWxrZXJAc2FzLmNvbSIsInppZCI6InVhYSIsIm9yaWdpbiI6ImxkYXAiLCJqdGkiOiIwZDk3ZGJhMzlkODA0ZGE1ODAwNTFlZDgwNmZhZmQ2YiIsInByZXZpb3VzX2xvZ29uX3RpbWUiOjE2MzE3NDEwODY4MjQsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50X2lkIjoic2FzLmVjIiwiY2lkIjoic2FzLmVjIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoiam96d2FsIiwicmV2X3NpZyI6ImUxODA1M2MiLCJhdXRoX3RpbWUiOjE2MzE3NDE1ODYsInVzZXJfaWQiOiIyM2I3NDJhOS1jN2IyLTRkNGUtYjBlYy0xZDJhNjdjNjIwOTMifQ.EZzKmxWtQltEED6ZPlUCYs1Wfk9VxB525cceP_4MwuytgUfoC4MxY3879oc_KQngXhcFeMfj2lmyJPSadYXFILBY0lRfjZJGHyh6dUvWfrQC2vNAkN_UNbcNr7KdEAwEgEai8NG9fbPWmTtSFuQMrhulBhDedMdPXRiZIA5D3DTwu9SCM0FG9hatBOpeEx-KX-QcTHxtiQM56_GM7ds2ut6byczqhOQmdyleriGYHASZ31VcM3Xc796tZHYNO5nl6WV7SQhKRGnlBD0dXP6K9px13IOSnGXidUZQtqrdWV8xfY9lRwPdfvEm1DbM8tw7v2CATuqFI_qCBv55dN6aRQ\",\"expires_in\":35999,\"scope\":\"esvakmcorionterritoryaccess sviusrs SCR viyapython mismakeordertstval CARYEMPS SAS_Visa_TE esvanemeainstructorconsumers harrisindirectreports rdinformoptin esvakmcrenewalforecastconsumers esvakmcorionoppaccess orcoevasrv02 COESRV tksem AWSSandboxAccount01 cloudacadusers modelmanager uaa.resource otggenrnd RNDSIMSUsers openid domainemps1 gelupdates OR_RD_COE scim.read sasvspusers esvakmcriskconsumers SASAdministrators OneDriveUsers openstackusers CASDiscussion scr_us acoe_server_group scr_ci esvarndperftestconsumers esvakmcorionconsultforecastconsumers intcawebcertreq ANALYSIS cooallamer esvakmcorionriskconsumers CTRYUNITEDSTATES tisurvey gtt_users intcausers BLDGR HADOOP-DEV clients.secret esvaallempsconsumers midena SIMSEdit rdtcaccess Safari_list RDAnnounce DSCIENCE unix_r&d TACCDevelopment SAS_TE AWSsalesenableAccount csatechxchange USemps rdanncauto SIMSView Weekly_Wrap defsusers opsglobalorion DomainEmployees AWS-TAM-Call esvanemeaeduconsumers bryanharrisALLemps esvakmcorionriskaccess exnet.simsview KSA_mail_list SSODLPUsers revegyusercommunity uaa.admin clients.admin AMTX esvakmcorionconsumers AMPSX USSAS esvanemeaeduadmins Skypeplugin TSDATASTORUSERS lanpanfilter exnet.simsedit SalesXchange ORE EMINERS sas92_install techoffice COOALLSTAFF sviadms scr_edu rdengineering allamazonusers R&DUS UDSREPORTS clients.read WWMGlobalBanking atlassiangroups aideas hrsb jaredpetersonallreports BLDALL TESSAUSERS KSA_ADGroup birdrace scr_psd R&D-AAD ITatSAS orclus05 scr_og R5TH scr_ga democenterusers HADOOP-L RE_PYTHON clients.write ts-tba-test scim.write ORCLUS08_USERS\",\"jti\":\"0d97dba39d804da580051ed806fafd6b\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Wed, 15 Sep 2021 21:33:07 GMT"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=100"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2021-09-15T21:33:07",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/compute/contexts"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/compute/contexts\",\"uri\":\"/compute/contexts\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.compute.context.summary\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/compute/contexts?start=0&limit=10\",\"uri\":\"/compute/contexts?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.compute.context.summary\"},{\"method\":\"POST\",\"rel\":\"createContext\",\"href\":\"/compute/contexts\",\"uri\":\"/compute/contexts\",\"type\":\"application/vnd.sas.compute.context.request\",\"responseType\":\"application/vnd.sas.compute.context.summary\"}],\"name\":\"items\",\"accept\":\"application/vnd.sas.compute.context.summary\",\"start\":0,\"count\":7,\"items\":[{\"createdBy\":\"sas.import9\",\"id\":\"9fbc2c5f-884a-4f01-a941-6ab020d7e7de\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/compute/contexts/9fbc2c5f-884a-4f01-a941-6ab020d7e7de\",\"uri\":\"/compute/contexts/9fbc2c5f-884a-4f01-a941-6ab020d7e7de\",\"type\":\"application/vnd.sas.compute.context\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/compute/contexts/9fbc2c5f-884a-4f01-a941-6ab020d7e7de\",\"uri\":\"/compute/contexts/9fbc2c5f-884a-4f01-a941-6ab020d7e7de\",\"type\":\"application/vnd.sas.compute.context.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/compute/contexts/9fbc2c5f-884a-4f01-a941-6ab020d7e7de\",\"uri\":\"/compute/contexts/9fbc2c5f-884a-4f01-a941-6ab020d7e7de\"},{\"method\":\"POST\",\"rel\":\"createSession\",\"href\":\"/compute/contexts/9fbc2c5f-884a-4f01-a941-6ab020d7e7de/sessions\",\"uri\":\"/compute/contexts/9fbc2c5f-884a-4f01-a941-6ab020d7e7de/sessions\",\"type\":\"application/vnd.sas.compute.session.request\",\"responseType\":\"application/vnd.sas.compute.session\"}],\"version\":2,\"name\":\"Import 9 service compute context\"},{\"createdBy\":\"sas.casFormats\",\"id\":\"2cd8325f-f4ca-4c8d-8aed-90dd9ea78d0a\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/compute/contexts/2cd8325f-f4ca-4c8d-8aed-90dd9ea78d0a\",\"uri\":\"/compute/contexts/2cd8325f-f4ca-4c8d-8aed-90dd9ea78d0a\",\"type\":\"application/vnd.sas.compute.context\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/compute/contexts/2cd8325f-f4ca-4c8d-8aed-90dd9ea78d0a\",\"uri\":\"/compute/contexts/2cd8325f-f4ca-4c8d-8aed-90dd9ea78d0a\",\"type\":\"application/vnd.sas.compute.context.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/compute/contexts/2cd8325f-f4ca-4c8d-8aed-90dd9ea78d0a\",\"uri\":\"/compute/contexts/2cd8325f-f4ca-4c8d-8aed-90dd9ea78d0a\"},{\"method\":\"POST\",\"rel\":\"createSession\",\"href\":\"/compute/contexts/2cd8325f-f4ca-4c8d-8aed-90dd9ea78d0a/sessions\",\"uri\":\"/compute/contexts/2cd8325f-f4ca-4c8d-8aed-90dd9ea78d0a/sessions\",\"type\":\"application/vnd.sas.compute.session.request\",\"responseType\":\"application/vnd.sas.compute.session\"}],\"version\":2,\"name\":\"CAS Formats service compute context\"},{\"createdBy\":\"sas.SASJobExecution\",\"id\":\"a72ed0cc-9fa7-476f-9c3e-7b07b96f5636\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/compute/contexts/a72ed0cc-9fa7-476f-9c3e-7b07b96f5636\",\"uri\":\"/compute/contexts/a72ed0cc-9fa7-476f-9c3e-7b07b96f5636\",\"type\":\"application/vnd.sas.compute.context\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/compute/contexts/a72ed0cc-9fa7-476f-9c3e-7b07b96f5636\",\"uri\":\"/compute/contexts/a72ed0cc-9fa7-476f-9c3e-7b07b96f5636\",\"type\":\"application/vnd.sas.compute.context.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/compute/contexts/a72ed0cc-9fa7-476f-9c3e-7b07b96f5636\",\"uri\":\"/compute/contexts/a72ed0cc-9fa7-476f-9c3e-7b07b96f5636\"},{\"method\":\"POST\",\"rel\":\"createSession\",\"href\":\"/compute/contexts/a72ed0cc-9fa7-476f-9c3e-7b07b96f5636/sessions\",\"uri\":\"/compute/contexts/a72ed0cc-9fa7-476f-9c3e-7b07b96f5636/sessions\",\"type\":\"application/vnd.sas.compute.session.request\",\"responseType\":\"application/vnd.sas.compute.session\"}],\"version\":2,\"name\":\"SAS Job Execution compute context\"},{\"createdBy\":\"sas.modelPublish\",\"id\":\"93e83a20-d0ad-4ea7-afe1-6057eed2126b\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/compute/contexts/93e83a20-d0ad-4ea7-afe1-6057eed2126b\",\"uri\":\"/compute/contexts/93e83a20-d0ad-4ea7-afe1-6057eed2126b\",\"type\":\"application/vnd.sas.compute.context\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/compute/contexts/93e83a20-d0ad-4ea7-afe1-6057eed2126b\",\"uri\":\"/compute/contexts/93e83a20-d0ad-4ea7-afe1-6057eed2126b\",\"type\":\"application/vnd.sas.compute.context.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/compute/contexts/93e83a20-d0ad-4ea7-afe1-6057eed2126b\",\"uri\":\"/compute/contexts/93e83a20-d0ad-4ea7-afe1-6057eed2126b\"},{\"method\":\"POST\",\"rel\":\"createSession\",\"href\":\"/compute/contexts/93e83a20-d0ad-4ea7-afe1-6057eed2126b/sessions\",\"uri\":\"/compute/contexts/93e83a20-d0ad-4ea7-afe1-6057eed2126b/sessions\",\"type\":\"application/vnd.sas.compute.session.request\",\"responseType\":\"application/vnd.sas.compute.session\"}],\"version\":2,\"name\":\"SAS Model Manager compute context\"},{\"createdBy\":\"sas.SASStudioV\",\"id\":\"1f42f4d3-de57-4d72-b0b4-0057250824ab\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/compute/contexts/1f42f4d3-de57-4d72-b0b4-0057250824ab\",\"uri\":\"/compute/contexts/1f42f4d3-de57-4d72-b0b4-0057250824ab\",\"type\":\"application/vnd.sas.compute.context\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/compute/contexts/1f42f4d3-de57-4d72-b0b4-0057250824ab\",\"uri\":\"/compute/contexts/1f42f4d3-de57-4d72-b0b4-0057250824ab\",\"type\":\"application/vnd.sas.compute.context.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/compute/contexts/1f42f4d3-de57-4d72-b0b4-0057250824ab\",\"uri\":\"/compute/contexts/1f42f4d3-de57-4d72-b0b4-0057250824ab\"},{\"method\":\"POST\",\"rel\":\"createSession\",\"href\":\"/compute/contexts/1f42f4d3-de57-4d72-b0b4-0057250824ab/sessions\",\"uri\":\"/compute/contexts/1f42f4d3-de57-4d72-b0b4-0057250824ab/sessions\",\"type\":\"application/vnd.sas.compute.session.request\",\"responseType\":\"application/vnd.sas.compute.session\"}],\"version\":2,\"name\":\"SAS Studio compute context\"},{\"createdBy\":\"sas.dataMining\",\"id\":\"073b25d4-3107-4b67-b727-1c0253027a80\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/compute/contexts/073b25d4-3107-4b67-b727-1c0253027a80\",\"uri\":\"/compute/contexts/073b25d4-3107-4b67-b727-1c0253027a80\",\"type\":\"application/vnd.sas.compute.context\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/compute/contexts/073b25d4-3107-4b67-b727-1c0253027a80\",\"uri\":\"/compute/contexts/073b25d4-3107-4b67-b727-1c0253027a80\",\"type\":\"application/vnd.sas.compute.context.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/compute/contexts/073b25d4-3107-4b67-b727-1c0253027a80\",\"uri\":\"/compute/contexts/073b25d4-3107-4b67-b727-1c0253027a80\"},{\"method\":\"POST\",\"rel\":\"createSession\",\"href\":\"/compute/contexts/073b25d4-3107-4b67-b727-1c0253027a80/sessions\",\"uri\":\"/compute/contexts/073b25d4-3107-4b67-b727-1c0253027a80/sessions\",\"type\":\"application/vnd.sas.compute.session.request\",\"responseType\":\"application/vnd.sas.compute.session\"}],\"version\":2,\"name\":\"Data Mining compute context\"},{\"createdBy\":\"sas.forecastingGateway\",\"id\":\"31c1321a-9b12-4369-93ed-b461d6331d03\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/compute/contexts/31c1321a-9b12-4369-93ed-b461d6331d03\",\"uri\":\"/compute/contexts/31c1321a-9b12-4369-93ed-b461d6331d03\",\"type\":\"application/vnd.sas.compute.context\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/compute/contexts/31c1321a-9b12-4369-93ed-b461d6331d03\",\"uri\":\"/compute/contexts/31c1321a-9b12-4369-93ed-b461d6331d03\",\"type\":\"application/vnd.sas.compute.context.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/compute/contexts/31c1321a-9b12-4369-93ed-b461d6331d03\",\"uri\":\"/compute/contexts/31c1321a-9b12-4369-93ed-b461d6331d03\"},{\"method\":\"POST\",\"rel\":\"createSession\",\"href\":\"/compute/contexts/31c1321a-9b12-4369-93ed-b461d6331d03/sessions\",\"uri\":\"/compute/contexts/31c1321a-9b12-4369-93ed-b461d6331d03/sessions\",\"type\":\"application/vnd.sas.compute.session.request\",\"responseType\":\"application/vnd.sas.compute.session\"}],\"version\":2,\"name\":\"SAS Visual Forecasting compute context\"}],\"limit\":10,\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json;charset=UTF-8"
+          ],
+          "Date": [
+            "Wed, 15 Sep 2021 21:33:07 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=99"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/compute/contexts"
+      }
+    },
+    {
+      "recorded_at": "2021-09-15T21:33:08",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/compute/contexts/9fbc2c5f-884a-4f01-a941-6ab020d7e7de/sessions"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"owner\":\"USERNAME\",\"state\":\"pending\",\"attributes\":{\"homeDirectory\":\"/opt/sas/viya/config/var/run/compsrv/default/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8\",\"sessionInactiveTimeout\":900},\"serverId\":\"d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8\",\"creationTimeStamp\":\"2021-09-15T21:33:08.000Z\",\"applicationName\":\"sas.ec\",\"sessionConditionCode\":0,\"stateElapsedTime\":0,\"id\":\"d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\",\"type\":\"application/vnd.sas.compute.session\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\",\"type\":\"application/vnd.sas.compute.session.summary\"},{\"method\":\"GET\",\"rel\":\"state\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/state\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/state\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"cancel\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/state?value=canceled\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/state?value=canceled\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\"},{\"method\":\"POST\",\"rel\":\"execute\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/jobs\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/jobs\",\"type\":\"application/vnd.sas.compute.job.request\",\"responseType\":\"application/vnd.sas.compute.job\"},{\"method\":\"GET\",\"rel\":\"jobs\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/jobs\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/jobs\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.compute.job\"},{\"method\":\"GET\",\"rel\":\"files\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/filerefs\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/filerefs\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.compute.fileref.summary\"},{\"method\":\"POST\",\"rel\":\"assign\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/filerefs\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/filerefs\",\"type\":\"application/vnd.sas.compute.fileref.request\",\"responseType\":\"application/vnd.sas.compute.fileref\"},{\"method\":\"GET\",\"rel\":\"librefs\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/data\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/data\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.compute.library.summary\"},{\"method\":\"GET\",\"rel\":\"log\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/log\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/log\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.compute.log.line\"},{\"method\":\"GET\",\"rel\":\"listing\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/listing\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/listing\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.compute.log.line\"},{\"method\":\"GET\",\"rel\":\"results\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/results\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/results\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.compute.result\"},{\"method\":\"GET\",\"rel\":\"variables\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/variables\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/variables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.compute.session.variable\"},{\"method\":\"GET\",\"rel\":\"engines\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/engines\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/engines\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.engine\"},{\"method\":\"GET\",\"rel\":\"getFiles\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/files\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/files\",\"type\":\"application/vnd.sas.compute.file.properties\"},{\"method\":\"GET\",\"rel\":\"getOption\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/options/{optionName}\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/options/{optionName}\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateOption\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/options/{optionName}\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/options/{optionName}\",\"type\":\"text/plain\",\"responseType\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"formats\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/formats\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/formats\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.format.summary\"},{\"method\":\"GET\",\"rel\":\"informats\",\"href\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/informats\",\"uri\":\"/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/informats\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.format.summary\"}],\"version\":1}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.compute.session+json; version=1"
+          ],
+          "Date": [
+            "Wed, 15 Sep 2021 21:33:08 GMT"
+          ],
+          "ETag": [
+            "\"j6a571x48z\""
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=98"
+          ],
+          "Location": [
+            "/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000"
+          ],
+          "Origin": [
+            "https://hostname.com:35273"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Public": [
+            "GET, PUT, HEAD, POST, DELETE, TRACE, OPTIONS, PATCH"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/compute/contexts/9fbc2c5f-884a-4f01-a941-6ab020d7e7de/sessions"
+      }
+    },
+    {
+      "recorded_at": "2021-09-15T21:33:08",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"version\": 3, \"name\": \"sasctl test job\", \"description\": \"Test job execution from sasctl\", \"environment\": {}, \"variables\": null, \"code\": [\"\", \"        ods html style=HTMLBlue;\", \"        proc print data=sashelp.class(OBS=5); \", \"        run; \", \"        quit;\", \"        ods html close;\", \"        \"], \"resources\": [], \"attributes\": {}}"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "336"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "python-requests/2.22.0"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/jobs"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"creationTimeStamp\":\"2021-09-15T21:33:08Z\",\"id\":\"D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\",\"links\":[{\"href\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\",\"method\":\"GET\",\"rel\":\"self\",\"type\":\"application\\/vnd.sas.compute.job\",\"uri\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\"},{\"href\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\\/state\",\"method\":\"GET\",\"rel\":\"state\",\"type\":\"text\\/plain\",\"uri\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\\/state\"},{\"href\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\\/state?value=canceled\",\"method\":\"PUT\",\"rel\":\"cancel\",\"uri\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\\/state?value=canceled\"},{\"href\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\",\"method\":\"DELETE\",\"rel\":\"delete\",\"uri\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\"},{\"href\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\\/log\",\"itemType\":\"application\\/vnd.sas.compute.log.line\",\"method\":\"GET\",\"rel\":\"log\",\"type\":\"application\\/vnd.sas.collection\",\"uri\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\\/log\"},{\"href\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\\/listing\",\"itemType\":\"application\\/vnd.sas.compute.log.line\",\"method\":\"GET\",\"rel\":\"listing\",\"type\":\"application\\/vnd.sas.collection\",\"uri\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\\/listing\"},{\"href\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\\/results\",\"itemType\":\"application\\/vnd.sas.compute.result\",\"method\":\"GET\",\"rel\":\"results\",\"type\":\"application\\/vnd.sas.collection\",\"uri\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\\/jobs\\/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA\\/results\"},{\"href\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\",\"method\":\"GET\",\"rel\":\"up\",\"type\":\"application\\/vnd.sas.compute.session\",\"uri\":\"\\/compute\\/sessions\\/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\"}],\"sessionId\":\"d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000\",\"state\":\"pending\",\"stateElapsedTime\":0,\"version\":1}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-store"
+          ],
+          "Connection": [
+            "Keep-Alive"
+          ],
+          "Content-Length": [
+            "2754"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.compute.job+json; version=1"
+          ],
+          "Date": [
+            "Wed, 15 Sep 2021 21:33:08 GMT"
+          ],
+          "ETag": [
+            "\"j6a571zq5j\""
+          ],
+          "Keep-Alive": [
+            "timeout=5, max=97"
+          ],
+          "Location": [
+            "/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/jobs/D9D29C99-7099-1D45-8760-FAD0A5EBDFDA"
+          ],
+          "Origin": [
+            "https://hostname.com:35273"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Public": [
+            "GET, PUT, HEAD, POST, DELETE, TRACE, OPTIONS, PATCH"
+          ],
+          "Server": [
+            "Apache/2.4"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000 ; includeSubDomains"
+          ],
+          "Vary": [
+            "User-Agent"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": ""
+        },
+        "url": "https://hostname.com/compute/sessions/d5dbd7dc-d84e-4535-aa1c-94c459e6eeb8-ses0000/jobs"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}
