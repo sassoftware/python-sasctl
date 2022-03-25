@@ -5,7 +5,7 @@ from msilib.schema import File
 from pathlib import Path
 from uuid import UUID
 from warnings import warn
-import shutil
+import zipfile
 from git import Repo
 import io
 
@@ -36,16 +36,25 @@ def getZippedModel(model, gPath, project=None):
         projectName = project.name
     else:
         projectName = mr.get_project(project).name
-    # Attempt to put model in project folder
-    try:
-        with open(Path(gPath) / (projectName + '/' + modelName + '.zip'), 'wb') as zFile:
-            zFile.write(modelZip)
-    # If the folder doesn't exist, create it and then put model into the project folder
-    except FileNotFoundError:
-        newDir = Path(projectName + '/')
+    # Check to see if project folder exists
+    if (Path(gPath) / projectName).exists():
+        #Check to see if model folder exists
+        if (Path(gPath) / projectName / modelName).exists():
+            with open(Path(gPath) / projectName / modelName / (modelName + '.zip'), 'wb') as zFile:
+                zFile.write(modelZip)
+        else:
+            newDir = Path(gPath) / projectName / modelName
+            newDir.mkdir(parents=True, exist_ok=True)
+            with open(Path(gPath) / projectName / modelName / (modelName + '.zip'), 'wb') as zFile:
+                zFile.write(modelZip)
+    else:
+        newDir = Path(gPath) / projectName
+        newDir.mkdir(parents=True, exist_ok=True)
+        newDir = Path(gPath) / projectName / modelName
         newDir.mkdir(parents=True, exist_ok=True)
         with open(Path(gPath) / (projectName + '/' + modelName + '.zip'), 'wb') as zFile:
             zFile.write(modelZip)
+
     return modelName, projectName
 
 def project_exists(response, project):
@@ -84,7 +93,51 @@ def project_exists(response, project):
             return response
     else:
         return response
+    
+def model_exists(project, name, force):
+    """Checks if model already exists and either raises an error or deletes the redundant model.
 
+    Parameters
+    ----------
+    project : string or dict
+        The name or id of the model project, or a dictionary representation of the project.
+    name : str or dict
+        The name of the model.
+    force : bool, optional
+        Sets whether to overwrite models with the same name upon upload.
+
+    Raises
+    ------
+    ValueError
+        Model repository API cannot overwrite an already existing model with the upload model call.
+        Alerts user of the force argument to allow multi-call API overwriting.
+    """
+    project = mr.get_project(project)
+    projectId = project["id"]
+    projectModels = mr.get("/projects/{}/models".format(projectId))
+
+    for model in projectModels:
+        # Throws a TypeError if only one model is in the project
+        try:
+            if model["name"] == name:
+                if force:
+                    mr.delete_model(model.id)
+                else:
+                    raise ValueError(
+                        "A model with the same model name exists in project {}. Include the force=True argument to overwrite models with the same name.".format(
+                            project.name
+                        )
+                    )
+        except TypeError:
+            if projectModels["name"] == name:
+                if force:
+                    mr.delete_model(projectModels.id)
+                else:
+                    raise ValueError(
+                        "A model with the same model name exists in project {}. Include the force=True argument to overwrite models with the same name.".format(
+                            project.name
+                        )
+                    )
 class GitIntegrate:
     @classmethod
     def pullViyaModel(
@@ -121,7 +174,7 @@ class GitIntegrate:
             else:
                 UUID(model)
             projectName = mr.get_model(model).projectName
-            modelName = getZippedModel(model, projectName, gPath)
+            modelName, projectName = getZippedModel(model, gPath, projectName)
         # If a name is provided instead, use the provided project name or UUID to find the correct model
         except ValueError:
             projectResponse = mr.get_project(project)
@@ -137,15 +190,16 @@ class GitIntegrate:
                 try:
                     if model["name"] == model:
                         modelId = model.id
-                        modelName = getZippedModel(modelId, projectName, gPath)
+                        modelName, projectName = getZippedModel(modelId, gPath, projectName)
                 except TypeError:
                     if projectModels["name"] == model:
                         modelId = projectModels.id
-                        modelName = getZippedModel(modelId, projectName, gPath)
+                        modelName, projectName = getZippedModel(modelId, gPath, projectName)
                         
         # Unpack the pulled down zip model and overwrite any duplicate files
         mPath = Path(gPath) / '{projectName}/{modelName}'.format(projectName=projectName, modelName=modelName)
-        shutil.unpack_archive(filename=(modelName + '.zip'), extract_dir=mPath)
+        with zipfile.ZipFile(str(mPath / (modelName + '.zip')), mode='r') as zFile:
+            zFile.extractall(str(mPath))
         
         # Delete the zip model objects in the directory to minimize confusion when uploading back to SAS Model Manager
         for zipFile in mPath.glob('*.zip'):
@@ -159,7 +213,7 @@ class GitIntegrate:
         Parameters
         ----------
         gPath : string or Path
-            Base directory of the git repository.
+            Base directory of the git repository or path which includes project and model directories.
         modelName : string, optional
             Name of model to be imported, by default None
         projectName : string, optional
@@ -167,13 +221,21 @@ class GitIntegrate:
         '''
         if modelName is None and projectName is None:
             modelDir = gPath
+            modelName = modelDir.name
+            projectName = modelDir.parent.name
         else:
             modelDir = Path(gPath) / (projectName + '/' + modelName)
         for zipFile in modelDir.glob('*.zip'):
                 zipFile.unlink()
-        shutil.make_archive(modelName, 'zip', modelDir)
-        with open(modelDir / (modelName + '.zip'), 'rb') as zFile:
+        fileNames = []
+        fileNames.extend(sorted(Path(modelDir).glob('*')))
+        with zipfile.ZipFile(str(modelDir / (modelDir.name + '.zip')), mode='w') as zFile:
+            for file in fileNames:
+                zFile.write(str(file), arcname=file.name)
+        with open(modelDir / (modelDir.name + '.zip'), 'rb') as zFile:
             zipIOFile = io.BytesIO(zFile.read())
+            # Check if model with same name already exists in project. Delete if it exists.
+            model_exists(projectName, modelName, True)
             mr.import_model_from_zip(modelName, projectName, zipIOFile)
         
     @classmethod
@@ -191,7 +253,7 @@ class GitIntegrate:
             Branch name for the remote repository, by default 'origin'
         '''
         repo = Repo(gPath)
-        repo.git.add(update=True)
+        repo.git.add(all=True)
         repo.index.commit(commitMessage)
         pushBranch = repo.remote(name=branch)
         pushBranch.push()
@@ -236,7 +298,7 @@ class GitIntegrate:
             models = [x for x in pPath.glob('*') if x.is_dir()]
             if len(models) == 0:
                 print('No models were found in project {}.'.format(projectName))
-            print('{numModels} were found in project {projectName}.'.format(numModels=len(models), projectName=projectName))
+            print('{numModels} models were found in project {projectName}.'.format(numModels=len(models), projectName=projectName))
         else:
             raise FileNotFoundError('No directory with the name {} was found in the specified git path.'.format(project))
         
@@ -275,10 +337,11 @@ class GitIntegrate:
         if modelResponse == []:
             raise FileNotFoundError('No models were found in the specified project. A new project folder ' + 
                                     'has been created if it did not already exist within the git repository.')        
-        modelNames, modelId = []*2
-        for i, model in enumerate(modelResponse):
-            modelNames[i] = model.name
-            modelId[i] = model.id
+        modelNames = []
+        modelId = []
+        for model in modelResponse:
+            modelNames.append(model.name)
+            modelId.append(model.id)
         
         # For each model, search for an appropriate model directory in the project directory and pull down the model
         for name, id in zip(modelNames, modelId):
