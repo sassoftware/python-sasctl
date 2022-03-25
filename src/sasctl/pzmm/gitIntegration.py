@@ -101,8 +101,7 @@ def project_exists(response, project):
             return response
     else:
         return response
-
-
+    
 def model_exists(project, name, force):
     """Checks if model already exists and either raises an error or deletes the redundant model.
 
@@ -369,7 +368,6 @@ class GitIntegrate:
         for model in modelResponse:
             modelNames.append(model.name)
             modelId.append(model.id)
-
         # For each model, search for an appropriate model directory in the project directory and pull down the model
         for name, id in zip(modelNames, modelId):
             mPath = pPath / name
