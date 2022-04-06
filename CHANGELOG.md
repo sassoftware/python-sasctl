@@ -1,6 +1,8 @@
 Unreleased
 ----------
- -
+**Bugfixes**
+ - Fixed an issue where `folders.create_folder()` would attempt to use root folder as parent if desired parent
+   folder wasn't found.  Now correctly handles parent folders and raises an error if folder not found.
 
 v1.6.3 (2021-09-23)
 -------------------

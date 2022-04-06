@@ -25,37 +25,43 @@ class Folders(Service):
     @classmethod
     @sasctl_command('folders', 'create')
     def create_folder(cls, name, parent=None, description=None):
-        """
+        """Create a new folder.
 
         Parameters
         ----------
         name : str
             The name of the new folder
         parent : str or dict, optional
-            The parent folder for this folder, if any.  Can be a folder name,
-            id, or dict response from `get_folder`
+            The parent folder for this folder, if any.  Can be a folder name, id, or dict response from `get_folder`.
+            If not specified, new folder will be created under root folder.
         description : str, optional
             A description of the folder
 
         Returns
         -------
+        RestObj
+            Details of newly-created folder
 
         """
         if parent is not None:
-            parent = cls.get_folder(parent)
+            parent_obj = cls.get_folder(parent)
 
-            if parent is None:
-                raise ValueError('`parent` folder does not exist')
+            parent_uri = cls.get_link(parent_obj, 'self')
+            if parent_uri is None:
+                raise ValueError("`parent` folder '%s' does not exist." % parent)
+            parent_uri = parent_uri['uri']
+        else:
+            parent_uri = None
 
         body = {
             'name': name,
             'description': description,
-            'folderType': 'folder',
-            'parentFolderUri': '/folders/folders/'+parent.id if parent else None,
+            'folderType': 'folder'
         }
 
         return cls.post(
             '/folders',
             json=body,
+            params={'parentFolderUri': parent_uri},
             headers={'Content-Type': 'application/vnd.sas.content.folder+json'},
         )
