@@ -41,13 +41,17 @@ class Folders(Service):
         -------
 
         """
-        parent = cls.get_folder(parent)
+        if parent is not None:
+            parent = cls.get_folder(parent)
+
+            if parent is None:
+                raise ValueError('`parent` folder does not exist')
 
         body = {
             'name': name,
             'description': description,
             'folderType': 'folder',
-            'parentFolderUri': parent.id if parent else None,
+            'parentFolderUri': '/folders/folders/'+parent.id if parent else None,
         }
 
         return cls.post(
