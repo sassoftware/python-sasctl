@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.model_publish &#8212; sasctl 1.6.4 documentation</title>
+    <title>sasctl._services.model_publish &#8212; sasctl 1.7.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -77,6 +77,7 @@
 <span class="kn">from</span> <span class="nn">.model_repository</span> <span class="kn">import</span> <span class="n">ModelRepository</span>
 <span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
 
+
 <div class="viewcode-block" id="ModelPublish"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish">[docs]</a><span class="k">class</span> <span class="nc">ModelPublish</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Enables publishing objects such as models to various destinations.</span>
 
@@ -84,7 +85,7 @@
 <span class="sd">    Hadoop, Teradata, or SAS Micro Analytic Service</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s1">&#39;/modelPublish&#39;</span>
+    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;/modelPublish&quot;</span>
     <span class="n">_model_repository</span> <span class="o">=</span> <span class="n">ModelRepository</span><span class="p">()</span>
 
     <span class="nd">@staticmethod</span>
@@ -107,21 +108,21 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Remove all non-word characters</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\w]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[^\w]&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
 
         <span class="c1"># Add a leading underscore if name starts with a digit</span>
-        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\d&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">name</span>
 
         <span class="k">return</span> <span class="n">name</span>
 
 <div class="viewcode-block" id="ModelPublish.list_models"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.list_models">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">list_models</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/models&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;items&#39;</span><span class="p">,</span> <span class="p">[])</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/models&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;items&quot;</span><span class="p">,</span> <span class="p">[])</span></div>
 
-    <span class="n">list_destinations</span><span class="p">,</span> <span class="n">get_destination</span><span class="p">,</span> <span class="n">update_destination</span><span class="p">,</span> \
-    <span class="n">_</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span><span class="s1">&#39;/destinations&#39;</span><span class="p">,</span>
-                                                 <span class="s1">&#39;destination&#39;</span><span class="p">)</span>
+    <span class="n">list_destinations</span><span class="p">,</span> <span class="n">get_destination</span><span class="p">,</span> <span class="n">update_destination</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span>
+        <span class="s2">&quot;/destinations&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span>
+    <span class="p">)</span>
 
     <span class="c1"># @sasctl_command(&#39;delete&#39;)</span>
 <div class="viewcode-block" id="ModelPublish.delete_destination"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.delete_destination">[docs]</a>    <span class="nd">@classmethod</span>
@@ -144,25 +145,19 @@
         <span class="n">item_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
         <span class="c1"># Try to find the item if the id can&#39;t be found</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">):</span>
             <span class="n">item</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_destination</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Object &#39;</span><span class="si">%s</span><span class="s2">&#39; not found.  Skipping delete.&quot;</span><span class="p">,</span>
-                             <span class="n">item_name</span><span class="p">)</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Object &#39;</span><span class="si">%s</span><span class="s2">&#39; not found.  Skipping delete.&quot;</span><span class="p">,</span> <span class="n">item_name</span><span class="p">)</span>
                 <span class="k">return</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;name&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
-            <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">&#39;/destinations/</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">item</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/destinations/</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">item</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="ModelPublish.publish_model"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.publish_model">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">publish_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span>
-                      <span class="n">model</span><span class="p">,</span>
-                      <span class="n">destination</span><span class="p">,</span>
-                      <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                      <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                      <span class="n">notes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">publish_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Publish a model to an existing publishing destination.</span>
 
 <span class="sd">        Parameters</span>
@@ -183,50 +178,46 @@
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">code_types</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;ds2package&#39;</span><span class="p">:</span> <span class="s1">&#39;ds2&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;datastep&#39;</span><span class="p">:</span> <span class="s1">&#39;datastep&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
-        <span class="p">}</span>
+        <span class="n">code_types</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ds2package&quot;</span><span class="p">:</span> <span class="s2">&quot;ds2&quot;</span><span class="p">,</span> <span class="s2">&quot;datastep&quot;</span><span class="p">:</span> <span class="s2">&quot;datastep&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
 
         <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model_repository</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-        <span class="n">model_uri</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model_repository</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;cls&#39;</span><span class="p">)</span>
+        <span class="n">model_uri</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model_repository</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;cls&quot;</span><span class="p">)</span>
 
         <span class="c1"># Get score code from registry if no code specified</span>
         <span class="k">if</span> <span class="n">code</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">code_link</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model_repository</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
-                                                             <span class="s1">&#39;scoreCode&#39;</span><span class="p">,</span>
-                                                             <span class="kc">True</span><span class="p">)</span>
+            <span class="n">code_link</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model_repository</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;scoreCode&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">code_link</span><span class="p">:</span>
-                <span class="n">code</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">code_link</span><span class="p">[</span><span class="s1">&#39;href&#39;</span><span class="p">])</span>
+                <span class="n">code</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">code_link</span><span class="p">[</span><span class="s2">&quot;href&quot;</span><span class="p">])</span>
 
         <span class="n">request</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">name</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
             <span class="n">notes</span><span class="o">=</span><span class="n">notes</span><span class="p">,</span>
             <span class="n">destinationName</span><span class="o">=</span><span class="n">destination</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">modelContents</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;modelName&#39;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span>
-            <span class="s1">&#39;modelId&#39;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">),</span>
-            <span class="s1">&#39;sourceUri&#39;</span><span class="p">:</span> <span class="n">model_uri</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">),</span>
-            <span class="s1">&#39;publishLevel&#39;</span><span class="p">:</span> <span class="s1">&#39;model&#39;</span><span class="p">,</span>        <span class="c1"># ?? What are the options?</span>
-            <span class="s1">&#39;codeType&#39;</span><span class="p">:</span> <span class="n">code_types</span><span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scoreCodeType&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()],</span>
-            <span class="s1">&#39;codeUri&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>          <span class="c1"># ??  Not needed if code is specified?</span>
-            <span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="n">code</span>
+            <span class="s2">&quot;modelName&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;modelId&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;sourceUri&quot;</span><span class="p">:</span> <span class="n">model_uri</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;publishLevel&quot;</span><span class="p">:</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span>  <span class="c1"># ?? What are the options?</span>
+            <span class="s2">&quot;codeType&quot;</span><span class="p">:</span> <span class="n">code_types</span><span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scoreCodeType&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()],</span>
+            <span class="s2">&quot;codeUri&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>  <span class="c1"># ??  Not needed if code is specified?</span>
+            <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="n">code</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="n">request</span><span class="p">[</span><span class="s1">&#39;modelContents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">modelContents</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/models&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">request</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
-            <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span>
-                <span class="s1">&#39;application/vnd.sas.models.publishing.request+json&#39;</span><span class="p">})</span></div>
+        <span class="n">request</span><span class="p">[</span><span class="s2">&quot;modelContents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">modelContents</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/models&quot;</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.models.publishing.request+json&quot;</span>
+            <span class="p">},</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ModelPublish.create_cas_destination"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.create_cas_destination">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">create_cas_destination</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
-                               <span class="n">library</span><span class="p">,</span>
-                               <span class="n">table</span><span class="p">,</span>
-                               <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                               <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">create_cas_destination</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">library</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define a new CAS publishing destination.</span>
 
 <span class="sd">        Parameters</span>
@@ -247,11 +238,16 @@
 <span class="sd">        RestObj</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="ow">or</span> <span class="s1">&#39;cas-shared-default&#39;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="ow">or</span> <span class="s2">&quot;cas-shared-default&quot;</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">create_destination</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cas_server</span><span class="o">=</span><span class="n">server</span><span class="p">,</span>
-                                      <span class="n">cas_library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span> <span class="n">cas_table</span><span class="o">=</span><span class="n">table</span><span class="p">,</span>
-                                      <span class="n">type_</span><span class="o">=</span><span class="s1">&#39;cas&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">create_destination</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">cas_server</span><span class="o">=</span><span class="n">server</span><span class="p">,</span>
+            <span class="n">cas_library</span><span class="o">=</span><span class="n">library</span><span class="p">,</span>
+            <span class="n">cas_table</span><span class="o">=</span><span class="n">table</span><span class="p">,</span>
+            <span class="n">type_</span><span class="o">=</span><span class="s2">&quot;cas&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ModelPublish.create_mas_destination"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.create_mas_destination">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">create_mas_destination</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -273,22 +269,25 @@
 <span class="sd">        RestObj</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">create_destination</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mas_uri</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s1">&#39;mas&#39;</span><span class="p">,</span>
-                                      <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">create_destination</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">mas_uri</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">&quot;mas&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ModelPublish.create_destination"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.create_destination">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">create_destination</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span>
-                           <span class="n">name</span><span class="p">,</span>
-                           <span class="n">type_</span><span class="p">,</span>
-                           <span class="n">cas_server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">cas_library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">cas_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">mas_uri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">hdfs_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">conf_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">database_library</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">create_destination</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="n">type_</span><span class="p">,</span>
+        <span class="n">cas_server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">cas_library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">cas_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">mas_uri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">hdfs_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">conf_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">database_library</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define a new publishing destination.</span>
 
 <span class="sd">        Parameters</span>
@@ -325,50 +324,72 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">type_</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">type_</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">type_</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;cas&#39;</span><span class="p">,</span> <span class="s1">&#39;microanalyticservice&#39;</span><span class="p">,</span> <span class="s1">&#39;mas&#39;</span><span class="p">,</span> <span class="s1">&#39;teradata&#39;</span><span class="p">,</span>
-                         <span class="s1">&#39;hadoop&#39;</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unrecognized destination type &#39;</span><span class="si">%s</span><span class="s2">&#39; specified.&quot;</span>
-                             <span class="o">%</span> <span class="n">type_</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">type_</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;cas&quot;</span><span class="p">,</span> <span class="s2">&quot;microanalyticservice&quot;</span><span class="p">,</span> <span class="s2">&quot;mas&quot;</span><span class="p">,</span> <span class="s2">&quot;teradata&quot;</span><span class="p">,</span> <span class="s2">&quot;hadoop&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unrecognized destination type &#39;</span><span class="si">%s</span><span class="s2">&#39; specified.&quot;</span> <span class="o">%</span> <span class="n">type_</span><span class="p">)</span>
 
         <span class="c1"># As of Viya 3.4 capitalization matters.</span>
-        <span class="k">if</span> <span class="n">type_</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;microanalyticservice&#39;</span><span class="p">,</span> <span class="s1">&#39;mas&#39;</span><span class="p">):</span>
-            <span class="n">type_</span> <span class="o">=</span> <span class="s1">&#39;microAnalyticService&#39;</span>
+        <span class="k">if</span> <span class="n">type_</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;microanalyticservice&quot;</span><span class="p">,</span> <span class="s2">&quot;mas&quot;</span><span class="p">):</span>
+            <span class="n">type_</span> <span class="o">=</span> <span class="s2">&quot;microAnalyticService&quot;</span>
 
-        <span class="n">request</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
-                   <span class="s1">&#39;destinationType&#39;</span><span class="p">:</span> <span class="n">type_</span><span class="p">,</span>
-                   <span class="s1">&#39;casServerName&#39;</span><span class="p">:</span> <span class="n">cas_server</span><span class="p">,</span>
-                   <span class="s1">&#39;casLibrary&#39;</span><span class="p">:</span> <span class="n">cas_library</span><span class="p">,</span>
-                   <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
-                   <span class="s1">&#39;destinationTable&#39;</span><span class="p">:</span> <span class="n">cas_table</span><span class="p">,</span>
-                   <span class="s1">&#39;databaseCasLibrary&#39;</span><span class="p">:</span> <span class="n">database_library</span><span class="p">,</span>
-                   <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">,</span>
-                   <span class="s1">&#39;hdfsDirectory&#39;</span><span class="p">:</span> <span class="n">hdfs_dir</span><span class="p">,</span>
-                   <span class="s1">&#39;configurationDirectory&#39;</span><span class="p">:</span> <span class="n">conf_dir</span><span class="p">,</span>
-                   <span class="s1">&#39;masUri&#39;</span><span class="p">:</span> <span class="n">mas_uri</span>
-                   <span class="p">}</span>
-
-        <span class="n">drop_list</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;cas&#39;</span><span class="p">:</span>
-                <span class="p">(</span><span class="s1">&#39;databaseCasLibrary&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;hdfsDirectory&#39;</span><span class="p">,</span> <span class="s1">&#39;masUri&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;configurationDirectory&#39;</span><span class="p">),</span>
-            <span class="s1">&#39;microAnalyticService&#39;</span><span class="p">:</span>
-                <span class="p">(</span><span class="s1">&#39;casServerName&#39;</span><span class="p">,</span> <span class="s1">&#39;casLibrary&#39;</span><span class="p">,</span> <span class="s1">&#39;destinationTable&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;databaseCasLibrary&#39;</span><span class="p">,</span> <span class="s1">&#39;hdfsDirectory&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;configurationDirectory&#39;</span><span class="p">),</span>
-            <span class="s1">&#39;hadoop&#39;</span><span class="p">:</span>
-                <span class="p">(</span><span class="s1">&#39;casServerName&#39;</span><span class="p">,</span> <span class="s1">&#39;casLibrary&#39;</span><span class="p">,</span> <span class="s1">&#39;destinationTable&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;databaseCasLibrary&#39;</span><span class="p">,</span> <span class="s1">&#39;masUri&#39;</span><span class="p">),</span>
-            <span class="s1">&#39;teradata&#39;</span><span class="p">:</span>
-                <span class="p">(</span><span class="s1">&#39;casServerName&#39;</span><span class="p">,</span> <span class="s1">&#39;casLibrary&#39;</span><span class="p">,</span> <span class="s1">&#39;destinationTable&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span>
-                 <span class="s1">&#39;hdfsDirectory&#39;</span><span class="p">,</span> <span class="s1">&#39;masUri&#39;</span><span class="p">,</span> <span class="s1">&#39;configurationDirectory&#39;</span><span class="p">)</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+            <span class="s2">&quot;destinationType&quot;</span><span class="p">:</span> <span class="n">type_</span><span class="p">,</span>
+            <span class="s2">&quot;casServerName&quot;</span><span class="p">:</span> <span class="n">cas_server</span><span class="p">,</span>
+            <span class="s2">&quot;casLibrary&quot;</span><span class="p">:</span> <span class="n">cas_library</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+            <span class="s2">&quot;destinationTable&quot;</span><span class="p">:</span> <span class="n">cas_table</span><span class="p">,</span>
+            <span class="s2">&quot;databaseCasLibrary&quot;</span><span class="p">:</span> <span class="n">database_library</span><span class="p">,</span>
+            <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="n">user</span><span class="p">,</span>
+            <span class="s2">&quot;hdfsDirectory&quot;</span><span class="p">:</span> <span class="n">hdfs_dir</span><span class="p">,</span>
+            <span class="s2">&quot;configurationDirectory&quot;</span><span class="p">:</span> <span class="n">conf_dir</span><span class="p">,</span>
+            <span class="s2">&quot;masUri&quot;</span><span class="p">:</span> <span class="n">mas_uri</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">drop_list</span><span class="p">[</span><span class="n">request</span><span class="p">[</span><span class="s1">&#39;destinationType&#39;</span><span class="p">]]:</span>
+        <span class="n">drop_list</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;cas&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;databaseCasLibrary&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;hdfsDirectory&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;masUri&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;configurationDirectory&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;microAnalyticService&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;casServerName&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;casLibrary&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;destinationTable&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;databaseCasLibrary&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;hdfsDirectory&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;configurationDirectory&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;hadoop&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;casServerName&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;casLibrary&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;destinationTable&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;databaseCasLibrary&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;masUri&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;teradata&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;casServerName&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;casLibrary&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;destinationTable&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;hdfsDirectory&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;masUri&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;configurationDirectory&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">drop_list</span><span class="p">[</span><span class="n">request</span><span class="p">[</span><span class="s2">&quot;destinationType&quot;</span><span class="p">]]:</span>
             <span class="n">request</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;/destinations&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">request</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
-            <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span>
-                <span class="s1">&#39;application/vnd.sas.models.publishing.destination+json&#39;</span><span class="p">})</span></div></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/destinations&quot;</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="n">request</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.models.publishing.destination+json&quot;</span>
+            <span class="p">},</span>
+        <span class="p">)</span></div></div>
 </pre></div>
 
           </div>

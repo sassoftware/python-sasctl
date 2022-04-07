@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.projects &#8212; sasctl 1.6.4 documentation</title>
+    <title>sasctl._services.projects &#8212; sasctl 1.7.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -74,10 +74,10 @@
 
 
 <div class="viewcode-block" id="Projects"><a class="viewcode-back" href="../../../api/services/projects.html#sasctl._services.projects.Projects">[docs]</a><span class="k">class</span> <span class="nc">Projects</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
-    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s1">&#39;/projects&#39;</span>
+    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;/projects&quot;</span>
 
     <span class="n">list_projects</span><span class="p">,</span> <span class="n">get_project</span><span class="p">,</span> <span class="n">update_project</span><span class="p">,</span> <span class="n">delete_project</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span>
-        <span class="s1">&#39;/projects&#39;</span><span class="p">,</span> <span class="s1">&#39;project&#39;</span>
+        <span class="s2">&quot;/projects&quot;</span><span class="p">,</span> <span class="s2">&quot;project&quot;</span>
     <span class="p">)</span>
 
 <div class="viewcode-block" id="Projects.create_project"><a class="viewcode-back" href="../../../api/services/projects.html#sasctl._services.projects.Projects.create_project">[docs]</a>    <span class="nd">@classmethod</span>
@@ -96,12 +96,12 @@
 <span class="sd">        RestObj</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">body</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span> <span class="s1">&#39;imageUri&#39;</span><span class="p">:</span> <span class="n">image</span><span class="p">}</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span> <span class="s2">&quot;imageUri&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">}</span>
 
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-            <span class="s1">&#39;/projects&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;/projects&quot;</span><span class="p">,</span>
             <span class="n">json</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
-            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/vnd.sas.project+json&#39;</span><span class="p">},</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.project+json&quot;</span><span class="p">},</span>
         <span class="p">)</span></div></div>
 </pre></div>
 

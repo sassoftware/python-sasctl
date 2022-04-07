@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.utils.pymas.core &#8212; sasctl 1.6.4 documentation</title>
+    <title>sasctl.utils.pymas.core &#8212; sasctl 1.7.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -88,9 +88,9 @@
 <span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">random_string</span>
 
 
-<div class="viewcode-block" id="build_wrapper_function"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.build_wrapper_function">[docs]</a><span class="nd">@versionchanged</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="s1">&#39;Added `name` parameter.&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="build_wrapper_function"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.build_wrapper_function">[docs]</a><span class="nd">@versionchanged</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Added `name` parameter.&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">build_wrapper_function</span><span class="p">(</span>
-    <span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">array_input</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;wrapper&#39;</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_msg</span><span class="o">=</span><span class="kc">None</span>
+    <span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">array_input</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;wrapper&quot;</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_msg</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wraps a function to ensure compatibility when called by PyMAS.</span>
 
@@ -148,10 +148,10 @@
     <span class="c1"># HELPER: SAS to python char issue where SAS char have spaces and python string does not.</span>
     <span class="c1"># NOTE: we assume SAS char always need white space to be trimmed.  This seems to match python model built so far</span>
     <span class="c1"># Note: Using this string fix to help with None or blank input situation for numerics</span>
-    <span class="n">string_input</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,)</span>
+    <span class="n">string_input</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,)</span>
     <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;char&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;char&quot;</span><span class="p">:</span>
                 <span class="n">string_input</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;        if </span><span class="si">{0}</span><span class="s2">: </span><span class="si">{0}</span><span class="s2"> = </span><span class="si">{0}</span><span class="s2">.strip()&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">name</span><span class="p">),)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">string_input</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;        if </span><span class="si">{0}</span><span class="s2"> is None: </span><span class="si">{0}</span><span class="s2"> = np.nan&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">name</span><span class="p">),)</span>
@@ -159,72 +159,72 @@
     <span class="c1"># Statement to execute the function w/ provided parameters</span>
     <span class="k">if</span> <span class="n">array_input</span><span class="p">:</span>
         <span class="n">middle</span> <span class="o">=</span> <span class="n">string_input</span> <span class="o">+</span> <span class="p">(</span>
-            <span class="s1">&#39;        input_array = np.array([</span><span class="si">{}</span><span class="s1">]).reshape((1, -1))&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+            <span class="s2">&quot;        input_array = np.array([</span><span class="si">{}</span><span class="s2">]).reshape((1, -1))&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
             <span class="p">),</span>
-            <span class="s1">&#39;        columns = [</span><span class="si">{}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="si">{0}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)),</span>
-            <span class="s1">&#39;        input_df = pd.DataFrame(data=input_array, columns=columns)&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;        result = </span><span class="si">{}</span><span class="s1">(input_df)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">),</span>
+            <span class="s2">&quot;        columns = [</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="si">{0}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)),</span>
+            <span class="s2">&quot;        input_df = pd.DataFrame(data=input_array, columns=columns)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;        result = </span><span class="si">{}</span><span class="s2">(input_df)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">),</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">func_call</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
-        <span class="n">middle</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;        result = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func_call</span><span class="p">),)</span>
+        <span class="n">func_call</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+        <span class="n">middle</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;        result = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">func_call</span><span class="p">),)</span>
 
     <span class="k">if</span> <span class="n">setup</span><span class="p">:</span>
         <span class="n">header</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">(</span><span class="s1">&#39;try:&#39;</span><span class="p">,)</span>
-            <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="s1">&#39;    &#39;</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">setup</span><span class="p">)</span>
+            <span class="p">(</span><span class="s2">&quot;try:&quot;</span><span class="p">,)</span>
+            <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="s2">&quot;    &quot;</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">setup</span><span class="p">)</span>
             <span class="o">+</span> <span class="p">(</span>
-                <span class="s1">&#39;    _compile_error = None&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;except Exception as e:&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;    _compile_error = e&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;    _compile_error = None&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;except Exception as e:&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;    _compile_error = e&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">header</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,)</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,)</span>
 
     <span class="c1"># NOTE: &#39;Output:&#39; section is required.  All return variables must be listed</span>
     <span class="c1"># separated by &#39;, &#39;</span>
     <span class="n">definition</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">header</span>
         <span class="o">+</span> <span class="p">(</span>
-            <span class="s1">&#39;def </span><span class="si">{name}</span><span class="s1">(</span><span class="si">{args}</span><span class="s1">):&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)),</span>
+            <span class="s2">&quot;def </span><span class="si">{name}</span><span class="s2">(</span><span class="si">{args}</span><span class="s2">):&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)),</span>
             <span class="s1">&#39;    &quot;Output: </span><span class="si">{}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_names</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">])</span>
+                <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_names</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;msg&quot;</span><span class="p">])</span>
                 <span class="k">if</span> <span class="n">return_msg</span>
-                <span class="k">else</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_names</span><span class="p">)</span>
+                <span class="k">else</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_names</span><span class="p">)</span>
             <span class="p">),</span>
-            <span class="s1">&#39;    result = None&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;    msg = None&#39;</span> <span class="k">if</span> <span class="n">return_msg</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;    try:&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;        global _compile_error&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;        if _compile_error is not None:&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;            raise _compile_error&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;        import numpy as np&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;        import pandas as pd&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;    result = None&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;    msg = None&quot;</span> <span class="k">if</span> <span class="n">return_msg</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;    try:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;        global _compile_error&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;        if _compile_error is not None:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;            raise _compile_error&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;        import numpy as np&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;        import pandas as pd&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="o">+</span> <span class="n">middle</span>
         <span class="o">+</span> <span class="p">(</span>
-            <span class="s1">&#39;        result = tuple(result.ravel()) if hasattr(result, &#39;</span>
+            <span class="s2">&quot;        result = tuple(result.ravel()) if hasattr(result, &quot;</span>
             <span class="s1">&#39;&quot;ravel&quot;) else tuple(result)&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;        if len(result) == 0:&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;            result = tuple(None for i in range(</span><span class="si">%s</span><span class="s1">))&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_names</span><span class="p">),</span>
+            <span class="s2">&quot;        if len(result) == 0:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;            result = tuple(None for i in range(</span><span class="si">%s</span><span class="s2">))&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_names</span><span class="p">),</span>
             <span class="s1">&#39;        elif &quot;numpy&quot; in str(type(result[0])):&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;            result = tuple(np.asscalar(i) for i in result)&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;    except Exception as e:&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;        from traceback import format_exc&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;        msg = str(e) + format_exc()&#39;</span> <span class="k">if</span> <span class="n">return_msg</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;        if result is None:&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;            result = tuple(None for i in range(</span><span class="si">%s</span><span class="s1">))&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_names</span><span class="p">),</span>
-            <span class="s1">&#39;    return result + (msg, )&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;            result = tuple(np.asscalar(i) for i in result)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;    except Exception as e:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;        from traceback import format_exc&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;        msg = str(e) + format_exc()&quot;</span> <span class="k">if</span> <span class="n">return_msg</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;        if result is None:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;            result = tuple(None for i in range(</span><span class="si">%s</span><span class="s2">))&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_names</span><span class="p">),</span>
+            <span class="s2">&quot;    return result + (msg, )&quot;</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="p">)</span>
 
-    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">definition</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">definition</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="wrap_predict_method"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.wrap_predict_method">[docs]</a><span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="wrap_predict_method"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.wrap_predict_method">[docs]</a><span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wrap_predict_method</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a PyMAS wrapper designed for Sci-kit&#39;s `.predict` methods.</span>
 
@@ -248,13 +248,13 @@
 <span class="sd">    :meth:`build_wrapper_function`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;array_input&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;predict&#39;</span><span class="p">)</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;array_input&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;predict&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">build_wrapper_function</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="wrap_predict_proba_method"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.wrap_predict_proba_method">[docs]</a><span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="wrap_predict_proba_method"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.wrap_predict_proba_method">[docs]</a><span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wrap_predict_proba_method</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a PyMAS wrapper designed for Sci-kit&#39;s `.predict_proba` methods.</span>
 
@@ -278,19 +278,19 @@
 <span class="sd">    :meth:`build_wrapper_function`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;array_input&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;predict_proba&#39;</span><span class="p">)</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;array_input&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">)</span>
 
     <span class="n">wrapper</span> <span class="o">=</span> <span class="n">build_wrapper_function</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="n">old_code</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;if result.size == 1:\s*result = np.asscalar\(result\)&#39;</span>
-    <span class="n">new_code</span> <span class="o">=</span> <span class="s1">&#39;assert result.shape[0] == 1</span><span class="se">\n</span><span class="s1">&#39;</span>
-    <span class="n">new_code</span> <span class="o">+=</span> <span class="s1">&#39;        result = tuple(result[0].tolist())&#39;</span>
+    <span class="n">old_code</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;if result.size == 1:\s*result = np.asscalar\(result\)&quot;</span>
+    <span class="n">new_code</span> <span class="o">=</span> <span class="s2">&quot;assert result.shape[0] == 1</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">new_code</span> <span class="o">+=</span> <span class="s2">&quot;        result = tuple(result[0].tolist())&quot;</span>
 
     <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">old_code</span><span class="p">,</span> <span class="n">new_code</span><span class="p">,</span> <span class="n">wrapper</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="from_inline"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_inline">[docs]</a><span class="nd">@versionchanged</span><span class="p">(</span><span class="s1">&#39;Return code and message are disabled by default.&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="from_inline"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_inline">[docs]</a><span class="nd">@versionchanged</span><span class="p">(</span><span class="s2">&quot;Return code and message are disabled by default.&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">from_inline</span><span class="p">(</span>
     <span class="n">func</span><span class="p">,</span> <span class="n">input_types</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">array_input</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_message</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
@@ -331,7 +331,7 @@
     <span class="k">return</span> <span class="n">from_pickle</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">input_types</span><span class="p">,</span> <span class="n">array_input</span><span class="p">,</span> <span class="n">return_code</span><span class="p">,</span> <span class="n">return_message</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="from_python_file"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_python_file">[docs]</a><span class="nd">@versionchanged</span><span class="p">(</span><span class="s1">&#39;Return code and message are disabled by default.&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="from_python_file"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_python_file">[docs]</a><span class="nd">@versionchanged</span><span class="p">(</span><span class="s2">&quot;Return code and message are disabled by default.&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">from_python_file</span><span class="p">(</span>
     <span class="n">file</span><span class="p">,</span>
     <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -375,7 +375,7 @@
             <span class="s2">&quot;removed completely in a future version&quot;</span>
         <span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.py&quot;</span><span class="p">)):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">{}</span><span class="s2"> does not have a .py extension.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
 
     <span class="c1"># Extract just the filename from the path</span>
@@ -393,13 +393,13 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">target_func</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Could not find a valid function named </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">func_name</span><span class="p">)</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">code</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
 
     <span class="k">return</span> <span class="n">_build_pymas</span><span class="p">(</span><span class="n">target_func</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">input_types</span><span class="p">,</span> <span class="n">array_input</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="from_pickle"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_pickle">[docs]</a><span class="nd">@versionchanged</span><span class="p">(</span><span class="s1">&#39;Return code and message are disabled by default.&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="from_pickle"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_pickle">[docs]</a><span class="nd">@versionchanged</span><span class="p">(</span><span class="s2">&quot;Return code and message are disabled by default.&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">from_pickle</span><span class="p">(</span>
     <span class="n">file</span><span class="p">,</span>
     <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -456,7 +456,7 @@
 
     <span class="c1"># Path to a pickle file</span>
     <span class="k">if</span> <span class="n">is_file_path</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">obj</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>  <span class="c1"># skipcq BAN-B301</span>
 
     <span class="c1"># The actual pickled bytes</span>
@@ -469,14 +469,14 @@
     <span class="n">pkl</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
 
     <span class="n">code</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s1">&#39;import pickle, base64&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;import pickle, base64&quot;</span><span class="p">,</span>
         <span class="c1"># Replace b&#39; with &quot; before embedding in DS2.</span>
-        <span class="s1">&#39;bytes = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkl</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;obj = pickle.loads(base64.b64decode(bytes))&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;bytes = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkl</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">),</span>
+        <span class="s2">&quot;obj = pickle.loads(base64.b64decode(bytes))&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">_build_pymas</span><span class="p">(</span>
-        <span class="n">obj</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">input_types</span><span class="p">,</span> <span class="n">array_input</span><span class="p">,</span> <span class="n">func_prefix</span><span class="o">=</span><span class="s1">&#39;obj.&#39;</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span>
+        <span class="n">obj</span><span class="p">,</span> <span class="n">func_name</span><span class="p">,</span> <span class="n">input_types</span><span class="p">,</span> <span class="n">array_input</span><span class="p">,</span> <span class="n">func_prefix</span><span class="o">=</span><span class="s2">&quot;obj.&quot;</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span>
     <span class="p">)</span></div>
 
 
@@ -517,7 +517,7 @@
         <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">func_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">func_name</span><span class="p">):</span>
             <span class="n">target_func</span> <span class="o">=</span> <span class="n">obj</span>
         <span class="k">elif</span> <span class="n">func_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Parameter `func_name` must be specified.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Parameter `func_name` must be specified.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">target_func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">func_name</span><span class="p">)</span>
 
@@ -526,13 +526,13 @@
 
         <span class="n">target_func_name</span> <span class="o">=</span> <span class="n">target_func</span><span class="o">.</span><span class="vm">__name__</span>
 
-        <span class="k">if</span> <span class="n">target_func_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;predict_proba&#39;</span><span class="p">:</span>
-            <span class="n">names</span> <span class="o">=</span> <span class="s1">&#39;P_&#39;</span>
+        <span class="k">if</span> <span class="n">target_func_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="s2">&quot;P_&quot;</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">names</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Need to create DS2Variable instances to pass to PyMAS</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">input_types</span><span class="p">,</span> <span class="s1">&#39;columns&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">input_types</span><span class="p">,</span> <span class="s2">&quot;columns&quot;</span><span class="p">):</span>
             <span class="c1"># Assuming input is a DataFrame representing model inputs.  Use to</span>
             <span class="c1"># get input variables</span>
             <span class="nb">vars</span> <span class="o">=</span> <span class="n">ds2_variables</span><span class="p">(</span><span class="n">input_types</span><span class="p">)</span>
@@ -554,7 +554,7 @@
             <span class="nb">vars</span> <span class="o">=</span> <span class="n">ds2_variables</span><span class="p">(</span><span class="n">target_func</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">vars</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">out</span><span class="p">):</span>
-            <span class="nb">vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;result&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="nb">vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;result&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;float&quot;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">target_func_name</span><span class="p">,</span> <span class="nb">vars</span>
 
@@ -611,7 +611,7 @@
                 <span class="s2">&quot;removed completely in a future version&quot;</span>
             <span class="p">)</span>
 
-        <span class="n">func_prefix</span> <span class="o">=</span> <span class="n">func_prefix</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">func_prefix</span> <span class="o">=</span> <span class="n">func_prefix</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_function</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">target_function</span> <span class="o">=</span> <span class="p">[</span><span class="n">target_function</span><span class="p">]</span>
@@ -633,9 +633,9 @@
         <span class="k">for</span> <span class="n">func</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">msg</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
             <span class="n">target_function</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">return_code</span><span class="p">,</span> <span class="n">return_msg</span>
         <span class="p">):</span>
-            <span class="n">wrapper_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">random_string</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
+            <span class="n">wrapper_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">random_string</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span>
 
-            <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;predict&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">func</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;predict&quot;</span><span class="p">:</span>
                 <span class="n">lines</span> <span class="o">=</span> <span class="n">wrap_predict_method</span><span class="p">(</span>
                     <span class="n">func_prefix</span> <span class="o">+</span> <span class="n">func</span><span class="p">,</span>
                     <span class="nb">vars</span><span class="p">,</span>
@@ -643,7 +643,7 @@
                     <span class="n">name</span><span class="o">=</span><span class="n">wrapper_names</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
                     <span class="o">**</span><span class="n">kwargs</span>
                 <span class="p">)</span>
-            <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;predict_proba&#39;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">func</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">:</span>
                 <span class="n">lines</span> <span class="o">=</span> <span class="n">wrap_predict_proba_method</span><span class="p">(</span>
                     <span class="n">func_prefix</span> <span class="o">+</span> <span class="n">func</span><span class="p">,</span>
                     <span class="nb">vars</span><span class="p">,</span>
@@ -664,15 +664,15 @@
             <span class="c1"># NOTE: add these *after* wrapper function is generated to prevent</span>
             <span class="c1"># double-counting them.</span>
             <span class="k">if</span> <span class="n">code</span><span class="p">:</span>
-                <span class="nb">vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;rc&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+                <span class="nb">vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;rc&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">msg</span><span class="p">:</span>
-                <span class="nb">vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;msg&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;char&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+                <span class="nb">vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DS2Variable</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;msg&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;char&quot;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
             <span class="c1"># Clear setup code once it&#39;s been added once.  No need to duplicate</span>
             <span class="c1"># if multiple functions are defined.</span>
             <span class="n">python_source</span> <span class="o">=</span> <span class="kc">None</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">wrapper</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">lines</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wrapper</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">lines</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="c1"># self.return_code = return_code[0]</span>
@@ -683,8 +683,8 @@
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">target_function</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">add_method</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">wrapper_names</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">variables</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
 
-<div class="viewcode-block" id="PyMAS.score_code"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.PyMAS.score_code">[docs]</a>    <span class="nd">@versionchanged</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;1.4&#39;</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Added `dest=&#39;Python&#39;` option&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">score_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;MAS&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="PyMAS.score_code"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.PyMAS.score_code">[docs]</a>    <span class="nd">@versionchanged</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.4&quot;</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Added `dest=&#39;Python&#39;` option&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">score_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;MAS&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate DS2 score code</span>
 
 <span class="sd">        Parameters</span>
@@ -709,34 +709,34 @@
         <span class="n">dest</span> <span class="o">=</span> <span class="n">dest</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
         <span class="c1"># Check for names that could result in DS2 errors.</span>
-        <span class="n">DS2_KEYWORDS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">]</span>
+        <span class="n">DS2_KEYWORDS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">DS2_KEYWORDS</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">input_table</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">==</span> <span class="n">input_table</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s1">&#39;Input table name `</span><span class="si">{}</span><span class="s1">` is a reserved term.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_table</span><span class="p">)</span>
+                    <span class="s2">&quot;Input table name `</span><span class="si">{}</span><span class="s2">` is a reserved term.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">input_table</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="k">if</span> <span class="n">output_table</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">==</span> <span class="n">output_table</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s1">&#39;Output table name `</span><span class="si">{}</span><span class="s1">` is a reserved term.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_table</span><span class="p">)</span>
+                    <span class="s2">&quot;Output table name `</span><span class="si">{}</span><span class="s2">` is a reserved term.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_table</span><span class="p">)</span>
                 <span class="p">)</span>
 
         <span class="c1"># Get package code</span>
-        <span class="n">code</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">code</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">code</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">dest</span> <span class="o">==</span> <span class="s1">&#39;EP&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dest</span> <span class="o">==</span> <span class="s2">&quot;EP&quot;</span><span class="p">:</span>
             <span class="n">code</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="p">(</span><span class="s1">&#39;data sasep.out;&#39;</span><span class="p">,)</span>
+                <span class="p">(</span><span class="s2">&quot;data sasep.out;&quot;</span><span class="p">,)</span>
                 <span class="o">+</span> <span class="n">code</span>
                 <span class="o">+</span> <span class="p">(</span>
-                    <span class="s1">&#39;   method run();&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;      set SASEP.IN;&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;   end;&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;   method term();&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;   end;&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;enddata;&#39;</span><span class="p">,</span>
+                    <span class="s2">&quot;   method run();&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;      set SASEP.IN;&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;   end;&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;   method term();&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;   end;&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;enddata;&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">dest</span> <span class="o">==</span> <span class="s1">&#39;CAS&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">dest</span> <span class="o">==</span> <span class="s2">&quot;CAS&quot;</span><span class="p">:</span>
             <span class="n">thread</span> <span class="o">=</span> <span class="n">DS2Thread</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">,</span>
                 <span class="n">input_table</span><span class="p">,</span>
@@ -747,20 +747,20 @@
 
             <span class="n">code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">thread</span><span class="p">),</span>
-                <span class="s1">&#39;data SASEP.out;&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;  dcl thread </span><span class="si">{}</span><span class="s1"> t;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
-                <span class="s1">&#39;  method run();&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;    set from t;&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;    output;&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;  end;&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;enddata;&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;data SASEP.out;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;  dcl thread </span><span class="si">{}</span><span class="s2"> t;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">thread</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                <span class="s2">&quot;  method run();&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;    set from t;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;    output;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;  end;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;enddata;&quot;</span><span class="p">,</span>
             <span class="p">)</span>
 
-        <span class="k">elif</span> <span class="n">dest</span> <span class="o">==</span> <span class="s1">&#39;PYTHON&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">dest</span> <span class="o">==</span> <span class="s2">&quot;PYTHON&quot;</span><span class="p">:</span>
             <span class="c1"># Python code return</span>
             <span class="n">code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">_python_code</span>
 
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>

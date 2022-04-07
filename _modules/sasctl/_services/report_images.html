@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.report_images &#8212; sasctl 1.6.4 documentation</title>
+    <title>sasctl._services.report_images &#8212; sasctl 1.7.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -78,7 +78,7 @@
 <span class="n">MEDIUM</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">HIGH</span> <span class="o">=</span> <span class="mi">2</span>
 
-<span class="n">_LOD_VALUES</span> <span class="o">=</span> <span class="p">{</span><span class="n">LOW</span><span class="p">:</span> <span class="s1">&#39;thumbnail&#39;</span><span class="p">,</span> <span class="n">MEDIUM</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">:</span> <span class="s1">&#39;entireSection&#39;</span><span class="p">}</span>
+<span class="n">_LOD_VALUES</span> <span class="o">=</span> <span class="p">{</span><span class="n">LOW</span><span class="p">:</span> <span class="s2">&quot;thumbnail&quot;</span><span class="p">,</span> <span class="n">MEDIUM</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">:</span> <span class="s2">&quot;entireSection&quot;</span><span class="p">}</span>
 
 
 <div class="viewcode-block" id="ReportImages"><a class="viewcode-back" href="../../../api/services/report_images.html#sasctl._services.report_images.ReportImages">[docs]</a><span class="k">class</span> <span class="nc">ReportImages</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
@@ -94,7 +94,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s1">&#39;reportImages&#39;</span>
+    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;reportImages&quot;</span>
 
     <span class="n">LOD_LOW</span> <span class="o">=</span> <span class="n">LOW</span>
     <span class="sd">&quot;&quot;&quot;Renders the content with minimal details for creating thumbnails.&quot;&quot;&quot;</span>
@@ -141,13 +141,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">):</span>
-            <span class="n">report</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="s1">&#39;self&#39;</span><span class="p">)[</span><span class="s1">&#39;uri&#39;</span><span class="p">]</span>
+            <span class="n">report</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">)[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-            <span class="n">size</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">size</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">size</span>
 
         <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">size</span> <span class="o">=</span> <span class="s1">&#39;640x480&#39;</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="s2">&quot;640x480&quot;</span>
 
         <span class="n">lod</span> <span class="o">=</span> <span class="n">lod</span> <span class="ow">or</span> <span class="n">HIGH</span>
 
@@ -167,7 +167,7 @@
         <span class="n">formatted_elements</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="n">elements</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">selection</span> <span class="o">=</span> <span class="s1">&#39;visualElements&#39;</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="s2">&quot;visualElements&quot;</span>
 
             <span class="c1"># In the case where a single element was passed, wrap it in a list</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elements</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
@@ -188,29 +188,29 @@
                     <span class="n">elem_size</span> <span class="o">=</span> <span class="n">size</span>
 
                 <span class="c1"># If element was passed as a RestObj, extract the name</span>
-                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">elem_name</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">elem_name</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">):</span>
                     <span class="n">elem_name</span> <span class="o">=</span> <span class="n">elem_name</span><span class="o">.</span><span class="n">name</span>
 
                 <span class="c1"># If size was passed as a tuple, format as string</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem_size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-                    <span class="n">elem_size</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">elem_size</span>
+                    <span class="n">elem_size</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">elem_size</span>
 
                 <span class="n">formatted_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">elem_name</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">elem_size</span><span class="p">))</span>
 
         <span class="k">elif</span> <span class="n">section</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">selection</span> <span class="o">=</span> <span class="s1">&#39;report&#39;</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="s2">&quot;report&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">selection</span> <span class="o">=</span> <span class="s1">&#39;perSection&#39;</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="s2">&quot;perSection&quot;</span>
 
         <span class="n">job</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-            <span class="s1">&#39;/jobs#requestBody&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;/jobs#requestBody&quot;</span><span class="p">,</span>
             <span class="n">json</span><span class="o">=</span><span class="p">{</span>
-                <span class="s1">&#39;reportUri&#39;</span><span class="p">:</span> <span class="n">report</span><span class="p">,</span>
-                <span class="s1">&#39;layoutType&#39;</span><span class="p">:</span> <span class="n">lod</span><span class="p">,</span>
-                <span class="s1">&#39;selectionType&#39;</span><span class="p">:</span> <span class="n">selection</span><span class="p">,</span>
-                <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
-                <span class="s1">&#39;specificVisualElements&#39;</span><span class="p">:</span> <span class="n">formatted_elements</span><span class="p">,</span>
-                <span class="s1">&#39;sectionIndex&#39;</span><span class="p">:</span> <span class="n">section</span><span class="p">,</span>
+                <span class="s2">&quot;reportUri&quot;</span><span class="p">:</span> <span class="n">report</span><span class="p">,</span>
+                <span class="s2">&quot;layoutType&quot;</span><span class="p">:</span> <span class="n">lod</span><span class="p">,</span>
+                <span class="s2">&quot;selectionType&quot;</span><span class="p">:</span> <span class="n">selection</span><span class="p">,</span>
+                <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
+                <span class="s2">&quot;specificVisualElements&quot;</span><span class="p">:</span> <span class="n">formatted_elements</span><span class="p">,</span>
+                <span class="s2">&quot;sectionIndex&quot;</span><span class="p">:</span> <span class="n">section</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">)</span>
 
@@ -280,7 +280,7 @@
         <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_monitor_job</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
 
         <span class="n">images</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;content&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">images</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;content&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">images</span>
         <span class="p">]</span>
 
         <span class="k">return</span> <span class="n">images</span></div></div>

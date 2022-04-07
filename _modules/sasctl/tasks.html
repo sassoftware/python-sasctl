@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.tasks &#8212; sasctl 1.6.4 documentation</title>
+    <title>sasctl.tasks &#8212; sasctl 1.7.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -106,27 +106,27 @@
 
 
 <span class="k">def</span> <span class="nf">_property</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)[:</span><span class="n">_PROP_NAME_MAXLEN</span><span class="p">],</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)[:</span><span class="n">_PROP_VALUE_MAXLEN</span><span class="p">]}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)[:</span><span class="n">_PROP_NAME_MAXLEN</span><span class="p">],</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)[:</span><span class="n">_PROP_VALUE_MAXLEN</span><span class="p">]}</span>
 
 
 <span class="k">def</span> <span class="nf">_sklearn_to_dict</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
     <span class="c1"># Convert Scikit-learn values to built-in Model Manager values</span>
     <span class="n">mappings</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;LogisticRegression&#39;</span><span class="p">:</span> <span class="s1">&#39;Logistic regression&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;LinearRegression&#39;</span><span class="p">:</span> <span class="s1">&#39;Linear regression&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;SVC&#39;</span><span class="p">:</span> <span class="s1">&#39;Support vector machine&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;GradientBoostingClassifier&#39;</span><span class="p">:</span> <span class="s1">&#39;Gradient boosting&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;GradientBoostingRegressor&#39;</span><span class="p">:</span> <span class="s1">&#39;Gradient boosting&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;XGBClassifier&#39;</span><span class="p">:</span> <span class="s1">&#39;Gradient boosting&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;XGBRegressor&#39;</span><span class="p">:</span> <span class="s1">&#39;Gradient boosting&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;RandomForestClassifier&#39;</span><span class="p">:</span> <span class="s1">&#39;Forest&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;DecisionTreeClassifier&#39;</span><span class="p">:</span> <span class="s1">&#39;Decision tree&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;DecisionTreeRegressor&#39;</span><span class="p">:</span> <span class="s1">&#39;Decision tree&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;classifier&#39;</span><span class="p">:</span> <span class="s1">&#39;classification&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;regressor&#39;</span><span class="p">:</span> <span class="s1">&#39;prediction&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;LogisticRegression&quot;</span><span class="p">:</span> <span class="s2">&quot;Logistic regression&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;LinearRegression&quot;</span><span class="p">:</span> <span class="s2">&quot;Linear regression&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SVC&quot;</span><span class="p">:</span> <span class="s2">&quot;Support vector machine&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GradientBoostingClassifier&quot;</span><span class="p">:</span> <span class="s2">&quot;Gradient boosting&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;GradientBoostingRegressor&quot;</span><span class="p">:</span> <span class="s2">&quot;Gradient boosting&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;XGBClassifier&quot;</span><span class="p">:</span> <span class="s2">&quot;Gradient boosting&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;XGBRegressor&quot;</span><span class="p">:</span> <span class="s2">&quot;Gradient boosting&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;RandomForestClassifier&quot;</span><span class="p">:</span> <span class="s2">&quot;Forest&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DecisionTreeClassifier&quot;</span><span class="p">:</span> <span class="s2">&quot;Decision tree&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DecisionTreeRegressor&quot;</span><span class="p">:</span> <span class="s2">&quot;Decision tree&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;classifier&quot;</span><span class="p">:</span> <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;regressor&quot;</span><span class="p">:</span> <span class="s2">&quot;prediction&quot;</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;_final_estimator&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;_final_estimator&quot;</span><span class="p">):</span>
         <span class="n">estimator</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_final_estimator</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">estimator</span> <span class="o">=</span> <span class="n">model</span>
@@ -138,12 +138,12 @@
     <span class="c1"># Standardize regression/classification terms</span>
     <span class="n">analytic_function</span> <span class="o">=</span> <span class="n">mappings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_estimator_type</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">_estimator_type</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">analytic_function</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">and</span> <span class="s1">&#39;logistic&#39;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-        <span class="n">target_level</span> <span class="o">=</span> <span class="s1">&#39;Binary&#39;</span>
-    <span class="k">elif</span> <span class="n">analytic_function</span> <span class="o">==</span> <span class="s1">&#39;prediction&#39;</span> <span class="ow">and</span> <span class="p">(</span>
-        <span class="s1">&#39;regressor&#39;</span> <span class="ow">in</span> <span class="n">estimator</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s1">&#39;regression&#39;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">analytic_function</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span> <span class="ow">and</span> <span class="s2">&quot;logistic&quot;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;Binary&quot;</span>
+    <span class="k">elif</span> <span class="n">analytic_function</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="s2">&quot;regressor&quot;</span> <span class="ow">in</span> <span class="n">estimator</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;regression&quot;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="p">):</span>
-        <span class="n">target_level</span> <span class="o">=</span> <span class="s1">&#39;Interval&#39;</span>
+        <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;Interval&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">target_level</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -151,11 +151,11 @@
     <span class="n">result</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="p">)[:</span><span class="n">_DESC_MAXLEN</span><span class="p">],</span>
         <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span>
-        <span class="n">scoreCodeType</span><span class="o">=</span><span class="s1">&#39;ds2MultiType&#39;</span><span class="p">,</span>
-        <span class="n">trainCodeType</span><span class="o">=</span><span class="s1">&#39;Python&#39;</span><span class="p">,</span>
+        <span class="n">scoreCodeType</span><span class="o">=</span><span class="s2">&quot;ds2MultiType&quot;</span><span class="p">,</span>
+        <span class="n">trainCodeType</span><span class="o">=</span><span class="s2">&quot;Python&quot;</span><span class="p">,</span>
         <span class="n">targetLevel</span><span class="o">=</span><span class="n">target_level</span><span class="p">,</span>
         <span class="n">function</span><span class="o">=</span><span class="n">analytic_function</span><span class="p">,</span>
-        <span class="n">tool</span><span class="o">=</span><span class="s1">&#39;Python </span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">minor</span><span class="p">),</span>
+        <span class="n">tool</span><span class="o">=</span><span class="s2">&quot;Python </span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">minor</span><span class="p">),</span>
         <span class="n">properties</span><span class="o">=</span><span class="p">[</span><span class="n">_property</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span>
     <span class="p">)</span>
 
@@ -183,33 +183,33 @@
 <span class="sd">    RestObj</span>
 <span class="sd">        The created project</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">model</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">model</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;targetLevel&#39;</span><span class="p">)}</span>
+    <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">model</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">model</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;targetLevel&quot;</span><span class="p">)}</span>
 
-    <span class="n">function</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;algorithm&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">function</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;algorithm&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
     <span class="c1"># Get input &amp; output variable lists</span>
     <span class="c1"># Note: copying lists to avoid altering original</span>
-    <span class="n">input_vars</span> <span class="o">=</span> <span class="n">input_vars</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inputVariables&#39;</span><span class="p">,</span> <span class="p">[])</span>
-    <span class="n">output_vars</span> <span class="o">=</span> <span class="n">output_vars</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;outputVariables&#39;</span><span class="p">,</span> <span class="p">[])[:]</span>
+    <span class="n">input_vars</span> <span class="o">=</span> <span class="n">input_vars</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;inputVariables&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">output_vars</span> <span class="o">=</span> <span class="n">output_vars</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;outputVariables&quot;</span><span class="p">,</span> <span class="p">[])[:]</span>
     <span class="n">input_vars</span> <span class="o">=</span> <span class="n">input_vars</span><span class="p">[:]</span>
     <span class="n">output_vars</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[:]</span>
 
     <span class="c1"># Set prediction or eventProbabilityVariable</span>
     <span class="k">if</span> <span class="n">output_vars</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">function</span> <span class="o">==</span> <span class="s1">&#39;prediction&#39;</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;predictionVariable&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">function</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;predictionVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;eventProbabilityVariable&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;eventProbabilityVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
 
     <span class="c1"># Set targetLevel</span>
-    <span class="k">if</span> <span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;targetLevel&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">function</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">and</span> <span class="s1">&#39;logistic&#39;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;targetLevel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Binary&#39;</span>
-        <span class="k">elif</span> <span class="n">function</span> <span class="o">==</span> <span class="s1">&#39;prediction&#39;</span> <span class="ow">and</span> <span class="s1">&#39;regression&#39;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;targetLevel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Interval&#39;</span>
+    <span class="k">if</span> <span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">function</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span> <span class="ow">and</span> <span class="s2">&quot;logistic&quot;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Binary&quot;</span>
+        <span class="k">elif</span> <span class="n">function</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span> <span class="ow">and</span> <span class="s2">&quot;regression&quot;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Interval&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;targetLevel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">create_project</span><span class="p">(</span>
         <span class="n">project_name</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">input_vars</span> <span class="o">+</span> <span class="n">output_vars</span><span class="p">,</span> <span class="o">**</span><span class="n">properties</span>
@@ -219,7 +219,7 @@
     <span class="c1"># parameters are not set during project creation.  Update the project if</span>
     <span class="c1"># necessary.</span>
     <span class="n">needs_update</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;predictionVariable&#39;</span><span class="p">,</span> <span class="s1">&#39;eventProbabilityVariable&#39;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;predictionVariable&quot;</span><span class="p">,</span> <span class="s2">&quot;eventProbabilityVariable&quot;</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">!=</span> <span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
             <span class="n">project</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
             <span class="n">needs_update</span> <span class="o">=</span> <span class="kc">True</span>
@@ -306,7 +306,7 @@
     <span class="c1"># TODO: Create new version if model already exists</span>
 
     <span class="c1"># If version not specified, default to creating a new version</span>
-    <span class="n">version</span> <span class="o">=</span> <span class="n">version</span> <span class="ow">or</span> <span class="s1">&#39;new&#39;</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="n">version</span> <span class="ow">or</span> <span class="s2">&quot;new&quot;</span>
 
     <span class="n">files</span> <span class="o">=</span> <span class="n">files</span> <span class="ow">or</span> <span class="p">[]</span>
 
@@ -328,11 +328,11 @@
     <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">403</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">AuthorizationError</span><span class="p">(</span>
-                <span class="s1">&#39;Unable to register model.  User account &#39;</span>
-                <span class="s1">&#39;does not have read permissions for the &#39;</span>
-                <span class="s1">&#39;/modelRepository/repositories/ URL. &#39;</span>
-                <span class="s1">&#39;Please contact your SAS Viya &#39;</span>
-                <span class="s1">&#39;administrator.&#39;</span>
+                <span class="s2">&quot;Unable to register model.  User account &quot;</span>
+                <span class="s2">&quot;does not have read permissions for the &quot;</span>
+                <span class="s2">&quot;/modelRepository/repositories/ URL. &quot;</span>
+                <span class="s2">&quot;Please contact your SAS Viya &quot;</span>
+                <span class="s2">&quot;administrator.&quot;</span>
             <span class="p">)</span>
         <span class="k">raise</span> <span class="n">e</span>
 
@@ -345,7 +345,7 @@
 
     <span class="c1"># If model is a CASTable then assume it holds an ASTORE model.</span>
     <span class="c1"># Import these via a ZIP file.</span>
-    <span class="k">if</span> <span class="s1">&#39;swat.cas.table.CASTable&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">model</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="s2">&quot;swat.cas.table.CASTable&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">model</span><span class="p">)):</span>
         <span class="n">zipfile</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">create_package</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="nb">input</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">create_project</span><span class="p">:</span>
@@ -358,21 +358,21 @@
             <span class="n">tmpzip</span> <span class="o">=</span> <span class="n">zp</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zipfilecopy</span><span class="p">)</span>
             <span class="k">if</span> <span class="s2">&quot;outputVar.json&quot;</span> <span class="ow">in</span> <span class="n">tmpzip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
                 <span class="n">outvar</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
-                    <span class="n">tmpzip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;outputVar.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf=8&#39;</span><span class="p">)</span>
+                    <span class="n">tmpzip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;outputVar.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf=8&quot;</span><span class="p">)</span>
                 <span class="p">)</span>  <span class="c1"># added decode for 3.5 and older</span>
                 <span class="k">for</span> <span class="n">tmp</span> <span class="ow">in</span> <span class="n">outvar</span><span class="p">:</span>
-                    <span class="n">tmp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;output&#39;</span><span class="p">})</span>
+                    <span class="n">tmp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;output&quot;</span><span class="p">})</span>
             <span class="k">if</span> <span class="s2">&quot;inputVar.json&quot;</span> <span class="ow">in</span> <span class="n">tmpzip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
                 <span class="n">invar</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
-                    <span class="n">tmpzip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;inputVar.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+                    <span class="n">tmpzip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;inputVar.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
                 <span class="p">)</span>  <span class="c1"># added decode for 3.5 and older</span>
                 <span class="k">for</span> <span class="n">tmp</span> <span class="ow">in</span> <span class="n">invar</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;role&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;input&#39;</span><span class="p">:</span>
-                        <span class="n">tmp</span><span class="p">[</span><span class="s1">&#39;role&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;input&#39;</span>
+                    <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;input&quot;</span><span class="p">:</span>
+                        <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;input&quot;</span>
 
-            <span class="k">if</span> <span class="s1">&#39;ModelProperties.json&#39;</span> <span class="ow">in</span> <span class="n">tmpzip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s2">&quot;ModelProperties.json&quot;</span> <span class="ow">in</span> <span class="n">tmpzip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
                 <span class="n">model_props</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
-                    <span class="n">tmpzip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;ModelProperties.json&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+                    <span class="n">tmpzip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;ModelProperties.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">model_props</span> <span class="o">=</span> <span class="p">{}</span>
@@ -384,21 +384,21 @@
 
     <span class="c1"># If the model is an scikit-learn model, generate the model dictionary</span>
     <span class="c1"># from it and pickle the model for storage</span>
-    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;_estimator_type&#39;</span><span class="p">,</span> <span class="s1">&#39;get_params&#39;</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;_estimator_type&quot;</span><span class="p">,</span> <span class="s2">&quot;get_params&quot;</span><span class="p">]):</span>
         <span class="c1"># Pickle the model so we can store it</span>
         <span class="n">model_pkl</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-        <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;model.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">model_pkl</span><span class="p">,</span> <span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;Python Pickle&#39;</span><span class="p">})</span>
+        <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;model.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">model_pkl</span><span class="p">,</span> <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;Python Pickle&quot;</span><span class="p">})</span>
 
-        <span class="n">target_funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;predict&#39;</span><span class="p">,</span> <span class="s1">&#39;predict_proba&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">f</span><span class="p">)]</span>
+        <span class="n">target_funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;predict&quot;</span><span class="p">,</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">f</span><span class="p">)]</span>
 
         <span class="c1"># Extract model properties</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">_sklearn_to_dict</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-        <span class="n">model</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
 
         <span class="c1"># Get package versions in environment</span>
         <span class="n">packages</span> <span class="o">=</span> <span class="n">installed_packages</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">record_packages</span> <span class="ow">and</span> <span class="n">packages</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">model</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;properties&#39;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;properties&quot;</span><span class="p">,</span> <span class="p">[])</span>
 
             <span class="c1"># Define a custom property to capture each package version</span>
             <span class="c1"># NOTE: some packages may not conform to the &#39;name==version&#39; format</span>
@@ -406,12 +406,12 @@
             <span class="c1">#  packages also generally contain characters that are not allowed</span>
             <span class="c1"># in custom properties, so they are excluded here.</span>
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">packages</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s1">&#39;==&#39;</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
-                    <span class="n">n</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;==&#39;</span><span class="p">)</span>
-                    <span class="n">model</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_property</span><span class="p">(</span><span class="s1">&#39;env_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+                <span class="k">if</span> <span class="s2">&quot;==&quot;</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="n">n</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;==&quot;</span><span class="p">)</span>
+                    <span class="n">model</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_property</span><span class="p">(</span><span class="s2">&quot;env_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
 
             <span class="c1"># Generate and upload a requirements.txt file</span>
-            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;requirements.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packages</span><span class="p">)})</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;requirements.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packages</span><span class="p">)})</span>
 
         <span class="c1"># Generate PyMAS wrapper</span>
         <span class="k">try</span><span class="p">:</span>
@@ -422,41 +422,41 @@
             <span class="c1"># Include score code files from ESP and MAS</span>
             <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="p">{</span>
-                    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;dmcas_packagescorecode.sas&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">score_code</span><span class="p">(),</span>
-                    <span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;Score Code&#39;</span><span class="p">,</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;dmcas_packagescorecode.sas&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">score_code</span><span class="p">(),</span>
+                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;Score Code&quot;</span><span class="p">,</span>
                 <span class="p">}</span>
             <span class="p">)</span>
             <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="p">{</span>
-                    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;dmcas_epscorecode.sas&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">score_code</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="s1">&#39;CAS&#39;</span><span class="p">),</span>
-                    <span class="s1">&#39;role&#39;</span><span class="p">:</span> <span class="s1">&#39;score&#39;</span><span class="p">,</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;dmcas_epscorecode.sas&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">score_code</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="s2">&quot;CAS&quot;</span><span class="p">),</span>
+                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;score&quot;</span><span class="p">,</span>
                 <span class="p">}</span>
             <span class="p">)</span>
             <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="p">{</span>
-                    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;python_wrapper.py&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">score_code</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="s1">&#39;Python&#39;</span><span class="p">),</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;python_wrapper.py&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">score_code</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="s2">&quot;Python&quot;</span><span class="p">),</span>
                 <span class="p">}</span>
             <span class="p">)</span>
 
-            <span class="n">model</span><span class="p">[</span><span class="s1">&#39;inputVariables&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">model</span><span class="p">[</span><span class="s2">&quot;inputVariables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">var</span><span class="o">.</span><span class="n">as_model_metadata</span><span class="p">()</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">variables</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">var</span><span class="o">.</span><span class="n">out</span>
             <span class="p">]</span>
 
-            <span class="n">model</span><span class="p">[</span><span class="s1">&#39;outputVariables&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">model</span><span class="p">[</span><span class="s2">&quot;outputVariables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">var</span><span class="o">.</span><span class="n">as_model_metadata</span><span class="p">()</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">variables</span> <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">out</span>
             <span class="p">]</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
             <span class="c1"># PyMAS creation failed, most likely because input data wasn&#39;t</span>
             <span class="c1"># provided</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Unable to inspect model </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Unable to inspect model </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
 
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39;Unable to determine input/output variables. &#39;</span>
-                <span class="s1">&#39; Model variables will not be specified and some &#39;</span>
-                <span class="s1">&#39;model functionality may not be available.&#39;</span>
+                <span class="s2">&quot;Unable to determine input/output variables. &quot;</span>
+                <span class="s2">&quot; Model variables will not be specified and some &quot;</span>
+                <span class="s2">&quot;model functionality may not be available.&quot;</span>
             <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Otherwise, the model better be a dictionary of metadata</span>
@@ -469,7 +469,7 @@
         <span class="n">project</span> <span class="o">=</span> <span class="n">_create_project</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">repo_obj</span><span class="p">)</span>
 
     <span class="c1"># If replacing an existing version, make sure the model version exists</span>
-    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">version</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;new&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">version</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;new&quot;</span><span class="p">:</span>
         <span class="c1"># Update an existing model with new files</span>
         <span class="n">model_obj</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">model_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -568,17 +568,17 @@
 
     <span class="c1"># If model was successfully published and it isn&#39;t a MAS module, we&#39;re done</span>
     <span class="k">if</span> <span class="p">(</span>
-        <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;completed&#39;</span>
-        <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">destinationType</span> <span class="o">!=</span> <span class="s1">&#39;microAnalyticService&#39;</span>
+        <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;completed&quot;</span>
+        <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">destinationType</span> <span class="o">!=</span> <span class="s2">&quot;microAnalyticService&quot;</span>
     <span class="p">):</span>
-        <span class="k">return</span> <span class="n">request_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s1">&#39;self&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">request_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">)</span>
 
     <span class="c1"># If MAS publish failed and replace=True, attempt to delete the module</span>
     <span class="c1"># and republish</span>
     <span class="k">if</span> <span class="p">(</span>
-        <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;failed&#39;</span>
+        <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;failed&quot;</span>
         <span class="ow">and</span> <span class="n">replace</span>
-        <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">destinationType</span> <span class="o">==</span> <span class="s1">&#39;microAnalyticService&#39;</span>
+        <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">destinationType</span> <span class="o">==</span> <span class="s2">&quot;microAnalyticService&quot;</span>
     <span class="p">):</span>
         <span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">microanalytic_score</span> <span class="k">as</span> <span class="n">mas</span>
 
@@ -588,29 +588,29 @@
         <span class="n">job</span> <span class="o">=</span> <span class="n">submit_request</span><span class="p">()</span>
 
     <span class="c1"># Raise exception if still failing</span>
-    <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;failed&#39;</span><span class="p">:</span>
-        <span class="n">log</span> <span class="o">=</span> <span class="n">request_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s1">&#39;publishingLog&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;failed&quot;</span><span class="p">:</span>
+        <span class="n">log</span> <span class="o">=</span> <span class="n">request_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s2">&quot;publishingLog&quot;</span><span class="p">)</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Failed to publish model &#39;</span><span class="si">%s</span><span class="s2">&#39;: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">log</span><span class="o">.</span><span class="n">log</span><span class="p">))</span>
 
     <span class="c1"># Raise exception if unknown status received</span>
-    <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;completed&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;completed&quot;</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
             <span class="s2">&quot;Model publishing job in an unknown state: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">job</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="p">)</span>
 
-    <span class="n">log</span> <span class="o">=</span> <span class="n">request_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s1">&#39;publishingLog&#39;</span><span class="p">)</span>
-    <span class="n">msg</span> <span class="o">=</span> <span class="n">log</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;SUCCESS===&#39;</span><span class="p">)</span>
+    <span class="n">log</span> <span class="o">=</span> <span class="n">request_link</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="s2">&quot;publishingLog&quot;</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">log</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;SUCCESS===&quot;</span><span class="p">)</span>
 
     <span class="c1"># As of Viya 3.4 MAS converts module names to lower case.</span>
     <span class="c1"># Since we can&#39;t rely on the request module name being preserved, try to</span>
     <span class="c1"># parse the URL out of the response so we can retrieve the created module.</span>
     <span class="n">module_url</span> <span class="o">=</span> <span class="n">_parse_module_url</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">module_url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Unable to retrieve module URL from publish log.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve module URL from publish log.&quot;</span><span class="p">)</span>
 
     <span class="n">module</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="n">module_url</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="s1">&#39;application/vnd.sas.microanalytic.module&#39;</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">_headers</span><span class="p">[</span><span class="s1">&#39;content-type&#39;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="s2">&quot;application/vnd.sas.microanalytic.module&quot;</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">_headers</span><span class="p">[</span><span class="s2">&quot;content-type&quot;</span><span class="p">]:</span>
         <span class="c1"># Bind Python methods to the module instance that will execute the</span>
         <span class="c1"># corresponding MAS module step.</span>
         <span class="kn">from</span> <span class="nn">sasctl.services</span> <span class="kn">import</span> <span class="n">microanalytic_score</span> <span class="k">as</span> <span class="n">mas</span>
@@ -665,37 +665,37 @@
     <span class="n">model_obj</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">model_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Model </span><span class="si">%s</span><span class="s1"> was not found.&#39;</span> <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Model </span><span class="si">%s</span><span class="s2"> was not found.&quot;</span> <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
 
     <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">model_obj</span><span class="o">.</span><span class="n">projectId</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;prediction&#39;</span><span class="p">,</span> <span class="s1">&#39;classification&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;prediction&quot;</span><span class="p">,</span> <span class="s2">&quot;classification&quot;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;Performance monitoring is currently supported for &quot;</span>
             <span class="s2">&quot;regression and binary classification projects.  &quot;</span>
             <span class="s2">&quot;Received project with &#39;</span><span class="si">%s</span><span class="s2">&#39; function.  Should be &quot;</span>
-            <span class="s2">&quot;&#39;Prediction&#39; or &#39;Classification&#39;.&quot;</span> <span class="o">%</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">)</span>
+            <span class="s2">&quot;&#39;Prediction&#39; or &#39;Classification&#39;.&quot;</span> <span class="o">%</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;targetLevel&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;interval&#39;</span><span class="p">,</span> <span class="s1">&#39;binary&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;interval&quot;</span><span class="p">,</span> <span class="s2">&quot;binary&quot;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;Performance monitoring is currently supported for &quot;</span>
             <span class="s2">&quot;regression and binary classification projects.  &quot;</span>
             <span class="s2">&quot;Received project with &#39;</span><span class="si">%s</span><span class="s2">&#39; target level.  Should be &quot;</span>
-            <span class="s2">&quot;&#39;Interval&#39; or &#39;Binary&#39;.&quot;</span> <span class="o">%</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;targetLevel&#39;</span><span class="p">)</span>
+            <span class="s2">&quot;&#39;Interval&#39; or &#39;Binary&#39;.&quot;</span> <span class="o">%</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">)</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span>
-        <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;predictionVariable&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span>
-        <span class="ow">and</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;prediction&#39;</span>
+        <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;predictionVariable&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span>
+        <span class="ow">and</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span>
     <span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;Project &#39;</span><span class="si">%s</span><span class="s2">&#39; does not have a prediction variable &quot;</span> <span class="s2">&quot;specified.&quot;</span> <span class="o">%</span> <span class="n">project</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span>
-        <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;eventProbabilityVariable&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span>
-        <span class="ow">and</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span>
+        <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;eventProbabilityVariable&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span>
+        <span class="ow">and</span> <span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span>
     <span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;Project &#39;</span><span class="si">%s</span><span class="s2">&#39; does not have an Event Probability variable &quot;</span>
@@ -716,16 +716,16 @@
         <span class="p">)</span>
 
     <span class="c1"># Check where performance datasets should be uploaded</span>
-    <span class="n">cas_id</span> <span class="o">=</span> <span class="n">perf_def</span><span class="p">[</span><span class="s1">&#39;casServerId&#39;</span><span class="p">]</span>
-    <span class="n">caslib</span> <span class="o">=</span> <span class="n">perf_def</span><span class="p">[</span><span class="s1">&#39;dataLibrary&#39;</span><span class="p">]</span>
-    <span class="n">table_prefix</span> <span class="o">=</span> <span class="n">perf_def</span><span class="p">[</span><span class="s1">&#39;dataPrefix&#39;</span><span class="p">]</span>
+    <span class="n">cas_id</span> <span class="o">=</span> <span class="n">perf_def</span><span class="p">[</span><span class="s2">&quot;casServerId&quot;</span><span class="p">]</span>
+    <span class="n">caslib</span> <span class="o">=</span> <span class="n">perf_def</span><span class="p">[</span><span class="s2">&quot;dataLibrary&quot;</span><span class="p">]</span>
+    <span class="n">table_prefix</span> <span class="o">=</span> <span class="n">perf_def</span><span class="p">[</span><span class="s2">&quot;dataPrefix&quot;</span><span class="p">]</span>
 
     <span class="c1"># All input variables must be present</span>
     <span class="n">missing_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">perf_def</span><span class="o">.</span><span class="n">inputVariables</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">missing_cols</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;The following columns were expected but not found in &quot;</span>
-            <span class="s2">&quot;the data set: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_cols</span><span class="p">)</span>
+            <span class="s2">&quot;the data set: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_cols</span><span class="p">)</span>
         <span class="p">)</span>
 
     <span class="c1"># If CAS is not executing the model then the output variables must also be</span>
@@ -737,29 +737,29 @@
         <span class="k">if</span> <span class="n">missing_cols</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;The following columns were expected but not found in the data &quot;</span>
-                <span class="s2">&quot;set: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_cols</span><span class="p">)</span>
+                <span class="s2">&quot;set: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_cols</span><span class="p">)</span>
             <span class="p">)</span>
 
     <span class="n">sess</span> <span class="o">=</span> <span class="n">current_session</span><span class="p">()</span>
-    <span class="n">regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_(\d+)_.*_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_prefix</span><span class="p">,</span> <span class="n">model_obj</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">regex</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_(\d+)_.*_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_prefix</span><span class="p">,</span> <span class="n">model_obj</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 
     <span class="c1"># Save the current setting before overwriting</span>
-    <span class="n">orig_sslreqcert</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SSLREQCERT&#39;</span><span class="p">)</span>
+    <span class="n">orig_sslreqcert</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SSLREQCERT&quot;</span><span class="p">)</span>
 
     <span class="c1"># If SSL connections to microservices are not being verified, don&#39;t attempt</span>
     <span class="c1"># to verify connections to CAS - most likely certs are not in place.</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">sess</span><span class="o">.</span><span class="n">verify</span><span class="p">:</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;SSLREQCERT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;no&#39;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SSLREQCERT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;no&quot;</span>
 
     <span class="c1"># Upload the performance data to CAS</span>
     <span class="k">with</span> <span class="n">sess</span><span class="o">.</span><span class="n">as_swat</span><span class="p">(</span><span class="n">server</span><span class="o">=</span><span class="n">cas_id</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
 
-        <span class="n">s</span><span class="o">.</span><span class="n">setsessopt</span><span class="p">(</span><span class="n">messagelevel</span><span class="o">=</span><span class="s1">&#39;warning&#39;</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">setsessopt</span><span class="p">(</span><span class="n">messagelevel</span><span class="o">=</span><span class="s2">&quot;warning&quot;</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="n">swat</span><span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="n">exception_on_severity</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
             <span class="n">caslib_info</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">table</span><span class="o">.</span><span class="n">tableinfo</span><span class="p">(</span><span class="n">caslib</span><span class="o">=</span><span class="n">caslib</span><span class="p">)</span>
 
-        <span class="n">all_tables</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">caslib_info</span><span class="p">,</span> <span class="s1">&#39;TableInfo&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">all_tables</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">caslib_info</span><span class="p">,</span> <span class="s2">&quot;TableInfo&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">all_tables</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Find tables with similar names</span>
             <span class="n">perf_tables</span> <span class="o">=</span> <span class="n">all_tables</span><span class="o">.</span><span class="n">Name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span>
@@ -772,7 +772,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">next_seq</span> <span class="o">=</span> <span class="mi">1</span>
 
-        <span class="n">table_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{prefix}</span><span class="s1">_</span><span class="si">{sequence}</span><span class="s1">_</span><span class="si">{label}</span><span class="s1">_</span><span class="si">{model}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">table_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{prefix}</span><span class="s2">_</span><span class="si">{sequence}</span><span class="s2">_</span><span class="si">{label}</span><span class="s2">_</span><span class="si">{model}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">prefix</span><span class="o">=</span><span class="n">table_prefix</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="n">next_seq</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model_obj</span><span class="o">.</span><span class="n">id</span>
         <span class="p">)</span>
 
@@ -782,14 +782,14 @@
                 <span class="n">data</span><span class="p">,</span> <span class="n">casout</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">caslib</span><span class="o">=</span><span class="n">caslib</span><span class="p">,</span> <span class="n">promote</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="p">)</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;casTable&#39;</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Unable to upload performance data to CAS.&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;casTable&quot;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unable to upload performance data to CAS.&quot;</span><span class="p">)</span>
 
             <span class="n">tbl</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">casTable</span>
 
     <span class="c1"># Restore the original value</span>
     <span class="k">if</span> <span class="n">orig_sslreqcert</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;SSLREQCERT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orig_sslreqcert</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;SSLREQCERT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orig_sslreqcert</span>
 
     <span class="c1"># Execute the definition if requested</span>
     <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
@@ -802,13 +802,13 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">details</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-        <span class="n">module_url</span> <span class="o">=</span> <span class="n">get_link</span><span class="p">(</span><span class="n">details</span><span class="p">,</span> <span class="s1">&#39;module&#39;</span><span class="p">)</span>
-        <span class="n">module_url</span> <span class="o">=</span> <span class="n">module_url</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">)</span>
+        <span class="n">module_url</span> <span class="o">=</span> <span class="n">get_link</span><span class="p">(</span><span class="n">details</span><span class="p">,</span> <span class="s2">&quot;module&quot;</span><span class="p">)</span>
+        <span class="n">module_url</span> <span class="o">=</span> <span class="n">module_url</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
-        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(?:rel=module, href=(.*?),)&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>  <span class="c1"># Vya 3.5</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?:rel=module, href=(.*?),)&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>  <span class="c1"># Vya 3.5</span>
         <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
-                <span class="sa">r</span><span class="s1">&#39;(?:Rel: module URI: (.*?) MediaType)&#39;</span><span class="p">,</span> <span class="n">msg</span>
+                <span class="sa">r</span><span class="s2">&quot;(?:Rel: module URI: (.*?) MediaType)&quot;</span><span class="p">,</span> <span class="n">msg</span>
             <span class="p">)</span>  <span class="c1"># Format changed in Viya 4.0</span>
         <span class="n">module_url</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">match</span> <span class="k">else</span> <span class="kc">None</span>
 
