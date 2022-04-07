@@ -113,7 +113,7 @@ class ImportModel:
         isH2OModel=False,
         force=False,
         binaryString=None,
-        missingValues=False
+        missingValues=False,
     ):
         """Import model to SAS Model Manager using pzmm submodule.
 
@@ -240,7 +240,7 @@ class ImportModel:
                     isH2OModel=isH2OModel,
                     isBinaryModel=binaryModel,
                     binaryString=binaryString,
-                    missingValues=missingValues
+                    missingValues=missingValues,
                 )
                 print(
                     "Model score code was written successfully to {}.".format(
@@ -304,7 +304,7 @@ class ImportModel:
                     isH2OModel=isH2OModel,
                     isBinaryModel=binaryModel,
                     binaryString=binaryString,
-                    missingValues=missingValues
+                    missingValues=missingValues,
                 )
                 print(
                     "Model score code was written successfully to {} and uploaded to SAS Model Manager".format(
