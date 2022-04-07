@@ -64,7 +64,6 @@ def getZippedModel(model, gPath, project=None):
 
     return modelName, projectName
 
-
 def project_exists(response, project):
     """Checks if project exists on SAS Viya. If the project does not exist, then a new
     project is created or an error is raised.
@@ -352,7 +351,6 @@ class GitIntegrate:
         projectResponse = mr.get_project(project)
         project = project_exists(projectResponse, project)
         projectName = project.name
-
         # Check if project exists in git path and create it if it does not
         pPath = Path(gPath) / projectName
         if not pPath.exists():
@@ -370,7 +368,6 @@ class GitIntegrate:
         for model in modelResponse:
             modelNames.append(model.name)
             modelId.append(model.id)
-
         # For each model, search for an appropriate model directory in the project directory and pull down the model
         for name, id in zip(modelNames, modelId):
             mPath = pPath / name
