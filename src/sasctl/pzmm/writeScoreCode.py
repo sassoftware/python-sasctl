@@ -13,7 +13,7 @@ class ScoreCode:
     @classmethod
     def writeScoreCode(
         cls,
-        inputDF,
+        inputData,
         targetDF,
         modelPrefix,
         predictMethod,
@@ -28,6 +28,7 @@ class ScoreCode:
         scoreCAS=True,
         isBinaryModel=False,
         binaryString=None,
+        pickleType=None
     ):
         """
         Writes a Python score code file based on training data used to generate the model
@@ -45,7 +46,7 @@ class ScoreCode:
         training data set. If you have missing values or values not included in your training
         data set, you must set the OtherVariable option to True.
 
-        Both the inputDF and targetDF dataframes have the following stipulations:
+        Both the inputData and targetDF dataframes have the following stipulations:
         * Column names must be a valid Python variable name.
         * For categorical columns, the values must be a valid Python variable name.
         If either of these conditions is broken, an exception is raised.
@@ -60,12 +61,14 @@ class ScoreCode:
 
         Parameters
         ----------
-        inputDF : DataFrame
+        inputData : DataFrame or list of dicts
             The `DataFrame` object contains the training data, and includes only the predictor
             columns. The writeScoreCode function currently supports int(64), float(64),
-            and string data types for scoring.
+            and string data types for scoring. Providing a list of dict objects signals 
+            that the model files are being created from an MLFlow model.
         targetDF : DataFrame
-            The `DataFrame` object contains the training data for the target variable.
+            The `DataFrame` object contains the training data for the target variable. Note that 
+            for MLFlow models, this can set as None.
         modelPrefix : string
             The variable for the model name that is used when naming model files.
             (For example: hmeqClassTree + [Score.py || .pickle]).
@@ -107,12 +110,21 @@ class ScoreCode:
             Sets whether the H2O model provided is a binary model or a MOJO model. By default False.
         binaryString : string, optional
             Binary string representation of the model object. By default None.
+        pickleType : string optional
+            Indicator for MLFlow models, which may pickle by non-standard methods. By default None.
         """
         # Check if binary string model
         if binaryString is not None:
             isBinaryString = True
         else:
             isBinaryString = False
+        
+        # Check if MLFlow Model
+        if isinstance(inputData, list):
+            isMLFlow = True  
+        else:
+            isMLFlow = False
+        
         # Call REST API to check SAS Viya version
         isViya35 = platform_version() == "3.5"
 
@@ -141,16 +153,27 @@ class ScoreCode:
                 model = modelRepo.get_model(model)
                 modelID = model["id"]
 
-        # From the input dataframe columns, create a list of input variables, then check for viability
-        inputVarList = list(inputDF.columns)
-        for name in inputVarList:
-            if not str(name).isidentifier():
-                raise SyntaxError(
-                    "Invalid column name in inputDF. Columns must be "
-                    + "valid as Python variables."
-                )
-        newVarList = list(inputVarList)
-        inputDtypesList = list(inputDF.dtypes)
+        if not isMLFlow:
+            # From the input dataframe columns, create a list of input variables, then check for viability
+            inputVarList = list(inputData.columns)
+            for name in inputVarList:
+                if not str(name).isidentifier():
+                    raise SyntaxError(
+                        "Invalid column name in inputData. Columns must be "
+                        + "valid as Python variables."
+                    )
+            newVarList = list(inputVarList)
+            inputDtypesList = list(inputData.dtypes)
+        elif isMLFlow:
+            inputVarList = [var["name"] for var in inputData]
+            for name in inputVarList:
+                if not str(name).isidentifier():
+                    raise SyntaxError(
+                        "Invalid column name in inputData. Columns must be "
+                        + "valid as Python variables."
+                    )
+            newVarList = inputVarList
+            inputDtypesList = [var["type"] for var in inputData]
 
         # Set the location for the Python score file to be written, then open the file
         zPath = Path(pyPath)
@@ -174,10 +197,10 @@ import codecs"""
             cls.pyFile.write(
                 """\n
 import math
-import pickle
+import {pickleType}
 import pandas as pd
-import numpy as np"""
-            )
+import numpy as np""".format(pickleType=pickleType)
+                )
             # In SAS Viya 4.0 and SAS Open Model Manager, a settings.py file is generated that points to the resource
             # location
             if not isViya35:
@@ -226,8 +249,8 @@ _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelZipFileN
                 cls.pyFile.write(
                     """\n
 with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
-    _thisModelFit = pickle.load(_pFile)""".format(
-                        modelID=modelID, modelFileName=modelFileName
+    _thisModelFit = {pickleType}.load(_pFile)""".format(
+                        modelID=modelID, modelFileName=modelFileName, pickleType=pickleType
                     )
                 )
             elif isViya35 and isBinaryModel:
@@ -241,8 +264,8 @@ _thisModelFit = h2o.load_model('/models/resources/viya/{modelID}/{modelFileName}
                 cls.pyFile.write(
                     """\n
 with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
-    _thisModelFit = pickle.load(_pFile)""".format(
-                        modelFileName=modelFileName
+    _thisModelFit = {pickleType}.load(_pFile)""".format(
+                        modelFileName=modelFileName, pickleType=pickleType
                     )
                 )
             elif not isViya35 and isBinaryModel:
@@ -286,8 +309,8 @@ def score{modelPrefix}({inputVarList}):
                     cls.pyFile.write(
                         """
         with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
-            _thisModelFit = pickle.load(_pFile)""".format(
-                            modelID=modelID, modelFileName=modelFileName
+            _thisModelFit = {pickleType}.load(_pFile)""".format(
+                            modelID=modelID, modelFileName=modelFileName, pickleType = pickleType
                         )
                     )
                 elif isViya35 and isH2OModel and not isBinaryModel:
@@ -309,8 +332,8 @@ def score{modelPrefix}({inputVarList}):
                     cls.pyFile.write(
                         """
         with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
-            _thisModelFit = pickle.load(_pFile)""".format(
-                            modelFileName=modelFileName
+            _thisModelFit = {pickleType}.load(_pFile)""".format(
+                            modelFileName=modelFileName, pickleType=pickleType
                         )
                     )
                 elif not isViya35 and isH2OModel:
@@ -328,12 +351,12 @@ def score{modelPrefix}({inputVarList}):
                         )
                     )
 
-            if missingValues:
+            if missingValues and not isMLFlow: #MLFlow models are not guaranteed to have example input data 
                 # For each input variable, impute for missing values based on variable dtype
                 for i, dTypes in enumerate(inputDtypesList):
                     dTypes = dTypes.name
                     if "int" in dTypes or "float" in dTypes:
-                        if cls.checkIfBinary(inputDF[inputVarList[i]]):
+                        if cls.checkIfBinary(inputData[inputVarList[i]]):
                             cls.pyFile.write(
                                 """\n
     try:
@@ -343,7 +366,7 @@ def score{modelPrefix}({inputVarList}):
         {inputVar} = {inputVarMode}""".format(
                                     inputVar=inputVarList[i],
                                     inputVarMode=float(
-                                        list(inputDF[inputVarList[i]].mode())[0]
+                                        list(inputData[inputVarList[i]].mode())[0]
                                     ),
                                 )
                             )
@@ -357,7 +380,7 @@ def score{modelPrefix}({inputVarList}):
         {inputVar} = {inputVarMean}""".format(
                                     inputVar=inputVarList[i],
                                     inputVarMean=float(
-                                        inputDF[inputVarList[i]].mean(
+                                        inputData[inputVarList[i]].mean(
                                             axis=0, skipna=True
                                         )
                                     ),
@@ -375,7 +398,7 @@ def score{modelPrefix}({inputVarList}):
                         )
 
                         tempVar = cls.splitStringColumn(
-                            inputDF[inputVarList[i]], otherVariable
+                            inputData[inputVarList[i]], otherVariable
                         )
                         newVarList.remove(inputVarList[i])
                         newVarList.extend(tempVar)
@@ -430,7 +453,7 @@ def score{modelPrefix}({inputVarList}):
                         columnTypes=", ".join(columnType),
                     )
                 )
-            if not isH2OModel:
+            if not isH2OModel and not isMLFlow:
                 cls.pyFile.write(
                     """\n
     try:
@@ -455,13 +478,20 @@ def score{modelPrefix}({inputVarList}):
                             threshold=threshPrediction,
                         )
                     )
-            elif isH2OModel:
+            elif isH2OModel and not isMLFlow:
                 cls.pyFile.write(
                     """\n
     {} = float(prediction[1][2])
     {} = prediction[1][0]""".format(
                         metrics[0], metrics[1]
                     )
+                )
+            elif not isH2OModel and isMLFlow:
+                cls.pyFile.write(
+                    """\n
+    {0} = prediction
+    if isinstance({0}, np.ndarray):
+        {0} = prediction.item(0)""".format(metrics[0])
                 )
 
             metricsList = ", ".join(metrics)
@@ -473,6 +503,7 @@ def score{modelPrefix}({inputVarList}):
             )
 
             cls.pyFile.write("""\n""")
+            
 
         # For SAS Viya 3.5, the model is first registered to SAS Model Manager, then the model UUID can be
         # added to the score code and reuploaded to the model file contents
@@ -553,7 +584,7 @@ def score{modelPrefix}({inputVarList}):
             uniq = uniq.strip()
             if not uniq.isidentifier():
                 raise SyntaxError(
-                    "Invalid column value in inputDF. Values must be "
+                    "Invalid column value in inputData. Values must be "
                     + "valid as Python variables (or easily space strippable)."
                 )
             newVarList.append("{}_{}".format(inputSeries.name, uniq))

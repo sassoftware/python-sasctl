@@ -1,9 +1,9 @@
 # Copyright (c) 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
-
-
 # %%
 from pathlib import Path
+import shutil
+import os
 
 import pickle
 import gzip
@@ -19,6 +19,7 @@ class PickleModel:
         isH2OModel=False,
         isBinaryModel=False,
         isBinaryString=False,
+        mlFlowDetails=None,
     ):
         """
         Write trained model to a binary pickle file, H2O MOJO file, or a binary string object.
@@ -48,6 +49,8 @@ class PickleModel:
             Sets whether the H2O model provided is a binary model or a MOJO model. By default False.
         isBinaryString : boolean, optional
             Sets whether the model is to be set as a binary string instead of a pickle file. By default False.
+        mlFlowDetails : dict, optional
+            Model details from an MLFlow model. This dictionary is created by the readMLModelFile function.
 
         Returns
         -------
@@ -60,6 +63,13 @@ class PickleModel:
         if isBinaryString:
             binaryString = codecs.encode(pickle.dumps(trainedModel), "base64").decode()
             return binaryString
+        elif mlFlowDetails is not None:
+            mlPicklePath = (
+                Path(mlFlowDetails["mlflowPath"]) / mlFlowDetails["model_path"]
+            )
+            shutil.copy(mlPicklePath, pPath)
+            pzmmPicklePath = pPath / mlFlowDetails["model_path"]
+            pzmmPicklePath.rename(Path(pPath) / (modelPrefix + ".pickle"))
         else:
             # For non-H2O models, pickle the model object
             if not isH2OModel:

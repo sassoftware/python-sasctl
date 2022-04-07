@@ -114,6 +114,7 @@ class ImportModel:
         force=False,
         binaryString=None,
         missingValues=False,
+        mlFlowDetails=None
     ):
         """Import model to SAS Model Manager using pzmm submodule.
 
@@ -176,10 +177,16 @@ class ImportModel:
         missingValues : boolean, optional
             Sets whether data used for scoring needs to go through imputation for
             missing values before passed to the model. By default False.
+        mlFlowDetails : dict, optional
+            Model details from an MLFlow model. This dictionary is created by the readMLModelFile function.
+            By default None.       
         """
         # Initialize no score code or binary H2O model flags
         noScoreCode = False
         binaryModel = False
+        
+        if mlFlowDetails is None:
+            mlFlowDetails = {'serialization_format': 'pickle'} 
 
         if pyPath is None:
             pyPath = Path(zPath)
@@ -241,6 +248,7 @@ class ImportModel:
                     isBinaryModel=binaryModel,
                     binaryString=binaryString,
                     missingValues=missingValues,
+                    pickleType=mlFlowDetails['serialization_format']
                 )
                 print(
                     "Model score code was written successfully to {}.".format(
@@ -305,6 +313,7 @@ class ImportModel:
                     isBinaryModel=binaryModel,
                     binaryString=binaryString,
                     missingValues=missingValues,
+                    pickleType=mlFlowDetails['serialization_format']
                 )
                 print(
                     "Model score code was written successfully to {} and uploaded to SAS Model Manager".format(
