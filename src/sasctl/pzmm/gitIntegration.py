@@ -64,7 +64,6 @@ def getZippedModel(model, gPath, project=None):
 
     return modelName, projectName
 
-
 def project_exists(response, project):
     """Checks if project exists on SAS Viya. If the project does not exist, then a new
     project is created or an error is raised.
