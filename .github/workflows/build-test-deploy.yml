@@ -10,7 +10,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Black
-      - uses: psf/black@stable
+        uses: psf/black@stable
         with:
           src: "./src"
 
