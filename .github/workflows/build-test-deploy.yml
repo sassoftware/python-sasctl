@@ -9,11 +9,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Lint
-        uses: ricardochaves/python-lint@v1.4.0
-        continue-on-error: true
+      - name: Black
+      - uses: psf/black@stable
         with:
-          python-root-list: "src"
+          src: "./src"
 
   test:
     name: "Test"
@@ -22,7 +21,7 @@ jobs:
       LANG: en_US.UTF-8
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8, 3.9]
+        python-version: [3.5, 3.6, 3.7, 3.8, 3.9, '3.10']
         os-version: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
