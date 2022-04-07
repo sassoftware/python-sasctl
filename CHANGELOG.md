@@ -2,6 +2,13 @@ Unreleased
 ----------
  -
 
+v1.7.0 (2022-04-07)
+-------------------
+**Improvements**
+ - Added Git integration for better tracking of model history and versioning. 
+ - Added MLFlow integration for simple models, allowing users to import simple MLFlow models, such as sci-kit 
+   learn, to SAS Model Manager
+
 v1.6.4 (2022-04-07)
 -------------------
 **Bugfixes**
