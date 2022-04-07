@@ -90,7 +90,7 @@ class TreeParser(metaclass=abc.ABCMeta):
 
     @staticmethod
     def _remove_diacritic(input):
-        output = unicodedata.normalize('NFKD', input).encode('ASCII', 'ignore').decode()
+        output = unicodedata.normalize("NFKD", input).encode("ASCII", "ignore").decode()
 
         return output
 

@@ -16,13 +16,13 @@ class ExperimentalWarning(UserWarning):
 
 
 def _insert_docstring_text(func, text):
-    docstring = func.__doc__ or ''
+    docstring = func.__doc__ or ""
 
     # Dedent the existing docstring.  Multi-line docstrings are only indented
     # after the first line, so split before dedenting.
-    if '\n' in docstring:
-        first_line, remainder = docstring.split('\n', 1)
-        docstring = first_line + '\n' + textwrap.dedent(remainder)
+    if "\n" in docstring:
+        first_line, remainder = docstring.split("\n", 1)
+        docstring = first_line + "\n" + textwrap.dedent(remainder)
     else:
         docstring = textwrap.dedent(docstring)
 
@@ -30,13 +30,13 @@ def _insert_docstring_text(func, text):
 
     # Sphinx formatting requires 2 blank lines after a numpydoc section or one
     # blank line after another Sphinx directive.
-    if docstring.split('\n')[-1].startswith('.. '):
+    if docstring.split("\n")[-1].startswith(".. "):
         # Last line is another Sphinx directive
-        gap = '\n\n'
+        gap = "\n\n"
     else:
-        gap = '\n\n\n'
+        gap = "\n\n\n"
 
-    return docstring + gap + text + '\n'
+    return docstring + gap + text + "\n"
 
 
 def deprecated(reason=None, version=None, removed_in=None):
@@ -60,29 +60,29 @@ def deprecated(reason=None, version=None, removed_in=None):
 
     """
     if version is None:
-        raise ValueError('version must be specified.')
+        raise ValueError("version must be specified.")
 
     def decorator(func):
         @functools.wraps(func)
         def _wrapper(*args, **kwargs):
-            warning = '%s is deprecated since version %s' % (func.__name__, version)
+            warning = "%s is deprecated since version %s" % (func.__name__, version)
 
             if removed_in is not None:
-                warning += ' and will be removed in version %s.' % removed_in
+                warning += " and will be removed in version %s." % removed_in
             else:
-                warning += ' and may be removed in a future version.'
+                warning += " and may be removed in a future version."
 
             if reason is not None:
-                warning = warning + '  ' + reason
+                warning = warning + "  " + reason
 
             warnings.warn(warning, category=DeprecationWarning, stacklevel=2)
             return func(*args, **kwargs)
 
         # Generate Sphinx deprecated directive
-        directive = '.. deprecated:: %s' % version
+        directive = ".. deprecated:: %s" % version
 
         if reason is not None:
-            directive += '\n  %s' % reason
+            directive += "\n  %s" % reason
 
         try:
             functools.update_wrapper(_wrapper, func)
@@ -117,15 +117,15 @@ def experimental(func):
     @functools.wraps(func)
     def _wrapper(*args, **kwargs):
         warning = (
-            '%s is experimental and may be modified or removed without warning.'
+            "%s is experimental and may be modified or removed without warning."
             % func.__name__
         )
         warnings.warn(warning, category=ExperimentalWarning, stacklevel=2)
         return func(*args, **kwargs)
 
-    type_ = 'class' if isinstance(func, type) else 'method'
+    type_ = "class" if isinstance(func, type) else "method"
     directive = (
-        '.. warning:: This %s is experimental and may be modified or removed without warning.'
+        ".. warning:: This %s is experimental and may be modified or removed without warning."
         % type_
     )
 
@@ -160,14 +160,14 @@ def versionadded(reason=None, version=None):
 
     """
     if version is None:
-        raise ValueError('version must be specified.')
+        raise ValueError("version must be specified.")
 
     def decorator(func):
         # Generate Sphinx deprecated directive
-        directive = '.. versionadded:: %s' % version
+        directive = ".. versionadded:: %s" % version
 
         if reason is not None:
-            directive += '\n  %s' % reason
+            directive += "\n  %s" % reason
 
         try:
             # Insert directive into original docstring
@@ -201,14 +201,14 @@ def versionchanged(reason=None, version=None):
 
     """
     if version is None:
-        raise ValueError('version must be specified.')
+        raise ValueError("version must be specified.")
 
     def decorator(func):
         # Generate Sphinx deprecated directive
-        directive = '.. versionchanged:: %s' % version
+        directive = ".. versionchanged:: %s" % version
 
         if reason is not None:
-            directive += '\n  %s' % reason
+            directive += "\n  %s" % reason
 
         try:
             # Insert directive into original docstring

@@ -14,17 +14,19 @@ class TextCategorization(Service):
     user-defined model.
     """
 
-    _SERVICE_ROOT = '/categorization'
+    _SERVICE_ROOT = "/categorization"
 
     @classmethod
-    def categorize(cls,
-                   documents,
-                   model,
-                   caslib=None,
-                   id_column=None,
-                   text_column=None,
-                   description=None,
-                   output_postfix=None):
+    def categorize(
+        cls,
+        documents,
+        model,
+        caslib=None,
+        id_column=None,
+        text_column=None,
+        description=None,
+        output_postfix=None,
+    ):
         """
 
         Parameters
@@ -63,40 +65,40 @@ class TextCategorization(Service):
 
         """
         if documents is None:
-            raise TypeError('`documents` cannot be None.')
+            raise TypeError("`documents` cannot be None.")
 
-        url = '/jobs'
+        url = "/jobs"
 
         if isinstance(documents, (dict, str)):
             # Input is caslib
             data = {
-                'inputUri': uri_as_str(documents),
-                'documentIdVariable': id_column,
-                'textVariable': text_column,
-                'version': 1,
+                "inputUri": uri_as_str(documents),
+                "documentIdVariable": id_column,
+                "textVariable": text_column,
+                "version": 1,
             }
             headers = {
-                'Content-Type': 'application/vnd.sas.text.categorization.job.request+json',
-                'Accept': 'application/vnd.sas.text.categorization.job+json',
+                "Content-Type": "application/vnd.sas.text.categorization.job.request+json",
+                "Accept": "application/vnd.sas.text.categorization.job+json",
             }
         else:
             # Input is inline documents
             data = {
-                'caslibUri': uri_as_str(caslib),
-                'documents': documents,
-                'version': 1,
+                "caslibUri": uri_as_str(caslib),
+                "documents": documents,
+                "version": 1,
             }
-            url += '#data'
+            url += "#data"
             headers = {
-                'Content-Type': 'application/vnd.sas.text.categorization.job.request.documents+json',
-                'Accept': 'application/vnd.sas.text.categorization.job+json',
+                "Content-Type": "application/vnd.sas.text.categorization.job.request.documents+json",
+                "Accept": "application/vnd.sas.text.categorization.job+json",
             }
 
         data.update(
             {
-                'description': description,
-                'modelUri': uri_as_str(model),
-                'outputTableNamePostfix': output_postfix,
+                "description": description,
+                "modelUri": uri_as_str(model),
+                "outputTableNamePostfix": output_postfix,
             }
         )
 

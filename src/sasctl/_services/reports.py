@@ -17,9 +17,9 @@ class Reports(Service):
 
     """
 
-    _SERVICE_ROOT = 'reports'
+    _SERVICE_ROOT = "reports"
 
-    list_reports, get_report, _, _ = Service._crud_funcs('/reports', 'report')
+    list_reports, get_report, _, _ = Service._crud_funcs("/reports", "report")
 
     @classmethod
     def get_visual_elements(cls, report):
@@ -41,11 +41,8 @@ class Reports(Service):
 
         """
         report = cls.get_report(report)
-        elements = cls.request_link(report, 'contentVisualElements')
+        elements = cls.request_link(report, "contentVisualElements")
 
         # Despite being "visual" not all elements can be rendered by
         # report_images service.  Only return renderable elements.
-        return [e for e in elements if e.type not in ('Table')]
-
-
-
+        return [e for e in elements if e.type not in ("Table")]

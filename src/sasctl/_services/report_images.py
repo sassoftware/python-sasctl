@@ -12,7 +12,7 @@ LOW = 0
 MEDIUM = 1
 HIGH = 2
 
-_LOD_VALUES = {LOW: 'thumbnail', MEDIUM: 'normal', HIGH: 'entireSection'}
+_LOD_VALUES = {LOW: "thumbnail", MEDIUM: "normal", HIGH: "entireSection"}
 
 
 class ReportImages(Service):
@@ -28,7 +28,7 @@ class ReportImages(Service):
 
     """
 
-    _SERVICE_ROOT = 'reportImages'
+    _SERVICE_ROOT = "reportImages"
 
     LOD_LOW = LOW
     """Renders the content with minimal details for creating thumbnails."""
@@ -75,13 +75,13 @@ class ReportImages(Service):
         """
 
         if isinstance(report, RestObj):
-            report = cls.get_link(report, 'self')['uri']
+            report = cls.get_link(report, "self")["uri"]
 
         if isinstance(size, tuple):
-            size = '%dx%d' % size
+            size = "%dx%d" % size
 
         if size is None:
-            size = '640x480'
+            size = "640x480"
 
         lod = lod or HIGH
 
@@ -101,7 +101,7 @@ class ReportImages(Service):
         formatted_elements = []
 
         if elements is not None:
-            selection = 'visualElements'
+            selection = "visualElements"
 
             # In the case where a single element was passed, wrap it in a list
             if isinstance(elements, (str, dict)):
@@ -122,29 +122,29 @@ class ReportImages(Service):
                     elem_size = size
 
                 # If element was passed as a RestObj, extract the name
-                if hasattr(elem_name, 'name'):
+                if hasattr(elem_name, "name"):
                     elem_name = elem_name.name
 
                 # If size was passed as a tuple, format as string
                 if isinstance(elem_size, tuple):
-                    elem_size = '%dx%d' % elem_size
+                    elem_size = "%dx%d" % elem_size
 
                 formatted_elements.append(dict(name=elem_name, size=elem_size))
 
         elif section is not None:
-            selection = 'report'
+            selection = "report"
         else:
-            selection = 'perSection'
+            selection = "perSection"
 
         job = cls.post(
-            '/jobs#requestBody',
+            "/jobs#requestBody",
             json={
-                'reportUri': report,
-                'layoutType': lod,
-                'selectionType': selection,
-                'size': size,
-                'specificVisualElements': formatted_elements,
-                'sectionIndex': section,
+                "reportUri": report,
+                "layoutType": lod,
+                "selectionType": selection,
+                "size": size,
+                "specificVisualElements": formatted_elements,
+                "sectionIndex": section,
             },
         )
 
@@ -214,7 +214,7 @@ class ReportImages(Service):
         result = cls._monitor_job(job)
 
         images = [
-            cls.request_link(img, 'image', format='content') for img in result.images
+            cls.request_link(img, "image", format="content") for img in result.images
         ]
 
         return images

@@ -8,8 +8,8 @@ import os
 
 from .service import Service
 
-DEFAULT_SERVER = 'cas-shared-default'
-DEFAULT_CASLIB = 'casuser'
+DEFAULT_SERVER = "cas-shared-default"
+DEFAULT_CASLIB = "casuser"
 
 
 class CASManagement(Service):
@@ -17,9 +17,9 @@ class CASManagement(Service):
     actions on common resources as they relate to Cloud Analytic Services (CAS).
     """
 
-    _SERVICE_ROOT = '/casManagement'
+    _SERVICE_ROOT = "/casManagement"
 
-    list_servers, get_server, _, _ = Service._crud_funcs('/servers', 'server')
+    list_servers, get_server, _, _ = Service._crud_funcs("/servers", "server")
 
     @classmethod
     def list_caslibs(cls, server, filter_=None):
@@ -40,7 +40,7 @@ class CASManagement(Service):
 
         """
         return (
-            cls._get_rel(server, 'caslibs', func=cls.get_server, filter_=filter_) or []
+            cls._get_rel(server, "caslibs", func=cls.get_server, filter_=filter_) or []
         )
 
     @classmethod
@@ -86,7 +86,10 @@ class CASManagement(Service):
             A collection of :class:`.RestObj` instances.
 
         """
-        return cls._get_rel(caslib, 'tables', server, func=cls.get_caslib, filter_=filter_) or []
+        return (
+            cls._get_rel(caslib, "tables", server, func=cls.get_caslib, filter_=filter_)
+            or []
+        )
 
     @classmethod
     def get_table(cls, name, caslib=None, server=None):
@@ -155,28 +158,28 @@ class CASManagement(Service):
         header = True if header is None else bool(header)
 
         # Not a file-like object, assuming it's a file path
-        if not hasattr(file, 'read'):
+        if not hasattr(file, "read"):
             path = os.path.abspath(os.path.expanduser(file))
-            format_ = os.path.splitext(path)[-1].lstrip('.').lower()
+            format_ = os.path.splitext(path)[-1].lstrip(".").lower()
 
             # Extension should be supported & needs to be explicitly set in
             # the "format" parameter to avoid errors.
-            if format_ not in ('csv', 'xls', 'xlsx', 'sas7bdat', 'sashdat'):
+            if format_ not in ("csv", "xls", "xlsx", "sas7bdat", "sashdat"):
                 raise ValueError("File '%s' has an unsupported file type." % file)
 
-            with open(path, 'rb') as f:
+            with open(path, "rb") as f:
                 file = f.read()
 
         data = {
-            'tableName': name,
-            'containsHeaderRow': header,
+            "tableName": name,
+            "containsHeaderRow": header,
         }
 
         if format_ is not None:
-            data['format'] = format_
+            data["format"] = format_
 
         tbl = cls.post(
-            '/servers/%s/caslibs/%s/tables' % (server, caslib),
+            "/servers/%s/caslibs/%s/tables" % (server, caslib),
             data=data,
             files={name: file},
         )

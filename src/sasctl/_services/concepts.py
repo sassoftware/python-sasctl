@@ -13,7 +13,7 @@ class Concepts(Service):
     prebuilt or user-defined model.
     """
 
-    _SERVICE_ROOT = '/concepts'
+    _SERVICE_ROOT = "/concepts"
 
     @classmethod
     def assign_concepts(
@@ -27,7 +27,7 @@ class Concepts(Service):
         output_postfix=None,
         match_type=None,
         enable_facts=False,
-        language='en',
+        language="en",
     ):
         """Performs sentiment analysis on the input data.
 
@@ -77,30 +77,30 @@ class Concepts(Service):
 
         """
         if documents is None:
-            raise TypeError('`documents` cannot be None.')
+            raise TypeError("`documents` cannot be None.")
 
         if isinstance(documents, (dict, str)):
             data = {
-                'inputUri': uri_as_str(documents),
-                'documentIdVariable': id_column,
-                'textVariable': text_column,
-                'version': 1,
+                "inputUri": uri_as_str(documents),
+                "documentIdVariable": id_column,
+                "textVariable": text_column,
+                "version": 1,
             }
         else:
             data = {
-                'caslibUri': uri_as_str(caslib),
-                'documents': documents,
-                'version': 1,
+                "caslibUri": uri_as_str(caslib),
+                "documents": documents,
+                "version": 1,
             }
 
         data.update(
             {
-                'description': description,
-                'language': language,
-                'modelUri': uri_as_str(model),
-                'outputTableNamePostfix': output_postfix,
-                'matchType': match_type,
-                'enableFacts': enable_facts,
+                "description": description,
+                "language": language,
+                "modelUri": uri_as_str(model),
+                "outputTableNamePostfix": output_postfix,
+                "matchType": match_type,
+                "enableFacts": enable_facts,
             }
         )
 
@@ -109,19 +109,19 @@ class Concepts(Service):
             if data[k] is None:
                 del data[k]
 
-        url = '/jobs'
+        url = "/jobs"
 
         # Update URL if passing in raw documents.
-        if 'documents' in data:
-            url += '#data'
+        if "documents" in data:
+            url += "#data"
             headers = {
-                'Content-Type': 'application/vnd.sas.text.concepts.job.request.documents+json',
-                'Accept': 'application/vnd.sas.text.concepts.job+json',
+                "Content-Type": "application/vnd.sas.text.concepts.job.request.documents+json",
+                "Accept": "application/vnd.sas.text.concepts.job+json",
             }
         else:
             headers = {
-                'Content-Type': 'application/vnd.sas.text.concepts.job.request+json',
-                'Accept': 'application/vnd.sas.text.concepts.job+json',
+                "Content-Type": "application/vnd.sas.text.concepts.job.request+json",
+                "Accept": "application/vnd.sas.text.concepts.job+json",
             }
 
         return cls.post(url, json=data, headers=headers)

@@ -25,26 +25,28 @@ class TextParsing(Service):
 
     """
 
-    _SERVICE_ROOT = '/parsing'
+    _SERVICE_ROOT = "/parsing"
 
     @classmethod
-    def parse_documents(cls,
-                        documents,
-                        caslib=None,
-                        id_column=None,
-                        text_column=None,
-                        description=None,
-                        standard_entities=False,
-                        noun_groups=False,
-                        min_doc_count=10,
-                        concept_model=None,
-                        output_postfix=None,
-                        spell_check=False,
-                        override_list=None,
-                        stop_list=None,
-                        start_list=None,
-                        synonym_list=None,
-                        language='en'):
+    def parse_documents(
+        cls,
+        documents,
+        caslib=None,
+        id_column=None,
+        text_column=None,
+        description=None,
+        standard_entities=False,
+        noun_groups=False,
+        min_doc_count=10,
+        concept_model=None,
+        output_postfix=None,
+        spell_check=False,
+        override_list=None,
+        stop_list=None,
+        start_list=None,
+        synonym_list=None,
+        language="en",
+    ):
         """Performs natural language parsing on the input data.
 
         Creates a text parsing job that executes asynchronously.  There are two
@@ -100,7 +102,7 @@ class TextParsing(Service):
         """
 
         if documents is None:
-            raise TypeError('`documents` cannot be None.')
+            raise TypeError("`documents` cannot be None.")
 
         if isinstance(documents, (dict, str)):
             data = {
@@ -111,9 +113,9 @@ class TextParsing(Service):
             }
         else:
             data = {
-                'caslibUri': uri_as_str(caslib),
-                'documents': documents,
-                'version': 1,
+                "caslibUri": uri_as_str(caslib),
+                "documents": documents,
+                "version": 1,
             }
 
         data.update(
@@ -139,19 +141,19 @@ class TextParsing(Service):
             if data[k] is None:
                 del data[k]
 
-        url = '/jobs'
+        url = "/jobs"
 
         # Update URL if passing in raw documents.
-        if 'documents' in data:
-            url += '#data'
+        if "documents" in data:
+            url += "#data"
             headers = {
-                'Content-Type': 'application/vnd.sas.text.parsing.job.request.documents+json',
-                'Accept': 'application/vnd.sas.text.parsing.job+json',
+                "Content-Type": "application/vnd.sas.text.parsing.job.request.documents+json",
+                "Accept": "application/vnd.sas.text.parsing.job+json",
             }
         else:
             headers = {
-                'Content-Type': 'application/vnd.sas.text.parsing.job.request+json',
-                'Accept': 'application/vnd.sas.text.parsing.job+json',
+                "Content-Type": "application/vnd.sas.text.parsing.job.request+json",
+                "Accept": "application/vnd.sas.text.parsing.job+json",
             }
 
         return cls.post(url, json=data, headers=headers)

@@ -16,14 +16,14 @@ class Folders(Service):
 
     """
 
-    _SERVICE_ROOT = '/folders'
+    _SERVICE_ROOT = "/folders"
 
     list_folders, get_folder, update_folder, delete_folder = Service._crud_funcs(
-        '/folders', 'folder'
+        "/folders", "folder"
     )
 
     @classmethod
-    @sasctl_command('folders', 'create')
+    @sasctl_command("folders", "create")
     def create_folder(cls, name, parent=None, description=None):
         """Create a new folder.
 
@@ -46,22 +46,18 @@ class Folders(Service):
         if parent is not None:
             parent_obj = cls.get_folder(parent)
 
-            parent_uri = cls.get_link(parent_obj, 'self')
+            parent_uri = cls.get_link(parent_obj, "self")
             if parent_uri is None:
                 raise ValueError("`parent` folder '%s' does not exist." % parent)
-            parent_uri = parent_uri['uri']
+            parent_uri = parent_uri["uri"]
         else:
             parent_uri = None
 
-        body = {
-            'name': name,
-            'description': description,
-            'folderType': 'folder'
-        }
+        body = {"name": name, "description": description, "folderType": "folder"}
 
         return cls.post(
-            '/folders',
+            "/folders",
             json=body,
-            params={'parentFolderUri': parent_uri},
-            headers={'Content-Type': 'application/vnd.sas.content.folder+json'},
+            params={"parentFolderUri": parent_uri},
+            headers={"Content-Type": "application/vnd.sas.content.folder+json"},
         )

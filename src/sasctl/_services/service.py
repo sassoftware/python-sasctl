@@ -16,7 +16,7 @@ from ..core import HTTPError, PagedItemIterator, sasctl_command
 from ..exceptions import JobTimeoutError
 
 
-class Service(object):                                        # skipcq PYL-R0205
+class Service(object):  # skipcq PYL-R0205
     """Base class for all services.  Should not be used directly."""
 
     _SERVICE_ROOT = None
@@ -41,7 +41,7 @@ class Service(object):                                        # skipcq PYL-R0205
 
         """
         try:
-            response = cls.head('/', format_='response')
+            response = cls.head("/", format_="response")
             return response.status_code == 200
         except HTTPError:
             return False
@@ -55,10 +55,10 @@ class Service(object):                                        # skipcq PYL-R0205
         RestObj
 
         """
-        return cls.get('/apiMeta')
+        return cls.get("/apiMeta")
 
     @classmethod
-    def request(cls, verb, path, session=None, format_='auto', **kwargs):
+    def request(cls, verb, path, session=None, format_="auto", **kwargs):
         """Send an HTTP request with a session.
 
         Parameters
@@ -85,10 +85,10 @@ class Service(object):                                        # skipcq PYL-R0205
         -------
 
         """
-        if path.startswith('/'):
+        if path.startswith("/"):
             path = cls._SERVICE_ROOT + path
         else:
-            path = cls._SERVICE_ROOT + '/' + path
+            path = cls._SERVICE_ROOT + "/" + path
 
         return core.request(verb, path, session, format_, **kwargs)
 
@@ -96,7 +96,7 @@ class Service(object):                                        # skipcq PYL-R0205
     def get(cls, *args, **kwargs):
         """Send a GET request."""
         try:
-            return cls.request('get', *args, **kwargs)
+            return cls.request("get", *args, **kwargs)
         except HTTPError as e:
             if e.code == 404:
                 return None  # Resource not found
@@ -105,22 +105,22 @@ class Service(object):                                        # skipcq PYL-R0205
     @classmethod
     def head(cls, *args, **kwargs):
         """Send a HEAD request."""
-        return cls.request('head', *args, **kwargs)
+        return cls.request("head", *args, **kwargs)
 
     @classmethod
     def post(cls, *args, **kwargs):
         """Send a POST request."""
-        return cls.request('post', *args, **kwargs)
+        return cls.request("post", *args, **kwargs)
 
     @classmethod
     def put(cls, *args, **kwargs):
         """Send a PUT request."""
-        return cls.request('put', *args, **kwargs)
+        return cls.request("put", *args, **kwargs)
 
     @classmethod
     def delete(cls, *args, **kwargs):
         """Send a DELETE request."""
-        return cls.request('delete', *args, **kwargs)
+        return cls.request("delete", *args, **kwargs)
 
     @staticmethod
     def _crud_funcs(
@@ -169,7 +169,7 @@ class Service(object):                                        # skipcq PYL-R0205
 
             get_filter = default_filter
 
-        @sasctl_command('list')
+        @sasctl_command("list")
         def list_items(cls, filter=None, start=None, limit=None, **kwargs):
             """List all {items} available in the environment.
 
@@ -194,14 +194,14 @@ class Service(object):                                        # skipcq PYL-R0205
 
             """
             if filter is not None:
-                kwargs['filter'] = filter
+                kwargs["filter"] = filter
             if start is not None:
-                kwargs['start'] = int(start)
+                kwargs["start"] = int(start)
             if limit is not None:
-                kwargs['limit'] = int(limit)
+                kwargs["limit"] = int(limit)
 
-            params = '&'.join(
-                '%s=%s' % (k, quote(str(v), safe='/(),"')) for k, v in kwargs.items()
+            params = "&".join(
+                "%s=%s" % (k, quote(str(v), safe='/(),"')) for k, v in kwargs.items()
             )
 
             results = cls.get(path, params=params)
@@ -212,7 +212,7 @@ class Service(object):                                        # skipcq PYL-R0205
 
             return [results]
 
-        @sasctl_command('get')
+        @sasctl_command("get")
         def get_item(cls, item, refresh=False):
             """Return a {item} instance.
 
@@ -237,30 +237,30 @@ class Service(object):                                        # skipcq PYL-R0205
             """
             # If the input already appears to be the requested object just
             # return it, unless a refresh of the data was explicitly requested.
-            if isinstance(item, dict) and all(k in item for k in ('id', 'name')):
+            if isinstance(item, dict) and all(k in item for k in ("id", "name")):
                 if refresh:
-                    item = item['id']
+                    item = item["id"]
                 else:
                     return item
 
             if cls.is_uuid(item):
-                return cls.get(path + '/{id}'.format(id=item))
+                return cls.get(path + "/{id}".format(id=item))
             results = list_items(cls, **get_filter(item))
 
             match = None
             for result in results:
-                if result['name'] == str(item):
+                if result["name"] == str(item):
                     # The first result that matches on name should be stored.
                     # Will be returned after determining that there aren't additional
                     # matches
                     if match is None:
                         # Make a request for the specific object so that ETag
                         # is included, allowing updates.
-                        if cls.get_link(result, 'self'):
-                            match = cls.request_link(result, 'self')
+                        if cls.get_link(result, "self"):
+                            match = cls.request_link(result, "self")
                         else:
-                            id_ = result.get('id', result['name'])
-                            match = cls.get(path + '/{id}'.format(id=id_))
+                            id_ = result.get("id", result["name"])
+                            match = cls.get(path + "/{id}".format(id=id_))
                     # We already found a match so this is a duplicate.  Warn the user so they know
                     # the item returned may not be the one they were expecting.
                     else:
@@ -272,7 +272,7 @@ class Service(object):                                        # skipcq PYL-R0205
 
             return match
 
-        @sasctl_command('update')
+        @sasctl_command("update")
         def update_item(cls, item):
             """Update a {item} instance.
 
@@ -285,24 +285,24 @@ class Service(object):                                        # skipcq PYL-R0205
             None
 
             """
-            headers = getattr(item, '_headers', None)
-            if headers is None or headers.get('etag') is None:
-                raise ValueError('Could not find ETag for update of %s.' % item)
+            headers = getattr(item, "_headers", None)
+            if headers is None or headers.get("etag") is None:
+                raise ValueError("Could not find ETag for update of %s." % item)
 
-            id_ = getattr(item, 'id', None)
+            id_ = getattr(item, "id", None)
             if id_ is None:
                 raise ValueError(
-                    'Could not find property `id` for update of %s.' % item
+                    "Could not find property `id` for update of %s." % item
                 )
 
             headers = {
-                'If-Match': item._headers.get('etag'),
-                'Content-Type': item._headers.get('content-type'),
+                "If-Match": item._headers.get("etag"),
+                "Content-Type": item._headers.get("content-type"),
             }
 
-            return cls.put(path + '/%s' % id_, json=item, headers=headers)
+            return cls.put(path + "/%s" % id_, json=item, headers=headers)
 
-        @sasctl_command('delete')
+        @sasctl_command("delete")
         def delete_item(cls, item):
             """Delete a {item} instance.
 
@@ -318,17 +318,17 @@ class Service(object):                                        # skipcq PYL-R0205
             item_name = str(item)
 
             # Try to find the item if the id can't be found
-            if not (isinstance(item, dict) and 'id' in item):
+            if not (isinstance(item, dict) and "id" in item):
                 item = get_item(cls, item)
                 if item is None:
                     cls.log.info("Object '%s' not found.  Skipping delete.", item_name)
                     return
 
-            if isinstance(item, dict) and 'id' in item:
-                item = item['id']
+            if isinstance(item, dict) and "id" in item:
+                item = item["id"]
 
             if cls.is_uuid(item):
-                response = cls.delete(path + '/{id}'.format(id=item))
+                response = cls.delete(path + "/{id}".format(id=item))
                 # Response generally seems to be an empty string.  If so, just return None
                 # BUT, if the service provides an actual response, return it.
                 if response:
@@ -338,17 +338,17 @@ class Service(object):                                        # skipcq PYL-R0205
 
         # Pull object name from path if unspecified (many paths end in
         # nouns like /folders or /repositories).
-        plural_term = plural_term or str(path).split('/')[-1]
+        plural_term = plural_term or str(path).split("/")[-1]
         single_term = single_term or plural_term
         service_name = service_name or plural_term
-        service_name = service_name.replace(' ', '_')
+        service_name = service_name.replace(" ", "_")
 
         for func in [list_items, get_item, update_item, delete_item]:
             func.__doc__ = func.__doc__.format(item=single_term, items=plural_term)
             func._cli_service = service_name
 
-            prefix = func.__name__.split('_')[0] + '_'
-            suffix = plural_term if prefix == 'list_' else single_term
+            prefix = func.__name__.split("_")[0] + "_"
+            suffix = plural_term if prefix == "list_" else single_term
             func.__name__ = prefix + suffix
 
         return [
@@ -383,7 +383,7 @@ class Service(object):                                        # skipcq PYL-R0205
         if obj is None:
             return None
 
-        params = 'filter={}'.format(filter_) if filter_ is not None else {}
+        params = "filter={}".format(filter_) if filter_ is not None else {}
 
         resources = cls.request_link(obj, rel, params=params)
 
@@ -415,19 +415,19 @@ class Service(object):                                        # skipcq PYL-R0205
         """
 
         def completed(job):
-            return job['state'].lower() in ('completed', 'failed')
+            return job["state"].lower() in ("completed", "failed")
 
         retries = 0
 
-        if cls.get_link(job, 'self') is None:
+        if cls.get_link(job, "self") is None:
             raise ValueError("Link 'self' not found on %s" % job)
 
         # TODO: Log
         while not completed(job) and retries < max_retries:
             time.sleep(0.5)
             retries += 1
-            job = cls.request_link(job, 'self')
+            job = cls.request_link(job, "self")
 
         if completed(job):
             return job
-        raise JobTimeoutError('Timeout while waiting on job %s' % job)
+        raise JobTimeoutError("Timeout while waiting on job %s" % job)

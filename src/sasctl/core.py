@@ -63,44 +63,44 @@ def _redact(pattern, repl, string):
     is_bytes = isinstance(string, bytes)
 
     try:
-        string = string.decode('utf-8') if is_bytes else string
+        string = string.decode("utf-8") if is_bytes else string
         string = re.sub(pattern, repl, string)
-        string = string.encode('utf-8') if is_bytes else string
+        string = string.encode("utf-8") if is_bytes else string
     except UnicodeDecodeError:
         pass
     return string
 
 
 def _filter_password(r):
-    if hasattr(r, 'body') and r.body is not None:
+    if hasattr(r, "body") and r.body is not None:
         # Filter password from 'grant_type=password&username=<user>&password=<password>' during Post to Logon service.
-        r.body = _redact(r"(?<=&password=)([^&]*)\b", '*****', r.body)
+        r.body = _redact(r"(?<=&password=)([^&]*)\b", "*****", r.body)
 
         # Filter client secret {"client_secret": "<password>"}
-        r.body = _redact('(?<=client_secret": ")[^"]*', '*****', r.body)
+        r.body = _redact('(?<=client_secret": ")[^"]*', "*****", r.body)
     return r
 
 
 def _filter_token(r):
     # Redact "Bearer <token>" in Authorization headers
-    if hasattr(r, 'headers') and 'Authorization' in r.headers:
-        r.headers['Authorization'] = _redact(
-            r'(?<=Bearer ).*', '[redacted]', r.headers['Authorization']
+    if hasattr(r, "headers") and "Authorization" in r.headers:
+        r.headers["Authorization"] = _redact(
+            r"(?<=Bearer ).*", "[redacted]", r.headers["Authorization"]
         )
 
     # Redact "Basic <base64 encoded pw> in Authorization headers.  This covers client ids & client secrets.
-    if hasattr(r, 'headers') and 'Authorization' in r.headers:
-        r.headers['Authorization'] = _redact(
-            r'(?<=Basic ).*', '[redacted]', r.headers['Authorization']
+    if hasattr(r, "headers") and "Authorization" in r.headers:
+        r.headers["Authorization"] = _redact(
+            r"(?<=Basic ).*", "[redacted]", r.headers["Authorization"]
         )
 
     # Redact Consul token from headers.  Should only appear when registering a new client
-    if hasattr(r, 'headers') and 'X-Consul-Token' in r.headers:
-        r.headers['X-Consul-Token'] = '[redacted]'
+    if hasattr(r, "headers") and "X-Consul-Token" in r.headers:
+        r.headers["X-Consul-Token"] = "[redacted]"
 
     # Redact "access_token":"<token>" in response from Logon service
-    if hasattr(r, '_content'):
-        r._content = _redact('(?<=access_token":")[^"]*', '[redacted]', r._content)
+    if hasattr(r, "_content"):
+        r._content = _redact('(?<=access_token":")[^"]*', "[redacted]", r._content)
 
     return r
 
@@ -174,7 +174,7 @@ class OAuth2Token(requests.auth.AuthBase):
             self.expiration = datetime.now() + timedelta(seconds=expires_in)
 
     def __call__(self, r):
-        r.headers['Authorization'] = 'Bearer ' + self.access_token
+        r.headers["Authorization"] = "Bearer " + self.access_token
         return r
 
     @property
@@ -202,7 +202,7 @@ class RestObj(dict):
         )
 
     def __repr__(self):
-        headers = getattr(self, '_headers', {})
+        headers = getattr(self, "_headers", {})
 
         return "%s(headers=%r, data=%s)" % (
             self.__class__,
@@ -211,10 +211,10 @@ class RestObj(dict):
         )
 
     def __str__(self):
-        if 'name' in self:
-            return str(self['name'])
-        if 'id' in self:
-            return str(self['id'])
+        if "name" in self:
+            return str(self["name"])
+        if "id" in self:
+            return str(self["id"])
         return repr(self)
 
 
@@ -222,14 +222,14 @@ class SSLContextAdapter(HTTPAdapter):
     """HTTPAdapter that uses the default SSL context on the machine."""
 
     def __init__(self, *args, **kwargs):
-        self.assert_hostname = kwargs.pop('assert_hostname', True)
+        self.assert_hostname = kwargs.pop("assert_hostname", True)
         requests.adapters.HTTPAdapter.__init__(self, *args, **kwargs)
 
     def init_poolmanager(self, *args, **kwargs):
         context = ssl.create_default_context()
         context.check_hostname = self.assert_hostname
-        kwargs['ssl_context'] = context
-        kwargs['assert_hostname'] = self.assert_hostname
+        kwargs["ssl_context"] = context
+        kwargs["assert_hostname"] = self.assert_hostname
         return super(SSLContextAdapter, self).init_poolmanager(*args, **kwargs)
 
 
@@ -273,7 +273,7 @@ class Session(requests.Session):
 
     """
 
-    PROFILE_PATH = '~/.sas/viya-api-profiles.yaml'
+    PROFILE_PATH = "~/.sas/viya-api-profiles.yaml"
 
     def __init__(
         self,
@@ -290,23 +290,23 @@ class Session(requests.Session):
 
         # Determine whether or not server SSL certificates should be verified.
         if verify_ssl is None:
-            verify_ssl = os.environ.get('SSLREQCERT', 'yes')
-            verify_ssl = str(verify_ssl).lower() not in ('no', 'false')
+            verify_ssl = os.environ.get("SSLREQCERT", "yes")
+            verify_ssl = str(verify_ssl).lower() not in ("no", "false")
 
         self._id = uuid4().hex
-        self.message_log = logger.getChild('session.%s' % self._id)
+        self.message_log = logger.getChild("session.%s" % self._id)
 
         # If certificate path has already been set for SWAT package, make
         # Requests module reuse it.
-        for k in ['SSLCALISTLOC', 'CAS_CLIENT_SSL_CA_LIST']:
+        for k in ["SSLCALISTLOC", "CAS_CLIENT_SSL_CA_LIST"]:
             if k in os.environ:
-                os.environ['REQUESTS_CA_BUNDLE'] = os.environ[k]
+                os.environ["REQUESTS_CA_BUNDLE"] = os.environ[k]
                 break
 
         # If certificate path hasn't been specified in either environment
         # variable, replace the default adapter with one that will use the
         # machine's default SSL _settings.
-        if 'REQUESTS_CA_BUNDLE' not in os.environ:
+        if "REQUESTS_CA_BUNDLE" not in os.environ:
             if verify_ssl:
                 # Skip hostname verification if IP address specified instead
                 # of DNS name.  Prevents error from urllib3.
@@ -320,14 +320,14 @@ class Session(requests.Session):
                 verify_hostname = not is_ipaddress(hostname)
                 adapter = SSLContextAdapter(assert_hostname=verify_hostname)
 
-                self.mount('https://', adapter)
+                self.mount("https://", adapter)
 
         # If we're skipping SSL verification, urllib3 will raise InsecureRequestWarnings on
         # every request.  Insert a warning filter so these warnings only appear on the first request.
         if not verify_ssl:
             from urllib3.exceptions import InsecureRequestWarning
 
-            warnings.simplefilter('default', InsecureRequestWarning)
+            warnings.simplefilter("default", InsecureRequestWarning)
 
         self.filters = DEFAULT_FILTERS
 
@@ -340,7 +340,7 @@ class Session(requests.Session):
 
                 # Use the httpAddress action to retieve information about
                 # REST endpoints
-                httpAddress = hostname.get_action('builtins.httpAddress')
+                httpAddress = hostname.get_action("builtins.httpAddress")
                 address = httpAddress()
                 domain = address.virtualHost
                 # httpAddress action may return virtualHost = ''
@@ -349,10 +349,10 @@ class Session(requests.Session):
                     domain = hostname._sw_connection._current_hostname
                 protocol = address.protocol
                 port = address.port
-                auth = hostname._sw_connection._auth.decode('utf-8').replace(
-                    'Basic ', ''
+                auth = hostname._sw_connection._auth.decode("utf-8").replace(
+                    "Basic ", ""
                 )
-                username, password = base64.b64decode(auth).decode('utf-8').split(':')
+                username, password = base64.b64decode(auth).decode("utf-8").split(":")
             else:
                 raise ValueError(
                     "A 'swat.CAS' session can only be reused "
@@ -366,36 +366,36 @@ class Session(requests.Session):
             domain = url.hostname or str(hostname)
 
         self._settings = {
-            'protocol': protocol or 'https',
-            'domain': domain,
-            'port': port,
-            'username': username,
-            'password': password,
+            "protocol": protocol or "https",
+            "domain": domain,
+            "port": port,
+            "username": username,
+            "password": password,
         }
 
-        if self._settings['password'] is None:
+        if self._settings["password"] is None:
             # Try to get credentials from .authinfo or .netrc files.
             # If no file path was specified, the default locations will
             # be checked.
-            if 'swat' in sys.modules:
+            if "swat" in sys.modules:
                 auth = swat.utils.authinfo.query_authinfo(
                     domain, user=username, path=authinfo
                 )
-                self._settings['username'] = auth.get('user')
-                self._settings['password'] = auth.get('password')
+                self._settings["username"] = auth.get("user")
+                self._settings["password"] = auth.get("password")
 
             # Not able to load credentials using SWAT.  Try Netrc.
             # TODO: IF a username was specified, verify that the credentials
             #       found are for that username.
-            if self._settings['password'] is None:
+            if self._settings["password"] is None:
                 try:
                     parser = netrc.netrc(authinfo)
                     values = parser.authenticators(domain)
                     if values:
                         (
-                            self._settings['username'],
+                            self._settings["username"],
                             _,
-                            self._settings['password'],
+                            self._settings["password"],
                         ) = values
                 except (OSError, IOError):
                     pass  # netrc throws if $HOME is not set
@@ -405,7 +405,7 @@ class Session(requests.Session):
 
         # Find a suitable authentication mechanism and build an auth header
         self.auth = self.get_auth(
-            self._settings['username'], self._settings['password'], token
+            self._settings["username"], self._settings["password"], token
         )
 
         # Used for context manager
@@ -458,7 +458,7 @@ class Session(requests.Session):
         """
         return self.add_logger(logging.StreamHandler(), level)
 
-    @versionadded(version='1.5.4')
+    @versionadded(version="1.5.4")
     def as_swat(self, server=None, **kwargs):
         """Create a SWAT connection to a CAS server.
 
@@ -492,7 +492,7 @@ class Session(requests.Session):
         0  example.sas.com  controller       Yes  127.0.0.1)])
 
         """
-        server = server or 'cas-shared-default'
+        server = server or "cas-shared-default"
 
         if swat is None:
             raise RuntimeError(
@@ -500,46 +500,46 @@ class Session(requests.Session):
             )
 
         # Construct the CAS server's URL
-        url = '{}://{}/{}-http/'.format(
-            self._settings['protocol'], self.hostname, server
+        url = "{}://{}/{}-http/".format(
+            self._settings["protocol"], self.hostname, server
         )
 
-        kwargs.setdefault('hostname', url)
+        kwargs.setdefault("hostname", url)
 
         # Starting in SWAT v1.8 oauth tokens could be passed directly in the password param.
         # Otherwise, use the username & password to re-authenticate.
-        if version.parse(swat.__version__) >= version.parse('1.8'):
-            kwargs['username'] = None
-            kwargs['password'] = self.auth.access_token
+        if version.parse(swat.__version__) >= version.parse("1.8"):
+            kwargs["username"] = None
+            kwargs["password"] = self.auth.access_token
         else:
             # Use this sessions info to connect to CAS unless user has explicitly give a value (even if None)
-            kwargs.setdefault('username', self.username)
-            kwargs.setdefault('password', self._settings['password'])
+            kwargs.setdefault("username", self.username)
+            kwargs.setdefault("password", self._settings["password"])
 
-        orig_sslreqcert = os.environ.get('SSLREQCERT')
+        orig_sslreqcert = os.environ.get("SSLREQCERT")
 
         # If SSL connections to microservices are not being verified, don't attempt
         # to verify connections to CAS - most likely certs are not in place.
         if not self.verify:
-            os.environ['SSLREQCERT'] = 'no'
+            os.environ["SSLREQCERT"] = "no"
 
         try:
             cas = swat.CAS(**kwargs)
-            cas.setsessopt(messagelevel='warning')
+            cas.setsessopt(messagelevel="warning")
         finally:
             # Reset environment variable to whatever it's original value was
             if orig_sslreqcert:
-                os.environ['SSLREQCERT'] = orig_sslreqcert
+                os.environ["SSLREQCERT"] = orig_sslreqcert
 
         return cas
 
     @property
     def username(self):
-        return self._settings.get('username')
+        return self._settings.get("username")
 
     @property
     def hostname(self):
-        return self._settings.get('domain')
+        return self._settings.get("domain")
 
     def send(self, request, **kwargs):
         if self.message_log.isEnabledFor(logging.DEBUG):
@@ -548,17 +548,17 @@ class Session(requests.Session):
                 r = filter(r)
 
             self.message_log.debug(
-                'HTTP/1.1 {verb} {url}\n{headers}\nBody:\n{body}'.format(
+                "HTTP/1.1 {verb} {url}\n{headers}\nBody:\n{body}".format(
                     verb=r.method,
                     url=r.url,
-                    headers='\n'.join(
-                        '{}: {}'.format(k, v) for k, v in r.headers.items()
+                    headers="\n".join(
+                        "{}: {}".format(k, v) for k, v in r.headers.items()
                     ),
                     body=_pformat(r.body),
                 )
             )
         else:
-            self.message_log.info('HTTP/1.1 %s %s', request.method, request.url)
+            self.message_log.info("HTTP/1.1 %s %s", request.method, request.url)
 
         response = super(Session, self).send(request, **kwargs)
 
@@ -568,17 +568,17 @@ class Session(requests.Session):
                 r = filter(r)
 
             self.message_log.debug(
-                'HTTP {status} {url}\n{headers}\nBody:\n{body}'.format(
+                "HTTP {status} {url}\n{headers}\nBody:\n{body}".format(
                     status=r.status_code,
                     url=r.url,
-                    headers='\n'.join(
-                        '{}: {}'.format(k, v) for k, v in r.headers.items()
+                    headers="\n".join(
+                        "{}: {}".format(k, v) for k, v in r.headers.items()
                     ),
                     body=_pformat(r.text),
                 )
             )
         else:
-            self.message_log.info('HTTP/1.1 %s %s', response.status_code, response.url)
+            self.message_log.info("HTTP/1.1 %s %s", response.status_code, response.url)
 
         return response
 
@@ -626,10 +626,10 @@ class Session(requests.Session):
             )
 
             if r.status_code == 401:
-                auth_header = r.headers.get('WWW-Authenticate', '').lower()
+                auth_header = r.headers.get("WWW-Authenticate", "").lower()
 
                 # Access token expired, need to refresh it (if we can)
-                if 'access token expired' in auth_header:
+                if "access token expired" in auth_header:
                     try:
                         self.auth = self.get_oauth_token(
                             refresh_token=self.auth.refresh_token
@@ -659,7 +659,7 @@ class Session(requests.Session):
 
             return r
         except requests.exceptions.SSLError as e:
-            if 'REQUESTS_CA_BUNDLE' not in os.environ:
+            if "REQUESTS_CA_BUNDLE" not in os.environ:
                 raise RuntimeError(
                     "SSL handshake failed.  The 'REQUESTS_CA_BUNDLE' "
                     "environment variable should contain the path to the CA "
@@ -669,19 +669,19 @@ class Session(requests.Session):
             raise e
 
     def get(self, url, **kwargs):
-        return self.request('GET', url, **kwargs)
+        return self.request("GET", url, **kwargs)
 
     def post(self, url, **kwargs):
-        return self.request('POST', url, **kwargs)
+        return self.request("POST", url, **kwargs)
 
     def put(self, url, **kwargs):
-        return self.request('PUT', url, **kwargs)
+        return self.request("PUT", url, **kwargs)
 
     def head(self, url, **kwargs):
-        return self.request('HEAD', url, **kwargs)
+        return self.request("HEAD", url, **kwargs)
 
     def delete(self, url, **kwargs):
-        return self.request('DELETE', url, **kwargs)
+        return self.request("DELETE", url, **kwargs)
 
     def get_auth(self, username=None, password=None, token=None):
         """Attempt to authenticate with the Viya environment.
@@ -721,7 +721,7 @@ class Session(requests.Session):
             token = self._get_token_with_kerberos()
             return OAuth2Token(token)
         except:
-            logger.exception('Failed to connect with Kerberos')
+            logger.exception("Failed to connect with Kerberos")
 
         # Try loading cached credentials
         token = self.read_cached_token(self.PROFILE_PATH)
@@ -771,28 +771,28 @@ class Session(requests.Session):
 
         if username is not None:
             data = {
-                'grant_type': 'password',
-                'username': username,
-                'password': password,
+                "grant_type": "password",
+                "username": username,
+                "password": password,
             }
         elif auth_code is not None:
-            data = {'grant_type': 'authorization_code', 'code': auth_code}
+            data = {"grant_type": "authorization_code", "code": auth_code}
         elif refresh_token is not None:
-            data = {'grant_type': 'refresh_token', 'refresh_token': refresh_token}
+            data = {"grant_type": "refresh_token", "refresh_token": refresh_token}
         else:
             raise ValueError(
-                'Either username and password or auth_code parameters must be specified.'
+                "Either username and password or auth_code parameters must be specified."
             )
 
-        client_id = client_id or os.environ.get('SASCTL_CLIENT_ID', 'sas.ec')
-        client_secret = client_secret or os.environ.get('SASCTL_CLIENT_SECRET', '')
+        client_id = client_id or os.environ.get("SASCTL_CLIENT_ID", "sas.ec")
+        client_secret = client_secret or os.environ.get("SASCTL_CLIENT_SECRET", "")
 
         headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
         }
 
-        url = self._build_url('/SASLogon/oauth/token')
+        url = self._build_url("/SASLogon/oauth/token")
         r = super(Session, self).post(
             url,
             headers=headers,
@@ -804,19 +804,19 @@ class Session(requests.Session):
         # Raise user-friendly error messages if issue is known
         if r.status_code == 400 and auth_code is not None:
             j = r.json()
-            if "Invalid authorization code" in j.get('error_description', ''):
+            if "Invalid authorization code" in j.get("error_description", ""):
                 raise exceptions.AuthorizationError(
                     "Invalid authorization code: '%s'" % auth_code
                 )
         if r.status_code == 401:
             if (
-                r.json().get('error_description', '').lower() == 'bad credentials'
+                r.json().get("error_description", "").lower() == "bad credentials"
                 and username is None
             ):
-                raise exceptions.AuthenticationError(msg='Invalid client id or secret.')
-            if r.json().get('error', '') == 'invalid_token':
+                raise exceptions.AuthenticationError(msg="Invalid client id or secret.")
+            if r.json().get("error", "") == "invalid_token":
                 raise exceptions.AuthorizationError(
-                    'Refresh token is incorrect, expired, or revoked.'
+                    "Refresh token is incorrect, expired, or revoked."
                 )
             if username is not None:
                 raise exceptions.AuthenticationError(username)
@@ -851,20 +851,20 @@ class Session(requests.Session):
         :meth:`Session.get_oauth_token`
 
         """
-        client_id = client_id or os.environ.get('SASCTL_CLIENT_ID', 'sas.ec')
+        client_id = client_id or os.environ.get("SASCTL_CLIENT_ID", "sas.ec")
 
         # User must open this URL in a browser and then enter the auth code that's generated.
         url = (
-            self._build_url('/SASLogon/oauth/authorize')
-            + '?response_type=code&client_id='
+            self._build_url("/SASLogon/oauth/authorize")
+            + "?response_type=code&client_id="
             + client_id
         )
         message = (
-            'Please use a web browser to login at the following URL to get your authorization code:\n'
+            "Please use a web browser to login at the following URL to get your authorization code:\n"
             + url
         )
         print(message)
-        auth_code = input('Authorization Code:')
+        auth_code = input("Authorization Code:")
 
         return auth_code
 
@@ -884,33 +884,33 @@ class Session(requests.Session):
 
         """
         profiles = Session._read_token_cache(path)
-        base_url = self._build_url('')
+        base_url = self._build_url("")
 
         # Top-level structure if no existing file was found
         if profiles is None:
-            profiles = {'profiles': []}
+            profiles = {"profiles": []}
 
         # Token values to be cached
         token = {
-            'accesstoken': token.access_token,
-            'refreshtoken': token.refresh_token,
-            'tokentype': 'bearer',
-            'expiry': token.expiration,
+            "accesstoken": token.access_token,
+            "refreshtoken": token.refresh_token,
+            "tokentype": "bearer",
+            "expiry": token.expiration,
         }
 
         # See if there's an existing profile to update
         matches = [
             (i, p)
-            for i, p in enumerate(profiles['profiles'])
-            if p['baseurl'] == base_url
+            for i, p in enumerate(profiles["profiles"])
+            if p["baseurl"] == base_url
         ]
         if matches:
             idx, match = matches[0]
-            match['oauthtoken'] = token
-            profiles['profiles'][idx] = match
+            match["oauthtoken"] = token
+            profiles["profiles"][idx] = match
         else:
-            profiles['profiles'].append(
-                {'baseurl': base_url, 'name': None, 'oauthtoken': token}
+            profiles["profiles"].append(
+                {"baseurl": base_url, "name": None, "oauthtoken": token}
             )
 
         Session._write_token_cache(profiles, path)
@@ -930,25 +930,25 @@ class Session(requests.Session):
         """
         # Map from field names in YAML to fields returned by SASLogon
         field_mappings = {
-            'accesstoken': 'access_token',
-            'refreshtoken': 'refresh_token',
-            'expiry': 'expiration',
+            "accesstoken": "access_token",
+            "refreshtoken": "refresh_token",
+            "expiry": "expiration",
         }
 
         profiles = Session._read_token_cache(path)
-        url = self._build_url('')
+        url = self._build_url("")
 
         # Couldn't read any profiles
         if profiles is None:
             return
 
         # Check each profile for a hostname match and return token if found
-        for profile in profiles.get('profiles', []):
-            baseurl = profile.get('baseurl', '').lower()
+        for profile in profiles.get("profiles", []):
+            baseurl = profile.get("baseurl", "").lower()
 
             # Return the cached token
             if baseurl == url.lower():
-                data = profile.get('oauthtoken', {})
+                data = profile.get("oauthtoken", {})
                 token = {
                     field_mappings[k]: v for k, v in data.items() if k in field_mappings
                 }
@@ -977,14 +977,14 @@ class Session(requests.Session):
             )
 
         user = self.username
-        client_id = 'sas.tkmtrb'
+        client_id = "sas.tkmtrb"
         flags = kerberos.GSS_C_MUTUAL_FLAG | kerberos.GSS_C_SEQUENCE_FLAG
-        service = 'HTTP@%s' % self._settings['domain']
+        service = "HTTP@%s" % self._settings["domain"]
 
-        logger.info('Attempting Kerberos authentication to %s', service)
+        logger.info("Attempting Kerberos authentication to %s", service)
 
         url = self._build_url(
-            '/SASLogon/oauth/authorize?client_id=%s&response_type=token' % client_id
+            "/SASLogon/oauth/authorize?client_id=%s&response_type=token" % client_id
         )
 
         # Get Kerberos challenge
@@ -992,21 +992,21 @@ class Session(requests.Session):
 
         if r.status_code != 401:
             raise ValueError(
-                'Kerberos challenge response not received.  '
-                'Expected HTTP 401 but received %s' % r.status_code
+                "Kerberos challenge response not received.  "
+                "Expected HTTP 401 but received %s" % r.status_code
             )
 
-        if 'www-authenticate' not in r.headers:
+        if "www-authenticate" not in r.headers:
             raise ValueError(
                 "Kerberos challenge response not received.  "
                 "'WWW-Authenticate' header not received."
             )
 
-        if 'Negotiate' not in r.headers['www-authenticate']:
+        if "Negotiate" not in r.headers["www-authenticate"]:
             raise ValueError(
                 "Kerberos challenge response not received.  "
                 "'WWW-Authenticate' header contained '%s', "
-                "expected 'Negotiate'." % r.headers['www-authenticate']
+                "expected 'Negotiate'." % r.headers["www-authenticate"]
             )
 
         # Initialize a request to KDC for a ticket to access the service.
@@ -1014,32 +1014,32 @@ class Session(requests.Session):
 
         # Send the request.
         # NOTE: empty-string parameter required for initial call.
-        kerberos.authGSSClientStep(context, '')
+        kerberos.authGSSClientStep(context, "")
 
         # Get the KDC response
-        auth_header = 'Negotiate %s' % kerberos.authGSSClientResponse(context)
+        auth_header = "Negotiate %s" % kerberos.authGSSClientResponse(context)
 
         # Get the user that was used for authentication
         username = kerberos.authGSSClientUserName(context)
 
         # Drop @REALM from username and store
         if username is not None:
-            self._settings['username'] = username.rsplit('@', maxsplit=1)[0]
+            self._settings["username"] = username.rsplit("@", maxsplit=1)[0]
 
         # Response to Kerberos challenge with ticket
         r = self.get(
             url,
-            headers={'Authorization': auth_header},
+            headers={"Authorization": auth_header},
             allow_redirects=False,
             verify=self.verify,
         )
 
-        if 'Location' not in r.headers:
+        if "Location" not in r.headers:
             raise ValueError(
                 "Invalid authentication response." "'Location' header not received."
             )
 
-        match = re.search('(?<=access_token=)[^&]*', r.headers['Location'])
+        match = re.search("(?<=access_token=)[^&]*", r.headers["Location"])
 
         if match is None:
             raise ValueError(
@@ -1053,15 +1053,15 @@ class Session(requests.Session):
         """Build a complete URL from a path by substituting in session parameters."""
         components = urlsplit(url)
 
-        domain = components.netloc or self._settings['domain']
+        domain = components.netloc or self._settings["domain"]
 
         # Add port if a non-standard port was specified
-        if self._settings['port'] is not None and ':' not in domain:
-            domain = '{}:{}'.format(domain, self._settings['port'])
+        if self._settings["port"] is not None and ":" not in domain:
+            domain = "{}:{}".format(domain, self._settings["port"])
 
         return urlunsplit(
             [
-                components.scheme or self._settings['protocol'],
+                components.scheme or self._settings["protocol"],
                 domain,
                 components.path,
                 components.query,
@@ -1096,11 +1096,11 @@ class Session(requests.Session):
             mode = os.stat(yaml_file).st_mode
             flags = oct(mode)[-3:]
 
-            if flags != '600':
+            if flags != "600":
                 raise RuntimeError(
-                    'Unable to read profile cache.  '
-                    'The file permissions for %s must be configured so that only the file owner has '
-                    'read/write permissions (equivalent to 600 on Linux systems).'
+                    "Unable to read profile cache.  "
+                    "The file permissions for %s must be configured so that only the file owner has "
+                    "read/write permissions (equivalent to 600 on Linux systems)."
                     % yaml_file
                 )
 
@@ -1128,7 +1128,7 @@ class Session(requests.Session):
         if not os.path.exists(sas_dir):
             os.mkdir(sas_dir)
 
-        with open(yaml_file, 'w') as f:
+        with open(yaml_file, "w") as f:
             yaml.dump(profiles, f)
 
         # Get bit flags indicating access permissions
@@ -1136,7 +1136,7 @@ class Session(requests.Session):
         flags = oct(mode)[-3:]
 
         # Ensure access to file is restricted
-        if flags != '600':
+        if flags != "600":
             os.chmod(yaml_file, 0o600)
 
     def __enter__(self):
@@ -1161,7 +1161,7 @@ class Session(requests.Session):
                 class_=type(self).__name__,
                 hostname=self.hostname,
                 username=self.username,
-                protocol=self._settings.get('protocol'),
+                protocol=self._settings.get("protocol"),
                 verify=self.verify,
             )
         )
@@ -1200,7 +1200,7 @@ class PageIterator:
         self._pool = None
         self._requested = []
 
-        link = get_link(obj, 'next')
+        link = get_link(obj, "next")
 
         # Dissect the "next" link so it can be reformatted and used by
         # parallel threads
@@ -1209,17 +1209,17 @@ class PageIterator:
             self._start = 0
             self._limit = 0
         if link is not None:
-            link = link['href']
-            start = re.search(r'(?<=start=)[\d]+', link)
-            limit = re.search(r'(?<=limit=)[\d]+', link)
+            link = link["href"]
+            start = re.search(r"(?<=start=)[\d]+", link)
+            limit = re.search(r"(?<=limit=)[\d]+", link)
 
             # Construct a new link with format params
             # Result is "/spam/spam?start={start}&limit={limit}"
             link = (
                 link[: start.start()]
-                + '{start}'
+                + "{start}"
                 + link[start.end() : limit.start()]
-                + '{limit}'
+                + "{limit}"
                 + link[limit.end() :]
             )
 
@@ -1249,7 +1249,7 @@ class PageIterator:
         # If this is the first time next() has been called, return the items
         # contained in the initial page.
         if self._obj is not None:
-            result = [RestObj(x) for x in self._obj['items']]
+            result = [RestObj(x) for x in self._obj["items"]]
             self._obj = None
             return result
 
@@ -1276,9 +1276,9 @@ class PageIterator:
 
         # Format the link to retrieve desired batch
         link = self._next_link.format(start=start, limit=self._limit)
-        r = get(link, format='json', session=self._session)
+        r = get(link, format="json", session=self._session)
         r = RestObj(r)
-        return [RestObj(x) for x in r['items']]
+        return [RestObj(x) for x in r["items"]]
 
 
 class PagedItemIterator:
@@ -1321,12 +1321,12 @@ class PagedItemIterator:
         self._cache = []
 
         # Total number of items to iterate over
-        if 'count' in obj:
+        if "count" in obj:
             # NOTE: "count" may be an (over) estimate of the number of items available
             #       since some may be inaccessible due to user permissions & won't actually be returned.
             self._count = int(obj.count)
         else:
-            self._count = len(obj['items'])
+            self._count = len(obj["items"])
 
     def __len__(self):
         return self._count
@@ -1408,7 +1408,7 @@ class PagedList(list):
 
         # Go ahead and add the items that were initially returned.
         # Do this by "paging" so iterator remains at the correct spot.
-        for _ in range(len(obj['items'])):
+        for _ in range(len(obj["items"])):
             self.append(next(self._paged_items))
 
         # Assume that server has more items available
@@ -1431,7 +1431,7 @@ class PagedList(list):
         return self.__getitem__(slice(i, j))
 
     def __getitem__(self, item):
-        if hasattr(item, 'stop'):
+        if hasattr(item, "stop"):
             # `item` is a slice
             # if no stop was specified, assume full length
             idx = item.stop or len(self)
@@ -1462,7 +1462,7 @@ class PagedList(list):
         # If the list has more "items" than are stored in the underlying list
         # then there are more downloads to make.
         if len(self) - super(PagedList, self).__len__() > 0:
-            string = string.rstrip(']') + ', ...]'
+            string = string.rstrip("]") + ", ...]"
 
         return string
 
@@ -1492,7 +1492,7 @@ def get(path, **kwargs):
 
     """
     try:
-        return request('get', path, **kwargs)
+        return request("get", path, **kwargs)
     except HTTPError as e:
         if e.code == 404:
             return None  # Resource not found
@@ -1514,7 +1514,7 @@ def head(path, **kwargs):
     RestObj
 
     """
-    return request('head', path, **kwargs)
+    return request("head", path, **kwargs)
 
 
 def post(path, **kwargs):
@@ -1532,7 +1532,7 @@ def post(path, **kwargs):
     RestObj
 
     """
-    return request('post', path, **kwargs)
+    return request("post", path, **kwargs)
 
 
 def put(path, item=None, **kwargs):
@@ -1556,15 +1556,15 @@ def put(path, item=None, **kwargs):
     # If call is in the format put(url, RestObj), automatically fill in header
     # information
     if item is not None and isinstance(item, RestObj):
-        get_headers = getattr(item, '_headers', None)
+        get_headers = getattr(item, "_headers", None)
         if get_headers is not None:
             # Update the headers param if it was specified
-            headers = kwargs.pop('headers', {})
-            headers.setdefault('If-Match', get_headers.get('etag'))
-            headers.setdefault('Content-Type', get_headers.get('content-type'))
-            return request('put', path, json=item, headers=headers)
+            headers = kwargs.pop("headers", {})
+            headers.setdefault("If-Match", get_headers.get("etag"))
+            headers.setdefault("Content-Type", get_headers.get("content-type"))
+            return request("put", path, json=item, headers=headers)
 
-    return request('put', path, **kwargs)
+    return request("put", path, **kwargs)
 
 
 def delete(path, **kwargs):
@@ -1582,10 +1582,10 @@ def delete(path, **kwargs):
     RestObj
 
     """
-    return request('delete', path, **kwargs)
+    return request("delete", path, **kwargs)
 
 
-def request(verb, path, session=None, format='auto', **kwargs):
+def request(verb, path, session=None, format="auto", **kwargs):
     """Send an HTTP request with a session.
 
     Parameters
@@ -1615,10 +1615,10 @@ def request(verb, path, session=None, format='auto', **kwargs):
     session = session or current_session()
 
     if session is None:
-        raise TypeError('No `Session` instance found.')
+        raise TypeError("No `Session` instance found.")
 
-    format = 'auto' if format is None else str(format).lower()
-    if format not in ('auto', 'response', 'content', 'text', 'json', 'rest'):
+    format = "auto" if format is None else str(format).lower()
+    if format not in ("auto", "response", "content", "text", "json", "rest"):
         raise ValueError
 
     response = session.request(verb, path, **kwargs)
@@ -1629,13 +1629,13 @@ def request(verb, path, session=None, format='auto', **kwargs):
         )
 
     # Return the raw response if requested
-    if format == 'response':
+    if format == "response":
         return response
-    if format == 'json':
+    if format == "json":
         return response.json()
-    if format == 'text':
+    if format == "text":
         return response.text
-    if format == 'content':
+    if format == "content":
         return response.content
     try:
         obj = _unwrap(response.json())
@@ -1647,7 +1647,7 @@ def request(verb, path, session=None, format='auto', **kwargs):
             obj._headers = response.headers
         return obj
     except ValueError:
-        if format == 'rest':
+        if format == "rest":
             return RestObj()
         return response.text
 
@@ -1665,18 +1665,18 @@ def get_link(obj, rel):
     dict
 
     """
-    if isinstance(obj, dict) and 'links' in obj:
-        if isinstance(obj['links'], dict):
-            return obj['links'].get(rel)
+    if isinstance(obj, dict) and "links" in obj:
+        if isinstance(obj["links"], dict):
+            return obj["links"].get(rel)
 
-        links = [l for l in obj.get('links', []) if l.get('rel') == rel]
+        links = [l for l in obj.get("links", []) if l.get("rel") == rel]
         if not links:
             return None
         if len(links) == 1:
             return links[0]
         return links
 
-    if isinstance(obj, dict) and 'rel' in obj and obj['rel'] == rel:
+    if isinstance(obj, dict) and "rel" in obj and obj["rel"] == rel:
         # Object is already a link, just return it
         return obj
 
@@ -1700,7 +1700,7 @@ def request_link(obj, rel, **kwargs):
     if link is None:
         raise ValueError("Link '%s' not found in object %s." % (rel, obj))
 
-    return request(link['method'], link['href'], **kwargs)
+    return request(link["method"], link["href"], **kwargs)
 
 
 def uri_as_str(obj):
@@ -1719,9 +1719,9 @@ def uri_as_str(obj):
 
     """
     if isinstance(obj, dict):
-        link = get_link(obj, 'self')
+        link = get_link(obj, "self")
         if isinstance(link, dict):
-            return link.get('uri')
+            return link.get("uri")
 
     return obj
 
@@ -1739,10 +1739,10 @@ def _unwrap(json):
     -------
 
     """
-    if 'items' in json:
-        if len(json['items']) == 1:
-            return RestObj(json['items'][0])
-        if len(json['items']) > 1:
+    if "items" in json:
+        if len(json["items"]) == 1:
+            return RestObj(json["items"][0])
+        if len(json["items"]) > 1:
             return PagedList(RestObj(json))
         return []
 
@@ -1776,7 +1776,7 @@ def _build_crud_funcs(path, single_term=None, plural_term=None, service_name=Non
 
     """
 
-    @sasctl_command('list')
+    @sasctl_command("list")
     def list_items(filter=None):
         """List all {items} available in the environment.
 
@@ -1796,12 +1796,12 @@ def _build_crud_funcs(path, single_term=None, plural_term=None, service_name=Non
         .. _filtering: https://developer.sas.com/reference/filtering/
 
         """
-        params = 'filter={}'.format(filter) if filter is not None else {}
+        params = "filter={}".format(filter) if filter is not None else {}
 
         results = get(path, params=params)
         return results if isinstance(results, list) else [results]
 
-    @sasctl_command('get')
+    @sasctl_command("get")
     def get_item(item, refresh=False):
         """Returns a {item} instance.
 
@@ -1826,30 +1826,30 @@ def _build_crud_funcs(path, single_term=None, plural_term=None, service_name=Non
 
         # If the input already appears to be the requested object just return it, unless
         # a refresh of the data was explicitly requested.
-        if isinstance(item, dict) and all(k in item for k in ('id', 'name')):
+        if isinstance(item, dict) and all(k in item for k in ("id", "name")):
             if refresh:
-                item = item['id']
+                item = item["id"]
             else:
                 return item
 
         if is_uuid(item):
-            return get(path + '/{id}'.format(id=item))
+            return get(path + "/{id}".format(id=item))
         results = list_items(filter='eq(name, "{}")'.format(item))
 
         # Not sure why, but as of 19w04 the filter doesn't seem to work.
         for result in results:
-            if result['name'] == str(item):
+            if result["name"] == str(item):
                 # Make a request for the specific object so that ETag is
                 # included, allowing updates.
-                if get_link(result, 'self'):
-                    return request_link(result, 'self')
+                if get_link(result, "self"):
+                    return request_link(result, "self")
 
-                id_ = result.get('id', result['name'])
-                return get(path + '/{id}'.format(id=id_))
+                id_ = result.get("id", result["name"])
+                return get(path + "/{id}".format(id=id_))
 
         return None
 
-    @sasctl_command('update')
+    @sasctl_command("update")
     def update_item(item):
         """Updates a {item} instance.
 
@@ -1863,22 +1863,22 @@ def _build_crud_funcs(path, single_term=None, plural_term=None, service_name=Non
 
         """
 
-        headers = getattr(item, '_headers', None)
-        if headers is None or headers.get('etag') is None:
-            raise ValueError('Could not find ETag for update of %s.' % item)
+        headers = getattr(item, "_headers", None)
+        if headers is None or headers.get("etag") is None:
+            raise ValueError("Could not find ETag for update of %s." % item)
 
-        id_ = getattr(item, 'id', None)
+        id_ = getattr(item, "id", None)
         if id_ is None:
-            raise ValueError('Could not find property `id` for update of %s.' % item)
+            raise ValueError("Could not find property `id` for update of %s." % item)
 
         headers = {
-            'If-Match': item._headers.get('etag'),
-            'Content-Type': item._headers.get('content-type'),
+            "If-Match": item._headers.get("etag"),
+            "Content-Type": item._headers.get("content-type"),
         }
 
-        return put(path + '/%s' % id_, json=item, headers=headers)
+        return put(path + "/%s" % id_, json=item, headers=headers)
 
-    @sasctl_command('delete')
+    @sasctl_command("delete")
     def delete_item(item):
         """Deletes a {item} instance.
 
@@ -1893,28 +1893,28 @@ def _build_crud_funcs(path, single_term=None, plural_term=None, service_name=Non
         """
 
         # Try to find the item if the id can't be found
-        if not (isinstance(item, dict) and 'id' in item):
+        if not (isinstance(item, dict) and "id" in item):
             item = get_item(item)
 
-        if isinstance(item, dict) and 'id' in item:
-            item = item['id']
+        if isinstance(item, dict) and "id" in item:
+            item = item["id"]
 
         if is_uuid(item):
-            return delete(path + '/{id}'.format(id=item))
+            return delete(path + "/{id}".format(id=item))
         raise ValueError("Unrecognized id '%s'" % item)
 
     # Pull object name from path if unspecified (many paths end in /folders or /repositories).
-    plural_term = plural_term or str(path).split('/')[-1]
+    plural_term = plural_term or str(path).split("/")[-1]
     single_term = single_term or plural_term
     service_name = service_name or plural_term
-    service_name = service_name.replace(' ', '_')
+    service_name = service_name.replace(" ", "_")
 
     for func in [list_items, get_item, update_item, delete_item]:
         func.__doc__ = func.__doc__.format(item=single_term, items=plural_term)
         func._cli_service = service_name
 
-        prefix = func.__name__.split('_')[0] + '_'
-        suffix = plural_term if prefix == 'list_' else single_term
+        prefix = func.__name__.split("_")[0] + "_"
+        suffix = plural_term if prefix == "list_" else single_term
         func.__name__ = prefix + suffix
 
     return list_items, get_item, update_item, delete_item
@@ -1929,13 +1929,13 @@ def _build_is_available_func(service_root):
         bool
 
         """
-        response = current_session().head(service_root + '/')
+        response = current_session().head(service_root + "/")
         return response.status_code == 200
 
     return is_available
 
 
-@versionadded(version='1.5.6')
+@versionadded(version="1.5.6")
 def platform_version():
     """Get the version of the SAS Viya platform to which sasctl is connected.
 
@@ -1949,11 +1949,11 @@ def platform_version():
     from .services import model_repository as mr
 
     response = mr.info()
-    buildVersion = response.get('build')['buildVersion']
+    buildVersion = response.get("build")["buildVersion"]
     try:
-        if buildVersion[0:4] == '3.7.':
-            return '3.5'
+        if buildVersion[0:4] == "3.7.":
+            return "3.5"
         elif float(buildVersion[0:4]) >= 3.10:
-            return '4.0'
+            return "4.0"
     except ValueError:
         pass  # Version could not be found.  Return None instead.

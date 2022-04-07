@@ -22,9 +22,9 @@ from ..decorators import versionadded, versionchanged
 from ..misc import random_string
 
 
-@versionchanged(reason='Added `name` parameter.', version='1.5')
+@versionchanged(reason="Added `name` parameter.", version="1.5")
 def build_wrapper_function(
-    func, variables, array_input, name='wrapper', setup=None, return_msg=None
+    func, variables, array_input, name="wrapper", setup=None, return_msg=None
 ):
     """Wraps a function to ensure compatibility when called by PyMAS.
 
@@ -82,10 +82,10 @@ def build_wrapper_function(
     # HELPER: SAS to python char issue where SAS char have spaces and python string does not.
     # NOTE: we assume SAS char always need white space to be trimmed.  This seems to match python model built so far
     # Note: Using this string fix to help with None or blank input situation for numerics
-    string_input = ('',)
+    string_input = ("",)
     for v in variables:
         if not v.out:
-            if v.type == 'char':
+            if v.type == "char":
                 string_input += ("        if {0}: {0} = {0}.strip()".format(v.name),)
             else:
                 string_input += ("        if {0} is None: {0} = np.nan".format(v.name),)
@@ -93,72 +93,72 @@ def build_wrapper_function(
     # Statement to execute the function w/ provided parameters
     if array_input:
         middle = string_input + (
-            '        input_array = np.array([{}]).reshape((1, -1))'.format(
-                ', '.join(args)
+            "        input_array = np.array([{}]).reshape((1, -1))".format(
+                ", ".join(args)
             ),
-            '        columns = [{}]'.format(', '.join('"{0}"'.format(w) for w in args)),
-            '        input_df = pd.DataFrame(data=input_array, columns=columns)',
-            '        result = {}(input_df)'.format(func),
+            "        columns = [{}]".format(", ".join('"{0}"'.format(w) for w in args)),
+            "        input_df = pd.DataFrame(data=input_array, columns=columns)",
+            "        result = {}(input_df)".format(func),
         )
     else:
-        func_call = '{}({})'.format(func, ','.join(args))
-        middle = ('        result = {}'.format(func_call),)
+        func_call = "{}({})".format(func, ",".join(args))
+        middle = ("        result = {}".format(func_call),)
 
     if setup:
         header = (
-            ('try:',)
-            + tuple('    ' + line for line in setup)
+            ("try:",)
+            + tuple("    " + line for line in setup)
             + (
-                '    _compile_error = None',
-                'except Exception as e:',
-                '    _compile_error = e',
-                '',
+                "    _compile_error = None",
+                "except Exception as e:",
+                "    _compile_error = e",
+                "",
             )
         )
     else:
-        header = ('',)
+        header = ("",)
 
     # NOTE: 'Output:' section is required.  All return variables must be listed
     # separated by ', '
     definition = (
         header
         + (
-            'def {name}({args}):'.format(name=name, args=', '.join(args)),
+            "def {name}({args}):".format(name=name, args=", ".join(args)),
             '    "Output: {}"'.format(
-                ', '.join(output_names + ['msg'])
+                ", ".join(output_names + ["msg"])
                 if return_msg
-                else ', '.join(output_names)
+                else ", ".join(output_names)
             ),
-            '    result = None',
-            '    msg = None' if return_msg else '',
-            '    try:',
-            '        global _compile_error',
-            '        if _compile_error is not None:',
-            '            raise _compile_error',
-            '        import numpy as np',
-            '        import pandas as pd',
+            "    result = None",
+            "    msg = None" if return_msg else "",
+            "    try:",
+            "        global _compile_error",
+            "        if _compile_error is not None:",
+            "            raise _compile_error",
+            "        import numpy as np",
+            "        import pandas as pd",
         )
         + middle
         + (
-            '        result = tuple(result.ravel()) if hasattr(result, '
+            "        result = tuple(result.ravel()) if hasattr(result, "
             '"ravel") else tuple(result)',
-            '        if len(result) == 0:',
-            '            result = tuple(None for i in range(%s))' % len(output_names),
+            "        if len(result) == 0:",
+            "            result = tuple(None for i in range(%s))" % len(output_names),
             '        elif "numpy" in str(type(result[0])):',
-            '            result = tuple(np.asscalar(i) for i in result)',
-            '    except Exception as e:',
-            '        from traceback import format_exc',
-            '        msg = str(e) + format_exc()' if return_msg else '',
-            '        if result is None:',
-            '            result = tuple(None for i in range(%s))' % len(output_names),
-            '    return result + (msg, )',
+            "            result = tuple(np.asscalar(i) for i in result)",
+            "    except Exception as e:",
+            "        from traceback import format_exc",
+            "        msg = str(e) + format_exc()" if return_msg else "",
+            "        if result is None:",
+            "            result = tuple(None for i in range(%s))" % len(output_names),
+            "    return result + (msg, )",
         )
     )
 
-    return '\n'.join(definition)
+    return "\n".join(definition)
 
 
-@versionadded(version='1.5')
+@versionadded(version="1.5")
 def wrap_predict_method(func, variables, **kwargs):
     """Create a PyMAS wrapper designed for Sci-kit's `.predict` methods.
 
@@ -182,13 +182,13 @@ def wrap_predict_method(func, variables, **kwargs):
     :meth:`build_wrapper_function`
 
     """
-    kwargs.setdefault('array_input', True)
-    kwargs.setdefault('name', 'predict')
+    kwargs.setdefault("array_input", True)
+    kwargs.setdefault("name", "predict")
 
     return build_wrapper_function(func, variables, **kwargs)
 
 
-@versionadded(version='1.5')
+@versionadded(version="1.5")
 def wrap_predict_proba_method(func, variables, **kwargs):
     """Create a PyMAS wrapper designed for Sci-kit's `.predict_proba` methods.
 
@@ -212,19 +212,19 @@ def wrap_predict_proba_method(func, variables, **kwargs):
     :meth:`build_wrapper_function`
 
     """
-    kwargs.setdefault('array_input', True)
-    kwargs.setdefault('name', 'predict_proba')
+    kwargs.setdefault("array_input", True)
+    kwargs.setdefault("name", "predict_proba")
 
     wrapper = build_wrapper_function(func, variables, **kwargs)
 
-    old_code = r'if result.size == 1:\s*result = np.asscalar\(result\)'
-    new_code = 'assert result.shape[0] == 1\n'
-    new_code += '        result = tuple(result[0].tolist())'
+    old_code = r"if result.size == 1:\s*result = np.asscalar\(result\)"
+    new_code = "assert result.shape[0] == 1\n"
+    new_code += "        result = tuple(result[0].tolist())"
 
     return re.sub(old_code, new_code, wrapper)
 
 
-@versionchanged('Return code and message are disabled by default.', version='1.5')
+@versionchanged("Return code and message are disabled by default.", version="1.5")
 def from_inline(
     func, input_types=None, array_input=False, return_code=None, return_message=None
 ):
@@ -265,7 +265,7 @@ def from_inline(
     return from_pickle(obj, None, input_types, array_input, return_code, return_message)
 
 
-@versionchanged('Return code and message are disabled by default.', version='1.5')
+@versionchanged("Return code and message are disabled by default.", version="1.5")
 def from_python_file(
     file,
     func_name=None,
@@ -309,7 +309,7 @@ def from_python_file(
             "removed completely in a future version"
         )
 
-    if not str(file.lower().endswith('.py')):
+    if not str(file.lower().endswith(".py")):
         raise ValueError("File {} does not have a .py extension.".format(file))
 
     # Extract just the filename from the path
@@ -327,13 +327,13 @@ def from_python_file(
     if not callable(target_func):
         raise RuntimeError("Could not find a valid function named %s" % func_name)
 
-    with open(file, 'r') as f:
-        code = [line.strip('\n') for line in f.readlines()]
+    with open(file, "r") as f:
+        code = [line.strip("\n") for line in f.readlines()]
 
     return _build_pymas(target_func, None, input_types, array_input, code=code)
 
 
-@versionchanged('Return code and message are disabled by default.', version='1.5')
+@versionchanged("Return code and message are disabled by default.", version="1.5")
 def from_pickle(
     file,
     func_name=None,
@@ -390,7 +390,7 @@ def from_pickle(
 
     # Path to a pickle file
     if is_file_path:
-        with open(file, 'rb') as f:
+        with open(file, "rb") as f:
             obj = pickle.load(f)  # skipcq BAN-B301
 
     # The actual pickled bytes
@@ -403,14 +403,14 @@ def from_pickle(
     pkl = base64.b64encode(pickle.dumps(obj))
 
     code = (
-        'import pickle, base64',
+        "import pickle, base64",
         # Replace b' with " before embedding in DS2.
-        'bytes = {}'.format(pkl).replace("'", '"'),
-        'obj = pickle.loads(base64.b64decode(bytes))',
+        "bytes = {}".format(pkl).replace("'", '"'),
+        "obj = pickle.loads(base64.b64decode(bytes))",
     )
 
     return _build_pymas(
-        obj, func_name, input_types, array_input, func_prefix='obj.', code=code
+        obj, func_name, input_types, array_input, func_prefix="obj.", code=code
     )
 
 
@@ -451,7 +451,7 @@ def _build_pymas(
         if callable(obj) and (func_name is None or obj.__name__ == func_name):
             target_func = obj
         elif func_name is None:
-            raise ValueError('Parameter `func_name` must be specified.')
+            raise ValueError("Parameter `func_name` must be specified.")
         else:
             target_func = getattr(obj, func_name)
 
@@ -460,13 +460,13 @@ def _build_pymas(
 
         target_func_name = target_func.__name__
 
-        if target_func_name.lower() == 'predict_proba':
-            names = 'P_'
+        if target_func_name.lower() == "predict_proba":
+            names = "P_"
         else:
             names = None
 
         # Need to create DS2Variable instances to pass to PyMAS
-        if hasattr(input_types, 'columns'):
+        if hasattr(input_types, "columns"):
             # Assuming input is a DataFrame representing model inputs.  Use to
             # get input variables
             vars = ds2_variables(input_types)
@@ -488,7 +488,7 @@ def _build_pymas(
             vars = ds2_variables(target_func)
 
         if not any(v for v in vars if v.out):
-            vars.append(DS2Variable(name='result', type='float', out=True))
+            vars.append(DS2Variable(name="result", type="float", out=True))
 
         return target_func_name, vars
 
@@ -545,7 +545,7 @@ class PyMAS:
                 "removed completely in a future version"
             )
 
-        func_prefix = func_prefix or ''
+        func_prefix = func_prefix or ""
 
         if not isinstance(target_function, list):
             target_function = [target_function]
@@ -567,9 +567,9 @@ class PyMAS:
         for func, vars, code, msg in zip(
             target_function, variables, return_code, return_msg
         ):
-            wrapper_names.append('_' + random_string(20))
+            wrapper_names.append("_" + random_string(20))
 
-            if func.lower() == 'predict':
+            if func.lower() == "predict":
                 lines = wrap_predict_method(
                     func_prefix + func,
                     vars,
@@ -577,7 +577,7 @@ class PyMAS:
                     name=wrapper_names[-1],
                     **kwargs
                 )
-            elif func.lower() == 'predict_proba':
+            elif func.lower() == "predict_proba":
                 lines = wrap_predict_proba_method(
                     func_prefix + func,
                     vars,
@@ -598,15 +598,15 @@ class PyMAS:
             # NOTE: add these *after* wrapper function is generated to prevent
             # double-counting them.
             if code:
-                vars.append(DS2Variable(name='rc', type='int32', out=True))
+                vars.append(DS2Variable(name="rc", type="int32", out=True))
             if msg:
-                vars.append(DS2Variable(name='msg', type='char', out=True))
+                vars.append(DS2Variable(name="msg", type="char", out=True))
 
             # Clear setup code once it's been added once.  No need to duplicate
             # if multiple functions are defined.
             python_source = None
 
-            self.wrapper.extend(lines.split('\n'))
+            self.wrapper.extend(lines.split("\n"))
 
         self.variables = variables[0]
         # self.return_code = return_code[0]
@@ -617,8 +617,8 @@ class PyMAS:
         for idx, func in enumerate(target_function):
             self.package.add_method(func, wrapper_names[idx], variables[idx])
 
-    @versionchanged(version='1.4', reason="Added `dest='Python'` option")
-    def score_code(self, input_table=None, output_table=None, columns=None, dest='MAS'):
+    @versionchanged(version="1.4", reason="Added `dest='Python'` option")
+    def score_code(self, input_table=None, output_table=None, columns=None, dest="MAS"):
         """Generate DS2 score code
 
         Parameters
@@ -643,34 +643,34 @@ class PyMAS:
         dest = dest.upper()
 
         # Check for names that could result in DS2 errors.
-        DS2_KEYWORDS = ['input', 'output']
+        DS2_KEYWORDS = ["input", "output"]
         for k in DS2_KEYWORDS:
             if input_table and k == input_table.lower():
                 raise ValueError(
-                    'Input table name `{}` is a reserved term.'.format(input_table)
+                    "Input table name `{}` is a reserved term.".format(input_table)
                 )
             if output_table and k == output_table.lower():
                 raise ValueError(
-                    'Output table name `{}` is a reserved term.'.format(output_table)
+                    "Output table name `{}` is a reserved term.".format(output_table)
                 )
 
         # Get package code
-        code = tuple(self.package.code().split('\n'))
+        code = tuple(self.package.code().split("\n"))
 
-        if dest == 'EP':
+        if dest == "EP":
             code = (
-                ('data sasep.out;',)
+                ("data sasep.out;",)
                 + code
                 + (
-                    '   method run();',
-                    '      set SASEP.IN;',
-                    '   end;',
-                    '   method term();',
-                    '   end;',
-                    'enddata;',
+                    "   method run();",
+                    "      set SASEP.IN;",
+                    "   end;",
+                    "   method term();",
+                    "   end;",
+                    "enddata;",
                 )
             )
-        elif dest == 'CAS':
+        elif dest == "CAS":
             thread = DS2Thread(
                 self.variables,
                 input_table,
@@ -681,17 +681,17 @@ class PyMAS:
 
             code += (
                 str(thread),
-                'data SASEP.out;',
-                '  dcl thread {} t;'.format(thread.name),
-                '  method run();',
-                '    set from t;',
-                '    output;',
-                '  end;',
-                'enddata;',
+                "data SASEP.out;",
+                "  dcl thread {} t;".format(thread.name),
+                "  method run();",
+                "    set from t;",
+                "    output;",
+                "  end;",
+                "enddata;",
             )
 
-        elif dest == 'PYTHON':
+        elif dest == "PYTHON":
             # Python code return
             code = self.package._python_code
 
-        return '\n'.join(code)
+        return "\n".join(code)

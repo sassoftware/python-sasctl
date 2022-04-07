@@ -11,6 +11,7 @@ import re
 from .model_repository import ModelRepository
 from .service import Service
 
+
 class ModelPublish(Service):
     """Enables publishing objects such as models to various destinations.
 
@@ -18,7 +19,7 @@ class ModelPublish(Service):
     Hadoop, Teradata, or SAS Micro Analytic Service
     """
 
-    _SERVICE_ROOT = '/modelPublish'
+    _SERVICE_ROOT = "/modelPublish"
     _model_repository = ModelRepository()
 
     @staticmethod
@@ -41,21 +42,21 @@ class ModelPublish(Service):
 
         """
         # Remove all non-word characters
-        name = re.sub(r'[^\w]', '', str(name))
+        name = re.sub(r"[^\w]", "", str(name))
 
         # Add a leading underscore if name starts with a digit
-        if re.match(r'\d', name):
-            name = '_' + name
+        if re.match(r"\d", name):
+            name = "_" + name
 
         return name
 
     @classmethod
     def list_models(cls):
-        return cls.get('/models').get('items', [])
+        return cls.get("/models").get("items", [])
 
-    list_destinations, get_destination, update_destination, \
-    _ = Service._crud_funcs('/destinations',
-                                                 'destination')
+    list_destinations, get_destination, update_destination, _ = Service._crud_funcs(
+        "/destinations", "destination"
+    )
 
     # @sasctl_command('delete')
     @classmethod
@@ -78,25 +79,19 @@ class ModelPublish(Service):
         item_name = str(item)
 
         # Try to find the item if the id can't be found
-        if not (isinstance(item, dict) and 'id' in item):
+        if not (isinstance(item, dict) and "id" in item):
             item = cls.get_destination(item)
             if item is None:
-                cls.log.info("Object '%s' not found.  Skipping delete.",
-                             item_name)
+                cls.log.info("Object '%s' not found.  Skipping delete.", item_name)
                 return
 
-        if isinstance(item, dict) and 'name' in item:
-            item = item['name']
+        if isinstance(item, dict) and "name" in item:
+            item = item["name"]
 
-        return cls.delete('/destinations/{name}'.format(name=item))
+        return cls.delete("/destinations/{name}".format(name=item))
 
     @classmethod
-    def publish_model(cls,
-                      model,
-                      destination,
-                      name=None,
-                      code=None,
-                      notes=None):
+    def publish_model(cls, model, destination, name=None, code=None, notes=None):
         """Publish a model to an existing publishing destination.
 
         Parameters
@@ -117,50 +112,46 @@ class ModelPublish(Service):
         -------
 
         """
-        code_types = {
-            'ds2package': 'ds2',
-            'datastep': 'datastep',
-            '': ''
-        }
+        code_types = {"ds2package": "ds2", "datastep": "datastep", "": ""}
 
         model = cls._model_repository.get_model(model)
-        model_uri = cls._model_repository.get_model_link(model, 'cls')
+        model_uri = cls._model_repository.get_model_link(model, "cls")
 
         # Get score code from registry if no code specified
         if code is None:
-            code_link = cls._model_repository.get_model_link(model,
-                                                             'scoreCode',
-                                                             True)
+            code_link = cls._model_repository.get_model_link(model, "scoreCode", True)
             if code_link:
-                code = cls.get(code_link['href'])
+                code = cls.get(code_link["href"])
 
         request = dict(
-            name=name or model.get('name'),
+            name=name or model.get("name"),
             notes=notes,
             destinationName=destination,
         )
 
         modelContents = {
-            'modelName': model.get('name'),
-            'modelId': model.get('id'),
-            'sourceUri': model_uri.get('href'),
-            'publishLevel': 'model',        # ?? What are the options?
-            'codeType': code_types[model.get('scoreCodeType', '').lower()],
-            'codeUri': '',          # ??  Not needed if code is specified?
-            'code': code
+            "modelName": model.get("name"),
+            "modelId": model.get("id"),
+            "sourceUri": model_uri.get("href"),
+            "publishLevel": "model",  # ?? What are the options?
+            "codeType": code_types[model.get("scoreCodeType", "").lower()],
+            "codeUri": "",  # ??  Not needed if code is specified?
+            "code": code,
         }
 
-        request['modelContents'] = [modelContents]
-        return cls.post('/models', json=request, headers={
-            'Content-Type':
-                'application/vnd.sas.models.publishing.request+json'})
+        request["modelContents"] = [modelContents]
+        return cls.post(
+            "/models",
+            json=request,
+            headers={
+                "Content-Type": "application/vnd.sas.models.publishing.request+json"
+            },
+        )
 
     @classmethod
-    def create_cas_destination(cls, name,
-                               library,
-                               table,
-                               server=None,
-                               description=None):
+    def create_cas_destination(
+        cls, name, library, table, server=None, description=None
+    ):
         """Define a new CAS publishing destination.
 
         Parameters
@@ -181,11 +172,16 @@ class ModelPublish(Service):
         RestObj
 
         """
-        server = server or 'cas-shared-default'
+        server = server or "cas-shared-default"
 
-        return cls.create_destination(name, cas_server=server,
-                                      cas_library=library, cas_table=table,
-                                      type_='cas', description=description)
+        return cls.create_destination(
+            name,
+            cas_server=server,
+            cas_library=library,
+            cas_table=table,
+            type_="cas",
+            description=description,
+        )
 
     @classmethod
     def create_mas_destination(cls, name, uri, description=None):
@@ -207,22 +203,25 @@ class ModelPublish(Service):
         RestObj
 
         """
-        return cls.create_destination(name, mas_uri=uri, type_='mas',
-                                      description=description)
+        return cls.create_destination(
+            name, mas_uri=uri, type_="mas", description=description
+        )
 
     @classmethod
-    def create_destination(cls,
-                           name,
-                           type_,
-                           cas_server=None,
-                           cas_library=None,
-                           cas_table=None,
-                           description=None,
-                           mas_uri=None,
-                           hdfs_dir=None,
-                           conf_dir=None,
-                           user=None,
-                           database_library=None):
+    def create_destination(
+        cls,
+        name,
+        type_,
+        cas_server=None,
+        cas_library=None,
+        cas_table=None,
+        description=None,
+        mas_uri=None,
+        hdfs_dir=None,
+        conf_dir=None,
+        user=None,
+        database_library=None,
+    ):
         """Define a new publishing destination.
 
         Parameters
@@ -259,47 +258,69 @@ class ModelPublish(Service):
 
         """
         type_ = str(type_).lower()
-        if type_ not in ('cas', 'microanalyticservice', 'mas', 'teradata',
-                         'hadoop'):
-            raise ValueError("Unrecognized destination type '%s' specified."
-                             % type_)
+        if type_ not in ("cas", "microanalyticservice", "mas", "teradata", "hadoop"):
+            raise ValueError("Unrecognized destination type '%s' specified." % type_)
 
         # As of Viya 3.4 capitalization matters.
-        if type_ in ('microanalyticservice', 'mas'):
-            type_ = 'microAnalyticService'
+        if type_ in ("microanalyticservice", "mas"):
+            type_ = "microAnalyticService"
 
-        request = {'name': str(name),
-                   'destinationType': type_,
-                   'casServerName': cas_server,
-                   'casLibrary': cas_library,
-                   'description': description,
-                   'destinationTable': cas_table,
-                   'databaseCasLibrary': database_library,
-                   'user': user,
-                   'hdfsDirectory': hdfs_dir,
-                   'configurationDirectory': conf_dir,
-                   'masUri': mas_uri
-                   }
-
-        drop_list = {
-            'cas':
-                ('databaseCasLibrary', 'user', 'hdfsDirectory', 'masUri',
-                 'configurationDirectory'),
-            'microAnalyticService':
-                ('casServerName', 'casLibrary', 'destinationTable', 'user',
-                 'databaseCasLibrary', 'hdfsDirectory',
-                 'configurationDirectory'),
-            'hadoop':
-                ('casServerName', 'casLibrary', 'destinationTable',
-                 'databaseCasLibrary', 'masUri'),
-            'teradata':
-                ('casServerName', 'casLibrary', 'destinationTable', 'user',
-                 'hdfsDirectory', 'masUri', 'configurationDirectory')
+        request = {
+            "name": str(name),
+            "destinationType": type_,
+            "casServerName": cas_server,
+            "casLibrary": cas_library,
+            "description": description,
+            "destinationTable": cas_table,
+            "databaseCasLibrary": database_library,
+            "user": user,
+            "hdfsDirectory": hdfs_dir,
+            "configurationDirectory": conf_dir,
+            "masUri": mas_uri,
         }
 
-        for k in drop_list[request['destinationType']]:
+        drop_list = {
+            "cas": (
+                "databaseCasLibrary",
+                "user",
+                "hdfsDirectory",
+                "masUri",
+                "configurationDirectory",
+            ),
+            "microAnalyticService": (
+                "casServerName",
+                "casLibrary",
+                "destinationTable",
+                "user",
+                "databaseCasLibrary",
+                "hdfsDirectory",
+                "configurationDirectory",
+            ),
+            "hadoop": (
+                "casServerName",
+                "casLibrary",
+                "destinationTable",
+                "databaseCasLibrary",
+                "masUri",
+            ),
+            "teradata": (
+                "casServerName",
+                "casLibrary",
+                "destinationTable",
+                "user",
+                "hdfsDirectory",
+                "masUri",
+                "configurationDirectory",
+            ),
+        }
+
+        for k in drop_list[request["destinationType"]]:
             request.pop(k, None)
 
-        return cls.post('/destinations', json=request, headers={
-            'Content-Type':
-                'application/vnd.sas.models.publishing.destination+json'})
+        return cls.post(
+            "/destinations",
+            json=request,
+            headers={
+                "Content-Type": "application/vnd.sas.models.publishing.destination+json"
+            },
+        )

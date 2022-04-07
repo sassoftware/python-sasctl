@@ -18,7 +18,11 @@ class Relationships(Service):
 
     """
 
-    _SERVICE_ROOT = '/relationships'
+    _SERVICE_ROOT = "/relationships"
 
-    list_relationships, get_relationship, update_relationship, \
-        delete_relationship = Service._crud_funcs('/relationships', 'relationship')
+    (
+        list_relationships,
+        get_relationship,
+        update_relationship,
+        delete_relationship,
+    ) = Service._crud_funcs("/relationships", "relationship")

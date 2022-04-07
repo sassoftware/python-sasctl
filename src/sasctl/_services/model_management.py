@@ -7,26 +7,28 @@
 from .service import Service
 from ..utils.decorators import experimental
 
+
 class ModelManagement(Service):
     """The Model Management API provides basic resources for monitoring
     performance, comparing models, and running workflow processes.
     """
-    _SERVICE_ROOT= '/modelManagement'
 
+    _SERVICE_ROOT = "/modelManagement"
 
-    list_performance_definitions, get_performance_definition, \
-        update_performance_definition, delete_performance_definition = \
-        Service._crud_funcs('/performanceTasks', 'performance task',
-                            'performance tasks')
+    (
+        list_performance_definitions,
+        get_performance_definition,
+        update_performance_definition,
+        delete_performance_definition,
+    ) = Service._crud_funcs(
+        "/performanceTasks", "performance task", "performance tasks"
+    )
 
     # TODO:  set ds2MultiType
     @classmethod
-    def publish_model(cls,
-                      model,
-                      destination,
-                      name=None,
-                      force=False,
-                      reload_model_table=False):
+    def publish_model(
+        cls, model, destination, name=None, force=False, reload_model_table=False
+    ):
         """
 
         Parameters
@@ -54,58 +56,62 @@ class ModelManagement(Service):
         model_obj = mr.get_model(model)
 
         if model_obj is None:
-            model_name = model.name if hasattr(model, 'name') else str(model)
+            model_name = model.name if hasattr(model, "name") else str(model)
             raise ValueError("Model '{}' was not found.".format(model_name))
 
-        model_uri = mr.get_model_link(model_obj, 'self')
+        model_uri = mr.get_model_link(model_obj, "self")
 
         # TODO: Verify allowed formats by destination type.
         # As of 19w04 MAS throws HTTP 500 if name is in invalid format.
-        model_name = name or '{}_{}'.format(model_obj['name'].replace(' ', ''),
-                                            model_obj['id']).replace('-', '')
+        model_name = name or "{}_{}".format(
+            model_obj["name"].replace(" ", ""), model_obj["id"]
+        ).replace("-", "")
 
         request = {
-            "name": model_obj.get('name'),
-            "notes": model_obj.get('description'),
+            "name": model_obj.get("name"),
+            "notes": model_obj.get("description"),
             "modelContents": [
                 {
-                    "modelName": mp._publish_name(
-                        model_obj.get('name')),
-                    "sourceUri": model_uri.get('uri'),
-                    "publishLevel": "model"
+                    "modelName": mp._publish_name(model_obj.get("name")),
+                    "sourceUri": model_uri.get("uri"),
+                    "publishLevel": "model",
                 }
             ],
-            "destinationName": destination
+            "destinationName": destination,
         }
 
         # Publishes a model that has already been registered in the model
         # repository.
         # Unlike model_publish service, does not require Code to be specified.
-        r = cls.post('/publish',
-                     json=request,
-                     params=dict(force=force,
-                                  reloadModelTable=reload_model_table),
-                     headers={'Content-Type':
-                                   'application/vnd.sas.models.publishing.request.asynchronous+json'})
+        r = cls.post(
+            "/publish",
+            json=request,
+            params=dict(force=force, reloadModelTable=reload_model_table),
+            headers={
+                "Content-Type": "application/vnd.sas.models.publishing.request.asynchronous+json"
+            },
+        )
         return r
 
     @classmethod
-    def create_performance_definition(cls,
-                                      model,
-                                      library_name,
-                                      table_prefix,
-                                      name=None,
-                                      description=None,
-                                      monitor_champion=False,
-                                      monitor_challenger=False,
-                                      max_bins=None,
-                                      scoring_required=False,
-                                      all_data=False,
-                                      save_output=True,
-                                      output_library=None,
-                                      autoload_output=False,
-                                      cas_server=None,
-                                      trace=False):
+    def create_performance_definition(
+        cls,
+        model,
+        library_name,
+        table_prefix,
+        name=None,
+        description=None,
+        monitor_champion=False,
+        monitor_challenger=False,
+        max_bins=None,
+        scoring_required=False,
+        all_data=False,
+        save_output=True,
+        output_library=None,
+        autoload_output=False,
+        cas_server=None,
+        trace=False,
+    ):
         """Create the performance task definition in the model project to
         monitor model performance.
 
@@ -158,15 +164,18 @@ class ModelManagement(Service):
         """
         from .model_repository import ModelRepository
 
-        if not scoring_required and '_' in table_prefix:
+        if not scoring_required and "_" in table_prefix:
             raise ValueError(
                 "Parameter 'table_prefix' cannot contain underscores."
-                " Received a value of '%s'.") % table_prefix
+                " Received a value of '%s'."
+            ) % table_prefix
 
         max_bins = 10 if max_bins is None else int(max_bins)
         if int(max_bins) < 2:
-            raise ValueError("Parameter 'max_bins' must be at least 2.  "
-                             "Received a value of '%s'." % max_bins)
+            raise ValueError(
+                "Parameter 'max_bins' must be at least 2.  "
+                "Received a value of '%s'." % max_bins
+            )
 
         mr = ModelRepository()
         model = mr.get_model(model)
@@ -174,55 +183,74 @@ class ModelManagement(Service):
 
         # Performance data cannot be captured unless certain project properties
         # have been configured.
-        for required in ['targetVariable', 'targetLevel']:
+        for required in ["targetVariable", "targetLevel"]:
             if getattr(project, required, None) is None:
-                raise ValueError("Project %s must have the '%s' property set."
-                                 % (project.name, required))
-        if project.get('function') == 'classification' \
-                and project.get('eventProbabilityVariable') is None:
-            raise ValueError("Project %s must have the "
-                             "'eventProbabilityVariable' property set."
-                             % project.name)
-        if project.get('function') == 'prediction' \
-                and project.get('predictionVariable') is None:
-            raise ValueError("Project %s must have the 'predictionVariable' "
-                             "property set." % project.name)
+                raise ValueError(
+                    "Project %s must have the '%s' property set."
+                    % (project.name, required)
+                )
+        if (
+            project.get("function") == "classification"
+            and project.get("eventProbabilityVariable") is None
+        ):
+            raise ValueError(
+                "Project %s must have the "
+                "'eventProbabilityVariable' property set." % project.name
+            )
+        if (
+            project.get("function") == "prediction"
+            and project.get("predictionVariable") is None
+        ):
+            raise ValueError(
+                "Project %s must have the 'predictionVariable' "
+                "property set." % project.name
+            )
 
-        request = {'projectId': project.id,
-                   'name': name or model.name + ' Performance',
-                   'modelIds': [model.id],
-                   'championMonitored': monitor_champion,
-                   'challengerMonitored': monitor_challenger,
-                   'maxBins': max_bins,
-                   'resultLibrary': output_library or 'ModelPerformanceData',
-                   'includeAllData': all_data,
-                   'scoreExecutionRequired': scoring_required,
-                   'performanceResultSaved': save_output,
-                   'loadPerformanceResult': autoload_output,
-                   'dataLibrary': library_name or 'Public',
-                   'description': description or 'Performance definition for model ' + model.name,
-                   'casServerId': cas_server or 'cas-shared-default',
-                   'dataPrefix': table_prefix,
-                   'traceOn': trace
-                   }
+        request = {
+            "projectId": project.id,
+            "name": name or model.name + " Performance",
+            "modelIds": [model.id],
+            "championMonitored": monitor_champion,
+            "challengerMonitored": monitor_challenger,
+            "maxBins": max_bins,
+            "resultLibrary": output_library or "ModelPerformanceData",
+            "includeAllData": all_data,
+            "scoreExecutionRequired": scoring_required,
+            "performanceResultSaved": save_output,
+            "loadPerformanceResult": autoload_output,
+            "dataLibrary": library_name or "Public",
+            "description": description
+            or "Performance definition for model " + model.name,
+            "casServerId": cas_server or "cas-shared-default",
+            "dataPrefix": table_prefix,
+            "traceOn": trace,
+        }
 
         # If model doesn't specify input/output variables, try to pull from project definition
-        if model.get('inputVariables', []):
-            request['inputVariables'] = [v.get('name') for v in
-                                         model['inputVariables']]
-            request['outputVariables'] = [v.get('name') for v in
-                                          model['outputVariables']]
+        if model.get("inputVariables", []):
+            request["inputVariables"] = [v.get("name") for v in model["inputVariables"]]
+            request["outputVariables"] = [
+                v.get("name") for v in model["outputVariables"]
+            ]
         else:
-            request['inputVariables'] = [v.get('name') for v in
-                                         project.get('variables', []) if
-                                         v.get('role') == 'input']
-            request['outputVariables'] = [v.get('name') for v in
-                                          project.get('variables', []) if
-                                          v.get('role') == 'output']
+            request["inputVariables"] = [
+                v.get("name")
+                for v in project.get("variables", [])
+                if v.get("role") == "input"
+            ]
+            request["outputVariables"] = [
+                v.get("name")
+                for v in project.get("variables", [])
+                if v.get("role") == "output"
+            ]
 
-        return cls.post('/performanceTasks', json=request,
-                        headers={
-            'Content-Type': 'application/vnd.sas.models.performance.task+json'})
+        return cls.post(
+            "/performanceTasks",
+            json=request,
+            headers={
+                "Content-Type": "application/vnd.sas.models.performance.task+json"
+            },
+        )
 
     @classmethod
     def execute_performance_definition(cls, definition):
@@ -241,7 +269,7 @@ class ModelManagement(Service):
         """
         definition = cls.get_performance_definition(definition)
 
-        return cls.post('/performanceTasks/%s' % definition.id)
+        return cls.post("/performanceTasks/%s" % definition.id)
 
     @classmethod
     @experimental
@@ -255,6 +283,7 @@ class ModelManagement(Service):
 
         """
         from .workflow import Workflow
+
         wf = Workflow()
 
         return wf.list_enabled_definitions()
@@ -273,11 +302,12 @@ class ModelManagement(Service):
         -------
         list
             The list of prompts for specific workflow
-    
+
         """
         from .workflow import Workflow
+
         wf = Workflow()
-        
+
         return wf.list_workflow_prompt(workflowName)
 
     @classmethod
@@ -297,11 +327,16 @@ class ModelManagement(Service):
 
         """
         from .model_repository import ModelRepository
+
         mr = ModelRepository()
 
         project = mr.get_project(projectName)
 
-        return cls.get('/workflowProcesses?filter=eq(associations.solutionObjectId,%22' + project['id'] + '%22)')
+        return cls.get(
+            "/workflowProcesses?filter=eq(associations.solutionObjectId,%22"
+            + project["id"]
+            + "%22)"
+        )
 
     @classmethod
     @experimental
@@ -321,36 +356,40 @@ class ModelManagement(Service):
         -------
         RestObj
             The executing workflow
-            
+
         """
         from .model_repository import ModelRepository
         from .workflow import Workflow
 
         mr = ModelRepository()
         wf = Workflow()
-        
+
         project = mr.get_project(project_name)
 
         workflow = wf.run_workflow_definition(workflow_name, input=input)
-        
+
         # Associations running workflow to model project, note workflow has to be running
         # THINK ABOUT: do we do a check on status of the workflow to determine if it is still running before associating?
 
-        input = {"processName": workflow['name'],
-                 "processId": workflow['id'],
-                 "objectType": "MM_Project",
-                 "solutionObjectName": project_name,
-                 "solutionObjectId": project['id'],
-                 "solutionObjectUri": "/modelRepository/projects/" + project['id'],
-                 "solutionObjectMediaType": "application/vnd.sas.models.project+json"}
-        
-        #Note, you can get a HTTP Error 404: {"errorCode":74052,"message":"The workflow process for id <> cannot be found.
+        input = {
+            "processName": workflow["name"],
+            "processId": workflow["id"],
+            "objectType": "MM_Project",
+            "solutionObjectName": project_name,
+            "solutionObjectId": project["id"],
+            "solutionObjectUri": "/modelRepository/projects/" + project["id"],
+            "solutionObjectMediaType": "application/vnd.sas.models.project+json",
+        }
+
+        # Note, you can get a HTTP Error 404: {"errorCode":74052,"message":"The workflow process for id <> cannot be found.
         #                                    Associations can only be made to running processes.","details":["correlator:
         #                                    e62c5562-2b11-45db-bcb7-933200cb0f0a","traceId: 3118c0fb1eb9702d","path:
-        #                                    /modelManagement/workflowAssociations"],"links":[],"version":2,"httpStatusCode":404} 
+        #                                    /modelManagement/workflowAssociations"],"links":[],"version":2,"httpStatusCode":404}
         # Which is fine and expected like the Visual Experience.
-        return cls.post('/workflowAssociations',
-                        json=input,
-                        headers={'Content-Type': 'application/vnd.sas.workflow.object.association+json'})
-
-
+        return cls.post(
+            "/workflowAssociations",
+            json=input,
+            headers={
+                "Content-Type": "application/vnd.sas.workflow.object.association+json"
+            },
+        )
