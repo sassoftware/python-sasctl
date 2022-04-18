@@ -32,9 +32,11 @@ def getZippedModel(model, gPath, project=None):
     params = {"format": "zip"}
     modelZip = mr.get("models/%s" % (model), params=params, format_="content")
     modelName = mr.get_model(model).name
-    # Check if the provided project variable is a REST object
+    # Check project argument to determine project name
     if isinstance(project, RestObj):
         projectName = project.name
+    elif project is None:
+        projectName = mr.get_model(model).projectName
     else:
         projectName = mr.get_project(project).name
     # Check to see if project folder exists
@@ -58,7 +60,7 @@ def getZippedModel(model, gPath, project=None):
         newDir = Path(gPath) / projectName / modelName
         newDir.mkdir(parents=True, exist_ok=True)
         with open(
-            Path(gPath) / (projectName + "/" + modelName + ".zip"), "wb"
+            Path(gPath) / (projectName + "/" + modelName + "/" + modelName + ".zip"), "wb"
         ) as zFile:
             zFile.write(modelZip)
 
@@ -253,6 +255,10 @@ class GitIntegrate:
                 zFile.write(str(file), arcname=file.name)
         with open(modelDir / (modelDir.name + ".zip"), "rb") as zFile:
             zipIOFile = io.BytesIO(zFile.read())
+            # Check to see if provided project argument is a valid project on SAS Model Manager
+            projectResponse = mr.get_project(projectName)
+            project = project_exists(projectResponse, projectName)
+            projectName = project.name
             # Check if model with same name already exists in project. Delete if it exists.
             model_exists(projectName, modelName, True)
             mr.import_model_from_zip(modelName, projectName, zipIOFile)
@@ -294,7 +300,7 @@ class GitIntegrate:
         pullBranch.pull()
 
     @classmethod
-    def pullGitProject(cls, gPath, project=None):
+    def pushGitProject(cls, gPath, project=None):
         """Using a user provided project name, search for the project in the specified git repository,
         check if the project already exists on SAS Model Manager (create a new project if it does not),
         then upload each model found in the git project to SAS Model Manager
