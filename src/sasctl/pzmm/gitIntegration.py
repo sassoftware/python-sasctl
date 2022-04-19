@@ -1,7 +1,6 @@
 # Copyright (c) 2022, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-from msilib.schema import File
 from pathlib import Path
 from uuid import UUID
 from warnings import warn
