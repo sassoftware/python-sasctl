@@ -59,7 +59,8 @@ def getZippedModel(model, gPath, project=None):
         newDir = Path(gPath) / projectName / modelName
         newDir.mkdir(parents=True, exist_ok=True)
         with open(
-            Path(gPath) / (projectName + "/" + modelName + "/" + modelName + ".zip"), "wb"
+            Path(gPath) / (projectName + "/" + modelName + "/" + modelName + ".zip"),
+            "wb",
         ) as zFile:
             zFile.write(modelZip)
 
