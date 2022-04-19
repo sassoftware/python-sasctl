@@ -1,6 +1,11 @@
 Unreleased
 ----------
  -
+v1.7.1 (2022-04-19)
+-------------------
+**Bugfixes**
+- Removed linux breaking import from new git integration feature
+- Various minor bug fixes in the git integration feature
 
 v1.7.0 (2022-04-07)
 -------------------
