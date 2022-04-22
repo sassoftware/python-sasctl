@@ -42,7 +42,7 @@ setup(
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     python_requires=">=3.5",
-    install_requires=["pandas", "scikit-learn", "requests", "pyyaml", "packaging"],
+    install_requires=["pandas", "scikit-learn", "requests", "pyyaml", "packaging", "GitPython"],
     extras_require={
         "swat": ["swat"],
         "kerberos": [
