@@ -5,6 +5,7 @@ from pathlib import Path
 from uuid import UUID
 from warnings import warn
 import zipfile
+import git
 from git import Repo
 import io
 
@@ -284,7 +285,7 @@ class GitIntegrate:
         pushBranch.push()
 
     @classmethod
-    def gitRepoPull(cls, gPath, branch="origin"):
+    def gitRepoPull(cls, gPath, remote="origin", branch="main"):
         """Pull down any changes from a remote branch of the git repository. The default branch is
         origin.
 
@@ -292,12 +293,13 @@ class GitIntegrate:
         ----------
         gPath : string or Path
             Base directory of the git repository.
+        remote : string
+            Remote name for the remote repository, by default 'origin'
         branch : string
-            Branch name for the remote repository, by default 'origin'
+            Branch name for the target pull branch from remote, by default 'main'
         """
-        repo = Repo(gPath)
-        pullBranch = repo.remote(name=branch)
-        pullBranch.pull()
+        repo = git.Git(gPath)
+        repo.pull(remote, branch)
 
     @classmethod
     def pushGitProject(cls, gPath, project=None):
