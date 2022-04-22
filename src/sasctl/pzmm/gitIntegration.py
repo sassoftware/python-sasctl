@@ -265,7 +265,7 @@ class GitIntegrate:
             mr.import_model_from_zip(modelName, projectName, zipIOFile)
 
     @classmethod
-    def gitRepoPush(cls, gPath, commitMessage, branch="origin"):
+    def gitRepoPush(cls, gPath, commitMessage, remote="origin", branch="main"):
         """Create a new commit with new files, then push changes from the local repository to a remote
         branch. The default remote branch is origin.
 
@@ -275,14 +275,15 @@ class GitIntegrate:
             Base directory of the git repository.
         commitMessage : string
             Commit message for the new commit
-        branch : str, optional
-            Branch name for the remote repository, by default 'origin'
+        remote : str, optional
+            Remote name for the remote repository, by default 'origin'
+        branch : string
+            Branch name for the target pull branch from remote, by default 'main'
         """
         repo = Repo(gPath)
         repo.git.add(all=True)
         repo.index.commit(commitMessage)
-        pushBranch = repo.remote(name=branch)
-        pushBranch.push()
+        repo.git.push(remote, branch)
 
     @classmethod
     def gitRepoPull(cls, gPath, remote="origin", branch="main"):
