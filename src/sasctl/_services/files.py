@@ -26,14 +26,14 @@ class Files(Service):
     multipart form request.
     """
 
-    _SERVICE_ROOT = '/files'
+    _SERVICE_ROOT = "/files"
 
     list_files, get_file, update_file, delete_file = Service._crud_funcs(
-        '/files', 'file'
+        "/files", "file"
     )
 
     @classmethod
-    @sasctl_command('files', 'create')
+    @sasctl_command("files", "create")
     def create_file(cls, file, folder=None, filename=None, expiration=None):
         """Create a new file on the server by uploading a local file.
 
@@ -57,12 +57,12 @@ class Files(Service):
         if isinstance(file, str):
             filename = filename or os.path.splitext(os.path.split(file)[1])[0]
 
-            with open(file, 'rb') as f:
+            with open(file, "rb") as f:
                 file = f.read()
         else:
             if filename is None:
                 raise ValueError(
-                    '`filename` must be specified if `file` is not a path.'
+                    "`filename` must be specified if `file` is not a path."
                 )
 
             file = file.read()
@@ -75,17 +75,16 @@ class Files(Service):
             if _folder is None:
                 raise ValueError("Folder '%s' could not be found." % folder)
 
-            params['parentFolderUri'] = cls.get_link(_folder, 'self')['href']
+            params["parentFolderUri"] = cls.get_link(_folder, "self")["href"]
 
         if expiration is not None:
             pass
             # TODO: add 'expirationTimeStamp' to params.  Need to determine correct format
 
-        return cls.post('/files#multipartUpload',
-                        files={filename: file}, params=params)
+        return cls.post("/files#multipartUpload", files={filename: file}, params=params)
 
     @classmethod
-    @sasctl_command('files', 'content')
+    @sasctl_command("files", "content")
     def get_file_content(cls, file):
         """Download the contents of a file.
 
@@ -101,15 +100,15 @@ class Files(Service):
         """
         file = cls.get_file(file)
 
-        r = cls.request_link(file, 'content', format='response')
+        r = cls.request_link(file, "content", format="response")
 
-        content_type = r.headers.get('Content-Type', '')
+        content_type = r.headers.get("Content-Type", "")
 
-        if 'text/plain' in content_type:
+        if "text/plain" in content_type:
             return r.text
-        if 'application/json' in content_type:
+        if "application/json" in content_type:
             return r.json()
-        if 'application/octet-stream' in content_type:
+        if "application/octet-stream" in content_type:
             return r.content
 
         return r.text

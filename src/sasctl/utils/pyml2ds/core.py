@@ -26,10 +26,10 @@ def _check_type(model):
     ]
 
     if xgboost and isinstance(model, xgboost.sklearn.XGBModel):
-        if model.booster not in ['gbtree', 'dart']:
+        if model.booster not in ["gbtree", "dart"]:
             raise RuntimeError(
                 "Model is xgboost. Unsupported booster type: %s."
-                " Supported types are: %s" % (model.booster, ', '.join(comp_types))
+                " Supported types are: %s" % (model.booster, ", ".join(comp_types))
             )
 
         parser = XgbParser(model.get_booster(), model.objective)
@@ -43,7 +43,7 @@ def _check_type(model):
         raise RuntimeError(
             "Unknown booster type: %s. Compatible types are: %s."
             " Check if corresponding library is installed."
-            % (type(model).__name__, ', '.join(comp_types))
+            % (type(model).__name__, ", ".join(comp_types))
         )
 
     return parser
@@ -91,11 +91,11 @@ def pyml2ds(in_file, out_var_name="P_TARGET"):
     # Path to a PMML or pickle file
     if is_file_path:
         # Parse PMML files
-        if os.path.splitext(in_file)[-1] == '.pmml':
+        if os.path.splitext(in_file)[-1] == ".pmml":
             model = etree.parse(in_file)
         else:
             # Read pickled files
-            with open(in_file, 'rb') as f:
+            with open(in_file, "rb") as f:
                 model = pickle.load(f)
 
     elif isinstance(in_file, bytes):

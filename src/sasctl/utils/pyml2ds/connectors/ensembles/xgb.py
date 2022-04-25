@@ -11,43 +11,43 @@ class XgbTreeParser(TreeParser):
     def _gen_dict(self):
         pnode = self._node
 
-        self.d[self._node['nodeid']] = self._node
-        if 'children' in self._node:
-            for child in self._node['children']:
+        self.d[self._node["nodeid"]] = self._node
+        if "children" in self._node:
+            for child in self._node["children"]:
                 self._node = child
                 self._gen_dict()
 
         self._node = pnode
 
     def _not_leaf(self):
-        return 'split' in self._node
+        return "split" in self._node
 
     def _get_var(self):
-        return self._node['split']
+        return self._node["split"]
 
     def _go_left(self):
-        return self._node['missing'] == self._node['yes']
+        return self._node["missing"] == self._node["yes"]
 
     def _go_right(self):
-        return self._node['missing'] == self._node['no']
+        return self._node["missing"] == self._node["no"]
 
     def _left_node(self):
-        return self.d[self._node['yes']]
+        return self.d[self._node["yes"]]
 
     def _right_node(self):
-        return self.d[self._node['no']]
+        return self.d[self._node["no"]]
 
     def _missing_node(self):
-        return self.d[self._node['missing']]
+        return self.d[self._node["missing"]]
 
     def _split_value(self):
-        return self._node['split_condition']
+        return self._node["split_condition"]
 
     def _decision_type(self):
-        return '<'
+        return "<"
 
     def _leaf_value(self):
-        return self._node['leaf']
+        return self._node["leaf"]
 
 
 class XgbParser(EnsembleParser):
@@ -61,24 +61,28 @@ class XgbParser(EnsembleParser):
         Xgboost objective function.
 
     """
+
     def __init__(self, booster, objective):
         super(XgbParser, self).__init__()
 
         self._booster = booster
-        self._dump = booster.get_dump(dump_format='json')
+        self._dump = booster.get_dump(dump_format="json")
         self._objective = objective
         self._features = booster.feature_names
 
-        if objective == 'binary:logistic':
+        if objective == "binary:logistic":
             self.out_transform = "1 / (1 + exp(-{0}))"
-        elif objective == 'reg:linear':
+        elif objective == "reg:linear":
             pass
         else:
-            raise ValueError("Unsupported objective: '%s'.  ""Expected "
-                             "'binary:logistic' or 'reg:linear'." % objective)
+            raise ValueError(
+                "Unsupported objective: '%s'.  "
+                "Expected "
+                "'binary:logistic' or 'reg:linear'." % objective
+            )
 
         self._tree_parser = XgbTreeParser()
-    
+
     def _iter_trees(self):
         for booster_id, tree_json in enumerate(self._dump):
             yield booster_id, json.loads(tree_json)

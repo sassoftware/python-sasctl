@@ -113,7 +113,8 @@ class ImportModel:
         isH2OModel=False,
         force=False,
         binaryString=None,
-        mlFlowDetails=None
+        missingValues=False,
+        mlFlowDetails=None,
     ):
         """Import model to SAS Model Manager using pzmm submodule.
 
@@ -173,16 +174,19 @@ class ImportModel:
             Sets whether to overwrite models with the same name upon upload. By default False.
         binaryString : string, optional
             Binary string representation of the model object. By default None.
+        missingValues : boolean, optional
+            Sets whether data used for scoring needs to go through imputation for
+            missing values before passed to the model. By default False.
         mlFlowDetails : dict, optional
             Model details from an MLFlow model. This dictionary is created by the readMLModelFile function.
-            By default None.       
+            By default None.
         """
         # Initialize no score code or binary H2O model flags
         noScoreCode = False
         binaryModel = False
-        
+
         if mlFlowDetails is None:
-            mlFlowDetails = {'serialization_format': 'pickle'} 
+            mlFlowDetails = {"serialization_format": "pickle"}
 
         if pyPath is None:
             pyPath = Path(zPath)
@@ -243,7 +247,8 @@ class ImportModel:
                     isH2OModel=isH2OModel,
                     isBinaryModel=binaryModel,
                     binaryString=binaryString,
-                    pickleType=mlFlowDetails['serialization_format']
+                    missingValues=missingValues,
+                    pickleType=mlFlowDetails["serialization_format"],
                 )
                 print(
                     "Model score code was written successfully to {}.".format(
@@ -307,7 +312,8 @@ class ImportModel:
                     isH2OModel=isH2OModel,
                     isBinaryModel=binaryModel,
                     binaryString=binaryString,
-                    pickleType=mlFlowDetails['serialization_format']
+                    missingValues=missingValues,
+                    pickleType=mlFlowDetails["serialization_format"],
                 )
                 print(
                     "Model score code was written successfully to {} and uploaded to SAS Model Manager".format(

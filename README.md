@@ -16,7 +16,12 @@
   <a href="https://github.com/sassoftware/python-sasctl/actions/workflows/build-test-deploy.yml">
     <img src="https://github.com/sassoftware/python-sasctl/actions/workflows/build-test-deploy.yml/badge.svg" />
   </a>
-  
+    
+  <a href="https://codecov.io/gh/sassoftware/python-sasctl">
+    <img src="https://codecov.io/gh/sassoftware/python-sasctl/branch/master/graph/badge.svg?token=mDcvtz2Als"/>
+  </a>
+
+    
 </div>
 
 

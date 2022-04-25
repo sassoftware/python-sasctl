@@ -1,6 +1,24 @@
 Unreleased
 ----------
  -
+v1.7.1 (2022-04-19)
+-------------------
+**Bugfixes**
+- Removed linux breaking import from new git integration feature
+- Various minor bug fixes in the git integration feature
+
+v1.7.0 (2022-04-07)
+-------------------
+**Improvements**
+ - Added Git integration for better tracking of model history and versioning. 
+ - Added MLFlow integration for simple models, allowing users to import simple MLFlow models, such as sci-kit 
+   learn, to SAS Model Manager
+
+v1.6.4 (2022-04-07)
+-------------------
+**Bugfixes**
+ - Fixed an issue where `folders.create_folder()` would attempt to use root folder as parent if desired parent
+   folder wasn't found.  Now correctly handles parent folders and raises an error if folder not found.
 
 v1.6.3 (2021-09-23)
 -------------------

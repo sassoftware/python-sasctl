@@ -11,11 +11,10 @@ class Workflow(Service):
     """The Workflow API provides basic resources for list, prompt details,
     and running workflow processes.
     """
-    _SERVICE_ROOT= '/workflow'
 
-    def list_definitions(self,
-                         include_enabled=True,
-                         include_disabled=False):
+    _SERVICE_ROOT = "/workflow"
+
+    def list_definitions(self, include_enabled=True, include_disabled=False):
         """List workflow definitions.
 
         Parameters
@@ -32,11 +31,11 @@ class Workflow(Service):
 
         """
         if include_enabled and include_disabled:
-            url = '/definitions'
+            url = "/definitions"
         elif include_enabled:
-            url = '/enabledDefinitions'
+            url = "/enabledDefinitions"
         elif include_disabled:
-            url = '/disabledDefinitions'
+            url = "/disabledDefinitions"
         else:
             return []
 
@@ -52,8 +51,7 @@ class Workflow(Service):
             The list of definitions.
 
         """
-        return self.list_definitions(include_enabled=True,
-                                     include_disabled=False)
+        return self.list_definitions(include_enabled=True, include_disabled=False)
 
     def list_workflow_prompt(self, name):
         """List prompt Workflow Processes Definitions.
@@ -67,19 +65,19 @@ class Workflow(Service):
         -------
         list
             The list of prompts for specific workflow
-    
+
         """
-        
+
         ret = self._find_specific_workflow(name)
         if ret is None:
             raise ValueError("No Workflow enabled for %s name or id." % name)
-        
-        if 'prompts' in ret:
-            return ret['prompts']
+
+        if "prompts" in ret:
+            return ret["prompts"]
         else:
             # No prompt inputs on workflow
             return None
-        
+
     def run_workflow_definition(self, name, input=None):
         """Runs specific Workflow Processes Definitions.
 
@@ -94,19 +92,24 @@ class Workflow(Service):
         -------
         RestObj
             The executing workflow
-            
+
         """
 
         workflow = self._find_specific_workflow(name)
         if workflow is None:
             raise ValueError("No Workflow enabled for %s name or id." % name)
-        
+
         if input is None:
-            return self.post('/processes?definitionId=' + workflow['id'],
-	                     headers={'Content-Type': 'application/vnd.sas.workflow.variables+json'})
+            return self.post(
+                "/processes?definitionId=" + workflow["id"],
+                headers={"Content-Type": "application/vnd.sas.workflow.variables+json"},
+            )
         if isinstance(input, dict):
-            return self.post('/processes?definitionId=' + workflow['id'], json=input,
-	                     headers={'Content-Type': 'application/vnd.sas.workflow.variables+json'})
+            return self.post(
+                "/processes?definitionId=" + workflow["id"],
+                json=input,
+                headers={"Content-Type": "application/vnd.sas.workflow.variables+json"},
+            )
 
     def _find_specific_workflow(self, name):
         # Internal helper method
@@ -114,12 +117,10 @@ class Workflow(Service):
         # Returns a dict objects of the workflow
         listendef = self.list_enabled_definitions()
         for tmp in listendef:
-            if tmp['name'] == name:
+            if tmp["name"] == name:
                 return tmp
-            elif tmp['id'] == name:
+            elif tmp["id"] == name:
                 return tmp
-        
+
         # Did not find any enabled workflow with name/id
         return None
-
-

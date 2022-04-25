@@ -33,7 +33,7 @@ def installed_packages():
         return list(freeze.freeze())
 
 
-@versionadded(version='1.5.1')
+@versionadded(version="1.5.1")
 def random_string(length):
     """Generates a random alpha-numeric string of a given length.
 
@@ -50,4 +50,4 @@ def random_string(length):
 
     # random.choices() wasn't added until Python 3.6, so repeatedly call .choice() instead
     chars = string.ascii_letters + string.digits
-    return ''.join(random.choice(chars) for _ in range(length))
+    return "".join(random.choice(chars) for _ in range(length))

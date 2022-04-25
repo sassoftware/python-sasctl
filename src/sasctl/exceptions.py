@@ -33,6 +33,7 @@ class ServiceUnavailableError(RuntimeError):
     unavailable.  This could be because the necessary SAS components have not
     been licensed or installed, or because the service is temporarily offline.
     """
+
     def __init__(self, service, *args, **kwargs):
         msg = "The service at '%s' is unavailable." % service._SERVICE_ROOT
         super(ServiceUnavailableError, self).__init__(msg, *args, **kwargs)

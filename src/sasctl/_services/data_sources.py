@@ -19,9 +19,9 @@ class DataSources(Service):
 
     """
 
-    _SERVICE_ROOT = '/dataSources'
+    _SERVICE_ROOT = "/dataSources"
 
-    list_providers, _, _, _ = Service._crud_funcs('/providers', 'provider')
+    list_providers, _, _, _ = Service._crud_funcs("/providers", "provider")
 
     @classmethod
     def get_provider(cls, provider, refresh=False):
@@ -46,13 +46,13 @@ class DataSources(Service):
         when data is already available on the client.
 
         """
-        if isinstance(provider, dict) and 'id' in provider:
+        if isinstance(provider, dict) and "id" in provider:
             if refresh:
-                provider = provider['id']
+                provider = provider["id"]
             else:
                 return provider
 
-        return cls.get('/providers/{id}'.format(id=provider))
+        return cls.get("/providers/{id}".format(id=provider))
 
     @classmethod
     def list_sources(cls, provider):
@@ -72,7 +72,7 @@ class DataSources(Service):
 
         provider = cls.get_provider(provider)
 
-        sources = cls.request_link(provider, 'dataSources')
+        sources = cls.request_link(provider, "dataSources")
         if isinstance(sources, (list, PagedItemIterator)):
             return sources
         return [sources]
@@ -94,7 +94,7 @@ class DataSources(Service):
             A dictionary containing the data source attributes or None.
 
         """
-        if isinstance(source, dict) and 'providerId' in source:
+        if isinstance(source, dict) and "providerId" in source:
             return source
 
         sources = cls.list_sources(provider)
@@ -105,7 +105,7 @@ class DataSources(Service):
         return None
 
     @classmethod
-    def list_caslibs(cls, source='cas-shared-default', filter_=None):
+    def list_caslibs(cls, source="cas-shared-default", filter_=None):
         """Get all caslibs registered with the given CAS server.
 
         Parameters
@@ -126,10 +126,10 @@ class DataSources(Service):
         .. _filtering: https://developer.sas.com/reference/filtering/
 
         """
-        source = cls.get_source('cas', source)
+        source = cls.get_source("cas", source)
 
-        params = 'filter={}'.format(filter_) if filter_ is not None else {}
-        result = cls.request_link(source, 'children', params=params)
+        params = "filter={}".format(filter_) if filter_ is not None else {}
+        result = cls.request_link(source, "children", params=params)
 
         return result if isinstance(result, (list, PagedItemIterator)) else [result]
 
@@ -149,7 +149,7 @@ class DataSources(Service):
         RestObj
 
         """
-        source = source or 'cas-shared-default'
+        source = source or "cas-shared-default"
         caslibs = cls.list_caslibs(source, filter_='eq(name, "%s")' % name)
 
         if caslibs:
@@ -181,19 +181,19 @@ class DataSources(Service):
         .. _filtering: https://developer.sas.com/reference/filtering/
 
         """
-        if not cls.get_link(caslib, 'tables'):
+        if not cls.get_link(caslib, "tables"):
             caslib = cls.get_caslib(caslib)
 
         params = {}
 
         if filter_ is not None:
-            params['filter'] = str(filter_)
+            params["filter"] = str(filter_)
         if session_id is not None:
-            params['sessionId'] = str(session_id)
+            params["sessionId"] = str(session_id)
 
-        params = '&'.join('%s=%s' % (k, params[k]) for k in params)
+        params = "&".join("%s=%s" % (k, params[k]) for k in params)
 
-        result = cls.request_link(caslib, 'tables', params=params)
+        result = cls.request_link(caslib, "tables", params=params)
 
         return result if isinstance(result, (list, PagedItemIterator)) else [result]
 
@@ -237,11 +237,11 @@ class DataSources(Service):
         """
 
         # Use the CASTable information to find the same table
-        if all(hasattr(table, x) for x in ('name', 'caslib', 'get_connection')):
+        if all(hasattr(table, x) for x in ("name", "caslib", "get_connection")):
             from .cas_management import CASManagement as cm
 
             server_http = table.builtins.httpAddress()
-            server_name = server_http['restPrefix'].lstrip('/').rsplit('-http')[0]
+            server_name = server_http["restPrefix"].lstrip("/").rsplit("-http")[0]
 
             table_name = table.name
             caslib_name = table.caslib
@@ -252,7 +252,7 @@ class DataSources(Service):
             if caslib_name == {}:
                 # skipcq: PYL-W0212
                 username = table.get_connection()._username
-                caslib_name = DEFAULT_CASLIB + '(%s)' % username
+                caslib_name = DEFAULT_CASLIB + "(%s)" % username
 
             # session_id = table.get_connection()._session
 
@@ -261,17 +261,17 @@ class DataSources(Service):
 
         # Responses directly from cas_management service have a URI to
         # data_tables service under the "dataTable" rel
-        link = cls.get_link(table, 'dataTable')
+        link = cls.get_link(table, "dataTable")
         if link is not None:
-            return link['uri']
+            return link["uri"]
 
         # Responses from data_tables service have the URI to data_tables under
         # the "self" rel
-        link = cls.get_link(table, 'self')
+        link = cls.get_link(table, "self")
         if link is not None:
-            return link['uri']
+            return link["uri"]
 
         # Responses from upload operations often don't include a links section.
         # Fall back to tableReference section if present
-        table_ref = table.get('tableReference', {})
-        return table_ref.get('tableUri')
+        table_ref = table.get("tableReference", {})
+        return table_ref.get("tableUri")

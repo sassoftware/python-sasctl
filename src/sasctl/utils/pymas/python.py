@@ -16,7 +16,7 @@ from ..decorators import versionchanged
 logger = logging.getLogger(__name__)
 
 
-@versionchanged('`names` parameter added.', version='1.5')
+@versionchanged("`names` parameter added.", version="1.5")
 def ds2_variables(input, output_vars=False, names=None):
     """Generate a collection of `DS2Variable` instances corresponding to the input
 
@@ -49,21 +49,21 @@ def ds2_variables(input, output_vars=False, names=None):
 
     if isinstance(input, dict):
         types = input
-    elif hasattr(input, 'columns') and hasattr(input, 'dtypes'):
+    elif hasattr(input, "columns") and hasattr(input, "dtypes"):
         # Pandas DataFrame
         types = OrderedDict()
         for col in input.columns:
-            if input[col].dtype.name == 'object':
-                types[col] = ('char', False)
-            elif input[col].dtype.name == 'category':
-                types[col] = ('char', False)
+            if input[col].dtype.name == "object":
+                types[col] = ("char", False)
+            elif input[col].dtype.name == "category":
+                types[col] = ("char", False)
             else:
                 types[col] = (input[col].dtype.name, False)
-    elif hasattr(input, 'dtype'):
+    elif hasattr(input, "dtype"):
         # Numpy array?  No column names, but we can at least create dummy vars of the correct type
         types = OrderedDict(
             [
-                ('var{}'.format(i), (input.dtype.name.replace('object', 'char'), False))
+                ("var{}".format(i), (input.dtype.name.replace("object", "char"), False))
                 for i in range(1, input.size + 1)
             ]
         )
@@ -92,12 +92,12 @@ def ds2_variables(input, output_vars=False, names=None):
             out = v[1] or output_vars
             results.append(DS2Variable(name=name, type=type_, out=out))
         else:
-            raise RuntimeError('Unable to determine input/ouput types.')
+            raise RuntimeError("Unable to determine input/ouput types.")
 
     return results
 
 
-def parse_type_hints(func, skip_var='self'):
+def parse_type_hints(func, skip_var="self"):
     """Attempt to discern types for the input and output variable(s).
 
     DS2 is a strongly-typed language but Python is not.  Need to determine the types for input/output variables so they
@@ -126,36 +126,36 @@ def parse_type_hints(func, skip_var='self'):
     params = OrderedDict(
         [(k, None) for k in getfullargspec(func).args if k != skip_var]
     )
-    logger.debug('Params: {}'.format(params))
+    logger.debug("Params: {}".format(params))
 
-    if getattr(func, '__annotations__', None):
+    if getattr(func, "__annotations__", None):
         params.update(parse_type_hints_from_annotations(func, skip_var=skip_var))
     else:
         params.update(parse_type_hints_from_source(func, skip_var=skip_var))
 
     if any(v is None for v in params.values()):
-        raise ValueError('Unable to determine parameter types.')
+        raise ValueError("Unable to determine parameter types.")
 
     return params
 
 
-def parse_type_hints_from_source(func, skip_var='self'):
+def parse_type_hints_from_source(func, skip_var="self"):
     """Parse type hints stored in comments according to PEP 484."""
 
-    regex = re.compile(r'^\s+\# types?: ', re.IGNORECASE)
+    regex = re.compile(r"^\s+\# types?: ", re.IGNORECASE)
 
     def parse_types(line):
         if line:
-            line = regex.sub('', line)  # Strip out the ' # type:' portion if it exists
-            return line.strip().strip('(').strip(')').split(',')
+            line = regex.sub("", line)  # Strip out the ' # type:' portion if it exists
+            return line.strip().strip("(").strip(")").split(",")
         return []
 
     params = OrderedDict()
 
     for line in getsourcelines(func)[0]:
         if regex.match(line):
-            if '->' in line:
-                inputs, outputs = line.split('->')
+            if "->" in line:
+                inputs, outputs = line.split("->")
             else:
                 inputs = line
                 outputs = None
@@ -173,22 +173,22 @@ def parse_type_hints_from_source(func, skip_var='self'):
 
             types = parse_types(outputs)
             for i, t in enumerate(types):
-                params['out%d' % (i + 1)] = (t.strip(), True)
+                params["out%d" % (i + 1)] = (t.strip(), True)
 
     return params
 
 
-def parse_type_hints_from_annotations(func, skip_var='self'):
+def parse_type_hints_from_annotations(func, skip_var="self"):
     """Parse type hints from the function signature."""
 
     annotations = func.__annotations__
     params = OrderedDict()
-    logger.debug('Annotations: {}'.format(annotations))
+    logger.debug("Annotations: {}".format(annotations))
 
     for p, t in annotations.items():
         if p == skip_var:
             continue
-        elif p == 'return':
+        elif p == "return":
             if t is not None:
                 params[p] = (t.__name__, True)
         else:

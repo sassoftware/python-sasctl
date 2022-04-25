@@ -28,7 +28,7 @@ class ScoreCode:
         scoreCAS=True,
         isBinaryModel=False,
         binaryString=None,
-        pickleType=None
+        pickleType=None,
     ):
         """
         Writes a Python score code file based on training data used to generate the model
@@ -64,10 +64,10 @@ class ScoreCode:
         inputData : DataFrame or list of dicts
             The `DataFrame` object contains the training data, and includes only the predictor
             columns. The writeScoreCode function currently supports int(64), float(64),
-            and string data types for scoring. Providing a list of dict objects signals 
+            and string data types for scoring. Providing a list of dict objects signals
             that the model files are being created from an MLFlow model.
         targetDF : DataFrame
-            The `DataFrame` object contains the training data for the target variable. Note that 
+            The `DataFrame` object contains the training data for the target variable. Note that
             for MLFlow models, this can set as None.
         modelPrefix : string
             The variable for the model name that is used when naming model files.
@@ -118,13 +118,13 @@ class ScoreCode:
             isBinaryString = True
         else:
             isBinaryString = False
-        
+
         # Check if MLFlow Model
         if isinstance(inputData, list):
-            isMLFlow = True  
+            isMLFlow = True
         else:
             isMLFlow = False
-        
+
         # Call REST API to check SAS Viya version
         isViya35 = platform_version() == "3.5"
 
@@ -199,8 +199,10 @@ import codecs"""
 import math
 import {pickleType}
 import pandas as pd
-import numpy as np""".format(pickleType=pickleType)
+import numpy as np""".format(
+                    pickleType=pickleType
                 )
+            )
             # In SAS Viya 4.0 and SAS Open Model Manager, a settings.py file is generated that points to the resource
             # location
             if not isViya35:
@@ -226,24 +228,33 @@ _thisModelFit = pickle.loads(codecs.decode(binaryString.encode(), 'base64'))'''.
                     )
                 )
             elif isViya35 and isH2OModel and not isBinaryModel:
-                cls.pyFile.write(
-                    """\n
+                try:
+                    cls.pyFile.write(
+                        """\n
 with gzip.open('/models/resources/viya/{modelID}/{modelFileName}', 'r') as fileIn, open('/models/resources/viya/{
 modelID}/{modelZipFileName}', 'wb') as fileOut:
     shutil.copyfileobj(fileIn, fileOut)
 os.chmod('/models/resources/viya/{modelID}/{modelZipFileName}', 0o777)
 _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelZipFileName}')""".format(
-                        modelID=modelID,
-                        modelFileName=modelFileName,
-                        modelZipFileName=modelFileName[:-4] + "zip",
+                            modelID=modelID,
+                            modelFileName=modelFileName,
+                            modelZipFileName=modelFileName[:-4] + "zip",
+                        )
                     )
-                )
+                except AttributeError:
+                    raise ValueError(
+                        "The following is not a valid model to register in this format. "
+                        + "Please verify that the appropriate arguments have been provided "
+                        + "to the import model function."
+                    )
             elif isViya35 and not isH2OModel:
                 cls.pyFile.write(
                     """\n
 with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
     _thisModelFit = {pickleType}.load(_pFile)""".format(
-                        modelID=modelID, modelFileName=modelFileName, pickleType=pickleType
+                        modelID=modelID,
+                        modelFileName=modelFileName,
+                        pickleType=pickleType,
                     )
                 )
             elif isViya35 and isBinaryModel:
@@ -291,7 +302,7 @@ def score{modelPrefix}({inputVarList}):
                 )
             )
             # As a check for missing model variables, run a try/except block that reattempts to load the model in as a variable
-            if binaryString is None:
+            if not isBinaryString:
                 cls.pyFile.write(
                     """\n
     try:
@@ -303,7 +314,9 @@ def score{modelPrefix}({inputVarList}):
                         """
         with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
             _thisModelFit = {pickleType}.load(_pFile)""".format(
-                            modelID=modelID, modelFileName=modelFileName, pickleType = pickleType
+                            modelID=modelID,
+                            modelFileName=modelFileName,
+                            pickleType=pickleType,
                         )
                     )
                 elif isViya35 and isH2OModel and not isBinaryModel:
@@ -344,7 +357,9 @@ def score{modelPrefix}({inputVarList}):
                         )
                     )
 
-            if missingValues and not isMLFlow: #MLFlow models are not guaranteed to have example input data 
+            if (
+                missingValues and not isMLFlow
+            ):  # MLFlow models are not guaranteed to have example input data
                 # For each input variable, impute for missing values based on variable dtype
                 for i, dTypes in enumerate(inputDtypesList):
                     dTypes = dTypes.name
@@ -397,7 +412,14 @@ def score{modelPrefix}({inputVarList}):
                         newVarList.extend(tempVar)
             # For non-H2O models, insert the model into the provided predictMethod call
             if not isH2OModel:
-                predictMethod = predictMethod.format("_thisModelFit", "inputArray")
+                try:
+                    predictMethod = predictMethod.format("_thisModelFit", "inputArray")
+                except AttributeError:
+                    raise ValueError(
+                        "The following is not a valid model to register in this format. "
+                        + "Please verify that the appropriate arguments have been provided "
+                        + "to the import model function."
+                    )
                 cls.pyFile.write(
                     """\n
     try:
@@ -477,7 +499,9 @@ def score{modelPrefix}({inputVarList}):
                     """\n
     {0} = prediction
     if isinstance({0}, np.ndarray):
-        {0} = prediction.item(0)""".format(metrics[0])
+        {0} = prediction.item(0)""".format(
+                        metrics[0]
+                    )
                 )
 
             metricsList = ", ".join(metrics)
@@ -489,7 +513,6 @@ def score{modelPrefix}({inputVarList}):
             )
 
             cls.pyFile.write("""\n""")
-            
 
         # For SAS Viya 3.5, the model is first registered to SAS Model Manager, then the model UUID can be
         # added to the score code and reuploaded to the model file contents

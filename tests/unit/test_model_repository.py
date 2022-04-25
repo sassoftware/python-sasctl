@@ -173,3 +173,27 @@ def test_get_model_by_name():
             result = mr.get_model(MODEL_NAME)
     assert result['id'] == 12345
     assert result['name'] == MODEL_NAME
+
+
+def test_add_model_content():
+
+    with mock.patch('sasctl._services.model_repository.ModelRepository.get_model', return_value={'id': 123}):
+        with mock.patch('sasctl._services.model_repository.ModelRepository.post') as post:
+            text_data = 'Test text file contents'
+
+            # Basic upload of text data
+            mr.add_model_content(None, text_data, 'test.txt')
+            assert post.call_args[1]['files'] == {'test.txt': text_data}
+
+            # Upload of text data with content type
+            mr.add_model_content(None, text_data, 'test.txt', content_type='application/text')
+            assert post.call_args[1]['files'] == {'test.txt': ('test.txt', text_data, 'application/text')}
+
+            # Upload of binary data should include content type
+            binary_data = 'Test binary file contents'.encode()
+            mr.add_model_content(None, binary_data, 'test.pkl')
+            assert post.call_args[1]['files'] == {'test.pkl': ('test.pkl', binary_data, 'application/octet-stream')}
+
+            # Should be able to customize content type
+            mr.add_model_content(None, binary_data, 'test.pkl', content_type='application/image')
+            assert post.call_args[1]['files'] == {'test.pkl': ('test.pkl', binary_data, 'application/image')}

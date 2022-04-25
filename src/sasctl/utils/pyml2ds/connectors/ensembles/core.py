@@ -25,7 +25,7 @@ class EnsembleParser(metaclass=abc.ABCMeta):
     @classmethod
     def _aggregate(cls, booster_count):
         return "treeValue = sum({});\n".format(
-            ', '.join("treeValue%d" % i for i in range(booster_count))
+            ", ".join("treeValue%d" % i for i in range(booster_count))
         )
 
     def translate(self, file):
