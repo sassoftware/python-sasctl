@@ -28,7 +28,7 @@ class ScoreCode:
         scoreCAS=True,
         isBinaryModel=False,
         binaryString=None,
-        pickleType=None,
+        pickleType='pickle',
     ):
         """
         Writes a Python score code file based on training data used to generate the model
@@ -110,8 +110,8 @@ class ScoreCode:
             Sets whether the H2O model provided is a binary model or a MOJO model. By default False.
         binaryString : string, optional
             Binary string representation of the model object. By default None.
-        pickleType : string optional
-            Indicator for MLFlow models, which may pickle by non-standard methods. By default None.
+        pickleType : string, optional
+            Indicator for MLFlow models, which may pickle by non-standard methods. By default 'pickle'.
         """
         # Check if binary string model
         if binaryString is not None:
