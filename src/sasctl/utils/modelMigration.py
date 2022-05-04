@@ -102,7 +102,7 @@ def convertScoreCode(zPath, scoreResource, pythonScoreCode):
     scoreCode = "import settings\n" + scoreCode
 
     # Search for all directory paths in score code that contain the scoreResource
-    oldString = re.findall(r"'\/.*?\.[\w:]+'", scoreCode)
+    oldString = re.findall(r"['\"]\/.*?\.[\w:]+['\"]", scoreCode)
     oldString = [s for s in oldString if scoreResource in s]
     # Remove duplicates, as .replace() checks for all instances
     oldString = list(set(oldString))
