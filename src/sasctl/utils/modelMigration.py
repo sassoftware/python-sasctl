@@ -107,13 +107,14 @@ def convertScoreCode(zPath, scoreResource, pythonScoreCode):
     # Search for all directory paths in score code that contain the scoreResource
     oldString = re.findall(r"['\"]\/.*?\.[\w:]+['\"]", scoreCode)
     parsedOldString = []
+    newString = []
     for resource in scoreResource:
-        parsedOldString = parsedOldString + [s for s in oldString if resource in s]
-    # Remove duplicates, as .replace() checks for all instances
-    oldString = list(set(parsedOldString))
-    # Replace Viya 3.5 style with Viya 4 style
-    newString = "settings.pickle_path + '{}'".format(scoreResource)
-    for oldStr in oldString:
+        stringFound = []
+        stringFound = [s for s in oldString if resource in s]
+        parsedOldString = parsedOldString + stringFound
+        if stringFound:
+            newString.append("settings.pickle_path + '{}'".format(resource))
+    for oldStr in parsedOldString:
         scoreCode = scoreCode.replace(oldStr, newString)
 
     # Write new text of score code to file
