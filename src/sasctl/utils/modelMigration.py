@@ -26,8 +26,8 @@ def convertMetadata(zPath, pythonScoreCode=None):
 
     Returns
     -------
-    scoreResource : string
-        File name of the score resource file.
+    scoreResource : list
+        File name(s) of the score resource file.
     pythonScoreCode : string
         File name of the Python score code file.
 
@@ -67,11 +67,14 @@ def convertMetadata(zPath, pythonScoreCode=None):
                 + " name of the Python score code file as an argument."
             )
             raise SyntaxError(message)
+    scoreResource = []
     for i in range(len(metaData)):
         if metaData[i]["role"] == "score":
             metaData[i].update({"name": pythonScoreCode})
         if metaData[i]["role"] == "scoreResource":
-            scoreResource = metaData[i]["name"]
+            scoreResource.append(metaData[i]["name"])
+        if metaData[i]["role"] == "python pickle":
+            scoreResource.append(metaData[i]["name"])
     with open(Path(zPath) / "fileMetaData.json", "w") as jFile:
         json.dump(metaData, jFile, indent=4, skipkeys=True)
         print("fileMetaData.json has been modified and rewritten for SAS Viya 4")
@@ -89,8 +92,8 @@ def convertScoreCode(zPath, scoreResource, pythonScoreCode):
     ----------
     zPath : string or Path object
         Location of files in the SAS Viya 3.5 model zip.
-    scoreResource : string
-        File name of the score resource file.
+    scoreResource : list
+        File name(s) of the score resource file.
     pythonScoreCode : string
         File name of the Python score code file.
     """
@@ -103,7 +106,9 @@ def convertScoreCode(zPath, scoreResource, pythonScoreCode):
 
     # Search for all directory paths in score code that contain the scoreResource
     oldString = re.findall(r"['\"]\/.*?\.[\w:]+['\"]", scoreCode)
-    oldString = [s for s in oldString if scoreResource in s]
+    parsedOldString = []
+    for resource in scoreResource:
+        parsedOldString = parsedOldString + [s for s in oldString if resource in s]
     # Remove duplicates, as .replace() checks for all instances
     oldString = list(set(oldString))
     # Replace Viya 3.5 style with Viya 4 style

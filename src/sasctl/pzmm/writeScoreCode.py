@@ -28,7 +28,7 @@ class ScoreCode:
         scoreCAS=True,
         isBinaryModel=False,
         binaryString=None,
-        pickleType='pickle',
+        pickleType="pickle",
     ):
         """
         Writes a Python score code file based on training data used to generate the model
@@ -102,7 +102,7 @@ class ScoreCode:
             Sets whether data used for scoring needs to go through imputation for
             missing values before passed to the model. By default False.
         scoreCAS : boolean, optional
-                Sets whether models registered to SAS Viya 3.5 should be able to be scored and
+            Sets whether models registered to SAS Viya 3.5 should be able to be scored and
             validated through both CAS and SAS Micro Analytic Service. By default true. If
             set to false, then the model will only be able to be scored and validated through
             SAS Micro Analytic Service. By default True.
