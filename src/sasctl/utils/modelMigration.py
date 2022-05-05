@@ -110,7 +110,7 @@ def convertScoreCode(zPath, scoreResource, pythonScoreCode):
     for resource in scoreResource:
         parsedOldString = parsedOldString + [s for s in oldString if resource in s]
     # Remove duplicates, as .replace() checks for all instances
-    oldString = list(set(oldString))
+    oldString = list(set(parsedOldString))
     # Replace Viya 3.5 style with Viya 4 style
     newString = "settings.pickle_path + '{}'".format(scoreResource)
     for oldStr in oldString:
