@@ -114,8 +114,8 @@ def convertScoreCode(zPath, scoreResource, pythonScoreCode):
         parsedOldString = parsedOldString + stringFound
         if stringFound:
             newString.append("settings.pickle_path + '{}'".format(resource))
-    for oldStr in parsedOldString:
-        scoreCode = scoreCode.replace(oldStr, newString)
+    for old, new in zip(parsedOldString, newString):
+        scoreCode = scoreCode.replace(str(old), str(new))
 
     # Write new text of score code to file
     with open(Path(zPath) / pythonScoreCode, "w") as pyFile:
