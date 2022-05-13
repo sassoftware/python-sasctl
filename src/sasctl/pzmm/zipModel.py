@@ -11,7 +11,7 @@ import io
 
 class ZipModel:
     @staticmethod
-    def zipFiles(fileDir, modelPrefix):
+    def zipFiles(fileDir, modelPrefix, isViya4=False):
         """
         Combines all JSON files with the model pickle file and associated score code file
         into a single archive ZIP file.
@@ -23,6 +23,10 @@ class ZipModel:
         modelPrefix : string
             Variable name for the model to be displayed in SAS Open Model Manager
             (i.e. hmeqClassTree + [Score.py || .pickle]).
+        isViya4 : boolean, optional
+            Boolean to indicate difference in logic between SAS Viya 3.5 and SAS Viya 4.
+            For Viya 3.5 models, ignore score code that is already in place in the file
+            directory provided. Default value is False. 
 
         Yields
         ---------------
@@ -33,7 +37,8 @@ class ZipModel:
 
         fileNames = []
         fileNames.extend(sorted(Path(fileDir).glob("*.json")))
-        fileNames.extend(sorted(Path(fileDir).glob("*Score.py")))
+        if isViya4:
+            fileNames.extend(sorted(Path(fileDir).glob("*Score.py")))
         fileNames.extend(sorted(Path(fileDir).glob("*.pickle")))
         # Include H2O.ai MOJO files
         fileNames.extend(sorted(Path(fileDir).glob("*.mojo")))
