@@ -42,15 +42,17 @@ setup(
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     python_requires=">=3.5",
-    install_requires=["pandas", "scikit-learn", "requests", "pyyaml", "packaging", "GitPython"],
+    install_requires=["pandas", "scikit-learn", "requests", "pyyaml", "packaging"],
     extras_require={
         "swat": ["swat"],
+        "GitPython": ["GitPython"],
         "kerberos": [
             'kerberos ; platform_system != "Windows"',
             'winkerberos ; platform_system == "Windows"',
         ],
         "all": [
             "swat",
+            "GitPython",
             'kerberos ; platform_system != "Windows"',
             'winkerberos ; platform_system == "Windows"',
         ],
