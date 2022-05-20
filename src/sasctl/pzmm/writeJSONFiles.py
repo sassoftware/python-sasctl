@@ -5,14 +5,12 @@
 from pathlib import Path
 import sys
 
-import swat
 import getpass
 import json
 import pandas as pd
 from sklearn import metrics
 import numpy as np
 from scipy.stats import kendalltau, gamma
-
 # %%
 class JSONFiles:
     def writeVarJSON(self, inputData, isInput=True, jPath=Path.cwd()):
@@ -608,6 +606,12 @@ class JSONFiles:
         'dmcas_lift.json'
             Output JSON file located at jPath.
         """
+        try:
+            import swat
+        except ImportError:
+            raise RuntimeError(
+                "The 'swat' package is required to generate ROC and Lift charts with this function."
+            )
 
         nullJSONROCPath = Path(__file__).resolve().parent / "null_dmcas_roc.json"
         nullJSONROCDict = self.readJSONFile(nullJSONROCPath)
