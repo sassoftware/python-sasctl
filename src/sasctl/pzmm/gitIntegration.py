@@ -15,20 +15,24 @@ try:
     from git import Repo
 except ImportError:
     git = None
-    
+
+
 def checkGitStatus():
-    '''Check to see if GitPython has been installed and if a valid git executable 
-    exists on the target system. If one of those two conditions is not met, then 
+    """Check to see if GitPython has been installed and if a valid git executable
+    exists on the target system. If one of those two conditions is not met, then
     a RunTime error is raised.
 
     Raises
     ------
     RuntimeError
         Raised if an invalid git setup for git integration is detected.
-    '''
+    """
     if git is None:
-        raise RuntimeError("The 'GitPython' package and a valid git executable is required" + 
-                           " for use of the git integration functions.")
+        raise RuntimeError(
+            "The 'GitPython' package and a valid git executable is required"
+            + " for use of the git integration functions."
+        )
+
 
 def getZippedModel(model, gPath, project=None):
     """Retrieve a zipped file containing all of the model contents or a specified
@@ -298,7 +302,7 @@ class GitIntegrate:
             Branch name for the target pull branch from remote, by default 'main'
         """
         checkGitStatus()
-    
+
         repo = Repo(gPath)
         repo.git.add(all=True)
         repo.index.commit(commitMessage)
@@ -319,7 +323,7 @@ class GitIntegrate:
             Branch name for the target pull branch from remote, by default 'main'
         """
         checkGitStatus()
-    
+
         repo = git.Git(gPath)
         repo.pull(remote, branch)
 

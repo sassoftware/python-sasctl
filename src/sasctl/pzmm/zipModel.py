@@ -26,7 +26,7 @@ class ZipModel:
         isViya4 : boolean, optional
             Boolean to indicate difference in logic between SAS Viya 3.5 and SAS Viya 4.
             For Viya 3.5 models, ignore score code that is already in place in the file
-            directory provided. Default value is False. 
+            directory provided. Default value is False.
 
         Yields
         ---------------

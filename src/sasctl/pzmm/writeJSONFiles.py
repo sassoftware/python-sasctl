@@ -11,6 +11,7 @@ import pandas as pd
 from sklearn import metrics
 import numpy as np
 from scipy.stats import kendalltau, gamma
+
 # %%
 class JSONFiles:
     def writeVarJSON(self, inputData, isInput=True, jPath=Path.cwd()):
