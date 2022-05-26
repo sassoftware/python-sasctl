@@ -513,8 +513,8 @@ class Session(requests.Session):
         # Otherwise, use the username & password to re-authenticate.
         # Use this sessions info to connect to CAS unless user has explicitly give a value (even if None)
         if version.parse(swat.__version__) >= version.parse("1.8"):
-            kwargs.setdefault('username', None)
-            kwargs.setdefault('password', self.auth.access_token)
+            kwargs.setdefault("username", None)
+            kwargs.setdefault("password", self.auth.access_token)
         else:
             kwargs.setdefault("username", self.username)
             kwargs.setdefault("password", self._settings["password"])
