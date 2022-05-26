@@ -377,12 +377,15 @@ class Session(requests.Session):
             # Try to get credentials from .authinfo or .netrc files.
             # If no file path was specified, the default locations will
             # be checked.
-            if "swat" in sys.modules:
+            try:
                 auth = swat.utils.authinfo.query_authinfo(
                     domain, user=username, path=authinfo
                 )
                 self._settings["username"] = auth.get("user")
                 self._settings["password"] = auth.get("password")
+            except AttributeError:
+                # If swat package or authinfo module not available
+                pass
 
             # Not able to load credentials using SWAT.  Try Netrc.
             # TODO: IF a username was specified, verify that the credentials
@@ -508,11 +511,11 @@ class Session(requests.Session):
 
         # Starting in SWAT v1.8 oauth tokens could be passed directly in the password param.
         # Otherwise, use the username & password to re-authenticate.
+        # Use this sessions info to connect to CAS unless user has explicitly give a value (even if None)
         if version.parse(swat.__version__) >= version.parse("1.8"):
-            kwargs["username"] = None
-            kwargs["password"] = self.auth.access_token
+            kwargs.setdefault('username', None)
+            kwargs.setdefault('password', self.auth.access_token)
         else:
-            # Use this sessions info to connect to CAS unless user has explicitly give a value (even if None)
             kwargs.setdefault("username", self.username)
             kwargs.setdefault("password", self._settings["password"])
 

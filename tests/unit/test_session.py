@@ -403,31 +403,44 @@ def test_as_swat():
     HOST = 'example.com'
     USERNAME = 'username'
     PASSWORD = 'password'
+    AUTH_TOKEN = 'token'
 
     with mock.patch('sasctl.core.Session.get_auth'):
         with Session(HOST, USERNAME, PASSWORD) as s:
             with mock.patch('swat.CAS') as CAS:
-                # Verify default parameters were passed
-                _ = s.as_swat()
-                CAS.assert_called_with(
-                    hostname='https://%s/cas-shared-default-http/' % HOST,
-                    username=USERNAME,
-                    password=PASSWORD,
-                )
 
-                # Verify connection to a non-default CAS instance
-                SERVER_NAME = 'my-cas-server'
-                _ = s.as_swat(SERVER_NAME)
-                CAS.assert_called_with(
-                    hostname='https://%s/%s-http/' % (HOST, SERVER_NAME),
-                    username=USERNAME,
-                    password=PASSWORD,
-                )
+                # Verify default username/password parameters were passed.
+                with mock.patch('swat.__version__', '1.6.1'):
+                    _ = s.as_swat()
+                    CAS.assert_called_with(
+                        hostname='https://%s/cas-shared-default-http/' % HOST,
+                        username=USERNAME,
+                        password=PASSWORD,
+                    )
 
-                # Verify default parameters can be overridden
-                _ = s.as_swat(username='testuser', password=None)
-                CAS.assert_called_with(
-                    hostname='https://%s/cas-shared-default-http/' % HOST,
-                    username='testuser',
-                    password=None,
-                )
+                # Verify auth token is passed with new SWAT versions
+                with mock.patch('swat.__version__', '1.9'):
+                    s.auth.access_token = AUTH_TOKEN
+                    _ = s.as_swat()
+                    CAS.assert_called_with(
+                        hostname='https://%s/cas-shared-default-http/' % HOST,
+                        username=None,
+                        password=AUTH_TOKEN,
+                    )
+
+                    # Verify connection to a non-default CAS instance
+                    SERVER_NAME = 'my-cas-server'
+                    _ = s.as_swat(SERVER_NAME)
+                    CAS.assert_called_with(
+                        hostname='https://%s/%s-http/' % (HOST, SERVER_NAME),
+                        username=None,
+                        password=AUTH_TOKEN,
+                    )
+
+                    # Verify default parameters can be overridden
+                    _ = s.as_swat(username='testuser', password=None)
+                    CAS.assert_called_with(
+                        hostname='https://%s/cas-shared-default-http/' % HOST,
+                        username='testuser',
+                        password=None,
+                    )
