@@ -70,7 +70,7 @@ jobs:
         run: |
           mv doc docs
           sudo apt-get install build-essential
-          pip install sphinx six pyyaml
+          pip install sphinx six pyyaml pandas
 
       - name: Check documentation
         uses: ammaraskar/sphinx-problem-matcher@master
