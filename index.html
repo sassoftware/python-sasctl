@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>sasctl &#8212; sasctl 1.7.1 documentation</title>
+    <title>sasctl &#8212; sasctl 1.7.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -48,7 +49,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script><h3>Navigation</h3>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">sasctl</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
@@ -96,12 +97,12 @@
           <div class="body" role="main">
             
   <section id="sasctl">
-<h1>sasctl<a class="headerlink" href="#sasctl" title="Permalink to this headline">¶</a></h1>
-<p>Version 1.7.1</p>
+<h1>sasctl<a class="headerlink" href="#sasctl" title="Permalink to this heading">¶</a></h1>
+<p>Version 1.7.2</p>
 <div class="toctree-wrapper compound">
 </div>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
 <p><strong>sasctl</strong> enables easy integration with the SAS Viya platform.</p>
 <p>It can be used directly as a python module:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sasctl</span><span class="o">.</span><span class="n">folders</span><span class="o">.</span><span class="n">list_folders</span><span class="p">()</span>
@@ -113,7 +114,7 @@
 </div>
 </section>
 <section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">¶</a></h2>
 <p><strong>sasctl</strong> requires the following Python packages be installed.
 If not already present, these packages will be downloaded and install automatically.</p>
 <ul class="simple">
@@ -127,7 +128,7 @@ If not already present, these packages will be downloaded and install automatica
 </ul>
 </section>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
 <p>For basic functionality:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">sasctl</span>
 </pre></div>
@@ -140,9 +141,9 @@ If not already present, these packages will be downloaded and install automatica
 </div>
 </section>
 <section id="quickstart">
-<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading">¶</a></h2>
 <section id="as-a-module">
-<h3>As a Module<a class="headerlink" href="#as-a-module" title="Permalink to this headline">¶</a></h3>
+<h3>As a Module<a class="headerlink" href="#as-a-module" title="Permalink to this heading">¶</a></h3>
 <p>Once the <strong>sasctl</strong> package has been installed and you have a SAS Viya server to
 connect to, the first step is to establish a session:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">Session</span>
@@ -206,7 +207,7 @@ directly, though in general, this is not recommended.:</p>
 </div>
 </section>
 <section id="as-a-command-line-utility">
-<h3>As a Command Line Utility<a class="headerlink" href="#as-a-command-line-utility" title="Permalink to this headline">¶</a></h3>
+<h3>As a Command Line Utility<a class="headerlink" href="#as-a-command-line-utility" title="Permalink to this heading">¶</a></h3>
 <p>When using <strong>sasctl</strong> as a command line utility you must pass authentication credentials using environment variables.
 See the <a class="reference internal" href="#authentication"><span class="std std-ref">Authentication</span></a> section for details</p>
 <p>Once these environment variables have been set you can simply run <strong>sasctl</strong> and ask for help:</p>
@@ -246,9 +247,9 @@ command:
 </div>
 </section>
 <section id="common-uses">
-<h3>Common Uses<a class="headerlink" href="#common-uses" title="Permalink to this headline">¶</a></h3>
+<h3>Common Uses<a class="headerlink" href="#common-uses" title="Permalink to this heading">¶</a></h3>
 <section id="register-a-sas-model">
-<h4>Register a SAS model<a class="headerlink" href="#register-a-sas-model" title="Permalink to this headline">¶</a></h4>
+<h4>Register a SAS model<a class="headerlink" href="#register-a-sas-model" title="Permalink to this heading">¶</a></h4>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">swat</span>
 <span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">register_model</span><span class="p">,</span> <span class="n">Session</span>
@@ -264,7 +265,7 @@ command:
 </div></blockquote>
 </section>
 <section id="register-a-scikit-learn-model">
-<h4>Register a scikit-learn model<a class="headerlink" href="#register-a-scikit-learn-model" title="Permalink to this headline">¶</a></h4>
+<h4>Register a scikit-learn model<a class="headerlink" href="#register-a-scikit-learn-model" title="Permalink to this heading">¶</a></h4>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
 <span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">register_model</span><span class="p">,</span> <span class="n">Session</span>
@@ -280,7 +281,7 @@ command:
 </div></blockquote>
 </section>
 <section id="publish-a-model">
-<h4>Publish a model<a class="headerlink" href="#publish-a-model" title="Permalink to this headline">¶</a></h4>
+<h4>Publish a model<a class="headerlink" href="#publish-a-model" title="Permalink to this heading">¶</a></h4>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">publish_model</span><span class="p">,</span> <span class="n">Session</span>
 <span class="kn">from</span> <span class="nn">sasctl.services</span> <span class="kn">import</span> <span class="n">model_repository</span> <span class="k">as</span> <span class="n">mr</span>
@@ -292,7 +293,7 @@ command:
 </div></blockquote>
 </section>
 <section id="execute-a-model-in-mas">
-<h4>Execute a model in MAS<a class="headerlink" href="#execute-a-model-in-mas" title="Permalink to this headline">¶</a></h4>
+<h4>Execute a model in MAS<a class="headerlink" href="#execute-a-model-in-mas" title="Permalink to this heading">¶</a></h4>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">Session</span>
 <span class="kn">from</span> <span class="nn">sasctl.services</span> <span class="kn">import</span> <span class="n">microanalytic_score</span> <span class="k">as</span> <span class="n">mas</span>
@@ -308,9 +309,9 @@ command:
 </section>
 </section>
 <section id="user-guide">
-<h2>User Guide<a class="headerlink" href="#user-guide" title="Permalink to this headline">¶</a></h2>
+<h2>User Guide<a class="headerlink" href="#user-guide" title="Permalink to this heading">¶</a></h2>
 <section id="authentication">
-<span id="id2"></span><h3>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h3>
+<span id="id2"></span><h3>Authentication<a class="headerlink" href="#authentication" title="Permalink to this heading">¶</a></h3>
 <p>There are a variety of ways to provide authentication credentials when creating a <a class="reference internal" href="api/sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a>.  They are presented
 here in the order of precedence in which they are recognized.  The simplest method
 is to just provide the information directly:</p>
@@ -319,7 +320,7 @@ is to just provide the information directly:</p>
 </div>
 <p>Although this is often the easiest method when getting started, it is not the most secure.  If your program will be used
 interactively, consider using the builtin <a class="reference external" href="https://docs.python.org/3/library/getpass.html#module-getpass" title="(in Python v3.10)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">getpass</span></code></a> module to avoid hard-coded user names and passwords.</p>
-<p>Because <strong>sasctl</strong> augments analytic modeling tasks, it may frequently be used in conjuction with the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.9.3)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a>
+<p>Because <strong>sasctl</strong> augments analytic modeling tasks, it may frequently be used in conjuction with the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.10.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a>
 module.  When this is the case, another easy way to create a <a class="reference internal" href="api/sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> is to simply reuse the existing CAS
 connection from swat:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cas_session</span> <span class="o">=</span> <span class="n">swat</span><span class="o">.</span><span class="n">CAS</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
@@ -328,7 +329,7 @@ connection from swat:</p>
 </pre></div>
 </div>
 <p>Note: this method will only work when the SWAT connection to CAS is using REST.</p>
-<p>A related option is to piggy-back on the <cite>.authinfo</cite> file used by <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.9.3)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> or a <cite>.netrc</cite> file:</p>
+<p>A related option is to piggy-back on the <cite>.authinfo</cite> file used by <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.10.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> or a <cite>.netrc</cite> file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">authinfo</span><span class="o">=</span><span class="n">file_path</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -354,7 +355,7 @@ a URL in your browser, retrieve an authorization code, and then enter it before 
 </div></blockquote>
 </section>
 <section id="ssl-certificates">
-<h3>SSL Certificates<a class="headerlink" href="#ssl-certificates" title="Permalink to this headline">¶</a></h3>
+<h3>SSL Certificates<a class="headerlink" href="#ssl-certificates" title="Permalink to this heading">¶</a></h3>
 <p>By default, <strong>sasctl</strong> will use HTTPS connections to communicating with the server and will validate the certificate
 presented by the server against the client’s trusted <abbr title="Certificate Authority">CA</abbr> list.</p>
 <p>While this behavior should be sufficient for most use cases, there may be times where it is necessary to trust a certificate
@@ -374,14 +375,14 @@ When instantiating a <a class="reference internal" href="api/sasctl.session.html
 <p>If you’re using <strong>sasctl</strong> from the command line, or want to disable SSL validation for all sessions, you can use the following <span class="target" id="index-7"></span><a class="reference internal" href="#envvar-SSLREQCERT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">SSLREQCERT</span></code></a> environment variable.</p>
 </section>
 <section id="logging">
-<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
+<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this heading">¶</a></h3>
 <p>All logging is handled through the built-in <a class="reference external" href="https://docs.python.org/3/library/logging.html#module-logging" title="(in Python v3.10)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a> module with standard module-level loggers.  The one exception
 to this is <a class="reference internal" href="api/sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> request/response logging.  Sessions contain a <a class="reference internal" href="api/sasctl.session.html#sasctl.core.Session.message_log" title="sasctl.core.Session.message_log"><code class="xref py py-attr docutils literal notranslate"><span class="pre">message_log</span></code></a> which is exclusively used
 to record requests and responses made through the session.  Message recording can be configured on a per-session basis
 by updating this logger, or the <code class="docutils literal notranslate"><span class="pre">sasctl.core.session</span></code> logger can be configured to control all message recording by all sessions.</p>
 </section>
 <section id="hateoas">
-<h3>HATEOAS<a class="headerlink" href="#hateoas" title="Permalink to this headline">¶</a></h3>
+<h3>HATEOAS<a class="headerlink" href="#hateoas" title="Permalink to this heading">¶</a></h3>
 <p>Many of the SAS microservices follow the <a class="reference external" href="https://restfulapi.net/hateoas/">HATEOAS</a> paradigm and the standard is for services to return a links
 collection containing valid operations.  Most <strong>sasctl</strong> operations return one or more instances of <a class="reference internal" href="api/sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a>.  Any
 links related to that object are accessible via the [‘links’] key.  Each link is represented as a dictionary containing metadata:</p>
@@ -398,7 +399,7 @@ links related to that object are accessible via the [‘links’] key.  Each lin
 </section>
 </section>
 <section id="api-reference">
-<h2>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h2>
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api/sasctl.html">sasctl package</a><ul>
@@ -410,27 +411,27 @@ links related to that object are accessible via the [‘links’] key.  Each lin
 </ul>
 </div>
 <section id="environment-variables">
-<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this heading">¶</a></h3>
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-CAS_CLIENT_SSL_CA_LIST">
 <span class="sig-name descname"><span class="pre">CAS_CLIENT_SSL_CA_LIST</span></span><a class="headerlink" href="#envvar-CAS_CLIENT_SSL_CA_LIST" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.9.3)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> module.  This
+<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.10.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> module.  This
 will take precedence over <span class="target" id="index-8"></span><a class="reference internal" href="#envvar-SSLCALISTLOC"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">SSLCALISTLOC</span></code></a> and <span class="target" id="index-9"></span><a class="reference internal" href="#envvar-REQUESTS_CA_BUNDLE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">REQUESTS_CA_BUNDLE</span></code></a>.</p>
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-SSLCALISTLOC">
 <span class="sig-name descname"><span class="pre">SSLCALISTLOC</span></span><a class="headerlink" href="#envvar-SSLCALISTLOC" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.9.3)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> module.  This
+<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.10.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> module.  This
 will take precedence over <span class="target" id="index-10"></span><a class="reference internal" href="#envvar-REQUESTS_CA_BUNDLE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">REQUESTS_CA_BUNDLE</span></code></a>.</p>
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-REQUESTS_CA_BUNDLE">
 <span class="sig-name descname"><span class="pre">REQUESTS_CA_BUNDLE</span></span><a class="headerlink" href="#envvar-REQUESTS_CA_BUNDLE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://2.python-requests.org/en/master/api/#module-requests" title="(in Requests v2.26.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a> module.</p>
+<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code> module.</p>
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-SSLREQCERT">
 <span class="sig-name descname"><span class="pre">SSLREQCERT</span></span><a class="headerlink" href="#envvar-SSLREQCERT" title="Permalink to this definition">¶</a></dt>
@@ -470,7 +471,7 @@ will take precedence over <span class="target" id="index-10"></span><a class="re
 </section>
 </section>
 <section id="contributor-guide">
-<h2>Contributor Guide<a class="headerlink" href="#contributor-guide" title="Permalink to this headline">¶</a></h2>
+<h2>Contributor Guide<a class="headerlink" href="#contributor-guide" title="Permalink to this heading">¶</a></h2>
 <dl class="simple">
 <dt>Ways to contribute</dt><dd><ul class="simple">
 <li><p><a class="reference internal" href="#improving-the-docs"><span class="std std-ref">Improving the documentation</span></a></p></li>
@@ -483,7 +484,7 @@ will take precedence over <span class="target" id="index-10"></span><a class="re
 </dd>
 </dl>
 <section id="improving-the-documentation">
-<span id="improving-the-docs"></span><h3>Improving the documentation<a class="headerlink" href="#improving-the-documentation" title="Permalink to this headline">¶</a></h3>
+<span id="improving-the-docs"></span><h3>Improving the documentation<a class="headerlink" href="#improving-the-documentation" title="Permalink to this heading">¶</a></h3>
 <p>Accurate, clear, and concise documentation that is also easy to read is critical for the success of any project.  This
 makes improving or expanding the <strong>sasctl</strong> documentation one of the most valuable ways to contribute.  In addition,
 simple code examples that demonstrate how to use various features are always welcome.  These may be added into the
@@ -493,7 +494,7 @@ The .rst files are then processed by <a class="reference external" href="http://
 details on how to build the final documentation.</p>
 </section>
 <section id="contributing-new-code">
-<span id="contributing-code"></span><h3>Contributing new code<a class="headerlink" href="#contributing-new-code" title="Permalink to this headline">¶</a></h3>
+<span id="contributing-code"></span><h3>Contributing new code<a class="headerlink" href="#contributing-new-code" title="Permalink to this heading">¶</a></h3>
 <p>All code contributions are managed through the standard GitHub pull request process.
 Consult <a class="reference external" href="https://help.github.com/articles/about-pull-requests/">GitHub Help</a> for more information on using pull requests.
 In addition, all pull requests must include appropriate test cases to verify the changes. See the <a class="reference internal" href="#testing"><span class="std std-ref">Testing</span></a> section
@@ -526,12 +527,12 @@ part of the project.</p>
 </dl>
 </section>
 <section id="testing">
-<span id="id7"></span><h3>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h3>
+<span id="id7"></span><h3>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">¶</a></h3>
 <p>Automated testing is used to ensure that existing functionality and new features continue to work on all supported
 platforms.  To accomplish this, the <code class="file docutils literal notranslate"><span class="pre">tests/</span></code> folder contains a collection of unit tests and integration tests where
 “unit” tests are generally target a single function and “integration” tests target a series of functions or classes
 working together.</p>
-<p>Test execution is handled by the  <a class="reference external" href="https://docs.pytest.org/en/latest/index.html" title="(in pytest v7.2.0.dev54+g045dbc895)"><span class="xref std std-doc">py.test</span></a> module which supports tests written using the builtin <a class="reference external" href="https://docs.python.org/3/library/unittest.html#module-unittest" title="(in Python v3.10)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest</span></code></a>
+<p>Test execution is handled by the  <a class="reference external" href="https://docs.pytest.org/en/latest/index.html" title="(in pytest v7.2.0.dev152+gfab696dcd)"><span class="xref std std-doc">py.test</span></a> module which supports tests written using the builtin <a class="reference external" href="https://docs.python.org/3/library/unittest.html#module-unittest" title="(in Python v3.10)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest</span></code></a>
 framework, but also adds some powerful features like test fixtures.  It is recommended that you review
 <code class="file docutils literal notranslate"><span class="pre">tests/conftest.py</span></code> and the existing test cases to understand what features are currently available for testing.</p>
 <p>To isolate individual methods for testing, the unit test cases make extensive use of mocking via the
@@ -546,14 +547,14 @@ once.</p>
 Python versions.</p>
 </section>
 <section id="useful-tox-commands">
-<span id="tox-commands"></span><h3>Useful Tox Commands<a class="headerlink" href="#useful-tox-commands" title="Permalink to this headline">¶</a></h3>
+<span id="tox-commands"></span><h3>Useful Tox Commands<a class="headerlink" href="#useful-tox-commands" title="Permalink to this heading">¶</a></h3>
 <p><code class="xref py py-mod docutils literal notranslate"><span class="pre">tox</span></code>  is used to automate common development tasks such as testing, linting, and building documentation.
 Running <strong class="program">tox</strong> from the project root directory will automatically build virtual environments for all Python interpreters
 found on the system and then install the required packages necessary to perform a given task.  The simplest way to run Tox is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tox
 </pre></div>
 </div>
-<p>This will run the <code class="xref py py-mod docutils literal notranslate"><span class="pre">flake8</span></code> linter followed by <a class="reference external" href="https://docs.pytest.org/en/latest/index.html#module-pytest" title="(in pytest v7.2.0.dev54+g045dbc895)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pytest</span></code></a> to test the code against all Python runtimes
+<p>This will run the <code class="xref py py-mod docutils literal notranslate"><span class="pre">flake8</span></code> linter followed by <a class="reference external" href="https://docs.pytest.org/en/latest/index.html#module-pytest" title="(in pytest v7.2.0.dev152+gfab696dcd)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pytest</span></code></a> to test the code against all Python runtimes
 found on the machine.  One of the great features of Tox is the ability to run specific tasks by specifying the environment to run.
 A few useful environments are listed below, where <strong>XX</strong> indicates a Python version present in your development environment,
 such as ‘27’ or ‘36’.</p>
@@ -600,7 +601,7 @@ such as ‘27’ or ‘36’.</p>
       &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
