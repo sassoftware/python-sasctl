@@ -1,6 +1,19 @@
 Unreleased
 ----------
  -
+v1.7.2 (2022-06-16)
+-------------------
+**Improvements**
+- Added a new example notebook for git integration
+- Added a model migration tool for migrating Python models from Viya 3.5 to Viya 4
+- Improved handling of CAS authentication with tokens
+
+**Bugfixes**
+- Fixed git integration failure caused by detached head
+- Fixed minor bugs in score code generation feature
+- Fixed 500 error when importing models to Viya 4 with prewritten score code
+- Fixed incorrect handling of optional packages in pzmm
+
 v1.7.1 (2022-04-19)
 -------------------
 **Bugfixes**
