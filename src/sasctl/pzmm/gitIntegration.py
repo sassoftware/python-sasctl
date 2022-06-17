@@ -29,7 +29,7 @@ def checkGitStatus():
     """
     if git is None:
         raise RuntimeError(
-            "The 'GitPython' package and a valid git executable is required"
+            "The 'GitPython' package and a valid git executable are required"
             + " for use of the git integration functions."
         )
 
