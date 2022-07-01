@@ -835,32 +835,21 @@ def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerforma
     sess = current_session()
 
     if is_uuid(project):
-        projectId = project
+            projectId = project
     elif isinstance(project, dict) and "id" in project:
         projectId = project["id"]
     else:
         project = mr.get_project(project)
         projectId = project["id"]
 
-    # To Do: include case for large kpi datasets
     kpiTableColumns = sess.get("casManagement/servers/{}/".format(server) +
                                "caslibs/{}/tables/".format(caslib) +
-                               "{}.MM_STD_KPI/columns?limit=10000".format(projectId))
-    if not kpiTableColumns:
-        project = mr.get_project(project)
-        raise SystemError("No KPI table exists for project {}.".format(project.name) +
-                          " Please confirm that the performance definition completed successfully.")
-    cols = pd.json_normalize(kpiTableColumns.json(), "items")
+                               "{projectId}.MM_STD_KPI/columns?limit=10000".format(projectId))
+    cols = pd.json_normalize(kpiTableColumns, "items")
     colNames = cols["name"].to_list()
-    
-    # To Do: include case for large kpi datasets
-    kpiTableRows = sess.get("casRowSets/servers/{}/".format(server) +
-                            "caslibs/{}/tables/".format(caslib) +
-                            "{}.MM_STD_KPI/rows?limit=10000".format(projectId))
-    kpiTableDf = pd.DataFrame(pd.json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
-                              columns=colNames)
-    # Strip leading spaces from all cells of KPI table and convert missing values to None
-    kpiTableDf = kpiTableDf.apply(lambda x: x.str.strip()).replace(['.', ''], None)
-    # Combine rows of similar model and datasets runs
-    #kpiTableDf = kpiTableDf.groupby(['TimeLabel', 'ModelUUID']).first()
-    return kpiTableDf
+
+    kpiTableRows = sess.get("casRowSets/servers/cas-shared-default/caslibs/" +
+                            "ModelPerformanceData/tables/" +
+                            "{}.MM_STD_KPI/rows".format(projectId))
+    return pd.DataFrame(pd.json_normalize(kpiTableRows["items"])["cells"].to_list(),
+                        columns=colNames)
