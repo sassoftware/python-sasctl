@@ -771,7 +771,7 @@ def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerforma
     sess = current_session()
     
     if is_uuid(project):
-            projectId = project
+        projectId = project
     elif isinstance(project, dict) and "id" in project:
         projectId = project["id"]
     else:
@@ -780,12 +780,12 @@ def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerforma
         
     kpiTableColumns = sess.get("casManagement/servers/{}/".format(server) +
                                "caslibs/{}/tables/".format(caslib) +
-                               "{projectId}.MM_STD_KPI/columns?limit=10000".format(projectId))
-    cols = pd.json_normalize(kpiTableColumns, "items")
+                               "{}.MM_STD_KPI/columns?limit=10000".format(projectId))
+    cols = pd.json_normalize(kpiTableColumns.json(), "items")
     colNames = cols["name"].to_list()
     
-    kpiTableRows = sess.get("casRowSets/servers/cas-shared-default/caslibs/" +
-                            "ModelPerformanceData/tables/" +
+    kpiTableRows = sess.get("casRowSets/servers/{}/".format(server) +
+                            "caslibs/{}/tables/".format(caslib) +
                             "{}.MM_STD_KPI/rows".format(projectId))
-    return pd.DataFrame(pd.json_normalize(kpiTableRows["items"])["cells"].to_list(),
+    return pd.DataFrame(pd.json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
                         columns=colNames)
