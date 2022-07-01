@@ -7,6 +7,7 @@
 """The Model Repository service supports registering and managing models."""
 
 from warnings import warn
+import json
 
 from .service import Service
 from ..core import current_session, get, delete, sasctl_command, HTTPError
