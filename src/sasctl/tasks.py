@@ -14,6 +14,7 @@ import os
 import re
 import sys
 import warnings
+import pandas as pd
 
 try:
     import swat
@@ -803,3 +804,44 @@ def _parse_module_url(msg):
         module_url = match.group(1) if match else None
 
     return module_url
+
+def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerformanceData"):
+    '''_summary_
+
+    Parameters
+    ----------
+    project : _type_
+        _description_
+    server : str, optional
+        _description_, by default "cas-shared-default"
+    caslib : str, optional
+        _description_, by default "ModelPerformanceData"
+
+    Returns
+    -------
+    _type_
+        _description_
+    '''
+    from .core import is_uuid 
+    
+    sess = current_session()
+    
+    if is_uuid(project):
+            projectId = project
+    elif isinstance(project, dict) and "id" in project:
+        projectId = project["id"]
+    else:
+        project = mr.get_project(project)
+        projectId = project["id"]
+        
+    kpiTableColumns = sess.get("casManagement/servers/{}/".format(server) +
+                               "caslibs/{}/tables/".format(caslib) +
+                               "{projectId}.MM_STD_KPI/columns?limit=10000".format(projectId))
+    cols = pd.json_normalize(kpiTableColumns, "items")
+    colNames = cols["name"].to_list()
+    
+    kpiTableRows = sess.get("casRowSets/servers/cas-shared-default/caslibs/" +
+                            "ModelPerformanceData/tables/" +
+                            "{}.MM_STD_KPI/rows".format(projectId))
+    return pd.DataFrame(pd.json_normalize(kpiTableRows["items"])["cells"].to_list(),
+                        columns=colNames)
