@@ -407,38 +407,21 @@ class ModelManagement(Service):
         )
 
     @classmethod
-    def create_custom_kpi(
-        cls, model, project, timeLabel, kpiName, kpiValue, timeSK=None
-    ):
-        """Post a user supplied custom KPI to a SAS Model Manager project's MM_STD_KPI
-        table. A custom KPI consists of the time label, KPI name, KPI value, and optionally
-        the timeSK. Additionally, the model and project associated with the custom KPI are
-        required.
-
-        Multiple custom KPIs can be uploaded at once by passing lists in for the four
-        arguments mentioned above.
+    def create_custom_kpi(cls, model, project, body):
+        '''_summary_
 
         Parameters
         ----------
-        model : str or dict
-            The name or id of the model, or a dictionary representation of the model.
-        project : str or dict
-        The name or id of the project, or a dictionary representation of
-        the project.
-        timeLabel : str or list
-            Label associated with the dataset used within the performance definition.
-        kpiName : str or list
-            Name of the custom KPI.
-        kpiValue : int or float or list
-            Value of the custom KPI.
-        timeSK : int or list, by default None
-            Indicator for the MM_STD_KPI table to denote performance task order.
-        """
+        model : _type_
+            _description_
+        project : _type_
+            _description_
+        body : _type_
+            _description_
+        '''
         from .model_repository import ModelRepository
-
         mr = ModelRepository()
 
-        # Step through options to determine project UUID
         if cls.is_uuid(project):
             projectId = project
         elif isinstance(project, dict) and "id" in project:
@@ -447,34 +430,23 @@ class ModelManagement(Service):
             project = mr.get_project(project)
             projectId = project["id"]
 
-        # Step through options to determine model UUID
         if cls.is_uuid(model):
             modelId = model
         elif isinstance(model, dict) and "id" in model:
             modelId = model["id"]
         else:
-            model = mr.list_models(
-                filter="eq('projectId','{}')&eq('name','{}')".format(projectId, model)
-            )
+            model = mr.list_models(filter="eq('projectId','{}')&eq('name','{}')".format(
+                projectId, model))
             modelId = model["id"]
 
-        model = mr.get_model(modelId)
-
-        # If no timeSK is provided, create a list of 0's for the API call
-        if not timeSK:
-            timeSK = [0] * len(timeLabel)
-
-        # Create a list of dicts mapped to each custom KPI value
-        customKPI = [
-            {"TimeLabel": label, "KPI": name, "Value": str(value), "TimeSK": SK}
-            for label, name, value, SK in zip(timeLabel, kpiName, kpiValue, timeSK)
-        ]
         headers = {"Accept": "application/vnd.sas.collection+json"}
-        requestData = {"ProjectID": projectId, "ModelID": modelId, "KPIs": customKPI}
-        # Include a terminal output, since it can take up to 60 seconds to POST the API
-        print("Uploading custom kpis to SAS Viya...")
-        return cls.post(
-            "/projects/{}/kpis".format(projectId),
-            headers=headers,
-            data=json.dumps(requestData),
-        )
+        customKPI = {"TimeLabel": "{}".format(body["TimeLabel"]),
+                     "TimeSK": body["TimeSK"],
+                     "KPI": "{}".format(body["KPI"]),
+                     "Value": "{}".format(body["Value"])}
+        requestData = {"ProjectID": projectId,
+                       "ModelID": modelId,
+                       "KPIs": [customKPI]}
+        return cls.post("/projects/{}/kpis".format(projectId),
+                        headers=headers,
+                        data=json.dumps(requestData))
