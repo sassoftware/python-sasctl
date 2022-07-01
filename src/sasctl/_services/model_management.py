@@ -3,6 +3,7 @@
 #
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
+import json
 
 from .service import Service
 from ..utils.decorators import experimental
@@ -397,3 +398,48 @@ class ModelManagement(Service):
                 "Content-Type": "application/vnd.sas.workflow.object.association+json"
             },
         )
+
+    @classmethod
+    def create_custom_kpi(cls, model, project, body):
+        '''_summary_
+
+        Parameters
+        ----------
+        model : _type_
+            _description_
+        project : _type_
+            _description_
+        body : _type_
+            _description_
+        '''
+        from .model_repository import ModelRepository
+        mr = ModelRepository()
+        
+        if cls.is_uuid(project):
+            projectId = project
+        elif isinstance(project, dict) and "id" in project:
+            projectId = project["id"]
+        else:
+            project = mr.get_project(project)
+            projectId = project["id"]
+            
+        if cls.is_uuid(model):
+            modelId = model
+        elif isinstance(model, dict) and "id" in model:
+            modelId = model["id"]
+        else:
+            model = mr.list_models(filter="eq('projectId','{}')&eq('name','{}')".format(
+                projectId, model))
+            modelId = model["id"]
+            
+        headers = {"Accept": "application/vnd.sas.collection+json"}
+        customKPI = {"TimeLabel": "{}".format(body["TimeLabel"]),
+                     "TimeSK": body["TimeSK"],
+                     "KPI": "{}".format(body["KPI"]),
+                     "Value": "{}".format(body["Value"])}
+        requestData = {"ProjectID": projectId,
+                       "ModelID": modelId,
+                       "KPIs": [customKPI]}
+        return cls.post("/projects/{}/kpis".format(projectId),
+                        headers=headers,
+                        data=json.dumps(requestData))
