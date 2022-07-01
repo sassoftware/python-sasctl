@@ -9,7 +9,7 @@
 from warnings import warn
 
 from .service import Service
-from ..core import current_session, get, delete, sasctl_command, HTTPError
+from ..core import RestObj, current_session, get, delete, sasctl_command, HTTPError
 
 FUNCTIONS = {
     "Analytical",
