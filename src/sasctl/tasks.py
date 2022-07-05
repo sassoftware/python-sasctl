@@ -837,6 +837,10 @@ def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerforma
     kpiTableColumns = sess.get("casManagement/servers/{}/".format(server) +
                                "caslibs/{}/tables/".format(caslib) +
                                "{}.MM_STD_KPI/columns?limit=10000".format(projectId))
+    if not kpiTableColumns:
+        project = mr.get_project(project)
+        raise SystemError("No KPI table exists for project {}.".format(project.name) +
+                          " Please confirm that the performance definition completed successfully.")
     cols = pd.json_normalize(kpiTableColumns.json(), "items")
     colNames = cols["name"].to_list()
     
