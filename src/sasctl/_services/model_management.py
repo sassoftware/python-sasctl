@@ -407,7 +407,7 @@ class ModelManagement(Service):
         )
 
     @classmethod
-    def create_custom_kpi(cls, model, project, body):
+    def create_custom_kpi(cls, model, project, timeLabel, kpiName, kpiValue, timeSK=None):
         '''_summary_
 
         Parameters
@@ -416,12 +416,16 @@ class ModelManagement(Service):
             _description_
         project : _type_
             _description_
-        body : _type_
+        timeLabel : _type_
+            _description_
+        kpiName : _type_
+            _description_
+        kpiValue : _type_
             _description_
         '''
         from .model_repository import ModelRepository
         mr = ModelRepository()
-
+        
         if cls.is_uuid(project):
             projectId = project
         elif isinstance(project, dict) and "id" in project:
@@ -429,7 +433,7 @@ class ModelManagement(Service):
         else:
             project = mr.get_project(project)
             projectId = project["id"]
-
+            
         if cls.is_uuid(model):
             modelId = model
         elif isinstance(model, dict) and "id" in model:
@@ -439,14 +443,18 @@ class ModelManagement(Service):
                 projectId, model))
             modelId = model["id"]
 
+        model = mr.get_model(modelId)
+
+        if not timeSK:
+            timeSK = [0] * len(timeLabel)
+
+        customKPI = [{"TimeLabel": label, "KPI": name, "Value": str(value), "TimeSK": SK}
+                     for label, name, value, SK in zip(timeLabel, kpiName, kpiValue, timeSK)]
         headers = {"Accept": "application/vnd.sas.collection+json"}
-        customKPI = {"TimeLabel": "{}".format(body["TimeLabel"]),
-                     "TimeSK": body["TimeSK"],
-                     "KPI": "{}".format(body["KPI"]),
-                     "Value": "{}".format(body["Value"])}
         requestData = {"ProjectID": projectId,
                        "ModelID": modelId,
-                       "KPIs": [customKPI]}
+                       "KPIs": customKPI}
+        print("Uploading custom kpis to SAS Viya...")
         return cls.post("/projects/{}/kpis".format(projectId),
                         headers=headers,
                         data=json.dumps(requestData))
