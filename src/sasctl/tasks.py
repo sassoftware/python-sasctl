@@ -846,6 +846,11 @@ def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerforma
     
     kpiTableRows = sess.get("casRowSets/servers/{}/".format(server) +
                             "caslibs/{}/tables/".format(caslib) +
-                            "{}.MM_STD_KPI/rows".format(projectId))
-    return pd.DataFrame(pd.json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
-                        columns=colNames)
+                            "{}.MM_STD_KPI/rows?limit=10000".format(projectId))
+    kpiTableDf = pd.DataFrame(pd.json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
+                              columns=colNames)
+    # Strip leading spaces from all cells of KPI table and convert missing values to None
+    kpiTableDf = kpiTableDf.apply(lambda x: x.str.strip()).replace(['.', ''], None)
+    # Combine rows of similar model and datasets runs
+    #kpiTableDf = kpiTableDf.groupby(['TimeLabel', 'ModelUUID']).first()
+    return kpiTableDf
