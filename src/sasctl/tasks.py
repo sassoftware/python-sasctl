@@ -778,6 +778,7 @@ def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerforma
         project = mr.get_project(project)
         projectId = project["id"]
         
+    # To Do: include case for large kpi datasets
     kpiTableColumns = sess.get("casManagement/servers/{}/".format(server) +
                                "caslibs/{}/tables/".format(caslib) +
                                "{}.MM_STD_KPI/columns?limit=10000".format(projectId))
@@ -788,6 +789,7 @@ def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerforma
     cols = pd.json_normalize(kpiTableColumns.json(), "items")
     colNames = cols["name"].to_list()
     
+    # To Do: include case for large kpi datasets
     kpiTableRows = sess.get("casRowSets/servers/{}/".format(server) +
                             "caslibs/{}/tables/".format(caslib) +
                             "{}.MM_STD_KPI/rows?limit=10000".format(projectId))
