@@ -805,8 +805,15 @@ def _parse_module_url(msg):
 
     return module_url
 
-def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerformanceData", filterColumn=None, filterValue=None):
-    '''_summary_
+
+def get_project_kpis(
+    project,
+    server="cas-shared-default",
+    caslib="ModelPerformanceData",
+    filterColumn=None,
+    filterValue=None,
+):
+    """_summary_
 
     Parameters
     ----------
@@ -824,7 +831,7 @@ def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerforma
     -------
     _type_
         _description_
-    '''
+    """
     from .core import is_uuid
 
     sess = current_session()
@@ -838,30 +845,38 @@ def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerforma
         projectId = project["id"]
 
     # To Do: include case for large kpi datasets
-    kpiTableColumns = sess.get("casManagement/servers/{}/".format(server) +
-                               "caslibs/{}/tables/".format(caslib) +
-                               "{}.MM_STD_KPI/columns?limit=10000".format(projectId))
+    kpiTableColumns = sess.get(
+        "casManagement/servers/{}/".format(server)
+        + "caslibs/{}/tables/".format(caslib)
+        + "{}.MM_STD_KPI/columns?limit=10000".format(projectId)
+    )
     if not kpiTableColumns:
         project = mr.get_project(project)
-        raise SystemError("No KPI table exists for project {}.".format(project.name) +
-                          " Please confirm that the performance definition completed successfully.")
+        raise SystemError(
+            "No KPI table exists for project {}.".format(project.name)
+            + " Please confirm that the performance definition completed successfully."
+        )
     cols = pd.json_normalize(kpiTableColumns.json(), "items")
     colNames = cols["name"].to_list()
-    
+
     # To Do: include case for large kpi datasets
-    
-    # Filter rows returned by column and value provided in arguments 
+
+    # Filter rows returned by column and value provided in arguments
     whereStatement = ""
     if filterColumn and filterValue:
         whereStatement = "&where={}='{}'".format(filterColumn, filterValue)
-    kpiTableRows = sess.get("casRowSets/servers/{}/".format(server) +
-                            "caslibs/{}/tables/".format(caslib) +
-                            "{}.MM_STD_KPI/rows?limit=10000".format(projectId) + 
-                            "{}".format(whereStatement))
-    kpiTableDf = pd.DataFrame(pd.json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
-                              columns=colNames)
+    kpiTableRows = sess.get(
+        "casRowSets/servers/{}/".format(server)
+        + "caslibs/{}/tables/".format(caslib)
+        + "{}.MM_STD_KPI/rows?limit=10000".format(projectId)
+        + "{}".format(whereStatement)
+    )
+    kpiTableDf = pd.DataFrame(
+        pd.json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
+        columns=colNames,
+    )
     # Strip leading spaces from all cells of KPI table and convert missing values to None
-    kpiTableDf = kpiTableDf.apply(lambda x: x.str.strip()).replace(['.', ''], None)
+    kpiTableDf = kpiTableDf.apply(lambda x: x.str.strip()).replace([".", ""], None)
     # Combine rows of similar model and datasets runs
-    #kpiTableDf = kpiTableDf.groupby(['TimeLabel', 'ModelUUID']).first()
+    # kpiTableDf = kpiTableDf.groupby(['TimeLabel', 'ModelUUID']).first()
     return kpiTableDf
