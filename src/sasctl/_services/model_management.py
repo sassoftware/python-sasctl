@@ -396,8 +396,10 @@ class ModelManagement(Service):
         )
 
     @classmethod
-    def create_custom_kpi(cls, model, project, timeLabel, kpiName, kpiValue, timeSK=None):
-        '''_summary_
+    def create_custom_kpi(
+        cls, model, project, timeLabel, kpiName, kpiValue, timeSK=None
+    ):
+        """_summary_
 
         Parameters
         ----------
@@ -411,10 +413,11 @@ class ModelManagement(Service):
             _description_
         kpiValue : _type_
             _description_
-        '''
+        """
         from .model_repository import ModelRepository
+
         mr = ModelRepository()
-        
+
         if cls.is_uuid(project):
             projectId = project
         elif isinstance(project, dict) and "id" in project:
@@ -422,28 +425,31 @@ class ModelManagement(Service):
         else:
             project = mr.get_project(project)
             projectId = project["id"]
-            
+
         if cls.is_uuid(model):
             modelId = model
         elif isinstance(model, dict) and "id" in model:
             modelId = model["id"]
         else:
-            model = mr.list_models(filter="eq('projectId','{}')&eq('name','{}')".format(
-                projectId, model))
+            model = mr.list_models(
+                filter="eq('projectId','{}')&eq('name','{}')".format(projectId, model)
+            )
             modelId = model["id"]
-            
+
         model = mr.get_model(modelId)
-        
+
         if not timeSK:
             timeSK = [0] * len(timeLabel)
-        
-        customKPI = [{"TimeLabel": label, "KPI": name, "Value": str(value), "TimeSK": SK} 
-                     for label, name, value, SK in zip(timeLabel, kpiName, kpiValue, timeSK)]
+
+        customKPI = [
+            {"TimeLabel": label, "KPI": name, "Value": str(value), "TimeSK": SK}
+            for label, name, value, SK in zip(timeLabel, kpiName, kpiValue, timeSK)
+        ]
         headers = {"Accept": "application/vnd.sas.collection+json"}
-        requestData = {"ProjectID": projectId,
-                       "ModelID": modelId,
-                       "KPIs": customKPI}
+        requestData = {"ProjectID": projectId, "ModelID": modelId, "KPIs": customKPI}
         print("Uploading custom kpis to SAS Viya...")
-        return cls.post("/projects/{}/kpis".format(projectId),
-                        headers=headers,
-                        data=json.dumps(requestData))
+        return cls.post(
+            "/projects/{}/kpis".format(projectId),
+            headers=headers,
+            data=json.dumps(requestData),
+        )
