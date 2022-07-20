@@ -813,7 +813,7 @@ def _parse_module_url(msg):
 
     return module_url
 
-def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerformanceData"):
+def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerformanceData", filterColumn=None, filterValue=None):
     '''_summary_
 
     Parameters
@@ -824,7 +824,10 @@ def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerforma
         _description_, by default "cas-shared-default"
     caslib : str, optional
         _description_, by default "ModelPerformanceData"
-
+    filterColumn : str, optional
+        _description_, by default None
+    filterValue : str, optional
+        _description_, by default None
     Returns
     -------
     _type_
@@ -854,9 +857,15 @@ def get_project_kpis(project, server="cas-shared-default", caslib="ModelPerforma
     colNames = cols["name"].to_list()
     
     # To Do: include case for large kpi datasets
+    
+    # Filter rows returned by column and value provided in arguments 
+    whereStatement = ""
+    if filterColumn and filterValue:
+        whereStatement = "&where={}='{}'".format(filterColumn, filterValue)
     kpiTableRows = sess.get("casRowSets/servers/{}/".format(server) +
                             "caslibs/{}/tables/".format(caslib) +
-                            "{}.MM_STD_KPI/rows?limit=10000".format(projectId))
+                            "{}.MM_STD_KPI/rows?limit=10000".format(projectId) + 
+                            "{}".format(whereStatement))
     kpiTableDf = pd.DataFrame(pd.json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
                               columns=colNames)
     # Strip leading spaces from all cells of KPI table and convert missing values to None
