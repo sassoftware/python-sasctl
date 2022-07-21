@@ -841,7 +841,11 @@ def get_project_kpis(
         _description_
     """
     from .core import is_uuid
-    from pandas.io.json import json_normalize
+    from distutils.version import StrictVersion
+    if pd.__version__ >= StrictVersion('1.0.3'):
+        from pandas import json_normalize
+    else:
+        from pandas.io.json import json_normalize
 
     sess = current_session()
 
@@ -880,10 +884,17 @@ def get_project_kpis(
         + "{}.MM_STD_KPI/rows?limit=10000".format(projectId)
         + "{}".format(whereStatement)
     )
-    kpiTableDf = pd.DataFrame(
-        json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
-        columns=colNames,
-    )
+    try:
+        kpiTableDf = pd.DataFrame(
+            json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
+            columns=colNames,
+        )
+    except KeyError:
+        if filterColumn and filterValue:
+            raise SystemError("No KPIs were found when filtering with {}='{}'.".format(filterColumn, filterValue))
+        else:
+            projectName = mr.get_project(project)["name"]
+            raise SystemError('No KPIs were found for project {}.'.format(projectName))
     # Strip leading spaces from all cells of KPI table and convert missing values to None
     kpiTableDf = kpiTableDf.apply(lambda x: x.str.strip()).replace([".", ""], None)
     # Combine rows of similar model and datasets runs
