@@ -841,6 +841,7 @@ def get_project_kpis(
         _description_
     """
     from .core import is_uuid
+    from pandas.io.json import json_normalize
 
     sess = current_session()
 
@@ -864,7 +865,7 @@ def get_project_kpis(
             "No KPI table exists for project {}.".format(project.name)
             + " Please confirm that the performance definition completed successfully."
         )
-    cols = pd.json_normalize(kpiTableColumns.json(), "items")
+    cols = json_normalize(kpiTableColumns.json(), "items")
     colNames = cols["name"].to_list()
 
     # To Do: include case for large kpi datasets
@@ -880,7 +881,7 @@ def get_project_kpis(
         + "{}".format(whereStatement)
     )
     kpiTableDf = pd.DataFrame(
-        pd.json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
+        json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
         columns=colNames,
     )
     # Strip leading spaces from all cells of KPI table and convert missing values to None
