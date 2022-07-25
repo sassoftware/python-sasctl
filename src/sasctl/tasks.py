@@ -757,34 +757,48 @@ def get_project_kpis(
     filterColumn=None,
     filterValue=None,
 ):
-    """_summary_
+    """Create a call to CAS to return the MM_STD_KPI table (Model Manager Standard KPI)
+    generated when custom KPIs are uploaded or when a performance definition is executed
+    on SAS Model Manager on SAS Viya 4.
+
+    Filtering options are available as additional arguments. The filtering is based on
+    column name and column value. Currently, only exact matches are available when filtering
+    by this method.
 
     Parameters
     ----------
-    project : _type_
-        _description_
+    project : str or dict
+        The name or id of the project, or a dictionary representation of
+        the project.
     server : str, optional
-        _description_, by default "cas-shared-default"
+        SAS Viya 4 server where the MM_STD_KPI table exists,
+        by default "cas-shared-default"
     caslib : str, optional
-        _description_, by default "ModelPerformanceData"
+        SAS Viya 4 caslib where the MM_STD_KPI table exists,
+        by default "ModelPerformanceData"
     filterColumn : str, optional
-        _description_, by default None
+        Column name from the MM_STD_KPI table to be filtered, by default None
     filterValue : str, optional
-        _description_, by default None
+        Column value to be filtered, by default None
     Returns
     -------
-    _type_
-        _description_
+    kpiTableDf : DataFrame
+        A pandas DataFrame representing the MM_STD_KPI table. Note that SAS
+        missing values are replaced with pandas valid missing values.
     """
     from .core import is_uuid
     from distutils.version import StrictVersion
-    if pd.__version__ >= StrictVersion('1.0.3'):
+
+    # Check the pandas version for where the json_normalize function exists
+    if pd.__version__ >= StrictVersion("1.0.3"):
         from pandas import json_normalize
     else:
         from pandas.io.json import json_normalize
 
+    # Collect the current session for authentication of API calls
     sess = current_session()
 
+    # Step through options to determine project UUID
     if is_uuid(project):
         projectId = project
     elif isinstance(project, dict) and "id" in project:
@@ -793,7 +807,8 @@ def get_project_kpis(
         project = mr.get_project(project)
         projectId = project["id"]
 
-    # To Do: include case for large kpi datasets
+    # TODO: include case for large MM_STD_KPI tables
+    # Call the casManagement service to collect the column names in the table
     kpiTableColumns = sess.get(
         "casManagement/servers/{}/".format(server)
         + "caslibs/{}/tables/".format(caslib)
@@ -803,23 +818,27 @@ def get_project_kpis(
         project = mr.get_project(project)
         raise SystemError(
             "No KPI table exists for project {}.".format(project.name)
-            + " Please confirm that the performance definition completed successfully."
+            + " Please confirm that the performance definition completed"
+            + " or custom KPIs have been uploaded successfully."
         )
+    # Parse through the json response to create a pandas DataFrame
     cols = json_normalize(kpiTableColumns.json(), "items")
+    # Convert the columns to a readable list
     colNames = cols["name"].to_list()
-
-    # To Do: include case for large kpi datasets
 
     # Filter rows returned by column and value provided in arguments
     whereStatement = ""
     if filterColumn and filterValue:
         whereStatement = "&where={}='{}'".format(filterColumn, filterValue)
+
+    # Call the casRowSets service to return row values; optional where statement is included
     kpiTableRows = sess.get(
         "casRowSets/servers/{}/".format(server)
         + "caslibs/{}/tables/".format(caslib)
         + "{}.MM_STD_KPI/rows?limit=10000".format(projectId)
         + "{}".format(whereStatement)
     )
+    # If no "cells" are found in the json response, return an error based on provided arguments
     try:
         kpiTableDf = pd.DataFrame(
             json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
@@ -827,12 +846,16 @@ def get_project_kpis(
         )
     except KeyError:
         if filterColumn and filterValue:
-            raise SystemError("No KPIs were found when filtering with {}='{}'.".format(filterColumn, filterValue))
+            raise SystemError(
+                "No KPIs were found when filtering with {}='{}'.".format(
+                    filterColumn, filterValue
+                )
+            )
         else:
             projectName = mr.get_project(project)["name"]
-            raise SystemError('No KPIs were found for project {}.'.format(projectName))
+            raise SystemError("No KPIs were found for project {}.".format(projectName))
+
     # Strip leading spaces from all cells of KPI table and convert missing values to None
     kpiTableDf = kpiTableDf.apply(lambda x: x.str.strip()).replace([".", ""], None)
-    # Combine rows of similar model and datasets runs
-    # kpiTableDf = kpiTableDf.groupby(['TimeLabel', 'ModelUUID']).first()
+
     return kpiTableDf
