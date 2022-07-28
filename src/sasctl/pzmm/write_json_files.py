@@ -10,12 +10,9 @@ import pandas as pd
 import math
 import numpy as np
 from scipy.stats import kendalltau, gamma
-import types
 import pickle
 import pickletools
-import os
 
-# %%
 class JSONFiles:
     @classmethod
     def writeVarJSON(cls, inputData, isInput=True, jPath=Path.cwd()):
@@ -305,7 +302,7 @@ class JSONFiles:
 
     @classmethod
     def writeBaseFitStat(
-        self, csvPath=None, jPath=Path.cwd(), userInput=False, tupleList=None
+        cls, csvPath=None, jPath=Path.cwd(), userInput=False, tupleList=None
     ):
         """
         Writes a JSON file to display fit statistics for the model in SAS Open Model Manager.
@@ -376,7 +373,7 @@ class JSONFiles:
         ]
 
         nullJSONPath = Path(__file__).resolve().parent / "null_dmcas_fitstat.json"
-        nullJSONDict = self.readJSONFile(nullJSONPath)
+        nullJSONDict = cls.readJSONFile(nullJSONPath)
 
         dataMap = [{}, {}, {}]
         for i in range(3):
@@ -386,11 +383,11 @@ class JSONFiles:
             for paramTuple in tupleList:
                 # ignore incorrectly formatted input arguments
                 if type(paramTuple) == tuple and len(paramTuple) == 3:
-                    paramName = self.formatParameter(paramTuple[0])
+                    paramName = cls.formatParameter(paramTuple[0])
                     if paramName not in validParams:
                         continue
                     if type(paramTuple[2]) == str:
-                        dataRole = self.convertDataRole(paramTuple[2])
+                        dataRole = cls.convertDataRole(paramTuple[2])
                     else:
                         dataRole = paramTuple[2]
                     dataMap[dataRole - 1]["dataMap"][paramName] = paramTuple[1]
@@ -398,7 +395,7 @@ class JSONFiles:
         if userInput:
             while True:
                 paramName = input("Parameter name: ")
-                paramName = self.formatParameter(paramName)
+                paramName = cls.formatParameter(paramName)
                 if paramName not in validParams:
                     print("Not a valid parameter. Please see documentation.")
                     if input("More parameters? (Y/N)") == "N":
@@ -408,7 +405,7 @@ class JSONFiles:
                 dataRole = input("Data role: ")
 
                 if type(dataRole) is str:
-                    dataRole = self.convertDataRole(dataRole)
+                    dataRole = cls.convertDataRole(dataRole)
                 dataMap[dataRole - 1]["dataMap"][paramName] = paramValue
 
                 if input("More parameters? (Y/N)") == "N":
@@ -418,11 +415,11 @@ class JSONFiles:
             csvData = pd.read_csv(csvPath)
             for i, row in enumerate(csvData.values):
                 paramName, paramValue, dataRole = row
-                paramName = self.formatParameter(paramName)
+                paramName = cls.formatParameter(paramName)
                 if paramName not in validParams:
                     continue
                 if type(dataRole) is str:
-                    dataRole = self.convertDataRole(dataRole)
+                    dataRole = cls.convertDataRole(dataRole)
                 dataMap[dataRole - 1]["dataMap"][paramName] = paramValue
 
         outJSON = nullJSONDict
@@ -439,7 +436,7 @@ class JSONFiles:
 
     @classmethod
     def calculateFitStat(
-        self, validateData=None, trainData=None, testData=None, jPath=Path.cwd()
+        cls, validateData=None, trainData=None, testData=None, jPath=Path.cwd()
     ):
         """
         Calculates fit statistics from user data and predictions and then writes to
@@ -499,7 +496,7 @@ class JSONFiles:
             )
 
         nullJSONPath = Path(__file__).resolve().parent / "null_dmcas_fitstat.json"
-        nullJSONDict = self.readJSONFile(nullJSONPath)
+        nullJSONDict = cls.readJSONFile(nullJSONPath)
 
         dataSets = [[[None], [None]], [[None], [None]], [[None], [None]]]
 
@@ -598,7 +595,7 @@ class JSONFiles:
 
     @classmethod
     def generateROCLiftStat(
-        self,
+        cls,
         targetName,
         targetValue,
         swatConn,
@@ -656,10 +653,10 @@ class JSONFiles:
             )
 
         nullJSONROCPath = Path(__file__).resolve().parent / "null_dmcas_roc.json"
-        nullJSONROCDict = self.readJSONFile(nullJSONROCPath)
+        nullJSONROCDict = cls.readJSONFile(nullJSONROCPath)
 
         nullJSONLiftPath = Path(__file__).resolve().parent / "null_dmcas_lift.json"
-        nullJSONLiftDict = self.readJSONFile(nullJSONLiftPath)
+        nullJSONLiftDict = cls.readJSONFile(nullJSONLiftPath)
 
         dataSets = [pd.DataFrame(), pd.DataFrame(), pd.DataFrame()]
         columns = ["actual", "predict"]
@@ -965,25 +962,85 @@ class JSONFiles:
 
         return conversion
 
-    def getCurrentScopedImports(self):
+    @classmethod
+    def createRequirementsJSON(cls, jPath=Path.cwd()):
         """
-        Gets the Python modules from the current scope's global variables.
+        Searches the model directory for Python scripts and pickle files and determines
+        their Python package dependencies. Found dependencies are then matched to the package
+        version found in the current working environment. Then the package and version are
+        written to a requirements.json file.
+
+        WARNING:
+        The methods utilized in this function can determine package dependencies from provided
+        scripts and pickle files, but CANNOT determine the required package versions without
+        being in the development environment which they were originally created.
+
+        This function works best when run in the model development environment and is likely to
+        throw errors if run in another environment (and/or produce incorrect package versions).
+        In the case of using this function outside of the model development environment, it is
+        recommended to the user that they adjust the requirements.json file's package versions
+        to match the model development environment.
+
+        Parameters
+        ----------
+        jPath : str, optional
+            The path to a Python project, by default Path.cwd().
 
         Yields
-        -------
-        str
-            Name of the package that is generated.
+        ------
+        requirements.json : file
+            JSON file used to create a specific Python environment in a SAS Model Manager published
+            container.
         """
 
-        for name, val in globals().items():
-            if isinstance(val, types.ModuleType):
-                # Split ensures you get root package, not just imported function
-                name = val.__name__.split(".")[0]
-                yield name
-            elif isinstance(val, type):
-                name = val.__module__.split(".")[0]
-                yield name
+        picklePackages = []
+        pickleFiles = cls.getPickleFile(jPath)
+        for pickleFile in pickleFiles:
+            picklePackages.append(cls.getDependenciesFromPickleFile(pickleFile))
 
+        codeDependencies = cls.getCodeDependencies(jPath)
+
+        packageList = picklePackages + codeDependencies
+        packageAndVersion = cls.getLocalPackageVersion()
+
+        with open(Path(jPath) / "requirements.json") as file:
+            for package, version in packageAndVersion:
+                jsonStep = json.dumps(
+                    [
+                        {
+                            "step": "install " + package,
+                            "command": "pip install " + package + "==" + version,
+                        }
+                    ],
+                    indent=4,
+                )
+                file.write(jsonStep)
+
+    def getCodeDependencies(self, jPath, debug=False):
+        from ..utils import functionInspector
+        import inspect
+
+        fileNames = []
+        fileNames.extend(sorted(Path(jPath).glob("*.py")))
+
+        strScoreCode = ''
+        for file in fileNames:
+            with open(file, "r") as code:
+                strScoreCode = strScoreCode + code.read()
+
+        stringFunctionInspector = inspect.getsource(functionInspector)
+
+        execCode = strScoreCode + stringFunctionInspector + '''import logging
+if __name__ == "__main__":
+    debug = {}
+    logLevel = logging.DEBUG if debug else logging.INFO
+    logging.basicConfig(level=logLevel, format="%%(levelname)s: %%(message)s")
+    
+    symbols, dependencies = findDependencies()
+    print(dependencies)
+        '''.format(debug)
+
+        exec(execCode)
     def getPickleFile(self, pPath):
         """
         Given a file path, retrieve the pickle file(s).
@@ -1025,60 +1082,11 @@ class JSONFiles:
             obj = pickle.load(openfile)
             dumps = pickle.dumps(obj)
 
-        modules = {mod.split(".")[0] for mod, _ in self.getNames(dumps)}
+        modules = {mod.split(".")[0] for mod, _ in self.getPackageNames(dumps)}
+        modules.discard("builtins")
         return modules
 
-    @classmethod
-    def createRequirementsJSON(self, jPath=Path.cwd()):
-        """
-        Searches the root of the project for all Python modules and writes them to a requirements.json file.
-
-        Parameters
-        ----------
-        jPath : str, optional
-            The path to a Python project, by default Path.cwd().
-        """
-
-        module_version_map = {}
-        pickle_files = self.get_pickle_file(jPath)
-        requirements_txt_file = os.path.join(jPath, "requirements.txt")
-        with open(requirements_txt_file, "r") as f:
-            modules_requirements_txt = set()
-            for pickle_file in pickle_files:
-                modules_pickle = self.get_modules_from_pickle_file(pickle_file)
-                for line in f:
-                    module_parts = line.rstrip().split("==")
-                    module = module_parts[0]
-                    version = module_parts[1]
-                    module_version_map[module] = version
-                    modules_requirements_txt.add(module)
-            pip_name_list = list(modules_requirements_txt.union(modules_pickle))
-
-        for item in pip_name_list:
-            if item in module_version_map:
-                if module_version_map[item] == "0.0.0":
-                    print(
-                        "Warning: No pip install name found for package: "
-                        + item.split("==")[0]
-                    )
-                    pip_name_list.remove(item)
-
-        j = json.dumps(
-            [
-                {
-                    "step": "install " + i,
-                    "command": "pip install " + i + "==" + module_version_map[i],
-                }
-                if i in module_version_map
-                else {"step": "install " + i, "command": "pip install " + i}
-                for i in pip_name_list
-            ],
-            indent=4,
-        )
-        with open(os.path.join(jPath, "requirements.json"), "w") as file:
-            print(j, file=file)
-
-    def getNames(self, stream):
+    def getPackageNames(self, stream):
         """
         Generates (module, class_name) tuples from a pickle stream. Extracts all class names referenced
         by GLOBAL and STACK_GLOBAL opcodes.
@@ -1092,50 +1100,48 @@ class JSONFiles:
             A file like object or string containing the pickle.
 
         Yields
-        -------
+        ------
         tuple
             Generated (module, class_name) tuples.
         """
 
         stack, markstack, memo = [], [], []
-        mo = pickletools.markobject
+        mark = pickletools.markobject
 
-        for op, arg, pos in pickletools.genops(stream):
-            # simulate the pickle stack and marking scheme, insofar
-            # necessary to allow us to retrieve the names used by STACK_GLOBAL
+        # Step through the pickle stack and retrieve names used by STACK_GLOBAL
+        for opcode, arg, pos in pickletools.genops(stream):
 
-            before, after = op.stack_before, op.stack_after
+            before, after = opcode.stack_before, opcode.stack_after
             numtopop = len(before)
 
-            if op.name == "GLOBAL":
+            if opcode.name == "GLOBAL":
                 yield tuple(arg.split(1, None))
-            elif op.name == "STACK_GLOBAL":
+            elif opcode.name == "STACK_GLOBAL":
                 yield (stack[-2], stack[-1])
-
-            elif mo in before or (op.name == "POP" and stack and stack[-1] is mo):
+            elif mark in before or (opcode.name == "POP" and stack and stack[-1] is mark):
                 markpos = markstack.pop()
-                while stack[-1] is not mo:
+                while stack[-1] is not mark:
                     stack.pop()
                 stack.pop()
                 try:
-                    numtopop = before.index(mo)
+                    numtopop = before.index(mark)
                 except ValueError:
                     numtopop = 0
-            elif op.name in {"PUT", "BINPUT", "LONG_BINPUT", "MEMOIZE"}:
-                if op.name == "MEMOIZE":
+            elif opcode.name in {"PUT", "BINPUT", "LONG_BINPUT", "MEMOIZE"}:
+                if opcode.name == "MEMOIZE":
                     memo.append(stack[-1])
                 else:
                     memo[arg] = stack[-1]
-                numtopop, after = 0, []  # memoize and put do not pop the stack
-            elif op.name in {"GET", "BINGET", "LONG_BINGET"}:
+                numtopop, after = 0, []  # memoize and put; do not pop the stack
+            elif opcode.name in {"GET", "BINGET", "LONG_BINGET"}:
                 arg = memo[arg]
 
             if numtopop:
                 del stack[-numtopop:]
-            if mo in after:
+            if mark in after:
                 markstack.append(pos)
 
-            if len(after) == 1 and op.arg is not None:
+            if len(after) == 1 and opcode.arg is not None:
                 stack.append(arg)
             else:
                 stack.extend(after)
