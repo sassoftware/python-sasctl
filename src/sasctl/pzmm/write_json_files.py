@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 import getpass
 import json
+from importlib_metadata import PackageNotFoundError
 import pandas as pd
 import math
 import numpy as np
@@ -1001,7 +1002,7 @@ class JSONFiles:
         codeDependencies = cls.getCodeDependencies(jPath)
 
         packageList = picklePackages + codeDependencies
-        packageAndVersion = cls.getLocalPackageVersion()
+        packageAndVersion = cls.getLocalPackageVersion(list(set(packageList)))
 
         with open(Path(jPath) / "requirements.json") as file:
             for package, version in packageAndVersion:
@@ -1016,31 +1017,72 @@ class JSONFiles:
                 )
                 file.write(jsonStep)
 
-    def getCodeDependencies(self, jPath, debug=False):
-        from ..utils import functionInspector
-        import inspect
+    def getLocalPackageVersion(self, packageList):
 
+        packageVersion = []
+        if sys.version_info[1] >= 8:
+            from importlib.metadata import version
+            for package in packageList:
+                try:
+                    packageVersion.append(version(package))
+                except PackageNotFoundError:
+                    print("Warning: Package {} was not found in the local environment, so a version could not be determined.".format(package))
+                    print("The pip installation command will not include a version number.")
+                    packageVersion.append(None)
+            return packageVersion
+        else:
+            import importlib
+            for package in packageList:
+                name = importlib.import_module(package)
+                try:
+                    packageVersion.append(name.__version__)
+                except:
+                    try:
+                        packageVersion.append(name.version)
+                    except:
+                        try:
+                            packageVersion.append(name.VERSION)
+                        except:
+                            print("Warning: Package {} was not found in the local environment, so a version could not be determined.".format(package))
+                            print("The pip installation command will not include a version number.")
+            return packageVersion
+
+    def getCodeDependencies(self, jPath):
         fileNames = []
         fileNames.extend(sorted(Path(jPath).glob("*.py")))
 
-        strScoreCode = ''
+        importInfo = []
         for file in fileNames:
-            with open(file, "r") as code:
-                strScoreCode = strScoreCode + code.read()
+            importInfo.append(self.findImports(file))
+        importInfo = list(set(importInfo))
 
-        stringFunctionInspector = inspect.getsource(functionInspector)
+        return importInfo
 
-        execCode = strScoreCode + stringFunctionInspector + '''import logging
-if __name__ == "__main__":
-    debug = {}
-    logLevel = logging.DEBUG if debug else logging.INFO
-    logging.basicConfig(level=logLevel, format="%%(levelname)s: %%(message)s")
-    
-    symbols, dependencies = findDependencies()
-    print(dependencies)
-        '''.format(debug)
+    def findImports(self, fPath):
+        # modified from https://stackoverflow.com/questions/44988487/regex-to-parse-import-statements-in-python
+        import ast
 
-        exec(execCode)
+        fileText = open(fPath).read()
+tree = ast.parse(fileText)
+        modules = []
+
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom):
+                for name in node.names:
+                    if not name.asname:
+                        modules.append(node.module)
+            elif isinstance(node, ast.Import):
+                for name in node.names:
+                    if not node.names[0].asname:
+                        modules.append(node.names[0].name)
+
+        modules = list(set(modules))
+        try:
+            modules.remove('settings')
+            return modules
+        except ValueError:
+            return modules
+
     def getPickleFile(self, pPath):
         """
         Given a file path, retrieve the pickle file(s).
