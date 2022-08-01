@@ -9,6 +9,7 @@ import pickle
 import gzip
 import codecs
 
+
 # %%
 class PickleModel:
     def pickleTrainedModel(
@@ -80,6 +81,8 @@ class PickleModel:
                         modelPrefix, Path(pPath) / (modelPrefix + ".pickle")
                     )
                 )
+                from .modelParameters import modelParameters
+                modelParameters.generate_hyperparameters(trainedModel, modelPrefix, pPath)
             # For H2O models that are binary files, rename the binary file as a pickle file
             elif isBinaryModel:
                 binaryFile = Path(pPath) / modelPrefix
