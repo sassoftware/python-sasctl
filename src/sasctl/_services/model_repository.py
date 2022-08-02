@@ -7,6 +7,8 @@
 """The Model Repository service supports registering and managing models."""
 
 from warnings import warn
+from io import StringIO
+import json
 
 from .service import Service
 from ..core import current_session, get, delete, sasctl_command, HTTPError
@@ -366,22 +368,24 @@ class ModelRepository(Service):
         )
 
     @classmethod
-    def add_model_content(cls, model, file, name, role=None, content_type=None):
-        """Add additional files to the model.
+    def add_model_content(cls, model, file, name, content_type="multipart/form-data", role=None):
+        """Add additional files to the model. Additional files can come in the form of
+        a bytes-like, string, or dict object. String and dict objects will be converted to
+        a bytes-like object for upload.
 
         Parameters
         ----------
         model : str or dict
             The name or id of the model, or a dictionary representation of
             the model.
-        file : str or bytes
+        file : str, dict, or bytes
             A file related to the model, such as the model code.
         name : str
             Name of the file related to the model.
-        role : str
-            Role of the model file, such as 'Python pickle'.
-        content_type : str
-            an HTTP Content-Type value
+        content_type : str, optional
+            An HTTP Content-Type value. Default value is multipart/form-data.            
+        role : str, optional
+            Role of the model file, such as 'Python pickle'. Default value is None.
 
         Returns
         -------
@@ -396,27 +400,34 @@ class ModelRepository(Service):
         else:
             model = cls.get_model(model)
             id_ = model["id"]
+            
+        # Convert string file representations to bytes-like object
+        if isinstance(file, str):
+            file = StringIO(file)
+            content_type="multipart/form-data"
+        # Convert dict file representations to bytes-like object
+        elif isinstance(file, dict):
+            file = StringIO(json.dumps(file))
+            content_type="multipart/form-data"
 
-        if content_type is None and isinstance(file, bytes):
-            content_type = "application/octet-stream"
+        files = {"files": (name, file, content_type)}
 
-        if content_type is not None:
-            files = {name: (name, file, content_type)}
+        if role is None:
+            params = {}
         else:
-            files = {name: file}
+            params = {"role": role}
+        params = "&".join("{}={}".format(k, v) for k, v in params.items())
 
-        metadata = {"role": role, "name": name}
-
-        # return cls.post('/models/{}/contents'.format(id_), files=files, data=metadata)
-
-        # if the file already exists, a 409 error will be returned
+        # If the file already exists, a 409 error will be returned
         try:
             return cls.post(
-                "/models/{}/contents".format(id_), files=files, data=metadata
+                "/models/{}/contents".format(id_), 
+                files=files, 
+                params=params,
             )
-        # delete the older duplicate model and rerun the API call
-        except HTTPError as e:
-            if e.code == 409:
+        except HTTPError as err:
+            # Delete the older duplicate model file and rerun the API call
+            if err.code == 409:
                 model_contents = cls.get_model_contents(id_)
                 for item in model_contents:
                     if item.name == name:
@@ -424,10 +435,10 @@ class ModelRepository(Service):
                         return cls.post(
                             "/models/{}/contents".format(id_),
                             files=files,
-                            data=metadata,
+                            params=params,
                         )
             else:
-                raise e
+                raise err
 
     @classmethod
     def default_repository(cls):
