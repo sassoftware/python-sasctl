@@ -355,3 +355,48 @@ class CASManagement(Service):
         )
 
         return tbl
+
+    @classmethod
+    def save_table(
+        cls, name: str, caslib: str, properties: dict = None, sessId: str = None, server: str = None
+        ):
+        """Saves a CAS table to a source table
+
+        Parameters
+        ----------
+        name : str
+            Name of the table.
+        sessId: str
+            The session ID
+        caslib : str
+            Name of the caslib.
+        propertes : dict, optional
+            Properties of the table. 
+            Valid keys are `caslibName`, `format`, `replace`,
+            `compress`, `tableName`, `sourceTableName`, `parameters`.
+        server : str
+            Server where the `caslib` is registered. Defaults to `cas-shared-default`.
+
+        Returns
+        -------
+        RestObj
+        """
+        server = server or DEFAULT_SERVER
+
+        if properties:
+            allowedBodyKeys = ["caslibName", "format", "replace",
+            "compress", "tableName", "sourceTableName", "parameters"]
+
+            if not all(key in allowedBodyKeys for key in properties.keys()) :
+                raise ValueError("The only acceptable properties are %s." % (allowedBodyKeys))
+        else:
+            properties = {}
+        
+        query = {"sessionId": sessId} if sessId else {}
+        
+        sess = cls.post(
+            "/servers/%s/caslibs/%s/tables/%s"  % (server,caslib,name),
+            params = query
+            json = properties
+            )
+        return sess
