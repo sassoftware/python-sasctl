@@ -318,3 +318,40 @@ class CASManagement(Service):
         )
         
         return tbl
+        
+    @classmethod
+    def promote_table(cls, name: str, sessId: str, caslib: str, server: str = None):
+        """Changes the scope of a loaded CAS table from session to global scope.
+        Operation valid only on a session table.
+        Promote target is the same Caslib that contains the session table.
+
+        Parameters
+        ----------
+        name : str
+            Name of the table.
+        sessId: str
+            The session ID
+        caslib : str
+            Name of the caslib. 
+        server : str
+            Server where the `caslib` is registered. Defaults to CASUSER
+
+        Returns
+        -------
+        RestObj
+
+        """
+        server = server or DEFAULT_SERVER
+        caslib = caslib or DEFAULT_CASLIB
+        
+        query={
+            "value" : "global"
+            "sessionId": sessId
+        }
+            
+        tbl = cls.put(
+            "/servers/%s/caslibs/%s/tables/%s/scope" % (server, caslib, name),
+            params=query
+        )
+
+        return tbl
