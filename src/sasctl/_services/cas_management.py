@@ -27,13 +27,12 @@ class CASManagement(Service):
 
     @classmethod
     def create_session(cls, properties: dict, server: str):
-        """
-        Creates a new session on the CAS server.
+        """Creates a new session on the CAS server.
 
         Params
         ------
         properties : dict
-            Properties of the session. 
+            Properties of the session.
             Valid keys are `authenticationType` (required),
             `locale`, `name`, `nodeCount`, `timeOut`.
         server : str
@@ -45,25 +44,29 @@ class CASManagement(Service):
         """
         server = server or DEFAULT_SERVER
 
-        allowedBodyKeys = ["authenticationType", "locale", "name",
-        "nodeCount", "replace", "timeOut"]
+        allowedBodyKeys = [
+            "authenticationType",
+            "locale",
+            "name",
+            "nodeCount",
+            "replace",
+            "timeOut",
+        ]
 
-        if not all(key in allowedBodyKeys for key in properties.keys()) :
-            raise ValueError("The only acceptable properties are %s." % (allowedBodyKeys))
-        
+        if not all(key in allowedBodyKeys for key in properties.keys()):
+            raise ValueError(
+                "The only acceptable properties are %s." % (allowedBodyKeys)
+            )
+
         if "authenticationType" not in properties.keys():
             raise ValueError("The property 'authenticationType' is required.")
-        
-        sess = cls.post(
-            "/servers/%s/sessions"  % (server),
-            json = properties
-            )
+
+        sess = cls.post("/servers/%s/sessions" % (server), json=properties)
         return sess
 
     @classmethod
     def delete_session(cls, sess_id: str, server: str, qparams: dict = None):
-        """
-        Terminates a session on the CAS server.
+        """Terminates a session on the CAS server.
 
         Params
         ------
@@ -72,7 +75,7 @@ class CASManagement(Service):
         server : str
             Name of the CAS server.  Defaults to `cas-shared-default`.
         qparams : dict, optional
-            Query parameters. 
+            Query parameters.
             Valid keys are `force`, `superUserSessionId`.
 
         Returns
@@ -84,19 +87,18 @@ class CASManagement(Service):
         if qparams is not None:
             allowedQueryKeys = ["force", "superUserSessionId"]
 
-            if not all(key in allowedQueryKeys for key in qparams.keys()) :
-                raise ValueError("The only acceptable queries are %s." % (allowedQueryKeys))
+            if not all(key in allowedQueryKeys for key in qparams.keys()):
+                raise ValueError(
+                    "The only acceptable queries are %s." % (allowedQueryKeys)
+                )
         else:
             qparams = {}
-            
-        sess = cls.delete(
-            "/servers/%s/sessions/%s"  % (server,sess_id),
-            params = qparams
-            )
+
+        sess = cls.delete("/servers/%s/sessions/%s" % (server, sess_id), params=qparams)
         return sess
 
     @classmethod
-    def list_caslibs(cls, server:Union[str,dict], filter_:str=None):
+    def list_caslibs(cls, server: Union[str, dict], filter_: str = None):
         """List caslibs available on a server.
 
         Parameters
@@ -118,7 +120,7 @@ class CASManagement(Service):
         )
 
     @classmethod
-    def get_caslib(cls, name:str, server:str=None):
+    def get_caslib(cls, name: str, server: str = None):
         """Get a caslib by name.
 
         Parameters
@@ -141,7 +143,9 @@ class CASManagement(Service):
         return None
 
     @classmethod
-    def list_tables(cls, caslib:Union[str,dict], server:str=None, filter_:str=None):
+    def list_tables(
+        cls, caslib: Union[str, dict], server: str = None, filter_: str = None
+    ):
         """List tables available in a caslib.
 
         Parameters
@@ -166,7 +170,7 @@ class CASManagement(Service):
         )
 
     @classmethod
-    def get_table(cls, name:str, caslib:Union[str,dict]=None, server:str=None):
+    def get_table(cls, name: str, caslib: Union[str, dict] = None, server: str = None):
         """Get a table by name.
 
         Parameters
@@ -195,7 +199,13 @@ class CASManagement(Service):
 
     @classmethod
     def upload_file(
-        cls, file:Union[str,TextIO], name:str, caslib:str=None, server:str=None, header:bool=None, format_:str=None
+        cls,
+        file: Union[str, TextIO],
+        name: str,
+        caslib: str = None,
+        server: str = None,
+        header: bool = None,
+        format_: str = None,
     ):
         """Upload a file to a CAS table.
 
@@ -260,8 +270,17 @@ class CASManagement(Service):
         return tbl
 
     @classmethod
-    def update_state_table(cls, value: str, name: str, caslib:str=None, server:str=None, *, qparams:dict=None, body:dict = dict()):
-        """Modifies the state of a table to loaded or unloaded. 
+    def update_state_table(
+        cls,
+        value: str,
+        name: str,
+        caslib: str = None,
+        server: str = None,
+        *,
+        qparams: dict = None,
+        body: dict = dict()
+    ):
+        """Modifies the state of a table to loaded or unloaded.
         Returns loaded or unloaded to indicate the state after the operation.
 
         Parameters
@@ -275,13 +294,13 @@ class CASManagement(Service):
         server : str, optional
             Server where the `caslib` is registered.
         qparams: dict, optional
-            Additional query parameters. 
+            Additional query parameters.
             Valid keys are `sessionId`, `scope`, `sourceTableName`, `createRelationships`
         body : dict, optional
             Extra instructions providing greater control over the output when a state change to loaded is requested.
-            Valid keys are `copies`, `label`, `outputCaslibName`, `outputTableName`, `parameters`, 
+            Valid keys are `copies`, `label`, `outputCaslibName`, `outputTableName`, `parameters`,
             `replace`, `replaceMode`, `scope`.
-        
+
         Returns
         -------
         RestObj
@@ -289,36 +308,52 @@ class CASManagement(Service):
         """
         caslib = caslib or DEFAULT_CASLIB
 
-        if value in ['loaded', 'unloaded']:
-            query = {
-                "value":value
-            }
+        if value in ["loaded", "unloaded"]:
+            query = {"value": value}
         else:
-            raise ValueError("The state can only have values of `loaded` or `unloaded`.")
-        
-        if qparams is not None:
-            allowedQueryKeys = ["sessionId", "scope", "sourceTableName", "createRelationships"]
+            raise ValueError(
+                "The state can only have values of `loaded` or `unloaded`."
+            )
 
-            if not all(key in allowedQueryKeys for key in qparams.keys()) :
-                raise ValueError("The only query parameters allowed are %s." % (allowedQueryKeys))
+        if qparams is not None:
+            allowedQueryKeys = [
+                "sessionId",
+                "scope",
+                "sourceTableName",
+                "createRelationships",
+            ]
+
+            if not all(key in allowedQueryKeys for key in qparams.keys()):
+                raise ValueError(
+                    "The only query parameters allowed are %s." % (allowedQueryKeys)
+                )
             else:
                 query.update(qparams)
 
-        allowedBodyKeys = ["copies", "label", "outputCaslibName", "outputTableName", "parameters", 
-        "replace", "replaceMode","scope"]
+        allowedBodyKeys = [
+            "copies",
+            "label",
+            "outputCaslibName",
+            "outputTableName",
+            "parameters",
+            "replace",
+            "replaceMode",
+            "scope",
+        ]
 
-        if not all(key in allowedBodyKeys for key in body.keys()) :
-            raise ValueError("The body accepts only the following parameters %s." % (allowedBodyKeys))
+        if not all(key in allowedBodyKeys for key in body.keys()):
+            raise ValueError(
+                "The body accepts only the following parameters %s." % (allowedBodyKeys)
+            )
 
-                    
         tbl = cls.put(
-            "/servers/%s/caslibs/%s/tables/%s/state" % (server, caslib,name),
+            "/servers/%s/caslibs/%s/tables/%s/state" % (server, caslib, name),
             params=query,
-            json=body
+            json=body,
         )
-        
+
         return tbl
-        
+
     @classmethod
     def promote_table(cls, name: str, sessId: str, caslib: str, server: str = None):
         """Changes the scope of a loaded CAS table from session to global scope.
@@ -332,7 +367,7 @@ class CASManagement(Service):
         sessId: str
             The session ID
         caslib : str
-            Name of the caslib. 
+            Name of the caslib.
         server : str
             Server where the `caslib` is registered. Defaults to CASUSER
 
@@ -343,23 +378,25 @@ class CASManagement(Service):
         """
         server = server or DEFAULT_SERVER
         caslib = caslib or DEFAULT_CASLIB
-        
-        query={
-            "value" : "global"
-            "sessionId": sessId
-        }
-            
+
+        query = {"value": "global", "sessionId": sessId}
+
         tbl = cls.put(
             "/servers/%s/caslibs/%s/tables/%s/scope" % (server, caslib, name),
-            params=query
+            params=query,
         )
 
         return tbl
 
     @classmethod
     def save_table(
-        cls, name: str, caslib: str, properties: dict = None, sessId: str = None, server: str = None
-        ):
+        cls,
+        name: str,
+        caslib: str,
+        properties: dict = None,
+        sessId: str = None,
+        server: str = None,
+    ):
         """Saves a CAS table to a source table
 
         Parameters
@@ -371,7 +408,7 @@ class CASManagement(Service):
         caslib : str
             Name of the caslib.
         propertes : dict, optional
-            Properties of the table. 
+            Properties of the table.
             Valid keys are `caslibName`, `format`, `replace`,
             `compress`, `tableName`, `sourceTableName`, `parameters`.
         server : str
@@ -384,19 +421,28 @@ class CASManagement(Service):
         server = server or DEFAULT_SERVER
 
         if properties:
-            allowedBodyKeys = ["caslibName", "format", "replace",
-            "compress", "tableName", "sourceTableName", "parameters"]
+            allowedBodyKeys = [
+                "caslibName",
+                "format",
+                "replace",
+                "compress",
+                "tableName",
+                "sourceTableName",
+                "parameters",
+            ]
 
-            if not all(key in allowedBodyKeys for key in properties.keys()) :
-                raise ValueError("The only acceptable properties are %s." % (allowedBodyKeys))
+            if not all(key in allowedBodyKeys for key in properties.keys()):
+                raise ValueError(
+                    "The only acceptable properties are %s." % (allowedBodyKeys)
+                )
         else:
             properties = {}
-        
+
         query = {"sessionId": sessId} if sessId else {}
-        
+
         sess = cls.post(
-            "/servers/%s/caslibs/%s/tables/%s"  % (server,caslib,name),
-            params = query
-            json = properties
-            )
+            "/servers/%s/caslibs/%s/tables/%s" % (server, caslib, name),
+            params=query,
+            json=properties,
+        )
         return sess
