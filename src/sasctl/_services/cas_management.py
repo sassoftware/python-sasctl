@@ -61,6 +61,41 @@ class CASManagement(Service):
         return sess
 
     @classmethod
+    def delete_session(cls, sess_id: str, server: str, qparams: dict = None):
+        """
+        Terminates a session on the CAS server.
+
+        Params
+        ------
+        sess_id : str
+            A string indicating the Session id.
+        server : str
+            Name of the CAS server.  Defaults to `cas-shared-default`.
+        qparams : dict, optional
+            Query parameters. 
+            Valid keys are `force`, `superUserSessionId`.
+
+        Returns
+        -------
+        RestObj
+        """
+        server = server or DEFAULT_SERVER
+
+        if qparams is not None:
+            allowedQueryKeys = ["force", "superUserSessionId"]
+
+            if not all(key in allowedQueryKeys for key in qparams.keys()) :
+                raise ValueError("The only acceptable queries are %s." % (allowedQueryKeys))
+        else:
+            qparams = {}
+            
+        sess = cls.delete(
+            "/servers/%s/sessions/%s"  % (server,sess_id),
+            params = qparams
+            )
+        return sess
+
+    @classmethod
     def list_caslibs(cls, server:Union[str,dict], filter_:str=None):
         """List caslibs available on a server.
 
