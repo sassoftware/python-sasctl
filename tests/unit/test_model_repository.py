@@ -8,6 +8,8 @@ import copy
 from unittest import mock
 
 import pytest
+from io import StringIO
+import json
 from sasctl import current_session
 from sasctl.services import model_repository as mr
 
@@ -180,19 +182,28 @@ def test_add_model_content():
     with mock.patch('sasctl._services.model_repository.ModelRepository.get_model', return_value={'id': 123}):
         with mock.patch('sasctl._services.model_repository.ModelRepository.post') as post:
             text_data = 'Test text file contents'
+            dict_data = {'Test': 'dict file contents'}
 
             # Basic upload of text data
             mr.add_model_content(None, text_data, 'test.txt')
-            assert post.call_args[1]['files'] == {'test.txt': text_data}
+            assert post.call_args[1]['files'] == {'files': ('test.txt', StringIO(text_data), 'multipart/form-data')}
+            
+            # Basic upload of dict data
+            mr.add_model_content(None, dict_data, 'dict.json')
+            assert post.call_args[1]['files'] == {'files': ('dict.json', StringIO(json.dumps(dict_data)), 'multipart/form-data')}
 
-            # Upload of text data with content type
+            # Upload of text data with content type (set content type after string detection and conversion)
             mr.add_model_content(None, text_data, 'test.txt', content_type='application/text')
-            assert post.call_args[1]['files'] == {'test.txt': ('test.txt', text_data, 'application/text')}
-
+            assert post.call_args[1]['files'] == {'files': ('test.txt', StringIO(text_data), 'multipart/form-data')}
+            
+            # Upload of dict data with content type (set content type after dict detection and conversion)
+            mr.add_model_content(None, dict_data, 'dict.json', content_type='application/json')
+            assert post.call_args[1]['files'] == {'files': ('dict.json', StringIO(json.dumps(dict_data)), 'multipart/form-data')}
+            
             # Upload of binary data should include content type
             binary_data = 'Test binary file contents'.encode()
             mr.add_model_content(None, binary_data, 'test.pkl')
-            assert post.call_args[1]['files'] == {'test.pkl': ('test.pkl', binary_data, 'application/octet-stream')}
+            assert post.call_args[1]['files'] == {'test.pkl': ('test.pkl', binary_data, 'multipart/form-data')}
 
             # Should be able to customize content type
             mr.add_model_content(None, binary_data, 'test.pkl', content_type='application/image')
