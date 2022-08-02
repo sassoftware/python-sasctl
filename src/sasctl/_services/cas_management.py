@@ -26,6 +26,41 @@ class CASManagement(Service):
     list_servers, get_server, _, _ = Service._crud_funcs("/servers", "server")
 
     @classmethod
+    def create_session(cls, properties: dict, server: str):
+        """
+        Creates a new session on the CAS server.
+
+        Params
+        ------
+        properties : dict
+            Properties of the session. 
+            Valid keys are `authenticationType` (required),
+            `locale`, `name`, `nodeCount`, `timeOut`.
+        server : str
+            Name of the CAS server.  Defaults to `cas-shared-default`.
+
+        Returns
+        -------
+        RestObj
+        """
+        server = server or DEFAULT_SERVER
+
+        allowedBodyKeys = ["authenticationType", "locale", "name",
+        "nodeCount", "replace", "timeOut"]
+
+        if not all(key in allowedBodyKeys for key in properties.keys()) :
+            raise ValueError("The only acceptable properties are %s." % (allowedBodyKeys))
+        
+        if "authenticationType" not in properties.keys():
+            raise ValueError("The property 'authenticationType' is required.")
+        
+        sess = cls.post(
+            "/servers/%s/sessions"  % (server),
+            json = properties
+            )
+        return sess
+
+    @classmethod
     def list_caslibs(cls, server:Union[str,dict], filter_:str=None):
         """List caslibs available on a server.
 
