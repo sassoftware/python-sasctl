@@ -205,10 +205,11 @@ class CASManagement(Service):
         server : str, optional
             Server where the `caslib` is registered.
         qparams: dict, optional
-            Query parameters such as `sessionId`,`scope`,`sourceTableName`, `createRelationships`. 
+            Additional query parameters. 
+            Valid keys are `sessionId`, `scope`, `sourceTableName`, `createRelationships`
         body : dict, optional
             Extra instructions providing greater control over the output when a state change to loaded is requested.
-            Valid key-value pairs are `copies`, `label`, `outputCaslibName`, `outputTableName`, `parameters`, 
+            Valid keys are `copies`, `label`, `outputCaslibName`, `outputTableName`, `parameters`, 
             `replace`, `replaceMode`, `scope`.
         
         Returns
@@ -226,13 +227,18 @@ class CASManagement(Service):
             raise ValueError("The state can only have values of `loaded` or `unloaded`.")
         
         if qparams is not None:
-            dict.update(qparams,query)
+            allowedQueryKeys = ["sessionId", "scope", "sourceTableName", "createRelationships"]
 
-        allowedKeys = ["copies", "label", "outputCaslibName", "outputTableName", "parameters", 
+            if not all(key in allowedQueryKeys for key in qparams.keys()) :
+                raise ValueError("The only query parameters allowed are %s." % (allowedQueryKeys))
+            else:
+                query.update(qparams)
+
+        allowedBodyKeys = ["copies", "label", "outputCaslibName", "outputTableName", "parameters", 
         "replace", "replaceMode","scope"]
 
-        if not all(key in allowedKeys for key in body.keys()) :
-            raise ValueError("The body accepts only the following parameters %s." % (allowedKeys))
+        if not all(key in allowedBodyKeys for key in body.keys()) :
+            raise ValueError("The body accepts only the following parameters %s." % (allowedBodyKeys))
 
                     
         tbl = cls.put(
