@@ -8,6 +8,10 @@ import os
 
 from .service import Service
 
+
+from typing import Union, TextIO
+
+
 DEFAULT_SERVER = "cas-shared-default"
 DEFAULT_CASLIB = "casuser"
 
@@ -22,7 +26,7 @@ class CASManagement(Service):
     list_servers, get_server, _, _ = Service._crud_funcs("/servers", "server")
 
     @classmethod
-    def list_caslibs(cls, server, filter_=None):
+    def list_caslibs(cls, server:Union[str,dict], filter_:str=None):
         """List caslibs available on a server.
 
         Parameters
@@ -44,7 +48,7 @@ class CASManagement(Service):
         )
 
     @classmethod
-    def get_caslib(cls, name, server=None):
+    def get_caslib(cls, name:str, server:str=None):
         """Get a caslib by name.
 
         Parameters
@@ -67,7 +71,7 @@ class CASManagement(Service):
         return None
 
     @classmethod
-    def list_tables(cls, caslib, server=None, filter_=None):
+    def list_tables(cls, caslib:Union[str,dict], server:str=None, filter_:str=None):
         """List tables available in a caslib.
 
         Parameters
@@ -92,7 +96,7 @@ class CASManagement(Service):
         )
 
     @classmethod
-    def get_table(cls, name, caslib=None, server=None):
+    def get_table(cls, name:str, caslib:Union[str,dict]=None, server:str=None):
         """Get a table by name.
 
         Parameters
@@ -121,7 +125,7 @@ class CASManagement(Service):
 
     @classmethod
     def upload_file(
-        cls, file, name, caslib=None, server=None, header=None, format_=None
+        cls, file:Union[str,TextIO], name:str, caslib:str=None, server:str=None, header:bool=None, format_:str=None
     ):
         """Upload a file to a CAS table.
 
@@ -183,4 +187,58 @@ class CASManagement(Service):
             data=data,
             files={name: file},
         )
+        return tbl
+
+    @classmethod
+    def update_state_table(cls, value: str, name: str, caslib:str=None, server:str=None, *, qparams:dict=None, body:dict = dict()):
+        """Modifies the state of a table to loaded or unloaded. 
+        Returns loaded or unloaded to indicate the state after the operation.
+
+        Parameters
+        ----------
+        value : str, required
+            State to which to set the table. Valid values include `loaded` or `unloaded`.
+        name : str, required
+            Name of the table.
+        caslib : str, optional
+            Name of the caslib. Defaults to CASUSER.
+        server : str, optional
+            Server where the `caslib` is registered.
+        qparams: dict, optional
+            Query parameters such as `sessionId`,`scope`,`sourceTableName`, `createRelationships`. 
+        body : dict, optional
+            Extra instructions providing greater control over the output when a state change to loaded is requested.
+            Valid key-value pairs are `copies`, `label`, `outputCaslibName`, `outputTableName`, `parameters`, 
+            `replace`, `replaceMode`, `scope`.
+        
+        Returns
+        -------
+        RestObj
+
+        """
+        caslib = caslib or DEFAULT_CASLIB
+
+        if value in ['loaded', 'unloaded']:
+            query = {
+                "value":value
+            }
+        else:
+            raise ValueError("The state can only have values of `loaded` or `unloaded`.")
+        
+        if qparams is not None:
+            dict.update(qparams,query)
+
+        allowedKeys = ["copies", "label", "outputCaslibName", "outputTableName", "parameters", 
+        "replace", "replaceMode","scope"]
+
+        if not all(key in allowedKeys for key in body.keys()) :
+            raise ValueError("The body accepts only the following parameters %s." % (allowedKeys))
+
+                    
+        tbl = cls.put(
+            "/servers/%s/caslibs/%s/tables/%s/state" % (server, caslib,name),
+            params=query,
+            json=body
+        )
+        
         return tbl
