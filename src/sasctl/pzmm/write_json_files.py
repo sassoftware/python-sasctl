@@ -1004,50 +1004,105 @@ class JSONFiles:
         packageList = picklePackages + codeDependencies
         packageAndVersion = cls.getLocalPackageVersion(list(set(packageList)))
 
-        with open(Path(jPath) / "requirements.json") as file:
-            for package, version in packageAndVersion:
+        # Identify packages with missing versions
+        missingPackageVersions = [item[0] for item in packageAndVersion if not item[1]]
+
+        with open(Path(jPath) / "requirements.json", "w") as file:
+            if missingPackageVersions:
                 jsonStep = json.dumps(
-                    [
-                        {
-                            "step": "install " + package,
-                            "command": "pip install " + package + "==" + version,
-                        }
-                    ],
-                    indent=4,
-                )
+                        [
+                            {
+                                "Warning": "The versions for the following packages could not be determined",
+                                "Packages": ", ".join(missingPackageVersions)
+                            }
+                        ],
+                        indent=4,
+                    )
+                file.write(jsonStep)
+            for package, version in packageAndVersion:
+                if version:
+                    jsonStep = json.dumps(
+                        [
+                            {
+                                "step": "install " + package,
+                                "command": "pip install " + package + "==" + version,
+                            }
+                        ],
+                        indent=4,
+                    )
+                else:
+                    jsonStep = json.dumps(
+                        [
+                            {
+                                "step": "install " + package,
+                                "command": "pip install " + package,
+                            }
+                        ],
+                        indent=4,
+                    )
                 file.write(jsonStep)
 
     def getLocalPackageVersion(self, packageList):
+'''Get package versions from the local environment. For Python versions
+        < 3.8, if the package does not contain an attribute of "__version__",
+        "version", or "VERSION", no package version will be found.
 
-        packageVersion = []
+        Parameters
+        ----------
+        packageList : list
+            List of Python packages.
+
+        Returns
+        -------
+        list
+            Nested list of Python package names and found versions.
+        '''
+        packageAndVersion = []
         if sys.version_info[1] >= 8:
             from importlib.metadata import version
             for package in packageList:
                 try:
-                    packageVersion.append(version(package))
+                    packageAndVersion.append([package,version(package)])
                 except PackageNotFoundError:
                     print("Warning: Package {} was not found in the local environment, so a version could not be determined.".format(package))
-                    print("The pip installation command will not include a version number.")
-                    packageVersion.append(None)
-            return packageVersion
+                    print("The pip installation command will not include a version number for {}.").format(package)
+                    packageAndVersion.append([package, None])
+            return packageAndVersion
         else:
             import importlib
             for package in packageList:
                 name = importlib.import_module(package)
                 try:
-                    packageVersion.append(name.__version__)
-                except:
+                    packageAndVersion.append([package, name.__version__])
+                except AttributeError:
+                    pass
                     try:
-                        packageVersion.append(name.version)
-                    except:
+                        packageAndVersion.append([package, name.version])
+                    except AttributeError:
                         try:
-                            packageVersion.append(name.VERSION)
-                        except:
+                            packageAndVersion.append([package, name.VERSION])
+                        except AttributeError:
                             print("Warning: Package {} was not found in the local environment, so a version could not be determined.".format(package))
-                            print("The pip installation command will not include a version number.")
-            return packageVersion
+                            print("The pip installation command will not include a version number for {}.".format(package))
+                            packageAndVersion.append([package, None])
+            return packageAndVersion
 
-    def getCodeDependencies(self, jPath):
+    def getCodeDependencies(self, jPath=Path.cwd()):
+        '''Get the package dependencies for all Python scripts in the
+        provided directory path. Note that currently this functionality
+        only works for .py files.
+
+        Parameters
+        ----------
+        jPath : string, optional
+            File location for the output JSON file. Default is the current
+            working directory.
+
+        Returns
+        -------
+        list
+            List of found package dependencies.
+        '''
         fileNames = []
         fileNames.extend(sorted(Path(jPath).glob("*.py")))
 
@@ -1059,14 +1114,31 @@ class JSONFiles:
         return importInfo
 
     def findImports(self, fPath):
-        # modified from https://stackoverflow.com/questions/44988487/regex-to-parse-import-statements-in-python
+        '''Find import calls in provided Python code path. Ignores
+        built in Python modules.
+
+        Credit: modified from https://stackoverflow.com/questions/44988487/regex-to-parse-import-statements-in-python
+
+        Parameters
+        ----------
+        fPath : string
+            File location for the Python file to be parsed.
+
+        Returns
+        -------
+        list
+            List of found package dependencies.
+        '''
         import ast
 
         fileText = open(fPath).read()
-tree = ast.parse(fileText)
+# Parse the file to get the abstract syntax tree representation
+        tree = ast.parse(fileText)
         modules = []
 
+        # Walk through each node in the ast to find import calls
         for node in ast.walk(tree):
+            # Determine parent module for from * import * calls
             if isinstance(node, ast.ImportFrom):
                 for name in node.names:
                     if not name.asname:
@@ -1078,6 +1150,7 @@ tree = ast.parse(fileText)
 
         modules = list(set(modules))
         try:
+            # Remove 'settings' module that is auto generated for SAS Model Manager score code
             modules.remove('settings')
             return modules
         except ValueError:
@@ -1133,7 +1206,7 @@ tree = ast.parse(fileText)
         Generates (module, class_name) tuples from a pickle stream. Extracts all class names referenced
         by GLOBAL and STACK_GLOBAL opcodes.
 
-        Credit: https://stackoverflow.com/questions/64850179/inspecting-a-pickle-dump-for-dependencies
+        Credit: modified from https://stackoverflow.com/questions/64850179/inspecting-a-pickle-dump-for-dependencies
         More information here: https://github.com/python/cpython/blob/main/Lib/pickletools.py
 
         Parameters
