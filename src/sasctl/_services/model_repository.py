@@ -245,7 +245,7 @@ class ModelRepository(Service):
         properties=None,
         input_variables=None,
         output_variables=None,
-        project_version="latest"
+        project_version="latest",
     ):
         """Create a model in an existing project or folder.
 
@@ -779,7 +779,7 @@ class ModelRepository(Service):
 
     @classmethod
     def create_custom_kpi(cls, model, project, body):
-        '''_summary_
+        """_summary_
 
         Parameters
         ----------
