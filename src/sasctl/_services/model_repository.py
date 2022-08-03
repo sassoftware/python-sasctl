@@ -245,7 +245,7 @@ class ModelRepository(Service):
         properties=None,
         input_variables=None,
         output_variables=None,
-        project_version="latest"
+        project_version="latest",
     ):
         """Create a model in an existing project or folder.
 
@@ -302,7 +302,7 @@ class ModelRepository(Service):
             Model output variables. By default, these are the same as the model
              project.
         projectVersion : str
-            Name of project version to import model in to. Default 
+            Name of project version to import model in to. Default
             value is "latest".
 
         Returns
@@ -509,7 +509,7 @@ class ModelRepository(Service):
         description : str
             The description of the model.
         projectVersion : str
-            Name of project version to import model in to. Default 
+            Name of project version to import model in to. Default
             value is "latest".
 
         Returns
@@ -766,7 +766,7 @@ class ModelRepository(Service):
         -------
         API response
             JSON response detailing the model details
-            
+
         """
         if cls.is_uuid(model):
             id_ = model
@@ -777,17 +777,17 @@ class ModelRepository(Service):
             id_ = model["id"]
 
         return cls.get("/models/%s" % id_)
-    
+
     @classmethod
     def list_project_versions(cls, project):
-        '''_summary_
+        """_summary_
 
         Parameters
         ----------
         project : str or dict
             The name or id of the model project, or a dictionary representation
             of the model project.
-            
+
         Returns
         -------
         list of dicts
@@ -797,20 +797,27 @@ class ModelRepository(Service):
                 id : str
                 number : str
                 modified : datetime
-                
-        '''
+
+        """
         from datetime import datetime
+
         project_info = cls.get_project(project)
 
         if project_info is None:
             raise ValueError("Project `%s` could not be found." % str(project))
-        
-        projectVersions = cls.get("/projects/{}/projectVersions".format(project_info.id))
+
+        projectVersions = cls.get(
+            "/projects/{}/projectVersions".format(project_info.id)
+        )
         versionList = []
         for version in projectVersions:
-            versionDict = {"name": version.name,
-                           "id": version.id,
-                           "number": version.versionNumber,
-                           "modified": datetime.strptime(version.modifiedTimeStamp, "%Y-%m-%dT%I:%M:%S.%fZ")}
+            versionDict = {
+                "name": version.name,
+                "id": version.id,
+                "number": version.versionNumber,
+                "modified": datetime.strptime(
+                    version.modifiedTimeStamp, "%Y-%m-%dT%I:%M:%S.%fZ"
+                ),
+            }
             versionList.append(versionDict)
         return versionList
