@@ -54,7 +54,7 @@ class ModelRepository(Service):
 
     @classmethod
     def get_astore(cls, model):
-        """Get the ASTORE for a model registered int he model repository.
+        """Get the ASTORE for a model registered in the model repository.
 
         Parameters
         ----------
@@ -245,6 +245,7 @@ class ModelRepository(Service):
         properties=None,
         input_variables=None,
         output_variables=None,
+        project_version="latest"
     ):
         """Create a model in an existing project or folder.
 
@@ -300,6 +301,9 @@ class ModelRepository(Service):
         output_variables : array_like, optional
             Model output variables. By default, these are the same as the model
              project.
+        projectVersion : str
+            Name of project version to import model in to. Default 
+            value is "latest".
 
         Returns
         -------
@@ -319,6 +323,7 @@ class ModelRepository(Service):
         # Use any explicitly passed parameter value first.
         # Fall back to values in the model dict.
         model["projectId"] = p["id"]
+        model["versionOption"] = project_version or model.get("versionOption")
         model["modeler"] = modeler or model.get("modeler") or current_session().username
         model["description"] = description or model.get("description")
         model["function"] = function or model.get("function")
@@ -488,7 +493,7 @@ class ModelRepository(Service):
 
     @classmethod
     def import_model_from_zip(
-        cls, name, project, file, description=None, version="latest"
+        cls, name, project, file, description=None, projectVersion="latest"
     ):
         """Import a model and contents as a ZIP file into a model project.
 
@@ -503,6 +508,9 @@ class ModelRepository(Service):
             The ZIP file containing the model and contents.
         description : str
             The description of the model.
+        projectVersion : str
+            Name of project version to import model in to. Default 
+            value is "latest".
 
         Returns
         -------
@@ -520,7 +528,7 @@ class ModelRepository(Service):
             "description": description,
             "type": "ZIP",
             "projectId": project_info.id,
-            "versionOption": version,
+            "versionOption": projectVersion,
         }
         params = "&".join("{}={}".format(k, v) for k, v in params.items())
 
@@ -769,45 +777,3 @@ class ModelRepository(Service):
             id_ = model["id"]
 
         return cls.get("/models/%s" % id_)
-    
-    @classmethod
-    def create_custom_kpi(cls, model, project, body):
-        '''_summary_
-
-        Parameters
-        ----------
-        model : _type_
-            _description_
-        project : _type_
-            _description_
-        body : _type_
-            _description_
-        '''
-        if cls.is_uuid(project):
-            projectId = project
-        elif isinstance(project, dict) and "id" in project:
-            projectId = project["id"]
-        else:
-            project = cls.get_project(project)
-            projectId = project["id"]
-            
-        if cls.is_uuid(model):
-            modelId = model
-        elif isinstance(model, dict) and "id" in model:
-            modelId = model["id"]
-        else:
-            model = cls.list_models(filter="eq('projectId','{}')&eq('name','{}')".format(
-                projectId, model))
-            modelId = model["id"]
-            
-        headers = {"Accept": "application/vnd.sas.collection+json"}
-        customKPI = {"TimeLabel": "{}".format(body["TimeLabel"]),
-                     "TimeSK": body["TimeSK"],
-                     "KPI": "{}".format(body["KPI"]),
-                     "Value": "{}".format(body["Value"])}
-        requestData = {"ProjectID": projectId,
-                       "ModelID": modelId,
-                       "KPIs": [customKPI]}
-        return cls.post("/projects/{}/kpis".format(projectId),
-                        headers=headers,
-                        data=json.dumps(requestData))
