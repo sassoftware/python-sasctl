@@ -765,7 +765,7 @@ class ModelRepository(Service):
         -------
         API response
             JSON response detailing the model details
-            
+
         """
         if cls.is_uuid(model):
             id_ = model
