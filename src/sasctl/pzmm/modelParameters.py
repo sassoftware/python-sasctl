@@ -41,7 +41,7 @@ class ModelParameters:
         from ..tasks import get_project_kpis
         from io import StringIO
 
-        kpis = get_project_kpis(project, server, caslib)
+        kpis = get_project_kpis(cls, project, server, caslib)
         modelsToUpdate = kpis["ModelUUID"].unique().tolist()
         for model in modelsToUpdate:
             currentParams = find_file(model, "hyperparameters")
