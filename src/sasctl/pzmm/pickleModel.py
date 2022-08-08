@@ -83,7 +83,7 @@ class PickleModel:
                 )
                 from .modelParameters import ModelParameters
 
-                modelParameters.generate_hyperparameters(
+                ModelParameters.generate_hyperparameters(
                     trainedModel, modelPrefix, pPath
                 )
             # For H2O models that are binary files, rename the binary file as a pickle file
