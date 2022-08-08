@@ -8,4 +8,4 @@ from .writeScoreCode import ScoreCode
 from .importModel import ImportModel
 from .gitIntegration import GitIntegrate
 from .mlflowModel import MLFlowModel
-from .modelParameters import modelParameters
+from .modelParameters import ModelParameters
