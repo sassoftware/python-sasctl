@@ -10,6 +10,7 @@ def find_file(model, fileName):
     sess = current_session()
     fileList = mr.get_model_contents(model)
     for file in fileList:
+        print(file.name)
         if fileName.lower() in file.name.lower():
             correctFile = sess.get(
                 "modelRepository/models/{}/contents/{}/content".format(model, file.id)
@@ -18,23 +19,19 @@ def find_file(model, fileName):
     return correctFile
 
 
-def sklearn_params(model, modelPrefix, pPath):
-    hyperparameters = model.get_params()
-    modelJson = {"hyperparameters": hyperparameters}
-    with open(Path(pPath) / ("{}Hyperparameters.json".format(modelPrefix)), "w") as f:
-        f.write(json.dumps(modelJson, indent=4))
-
-
-class modelParameters:
-    def generate_hyperparameters(model, modelPrefix, pPath):
+class ModelParameters:
+    @classmethod
+    def generate_hyperparameters(cls, model, modelPrefix, pPath):
         if all(hasattr(model, attr) for attr in ["_estimator_type", "get_params"]):
-            sklearn_params(model, modelPrefix, pPath)
+            cls.sklearn_params(model, modelPrefix, pPath)
         else:
             print(
                 "Other model types not currently supported for hyperparameter generation."
             )
 
+    @classmethod
     def update_kpis(
+        cls,
         project,
         server="cas-shared-default",
         caslib="ModelPerformanceData",
@@ -43,7 +40,7 @@ class modelParameters:
         from ..tasks import get_project_kpis
         from io import StringIO
 
-        kpis = get_project_kpis(project, server, caslib)
+        kpis = get_project_kpis(cls, project, server, caslib)
         modelsToUpdate = kpis["ModelUUID"].unique().tolist()
         for model in modelsToUpdate:
             currentParams = find_file(model, "hyperparameters")
@@ -63,5 +60,21 @@ class modelParameters:
             )
 
     @classmethod
-    def get_hyperparameters(model):
-        return find_file(model).json()
+    def get_hyperparameters(cls, model):
+        if mr.is_uuid(model):
+            id_ = model
+        elif isinstance(model, dict) and "id" in model:
+            id_ = model["id"]
+        else:
+            model = mr.get_model(model)
+            id_ = model["id"]
+        file = find_file(id_, "hyperparameters")
+        return file.json()
+
+    def sklearn_params(cls, model, modelPrefix, pPath):
+        hyperparameters = model.get_params()
+        modelJson = {"hyperparameters": hyperparameters}
+        with open(
+            Path(pPath) / ("{}Hyperparameters.json".format(modelPrefix)), "w"
+        ) as f:
+            f.write(json.dumps(modelJson, indent=4))
