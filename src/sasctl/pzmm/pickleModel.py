@@ -81,7 +81,7 @@ class PickleModel:
                         modelPrefix, Path(pPath) / (modelPrefix + ".pickle")
                     )
                 )
-                from .modelParameters import modelParameters
+                from .modelParameters import ModelParameters
 
                 modelParameters.generate_hyperparameters(
                     trainedModel, modelPrefix, pPath
