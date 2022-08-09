@@ -13,6 +13,27 @@ import numpy as np
 from scipy.stats import kendalltau, gamma
 import pickle
 import pickletools
+from collections.abc import Iterable
+
+def flatten(nestedList):
+    '''Flatten a nested list. Controls for str values in list, such that the str
+    values are not expanded into a list of single characters.
+
+    Parameters
+    ----------
+    nestedList : list
+        A nested list of strings.
+
+    Yields
+    ------
+    list
+        A flattened list of strings.
+    '''
+    for item in nestedList:
+        if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
+            yield from flatten(item)
+        else:
+            yield item
 
 class JSONFiles:
     @classmethod
@@ -997,13 +1018,14 @@ class JSONFiles:
         picklePackages = []
         pickleFiles = cls.getPickleFile(jPath)
         for pickleFile in pickleFiles:
-            picklePackages.append(cls.getDependenciesFromPickleFile(pickleFile))
+            picklePackages.append(cls.getDependenciesFromPickleFile(cls, pickleFile))
 
-        codeDependencies = cls.getCodeDependencies(jPath)
+        codeDependencies = cls.getCodeDependencies(cls, jPath)
 
-        packageList = picklePackages + codeDependencies
-        packageAndVersion = cls.getLocalPackageVersion(list(set(packageList)))
-
+        packageList = list(picklePackages) + codeDependencies
+        packageList = list(set(list(flatten(packageList))))
+        packageList = cls.removeStdlibPackages(packageList)
+        packageAndVersion = cls.getLocalPackageVersion(packageList)
         # Identify packages with missing versions
         missingPackageVersions = [item[0] for item in packageAndVersion if not item[1]]
 
@@ -1012,7 +1034,7 @@ class JSONFiles:
                 jsonStep = json.dumps(
                         [
                             {
-                                "Warning": "The versions for the following packages could not be determined",
+                                "Warning": "The versions for the following packages could not be determined:",
                                 "Packages": ", ".join(missingPackageVersions)
                             }
                         ],
@@ -1042,10 +1064,10 @@ class JSONFiles:
                     )
                 file.write(jsonStep)
 
-    def getLocalPackageVersion(self, packageList):
-'''Get package versions from the local environment. For Python versions
-        < 3.8, if the package does not contain an attribute of "__version__",
-        "version", or "VERSION", no package version will be found.
+    def getLocalPackageVersion(packageList):
+'''Get package versions from the local environment. If the package
+        does not contain an attribute of "__version__", "version", or
+        "VERSION", no package version will be found.
 
         Parameters
         ----------
@@ -1057,20 +1079,16 @@ class JSONFiles:
         list
             Nested list of Python package names and found versions.
         '''
-        packageAndVersion = []
-        if sys.version_info[1] >= 8:
-            from importlib.metadata import version
-            for package in packageList:
-                try:
-                    packageAndVersion.append([package,version(package)])
-                except PackageNotFoundError:
-                    print("Warning: Package {} was not found in the local environment, so a version could not be determined.".format(package))
-                    print("The pip installation command will not include a version number for {}.").format(package)
-                    packageAndVersion.append([package, None])
+        def packageNotFoundOutput(package, packageAndVersion):
+            print("Warning: Package {} was not found in the local environment, so a version could not be determined.".format(package))
+            print("The pip installation command will not include a version number for {}.".format(package))
+            packageAndVersion.append([package, None])
             return packageAndVersion
-        else:
-            import importlib
-            for package in packageList:
+
+        packageAndVersion = []
+        import importlib
+        for package in packageList:
+            try:
                 name = importlib.import_module(package)
                 try:
                     packageAndVersion.append([package, name.__version__])
@@ -1082,12 +1100,13 @@ class JSONFiles:
                         try:
                             packageAndVersion.append([package, name.VERSION])
                         except AttributeError:
-                            print("Warning: Package {} was not found in the local environment, so a version could not be determined.".format(package))
-                            print("The pip installation command will not include a version number for {}.".format(package))
-                            packageAndVersion.append([package, None])
-            return packageAndVersion
+                            packageAndVersion = packageNotFoundOutput(package, packageAndVersion)
+            except ModuleNotFoundError:
+                packageAndVersion = packageNotFoundOutput(package, packageAndVersion)
 
-    def getCodeDependencies(self, jPath=Path.cwd()):
+        return packageAndVersion
+
+    def getCodeDependencies(cls, jPath=Path.cwd()):
         '''Get the package dependencies for all Python scripts in the
         provided directory path. Note that currently this functionality
         only works for .py files.
@@ -1108,12 +1127,11 @@ class JSONFiles:
 
         importInfo = []
         for file in fileNames:
-            importInfo.append(self.findImports(file))
-        importInfo = list(set(importInfo))
-
+            importInfo.append(cls.findImports(file))
+        importInfo = list(set(flatten(importInfo)))
         return importInfo
 
-    def findImports(self, fPath):
+    def findImports(fPath):
         '''Find import calls in provided Python code path. Ignores
         built in Python modules.
 
@@ -1156,7 +1174,7 @@ class JSONFiles:
         except ValueError:
             return modules
 
-    def getPickleFile(self, pPath):
+    def getPickleFile(pPath=Path.cwd()):
         """
         Given a file path, retrieve the pickle file(s).
 
@@ -1176,7 +1194,7 @@ class JSONFiles:
         fileNames.extend(sorted(Path(pPath).glob("*.pickle")))
         return fileNames
 
-    def getDependenciesFromPickleFile(self, pickleFile):
+    def getDependenciesFromPickleFile(cls, pickleFile):
         """
         Reads the pickled byte stream from a file object, serializes the pickled byte
         stream as a bytes object, and inspects the bytes object for all Python modules
@@ -1189,19 +1207,20 @@ class JSONFiles:
 
         Returns
         -------
-        set
-            A set of modules obtained from the pickle stream.
+        list
+            A list of modules obtained from the pickle stream. Duplicates are removed and
+            Python built-in modules are removed.
         """
 
         with (open(pickleFile, "rb")) as openfile:
             obj = pickle.load(openfile)
             dumps = pickle.dumps(obj)
 
-        modules = {mod.split(".")[0] for mod, _ in self.getPackageNames(dumps)}
+        modules = {mod.split(".")[0] for mod, _ in cls.getPackageNames(dumps)}
         modules.discard("builtins")
-        return modules
+        return list(modules)
 
-    def getPackageNames(self, stream):
+    def getPackageNames(stream):
         """
         Generates (module, class_name) tuples from a pickle stream. Extracts all class names referenced
         by GLOBAL and STACK_GLOBAL opcodes.
@@ -1260,3 +1279,56 @@ class JSONFiles:
                 stack.append(arg)
             else:
                 stack.extend(after)
+
+    def removeStdlibPackages(packageList):
+        '''Remove any packages from the required list of installed packages that are part of the Python
+        Standard Library.
+
+        Parameters
+        ----------
+        packageList : list
+            List of all packages found that are not Python built-in packages.
+
+        Returns
+        -------
+        list
+            List of all packages found that are not Python built-in packages or part of the Python
+            Standard Library.
+        '''
+        py10stdlib = ['_aix_support', '_heapq', 'lzma', 'gc', 'mailcap', 'winsound', 'sre_constants', 'netrc', 'audioop',
+                      'xdrlib', 'code', '_pyio', '_gdbm', 'unicodedata', 'pwd', 'xml', '_symtable', 'pkgutil', '_decimal',
+                      '_compat_pickle', '_frozen_importlib_external', '_signal', 'fcntl', 'wsgiref', 'uu', 'textwrap',
+                      '_codecs_iso2022', 'keyword', 'distutils', 'binascii', 'email', 'reprlib', 'cmd', 'cProfile',
+                      'dataclasses', '_sha512', 'ntpath', 'readline', 'signal', '_elementtree', 'dis', 'rlcompleter',
+                      '_json', '_ssl', '_sha3', '_winapi', 'telnetlib', 'pyexpat', '_lzma', 'http', 'poplib', 'tokenize',
+                      '_dbm', '_io', 'linecache', 'json', 'faulthandler', 'hmac', 'aifc', '_csv', '_codecs_hk', 'selectors',
+                      '_random', '_pickle', '_lsprof', 'turtledemo', 'cgitb', '_sitebuiltins', 'binhex', 'fnmatch',
+                      'sysconfig', 'datetime', 'quopri', 'copyreg', '_pydecimal', 'pty', 'stringprep', 'bisect', '_abc',
+                      '_codecs_jp', '_md5', 'errno', 'compileall', '_threading_local', 'dbm', 'builtins', 'difflib',
+                      'imghdr', '__future__', '_statistics', 'getopt', 'xmlrpc', '_sqlite3', '_sha1', 'shelve',
+                      '_posixshmem', 'struct', 'timeit', 'ensurepip', 'pathlib', 'ctypes', '_multiprocessing', 'tty',
+                      '_weakrefset', 'sqlite3', 'tracemalloc', 'venv', 'unittest', '_blake2', 'mailbox', 'resource',
+                      'shutil', 'winreg', '_opcode', '_codecs_tw', '_operator', 'imp', '_string', 'os', 'opcode',
+                      '_zoneinfo', '_posixsubprocess', 'copy', 'symtable', 'itertools', 'sre_parse', '_bisect', '_imp', 're',
+                      'ast', 'zlib', 'fractions', 'pickle', 'profile', 'sys', 'ssl', 'cgi', 'enum', 'modulefinder',
+                      'py_compile', '_curses', '_functools', 'cmath', '_crypt', 'contextvars', 'math', 'uuid', 'argparse',
+                      '_frozen_importlib', 'inspect', 'posix', 'statistics', 'marshal', 'nis', '_bz2', 'pipes',
+                      'socketserver', 'pstats', 'site', 'trace', 'lib2to3', 'zipapp', 'runpy', 'sre_compile', 'time',
+                      'pprint', 'base64', '_stat', '_ast', 'pdb', '_markupbase', '_bootsubprocess', '_collections', '_sre',
+                      'msilib', 'crypt', 'gettext', 'mimetypes', '_overlapped', 'asyncore', 'zipimport', 'chunk', 'atexit',
+                      'graphlib', '_multibytecodec', 'gzip', 'io', 'logging', 'nntplib', 'genericpath', 'syslog', 'token',
+                      '_msi', 'idlelib', '_hashlib', 'threading', 'select', 'doctest', 'getpass', '_sha256', 'importlib',
+                      '_tracemalloc', 'multiprocessing', 'calendar', '_codecs_cn', '_tkinter', '_uuid', 'socket',
+                      'antigravity', 'string', '_locale', '_thread', 'grp', 'this', 'zoneinfo', 'abc', 'operator', 'colorsys',
+                      'tabnanny', '_weakref', 'imaplib', 'concurrent', 'subprocess', '_compression', 'pyclbr', 'tarfile',
+                      'numbers', 'queue', 'posixpath', 'smtpd', 'webbrowser', 'asynchat', 'weakref', 'filecmp', 'decimal',
+                      '_py_abc', 'collections', 'tempfile', '_collections_abc', 'sched', 'locale', 'secrets', 'msvcrt',
+                      'asyncio', 'array', '_codecs_kr', '_scproxy', '_strptime', 'heapq', '_socket', 'sndhdr', 'types', 'nt',
+                      '_datetime', 'shlex', 'tkinter', 'curses', 'encodings', 'pickletools', 'html', '_codecs', 'codeop',
+                      '_ctypes', 'bz2', 'contextlib', 'platform', 'termios', '_asyncio', 'ftplib', 'pydoc_data',
+                      '_contextvars', 'codecs', 'traceback', 'pydoc', 'fileinput', 'ossaudiodev', 'urllib', 'csv', 'sunau',
+                      '_curses_panel', 'wave', 'mmap', 'warnings', 'functools', 'ipaddress', 'nturl2path', 'optparse', '_queue',
+                      'turtle', 'spwd', 'stat', 'configparser', '_warnings', 'bdb', '_osx_support', 'typing', 'zipfile', 'glob',
+                      'random', 'smtplib', 'plistlib', 'hashlib', '_struct']
+        packageList = [package for package in packageList if package not in py10stdlib]
+        return packageList
