@@ -72,3 +72,36 @@ def test_get_table():
     assert cm.get_table(target, 'fake_caslib') is None
 
     assert cm.get_table('fake_table', 'Samples') is None
+
+def test_list_sessions():
+    sessions = cm.list_sessions()
+
+    assert isinstance(sessions, list)
+
+def test_create_session():
+    
+    properties = {
+        "authenticationType": "OAuth",
+        "name": "SessionSimulation"
+    }
+    sess = cm.create_session(properties)
+    
+    assert str(sess['name']).startswith("SessionSimulation")
+
+def test_delete_session():
+    
+    properties = {
+        "authenticationType": "OAuth",
+        "name": "SessionSimulation"
+    }
+    sess = cm.create_session(properties)
+    sessID = sess['id']
+
+    cm.delete_session(sessID)
+
+    qpar = {
+        "filter": "startsWith(name,SessionSimulation)"
+    }
+    res = cm.list_sessions(qpar)
+    
+    assert len(res)==0 

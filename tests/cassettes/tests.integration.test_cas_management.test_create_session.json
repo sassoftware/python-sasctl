@@ -1,0 +1,89 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2022-08-12T10:52:21",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"authenticationType\": \"OAuth\", \"name\": \"SessionSimulation\"}"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "60"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/casManagement/servers/cas-shared-default/sessions"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"version\":2,\"id\":\"ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4\",\"name\":\"SessionSimulation:Fri Aug 12 10:52:17 2022\",\"state\":\"Connected\",\"transactionState\":\"none\",\"authenticationType\":\"OAuth\",\"owner\":\"stzsil\",\"locale\":\"en\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4\",\"type\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default/sessions\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4\"},{\"method\":\"POST\",\"rel\":\"startPermissionsTransaction\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4?action=start\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4?action=start\"}]}"
+        },
+        "headers": {
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "1238"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none';"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.cas.session+json"
+          ],
+          "Date": [
+            "Fri, 12 Aug 2022 10:52:18 GMT"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Set-Cookie": [
+            "sas-ingress-nginx=968bf7603a23374f47d2b61619986ab6|fedf5c4919a6eb76e9925a7a50aad13d; Path=/casManagement/; Secure; HttpOnly; SameSite=None",
+            "JSESSIONID=496ad26e-7c17-4e22-8ca7-e6e75637bf45; Path=/casManagement/; HttpOnly; Secure; SameSite=None"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": "Created"
+        },
+        "url": "https://hostname.com/casManagement/servers/cas-shared-default/sessions"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}
