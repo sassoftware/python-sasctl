@@ -401,6 +401,7 @@ class ModelRepository(Service):
             content_type = "application/octet-stream"
         elif isinstance(file, dict):
             import json
+
             file = json.dumps(file)
 
         files = {"files": (name, file, content_type)}
@@ -410,7 +411,7 @@ class ModelRepository(Service):
         else:
             params = {"role": role}
         params = "&".join("{}={}".format(k, v) for k, v in params.items())
-        
+
         # If the file already exists, a 409 error will be returned
         try:
             return cls.post(

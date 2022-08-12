@@ -18,18 +18,23 @@ def installed_packages():
 
     Notes
     -----
-    Uses pip freeze functionality so pip module must be present. For pip 
+    Uses pip freeze functionality so pip module must be present. For pip
     versions >=20.1, this functionality fails to provide versions for some
     conda installed, locally installed, and url installed packages. Instead
     uses the pkg_resources package which is typically bundled with pip.
 
     """
     from packaging import version
+
     try:
         import pip
+
         if version.parse(pip.__version__) >= version.parse("20.1"):
             import pkg_resources
-            return [p.project_name + "==" + p.version for p in pkg_resources.working_set]
+
+            return [
+                p.project_name + "==" + p.version for p in pkg_resources.working_set
+            ]
         else:
             from pip._internal.operations import freeze
     except ImportError:
