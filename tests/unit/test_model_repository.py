@@ -186,37 +186,25 @@ def test_add_model_content():
 
             # Basic upload of text data
             mr.add_model_content(None, text_data, 'test.txt')
-            assert list(post.call_args[1]['files'].items())[0][0] == 'files'
-            assert list(post.call_args[1]['files'].items())[0][1][0] == 'test.txt'
-            assert (list(post.call_args[1]['files'].items())[0][1][1]).read() == StringIO(text_data).read()
-            assert list(post.call_args[1]['files'].items())[0][1][2] == 'multipart/form-data'
-
+            assert post.call_args[1]['files'] == {'files': ('test.txt', StringIO(text_data), 'multipart/form-data')}
+            
             # Basic upload of dict data
             mr.add_model_content(None, dict_data, 'dict.json')
-            assert list(post.call_args[1]['files'].items())[0][0] == 'files'
-            assert list(post.call_args[1]['files'].items())[0][1][0] == 'dict.json'
-            assert (list(post.call_args[1]['files'].items())[0][1][1]).read() == StringIO(json.dumps(dict_data)).read()
-            assert list(post.call_args[1]['files'].items())[0][1][2] == 'multipart/form-data'
+            assert post.call_args[1]['files'] == {'files': ('dict.json', StringIO(json.dumps(dict_data)), 'multipart/form-data')}
 
             # Upload of text data with content type (set content type after string detection and conversion)
             mr.add_model_content(None, text_data, 'test.txt', content_type='application/text')
-            assert list(post.call_args[1]['files'].items())[0][0] == 'files'
-            assert list(post.call_args[1]['files'].items())[0][1][0] == 'test.txt'
-            assert (list(post.call_args[1]['files'].items())[0][1][1]).read() == StringIO(text_data).read()
-            assert list(post.call_args[1]['files'].items())[0][1][2] == 'multipart/form-data'
-
+            assert post.call_args[1]['files'] == {'files': ('test.txt', StringIO(text_data), 'multipart/form-data')}
+            
             # Upload of dict data with content type (set content type after dict detection and conversion)
             mr.add_model_content(None, dict_data, 'dict.json', content_type='application/json')
-            assert list(post.call_args[1]['files'].items())[0][0] == 'files'
-            assert list(post.call_args[1]['files'].items())[0][1][0] == 'dict.json'
-            assert (list(post.call_args[1]['files'].items())[0][1][1]).read() == StringIO(json.dumps(dict_data)).read()
-            assert list(post.call_args[1]['files'].items())[0][1][2] == 'multipart/form-data'
-
+            assert post.call_args[1]['files'] == {'files': ('dict.json', StringIO(json.dumps(dict_data)), 'multipart/form-data')}
+            
             # Upload of binary data should include content type
             binary_data = 'Test binary file contents'.encode()
             mr.add_model_content(None, binary_data, 'test.pkl')
-            assert post.call_args[1]['files'] == {'files': ('test.pkl', binary_data, 'multipart/form-data')}
+            assert post.call_args[1]['files'] == {'test.pkl': ('test.pkl', binary_data, 'multipart/form-data')}
 
             # Should be able to customize content type
             mr.add_model_content(None, binary_data, 'test.pkl', content_type='application/image')
-            assert post.call_args[1]['files'] == {'files': ('test.pkl', binary_data, 'application/image')}
+            assert post.call_args[1]['files'] == {'test.pkl': ('test.pkl', binary_data, 'application/image')}
