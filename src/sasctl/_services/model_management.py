@@ -98,7 +98,7 @@ class ModelManagement(Service):
     @classmethod
     def create_performance_definition(
         cls,
-        model,
+        models,
         library_name,
         table_prefix,
         name=None,
@@ -119,8 +119,8 @@ class ModelManagement(Service):
 
         Parameters
         ----------
-        model : str or dict
-            The name or id of the model, or a dictionary representation of the model.
+        models : str or dict
+            The name or id of the model(s), or a dictionary representation of the model(s).
         library_name : str
             The library containing the input data, default is 'Public'.
         table_prefix : str
@@ -180,8 +180,12 @@ class ModelManagement(Service):
             )
 
         mr = ModelRepository()
-        model = mr.get_model(model)
-        project = mr.get_project(model.projectId)
+
+        if not isinstance(models, list):
+            models = [models]
+
+        models = [mr.get_model(m) for m in models]
+        project = mr.get_project(models[0].projectId)
 
         # Performance data cannot be captured unless certain project properties
         # have been configured.
@@ -210,8 +214,8 @@ class ModelManagement(Service):
 
         request = {
             "projectId": project.id,
-            "name": name or model.name + " Performance",
-            "modelIds": [model.id],
+            "name": name or project.name + " Performance",
+            "modelIds": [m.id for m in models],
             "championMonitored": monitor_champion,
             "challengerMonitored": monitor_challenger,
             "maxBins": max_bins,
@@ -222,17 +226,17 @@ class ModelManagement(Service):
             "loadPerformanceResult": autoload_output,
             "dataLibrary": library_name or "Public",
             "description": description
-            or "Performance definition for model " + model.name,
+            or "Performance definition for models " + ', '.join(m.name for m in models),
             "casServerId": cas_server or "cas-shared-default",
             "dataPrefix": table_prefix,
             "traceOn": trace,
         }
 
         # If model doesn't specify input/output variables, try to pull from project definition
-        if model.get("inputVariables", []):
-            request["inputVariables"] = [v.get("name") for v in model["inputVariables"]]
+        if models[0].get("inputVariables", []):
+            request["inputVariables"] = [v.get("name") for v in models[0]["inputVariables"]]
             request["outputVariables"] = [
-                v.get("name") for v in model["outputVariables"]
+                v.get("name") for v in models[0]["outputVariables"]
             ]
         else:
             request["inputVariables"] = [
