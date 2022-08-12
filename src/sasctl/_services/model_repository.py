@@ -432,8 +432,6 @@ class ModelRepository(Service):
                 for item in model_contents:
                     if item.name == name:
                         cls.delete("/models/{}/contents/{}".format(id_, item.id))
-                        # Move IO buffer back to start
-                        files["files"][1].seek(0)
                         return cls.post(
                             "/models/{}/contents".format(id_),
                             files=files,
