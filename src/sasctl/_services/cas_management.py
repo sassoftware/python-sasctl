@@ -26,7 +26,53 @@ class CASManagement(Service):
     list_servers, get_server, _, _ = Service._crud_funcs("/servers", "server")
 
     @classmethod
-    def create_session(cls, properties: dict, server: str):
+    def list_sessions(cls, qparams: dict = None, server: str = None):
+        """
+        Returns a collection of sessions available on the CAS server.
+
+        Params
+        ------
+        queryParams : dict, optional
+            Query parameters.
+            Valid keys are `start`, `limit`, `filter`,
+            `sortBy`, `excludeItemLink`, `sessionId`.
+        server : str, optional
+            Name of the CAS server. Defaults to 'cas-shared-default'.
+
+        Returns
+        -------
+        list
+            A collection of :class:`.RestObj` instances.
+        """
+        server = server or DEFAULT_SERVER
+
+        if qparams is not None:
+            allowedQuery = [
+                "start",
+                "limit",
+                "filter",
+                "sortBy",
+                "excludeItemLink",
+                "sessionId",
+            ]
+
+            if not all(key in allowedQuery for key in qparams.keys()):
+                raise ValueError(
+                    "The only acceptable queries are %s." % (allowedQuery)
+                )
+            else:
+                query = qparams
+        else:
+            query={}
+        
+        sesslist = cls.get(
+            "/servers/%s/sessions"  % (server),
+            params = query
+            )
+        return sesslist
+
+    @classmethod
+    def create_session(cls, properties: dict, server: str = None):
         """Creates a new session on the CAS server.
 
         Params
@@ -65,7 +111,7 @@ class CASManagement(Service):
         return sess
 
     @classmethod
-    def delete_session(cls, sess_id: str, server: str, qparams: dict = None):
+    def delete_session(cls, sess_id: str, server: str = None, qparams: dict = None):
         """Terminates a session on the CAS server.
 
         Params
