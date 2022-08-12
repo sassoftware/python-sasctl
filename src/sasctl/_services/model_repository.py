@@ -374,7 +374,7 @@ class ModelRepository(Service):
         model : str or dict
             The name or id of the model, or a dictionary representation of
             the model.
-        file : str or bytes
+        file : str, dict, or bytes
             A file related to the model, such as the model code.
         name : str
             Name of the file related to the model.
@@ -399,22 +399,24 @@ class ModelRepository(Service):
 
         if content_type is None and isinstance(file, bytes):
             content_type = "application/octet-stream"
+        elif isinstance(file, dict):
+            import json
+            file = json.dumps(file)
 
-        if content_type is not None:
-            files = {name: (name, file, content_type)}
+        files = {"files": (name, file, content_type)}
+
+        if role is None:
+            params = {}
         else:
-            files = {name: file}
-
-        metadata = {"role": role, "name": name}
-
-        # return cls.post('/models/{}/contents'.format(id_), files=files, data=metadata)
-
-        # if the file already exists, a 409 error will be returned
+            params = {"role": role}
+        params = "&".join("{}={}".format(k, v) for k, v in params.items())
+        
+        # If the file already exists, a 409 error will be returned
         try:
             return cls.post(
-                "/models/{}/contents".format(id_), files=files, data=metadata
+                "/models/{}/contents".format(id_), files=files, params=params
             )
-        # delete the older duplicate model and rerun the API call
+        # Delete the older duplicate model and rerun the API call
         except HTTPError as e:
             if e.code == 409:
                 model_contents = cls.get_model_contents(id_)
@@ -424,7 +426,7 @@ class ModelRepository(Service):
                         return cls.post(
                             "/models/{}/contents".format(id_),
                             files=files,
-                            data=metadata,
+                            params=params,
                         )
             else:
                 raise e
