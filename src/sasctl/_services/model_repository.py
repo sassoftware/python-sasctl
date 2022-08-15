@@ -366,7 +366,9 @@ class ModelRepository(Service):
         )
 
     @classmethod
-    def add_model_content(cls, model, file, name, role=None, content_type=None):
+    def add_model_content(
+        cls, model, file, name, role=None, content_type="multipart/form-data"
+    ):
         """Add additional files to the model.
 
         Parameters
@@ -379,9 +381,9 @@ class ModelRepository(Service):
         name : str
             Name of the file related to the model.
         role : str
-            Role of the model file, such as 'Python pickle'.
+            Role of the model file, such as 'Python pickle'. Default value is None.
         content_type : str
-            an HTTP Content-Type value
+            An HTTP Content-Type value. Default value is multipart/form-data.
 
         Returns
         -------
@@ -397,7 +399,7 @@ class ModelRepository(Service):
             model = cls.get_model(model)
             id_ = model["id"]
 
-        if content_type is None and isinstance(file, bytes):
+        if content_type is "multipart/form-data" and isinstance(file, bytes):
             content_type = "application/octet-stream"
         elif isinstance(file, dict):
             import json

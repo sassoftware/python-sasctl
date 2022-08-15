@@ -183,17 +183,23 @@ def test_add_model_content():
 
             # Basic upload of text data
             mr.add_model_content(None, text_data, 'test.txt')
-            assert post.call_args[1]['files'] == {'test.txt': text_data}
+            assert post.call_args[1]['files'] == {'files': ('test.txt', text_data, 'multipart/form-data')}
 
             # Upload of text data with content type
             mr.add_model_content(None, text_data, 'test.txt', content_type='application/text')
-            assert post.call_args[1]['files'] == {'test.txt': ('test.txt', text_data, 'application/text')}
+            assert post.call_args[1]['files'] == {'files': ('test.txt', text_data, 'application/text')}
+
+            # Upload of dict data without content type
+            import json
+            dict_data = {'data': text_data}
+            mr.add_model_content(None, dict_data, 'dict.json')
+            assert post.call_args[1]['files'] == {'files': ('dict.json', json.dumps(dict_data), 'multipart/form-data')}
 
             # Upload of binary data should include content type
             binary_data = 'Test binary file contents'.encode()
             mr.add_model_content(None, binary_data, 'test.pkl')
-            assert post.call_args[1]['files'] == {'test.pkl': ('test.pkl', binary_data, 'application/octet-stream')}
+            assert post.call_args[1]['files'] == {'files': ('test.pkl', binary_data, 'application/octet-stream')}
 
             # Should be able to customize content type
             mr.add_model_content(None, binary_data, 'test.pkl', content_type='application/image')
-            assert post.call_args[1]['files'] == {'test.pkl': ('test.pkl', binary_data, 'application/image')}
+            assert post.call_args[1]['files'] == {'files': ('test.pkl', binary_data, 'application/image')}
