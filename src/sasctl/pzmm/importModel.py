@@ -74,10 +74,15 @@ def model_exists(project, name, force, versionName="latest"):
     project = mr.get_project(project)
     projectId = project["id"]
     projectVersions = mr.list_project_versions(project)
-    for version in projectVersions:
-        if versionName == version["name"]:
-            versionId = version["id"]
-            break
+    if versionName == "latest":
+        modTime = [item["modified"] for item in projectVersions]
+        latestVersion = modTime.index(max(modTime))
+        versionId = projectVersions[latestVersion]["id"]
+    else:
+        for version in projectVersions:
+            if versionName is version["name"]:
+                versionId = version["id"]
+                break
     projectModels = mr.get("/projects/{}/projectVersions/{}/models".format(projectId, versionId))
 
     for model in projectModels:
