@@ -816,7 +816,7 @@ class ModelRepository(Service):
                 "id": version.id,
                 "number": version.versionNumber,
                 "modified": datetime.strptime(
-                    version.modifiedTimeStamp, "%Y-%m-%dT%I:%M:%S.%fZ"
+                    version.modifiedTimeStamp, "%Y-%m-%dT%H:%M:%S.%fZ"
                 ),
             }
             versionList.append(versionDict)
