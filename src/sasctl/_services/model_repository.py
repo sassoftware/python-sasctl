@@ -508,7 +508,7 @@ class ModelRepository(Service):
             The ZIP file containing the model and contents.
         description : str
             The description of the model.
-        projectVersion : str
+        projectVersion : str, optional
             Name of project version to import model in to. Default
             value is "latest".
 

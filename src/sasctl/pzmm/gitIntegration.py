@@ -247,7 +247,7 @@ class GitIntegrate:
             zipFile.unlink()
 
     @classmethod
-    def pushGitModel(cls, gPath, modelName=None, projectName=None):
+    def pushGitModel(cls, gPath, modelName=None, projectName=None, projectVersion="latest"):
         """Push a single model in the git repository up to SAS Model Manager. This function
         creates an archive of all files in the directory and imports the zipped model.
 
@@ -259,6 +259,9 @@ class GitIntegrate:
             Name of model to be imported, by default None
         projectName : string, optional
             Name of project the model is imported from, by default None
+        projectVersion : str, optional
+            Name of project version to import model in to. Default
+            value is "latest".
         """
         if modelName is None and projectName is None:
             modelDir = gPath
@@ -283,7 +286,7 @@ class GitIntegrate:
             projectName = project.name
             # Check if model with same name already exists in project. Delete if it exists.
             model_exists(projectName, modelName, True)
-            mr.import_model_from_zip(modelName, projectName, zipIOFile)
+            mr.import_model_from_zip(modelName, projectName, zipIOFile, projectVersion=projectVersion)
 
     @classmethod
     def gitRepoPush(cls, gPath, commitMessage, remote="origin", branch="main"):

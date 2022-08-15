@@ -106,6 +106,7 @@ class ImportModel:
         targetDF,
         predictmethod,
         metrics=["EM_EVENTPROBABILITY", "EM_CLASSIFICATION"],
+        projectVersion="latest",
         modelFileName=None,
         pyPath=None,
         threshPrediction=None,
@@ -156,6 +157,9 @@ class ImportModel:
         metrics : string list, optional
             The scoring metrics for the model. The default is a set of two
             metrics: EM_EVENTPROBABILITY and EM_CLASSIFICATION.
+        projectVersion : string, optional
+            The project version to import the model in to on SAS Model Manager. The default value
+            is latest.
         modelFileName : string, optional
             Name of the model file that contains the model. By default None and assigned as
             modelPrefix + '.pickle'.
@@ -265,7 +269,7 @@ class ImportModel:
             # Check if model with same name already exists in project.
             model_exists(project, modelPrefix, force)
 
-            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile)
+            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, projectVersion=projectVersion)
             try:
                 print(
                     "Model was successfully imported into SAS Model Manager as {} with UUID: {}.".format(
@@ -286,7 +290,7 @@ class ImportModel:
             # Check if model with same name already exists in project.
             model_exists(project, modelPrefix, force)
 
-            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
+            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force, projectVersion=projectVersion)
             try:
                 print(
                     "Model was successfully imported into SAS Model Manager as {} with UUID: {}.".format(
