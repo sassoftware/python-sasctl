@@ -49,17 +49,21 @@ def project_exists(response, project):
         return response
 
 
-def model_exists(project, name, force):
-    """Checks if model already exists and either raises an error or deletes the redundant model.
+def model_exists(project, name, force, versionName="latest"):
+    """Checks if model already exists in the same project and either raises an error or deletes 
+    the redundant model. If no project version is provided, the version is assumed to be "latest".
 
     Parameters
     ----------
-    project : string or dict
+    project : str or dict
         The name or id of the model project, or a dictionary representation of the project.
     name : str or dict
         The name of the model.
     force : bool, optional
         Sets whether to overwrite models with the same name upon upload.
+    versionName : str, optional
+        Name of project version to check if a model of the same name already exists. Default 
+        value is "latest".
 
     Raises
     ------
@@ -69,7 +73,12 @@ def model_exists(project, name, force):
     """
     project = mr.get_project(project)
     projectId = project["id"]
-    projectModels = mr.get("/projects/{}/models".format(projectId))
+    projectVersions = mr.list_project_versions(project)
+    for version in projectVersions:
+        if versionName == version["name"]:
+            versionId = version["id"]
+            break
+    projectModels = mr.get("/projects/{}/projectVersions/{}/models".format(projectId, versionId))
 
     for model in projectModels:
         # Throws a TypeError if only one model is in the project
