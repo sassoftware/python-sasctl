@@ -357,7 +357,7 @@ class ModelRepository(Service):
         model["immutable"] = is_immutable or model.get("immutable")
         model["inputVariables"] = input_variables or model.get("inputVariables", [])
         model["outputVariables"] = output_variables or model.get("outputVariables", [])
-        model["version"] = "2"
+        model["version"] = 2
 
         return cls.post(
             "/models",
@@ -399,7 +399,7 @@ class ModelRepository(Service):
             model = cls.get_model(model)
             id_ = model["id"]
 
-        if content_type is "multipart/form-data" and isinstance(file, bytes):
+        if content_type == "multipart/form-data" and isinstance(file, bytes):
             content_type = "application/octet-stream"
         elif isinstance(file, dict):
             import json
