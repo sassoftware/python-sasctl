@@ -46,7 +46,7 @@ def test_create_model():
         ],
         'inputVariables': [],
         'outputVariables': [],
-        'version': '2',
+        'version': 2,
     }
 
     # Passed params should be set correctly
