@@ -336,9 +336,10 @@ class CASManagement(Service):
         name : str, required
             Name of the table.
         caslib : str, optional
-            Name of the caslib. Defaults to CASUSER.
+            Name of the caslib. Defaults to `CASUSER`.
         server : str, optional
             Server where the `caslib` is registered.
+            Defaults to `cas-shared-default`.
         qparams: dict, optional
             Additional query parameters.
             Valid keys are `sessionId`, `scope`, `sourceTableName`, `createRelationships`
@@ -352,6 +353,7 @@ class CASManagement(Service):
         RestObj
 
         """
+        server = server or DEFAULT_SERVER
         caslib = caslib or DEFAULT_CASLIB
 
         if value in ["loaded", "unloaded"]:
@@ -415,7 +417,8 @@ class CASManagement(Service):
         caslib : str
             Name of the caslib.
         server : str
-            Server where the `caslib` is registered. Defaults to CASUSER
+            Server where the `caslib` is registered.
+            Defaults to `cas-shared-default`.
 
         Returns
         -------
@@ -423,7 +426,6 @@ class CASManagement(Service):
 
         """
         server = server or DEFAULT_SERVER
-        caslib = caslib or DEFAULT_CASLIB
 
         query = {"value": "global", "sessionId": sessId}
 
@@ -492,3 +494,65 @@ class CASManagement(Service):
             json=properties,
         )
         return sess
+    
+    @classmethod
+    def del_table(
+        cls, 
+        name: str, 
+        qParam: dict = None, 
+        caslib: str = None,
+        server: str = None 
+    ):
+        """Deletes a table from Caslib source. Note that is not an unload.
+        This operation physically removes the source table (if the source is writable).
+        For path-based caslibs, this physically removes the file.    
+        
+        Parameters
+        ----------
+        name : str
+            Name of the table.
+        qParam : dict
+            Query parameters. Note that some are required.
+            The allowed query parameters are `sessionId`, 
+            `sourceTableName`, `quiet`, `removeAcs`.
+        caslib : str
+            Name of the caslib. Defaults to 'CASUSER'
+        server : str
+            Server where the `caslib` is registered.
+            Defaults to 'cas-shared-default'.
+
+        Returns
+        -------
+        RestObj
+        """
+        
+        server = server or DEFAULT_SERVER
+        caslib = caslib or DEFAULT_CASLIB
+        
+        allowedQ = [
+            "sessionId",
+            "sourceTableName",
+            "quiet",
+            "removeAcs"
+        ]
+
+        if isinstance(qParam,dict) and all(key in allowedQ for key in qParam.keys()):
+            if ("sourceTableName" not in qParam.keys() 
+            and "quiet" not in qParam.keys() 
+            and "removeAcs" not in qParam.keys()):
+                raise Exception(
+                    "Missing required query parameters `sourceTableName`, `quiet`, `removeAcs`"
+                )
+            else:
+                query = qParam
+        else:
+            raise ValueError(
+                "The only acceptable query parameters are %s and must be passed in a dictionary"
+                % (allowedQ)
+            )
+
+        tbl =  cls.delete(
+            "servers/%s/caslibs/%s/tables/%s"%(server,caslib,name),
+            params=query
+            )
+        return tbl
