@@ -252,6 +252,8 @@ class CASManagement(Service):
         server: str = None,
         header: bool = None,
         format_: str = None,
+        *,
+        detail: dict = None
     ):
         """Upload a file to a CAS table.
 
@@ -275,6 +277,13 @@ class CASManagement(Service):
         format_ : {"csv", "xls", "xlsx", "sas7bdat", "sashdat"}, optional
             File of input `file`.  Not required if format can be discerned from
             the file path.
+        detail : dict, optional
+            Additional body parameters. Allowed parameters are
+            'sessionId', 'variables', 'label', 'scope', 'replace', 'encoding',
+            'allowTruncation', 'allowEmbeddedNewLines', 'delimiter', 
+            'varchars', 'scanRows', 'threadCount', 'stripBlanks', 'sheetName',
+            'password', 'decryptionKey', 'stringLengthMultiplier', 
+            'varcharConversionThreshold'.
 
         Returns
         -------
@@ -308,10 +317,95 @@ class CASManagement(Service):
         if format_ is not None:
             data["format"] = format_
 
+        allowedBody = [
+            'sessionId',
+            'variables', 
+            'label', 
+            'scope', 
+            'replace', 
+            'encoding',
+            'allowTruncation', 
+            'allowEmbeddedNewLines', 
+            'delimiter',
+            'varchars', 
+            'scanRows', 
+            'threadCount', 
+            'stripBlanks', 
+            'sheetName',
+            'password', 
+            'decryptionKey', 
+            'stringLengthMultiplier', 
+            'varcharConversionThreshold'
+        ]
+        allowedBcsv = [
+            'sessionId',
+            'variables', 
+            'label', 
+            'scope', 
+            'replace', 
+            'encoding',
+            'allowTruncation', 
+            'allowEmbeddedNewLines', 
+            'delimiter', 
+            'varchars', 
+            'scanRows', 
+            'threadCount', 
+            'stripBlanks'
+        ]
+        allowedBxls = [
+            'sessionId',
+            'variables', 
+            'label', 
+            'scope', 
+            'replace', 
+            'sheetName'
+        ]
+        allowedBsas = [
+            'sessionId',
+            'variables', 
+            'label', 
+            'scope', 
+            'replace', 
+            'password',
+            'decryptionKey',
+            'stringLengthMultiplier',  
+            'varcharConversionThreshold'
+        ]
+
+        if detail is not None:
+            inputK = detail.keys()
+            if not all(key in allowedBody for key in inputK):
+                raise ValueError(
+                    "The body accepts only the following parameters %s." % (allowedBody)
+                )
+            elif (
+                format_ == 'csv' and 
+                not all(key in allowedBcsv for key in inputK)
+                ):
+                    raise ValueError(
+                        "The parameters specific to a csv file are %s." % (allowedBcsv)
+                    )
+            elif (
+                format_ in ['xls','xlsx'] and
+                not all(key in allowedBxls for key in inputK)
+                ):
+                    raise ValueError(
+                        "The parameters specific to a excel file are %s." % (allowedBxls)
+                    )
+            elif (
+                format_ in ['sashdat','sas7bdat'] and
+                not all(key in allowedBsas for key in inputK)
+                ):
+                    raise ValueError(
+                        "The parameters specific to a sas file are %s." % (allowedBsas)
+                    )
+            else:
+                data.update(detail)
+
         tbl = cls.post(
             "/servers/%s/caslibs/%s/tables" % (server, caslib),
             data=data,
-            files={name: file},
+            files={'file': (name,file)},
         )
         return tbl
 
