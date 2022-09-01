@@ -105,3 +105,60 @@ def test_delete_session():
     res = cm.list_sessions(qpar)
     
     assert len(res)==0 
+
+@pytest.fixture(scope='session')
+def sample_table(tmpdir_factory):
+    """Create a temporary folder and 
+    save a CSV file representing the table.
+    Return the path to the file.
+    """
+    path = tmpdir_factory.mktemp("data") / "testtable.csv"
+    tbl = "A;B\r\nentry1;entry2\r\nentry3;entry4"
+    path.write(tbl)
+    return path
+
+
+def test_upload_file(sample_table):
+    properties = {
+        "authenticationType": "OAuth",
+        "name": "SessionSimulation"
+    }
+    sess = cm.create_session(properties)
+
+    path = sample_table 
+    test_tbl = "TEST_TABLE"
+    caslib = 'Samples'
+    server = 'cas-shared-default'
+    frmt = 'csv'
+
+    info = {
+        "sessionId": sess.id,
+        "delimiter": ";",
+        "scope": "session"
+    }
+    tbl = cm.upload_file(path,test_tbl,caslib,server,True,frmt,detail=info)
+    assert tbl.state == 'loaded'
+    qp = {'sessionId':sess.id}
+    r = cm.update_state_table('unloaded',test_tbl,caslib,server,qparams=qp)
+    assert r == 'unloaded'
+
+    info = {
+        "sessionId": sess.id,
+        "delimiter": ";",
+        "scope": "session",
+        "parameter": "wrong"
+    }
+    with pytest.raises(ValueError):
+        cm.upload_file(path,test_tbl,caslib,server,True,frmt,detail=info)
+        
+    info = {
+        "sessionId": sess.id,
+        "delimiter": ";",
+        "scope": "session",
+        "encoding": "utf-8",
+        "password": "pass"
+    }
+    with pytest.raises(ValueError):
+        cm.upload_file(path,test_tbl,caslib,server,True,frmt,detail=info)
+
+    cm.delete_session(sess.id,server)
