@@ -117,7 +117,6 @@ def sample_table(tmpdir_factory):
     path.write(tbl)
     return path
 
-
 def test_upload_file(sample_table):
     properties = {
         "authenticationType": "OAuth",
@@ -162,3 +161,35 @@ def test_upload_file(sample_table):
         cm.upload_file(path,test_tbl,caslib,server,True,frmt,detail=info)
 
     cm.delete_session(sess.id,server)
+
+def test_save_table(sample_table):    
+    path = sample_table
+    table = "TEST_TABLE"
+    caslib = 'CASUSER(X1064007)'
+    server = 'cas-shared-default'
+    frmt = 'csv'
+    info = {
+        "delimiter": ";"
+    }
+    tbl = cm.upload_file(path,table,caslib,server,True,frmt,detail=info)
+    assert tbl.state == 'loaded'
+
+    save_tbl = cm.save_table(table,caslib)
+    source_tbl_name = save_tbl.tableReference.sourceTableName
+    assert  source_tbl_name == "%s.sashdat" % (table)
+
+    cm.update_state_table('unloaded',table,caslib,server)
+
+def test_del_table():
+    table = "TEST_TABLE"
+    caslib = 'CASUSER(X1064007)'
+    server = 'cas-shared-default'
+    qp={
+        "sourceTableName": "%s.sashdat"%(table),
+        "removeAcs": True,
+    }
+    delTbl = cm.del_table(table,qp,caslib,server)
+    assert delTbl==''
+
+    get_tbl = cm.get_table(table,caslib,server)
+    assert get_tbl is None
