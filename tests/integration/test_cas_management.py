@@ -193,3 +193,30 @@ def test_del_table():
 
     get_tbl = cm.get_table(table,caslib,server)
     assert get_tbl is None
+
+def test_promote_table(sample_table):
+    properties = {
+        "authenticationType": "OAuth",
+        "name": "SessionSimulation"
+    }
+    sess = cm.create_session(properties)
+    
+    path = sample_table
+    table = "TEST_TABLE"
+    caslib = 'CASUSER(X1064007)'
+    server = 'cas-shared-default'
+    frmt = 'csv'
+    info = {
+        "sessionId": sess.id,
+        "delimiter": ";",
+        "scope": "session"
+    }
+    tbl = cm.upload_file(path,table,caslib,server,True,frmt,detail=info)
+    assert tbl.state == 'loaded'
+
+    promote = cm.promote_table(table,sess.id,caslib,server)
+    assert promote == 'global'
+    
+    cm.update_state_table('unloaded',table,caslib,server)
+    cm.delete_session(sess.id,server)
+
