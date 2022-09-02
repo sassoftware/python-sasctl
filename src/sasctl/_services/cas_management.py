@@ -123,11 +123,11 @@ class CASManagement(Service):
         else:
             query_params={}
         
-        sesslist = cls.get(
-            "/servers/%s/sessions"  % (server),
+        sess_list = cls.get(
+            "/servers/%s/sessions"  %server,
             params = query_params
             )
-        return sesslist
+        return sess_list
 
     @classmethod
     def create_session(cls, properties: dict, server: str = None):
@@ -457,9 +457,9 @@ class CASManagement(Service):
 
         Parameters
         ----------
-        value : str, required
+        value : str
             State to which to set the table. Valid values include `loaded` or `unloaded`.
-        name : str, required
+        name : str
             Name of the table.
         caslib : str, optional
             Name of the caslib. Defaults to 'Samples'.
@@ -523,7 +523,7 @@ class CASManagement(Service):
         return tbl
 
     @classmethod
-    def promote_table(cls, name: str, sessId: str, caslib: str, server: str = None):
+    def promote_table(cls, name: str, sess_id: str, caslib: str, server: str = None):
         """Changes the scope of a loaded CAS table from session to global scope.
         Operation valid only on a session table.
         Promote target is the same Caslib that contains the session table.
@@ -532,7 +532,7 @@ class CASManagement(Service):
         ----------
         name : str
             Name of the table.
-        sessId: str
+        sess_id: str
             The session ID
         caslib : str
             Name of the caslib.
@@ -547,7 +547,7 @@ class CASManagement(Service):
         """
         server = server or DEFAULT_SERVER
 
-        query = {"value": "global", "sessionId": sessId}
+        query = {"value": "global", "sessionId": sess_id}
 
         tbl = cls.put(
             "/servers/%s/caslibs/%s/tables/%s/scope" % (server, caslib, name),
@@ -562,7 +562,7 @@ class CASManagement(Service):
         name: str,
         caslib: str,
         properties: dict = None,
-        sessId: str = None,
+        sess_id: str = None,
         server: str = None,
     ):
         """Saves a CAS table to a source table
@@ -571,11 +571,11 @@ class CASManagement(Service):
         ----------
         name : str
             Name of the table.
-        sessId: str
+        sess_id: str
             The session ID
         caslib : str
             Name of the caslib.
-        propertes : dict, optional
+        properties : dict, optional
             Properties of the table.
             Valid keys are `caslibName`, `format`, `replace`,
             `compress`, `tableName`, `sourceTableName`, `parameters`.
@@ -602,7 +602,7 @@ class CASManagement(Service):
         else:
             properties = {}
 
-        query = {"sessionId": sessId} if sessId else {}
+        query = {"sessionId": sess_id} if sess_id else {}
 
         sess = cls.post(
             "/servers/%s/caslibs/%s/tables/%s" % (server, caslib, name),
@@ -628,9 +628,10 @@ class CASManagement(Service):
         name : str
             Name of the table.
         query_params : dict
-            Query parameters. Note that some are required.
+            Query parameters.
             The allowed query parameters are `sessionId`, 
             `sourceTableName`, `quiet`, `removeAcs`.
+            Note that the last three are required.
         caslib : str
             Name of the caslib. Defaults to 'Samples'
         server : str
