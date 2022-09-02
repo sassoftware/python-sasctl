@@ -95,14 +95,13 @@ def test_delete_session():
         "name": "SessionSimulation"
     }
     sess = cm.create_session(properties)
-    sessID = sess['id']
 
-    cm.delete_session(sessID)
+    cm.delete_session(sess.id)
 
-    qpar = {
+    query_param = {
         "filter": "startsWith(name,SessionSimulation)"
     }
-    res = cm.list_sessions(qpar)
+    res = cm.list_sessions(query_param)
     
     assert len(res)==0 
 
@@ -138,7 +137,7 @@ def test_upload_file(sample_table):
     tbl = cm.upload_file(path,test_tbl,caslib,server,True,frmt,detail=info)
     assert tbl.state == 'loaded'
     qp = {'sessionId':sess.id}
-    r = cm.update_state_table('unloaded',test_tbl,caslib,server,qparams=qp)
+    r = cm.update_state_table('unloaded',test_tbl,caslib,server,query_params=qp)
     assert r == 'unloaded'
 
     info = {
@@ -184,12 +183,19 @@ def test_del_table():
     table = "TEST_TABLE"
     caslib = 'CASUSER(X1064007)'
     server = 'cas-shared-default'
+    qp_err={
+        "sourceTableName": "%s.sashdat"%table
+    }
+    with pytest.raises(ValueError):
+        cm.del_table(table,qp_err,caslib,server)
+
     qp={
-        "sourceTableName": "%s.sashdat"%(table),
+        "sourceTableName": "%s.sashdat"%table,
+        "quiet": True,
         "removeAcs": True,
     }
-    delTbl = cm.del_table(table,qp,caslib,server)
-    assert delTbl==''
+    del_tbl = cm.del_table(table,qp,caslib,server)
+    assert del_tbl==''
 
     get_tbl = cm.get_table(table,caslib,server)
     assert get_tbl is None
@@ -219,4 +225,3 @@ def test_promote_table(sample_table):
     
     cm.update_state_table('unloaded',table,caslib,server)
     cm.delete_session(sess.id,server)
-

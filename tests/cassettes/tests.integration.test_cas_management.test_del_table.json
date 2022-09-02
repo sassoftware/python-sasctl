@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2022-09-01T13:37:17",
+      "recorded_at": "2022-09-02T07:54:33",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -28,7 +28,7 @@
           ]
         },
         "method": "DELETE",
-        "uri": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE?sourceTableName=TEST_TABLE.sashdat&removeAcs=True"
+        "uri": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE?sourceTableName=TEST_TABLE.sashdat&quiet=True&removeAcs=True"
       },
       "response": {
         "body": {
@@ -43,14 +43,14 @@
             "default-src 'self'; object-src 'none';"
           ],
           "Date": [
-            "Thu, 01 Sep 2022 13:37:17 GMT"
+            "Fri, 02 Sep 2022 07:54:33 GMT"
           ],
           "Sas-Service-Response-Flag": [
             "true"
           ],
           "Set-Cookie": [
             "sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6; Path=/casManagement/; Secure; HttpOnly; SameSite=Lax",
-            "JSESSIONID=86633e67-e0d9-4e59-9c01-d431521506f9; Path=/casManagement/; HttpOnly; Secure; SameSite=Lax"
+            "JSESSIONID=b5099ce4-7d94-41c1-ac06-2ba5fcf728fc; Path=/casManagement/; HttpOnly; Secure; SameSite=Lax"
           ],
           "Strict-Transport-Security": [
             "max-age=15724800; includeSubDomains"
@@ -72,11 +72,11 @@
           "code": 204,
           "message": "No Content"
         },
-        "url": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE?sourceTableName=TEST_TABLE.sashdat&removeAcs=True"
+        "url": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE?sourceTableName=TEST_TABLE.sashdat&quiet=True&removeAcs=True"
       }
     },
     {
-      "recorded_at": "2022-09-01T13:37:17",
+      "recorded_at": "2022-09-02T07:54:33",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -96,7 +96,7 @@
             "keep-alive"
           ],
           "Cookie": [
-            "JSESSIONID=86633e67-e0d9-4e59-9c01-d431521506f9; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
+            "JSESSIONID=b5099ce4-7d94-41c1-ac06-2ba5fcf728fc; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
           ],
           "User-Agent": [
             "python-requests/2.28.1"
@@ -121,7 +121,7 @@
             "application/vnd.sas.collection+json"
           ],
           "Date": [
-            "Thu, 01 Sep 2022 13:37:17 GMT"
+            "Fri, 02 Sep 2022 07:54:33 GMT"
           ],
           "Sas-Service-Response-Flag": [
             "true"
@@ -153,7 +153,7 @@
       }
     },
     {
-      "recorded_at": "2022-09-01T13:37:17",
+      "recorded_at": "2022-09-02T07:54:33",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -173,7 +173,7 @@
             "keep-alive"
           ],
           "Cookie": [
-            "JSESSIONID=86633e67-e0d9-4e59-9c01-d431521506f9; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
+            "JSESSIONID=b5099ce4-7d94-41c1-ac06-2ba5fcf728fc; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
           ],
           "User-Agent": [
             "python-requests/2.28.1"
@@ -198,7 +198,7 @@
             "application/vnd.sas.cas.server+json"
           ],
           "Date": [
-            "Thu, 01 Sep 2022 13:37:17 GMT"
+            "Fri, 02 Sep 2022 07:54:33 GMT"
           ],
           "Sas-Service-Response-Flag": [
             "true"
@@ -230,7 +230,7 @@
       }
     },
     {
-      "recorded_at": "2022-09-01T13:37:17",
+      "recorded_at": "2022-09-02T07:54:33",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -250,7 +250,7 @@
             "keep-alive"
           ],
           "Cookie": [
-            "JSESSIONID=86633e67-e0d9-4e59-9c01-d431521506f9; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
+            "JSESSIONID=b5099ce4-7d94-41c1-ac06-2ba5fcf728fc; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
           ],
           "User-Agent": [
             "python-requests/2.28.1"
@@ -275,7 +275,7 @@
             "application/vnd.sas.collection+json"
           ],
           "Date": [
-            "Thu, 01 Sep 2022 13:37:18 GMT"
+            "Fri, 02 Sep 2022 07:54:33 GMT"
           ],
           "Sas-Service-Response-Flag": [
             "true"
@@ -307,7 +307,7 @@
       }
     },
     {
-      "recorded_at": "2022-09-01T13:37:18",
+      "recorded_at": "2022-09-02T07:54:34",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -327,7 +327,7 @@
             "keep-alive"
           ],
           "Cookie": [
-            "JSESSIONID=86633e67-e0d9-4e59-9c01-d431521506f9; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
+            "JSESSIONID=b5099ce4-7d94-41c1-ac06-2ba5fcf728fc; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
           ],
           "User-Agent": [
             "python-requests/2.28.1"
@@ -355,7 +355,7 @@
             "application/vnd.sas.collection+json"
           ],
           "Date": [
-            "Thu, 01 Sep 2022 13:37:18 GMT"
+            "Fri, 02 Sep 2022 07:54:33 GMT"
           ],
           "Sas-Service-Response-Flag": [
             "true"
