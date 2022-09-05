@@ -10,7 +10,7 @@ from typing import Union, TextIO
 from .service import Service
 
 DEFAULT_SERVER = "cas-shared-default"
-DEFAULT_CASLIB = "Samples"
+DEFAULT_CASLIB = "Public"
 
 def check_keys(
     valid_keys:list, 
@@ -318,7 +318,7 @@ class CASManagement(Service):
         name : str
             Name of the table to create
         caslib : str, optional
-            caslib in which the table will be created. Defaults to 'Samples'.
+            caslib in which the table will be created. Defaults to 'Public'.
         server : str, optional
             CAS server on which the table will be created.  Defaults to
             cas-shared-default.
@@ -462,7 +462,7 @@ class CASManagement(Service):
         name : str
             Name of the table.
         caslib : str, optional
-            Name of the caslib. Defaults to 'Samples'.
+            Name of the caslib. Defaults to 'Public'.
         server : str, optional
             Server where the `caslib` is registered.
             Defaults to 'cas-shared-default'.
@@ -633,7 +633,7 @@ class CASManagement(Service):
             `sourceTableName`, `quiet`, `removeAcs`.
             Note that the last three are required.
         caslib : str
-            Name of the caslib. Defaults to 'Samples'
+            Name of the caslib. Defaults to 'Public'
         server : str
             Server where the `caslib` is registered.
             Defaults to 'cas-shared-default'.
