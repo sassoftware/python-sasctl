@@ -1,0 +1,329 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2022-09-01T11:21:40",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"authenticationType\": \"OAuth\", \"name\": \"SessionSimulation\"}"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "60"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/casManagement/servers/cas-shared-default/sessions"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"version\":2,\"id\":\"b4ca2c56-650d-b444-b0eb-8cfbb771e76c\",\"name\":\"SessionSimulation:Thu Sep  1 11:21:40 2022\",\"state\":\"Connected\",\"transactionState\":\"none\",\"authenticationType\":\"OAuth\",\"owner\":\"X1064007\",\"locale\":\"en\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/b4ca2c56-650d-b444-b0eb-8cfbb771e76c\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/b4ca2c56-650d-b444-b0eb-8cfbb771e76c\",\"type\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default/sessions\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/b4ca2c56-650d-b444-b0eb-8cfbb771e76c\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/b4ca2c56-650d-b444-b0eb-8cfbb771e76c\"},{\"method\":\"POST\",\"rel\":\"startPermissionsTransaction\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/b4ca2c56-650d-b444-b0eb-8cfbb771e76c?action=start\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/b4ca2c56-650d-b444-b0eb-8cfbb771e76c?action=start\"}]}"
+        },
+        "headers": {
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "1240"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none';"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.cas.session+json"
+          ],
+          "Date": [
+            "Thu, 01 Sep 2022 11:21:40 GMT"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Set-Cookie": [
+            "sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6; Path=/casManagement/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=4c1d4775-4dd6-43f4-8442-932065f5ef6e; Path=/casManagement/; HttpOnly; Secure; SameSite=Lax"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": "Created"
+        },
+        "url": "https://hostname.com/casManagement/servers/cas-shared-default/sessions"
+      }
+    },
+    {
+      "recorded_at": "2022-09-01T11:21:40",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "--4c69eb5fbca623ac39525bdd6c9335a8\r\nContent-Disposition: form-data; name=\"tableName\"\r\n\r\nTEST_TABLE\r\n--4c69eb5fbca623ac39525bdd6c9335a8\r\nContent-Disposition: form-data; name=\"containsHeaderRow\"\r\n\r\nTrue\r\n--4c69eb5fbca623ac39525bdd6c9335a8\r\nContent-Disposition: form-data; name=\"format\"\r\n\r\ncsv\r\n--4c69eb5fbca623ac39525bdd6c9335a8\r\nContent-Disposition: form-data; name=\"sessionId\"\r\n\r\nb4ca2c56-650d-b444-b0eb-8cfbb771e76c\r\n--4c69eb5fbca623ac39525bdd6c9335a8\r\nContent-Disposition: form-data; name=\"delimiter\"\r\n\r\n;\r\n--4c69eb5fbca623ac39525bdd6c9335a8\r\nContent-Disposition: form-data; name=\"scope\"\r\n\r\nsession\r\n--4c69eb5fbca623ac39525bdd6c9335a8\r\nContent-Disposition: form-data; name=\"file\"; filename=\"TEST_TABLE\"\r\n\r\nA;B\nentry1;entry2\nentry3;entry4\r\n--4c69eb5fbca623ac39525bdd6c9335a8--\r\n"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "779"
+          ],
+          "Content-Type": [
+            "multipart/form-data; boundary=4c69eb5fbca623ac39525bdd6c9335a8"
+          ],
+          "Cookie": [
+            "JSESSIONID=4c1d4775-4dd6-43f4-8442-932065f5ef6e; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/Samples/tables"
+      },
+      "response": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"caslibName\":\"Samples\",\"characterSet\":\"UTF8\",\"columnCount\":2,\"created\":\"2022-09-01T11:21:40.646Z\",\"createdBy\":\"X1064007\",\"disconnected\":true,\"encoding\":\"utf-8\",\"lastAccessed\":\"2022-09-01T11:21:40.646Z\",\"lastModified\":\"2022-09-01T11:21:40.646Z\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.table\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE\",\"type\":\"application/vnd.sas.cas.table\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE/state\",\"responseType\":\"application/json,text/plain\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE/columns\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.column\"},{\"method\":\"GET\",\"rel\":\"dataTable\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/TEST_TABLE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/TEST_TABLE\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"POST\",\"rel\":\"save\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE\",\"type\":\"application/vnd.sas.cas.table.save.request\",\"responseType\":\"application/vnd.sas.cas.table\"},{\"method\":\"GET\",\"rel\":\"summaryStatistics\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE/summaryStatistics\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE/summaryStatistics\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.column.summary.statistics\"},{\"method\":\"GET\",\"rel\":\"distinctCount\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE/distinctCounts\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE/distinctCounts\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.column.summary.statistics\"},{\"method\":\"PUT\",\"rel\":\"updateScope\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE/scope\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE/scope\",\"responseType\":\"application/json,text/plain\"}],\"name\":\"TEST_TABLE\",\"repeated\":false,\"rowCount\":2,\"scope\":\"session\",\"serverName\":\"cas-shared-default\",\"state\":\"loaded\",\"tableReference\":{\"version\":2,\"tableUri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~Samples/tables/TEST_TABLE\",\"sessionId\":\"b4ca2c56-650d-b444-b0eb-8cfbb771e76c\",\"sourceCaslibName\":\"Samples\"},\"version\":3}"
+        },
+        "headers": {
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none';"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "Date": [
+            "Thu, 01 Sep 2022 11:21:40 GMT"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": "Created"
+        },
+        "url": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/Samples/tables"
+      }
+    },
+    {
+      "recorded_at": "2022-09-01T11:21:40",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{}"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "2"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "Cookie": [
+            "JSESSIONID=4c1d4775-4dd6-43f4-8442-932065f5ef6e; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "PUT",
+        "uri": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE/state?value=unloaded&sessionId=b4ca2c56-650d-b444-b0eb-8cfbb771e76c"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "unloaded"
+        },
+        "headers": {
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "8"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none';"
+          ],
+          "Content-Type": [
+            "text/plain"
+          ],
+          "Date": [
+            "Thu, 01 Sep 2022 11:21:40 GMT"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/Samples/tables/TEST_TABLE/state?value=unloaded&sessionId=b4ca2c56-650d-b444-b0eb-8cfbb771e76c"
+      }
+    },
+    {
+      "recorded_at": "2022-09-01T11:21:40",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "Cookie": [
+            "JSESSIONID=4c1d4775-4dd6-43f4-8442-932065f5ef6e; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "DELETE",
+        "uri": "https://hostname.com/casManagement/servers/cas-shared-default/sessions/b4ca2c56-650d-b444-b0eb-8cfbb771e76c"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": ""
+        },
+        "headers": {
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none';"
+          ],
+          "Date": [
+            "Thu, 01 Sep 2022 11:21:40 GMT"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 204,
+          "message": "No Content"
+        },
+        "url": "https://hostname.com/casManagement/servers/cas-shared-default/sessions/b4ca2c56-650d-b444-b0eb-8cfbb771e76c"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}

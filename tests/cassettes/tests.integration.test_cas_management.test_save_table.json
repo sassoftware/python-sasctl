@@ -1,0 +1,255 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2022-09-02T07:54:31",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "--e6ec39a87fd23866c972e7a0b5dac697\r\nContent-Disposition: form-data; name=\"tableName\"\r\n\r\nTEST_TABLE\r\n--e6ec39a87fd23866c972e7a0b5dac697\r\nContent-Disposition: form-data; name=\"containsHeaderRow\"\r\n\r\nTrue\r\n--e6ec39a87fd23866c972e7a0b5dac697\r\nContent-Disposition: form-data; name=\"format\"\r\n\r\ncsv\r\n--e6ec39a87fd23866c972e7a0b5dac697\r\nContent-Disposition: form-data; name=\"delimiter\"\r\n\r\n;\r\n--e6ec39a87fd23866c972e7a0b5dac697\r\nContent-Disposition: form-data; name=\"file\"; filename=\"TEST_TABLE\"\r\n\r\nA;B\nentry1;entry2\nentry3;entry4\r\n--e6ec39a87fd23866c972e7a0b5dac697--\r\n"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "560"
+          ],
+          "Content-Type": [
+            "multipart/form-data; boundary=e6ec39a87fd23866c972e7a0b5dac697"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables"
+      },
+      "response": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"caslibName\":\"CASUSER(X1064007)\",\"characterSet\":\"UTF8\",\"columnCount\":2,\"created\":\"2022-09-02T07:54:31.704Z\",\"createdBy\":\"X1064007\",\"disconnected\":true,\"encoding\":\"utf-8\",\"lastAccessed\":\"2022-09-02T07:54:31.705Z\",\"lastModified\":\"2022-09-02T07:54:31.705Z\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.table\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE\",\"type\":\"application/vnd.sas.cas.table\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/state\",\"responseType\":\"application/json,text/plain\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/columns\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.column\"},{\"method\":\"GET\",\"rel\":\"dataTable\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~CASUSER(X1064007)/tables/TEST_TABLE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~CASUSER(X1064007)/tables/TEST_TABLE\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"POST\",\"rel\":\"save\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE\",\"type\":\"application/vnd.sas.cas.table.save.request\",\"responseType\":\"application/vnd.sas.cas.table\"},{\"method\":\"GET\",\"rel\":\"summaryStatistics\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/summaryStatistics\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/summaryStatistics\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.column.summary.statistics\"},{\"method\":\"GET\",\"rel\":\"distinctCount\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/distinctCounts\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/distinctCounts\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.column.summary.statistics\"},{\"method\":\"PUT\",\"rel\":\"updateScope\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/scope\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/scope\",\"responseType\":\"application/json,text/plain\"}],\"name\":\"TEST_TABLE\",\"repeated\":false,\"rowCount\":2,\"scope\":\"global\",\"serverName\":\"cas-shared-default\",\"state\":\"loaded\",\"tableReference\":{\"version\":2,\"tableUri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~CASUSER(X1064007)/tables/TEST_TABLE\",\"sessionId\":\"a59476f2-6d0e-5f47-a6f6-bd76488d40ec\",\"sourceCaslibName\":\"CASUSER(X1064007)\"},\"version\":3}"
+        },
+        "headers": {
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none';"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "Date": [
+            "Fri, 02 Sep 2022 07:54:31 GMT"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Set-Cookie": [
+            "sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6; Path=/casManagement/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=8813d496-c8d5-430e-93b2-1204b0da3886; Path=/casManagement/; HttpOnly; Secure; SameSite=Lax"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": "Created"
+        },
+        "url": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables"
+      }
+    },
+    {
+      "recorded_at": "2022-09-02T07:54:32",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{}"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "2"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "Cookie": [
+            "JSESSIONID=8813d496-c8d5-430e-93b2-1204b0da3886; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": "{\"attributes\":{\"encryption\":\"NONE\",\"group\":\"\",\"owner\":\"\",\"permission\":\"-rwxr-xr-x\",\"size\":8,\"time\":\"2022-09-02T07:54:32+00:00\"},\"caslibName\":\"CASUSER(X1064007)\",\"characterSet\":\"UTF8\",\"columnCount\":2,\"created\":\"2022-09-02T07:54:31.704Z\",\"createdBy\":\"X1064007\",\"disconnected\":true,\"encoding\":\"utf-8\",\"lastAccessed\":\"2022-09-02T07:54:32.102Z\",\"lastModified\":\"2022-09-02T07:54:31.705Z\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.table\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE\",\"type\":\"application/vnd.sas.cas.table\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE\"},{\"method\":\"PUT\",\"rel\":\"updateState\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/state\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/state\",\"responseType\":\"application/json,text/plain\"},{\"method\":\"GET\",\"rel\":\"columns\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/columns\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/columns\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.column\"},{\"method\":\"GET\",\"rel\":\"dataTable\",\"href\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~CASUSER(X1064007)/tables/TEST_TABLE\",\"uri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~CASUSER(X1064007)/tables/TEST_TABLE\",\"type\":\"application/vnd.sas.data.table\"},{\"method\":\"POST\",\"rel\":\"save\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE\",\"type\":\"application/vnd.sas.cas.table.save.request\",\"responseType\":\"application/vnd.sas.cas.table\"},{\"method\":\"GET\",\"rel\":\"summaryStatistics\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/summaryStatistics\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/summaryStatistics\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.column.summary.statistics\"},{\"method\":\"GET\",\"rel\":\"distinctCount\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/distinctCounts\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/distinctCounts\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.column.summary.statistics\"},{\"method\":\"PUT\",\"rel\":\"updateScope\",\"href\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/scope\",\"uri\":\"/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/scope\",\"responseType\":\"application/json,text/plain\"}],\"name\":\"TEST_TABLE\",\"repeated\":false,\"rowCount\":2,\"scope\":\"global\",\"serverName\":\"cas-shared-default\",\"state\":\"loaded\",\"tableReference\":{\"version\":2,\"tableUri\":\"/dataTables/dataSources/cas~fs~cas-shared-default~fs~CASUSER(X1064007)/tables/TEST_TABLE\",\"sessionId\":\"30b7f665-3d92-dd4a-9d7f-3755a3d6b4f6\",\"sourceCaslibName\":\"CASUSER(X1064007)\",\"sourceTableName\":\"TEST_TABLE.sashdat\"},\"version\":3}"
+        },
+        "headers": {
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none';"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.cas.table+json"
+          ],
+          "Date": [
+            "Fri, 02 Sep 2022 07:54:32 GMT"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 201,
+          "message": "Created"
+        },
+        "url": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE"
+      }
+    },
+    {
+      "recorded_at": "2022-09-02T07:54:32",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{}"
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "2"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "Cookie": [
+            "JSESSIONID=8813d496-c8d5-430e-93b2-1204b0da3886; sas-ingress-nginx=1ceea8e20c1d7f0525320d173016e50e|2eb82f3025ac3537becde082b07ee2c6"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "PUT",
+        "uri": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/state?value=unloaded"
+      },
+      "response": {
+        "body": {
+          "encoding": "ISO-8859-1",
+          "string": "unloaded"
+        },
+        "headers": {
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "8"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none';"
+          ],
+          "Content-Type": [
+            "text/plain"
+          ],
+          "Date": [
+            "Fri, 02 Sep 2022 07:54:32 GMT"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "SAMEORIGIN"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://hostname.com/casManagement/servers/cas-shared-default/caslibs/CASUSER(X1064007)/tables/TEST_TABLE/state?value=unloaded"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}
