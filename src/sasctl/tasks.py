@@ -207,7 +207,7 @@ def register_model(
         column_name: type may be provided.
     version : {'new', 'latest', int}, optional
         Version number of the project in which the model should be created.
-        Defaults to 'latest'.
+        Defaults to 'new'.
     files : list
         A list of dictionaries of the form
         {'name': filename, 'file': filecontent}.
@@ -248,7 +248,7 @@ def register_model(
     # TODO: Create new version if model already exists
 
     # If version not specified, default to creating a new version
-    version = version or "latest"
+    version = version or "new"
 
     files = files or []
 
