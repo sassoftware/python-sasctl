@@ -59,7 +59,8 @@ class ModelManagement(Service):
             model_name = model.name if hasattr(model, "name") else str(model)
             raise ValueError("Model '{}' was not found.".format(model_name))
 
-        model_uri = mr.get_model_link(model_obj, "self")
+        # Include refresh in case get_model call does not return enough information
+        model_uri = mr.get_model_link(model_obj, "self", True)
 
         # TODO: Verify allowed formats by destination type.
         # As of 19w04 MAS throws HTTP 500 if name is in invalid format.
