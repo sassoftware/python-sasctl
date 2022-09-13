@@ -15,6 +15,11 @@ import re
 import sys
 import warnings
 
+try:
+    import swat
+except ImportError:
+    swat = None
+
 from urllib.error import HTTPError
 
 from . import utils
@@ -202,7 +207,7 @@ def register_model(
         column_name: type may be provided.
     version : {'new', 'latest', int}, optional
         Version number of the project in which the model should be created.
-        Defaults to 'new'.
+        Defaults to 'latest'.
     files : list
         A list of dictionaries of the form
         {'name': filename, 'file': filecontent}.
@@ -236,11 +241,14 @@ def register_model(
     .. versionchanged:: v1.4.5
         Added `record_packages` parameter.
 
+    .. versionchanged:: v1.7.4
+        Update ASTORE handling for ease of use and removal of SAS Viya 4 score code errors
+
     """
     # TODO: Create new version if model already exists
 
     # If version not specified, default to creating a new version
-    version = version or "new"
+    version = version or "latest"
 
     files = files or []
 
@@ -280,40 +288,75 @@ def register_model(
     # If model is a CASTable then assume it holds an ASTORE model.
     # Import these via a ZIP file.
     if "swat.cas.table.CASTable" in str(type(model)):
-        zipfile = utils.create_package(model, input=input)
+        if swat is None:
+            raise RuntimeError("The 'swat' package is required to work with SAS models.")
+        if not isinstance(model, swat.CASTable):
+            raise ValueError(
+                "Parameter 'table' should be an instance of '%r' but "
+                "received '%r'." % (swat.CASTable, model)
+            )
+        if "DataStepSrc" in model.columns:
+            zip_file = utils.create_package_from_datastep(model, input=input)
+            if create_project:
+                out_var = []
+                in_var = []
+                import zipfile as zp
+                import copy
 
-        if create_project:
-            outvar = []
-            invar = []
-            import zipfile as zp
-            import copy
+                zip_file_copy = copy.deepcopy(zip_file)
+                tmp_zip = zp.ZipFile(zip_file_copy)
+                if "outputVar.json" in tmp_zip.namelist():
+                    out_var = json.loads(
+                        tmp_zip.read("outputVar.json").decode("utf=8")
+                    )  # added decode for 3.5 and older
+                    for tmp in out_var:
+                        tmp.update({"role": "output"})
+                if "inputVar.json" in tmp_zip.namelist():
+                    in_var = json.loads(
+                        tmp_zip.read("inputVar.json").decode("utf-8")
+                    )  # added decode for 3.5 and older
+                    for tmp in in_var:
+                        if tmp["role"] != "input":
+                            tmp["role"] = "input"
 
-            zipfilecopy = copy.deepcopy(zipfile)
-            tmpzip = zp.ZipFile(zipfilecopy)
-            if "outputVar.json" in tmpzip.namelist():
-                outvar = json.loads(
-                    tmpzip.read("outputVar.json").decode("utf=8")
-                )  # added decode for 3.5 and older
-                for tmp in outvar:
-                    tmp.update({"role": "output"})
-            if "inputVar.json" in tmpzip.namelist():
-                invar = json.loads(
-                    tmpzip.read("inputVar.json").decode("utf-8")
-                )  # added decode for 3.5 and older
-                for tmp in invar:
-                    if tmp["role"] != "input":
-                        tmp["role"] = "input"
-
-            if "ModelProperties.json" in tmpzip.namelist():
-                model_props = json.loads(
-                    tmpzip.read("ModelProperties.json").decode("utf-8")
-                )
+                if "ModelProperties.json" in tmp_zip.namelist():
+                    model_props = json.loads(
+                        tmp_zip.read("ModelProperties.json").decode("utf-8")
+                    )
+                else:
+                    model_props = {}
+                project = _create_project(project, model_props, repo_obj, in_var, out_var)
+            model = mr.import_model_from_zip(name, project, zip_file, version=version)
+        # Assume ASTORE model if not a DataStep model
+        else:
+            conn = model.session.get_connection()
+            conn.loadactionset("astore")
+            if create_project:
+                result = conn.astore.describe(rstore=model, epcode=False)
+                model_props = utils.astore._get_model_properties(result)
+                in_var = [utils.astore.get_variable_properties(var) for var in result.InputVariables.itertuples()]
+                for var in in_var:
+                    if not var.get("role"):
+                        var["role"] = "INPUT"
+                out_var = [utils.astore.get_variable_properties(var) for var in result.OutputVariables.itertuples()]
+                for var in out_var:
+                    if not var.get("role"):
+                        var["role"] = "OUTPUT"
+                project = _create_project(project, model_props, repo_obj, in_var, out_var)
             else:
-                model_props = {}
-
-            project = _create_project(project, model_props, repo_obj, invar, outvar)
-
-        model = mr.import_model_from_zip(name, project, zipfile, version=version)
+                project = mr.get_project(project)
+            astore = conn.astore.download(rstore=model)
+            params = {
+                "name": name,
+                "projectId": project.id,
+                "type": "ASTORE",
+                "versionOption": version
+            }
+            model = mr.post(
+                "/models",
+                files={"files": ("{}.sasast".format(model.params["name"]), astore["blob"])},
+                data=params
+            )
         return model
 
     # If the model is an scikit-learn model, generate the model dictionary
