@@ -359,7 +359,7 @@ def register_model(
             )
         return model
 
-    # If the model is an scikit-learn model, generate the model dictionary
+    # If the model is a scikit-learn model, generate the model dictionary
     # from it and pickle the model for storage
     if all(hasattr(model, attr) for attr in ["_estimator_type", "get_params"]):
         # Pickle the model so we can store it
