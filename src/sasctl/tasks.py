@@ -289,7 +289,9 @@ def register_model(
     # Import these via a ZIP file.
     if "swat.cas.table.CASTable" in str(type(model)):
         if swat is None:
-            raise RuntimeError("The 'swat' package is required to work with SAS models.")
+            raise RuntimeError(
+                "The 'swat' package is required to work with SAS models."
+            )
         if not isinstance(model, swat.CASTable):
             raise ValueError(
                 "Parameter 'table' should be an instance of '%r' but "
@@ -325,7 +327,9 @@ def register_model(
                     )
                 else:
                     model_props = {}
-                project = _create_project(project, model_props, repo_obj, in_var, out_var)
+                project = _create_project(
+                    project, model_props, repo_obj, in_var, out_var
+                )
             model = mr.import_model_from_zip(name, project, zip_file, version=version)
         # Assume ASTORE model if not a DataStep model
         else:
@@ -334,15 +338,23 @@ def register_model(
             if create_project:
                 result = conn.astore.describe(rstore=model, epcode=False)
                 model_props = utils.astore._get_model_properties(result)
-                in_var = [utils.astore.get_variable_properties(var) for var in result.InputVariables.itertuples()]
+                in_var = [
+                    utils.astore.get_variable_properties(var)
+                    for var in result.InputVariables.itertuples()
+                ]
                 for var in in_var:
                     if not var.get("role"):
                         var["role"] = "INPUT"
-                out_var = [utils.astore.get_variable_properties(var) for var in result.OutputVariables.itertuples()]
+                out_var = [
+                    utils.astore.get_variable_properties(var)
+                    for var in result.OutputVariables.itertuples()
+                ]
                 for var in out_var:
                     if not var.get("role"):
                         var["role"] = "OUTPUT"
-                project = _create_project(project, model_props, repo_obj, in_var, out_var)
+                project = _create_project(
+                    project, model_props, repo_obj, in_var, out_var
+                )
             else:
                 project = mr.get_project(project)
             astore = conn.astore.download(rstore=model)
@@ -354,8 +366,10 @@ def register_model(
             }
             model = mr.post(
                 "/models",
-                files={"files": ("{}.sasast".format(model.params["name"]), astore["blob"])},
-                data=params
+                files={
+                    "files": ("{}.sasast".format(model.params["name"]), astore["blob"])
+                },
+                data=params,
             )
         return model
 
