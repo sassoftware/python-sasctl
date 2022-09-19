@@ -336,10 +336,9 @@ class ModelRepository(Service):
         )
         model["scoreCodeType"] = score_code_type or model.get("scoreCodeType")
         model["trainTable"] = training_table or model.get("trainTable")
-        model[
-            "classificationEventProbabilityVariableName"
-        ] = event_prob_variable or model.get(
-            "classificationEventProbabilityVariableName"
+        model["classificationEventProbabilityVariableName"] = (
+            event_prob_variable
+            or model.get("classificationEventProbabilityVariableName")
         )
         model["classificationTargetEventValue"] = event_target_value or model.get(
             "classificationTargetEventValue"
@@ -412,13 +411,15 @@ class ModelRepository(Service):
             return cls.post(
                 "/models/{}/contents".format(id_), files=files, params=params
             )
-        # Delete the older duplicate model and rerun the API call
+        # Deletes the duplicate content and reruns the API call
         except HTTPError as e:
             if e.code == 409:
                 model_contents = cls.get_model_contents(id_)
                 for item in model_contents:
                     if item.name == name:
                         cls.delete("/models/{}/contents/{}".format(id_, item.id))
+                        # Return json stream to beginning of file content
+                        files["files"][1].seek(0)
                         return cls.post(
                             "/models/{}/contents".format(id_),
                             files=files,
