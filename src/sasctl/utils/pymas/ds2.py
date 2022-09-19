@@ -328,11 +328,7 @@ class DS2PyMASMethod(DS2BaseMethod):
 @deprecated(version="1.5", removed_in="1.6")
 class DS2ScoreMethod(DS2BaseMethod):
     def __init__(
-        self,
-        variables,
-        return_code=True,
-        return_message=True,
-        target="wrapper",
+        self, variables, return_code=True, return_message=True, target="wrapper",
     ):
         self._target = target
 

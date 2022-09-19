@@ -124,12 +124,10 @@ class ModelPublish(Service):
                 code = cls.get(code_link["href"])
 
         request = dict(
-            name=name or model.get("name"),
-            notes=notes,
-            destinationName=destination,
+            name=name or model.get("name"), notes=notes, destinationName=destination,
         )
 
-        modelContents = {
+        model_contents = {
             "modelName": model.get("name"),
             "modelId": model.get("id"),
             "sourceUri": model_uri.get("href"),
@@ -139,7 +137,7 @@ class ModelPublish(Service):
             "code": code,
         }
 
-        request["modelContents"] = [modelContents]
+        request["model_contents"] = [model_contents]
         return cls.post(
             "/models",
             json=request,

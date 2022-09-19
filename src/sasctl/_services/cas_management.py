@@ -9,14 +9,12 @@ from typing import Union, TextIO
 
 from .service import Service
 
+QUERY_PARAMETERS = "query parameters"
 DEFAULT_SERVER = "cas-shared-default"
 DEFAULT_CASLIB = "Public"
 
-def check_keys(
-    valid_keys:list, 
-    input_keys:list, 
-    parameters:str
-):
+
+def check_keys(valid_keys: list, input_keys: list, parameters: str):
     """Compares the input_keys against the valid_keys
     to see if they are allowed to be passed
     as parameters in the request.
@@ -38,12 +36,11 @@ def check_keys(
     if not all(key in valid_keys for key in input_keys):
         raise ValueError(
             "The only acceptable values for %s are %s" % (parameters, valid_keys)
-            )    
+        )
+
 
 def check_required_key(
-    required_key:Union[str,list], 
-    input_keys:list, 
-    parameters:str
+    required_key: Union[str, list], input_keys: list, parameters: str
 ):
     """Check whether the required parameters
     are in the list of input_key.
@@ -63,22 +60,23 @@ def check_required_key(
     raises ValueError if required_key is not present.
     raises TypeError if required_key is neither a list or a string.
     """
-    if isinstance(required_key,str):
+    if isinstance(required_key, str):
         if required_key not in input_keys:
             raise ValueError(
-                "The %s is a required %s parameter." % (required_key,parameters)
-                )
-    elif isinstance(required_key,list):
+                "The %s is a required %s parameter." % (required_key, parameters)
+            )
+    elif isinstance(required_key, list):
         required_set = set(required_key)
         input_set = set(input_keys)
         if not required_set.issubset(input_set):
             raise ValueError(
-                "The %s are required %s parameters." % (required_key,parameters)
-                )
+                "The %s are required %s parameters." % (required_key, parameters)
+            )
     else:
         raise TypeError(
             "Please enter either a list or a string of required parameters."
-            )
+        )
+
 
 class CASManagement(Service):
     """The CAS Management service provides the ability to manage and perform
@@ -119,14 +117,11 @@ class CASManagement(Service):
                 "excludeItemLink",
                 "sessionId",
             ]
-            check_keys(allowed_query,query_params,'query parameters')
+            check_keys(allowed_query, query_params, QUERY_PARAMETERS)
         else:
-            query_params={}
-        
-        sess_list = cls.get(
-            "/servers/%s/sessions"  %server,
-            params = query_params
-            )
+            query_params = {}
+
+        sess_list = cls.get("/servers/%s/sessions" % server, params=query_params)
         return sess_list
 
     @classmethod
@@ -156,14 +151,16 @@ class CASManagement(Service):
             "replace",
             "timeOut",
         ]
-        check_keys(allowed_body,properties.keys(),'body')
-        check_required_key("authenticationType",properties.keys(),'body')
+        check_keys(allowed_body, properties.keys(), "body")
+        check_required_key("authenticationType", properties.keys(), "body")
 
         sess = cls.post("/servers/%s/sessions" % (server), json=properties)
         return sess
 
     @classmethod
-    def delete_session(cls, sess_id: str, server: str = None, query_params: dict = None):
+    def delete_session(
+        cls, sess_id: str, server: str = None, query_params: dict = None
+    ):
         """Terminates a session on the CAS server.
 
         Parameters
@@ -184,14 +181,13 @@ class CASManagement(Service):
 
         if query_params is not None:
             allowed_query = ["force", "superUserSessionId"]
-            check_keys(allowed_query,query_params,'query parameters')
+            check_keys(allowed_query, query_params, QUERY_PARAMETERS)
         else:
             query_params = {}
 
         sess = cls.delete(
-            "/servers/%s/sessions/%s" % (server, sess_id),
-            params=query_params
-            )
+            "/servers/%s/sessions/%s" % (server, sess_id), params=query_params
+        )
         return sess
 
     @classmethod
@@ -369,75 +365,75 @@ class CASManagement(Service):
             data["format"] = format_
 
         allowed_body = [
-            'sessionId',
-            'variables', 
-            'label', 
-            'scope', 
-            'replace', 
-            'encoding',
-            'allowTruncation', 
-            'allowEmbeddedNewLines', 
-            'delimiter',
-            'varchars', 
-            'scanRows', 
-            'threadCount', 
-            'stripBlanks', 
-            'sheetName',
-            'password', 
-            'decryptionKey', 
-            'stringLengthMultiplier', 
-            'varcharConversionThreshold'
+            "sessionId",
+            "variables",
+            "label",
+            "scope",
+            "replace",
+            "encoding",
+            "allowTruncation",
+            "allowEmbeddedNewLines",
+            "delimiter",
+            "varchars",
+            "scanRows",
+            "threadCount",
+            "stripBlanks",
+            "sheetName",
+            "password",
+            "decryptionKey",
+            "stringLengthMultiplier",
+            "varcharConversionThreshold",
         ]
         allowed_csv = [
-            'sessionId',
-            'variables', 
-            'label', 
-            'scope', 
-            'replace', 
-            'encoding',
-            'allowTruncation', 
-            'allowEmbeddedNewLines', 
-            'delimiter', 
-            'varchars', 
-            'scanRows', 
-            'threadCount', 
-            'stripBlanks'
+            "sessionId",
+            "variables",
+            "label",
+            "scope",
+            "replace",
+            "encoding",
+            "allowTruncation",
+            "allowEmbeddedNewLines",
+            "delimiter",
+            "varchars",
+            "scanRows",
+            "threadCount",
+            "stripBlanks",
         ]
         allowed_xls = [
-            'sessionId',
-            'variables', 
-            'label', 
-            'scope', 
-            'replace', 
-            'sheetName'
+            "sessionId",
+            "variables",
+            "label",
+            "scope",
+            "replace",
+            "sheetName",
         ]
         allowed_sas = [
-            'sessionId',
-            'variables', 
-            'label', 
-            'scope', 
-            'replace', 
-            'password',
-            'decryptionKey',
-            'stringLengthMultiplier',  
-            'varcharConversionThreshold'
+            "sessionId",
+            "variables",
+            "label",
+            "scope",
+            "replace",
+            "password",
+            "decryptionKey",
+            "stringLengthMultiplier",
+            "varcharConversionThreshold",
         ]
 
         if detail is not None:
-            check_keys(allowed_body,detail.keys(),'body')
-            if format_=='csv':
-                check_keys(allowed_csv,detail.keys(),'csv files')
-            elif format_ in ['xls','xlsx']:
-                check_keys(allowed_xls,detail.keys(),'excel files')
-            elif format_ in ['sashdat','sas7bdat']:
-                check_keys(allowed_sas,detail.keys(),'sas files')
-            
+            check_keys(allowed_body, detail.keys(), "body")
+            if format_ == "csv":
+                check_keys(allowed_csv, detail.keys(), "csv files")
+            elif format_ in ["xls", "xlsx"]:
+                check_keys(allowed_xls, detail.keys(), "excel files")
+            elif format_ in ["sashdat", "sas7bdat"]:
+                check_keys(allowed_sas, detail.keys(), "sas files")
+
             data.update(detail)
 
         tbl = cls.post(
             "/servers/%s/caslibs/%s/tables" % (server, caslib),
             data=data,
-            files={'file': (name,file)},
+            files={"file": (name, file)},
         )
         return tbl
 
@@ -496,9 +492,9 @@ class CASManagement(Service):
                 "sourceTableName",
                 "createRelationships",
             ]
-            check_keys(allowed_query,query_params.keys(),'query parameters')
+            check_keys(allowed_query, query_params.keys(), QUERY_PARAMETERS)
             query.update(query_params)
-                
+
         if body is not None:
             allowed_body = [
                 "copies",
@@ -510,7 +506,7 @@ class CASManagement(Service):
                 "replaceMode",
                 "scope",
             ]
-            check_keys(allowed_body,body.keys(),'body parameters')
+            check_keys(allowed_body, body.keys(), "body parameters")
         else:
             body = {}
 
@@ -598,7 +594,7 @@ class CASManagement(Service):
                 "sourceTableName",
                 "parameters",
             ]
-            check_keys(allowed_body,properties.keys(),'body')
+            check_keys(allowed_body, properties.keys(), "body")
         else:
             properties = {}
 
@@ -610,14 +606,14 @@ class CASManagement(Service):
             json=properties,
         )
         return sess
-    
+
     @classmethod
     def del_table(
-        cls, 
-        name: str, 
-        query_params: dict = None, 
+        cls,
+        name: str,
+        query_params: dict = None,
         caslib: str = None,
-        server: str = None 
+        server: str = None,
     ):
         """Deletes a table from Caslib source. Note that is not an unload.
         This operation physically removes the source table (if the source is writable).
@@ -642,28 +638,23 @@ class CASManagement(Service):
         -------
         RestObj
         """
-        
+
         server = server or DEFAULT_SERVER
         caslib = caslib or DEFAULT_CASLIB
-        
-        required_queries = ["sourceTableName","quiet","removeAcs"]
+
+        required_queries = ["sourceTableName", "quiet", "removeAcs"]
 
         if query_params is not None:
-            allowed_query = [
-                "sessionId",
-                "sourceTableName",
-                "quiet",
-                "removeAcs"
-            ]
-            check_keys(allowed_query,query_params.keys(),'query parameters')
-            check_required_key(required_queries,query_params.keys(),'query')
+            allowed_query = ["sessionId", "sourceTableName", "quiet", "removeAcs"]
+            check_keys(allowed_query, query_params.keys(), QUERY_PARAMETERS)
+            check_required_key(required_queries, query_params.keys(), "query")
         else:
             raise ValueError(
-                "You must provide these query parameters: %s"%required_queries
+                "You must provide these query parameters: %s" % required_queries
             )
 
-        tbl =  cls.delete(
-            "servers/%s/caslibs/%s/tables/%s"%(server,caslib,name),
-            params=query_params
-            )
+        tbl = cls.delete(
+            "servers/%s/caslibs/%s/tables/%s" % (server, caslib, name),
+            params=query_params,
+        )
         return tbl
