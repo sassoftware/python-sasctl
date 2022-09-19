@@ -362,7 +362,6 @@ def register_model(
                 "name": name,
                 "projectId": project.id,
                 "type": "ASTORE",
-                "versionOption": version
             }
             model = mr.post(
                 "/models",
