@@ -17,7 +17,7 @@ tbl = s.upload('data/iris.csv').casTable
 
 # Train a gradient boosting model to identify iris species.
 s.loadactionset('decisionTree')
-tbl.decisiontree.gbtreetrain(target='Species',
+tbl.decisionTree.gbtreetrain(target='Species',
                              inputs=['SepalLength', 'SepalWidth',
                                      'PetalLength', 'PetalWidth'],
                              savestate='gradboost_astore')
