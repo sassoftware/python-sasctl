@@ -46,6 +46,7 @@ def run_around_tests(session):
 
 
 def test(cas_session, boston_dataset):
+    pytest.skip("Re-enable when sklearn score code is refactored for SAS Viya 4.")
     cas_session.loadactionset('regression')
 
     tbl = cas_session.upload(boston_dataset).casTable
