@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2020-01-22T00:10:00",
+      "recorded_at": "2022-09-14T16:47:59",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -12,7 +12,7 @@
             "application/json"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Basic [redacted]"
@@ -21,13 +21,13 @@
             "keep-alive"
           ],
           "Content-Length": [
-            "54"
+            "53"
           ],
           "Content-Type": [
             "application/x-www-form-urlencoded"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "POST",
@@ -36,38 +36,38 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIwODU0ZGEyMC1jZGVlLTRkZWEtOGRlNC04YTZhMDc2OTg0MDciLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE1Nzk2ODc4MDAsImlhdCI6MTU3OTY1MTgwMCwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJzYXNkZW1vQG5vbmUuc2FzLmNvbSIsInppZCI6InVhYSIsIm9yaWdpbiI6ImxkYXAiLCJqdGkiOiJhNWY3ZjU4MGJlNTI0MGE1OGEzYWMyYWVmZTI1NmY5ZSIsInByZXZpb3VzX2xvZ29uX3RpbWUiOjE1Nzk2NTE4MDA1MjIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50X2lkIjoic2FzLmVjIiwiY2lkIjoic2FzLmVjIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoic2FzZGVtbyIsInJldl9zaWciOiI5ZjAwNjhmYSIsImF1dGhfdGltZSI6MTU3OTY1MTgwMCwidXNlcl9pZCI6IjA4NTRkYTIwLWNkZWUtNGRlYS04ZGU0LThhNmEwNzY5ODQwNyJ9.EWU1ksl6fa5gcLlsSPakPnCQf33wWketipcZ1w6_FPj2xu44Bl-WpjgYq8dEe6IPxQFJly2fBSYzTpjjDQ8n7pYjj5--Gvt6nlOpoLi44-DCu4ocP8GX-pg30ppkcJhDEHovY0m57Y8e4dhUMEEcy6zjKqHUqaKg-jvRYHILhcLvdKlvnCTBVEcUlGWQM2FcV0oDXv8vPbH9Qi8GpS3AzIWrvvYFAzkVbSNNxV1eBLIDXyZhbLpCPM4THQ8L4GqDoxDED7pLFhS3aDg3-NP3TysXJDBydxNFkOjsuj9TrFIEagWnx9UChKpgBQioLSQpdC5pT4u2pqufiUqxcRl0kA\",\"expires_in\":35999,\"scope\":\"clients.read clients.secret DataBuilders uaa.resource openid ApplicationAdministrators uaa.admin clients.admin EsriUsers scim.read SASScoreUsers SASAdministrators clients.write scim.write\",\"jti\":\"a5f7f580be5240a58a3ac2aefe256f9e\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiJjMjA0MDRhZi1iYTZlLTRlMWQtYTc5MS00NWNkNmU0MTk2ODQiLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE2NjMxODg0NzksImlhdCI6MTY2MzE3NDA3OSwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJlZG1kZXZAdXNlci5mcm9tLmxkYXAuY2YiLCJ6aWQiOiJ1YWEiLCJvcmlnaW4iOiJsZGFwIiwianRpIjoiMzQ0MzQ3YTFlNmM4NDg0ZGFlN2RjOTkxOGMwYTM0ZjYiLCJwcmV2aW91c19sb2dvbl90aW1lIjoxNjYzMTc0MDc5MTIyLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudF9pZCI6InNhcy5lYyIsImNpZCI6InNhcy5lYyIsImdyYW50X3R5cGUiOiJwYXNzd29yZCIsInVzZXJfbmFtZSI6ImVkbWRldiIsInJldl9zaWciOiI5ZjhlYjY2ZSIsInVzZXJfaWQiOiJjMjA0MDRhZi1iYTZlLTRlMWQtYTc5MS00NWNkNmU0MTk2ODQiLCJhdXRoX3RpbWUiOjE2NjMxNzQwNzl9.dsvx1QvWkEzx7DcKmdgFmcz1Fuv3odY8O9BLOHVNbBx4NHRw9VyjlRyOn_SBKmsSNJrXKeSrPd0q0VvsNqqgQPlk1a3BfCAvWbsK7yVEArcAuD6J2HBiY7ArmBsoIaa6Vt1J9PKFUqu-qiKJz2sGNUUYmspbou8ROH1CZPXthdvLhmFaHAWEZ53NhsqgumNy5cEcw2T_vT5b7JrRNXuPDUKkIuE6naQZyxMQTwDZAJVbsvURZxbQBeytV7JrZydnLNQH_M-0Oqo56H1w8T3yCAuSiTOWxx0O9ym1HM-oFSJouTqoxC9oACbNvwQrRWVPKlmQRcrBbYcali1j3TqaYg\",\"expires_in\":14399,\"scope\":\"ViyaSASAdmins DataBuilders FSDev s2m_singlestore_secure clients.read clients.secret uaa.resource decqe openid uaa.admin clients.admin scim.read unix_r&d SASAdministrators openstackusers clients.write lanpanfilter scim.write\",\"jti\":\"344347a1e6c8484dae7dc9918c0a34f6\"}"
         },
         "headers": {
           "Cache-Control": [
             "no-store"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Type": [
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Wed, 22 Jan 2020 00:10:00 GMT"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
+            "Wed, 14 Sep 2022 16:47:59 GMT"
           ],
           "Pragma": [
             "no-cache"
           ],
-          "Server": [
-            "Apache/2.4"
+          "Set-Cookie": [
+            "sas-ingress-nginx=391a9ce41664ef049c506b29a73c5b69|f180b669c8557cce6224f4fde6085e56; Path=/SASLogon/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=330D30922CC05C5CD393012FC16230A4; Path=/SASLogon; Secure; HttpOnly; SameSite=Lax"
           ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
           ],
           "X-Content-Type-Options": [
             "nosniff"
@@ -87,7 +87,7 @@
       }
     },
     {
-      "recorded_at": "2020-01-22T00:10:00",
+      "recorded_at": "2022-09-14T16:47:59",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -98,7 +98,7 @@
             "*/*"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Bearer [redacted]"
@@ -107,7 +107,7 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "GET",
@@ -116,35 +116,32 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/sasctl_testmodule\",\"uri\":\"/microanalyticScore/modules/sasctl_testmodule\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/sasctl_testmodule/steps\",\"uri\":\"/microanalyticScore/modules/sasctl_testmodule/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/sasctl_testmodule/submodules\",\"uri\":\"/microanalyticScore/modules/sasctl_testmodule/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/sasctl_testmodule\",\"uri\":\"/microanalyticScore/modules/sasctl_testmodule\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/sasctl_testmodule\",\"uri\":\"/microanalyticScore/modules/sasctl_testmodule\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2020-01-21T23:58:44.404Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2020-01-21T23:58:44.404Z\",\"id\":\"sasctl_testmodule\",\"name\":\"myfunction\",\"revision\":0,\"scope\":\"public\",\"language\":\"python\",\"stepIds\":[\"myfunction\",\"myfunction2\"],\"warnings\":[]}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/sasctl_testmodule\",\"uri\":\"/microanalyticScore/modules/sasctl_testmodule\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/sasctl_testmodule/steps\",\"uri\":\"/microanalyticScore/modules/sasctl_testmodule/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/sasctl_testmodule/submodules\",\"uri\":\"/microanalyticScore/modules/sasctl_testmodule/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/sasctl_testmodule\",\"uri\":\"/microanalyticScore/modules/sasctl_testmodule\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/sasctl_testmodule\",\"uri\":\"/microanalyticScore/modules/sasctl_testmodule\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2022-09-14T16:47:57.091Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2022-09-14T16:47:57.091Z\",\"id\":\"sasctl_testmodule\",\"name\":\"myfunction\",\"revision\":0,\"scope\":\"public\",\"language\":\"python\",\"stepIds\":[\"myfunction\",\"myfunction2\"],\"warnings\":[]}"
         },
         "headers": {
           "Cache-Control": [
             "no-cache, no-store, max-age=0, must-revalidate"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+            "default-src 'self'; object-src 'none';"
           ],
           "Content-Type": [
             "application/vnd.sas.microanalytic.module+json;charset=UTF-8"
           ],
           "Date": [
-            "Wed, 22 Jan 2020 00:10:00 GMT"
+            "Wed, 14 Sep 2022 16:47:59 GMT"
           ],
           "ETag": [
-            "\"k5ojhsc4\""
+            "\"l81uwj37\""
           ],
           "Expires": [
             "0"
           ],
-          "Keep-Alive": [
-            "timeout=5, max=99"
-          ],
           "Last-Modified": [
-            "Tue, 21 Jan 2020 23:58:44 GMT"
+            "Wed, 14 Sep 2022 16:47:57 GMT"
           ],
           "Location": [
             "/microanalyticScore/modules/sasctl_testmodule"
@@ -152,17 +149,22 @@
           "Pragma": [
             "no-cache"
           ],
-          "Server": [
-            "Apache/2.4"
+          "SAS-Service-Response-Flag": [
+            "true"
+          ],
+          "Set-Cookie": [
+            "sas-ingress-nginx=40dee94f372eb2385df757ad6771e097|fbf55717cf5fc8fd999660bc89e3e35a; Path=/microanalyticScore/; Secure; HttpOnly; SameSite=Lax"
           ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
           ],
           "X-Content-Type-Options": [
             "nosniff"

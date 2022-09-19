@@ -1,7 +1,93 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2022-08-12T11:01:32",
+      "recorded_at": "2022-09-14T16:43:21",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate, br"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "53"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiJjMjA0MDRhZi1iYTZlLTRlMWQtYTc5MS00NWNkNmU0MTk2ODQiLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE2NjMxODgyMDEsImlhdCI6MTY2MzE3MzgwMSwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJlZG1kZXZAdXNlci5mcm9tLmxkYXAuY2YiLCJ6aWQiOiJ1YWEiLCJvcmlnaW4iOiJsZGFwIiwianRpIjoiYzRkMGVkYzRiMWNhNGRiOTkyMWE5MDE0NzVjZWQ2NWUiLCJwcmV2aW91c19sb2dvbl90aW1lIjoxNjYzMTczNzkzMjcxLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudF9pZCI6InNhcy5lYyIsImNpZCI6InNhcy5lYyIsImdyYW50X3R5cGUiOiJwYXNzd29yZCIsInVzZXJfbmFtZSI6ImVkbWRldiIsInJldl9zaWciOiI5ZjhlYjY2ZSIsInVzZXJfaWQiOiJjMjA0MDRhZi1iYTZlLTRlMWQtYTc5MS00NWNkNmU0MTk2ODQiLCJhdXRoX3RpbWUiOjE2NjMxNzM4MDF9.gdY5tQ-9rUCxvHwV96q-e5ms2hgf0qBfGF3Fq97kxXjUV-H16ORgDopBY9IpCuIiLrWV39gbH3x_-h7D-y7P3EOazMgYeoXt2pxcmT585Wcqf-GEDPorlmnuzBJAUUZzokU2JYIraaxU3qlKbXWTy9qG48sfPTb4mAXJHWhNq9QL-tK7JFWeA32HYoSdsEGaYxzrldtQCZKKS2ves1FZ6X8z9C2kdnz39JoW_NlW5GgPKnW9DtexuOWjysz5slbGKZhKyNM-xU2Rwpgwn7zo-U9m678_dlwzSgulvBnYT5W4lpAvuFxEDFHD0hbAt2QJqzv26YOCh-WlQGtibasROw\",\"expires_in\":14399,\"scope\":\"ViyaSASAdmins DataBuilders FSDev s2m_singlestore_secure clients.read clients.secret uaa.resource decqe openid uaa.admin clients.admin scim.read unix_r&d SASAdministrators openstackusers clients.write lanpanfilter scim.write\",\"jti\":\"c4d0edc4b1ca4db9921a901475ced65e\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-store"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Wed, 14 Sep 2022 16:43:21 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Set-Cookie": [
+            "sas-ingress-nginx=391a9ce41664ef049c506b29a73c5b69|f180b669c8557cce6224f4fde6085e56; Path=/SASLogon/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=0085F13DC845634EC7ACF73C3BDA40AD; Path=/SASLogon; Secure; HttpOnly; SameSite=Lax"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2022-09-14T16:43:22",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -12,7 +98,7 @@
             "*/*"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Bearer [redacted]"
@@ -30,27 +116,27 @@
       "response": {
         "body": {
           "encoding": null,
-          "string": "{\"version\":2,\"accept\":\"application/vnd.sas.cas.session.summary\",\"count\":3,\"start\":0,\"limit\":10,\"name\":\"sessions\",\"items\":[{\"version\":2,\"id\":\"ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4\",\"name\":\"SessionSimulation:Fri Aug 12 10:52:17 2022\",\"state\":\"Disconnected\",\"authenticationType\":\"OAuth\",\"owner\":\"stzsil\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4\",\"type\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default/sessions\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4\"},{\"method\":\"POST\",\"rel\":\"startPermissionsTransaction\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4?action=start\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/ed96b43a-544e-a84b-8ccc-c8ec9e94c5f4?action=start\"}]},{\"version\":2,\"id\":\"cc777d74-c0bd-0f45-ac2e-bfd75af0d611\",\"name\":\"casManagement:GET Sessions:handlers.CasManagementSessionsHandler.GetSessionsRouter:Fri Aug 12 11:01:28 2022\",\"state\":\"Connected\",\"authenticationType\":\"OAuth\",\"owner\":\"stzsil\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/cc777d74-c0bd-0f45-ac2e-bfd75af0d611\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/cc777d74-c0bd-0f45-ac2e-bfd75af0d611\",\"type\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default/sessions\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/cc777d74-c0bd-0f45-ac2e-bfd75af0d611\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/cc777d74-c0bd-0f45-ac2e-bfd75af0d611\"},{\"method\":\"POST\",\"rel\":\"startPermissionsTransaction\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/cc777d74-c0bd-0f45-ac2e-bfd75af0d611?action=start\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/cc777d74-c0bd-0f45-ac2e-bfd75af0d611?action=start\"}]},{\"version\":2,\"id\":\"1f38bf73-104f-024e-a5b7-6205afa27101\",\"name\":\"casManagement:GET tables:handlers.CasManagementTablesHandler.TableCollectionRouter:Fri Aug 12 11:01:28 2022\",\"state\":\"Connected\",\"authenticationType\":\"OAuth\",\"owner\":\"stzsil\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/1f38bf73-104f-024e-a5b7-6205afa27101\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/1f38bf73-104f-024e-a5b7-6205afa27101\",\"type\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default/sessions\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/1f38bf73-104f-024e-a5b7-6205afa27101\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/1f38bf73-104f-024e-a5b7-6205afa27101\"},{\"method\":\"POST\",\"rel\":\"startPermissionsTransaction\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/1f38bf73-104f-024e-a5b7-6205afa27101?action=start\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/1f38bf73-104f-024e-a5b7-6205afa27101?action=start\"}]}],\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default\",\"uri\":\"/casManagement/servers/cas-shared-default\",\"type\":\"application/vnd.sas.cas.server\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/sessions?start=0\\u0026limit=10\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions?start=0\\u0026limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/casManagement/servers/cas-shared-default/sessions\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.session.summary\"}]}"
+          "string": "{\"version\":2,\"accept\":\"application/vnd.sas.cas.session.summary\",\"count\":1,\"start\":0,\"limit\":10,\"name\":\"sessions\",\"items\":[{\"version\":2,\"id\":\"e9d5c472-8089-1d4d-9574-84a5fc73afa8\",\"name\":\"casManagement:GET Sessions:handlers.CasManagementSessionsHandler.GetSessionsRouter:Wed Sep 14 16:43:21 2022\",\"state\":\"Connected\",\"authenticationType\":\"OAuth\",\"owner\":\"USERNAME\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/e9d5c472-8089-1d4d-9574-84a5fc73afa8\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/e9d5c472-8089-1d4d-9574-84a5fc73afa8\",\"type\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default/sessions\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/e9d5c472-8089-1d4d-9574-84a5fc73afa8\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/e9d5c472-8089-1d4d-9574-84a5fc73afa8\"},{\"method\":\"POST\",\"rel\":\"startPermissionsTransaction\",\"href\":\"/casManagement/servers/cas-shared-default/sessions/e9d5c472-8089-1d4d-9574-84a5fc73afa8?action=start\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions/e9d5c472-8089-1d4d-9574-84a5fc73afa8?action=start\"}]}],\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/casManagement/servers/cas-shared-default\",\"uri\":\"/casManagement/servers/cas-shared-default\",\"type\":\"application/vnd.sas.cas.server\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/casManagement/servers/cas-shared-default/sessions?start=0\\u0026limit=10\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions?start=0\\u0026limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.session.summary\"},{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/casManagement/servers/cas-shared-default/sessions\",\"uri\":\"/casManagement/servers/cas-shared-default/sessions\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.cas.session.summary\"}]}"
         },
         "headers": {
           "Connection": [
             "keep-alive"
           ],
           "Content-Security-Policy": [
-            "default-src 'self'; object-src 'none';"
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
           ],
           "Content-Type": [
             "application/vnd.sas.collection+json"
           ],
           "Date": [
-            "Fri, 12 Aug 2022 11:01:29 GMT"
+            "Wed, 14 Sep 2022 16:43:22 GMT"
           ],
           "Sas-Service-Response-Flag": [
             "true"
           ],
           "Set-Cookie": [
-            "sas-ingress-nginx=968bf7603a23374f47d2b61619986ab6|fedf5c4919a6eb76e9925a7a50aad13d; Path=/casManagement/; Secure; HttpOnly; SameSite=None",
-            "JSESSIONID=19c5060c-9ccc-423f-8794-189d0ce737a0; Path=/casManagement/; HttpOnly; Secure; SameSite=None"
+            "sas-ingress-nginx=4ed8c25f5b05cb780b8b972bf42effee|54cf4a7ab78532a244ee7cc80a29d90e; Path=/casManagement/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=3d21ffb7-26f9-4371-bfac-2549ba794959; Path=/casManagement/; HttpOnly; Secure; SameSite=Lax"
           ],
           "Strict-Transport-Security": [
             "max-age=15724800; includeSubDomains"
@@ -63,9 +149,6 @@
           ],
           "X-Content-Type-Options": [
             "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
           ],
           "X-Xss-Protection": [
             "1; mode=block"

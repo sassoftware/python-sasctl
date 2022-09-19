@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2019-09-06T13:46:42",
+      "recorded_at": "2022-09-14T16:44:09",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -12,7 +12,7 @@
             "application/json"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Basic [redacted]"
@@ -21,13 +21,13 @@
             "keep-alive"
           ],
           "Content-Length": [
-            "54"
+            "53"
           ],
           "Content-Type": [
             "application/x-www-form-urlencoded"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "POST",
@@ -36,40 +36,38 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"0bc52aa1db144ca285751f457a89a148\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiJjMjA0MDRhZi1iYTZlLTRlMWQtYTc5MS00NWNkNmU0MTk2ODQiLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE2NjMxODgyNDksImlhdCI6MTY2MzE3Mzg0OSwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJlZG1kZXZAdXNlci5mcm9tLmxkYXAuY2YiLCJ6aWQiOiJ1YWEiLCJvcmlnaW4iOiJsZGFwIiwianRpIjoiY2ZhOTQ1NGVmNTdiNGJiN2FkYjdhN2IxOTZmNTczY2UiLCJwcmV2aW91c19sb2dvbl90aW1lIjoxNjYzMTczODQyMjkwLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudF9pZCI6InNhcy5lYyIsImNpZCI6InNhcy5lYyIsImdyYW50X3R5cGUiOiJwYXNzd29yZCIsInVzZXJfbmFtZSI6ImVkbWRldiIsInJldl9zaWciOiI5ZjhlYjY2ZSIsInVzZXJfaWQiOiJjMjA0MDRhZi1iYTZlLTRlMWQtYTc5MS00NWNkNmU0MTk2ODQiLCJhdXRoX3RpbWUiOjE2NjMxNzM4NDl9.eS9zLS5upQiILI2KdiDaXXpKUuz-LJnGcGlflQHwFnKqImh0_mco2lalwlIP5JeMdQT2jCK8RhC1Aq0c89o3tSQbdo0bUL5c0P1_BA2ea1r59Vv3dKsVkVT_cVGUT-tkwg0JDJCP9z9kYxYGjGlQNOxDuJqsANDaIk03ojecDdoIXtiqykTxH4NCZvZvPX0_U4wvWot3XNiJuahyre1p7xdMWxKdGLbjUwkjk9qaxE2RSs2Rmzj5zLF0iWUxSOX0SXkNmfQQ14jM3Mca5wnL8sf8pVjNpY5pzkMIDQyfYs2_Qq410k35ZZ8f1rNb_qYH-HHPW39bqbAmpPSmThT84Q\",\"expires_in\":14399,\"scope\":\"ViyaSASAdmins DataBuilders FSDev s2m_singlestore_secure clients.read clients.secret uaa.resource decqe openid uaa.admin clients.admin scim.read unix_r&d SASAdministrators openstackusers clients.write lanpanfilter scim.write\",\"jti\":\"cfa9454ef57b4bb7adb7a7b196f573ce\"}"
         },
         "headers": {
           "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate",
             "no-store"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Type": [
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Fri, 06 Sep 2019 13:46:45 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
+            "Wed, 14 Sep 2022 16:44:09 GMT"
           ],
           "Pragma": [
-            "no-cache",
             "no-cache"
           ],
+          "Set-Cookie": [
+            "sas-ingress-nginx=391a9ce41664ef049c506b29a73c5b69|f180b669c8557cce6224f4fde6085e56; Path=/SASLogon/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=C2D8D1A252B780A6B9B78C3CDA9A32AA; Path=/SASLogon; Secure; HttpOnly; SameSite=Lax"
+          ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
           ],
           "X-Content-Type-Options": [
             "nosniff"
@@ -89,7 +87,7 @@
       }
     },
     {
-      "recorded_at": "2019-09-06T13:46:42",
+      "recorded_at": "2022-09-14T16:44:09",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -100,7 +98,7 @@
             "*/*"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Bearer [redacted]"
@@ -109,7 +107,7 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "HEAD",
@@ -123,392 +121,51 @@
         "headers": {
           "Cache-Control": [
             "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/json;charset=UTF-8"
-          ],
-          "Date": [
-            "Fri, 06 Sep 2019 13:46:46 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=99"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/dataSources/"
-      }
-    },
-    {
-      "recorded_at": "2019-09-06T14:13:50",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": "grant_type=password&username=USERNAME&password=*****"
-        },
-        "headers": {
-          "Accept": [
-            "application/json"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Basic [redacted]"
           ],
           "Connection": [
             "keep-alive"
           ],
           "Content-Length": [
-            "54"
-          ],
-          "Content-Type": [
-            "application/x-www-form-urlencoded"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "POST",
-        "uri": "https://hostname.com/SASLogon/oauth/token"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"e57e4a21341d42959934850cdddffe3a\"}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate",
-            "no-store"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Type": [
-            "application/json;charset=UTF-8"
-          ],
-          "Date": [
-            "Fri, 06 Sep 2019 14:13:53 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
-          ],
-          "Pragma": [
-            "no-cache",
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "DENY"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/SASLogon/oauth/token"
-      }
-    },
-    {
-      "recorded_at": "2019-09-06T14:13:50",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "HEAD",
-        "uri": "https://hostname.com/dataSources/"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": ""
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
+            "217"
           ],
           "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
           ],
           "Content-Type": [
-            "application/json;charset=UTF-8"
+            "application/vnd.sas.api+json;version=1;charset=UTF-8"
           ],
           "Date": [
-            "Fri, 06 Sep 2019 14:13:54 GMT"
+            "Wed, 14 Sep 2022 16:44:09 GMT"
           ],
           "Expires": [
             "0"
           ],
-          "Keep-Alive": [
-            "timeout=5, max=99"
-          ],
           "Pragma": [
             "no-cache"
           ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+          "Sas-Service-Response-Flag": [
+            "true"
           ],
-          "Transfer-Encoding": [
-            "chunked"
+          "Set-Cookie": [
+            "sas-ingress-nginx=b2913352cb0c36446def478c13cd2ca4|bdbd0e614874b88d3c322eb89966f062; Path=/dataSources/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=69aba981-4416-4984-bd1b-38f463409f06; Path=/dataSources/; HttpOnly; Secure; SameSite=Lax"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin"
           ],
           "X-Content-Type-Options": [
             "nosniff"
           ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
+          "X-Xss-Protection": [
             "1; mode=block"
           ]
         },
         "status": {
           "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/dataSources/"
-      }
-    },
-    {
-      "recorded_at": "2019-09-06T14:23:11",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": "grant_type=password&username=USERNAME&password=*****"
-        },
-        "headers": {
-          "Accept": [
-            "application/json"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Basic [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "Content-Length": [
-            "54"
-          ],
-          "Content-Type": [
-            "application/x-www-form-urlencoded"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "POST",
-        "uri": "https://hostname.com/SASLogon/oauth/token"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"a758002465a747eabb278144eaa49a6d\"}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate",
-            "no-store"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Type": [
-            "application/json;charset=UTF-8"
-          ],
-          "Date": [
-            "Fri, 06 Sep 2019 14:23:14 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
-          ],
-          "Pragma": [
-            "no-cache",
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "DENY"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/SASLogon/oauth/token"
-      }
-    },
-    {
-      "recorded_at": "2019-09-06T14:23:11",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "HEAD",
-        "uri": "https://hostname.com/dataSources/"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": ""
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/json;charset=UTF-8"
-          ],
-          "Date": [
-            "Fri, 06 Sep 2019 14:23:15 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=99"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
+          "message": "OK"
         },
         "url": "https://hostname.com/dataSources/"
       }

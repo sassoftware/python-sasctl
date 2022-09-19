@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2020-02-22T13:54:17",
+      "recorded_at": "2022-09-19T18:44:55",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -12,7 +12,7 @@
             "application/json"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Basic [redacted]"
@@ -21,13 +21,13 @@
             "keep-alive"
           ],
           "Content-Length": [
-            "54"
+            "53"
           ],
           "Content-Type": [
             "application/x-www-form-urlencoded"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "POST",
@@ -36,40 +36,38 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"bc1d85bc01bf41a7a044ec50cf5801d1\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiJiZDdlMTM3Zi04MTJlLTQzOTQtOGI2Yi0yY2QxNjA0MjQ0NWEiLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE2NjM2Mjc0OTUsImlhdCI6MTY2MzYxMzA5NSwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJlZG1kZXZAdXNlci5mcm9tLmxkYXAuY2YiLCJ6aWQiOiJ1YWEiLCJvcmlnaW4iOiJsZGFwIiwianRpIjoiZjkyNmE5ZGQ1NGQzNDc0Zjg1ZDI4MWI2NzAwNTJiOGQiLCJwcmV2aW91c19sb2dvbl90aW1lIjoxNjYzNjEzMDYxMjYwLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudF9pZCI6InNhcy5lYyIsImNpZCI6InNhcy5lYyIsImdyYW50X3R5cGUiOiJwYXNzd29yZCIsInVzZXJfbmFtZSI6ImVkbWRldiIsInJldl9zaWciOiI3ZDQ1MWIwMCIsInVzZXJfaWQiOiJiZDdlMTM3Zi04MTJlLTQzOTQtOGI2Yi0yY2QxNjA0MjQ0NWEiLCJhdXRoX3RpbWUiOjE2NjM2MTMwOTV9.YFEIW7KW7TDy8Di_QwCTigEXusF5kk7FmjdGF6KageBItSVcWA4168WJIwTCzuGDLYwGl_MwAcm1bPHFOW6-drRKadcroIh2oByGqsEYzu1QYzw4sAHwj4wCW-b9Yek3jSkNpjsjLagu7oLubAliHaoWwWbS7wRiBrt5YbLZYR6RWsJn-2w4stNWenXcC-hLe1n8r62gapmhzR2a8RKqVkSdFexyliMXqd_uBgmEokAWmQGbDDtGaHkcfoGv0hbBnF38JUza7CNed73u58AhGpSxI8Nrr9o7RfVYZSv0AD02iGJCs3D3cgPU7Q5oWcdkJEK1FbO8WOQU475oDsOBig\",\"expires_in\":14399,\"scope\":\"ViyaSASAdmins DataBuilders FSDev s2m_singlestore_secure clients.read clients.secret uaa.resource decqe openid uaa.admin clients.admin scim.read unix_r&d SASAdministrators openstackusers clients.write lanpanfilter scim.write\",\"jti\":\"f926a9dd54d3474f85d281b670052b8d\"}"
         },
         "headers": {
           "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate",
             "no-store"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Type": [
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Sat, 22 Feb 2020 13:54:17 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
+            "Mon, 19 Sep 2022 18:44:55 GMT"
           ],
           "Pragma": [
-            "no-cache",
             "no-cache"
           ],
+          "Set-Cookie": [
+            "sas-ingress-nginx=eca273655c82ff95ffada33b81086191|1aaa746e8c5e41197b3f7dd9dc6c2a1c; Path=/SASLogon/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=26E40EE1D2BB592D773E59D84078D463; Path=/SASLogon; Secure; HttpOnly; SameSite=Lax"
+          ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
           ],
           "X-Content-Type-Options": [
             "nosniff"

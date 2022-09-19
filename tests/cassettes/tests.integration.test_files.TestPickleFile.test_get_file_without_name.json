@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2020-01-18T21:27:32",
+      "recorded_at": "2022-09-16T14:44:50",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -12,7 +12,7 @@
             "application/json"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Basic [redacted]"
@@ -21,13 +21,13 @@
             "keep-alive"
           ],
           "Content-Length": [
-            "54"
+            "53"
           ],
           "Content-Type": [
             "application/x-www-form-urlencoded"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "POST",
@@ -36,38 +36,38 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIwODU0ZGEyMC1jZGVlLTRkZWEtOGRlNC04YTZhMDc2OTg0MDciLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE1Nzk0MTg4NTIsImlhdCI6MTU3OTM4Mjg1MiwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJzYXNkZW1vQG5vbmUuc2FzLmNvbSIsInppZCI6InVhYSIsIm9yaWdpbiI6ImxkYXAiLCJqdGkiOiIwMzU4YjZmMDFjNmM0Njc0OTE5NDJlNmU0ZjM4MTEwNCIsInByZXZpb3VzX2xvZ29uX3RpbWUiOjE1NzkzODI4NTIyOTMsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50X2lkIjoic2FzLmVjIiwiY2lkIjoic2FzLmVjIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoic2FzZGVtbyIsInJldl9zaWciOiI5ZjAwNjhmYSIsImF1dGhfdGltZSI6MTU3OTM4Mjg1MiwidXNlcl9pZCI6IjA4NTRkYTIwLWNkZWUtNGRlYS04ZGU0LThhNmEwNzY5ODQwNyJ9.ZAbYyHtNs06_RKHecEszX1I_aopxhonkIau53bp9a3lW2B1qkzM6erBfUnKp_eCwuOAHoeUJ_54gfxNPXVRQttE4-G1ZXDJtBKGmnXHQH0Qsq4A40lPS9mgmfvr8vgKZziOf0JejBNhAZ96ZFAJeMy1oPjbrcvblfPhzDLnvsttojr8adtGwRBMCacy9aycGdSOZQLLN_dEsub8zLzzlwHm15RAJ7IbKlsy76Fh7r-WxDqMFqcGet9xy0hI_u2BU4fP4TvhJWxDZrgctZf1zYOEypqjGbNK2RGxGUMlikl8h6cZmtIHLefzA5CVsDD3MfbaHjAcq04LcMDH7AOsDUA\",\"expires_in\":35999,\"scope\":\"clients.read clients.secret DataBuilders uaa.resource openid ApplicationAdministrators uaa.admin clients.admin EsriUsers scim.read SASScoreUsers SASAdministrators clients.write scim.write\",\"jti\":\"0358b6f01c6c467491942e6e4f381104\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIxNzI1ODcwYS0zMjM1LTRlNDktYjAyMy1iOTM4MDVhNzMwODUiLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE2NjMzNTM4OTAsImlhdCI6MTY2MzMzOTQ5MCwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJlZG1kZXZAdXNlci5mcm9tLmxkYXAuY2YiLCJ6aWQiOiJ1YWEiLCJvcmlnaW4iOiJsZGFwIiwianRpIjoiNzY3ZWZlYjA5YjJjNDI1Njg0NzU3MmFkZDMzNWQxMjEiLCJwcmV2aW91c19sb2dvbl90aW1lIjoxNjYzMzM5NDkwMDYzLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudF9pZCI6InNhcy5lYyIsImNpZCI6InNhcy5lYyIsImdyYW50X3R5cGUiOiJwYXNzd29yZCIsInVzZXJfbmFtZSI6ImVkbWRldiIsInJldl9zaWciOiJkMWRhNDY1OCIsImF1dGhfdGltZSI6MTY2MzMzOTQ5MCwidXNlcl9pZCI6IjE3MjU4NzBhLTMyMzUtNGU0OS1iMDIzLWI5MzgwNWE3MzA4NSJ9.OHWV5Iw81ebFgEH-pIxO1fPhVxYvFBKlisJz3jX3F2ynXmD7_gyhZXKSN7Ku803C2yDfX2tZmiJ0_FP4ewMreEWqktEvAdQ2rProrWh7pDhUfHIrAay0mXvjok_Dh-jbApBwicSW8gJDT9fGncJfiFlQub5uOTKIAwOIdqPrFoCfL9t-rZ70h-K7kSf8M1rh_upUcgJKKKPdr8Rx17qdJd4za1xcEoOFW-OCTnqk1Hacx0_mzuR35S4ygoN5NYSjYoUQeK6DiiCNbOnRe8tTHUXCRruyV1kgp9Ryxu3yLL_tgvhqUJC1sk6N0sL57VCOHAL2ptZAGQgJ796CR0cxyg\",\"expires_in\":14399,\"scope\":\"ViyaSASAdmins FSDev clients.read clients.secret uaa.resource decqe openid uaa.admin clients.admin scim.read unix_r&d SASAdministrators openstackusers clients.write lanpanfilter Postgres_azure_Access scim.write\",\"jti\":\"767efeb09b2c4256847572add335d121\"}"
         },
         "headers": {
           "Cache-Control": [
             "no-store"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Type": [
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Sat, 18 Jan 2020 21:27:32 GMT"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
+            "Fri, 16 Sep 2022 14:44:50 GMT"
           ],
           "Pragma": [
             "no-cache"
           ],
-          "Server": [
-            "Apache/2.4"
+          "Set-Cookie": [
+            "sas-ingress-nginx=195f77b9b064e00b64971286ee55ac84|133a061ace010cd08997bd8e43a22519; Path=/SASLogon/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=2FC10AEE94F060780B882E85CA333E45; Path=/SASLogon; Secure; HttpOnly; SameSite=Lax"
           ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
           ],
           "X-Content-Type-Options": [
             "nosniff"
@@ -87,7 +87,7 @@
       }
     },
     {
-      "recorded_at": "2020-01-18T21:27:32",
+      "recorded_at": "2022-09-16T14:44:50",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -98,7 +98,7 @@
             "*/*"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Bearer [redacted]"
@@ -107,7 +107,7 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "GET",
@@ -115,51 +115,50 @@
       },
       "response": {
         "body": {
-          "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files?filter=eq(name,%20%22dummy_file%22)&sortBy=name&start=0&limit=10\",\"uri\":\"/files/files?filter=eq(name,%20%22dummy_file%22)&sortBy=name&start=0&limit=10\",\"type\":\"application/vnd.sas.collection\"}],\"name\":\"files\",\"accept\":\"application/vnd.sas.file\",\"start\":0,\"count\":2,\"items\":[{\"creationTimeStamp\":\"2020-01-18T21:27:30.026Z\",\"modifiedTimeStamp\":\"2020-01-18T21:27:30.026Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"cb165c23-6568-4f69-9d4b-651187fcec09\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09/content\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09/content\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09/copy\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"dummy_file\",\"size\":23,\"version\":3},{\"creationTimeStamp\":\"2020-01-18T21:27:32.342Z\",\"modifiedTimeStamp\":\"2020-01-18T21:27:32.342Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"190ad438-8d9f-49ec-a315-e6c01bbd61fd\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd\",\"uri\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd\",\"uri\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd\",\"uri\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd\",\"uri\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd\",\"uri\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd/content\",\"uri\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd/content\",\"uri\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd/copy\",\"uri\":\"/files/files/190ad438-8d9f-49ec-a315-e6c01bbd61fd/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"dummy_file\",\"size\":23,\"version\":3}],\"limit\":10,\"version\":2}"
+          "encoding": null,
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files?filter=eq(name,%20%22dummy_file%22)&sortBy=name&start=0&limit=10\",\"uri\":\"/files/files?filter=eq(name,%20%22dummy_file%22)&sortBy=name&start=0&limit=10\",\"type\":\"application/vnd.sas.collection\"}],\"name\":\"files\",\"accept\":\"application/vnd.sas.file\",\"start\":0,\"count\":2,\"items\":[{\"creationTimeStamp\":\"2022-09-16T14:44:44.861Z\",\"modifiedTimeStamp\":\"2022-09-16T14:44:44.861Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"5f495536-15b9-4e4a-900f-93259945e273\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273/content\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273/content\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273/copy\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"dummy_file\",\"size\":23,\"searchable\":true,\"fileStatus\":\"unlocked\",\"fileVersion\":0,\"version\":4,\"virusDetected\":false,\"urlDetected\":false,\"quarantine\":false},{\"creationTimeStamp\":\"2022-09-16T14:44:50.156Z\",\"modifiedTimeStamp\":\"2022-09-16T14:44:50.156Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"42e76ec8-fcbd-4d9c-92e6-62d7088f6c00\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00\",\"uri\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00\",\"uri\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00\",\"uri\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00\",\"uri\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00\",\"uri\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00/content\",\"uri\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00/content\",\"uri\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00/copy\",\"uri\":\"/files/files/42e76ec8-fcbd-4d9c-92e6-62d7088f6c00/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"dummy_file\",\"size\":23,\"searchable\":true,\"fileStatus\":\"unlocked\",\"fileVersion\":0,\"version\":4,\"virusDetected\":false,\"urlDetected\":false,\"quarantine\":false}],\"limit\":10,\"version\":2}"
         },
         "headers": {
           "Cache-Control": [
             "no-cache, no-store, max-age=0, must-revalidate"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
           ],
           "Content-Type": [
-            "application/vnd.sas.collection+json;charset=UTF-8"
+            "application/vnd.sas.collection+json"
           ],
           "Date": [
-            "Sat, 18 Jan 2020 21:27:32 GMT"
+            "Fri, 16 Sep 2022 14:44:50 GMT"
           ],
           "Expires": [
             "0"
           ],
-          "Keep-Alive": [
-            "timeout=5, max=99"
-          ],
           "Pragma": [
             "no-cache"
           ],
-          "Server": [
-            "Apache/2.4"
+          "SAS-Service-Response-Flag": [
+            "true"
+          ],
+          "Set-Cookie": [
+            "sas-ingress-nginx=08fc6138eb4f2b198b3eb1a31e4e9ffb|39b430d8f853dcecbe1154a904350a4e; Path=/files/; Secure; HttpOnly; SameSite=Lax"
           ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
           ],
           "X-Content-Type-Options": [
             "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
           ],
           "X-XSS-Protection": [
             "1; mode=block"
@@ -173,7 +172,7 @@
       }
     },
     {
-      "recorded_at": "2020-01-18T21:27:32",
+      "recorded_at": "2022-09-16T14:44:50",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -184,7 +183,7 @@
             "*/*"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Bearer [redacted]"
@@ -192,17 +191,20 @@
           "Connection": [
             "keep-alive"
           ],
+          "Cookie": [
+            "sas-ingress-nginx=08fc6138eb4f2b198b3eb1a31e4e9ffb|39b430d8f853dcecbe1154a904350a4e"
+          ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/files/files/cb165c23-6568-4f69-9d4b-651187fcec09"
+        "uri": "https://hostname.com/files/files/5f495536-15b9-4e4a-900f-93259945e273"
       },
       "response": {
         "body": {
-          "encoding": "UTF-8",
-          "string": "{\"creationTimeStamp\":\"2020-01-18T21:27:30.026Z\",\"modifiedTimeStamp\":\"2020-01-18T21:27:30.026Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"cb165c23-6568-4f69-9d4b-651187fcec09\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09/content\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09/content\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09/copy\",\"uri\":\"/files/files/cb165c23-6568-4f69-9d4b-651187fcec09/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"dummy_file\",\"size\":23,\"version\":3}"
+          "encoding": null,
+          "string": "{\"creationTimeStamp\":\"2022-09-16T14:44:44.861Z\",\"modifiedTimeStamp\":\"2022-09-16T14:44:44.861Z\",\"createdBy\":\"USERNAME\",\"modifiedBy\":\"USERNAME\",\"id\":\"5f495536-15b9-4e4a-900f-93259945e273\",\"properties\":{},\"contentType\":\"text/plain\",\"encoding\":\"UTF-8\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"type\":\"application/vnd.sas.file\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PATCH\",\"rel\":\"patch\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"type\":\"application/vnd.sas.file\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273/content\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273/content\",\"type\":\"text/plain\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273/content\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273/content\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"copyFile\",\"href\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273/copy\",\"uri\":\"/files/files/5f495536-15b9-4e4a-900f-93259945e273/copy\",\"responseType\":\"application/vnd.sas.file\"},{\"method\":\"POST\",\"rel\":\"create\",\"href\":\"/files/files\",\"uri\":\"/files/files\",\"type\":\"*/*\",\"responseType\":\"application/vnd.sas.file\"}],\"name\":\"dummy_file\",\"size\":23,\"searchable\":true,\"fileStatus\":\"unlocked\",\"fileVersion\":0,\"version\":4,\"virusDetected\":false,\"urlDetected\":false,\"quarantine\":false}"
         },
         "headers": {
           "Accept-Ranges": [
@@ -212,49 +214,45 @@
             "no-cache, no-store, max-age=0, must-revalidate"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
           ],
           "Content-Type": [
-            "application/vnd.sas.file+json; version=1;charset=UTF-8"
+            "application/vnd.sas.file+json;version=1"
           ],
           "Date": [
-            "Sat, 18 Jan 2020 21:27:32 GMT"
+            "Fri, 16 Sep 2022 14:44:50 GMT"
           ],
           "ETag": [
-            "\"k5k3rqi2\""
+            "\"l84ldsjh\""
           ],
           "Expires": [
             "0"
           ],
-          "Keep-Alive": [
-            "timeout=5, max=98"
-          ],
           "Last-Modified": [
-            "Sat, 18 Jan 2020 21:27:30 GMT"
+            "Fri, 16 Sep 2022 14:44:44 GMT"
           ],
           "Pragma": [
             "no-cache"
           ],
-          "Server": [
-            "Apache/2.4"
+          "SAS-Service-Response-Flag": [
+            "true"
           ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
           ],
           "X-Content-Type-Options": [
             "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
           ],
           "X-XSS-Protection": [
             "1; mode=block"
@@ -264,7 +262,7 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/files/files/cb165c23-6568-4f69-9d4b-651187fcec09"
+        "url": "https://hostname.com/files/files/5f495536-15b9-4e4a-900f-93259945e273"
       }
     }
   ],

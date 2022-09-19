@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2020-02-22T14:32:22",
+      "recorded_at": "2022-09-19T18:45:59",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -12,7 +12,7 @@
             "application/json"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Basic [redacted]"
@@ -21,13 +21,13 @@
             "keep-alive"
           ],
           "Content-Length": [
-            "54"
+            "53"
           ],
           "Content-Type": [
             "application/x-www-form-urlencoded"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "POST",
@@ -36,40 +36,38 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"be1ece19f451472383db717ff03466b1\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiJiZDdlMTM3Zi04MTJlLTQzOTQtOGI2Yi0yY2QxNjA0MjQ0NWEiLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE2NjM2Mjc1NTksImlhdCI6MTY2MzYxMzE1OSwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJlZG1kZXZAdXNlci5mcm9tLmxkYXAuY2YiLCJ6aWQiOiJ1YWEiLCJvcmlnaW4iOiJsZGFwIiwianRpIjoiOWIzMjhiOTE1ZDAxNDg5M2JhOGM1NjA5NzA2MGQwNjMiLCJwcmV2aW91c19sb2dvbl90aW1lIjoxNjYzNjEzMTM5MjU2LCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudF9pZCI6InNhcy5lYyIsImNpZCI6InNhcy5lYyIsImdyYW50X3R5cGUiOiJwYXNzd29yZCIsInVzZXJfbmFtZSI6ImVkbWRldiIsInJldl9zaWciOiI3ZDQ1MWIwMCIsInVzZXJfaWQiOiJiZDdlMTM3Zi04MTJlLTQzOTQtOGI2Yi0yY2QxNjA0MjQ0NWEiLCJhdXRoX3RpbWUiOjE2NjM2MTMxNTl9.U_7J3T_RugL7bHCPabmbqsXoeIfjEhx7bjndj2RicJKPPx6asTAVfoLk9ZgBdbBsEdfeQ7t_hQm4uEVzP8Lc8fcqkjvio6KtRHKZSPGc4Jxt60yzHnQkU2caPODTvBd3JzjU_3nt3yIYybJygVGQYn84-19JaD1ScDETP1EsGcM-30WEz7XLfRYBhxwvodgxxsh4liqB7ZZbV8jwB4BOm5nFhXyoGN4OdWXaX4LxVi9ibw1qCxAenELLMoowb8h0H4sGUiKJF90tPIG9YndgHNCnPM2F8evgCJLgTBB9MGsMXC0fIqAcPboJj_o31BHiA7tSnbu60RTYVT_o-cb3ow\",\"expires_in\":14399,\"scope\":\"ViyaSASAdmins DataBuilders FSDev s2m_singlestore_secure clients.read clients.secret uaa.resource decqe openid uaa.admin clients.admin scim.read unix_r&d SASAdministrators openstackusers clients.write lanpanfilter scim.write\",\"jti\":\"9b328b915d014893ba8c56097060d063\"}"
         },
         "headers": {
           "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate",
             "no-store"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Type": [
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Sat, 22 Feb 2020 14:32:22 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
+            "Mon, 19 Sep 2022 18:45:59 GMT"
           ],
           "Pragma": [
-            "no-cache",
             "no-cache"
           ],
+          "Set-Cookie": [
+            "sas-ingress-nginx=eca273655c82ff95ffada33b81086191|1aaa746e8c5e41197b3f7dd9dc6c2a1c; Path=/SASLogon/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=A2BBCA2EF33394DAB5DFD681851954A2; Path=/SASLogon; Secure; HttpOnly; SameSite=Lax"
+          ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
           ],
           "X-Content-Type-Options": [
             "nosniff"
@@ -86,543 +84,6 @@
           "message": ""
         },
         "url": "https://hostname.com/SASLogon/oauth/token"
-      }
-    },
-    {
-      "recorded_at": "2020-02-22T14:32:22",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/microanalyticScore/modules?filter=eq(name,%20%22sasctl_testingPipelineSklearnIrisModel%22)"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules?filter=eq(name,%20%22sasctl_testingPipelineSklearnIrisModel%22)&start=0&limit=20\",\"uri\":\"/microanalyticScore/modules?filter=eq(name,%20%22sasctl_testingPipelineSklearnIrisModel%22)&start=0&limit=20\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createModule\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.microanalytic.module.definition\",\"responseType\":\"application/vnd.sas.microanalytic.module\"}],\"name\":\"modules\",\"accept\":\"application/vnd.sas.microanalytic.module\",\"start\":0,\"count\":1,\"items\":[{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"source\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/source\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/source\",\"type\":\"application/vnd.sas.microanalytic.module.source\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/submodules\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2020-02-22T14:27:47.868Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2020-02-22T14:27:47.868Z\",\"id\":\"sasctl_testingpipelinesklearnirismodel\",\"name\":\"sasctl_testingPipelineSklearnIrisModel\",\"revision\":0,\"scope\":\"public\",\"language\":\"ds2\",\"stepIds\":[\"predict\",\"predict_proba\"],\"warnings\":[]}],\"limit\":20,\"version\":2}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/vnd.sas.collection+json;charset=UTF-8"
-          ],
-          "Date": [
-            "Sat, 22 Feb 2020 14:32:23 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=99"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/microanalyticScore/modules?filter=eq(name,%20%22sasctl_testingPipelineSklearnIrisModel%22)"
-      }
-    },
-    {
-      "recorded_at": "2020-02-22T14:32:22",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules\",\"uri\":\"/microanalyticScore/modules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel\",\"type\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"GET\",\"rel\":\"source\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/source\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/source\",\"type\":\"application/vnd.sas.microanalytic.module.source\"},{\"method\":\"GET\",\"rel\":\"steps\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"submodules\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/submodules\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/submodules\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.submodule\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel\",\"type\":\"application/vnd.sas.microanalytic.module\",\"responseType\":\"application/vnd.sas.microanalytic.module\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel\"}],\"version\":2,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2020-02-22T14:27:47.868Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2020-02-22T14:27:47.868Z\",\"id\":\"sasctl_testingpipelinesklearnirismodel\",\"name\":\"sasctl_testingPipelineSklearnIrisModel\",\"revision\":0,\"scope\":\"public\",\"language\":\"ds2\",\"stepIds\":[\"predict\",\"predict_proba\"],\"warnings\":[]}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/vnd.sas.microanalytic.module+json;charset=UTF-8"
-          ],
-          "Date": [
-            "Sat, 22 Feb 2020 14:32:23 GMT"
-          ],
-          "ETag": [
-            "\"k6xp6t5o\""
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=98"
-          ],
-          "Last-Modified": [
-            "Sat, 22 Feb 2020 14:27:47 GMT"
-          ],
-          "Location": [
-            "/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel"
-      }
-    },
-    {
-      "recorded_at": "2020-02-22T14:32:22",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict\",\"type\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"POST\",\"rel\":\"execute\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.microanalytic.module.step.output\"},{\"method\":\"POST\",\"rel\":\"validateStepInput\",\"href\":\"/microanalyticScore/commons/validations/modules/sasctl_testingpipelinesklearnirismodel/steps/predict\",\"uri\":\"/microanalyticScore/commons/validations/modules/sasctl_testingpipelinesklearnirismodel/steps/predict\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.validation\"}],\"version\":1,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2020-02-22T14:27:47.868Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2020-02-22T14:27:47.868Z\",\"id\":\"predict\",\"moduleId\":\"sasctl_testingpipelinesklearnirismodel\",\"inputs\":[{\"name\":\"sepallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"sepalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0}],\"outputs\":[{\"name\":\"var1\",\"type\":\"string\",\"dim\":0,\"size\":0}]}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/vnd.sas.microanalytic.module.step+json;charset=UTF-8"
-          ],
-          "Date": [
-            "Sat, 22 Feb 2020 14:32:23 GMT"
-          ],
-          "ETag": [
-            "\"k6xp6t5o\""
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=97"
-          ],
-          "Last-Modified": [
-            "Sat, 22 Feb 2020 14:27:47 GMT"
-          ],
-          "Location": [
-            "/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict"
-      }
-    },
-    {
-      "recorded_at": "2020-02-22T14:32:23",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict_proba"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict_proba\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict_proba\",\"type\":\"application/vnd.sas.microanalytic.module.step\"},{\"method\":\"POST\",\"rel\":\"execute\",\"href\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict_proba\",\"uri\":\"/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict_proba\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.microanalytic.module.step.output\"},{\"method\":\"POST\",\"rel\":\"validateStepInput\",\"href\":\"/microanalyticScore/commons/validations/modules/sasctl_testingpipelinesklearnirismodel/steps/predict_proba\",\"uri\":\"/microanalyticScore/commons/validations/modules/sasctl_testingpipelinesklearnirismodel/steps/predict_proba\",\"type\":\"application/vnd.sas.microanalytic.module.step.input\",\"responseType\":\"application/vnd.sas.validation\"}],\"version\":1,\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2020-02-22T14:27:47.868Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2020-02-22T14:27:47.868Z\",\"id\":\"predict_proba\",\"moduleId\":\"sasctl_testingpipelinesklearnirismodel\",\"inputs\":[{\"name\":\"sepallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"sepalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petallength\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"petalwidth\",\"type\":\"decimal\",\"dim\":0,\"size\":0}],\"outputs\":[{\"name\":\"p_1\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"p_2\",\"type\":\"decimal\",\"dim\":0,\"size\":0},{\"name\":\"p_3\",\"type\":\"decimal\",\"dim\":0,\"size\":0}]}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/vnd.sas.microanalytic.module.step+json;charset=UTF-8"
-          ],
-          "Date": [
-            "Sat, 22 Feb 2020 14:32:23 GMT"
-          ],
-          "ETag": [
-            "\"k6xp6t5o\""
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=96"
-          ],
-          "Last-Modified": [
-            "Sat, 22 Feb 2020 14:27:47 GMT"
-          ],
-          "Location": [
-            "/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict_proba"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict_proba"
-      }
-    },
-    {
-      "recorded_at": "2020-02-22T14:32:23",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": "{\"inputs\": [{\"name\": \"sepallength\", \"value\": 5.1}, {\"name\": \"sepalwidth\", \"value\": 3.5}, {\"name\": \"petallength\", \"value\": 1.4}, {\"name\": \"petalwidth\", \"value\": 0.2}]}"
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "Content-Length": [
-            "166"
-          ],
-          "Content-Type": [
-            "application/json"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "POST",
-        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"links\":[],\"version\":2,\"moduleId\":\"sasctl_testingpipelinesklearnirismodel\",\"stepId\":\"predict\",\"executionState\":\"completed\",\"outputs\":[{\"name\":\"var1\",\"value\":\"setosa\"}]}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/vnd.sas.microanalytic.module.step.output+json;charset=UTF-8"
-          ],
-          "Date": [
-            "Sat, 22 Feb 2020 14:32:23 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=95"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 201,
-          "message": ""
-        },
-        "url": "https://hostname.com/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict"
-      }
-    },
-    {
-      "recorded_at": "2020-02-22T14:32:23",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": "{\"inputs\": [{\"name\": \"sepallength\", \"value\": 5.1}, {\"name\": \"sepalwidth\", \"value\": 3.5}, {\"name\": \"petallength\", \"value\": 1.4}, {\"name\": \"petalwidth\", \"value\": 0.2}]}"
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "Content-Length": [
-            "166"
-          ],
-          "Content-Type": [
-            "application/json"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "POST",
-        "uri": "https://hostname.com/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict_proba"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"links\":[],\"version\":2,\"moduleId\":\"sasctl_testingpipelinesklearnirismodel\",\"stepId\":\"predict_proba\",\"executionState\":\"completed\",\"outputs\":[{\"name\":\"P_1\",\"value\":0.9999009018263827},{\"name\":\"P_2\",\"value\":8.218716413965307E-5},{\"name\":\"P_3\",\"value\":1.6911009477936822E-5}]}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/vnd.sas.microanalytic.module.step.output+json;charset=UTF-8"
-          ],
-          "Date": [
-            "Sat, 22 Feb 2020 14:32:23 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=94"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 201,
-          "message": ""
-        },
-        "url": "https://hostname.com/microanalyticScore/modules/sasctl_testingpipelinesklearnirismodel/steps/predict_proba"
       }
     }
   ],

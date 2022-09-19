@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2020-01-18T21:31:12",
+      "recorded_at": "2022-09-14T20:25:53",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -12,7 +12,7 @@
             "application/json"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Basic [redacted]"
@@ -21,13 +21,13 @@
             "keep-alive"
           ],
           "Content-Length": [
-            "54"
+            "53"
           ],
           "Content-Type": [
             "application/x-www-form-urlencoded"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "POST",
@@ -36,38 +36,38 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIwODU0ZGEyMC1jZGVlLTRkZWEtOGRlNC04YTZhMDc2OTg0MDciLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE1Nzk0MTkwNzIsImlhdCI6MTU3OTM4MzA3MiwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJzYXNkZW1vQG5vbmUuc2FzLmNvbSIsInppZCI6InVhYSIsIm9yaWdpbiI6ImxkYXAiLCJqdGkiOiJhOThmYzAxYzBiMjY0YWM3YTIyN2VkMmUzODA2NjFjZCIsInByZXZpb3VzX2xvZ29uX3RpbWUiOjE1NzkzODMwNzA4OTUsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiY2xpZW50X2lkIjoic2FzLmVjIiwiY2lkIjoic2FzLmVjIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9uYW1lIjoic2FzZGVtbyIsInJldl9zaWciOiI5ZjAwNjhmYSIsImF1dGhfdGltZSI6MTU3OTM4MzA3MiwidXNlcl9pZCI6IjA4NTRkYTIwLWNkZWUtNGRlYS04ZGU0LThhNmEwNzY5ODQwNyJ9.BeluTM-CK3quG5Es1alNHod1ZBC4eHmQ7P8f6mf_L9DIwirhBmpyltUKIM1_AdoYvQqEwucYQ5nvjLDQGpFOGwvb2ueZyxFizzkbluaVsK-BSJEbGoPzXau_OEHSIjhz9rt5ax-bda9ct67qsO91yOLAmcwcZLqdJ3S9a4aN1tj2DZLmyL7zeNKWSjWPycJIBn-29TMa9fcFdyKU16D3LPsFTlPPNJBiVKzv3pN4tcpq-_jx1RoHetcoUZkbUnrj9ISF7QM2X9t6fgVt_qGTXTVDInee0nEpbD_3t9V8yeCS_l7Ts9aS5ms8onaDsStpgmRn3PfkOVB25M_fYoPKbQ\",\"expires_in\":35999,\"scope\":\"clients.read clients.secret DataBuilders uaa.resource openid ApplicationAdministrators uaa.admin clients.admin EsriUsers scim.read SASScoreUsers SASAdministrators clients.write scim.write\",\"jti\":\"a98fc01c0b264ac7a227ed2e380661cd\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiJjMjA0MDRhZi1iYTZlLTRlMWQtYTc5MS00NWNkNmU0MTk2ODQiLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE2NjMyMDE1NTMsImlhdCI6MTY2MzE4NzE1MywiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJlZG1kZXZAdXNlci5mcm9tLmxkYXAuY2YiLCJ6aWQiOiJ1YWEiLCJvcmlnaW4iOiJsZGFwIiwianRpIjoiM2UxOGM2ZDI1MjcyNDljMmFkNjI4ZmE3Yjg2MTM4NWEiLCJwcmV2aW91c19sb2dvbl90aW1lIjoxNjYzMTg3MDY4NjE3LCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudF9pZCI6InNhcy5lYyIsImNpZCI6InNhcy5lYyIsImdyYW50X3R5cGUiOiJwYXNzd29yZCIsInVzZXJfbmFtZSI6ImVkbWRldiIsInJldl9zaWciOiI5ZjhlYjY2ZSIsInVzZXJfaWQiOiJjMjA0MDRhZi1iYTZlLTRlMWQtYTc5MS00NWNkNmU0MTk2ODQiLCJhdXRoX3RpbWUiOjE2NjMxODcxNTN9.Tlj8Mh-UVu9ZRR-tDHeo8F2XLhGpNA0NuWByVRbjZq7rvGSTiU0vk1HXHzhXFZlXWNz7EKbcnb4K_ff0U-ovX7-omhfNuPZNs2KQ7SkdR8vgwwVkYrkQ7inbk4EOWEa67cJ41QQcQnpT81-cGXwx0BacsPHP9xaUX9lGrLPflSHFLbCiTmJZBr6BHU16oMC8SpgcJ3hta6Bbkiuj6s1GV4EzE4PgJionr0zY9-BRw8ercNysW73MzSQwl1eVfDmECygI0R3OI1QuCXmNS-KBNjTG7Na__NXu1_M4w_umE-Jv4-rSeipopMHRVzVyvakTIY0GsWXDMmkmIS35guEWtQ\",\"expires_in\":14399,\"scope\":\"ViyaSASAdmins DataBuilders FSDev s2m_singlestore_secure clients.read clients.secret uaa.resource decqe openid uaa.admin clients.admin scim.read unix_r&d SASAdministrators openstackusers clients.write lanpanfilter scim.write\",\"jti\":\"3e18c6d2527249c2ad628fa7b861385a\"}"
         },
         "headers": {
           "Cache-Control": [
             "no-store"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Type": [
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Sat, 18 Jan 2020 21:31:12 GMT"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
+            "Wed, 14 Sep 2022 20:25:53 GMT"
           ],
           "Pragma": [
             "no-cache"
           ],
-          "Server": [
-            "Apache/2.4"
+          "Set-Cookie": [
+            "sas-ingress-nginx=391a9ce41664ef049c506b29a73c5b69|f180b669c8557cce6224f4fde6085e56; Path=/SASLogon/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=A9F68E1A64D6D382285303AFF14DEC5A; Path=/SASLogon; Secure; HttpOnly; SameSite=Lax"
           ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
           ],
           "X-Content-Type-Options": [
             "nosniff"
@@ -87,7 +87,7 @@
       }
     },
     {
-      "recorded_at": "2020-01-18T21:31:12",
+      "recorded_at": "2022-09-14T20:25:53",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -98,7 +98,7 @@
             "*/*"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Bearer [redacted]"
@@ -107,50 +107,52 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/reports/reports?filter=eq(name,%20%22Home%20Loan%20Default%20Demo%22)"
+        "uri": "https://hostname.com/reports/reports?filter=eq(name,%20%22User%20Activity%22)"
       },
       "response": {
         "body": {
           "encoding": null,
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/reports/reports\",\"uri\":\"/reports/reports\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/reports/reports?filter=eq(name,%20%22Home%20Loan%20Default%20Demo%22)&sortBy=name&start=0&limit=20\",\"uri\":\"/reports/reports?filter=eq(name,%20%22Home%20Loan%20Default%20Demo%22)&sortBy=name&start=0&limit=20\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createReport\",\"href\":\"/reports/reports\",\"uri\":\"/reports/reports\",\"type\":\"application/vnd.sas.report\",\"responseType\":\"application/vnd.sas.report\"}],\"name\":\"reports\",\"accept\":\"application/vnd.sas.summary\",\"start\":0,\"count\":1,\"items\":[{\"id\":\"55c590c6-e88d-45c8-a738-5dc72018d07b\",\"name\":\"Home Loan Default Demo\",\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-12-03T21:43:05.952Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-12-12T13:51:52.472Z\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\",\"type\":\"application/vnd.sas.report\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\"}],\"type\":\"report\",\"version\":1,\"iconUri\":\"/reports/icons/report.gif\"}],\"limit\":20,\"version\":2}"
+          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/reports/reports\",\"uri\":\"/reports/reports\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/reports/reports?filter=eq(name,%20%22User%20Activity%22)&sortBy=name&start=0&limit=20\",\"uri\":\"/reports/reports?filter=eq(name,%20%22User%20Activity%22)&sortBy=name&start=0&limit=20\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"POST\",\"rel\":\"createReport\",\"href\":\"/reports/reports\",\"uri\":\"/reports/reports\",\"type\":\"application/vnd.sas.report\",\"responseType\":\"application/vnd.sas.report\"}],\"name\":\"reports\",\"accept\":\"application/vnd.sas.summary\",\"start\":0,\"count\":1,\"items\":[{\"id\":\"fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"name\":\"User Activity\",\"createdBy\":\"SAS Supplied\",\"creationTimeStamp\":\"2018-03-28T15:02:02.692Z\",\"modifiedBy\":\"SAS Supplied\",\"modifiedTimeStamp\":\"2022-09-06T13:29:56.735Z\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"type\":\"application/vnd.sas.report\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\"}],\"type\":\"report\",\"version\":1,\"iconUri\":\"/reports/icons/report.gif\"}],\"limit\":20,\"version\":2}"
         },
         "headers": {
           "Cache-Control": [
             "no-cache"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Item-Type": [
             "application/vnd.sas.summary+json;version=2"
           ],
           "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+            "default-src 'self'; object-src 'none';"
           ],
           "Content-Type": [
-            "application/vnd.sas.collection+json; version=2"
+            "application/vnd.sas.collection+json;version=2"
           ],
           "Date": [
-            "Sat, 18 Jan 2020 21:31:11 GMT"
+            "Wed, 14 Sep 2022 20:25:53 GMT"
           ],
-          "Keep-Alive": [
-            "timeout=5, max=99"
+          "SAS-Service-Response-Flag": [
+            "true"
           ],
-          "Server": [
-            "Apache/2.4"
+          "Set-Cookie": [
+            "sas-ingress-nginx=dfe7bb08453580e5b792d9fdb709a338|4d7278092967b12d5b6e758d19cd6d8e; Path=/reports/; Secure; HttpOnly; SameSite=Lax"
           ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
           ],
           "X-Content-Type-Options": [
             "nosniff"
@@ -166,11 +168,11 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/reports/reports?filter=eq(name,%20%22Home%20Loan%20Default%20Demo%22)"
+        "url": "https://hostname.com/reports/reports?filter=eq(name,%20%22User%20Activity%22)"
       }
     },
     {
-      "recorded_at": "2020-01-18T21:31:12",
+      "recorded_at": "2022-09-14T20:25:53",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -181,7 +183,7 @@
             "*/*"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Bearer [redacted]"
@@ -189,60 +191,62 @@
           "Connection": [
             "keep-alive"
           ],
+          "Cookie": [
+            "sas-ingress-nginx=dfe7bb08453580e5b792d9fdb709a338|4d7278092967b12d5b6e758d19cd6d8e"
+          ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b"
+        "uri": "https://hostname.com/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c"
       },
       "response": {
         "body": {
-          "encoding": null,
-          "string": "{\"id\":\"55c590c6-e88d-45c8-a738-5dc72018d07b\",\"name\":\"Home Loan Default Demo\",\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2019-12-03T21:43:05.952Z\",\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2019-12-12T13:51:52.472Z\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\",\"type\":\"application/vnd.sas.report\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\",\"type\":\"application/vnd.sas.report\",\"responseType\":\"application/vnd.sas.report\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b\"},{\"method\":\"GET\",\"rel\":\"currentUserState\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/states/@currentUserState\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/states/@currentUserState\",\"type\":\"application/vnd.sas.report.state.info\"},{\"method\":\"POST\",\"rel\":\"createState\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/states\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/states\",\"type\":\"application/vnd.sas.report.state.info\"},{\"method\":\"GET\",\"rel\":\"states\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/states\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/states\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/content\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/content\",\"type\":\"application/vnd.sas.report.content\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/content\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/content\",\"type\":\"application/vnd.sas.report.content\",\"responseType\":\"application/vnd.sas.report.content\"},{\"method\":\"GET\",\"rel\":\"contentElements\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/content/elements\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/content/elements\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.report.content.element\"},{\"method\":\"GET\",\"rel\":\"contentVisualElements\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/content/elements?characteristics=visualElement\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/content/elements?characteristics=visualElement\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.report.content.element\"},{\"method\":\"POST\",\"rel\":\"validateContent\",\"href\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/content/validation\",\"uri\":\"/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b/content/validation\",\"responseType\":\"application/vnd.sas.report.content.validation\"}],\"imageUris\":{\"icon\":\"/reports/icons/report.gif\"},\"version\":1}"
+          "encoding": "utf-8",
+          "string": "{\"id\":\"fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"name\":\"User Activity\",\"createdBy\":\"SAS Supplied\",\"creationTimeStamp\":\"2018-03-28T15:02:02.692Z\",\"modifiedBy\":\"SAS Supplied\",\"modifiedTimeStamp\":\"2022-09-06T13:29:56.735Z\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"type\":\"application/vnd.sas.report\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"type\":\"application/vnd.sas.summary\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"type\":\"application/vnd.sas.report\",\"responseType\":\"application/vnd.sas.report\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c\"},{\"method\":\"GET\",\"rel\":\"currentUserState\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/states/@currentUserState\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/states/@currentUserState\",\"type\":\"application/vnd.sas.report.state.info\"},{\"method\":\"POST\",\"rel\":\"createState\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/states\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/states\",\"type\":\"application/vnd.sas.report.state.info\"},{\"method\":\"GET\",\"rel\":\"states\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/states\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/states\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"content\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/content\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/content\",\"type\":\"application/vnd.sas.report.content\"},{\"method\":\"PUT\",\"rel\":\"updateContent\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/content\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/content\",\"type\":\"application/vnd.sas.report.content\",\"responseType\":\"application/vnd.sas.report.content\"},{\"method\":\"GET\",\"rel\":\"contentElements\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/content/elements\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/content/elements\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.report.content.element\"},{\"method\":\"GET\",\"rel\":\"contentVisualElements\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/content/elements?characteristics=visualElement\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/content/elements?characteristics=visualElement\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.report.content.element\"},{\"method\":\"POST\",\"rel\":\"validateContent\",\"href\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/content/validation\",\"uri\":\"/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c/content/validation\",\"responseType\":\"application/vnd.sas.report.content.validation\"}],\"imageUris\":{\"icon\":\"/reports/icons/report.gif\"},\"version\":1}"
         },
         "headers": {
           "Cache-Control": [
             "no-cache, no-store, max-age=0, must-revalidate"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+            "default-src 'self'; object-src 'none';"
           ],
           "Content-Type": [
             "application/json"
           ],
           "Date": [
-            "Sat, 18 Jan 2020 21:31:11 GMT"
+            "Wed, 14 Sep 2022 20:25:53 GMT"
           ],
           "ETag": [
-            "\"k42s7a1k\""
+            "\"l7q8b2tb\""
           ],
           "Expires": [
             "0"
           ],
-          "Keep-Alive": [
-            "timeout=5, max=98"
-          ],
           "Last-Modified": [
-            "Thu, 12 Dec 2019 13:51:52 GMT"
+            "Tue, 06 Sep 2022 13:29:56 GMT"
           ],
           "Pragma": [
             "no-cache"
           ],
-          "Server": [
-            "Apache/2.4"
+          "SAS-Service-Response-Flag": [
+            "true"
           ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
           ],
           "X-Content-Type-Options": [
             "nosniff"
@@ -258,7 +262,7 @@
           "code": 200,
           "message": ""
         },
-        "url": "https://hostname.com/reports/reports/55c590c6-e88d-45c8-a738-5dc72018d07b"
+        "url": "https://hostname.com/reports/reports/fe5ed8c1-2398-4021-874d-48bfdb18c10c"
       }
     }
   ],

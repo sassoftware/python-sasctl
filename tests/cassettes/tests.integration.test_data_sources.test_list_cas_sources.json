@@ -1,7 +1,7 @@
 {
   "http_interactions": [
     {
-      "recorded_at": "2019-09-06T13:46:43",
+      "recorded_at": "2022-09-14T16:44:11",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -12,7 +12,7 @@
             "application/json"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Basic [redacted]"
@@ -21,13 +21,13 @@
             "keep-alive"
           ],
           "Content-Length": [
-            "54"
+            "53"
           ],
           "Content-Type": [
             "application/x-www-form-urlencoded"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "POST",
@@ -36,40 +36,38 @@
       "response": {
         "body": {
           "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"a5a0b34daa204da08e303c39ee28a41e\"}"
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiJjMjA0MDRhZi1iYTZlLTRlMWQtYTc5MS00NWNkNmU0MTk2ODQiLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE2NjMxODgyNTEsImlhdCI6MTY2MzE3Mzg1MSwiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJlZG1kZXZAdXNlci5mcm9tLmxkYXAuY2YiLCJ6aWQiOiJ1YWEiLCJvcmlnaW4iOiJsZGFwIiwianRpIjoiZDVkNTI4YjRmNjdmNDA1ZWE0OTM5NzMzNGJiN2JmOTgiLCJwcmV2aW91c19sb2dvbl90aW1lIjoxNjYzMTczODUwNTQ3LCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudF9pZCI6InNhcy5lYyIsImNpZCI6InNhcy5lYyIsImdyYW50X3R5cGUiOiJwYXNzd29yZCIsInVzZXJfbmFtZSI6ImVkbWRldiIsInJldl9zaWciOiI5ZjhlYjY2ZSIsInVzZXJfaWQiOiJjMjA0MDRhZi1iYTZlLTRlMWQtYTc5MS00NWNkNmU0MTk2ODQiLCJhdXRoX3RpbWUiOjE2NjMxNzM4NTF9.hl9z_acRiKg1f_06_vuJQB3z5v6sG1riom2Zo9TAYfyvL81VwoFGowlDnqZCVX9yILUw2u_2XdVPJVsh2JT3JU28LGlb_qDDSqqWJz_42GdUERdFMtCN8WEGrlsZa7sCnkvZxb8t2ikh9LI5RP5SjPE50WyF2O4VfXsMRAzVhjYe2oH2b29ZzV--LE7P18SKH5EsaTofmyeuMHVwkN_3wOZhukpaU8_hW-fiO-RotK_aVsnE54HEjieOr73RuVNlBKiLavavpNYAzJ9aBBU3ezWyt9O3XJlGEtllhe1Ft1FfKV8NSnH5mmeeeEyzVfU0p4fGn3wMpYCcAKx-jAM9WQ\",\"expires_in\":14399,\"scope\":\"ViyaSASAdmins DataBuilders FSDev s2m_singlestore_secure clients.read clients.secret uaa.resource decqe openid uaa.admin clients.admin scim.read unix_r&d SASAdministrators openstackusers clients.write lanpanfilter scim.write\",\"jti\":\"d5d528b4f67f405ea49397334bb7bf98\"}"
         },
         "headers": {
           "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate",
             "no-store"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Type": [
             "application/json;charset=UTF-8"
           ],
           "Date": [
-            "Fri, 06 Sep 2019 13:46:45 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
+            "Wed, 14 Sep 2022 16:44:11 GMT"
           ],
           "Pragma": [
-            "no-cache",
             "no-cache"
           ],
+          "Set-Cookie": [
+            "sas-ingress-nginx=391a9ce41664ef049c506b29a73c5b69|f180b669c8557cce6224f4fde6085e56; Path=/SASLogon/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=9AB97A825062CBE6ECEFA75E956B20A6; Path=/SASLogon; Secure; HttpOnly; SameSite=Lax"
+          ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
           ],
           "X-Content-Type-Options": [
             "nosniff"
@@ -89,7 +87,7 @@
       }
     },
     {
-      "recorded_at": "2019-09-06T13:46:43",
+      "recorded_at": "2022-09-14T16:44:11",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -100,7 +98,7 @@
             "*/*"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Bearer [redacted]"
@@ -109,7 +107,7 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "GET",
@@ -117,62 +115,72 @@
       },
       "response": {
         "body": {
-          "encoding": "UTF-8",
-          "string": "{\"id\":\"cas\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}],\"version\":2,\"apiVersion\":1,\"usesSessions\":true,\"sourceDefinitionsSupport\":\"none\"}"
+          "encoding": "utf-8",
+          "string": "{\"creationTimeStamp\":\"0001-01-01T00:00:00Z\",\"modifiedTimeStamp\":\"0001-01-01T00:00:00Z\",\"id\":\"cas\",\"version\":2,\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}],\"apiVersion\":2,\"usesSessions\":true,\"sourceDefinitionsSupport\":\"none\"}\n"
         },
         "headers": {
           "Cache-Control": [
             "no-cache, no-store, max-age=0, must-revalidate"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "886"
+          ],
+          "Content-Location": [
+            "/dataSources/providers/cas"
           ],
           "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
           ],
           "Content-Type": [
-            "application/json;charset=UTF-8"
+            "application/vnd.sas.data.provider+json; charset=utf-8"
           ],
           "Date": [
-            "Fri, 06 Sep 2019 13:46:46 GMT"
+            "Wed, 14 Sep 2022 16:44:11 GMT"
+          ],
+          "Etag": [
+            "\"-62135596800\""
           ],
           "Expires": [
             "0"
           ],
-          "Keep-Alive": [
-            "timeout=5, max=99"
+          "Location": [
+            "/dataSources/providers/cas"
           ],
           "Pragma": [
             "no-cache"
           ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+          "Sas-Service-Response-Flag": [
+            "true"
           ],
-          "Transfer-Encoding": [
-            "chunked"
+          "Set-Cookie": [
+            "sas-ingress-nginx=b2913352cb0c36446def478c13cd2ca4|bdbd0e614874b88d3c322eb89966f062; Path=/dataSources/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=786f2e30-312f-4694-9e0f-33722eb7a0cd; Path=/dataSources/; HttpOnly; Secure; SameSite=Lax"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin"
           ],
           "X-Content-Type-Options": [
             "nosniff"
           ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
+          "X-Xss-Protection": [
             "1; mode=block"
           ]
         },
         "status": {
           "code": 200,
-          "message": ""
+          "message": "OK"
         },
         "url": "https://hostname.com/dataSources/providers/cas"
       }
     },
     {
-      "recorded_at": "2019-09-06T13:46:43",
+      "recorded_at": "2022-09-14T16:44:11",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -183,7 +191,7 @@
             "*/*"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Bearer [redacted]"
@@ -191,8 +199,11 @@
           "Connection": [
             "keep-alive"
           ],
+          "Cookie": [
+            "JSESSIONID=786f2e30-312f-4694-9e0f-33722eb7a0cd; sas-ingress-nginx=b2913352cb0c36446def478c13cd2ca4|bdbd0e614874b88d3c322eb89966f062"
+          ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "GET",
@@ -200,65 +211,62 @@
       },
       "response": {
         "body": {
-          "encoding": "UTF-8",
-          "string": ""
+          "encoding": "utf-8",
+          "string": "<a href=\"/casManagement/providers/cas/sources?limit=10&amp;sortBy=name%3Aascending&amp;start=0\">Found</a>.\n\n"
         },
         "headers": {
           "Cache-Control": [
             "no-cache, no-store, max-age=0, must-revalidate"
           ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Length": [
-            "0"
+            "108"
           ],
           "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
           ],
           "Content-Type": [
-            "text/plain; charset=UTF-8"
+            "text/html; charset=utf-8"
           ],
           "Date": [
-            "Fri, 06 Sep 2019 13:46:46 GMT"
+            "Wed, 14 Sep 2022 16:44:11 GMT"
           ],
           "Expires": [
             "0"
           ],
-          "Keep-Alive": [
-            "timeout=5, max=98"
-          ],
           "Location": [
-            "/casManagement/providers/cas/sources"
+            "/casManagement/providers/cas/sources?limit=10&sortBy=name%3Aascending&start=0"
           ],
           "Pragma": [
             "no-cache"
           ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin"
           ],
           "X-Content-Type-Options": [
             "nosniff"
           ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
+          "X-Xss-Protection": [
             "1; mode=block"
           ]
         },
         "status": {
           "code": 302,
-          "message": ""
+          "message": "Found"
         },
         "url": "https://hostname.com/dataSources/providers/cas/sources"
       }
     },
     {
-      "recorded_at": "2019-09-06T13:46:43",
+      "recorded_at": "2022-09-14T16:44:11",
       "request": {
         "body": {
           "encoding": "utf-8",
@@ -269,7 +277,7 @@
             "*/*"
           ],
           "Accept-Encoding": [
-            "gzip, deflate"
+            "gzip, deflate, br"
           ],
           "Authorization": [
             "Bearer [redacted]"
@@ -278,746 +286,58 @@
             "keep-alive"
           ],
           "User-Agent": [
-            "python-requests/2.22.0"
+            "python-requests/2.28.1"
           ]
         },
         "method": "GET",
-        "uri": "https://hostname.com/casManagement/providers/cas/sources"
+        "uri": "https://hostname.com/casManagement/providers/cas/sources?limit=10&sortBy=name%3Aascending&start=0"
       },
       "response": {
         "body": {
-          "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"uri\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"}],\"name\":\"sources\",\"accept\":\"application/vnd.sas.data.source application/vnd.sas.data.source.summary\",\"start\":0,\"count\":1,\"items\":[{\"id\":\"cas-shared-default\",\"name\":\"cas-shared-default\",\"type\":\"casServer\",\"providerId\":\"cas\",\"description\":\"controller\",\"hasTables\":false,\"hasEngines\":false,\"attributes\":{\"port\":5570,\"host\":\"sasserver.demo.sas.com\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source.summary\"},{\"method\":\"GET\",\"rel\":\"state\",\"href\":\"/casManagement/servers/cas-shared-default/state\",\"uri\":\"/casManagement/servers/cas-shared-default/state\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"children\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}]}],\"limit\":10,\"version\":2}"
+          "encoding": null,
+          "string": "{\"version\":2,\"accept\":\"application/vnd.sas.data.source application/vnd.sas.data.source.summary\",\"count\":1,\"start\":0,\"limit\":10,\"name\":\"sources\",\"items\":[{\"version\":1,\"id\":\"cas-shared-default\",\"name\":\"cas-shared-default\",\"type\":\"casServer\",\"providerId\":\"cas\",\"description\":\"controller\",\"hasTables\":false,\"hasEngines\":false,\"attributes\":{\"host\":\"sas-cas-server-default-client\",\"port\":5570},\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source.summary\"},{\"method\":\"GET\",\"rel\":\"state\",\"href\":\"/casManagement/servers/cas-shared-default/state\",\"uri\":\"/casManagement/servers/cas-shared-default/state\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"children\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}]}],\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources?start=0\\u0026limit=10\\u0026sortBy=name:ascending\",\"uri\":\"/dataSources/providers/cas/sources?start=0\\u0026limit=10\\u0026sortBy=name:ascending\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}]}"
         },
         "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
           "Connection": [
-            "Keep-Alive"
+            "keep-alive"
           ],
           "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
           ],
           "Content-Type": [
-            "application/json;charset=UTF-8"
+            "application/vnd.sas.collection+json"
           ],
           "Date": [
-            "Fri, 06 Sep 2019 13:46:46 GMT"
+            "Wed, 14 Sep 2022 16:44:11 GMT"
           ],
-          "Expires": [
-            "0"
+          "Sas-Service-Response-Flag": [
+            "true"
           ],
-          "Keep-Alive": [
-            "timeout=5, max=97"
-          ],
-          "Pragma": [
-            "no-cache"
+          "Set-Cookie": [
+            "sas-ingress-nginx=4ed8c25f5b05cb780b8b972bf42effee|54cf4a7ab78532a244ee7cc80a29d90e; Path=/casManagement/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=88f6d777-eb69-47f1-b0ba-11d5f948def8; Path=/casManagement/; HttpOnly; Secure; SameSite=Lax"
           ],
           "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
+            "max-age=15724800; includeSubDomains"
           ],
           "Transfer-Encoding": [
             "chunked"
           ],
           "Vary": [
-            "User-Agent"
+            "Origin"
           ],
           "X-Content-Type-Options": [
             "nosniff"
           ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
+          "X-Xss-Protection": [
             "1; mode=block"
           ]
         },
         "status": {
           "code": 200,
-          "message": ""
+          "message": "OK"
         },
-        "url": "https://hostname.com/casManagement/providers/cas/sources"
-      }
-    },
-    {
-      "recorded_at": "2019-09-06T14:13:50",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": "grant_type=password&username=USERNAME&password=*****"
-        },
-        "headers": {
-          "Accept": [
-            "application/json"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Basic [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "Content-Length": [
-            "54"
-          ],
-          "Content-Type": [
-            "application/x-www-form-urlencoded"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "POST",
-        "uri": "https://hostname.com/SASLogon/oauth/token"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"d82ff05b34594c74b1bd4f50af6fba3a\"}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate",
-            "no-store"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Type": [
-            "application/json;charset=UTF-8"
-          ],
-          "Date": [
-            "Fri, 06 Sep 2019 14:13:54 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
-          ],
-          "Pragma": [
-            "no-cache",
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "DENY"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/SASLogon/oauth/token"
-      }
-    },
-    {
-      "recorded_at": "2019-09-06T14:13:50",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/dataSources/providers/cas"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"id\":\"cas\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}],\"version\":2,\"apiVersion\":1,\"usesSessions\":true,\"sourceDefinitionsSupport\":\"none\"}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/json;charset=UTF-8"
-          ],
-          "Date": [
-            "Fri, 06 Sep 2019 14:13:54 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=99"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/dataSources/providers/cas"
-      }
-    },
-    {
-      "recorded_at": "2019-09-06T14:13:50",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/dataSources/providers/cas/sources"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": ""
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Length": [
-            "0"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "text/plain; charset=UTF-8"
-          ],
-          "Date": [
-            "Fri, 06 Sep 2019 14:13:54 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=98"
-          ],
-          "Location": [
-            "/casManagement/providers/cas/sources"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 302,
-          "message": ""
-        },
-        "url": "https://hostname.com/dataSources/providers/cas/sources"
-      }
-    },
-    {
-      "recorded_at": "2019-09-06T14:13:50",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/casManagement/providers/cas/sources"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"uri\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"}],\"name\":\"sources\",\"accept\":\"application/vnd.sas.data.source application/vnd.sas.data.source.summary\",\"start\":0,\"count\":1,\"items\":[{\"id\":\"cas-shared-default\",\"name\":\"cas-shared-default\",\"type\":\"casServer\",\"providerId\":\"cas\",\"description\":\"controller\",\"hasTables\":false,\"hasEngines\":false,\"attributes\":{\"port\":5570,\"host\":\"sasserver.demo.sas.com\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source.summary\"},{\"method\":\"GET\",\"rel\":\"state\",\"href\":\"/casManagement/servers/cas-shared-default/state\",\"uri\":\"/casManagement/servers/cas-shared-default/state\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"children\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}]}],\"limit\":10,\"version\":2}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/json;charset=UTF-8"
-          ],
-          "Date": [
-            "Fri, 06 Sep 2019 14:13:54 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=97"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/casManagement/providers/cas/sources"
-      }
-    },
-    {
-      "recorded_at": "2019-09-06T14:23:11",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": "grant_type=password&username=USERNAME&password=*****"
-        },
-        "headers": {
-          "Accept": [
-            "application/json"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Basic [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "Content-Length": [
-            "54"
-          ],
-          "Content-Type": [
-            "application/x-www-form-urlencoded"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "POST",
-        "uri": "https://hostname.com/SASLogon/oauth/token"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"expires_in\":35999,\"scope\":\"DataBuilders ApplicationAdministrators qasDataAdmin qasFQAAnalyst SASScoreUsers qasAPAAnalyst qasInfoConsumer clients.read clients.secret uaa.resource openid uaa.admin clients.admin EsriUsers scim.read SASAdministrators qasPQAAnalyst clients.write scim.write qasAppAdmin CASHostAccountRequired\",\"jti\":\"92c71a9adcd64712b40f9ab5af67efd6\"}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate",
-            "no-store"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Type": [
-            "application/json;charset=UTF-8"
-          ],
-          "Date": [
-            "Fri, 06 Sep 2019 14:23:14 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=100"
-          ],
-          "Pragma": [
-            "no-cache",
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "DENY"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/SASLogon/oauth/token"
-      }
-    },
-    {
-      "recorded_at": "2019-09-06T14:23:11",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/dataSources/providers/cas"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"id\":\"cas\",\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers\",\"uri\":\"/dataSources/providers\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.provider.summary\"},{\"method\":\"GET\",\"rel\":\"dataSources\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}],\"version\":2,\"apiVersion\":1,\"usesSessions\":true,\"sourceDefinitionsSupport\":\"none\"}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/json;charset=UTF-8"
-          ],
-          "Date": [
-            "Fri, 06 Sep 2019 14:23:15 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=99"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/dataSources/providers/cas"
-      }
-    },
-    {
-      "recorded_at": "2019-09-06T14:23:11",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/dataSources/providers/cas/sources"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": ""
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Length": [
-            "0"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "text/plain; charset=UTF-8"
-          ],
-          "Date": [
-            "Fri, 06 Sep 2019 14:23:15 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=98"
-          ],
-          "Location": [
-            "/casManagement/providers/cas/sources"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 302,
-          "message": ""
-        },
-        "url": "https://hostname.com/dataSources/providers/cas/sources"
-      }
-    },
-    {
-      "recorded_at": "2019-09-06T14:23:11",
-      "request": {
-        "body": {
-          "encoding": "utf-8",
-          "string": ""
-        },
-        "headers": {
-          "Accept": [
-            "*/*"
-          ],
-          "Accept-Encoding": [
-            "gzip, deflate"
-          ],
-          "Authorization": [
-            "Bearer [redacted]"
-          ],
-          "Connection": [
-            "keep-alive"
-          ],
-          "User-Agent": [
-            "python-requests/2.22.0"
-          ]
-        },
-        "method": "GET",
-        "uri": "https://hostname.com/casManagement/providers/cas/sources"
-      },
-      "response": {
-        "body": {
-          "encoding": "UTF-8",
-          "string": "{\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"uri\":\"/dataSources/providers/cas/sources?start=0&limit=10\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas\",\"uri\":\"/dataSources/providers/cas\",\"type\":\"application/vnd.sas.data.provider\"}],\"name\":\"sources\",\"accept\":\"application/vnd.sas.data.source application/vnd.sas.data.source.summary\",\"start\":0,\"count\":1,\"items\":[{\"id\":\"cas-shared-default\",\"name\":\"cas-shared-default\",\"type\":\"casServer\",\"providerId\":\"cas\",\"description\":\"controller\",\"hasTables\":false,\"hasEngines\":false,\"attributes\":{\"port\":5570,\"host\":\"sasserver.demo.sas.com\"},\"version\":1,\"links\":[{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"alternate\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default\",\"type\":\"application/vnd.sas.data.source.summary\"},{\"method\":\"GET\",\"rel\":\"state\",\"href\":\"/casManagement/servers/cas-shared-default/state\",\"uri\":\"/casManagement/servers/cas-shared-default/state\",\"type\":\"text/plain\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/dataSources/providers/cas/sources\",\"uri\":\"/dataSources/providers/cas/sources\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"},{\"method\":\"GET\",\"rel\":\"children\",\"href\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"uri\":\"/dataSources/providers/cas/sources/cas-shared-default/children\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.data.source\"}]}],\"limit\":10,\"version\":2}"
-        },
-        "headers": {
-          "Cache-Control": [
-            "no-cache, no-store, max-age=0, must-revalidate"
-          ],
-          "Connection": [
-            "Keep-Alive"
-          ],
-          "Content-Security-Policy": [
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' *.sas.com blob: data:; style-src 'self' 'unsafe-inline'; child-src 'self' blob: data: mailto:;"
-          ],
-          "Content-Type": [
-            "application/json;charset=UTF-8"
-          ],
-          "Date": [
-            "Fri, 06 Sep 2019 14:23:15 GMT"
-          ],
-          "Expires": [
-            "0"
-          ],
-          "Keep-Alive": [
-            "timeout=5, max=97"
-          ],
-          "Pragma": [
-            "no-cache"
-          ],
-          "Strict-Transport-Security": [
-            "max-age=31536000 ; includeSubDomains"
-          ],
-          "Transfer-Encoding": [
-            "chunked"
-          ],
-          "Vary": [
-            "User-Agent"
-          ],
-          "X-Content-Type-Options": [
-            "nosniff"
-          ],
-          "X-Frame-Options": [
-            "SAMEORIGIN"
-          ],
-          "X-XSS-Protection": [
-            "1; mode=block"
-          ]
-        },
-        "status": {
-          "code": 200,
-          "message": ""
-        },
-        "url": "https://hostname.com/casManagement/providers/cas/sources"
+        "url": "https://hostname.com/casManagement/providers/cas/sources?limit=10&sortBy=name%3Aascending&start=0"
       }
     }
   ],
