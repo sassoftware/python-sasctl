@@ -37,14 +37,7 @@ class TestModelPublish:
         assert dest.destinationTable == 'sasctl_models'
         assert dest.description == 'Test CAS publish destination from sasctl.'
 
-    def test_create_mas_destination(self):
-        dest = mp.create_mas_destination('sasctlmas', 'localhost')
-
-        assert dest.name == 'sasctlmas'
-        assert dest.destinationType == 'microAnalyticService'
-        assert 'description' not in dest
-
-    def test_delete_cas_destionation(self):
+    def test_delete_cas_destination(self):
         dest = mp.get_destination('sasctlcas')
         assert dest.name == 'sasctlcas'
 
@@ -52,3 +45,12 @@ class TestModelPublish:
 
         dest = mp.get_destination('sasctlcas')
         assert dest is None
+
+    def test_create_mas_destination(self):
+        pytest.skip('Publishing destinations for a remote SAS Micro Analytic Service are currently not supported.')
+
+        dest = mp.create_mas_destination('sasctlmas', 'localhost')
+
+        assert dest.name == 'sasctlmas'
+        assert dest.destinationType == 'microAnalyticService'
+        assert 'description' not in dest

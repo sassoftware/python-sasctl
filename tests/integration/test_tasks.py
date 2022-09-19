@@ -14,9 +14,9 @@ import pytest
 # Every test function in the module will automatically receive the session fixture
 pytestmark = pytest.mark.usefixtures('session')
 
-ASTORE_MODEL_NAME = 'sasctl_testing Astore Model'
-SCIKIT_MODEL_NAME = 'sasctl_testing Scikit Model'
-PROJECT_NAME = 'sasctl_testing Task Project'
+ASTORE_MODEL_NAME = 'sasctl_testing_astore_model'
+SCIKIT_MODEL_NAME = 'sasctl_testing_scikit_model'
+PROJECT_NAME = 'sasctl_testing_task_project'
 
 
 @pytest.fixture

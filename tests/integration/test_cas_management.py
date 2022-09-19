@@ -73,10 +73,14 @@ def test_get_table():
 
     assert cm.get_table('fake_table', 'Samples') is None
 
+
 def test_list_sessions():
+    from sasctl.core import PagedList, RestObj
     sessions = cm.list_sessions()
 
-    assert isinstance(sessions, list)
+    # More than one session or just one session
+    assert isinstance(sessions, PagedList) or isinstance(sessions, RestObj)
+
 
 def test_create_session():
     
@@ -88,8 +92,9 @@ def test_create_session():
     
     assert str(sess['name']).startswith("SessionSimulation")
 
+
 def test_delete_session():
-    
+
     properties = {
         "authenticationType": "OAuth",
         "name": "SessionSimulation"
@@ -99,11 +104,13 @@ def test_delete_session():
     cm.delete_session(sess.id)
 
     query_param = {
-        "filter": "startsWith(name,SessionSimulation)"
+        "filter": "eq(id,'{}')".format(sess.id)
     }
     res = cm.list_sessions(query_param)
-    
-    assert len(res)==0 
+
+    # Assert that when the created session is deleted, filtered list_sessions only returns an empty list
+    assert not res
+
 
 @pytest.fixture(scope='session')
 def sample_table(tmpdir_factory):
@@ -125,7 +132,7 @@ def test_upload_file(sample_table):
 
     path = sample_table 
     test_tbl = "TEST_TABLE"
-    caslib = 'Samples'
+    caslib = 'Public'
     server = 'cas-shared-default'
     frmt = 'csv'
 
@@ -161,16 +168,17 @@ def test_upload_file(sample_table):
 
     cm.delete_session(sess.id,server)
 
-def test_save_table(sample_table):    
+
+def test_save_table(sample_table):
     path = sample_table
     table = "TEST_TABLE"
-    caslib = 'CASUSER(X1064007)'
+    caslib = 'Public'
     server = 'cas-shared-default'
     frmt = 'csv'
     info = {
         "delimiter": ";"
     }
-    tbl = cm.upload_file(path,table,caslib,server,True,frmt,detail=info)
+    tbl = cm.upload_file(path, table, caslib, server, True, frmt, detail=info)
     assert tbl.state == 'loaded'
 
     save_tbl = cm.save_table(table,caslib)
@@ -181,7 +189,7 @@ def test_save_table(sample_table):
 
 def test_del_table():
     table = "TEST_TABLE"
-    caslib = 'CASUSER(X1064007)'
+    caslib = 'Public'
     server = 'cas-shared-default'
     qp_err={
         "sourceTableName": "%s.sashdat"%table
@@ -209,7 +217,7 @@ def test_promote_table(sample_table):
     
     path = sample_table
     table = "TEST_TABLE"
-    caslib = 'CASUSER(X1064007)'
+    caslib = 'Public'
     server = 'cas-shared-default'
     frmt = 'csv'
     info = {

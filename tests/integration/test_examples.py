@@ -81,7 +81,7 @@ def test_sklearn_model(session, change_dir):
 def test_scikit_regression_model(session, change_dir):
     """Ensure the register_scikit_regression_model.py example executes successfully."""
 
-    pytest.skip('Re-enable once MAS publish no longer hangs.')
+    # pytest.skip('Re-enable once MAS publish no longer hangs.')
     # Mock up Session() to return the Betamax-recorded session
     def Session(*args, **kwargs):
         return session

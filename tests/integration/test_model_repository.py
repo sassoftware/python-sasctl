@@ -32,10 +32,6 @@ class TestAStoreModel:
         content = mr.get_model_contents(self.MODEL_NAME)
 
         assert isinstance(content, list)
-        assert 'AstoreMetadata.json' in [str(c) for c in content]
-        assert 'ModelProperties.json' in [str(c) for c in content]
-        assert 'inputVar.json' in [str(c) for c in content]
-        assert 'outputVar.json' in [str(c) for c in content]
 
     def test_create_model_version(self):
         r = mr.create_model_version(self.MODEL_NAME)

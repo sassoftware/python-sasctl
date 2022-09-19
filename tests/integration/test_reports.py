@@ -20,7 +20,7 @@ def test_list_reports():
 
 
 def test_get_report():
-    NAME = 'Home Loan Default Demo'
+    NAME = 'User Activity'
     r = reports.get_report(NAME)
 
     assert isinstance(r, RestObj)

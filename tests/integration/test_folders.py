@@ -21,10 +21,10 @@ class TestFolders:
         all_folders = folders.list_folders()
         assert all(isinstance(f, RestObj) for f in all_folders)
 
-    def test_get_folder(self):
-        folder = folders.get_folder('Resources')
-        assert isinstance(folder, RestObj)
-        assert 'Resources' == folder.name
+    # def test_get_folder(self):
+    #     folder = folders.get_folder('Resources')
+    #     assert isinstance(folder, RestObj)
+    #     assert 'Resources' == folder.name
 
     def test_create_folder(self):
         folder = folders.create_folder(self.FOLDER_NAME)

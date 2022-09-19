@@ -14,8 +14,8 @@ pytestmark = pytest.mark.usefixtures('session')
 
 @pytest.mark.incremental
 class TestAStoreRegressionModel:
-    PROJECT_NAME = 'sasctl_testing Pipeline Project'
-    MODEL_NAME = 'sasctl_testing Pipeline ASTORE Model'
+    PROJECT_NAME = 'sasctl_testing_pipeline_project'
+    MODEL_NAME = 'sasctl_testing_pipeline_ASTORE_model'
     CAS_DEST = 'sasctl_test_cas'
     MAS_DEST = 'sasctl_test_mas'
     CAS_MODEL_TABLE = 'sasctl_test_model_table'
@@ -37,9 +37,6 @@ class TestAStoreRegressionModel:
         model = register_model(astore, self.MODEL_NAME, self.PROJECT_NAME, force=True)
         assert model.name == self.MODEL_NAME
         assert model.projectName == self.PROJECT_NAME
-        assert model.function.lower() == 'prediction'
-        assert model.algorithm.lower() == 'linear regression'
-        assert model.targetVariable.lower() == 'price'
 
     def test_create_cas_destination(self):
         from sasctl.services import model_publish as mp
@@ -83,6 +80,8 @@ class TestAStoreRegressionModel:
         assert 'P_Price' in result.columns
 
     def test_create_mas_destination(self):
+        pytest.skip('Publishing destinations for a remote SAS Micro Analytic Service are currently not supported.')
+
         from sasctl.services import model_publish as mp
 
         dest = mp.create_mas_destination(self.MAS_DEST, 'localhost')
@@ -177,11 +176,12 @@ class TestSklearnRegressionModel:
         assert module.publishType == 'casModel'
 
     def test_score_cas(self, cas_session, boston_dataset, request):
+        pytest.skip("Score code generated is not valid for SAS Viya 4.")
         tbl = cas_session.upload(boston_dataset).casTable
         cas_session.loadactionset('modelpublishing')
 
         module_name = request.config.cache.get('CAS_MODULE_NAME', None)
-        assert  module_name is not None
+        assert module_name is not None
 
         result = cas_session.runModelLocal(modelName=module_name,
                                            modelTable=dict(name=self.CAS_MODEL_TABLE,
@@ -211,6 +211,7 @@ class TestSklearnRegressionModel:
         assert hasattr(module, 'predict')
 
     def test_score_mas(self, boston_dataset, request):
+        pytest.skip("Score code generated is not valid for SAS Viya 4.")
         from sasctl.services import microanalytic_score as mas
 
         module_name = request.config.cache.get('MAS_MODULE_NAME', None)
@@ -296,6 +297,7 @@ class TestSklearnClassificationModel:
         assert hasattr(module, 'predict')
 
     def test_score_mas(self, iris_dataset, request):
+        pytest.skip("Score code generated is not valid for SAS Viya 4.")
         from sasctl.services import microanalytic_score as mas
 
         module_name = request.config.cache.get('MAS_MODULE_NAME', None)
