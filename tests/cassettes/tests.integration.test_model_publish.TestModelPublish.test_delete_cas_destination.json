@@ -1,0 +1,602 @@
+{
+  "http_interactions": [
+    {
+      "recorded_at": "2022-09-16T16:13:17",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "grant_type=password&username=USERNAME&password=*****"
+        },
+        "headers": {
+          "Accept": [
+            "application/json"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate, br"
+          ],
+          "Authorization": [
+            "Basic [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "53"
+          ],
+          "Content-Type": [
+            "application/x-www-form-urlencoded"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "POST",
+        "uri": "https://hostname.com/SASLogon/oauth/token"
+      },
+      "response": {
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"access_token\":\"[redacted]\",\"token_type\":\"bearer\",\"id_token\":\"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vbG9jYWxob3N0L1NBU0xvZ29uL3Rva2VuX2tleXMiLCJraWQiOiJsZWdhY3ktdG9rZW4ta2V5IiwidHlwIjoiSldUIn0.eyJzdWIiOiIxNzI1ODcwYS0zMjM1LTRlNDktYjAyMy1iOTM4MDVhNzMwODUiLCJhdWQiOlsic2FzLmVjIl0sImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvU0FTTG9nb24vb2F1dGgvdG9rZW4iLCJleHAiOjE2NjMzNTkxOTcsImlhdCI6MTY2MzM0NDc5NywiYW1yIjpbImV4dCIsInB3ZCJdLCJhenAiOiJzYXMuZWMiLCJzY29wZSI6WyJvcGVuaWQiXSwiZW1haWwiOiJlZG1kZXZAdXNlci5mcm9tLmxkYXAuY2YiLCJ6aWQiOiJ1YWEiLCJvcmlnaW4iOiJsZGFwIiwianRpIjoiNjhjN2Q3NTE1MDIyNDNmZGFlNzY0Yjg1YzEwOWFmYTQiLCJwcmV2aW91c19sb2dvbl90aW1lIjoxNjYzMzQ0Nzk2OTc2LCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudF9pZCI6InNhcy5lYyIsImNpZCI6InNhcy5lYyIsImdyYW50X3R5cGUiOiJwYXNzd29yZCIsInVzZXJfbmFtZSI6ImVkbWRldiIsInJldl9zaWciOiJkMWRhNDY1OCIsImF1dGhfdGltZSI6MTY2MzM0NDc5NywidXNlcl9pZCI6IjE3MjU4NzBhLTMyMzUtNGU0OS1iMDIzLWI5MzgwNWE3MzA4NSJ9.UlUmbYI6gsnFyeUOY5Jgh-tU2U8e4VQ9mGfbU_AWK5CSS-XJRjQHqPc62zIU5b9ZK72xObhYVu_BZxgBcavdc2_5ipDT0iXVw9rAqJzy-5nvhnidRZpotMI0MkutYbACK97kI1LmV7bcGc_vpwTKe-fha34PMVVvauFANsAJhKsLZsAH_sxHk0FUfAdNtTd1CcysdHr1ZXHjaYrTxSi4xPiafvvC8RL6DvvSEqu0SB8KyW6E90H9Z3yO6lkrv7AOUPWLi922ylJpm8zje_faq5ffBlBW0a6d6kHXus32deahbtvV248Uw7k5vBU409no4QF7YoexpEoKPeKuspO8zQ\",\"expires_in\":14399,\"scope\":\"ViyaSASAdmins FSDev clients.read clients.secret uaa.resource decqe openid uaa.admin clients.admin scim.read unix_r&d SASAdministrators openstackusers clients.write lanpanfilter Postgres_azure_Access scim.write\",\"jti\":\"68c7d751502243fdae764b85c109afa4\"}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-store"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Type": [
+            "application/json;charset=UTF-8"
+          ],
+          "Date": [
+            "Fri, 16 Sep 2022 16:13:17 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Set-Cookie": [
+            "sas-ingress-nginx=195f77b9b064e00b64971286ee55ac84|133a061ace010cd08997bd8e43a22519; Path=/SASLogon/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=081D889D63A0E6FF5486A70028B0E711; Path=/SASLogon; Secure; HttpOnly; SameSite=Lax"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Frame-Options": [
+            "DENY"
+          ],
+          "X-XSS-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": ""
+        },
+        "url": "https://hostname.com/SASLogon/oauth/token"
+      }
+    },
+    {
+      "recorded_at": "2022-09-16T16:13:18",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate, br"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/destinations?filter=eq(name,%20%22sasctlcas%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"version\":2,\"accept\":\"application/vnd.sas.models.publishing.destination\",\"count\":1,\"start\":0,\"limit\":100,\"name\":\"publishDestinations\",\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish\",\"uri\":\"/modelPublish\",\"type\":\"application/vnd.sas.api\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations?start=0\\u0026limit=100\\u0026filter=eq%28name%2C+%22sasctlcas%22%29\",\"uri\":\"/modelPublish/destinations?start=0\\u0026limit=100\\u0026filter=eq%28name%2C+%22sasctlcas%22%29\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"POST\",\"rel\":\"createDestination\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination\",\"responseType\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"POST\",\"rel\":\"createDestinationCAS\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.cas\",\"responseType\":\"application/vnd.sas.models.publishing.destination.cas+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationMAS\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.mas\",\"responseType\":\"application/vnd.sas.models.publishing.destination.mas+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationAWS\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.aws\",\"responseType\":\"application/vnd.sas.models.publishing.destination.aws+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationAML\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.aml\",\"responseType\":\"application/vnd.sas.models.publishing.destination.aml+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationAzure\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.azure\",\"responseType\":\"application/vnd.sas.models.publishing.destination.azure+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationGCP\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.gcp\",\"responseType\":\"application/vnd.sas.models.publishing.destination.gcp+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationHadoop\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.hadoop\",\"responseType\":\"application/vnd.sas.models.publishing.destination.hadoop+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationTeradata\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.teradata\",\"responseType\":\"application/vnd.sas.models.publishing.destination.teradata+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationGit\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.git\",\"responseType\":\"application/vnd.sas.models.publishing.destination.git+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationPrivateDocker\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.privatedocker\",\"responseType\":\"application/vnd.sas.models.publishing.destination.privatedocker+json\"},{\"method\":\"GET\",\"rel\":\"publishRoot\",\"href\":\"/modelPublish\",\"uri\":\"/modelPublish\",\"type\":\"application/vnd.sas.api\"}],\"items\":[{\"creationTimeStamp\":\"2022-09-16T16:13:17.076372Z\",\"createdBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2022-09-16T16:13:17.076372Z\",\"modifiedBy\":\"USERNAME\",\"version\":2,\"id\":\"c0020255-1f60-4ebc-af57-3cb461903c72\",\"name\":\"sasctlcas\",\"description\":\"Test CAS publish destination from sasctl.\",\"destinationType\":\"cas\",\"destinationTable\":\"sasctl_models\",\"casServerName\":\"cas-shared-default\",\"casLibrary\":\"Public\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\",\"type\":\"application/vnd.sas.models.publishing.destination\"}]}]}\n"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json; charset=utf-8"
+          ],
+          "Date": [
+            "Fri, 16 Sep 2022 16:13:18 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Set-Cookie": [
+            "sas-ingress-nginx=f4f16ad9248c3a5a3fc1861e63e5bc62|1882cc3e3a5f8d417d27e0440bd2ea0f; Path=/modelPublish/; Secure; HttpOnly; SameSite=Lax",
+            "JSESSIONID=a5959ff7-6740-41ba-9d03-b4689a954e47; Path=/modelPublish/; HttpOnly; Secure; SameSite=Lax"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff",
+            "nosniff"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://hostname.com/modelPublish/destinations?filter=eq(name,%20%22sasctlcas%22)"
+      }
+    },
+    {
+      "recorded_at": "2022-09-16T16:13:18",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate, br"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Cookie": [
+            "JSESSIONID=a5959ff7-6740-41ba-9d03-b4689a954e47; sas-ingress-nginx=f4f16ad9248c3a5a3fc1861e63e5bc62|1882cc3e3a5f8d417d27e0440bd2ea0f"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/destinations/sasctlcas"
+      },
+      "response": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"casLibrary\":\"Public\",\"casServerName\":\"cas-shared-default\",\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2022-09-16T16:13:17.076372Z\",\"description\":\"Test CAS publish destination from sasctl.\",\"destinationTable\":\"sasctl_models\",\"destinationType\":\"cas\",\"id\":\"c0020255-1f60-4ebc-af57-3cb461903c72\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\",\"type\":\"application/vnd.sas.models.publishing.destination\"}],\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2022-09-16T16:13:17.076372Z\",\"name\":\"sasctlcas\",\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "1032"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.destination+json; charset=utf-8"
+          ],
+          "Date": [
+            "Fri, 16 Sep 2022 16:13:18 GMT"
+          ],
+          "Etag": [
+            "W/\"1663344797076372000\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Last-Modified": [
+            "Fri, 16 Sep 2022 16:13:17 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://hostname.com/modelPublish/destinations/sasctlcas"
+      }
+    },
+    {
+      "recorded_at": "2022-09-16T16:13:20",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate, br"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Cookie": [
+            "JSESSIONID=a5959ff7-6740-41ba-9d03-b4689a954e47; sas-ingress-nginx=f4f16ad9248c3a5a3fc1861e63e5bc62|1882cc3e3a5f8d417d27e0440bd2ea0f"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/destinations?filter=eq(name,%20%22sasctlcas%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"version\":2,\"accept\":\"application/vnd.sas.models.publishing.destination\",\"count\":1,\"start\":0,\"limit\":100,\"name\":\"publishDestinations\",\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish\",\"uri\":\"/modelPublish\",\"type\":\"application/vnd.sas.api\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations?start=0\\u0026limit=100\\u0026filter=eq%28name%2C+%22sasctlcas%22%29\",\"uri\":\"/modelPublish/destinations?start=0\\u0026limit=100\\u0026filter=eq%28name%2C+%22sasctlcas%22%29\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"POST\",\"rel\":\"createDestination\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination\",\"responseType\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"POST\",\"rel\":\"createDestinationCAS\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.cas\",\"responseType\":\"application/vnd.sas.models.publishing.destination.cas+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationMAS\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.mas\",\"responseType\":\"application/vnd.sas.models.publishing.destination.mas+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationAWS\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.aws\",\"responseType\":\"application/vnd.sas.models.publishing.destination.aws+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationAML\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.aml\",\"responseType\":\"application/vnd.sas.models.publishing.destination.aml+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationAzure\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.azure\",\"responseType\":\"application/vnd.sas.models.publishing.destination.azure+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationGCP\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.gcp\",\"responseType\":\"application/vnd.sas.models.publishing.destination.gcp+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationHadoop\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.hadoop\",\"responseType\":\"application/vnd.sas.models.publishing.destination.hadoop+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationTeradata\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.teradata\",\"responseType\":\"application/vnd.sas.models.publishing.destination.teradata+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationGit\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.git\",\"responseType\":\"application/vnd.sas.models.publishing.destination.git+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationPrivateDocker\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.privatedocker\",\"responseType\":\"application/vnd.sas.models.publishing.destination.privatedocker+json\"},{\"method\":\"GET\",\"rel\":\"publishRoot\",\"href\":\"/modelPublish\",\"uri\":\"/modelPublish\",\"type\":\"application/vnd.sas.api\"}],\"items\":[{\"creationTimeStamp\":\"2022-09-16T16:13:17.076372Z\",\"createdBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2022-09-16T16:13:17.076372Z\",\"modifiedBy\":\"USERNAME\",\"version\":2,\"id\":\"c0020255-1f60-4ebc-af57-3cb461903c72\",\"name\":\"sasctlcas\",\"description\":\"Test CAS publish destination from sasctl.\",\"destinationType\":\"cas\",\"destinationTable\":\"sasctl_models\",\"casServerName\":\"cas-shared-default\",\"casLibrary\":\"Public\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\",\"type\":\"application/vnd.sas.models.publishing.destination\"}]}]}\n"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json; charset=utf-8"
+          ],
+          "Date": [
+            "Fri, 16 Sep 2022 16:13:20 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff",
+            "nosniff"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://hostname.com/modelPublish/destinations?filter=eq(name,%20%22sasctlcas%22)"
+      }
+    },
+    {
+      "recorded_at": "2022-09-16T16:13:20",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate, br"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Cookie": [
+            "JSESSIONID=a5959ff7-6740-41ba-9d03-b4689a954e47; sas-ingress-nginx=f4f16ad9248c3a5a3fc1861e63e5bc62|1882cc3e3a5f8d417d27e0440bd2ea0f"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/destinations/sasctlcas"
+      },
+      "response": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"casLibrary\":\"Public\",\"casServerName\":\"cas-shared-default\",\"createdBy\":\"USERNAME\",\"creationTimeStamp\":\"2022-09-16T16:13:17.076372Z\",\"description\":\"Test CAS publish destination from sasctl.\",\"destinationTable\":\"sasctl_models\",\"destinationType\":\"cas\",\"id\":\"c0020255-1f60-4ebc-af57-3cb461903c72\",\"links\":[{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\",\"type\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"DELETE\",\"rel\":\"delete\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\"},{\"method\":\"PUT\",\"rel\":\"update\",\"href\":\"/modelPublish/destinations/sasctlcas\",\"uri\":\"/modelPublish/destinations/sasctlcas\",\"type\":\"application/vnd.sas.models.publishing.destination\"}],\"modifiedBy\":\"USERNAME\",\"modifiedTimeStamp\":\"2022-09-16T16:13:17.076372Z\",\"name\":\"sasctlcas\",\"version\":2}"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "1032"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.models.publishing.destination+json; charset=utf-8"
+          ],
+          "Date": [
+            "Fri, 16 Sep 2022 16:13:20 GMT"
+          ],
+          "Etag": [
+            "W/\"1663344797076372000\""
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Last-Modified": [
+            "Fri, 16 Sep 2022 16:13:17 GMT"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://hostname.com/modelPublish/destinations/sasctlcas"
+      }
+    },
+    {
+      "recorded_at": "2022-09-16T16:13:20",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate, br"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Length": [
+            "0"
+          ],
+          "Cookie": [
+            "JSESSIONID=a5959ff7-6740-41ba-9d03-b4689a954e47; sas-ingress-nginx=f4f16ad9248c3a5a3fc1861e63e5bc62|1882cc3e3a5f8d417d27e0440bd2ea0f"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "DELETE",
+        "uri": "https://hostname.com/modelPublish/destinations/sasctlcas"
+      },
+      "response": {
+        "body": {
+          "encoding": null,
+          "string": ""
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
+          ],
+          "Date": [
+            "Fri, 16 Sep 2022 16:13:20 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 204,
+          "message": "No Content"
+        },
+        "url": "https://hostname.com/modelPublish/destinations/sasctlcas"
+      }
+    },
+    {
+      "recorded_at": "2022-09-16T16:13:21",
+      "request": {
+        "body": {
+          "encoding": "utf-8",
+          "string": ""
+        },
+        "headers": {
+          "Accept": [
+            "*/*"
+          ],
+          "Accept-Encoding": [
+            "gzip, deflate, br"
+          ],
+          "Authorization": [
+            "Bearer [redacted]"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Cookie": [
+            "JSESSIONID=a5959ff7-6740-41ba-9d03-b4689a954e47; sas-ingress-nginx=f4f16ad9248c3a5a3fc1861e63e5bc62|1882cc3e3a5f8d417d27e0440bd2ea0f"
+          ],
+          "User-Agent": [
+            "python-requests/2.28.1"
+          ]
+        },
+        "method": "GET",
+        "uri": "https://hostname.com/modelPublish/destinations?filter=eq(name,%20%22sasctlcas%22)"
+      },
+      "response": {
+        "body": {
+          "encoding": "utf-8",
+          "string": "{\"version\":2,\"accept\":\"application/vnd.sas.models.publishing.destination\",\"count\":0,\"start\":0,\"limit\":100,\"name\":\"publishDestinations\",\"links\":[{\"method\":\"GET\",\"rel\":\"collection\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"GET\",\"rel\":\"up\",\"href\":\"/modelPublish\",\"uri\":\"/modelPublish\",\"type\":\"application/vnd.sas.api\"},{\"method\":\"GET\",\"rel\":\"self\",\"href\":\"/modelPublish/destinations?start=0\\u0026limit=100\\u0026filter=eq%28name%2C+%22sasctlcas%22%29\",\"uri\":\"/modelPublish/destinations?start=0\\u0026limit=100\\u0026filter=eq%28name%2C+%22sasctlcas%22%29\",\"type\":\"application/vnd.sas.collection\",\"itemType\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"POST\",\"rel\":\"createDestination\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination\",\"responseType\":\"application/vnd.sas.models.publishing.destination\"},{\"method\":\"POST\",\"rel\":\"createDestinationCAS\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.cas\",\"responseType\":\"application/vnd.sas.models.publishing.destination.cas+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationMAS\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.mas\",\"responseType\":\"application/vnd.sas.models.publishing.destination.mas+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationAWS\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.aws\",\"responseType\":\"application/vnd.sas.models.publishing.destination.aws+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationAML\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.aml\",\"responseType\":\"application/vnd.sas.models.publishing.destination.aml+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationAzure\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.azure\",\"responseType\":\"application/vnd.sas.models.publishing.destination.azure+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationGCP\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.gcp\",\"responseType\":\"application/vnd.sas.models.publishing.destination.gcp+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationHadoop\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.hadoop\",\"responseType\":\"application/vnd.sas.models.publishing.destination.hadoop+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationTeradata\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.teradata\",\"responseType\":\"application/vnd.sas.models.publishing.destination.teradata+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationGit\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.git\",\"responseType\":\"application/vnd.sas.models.publishing.destination.git+json\"},{\"method\":\"POST\",\"rel\":\"createDestinationPrivateDocker\",\"href\":\"/modelPublish/destinations\",\"uri\":\"/modelPublish/destinations\",\"type\":\"application/vnd.sas.models.publishing.destination.privatedocker\",\"responseType\":\"application/vnd.sas.models.publishing.destination.privatedocker+json\"},{\"method\":\"GET\",\"rel\":\"publishRoot\",\"href\":\"/modelPublish\",\"uri\":\"/modelPublish\",\"type\":\"application/vnd.sas.api\"}],\"items\":[]}\n"
+        },
+        "headers": {
+          "Cache-Control": [
+            "no-cache, no-store, max-age=0, must-revalidate"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Content-Security-Policy": [
+            "default-src 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self';"
+          ],
+          "Content-Type": [
+            "application/vnd.sas.collection+json; charset=utf-8"
+          ],
+          "Date": [
+            "Fri, 16 Sep 2022 16:13:21 GMT"
+          ],
+          "Expires": [
+            "0"
+          ],
+          "Pragma": [
+            "no-cache"
+          ],
+          "Sas-Service-Response-Flag": [
+            "true"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=15724800; includeSubDomains"
+          ],
+          "Transfer-Encoding": [
+            "chunked"
+          ],
+          "Vary": [
+            "Origin"
+          ],
+          "X-Content-Type-Options": [
+            "nosniff",
+            "nosniff"
+          ],
+          "X-Xss-Protection": [
+            "1; mode=block"
+          ]
+        },
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "url": "https://hostname.com/modelPublish/destinations?filter=eq(name,%20%22sasctlcas%22)"
+      }
+    }
+  ],
+  "recorded_with": "betamax/0.8.1"
+}
