@@ -124,7 +124,9 @@ class ModelPublish(Service):
                 code = cls.get(code_link["href"])
 
         request = dict(
-            name=name or model.get("name"), notes=notes, destinationName=destination,
+            name=name or model.get("name"),
+            notes=notes,
+            destinationName=destination,
         )
 
         model_contents = {

@@ -18,7 +18,7 @@ def check_keys(valid_keys: list, input_keys: list, parameters: str):
     """Compares the input_keys against the valid_keys
     to see if they are allowed to be passed
     as parameters in the request.
-    
+
     Parameters
     ----------
     valid_keys: list
@@ -28,7 +28,7 @@ def check_keys(valid_keys: list, input_keys: list, parameters: str):
     parameters: str
         String describing the type of parameters
         that are being tested.
-    
+
     Returns
     -------
     raises ValueError if input_keys are not valid
@@ -44,7 +44,7 @@ def check_required_key(
 ):
     """Check whether the required parameters
     are in the list of input_key.
-    
+
     Parameters
     ----------
     required_key: str or list
@@ -327,9 +327,9 @@ class CASManagement(Service):
         detail : dict, optional
             Additional body parameters. Allowed parameters are
             'sessionId', 'variables', 'label', 'scope', 'replace', 'encoding',
-            'allowTruncation', 'allowEmbeddedNewLines', 'delimiter', 
+            'allowTruncation', 'allowEmbeddedNewLines', 'delimiter',
             'varchars', 'scanRows', 'threadCount', 'stripBlanks', 'sheetName',
-            'password', 'decryptionKey', 'stringLengthMultiplier', 
+            'password', 'decryptionKey', 'stringLengthMultiplier',
             'varcharConversionThreshold'.
 
         Returns
@@ -617,15 +617,15 @@ class CASManagement(Service):
     ):
         """Deletes a table from Caslib source. Note that is not an unload.
         This operation physically removes the source table (if the source is writable).
-        For path-based caslibs, this physically removes the file.    
-        
+        For path-based caslibs, this physically removes the file.
+
         Parameters
         ----------
         name : str
             Name of the table.
         query_params : dict
             Query parameters.
-            The allowed query parameters are `sessionId`, 
+            The allowed query parameters are `sessionId`,
             `sourceTableName`, `quiet`, `removeAcs`.
             Note that the last three are required.
         caslib : str

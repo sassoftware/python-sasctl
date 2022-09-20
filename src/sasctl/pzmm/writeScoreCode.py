@@ -679,8 +679,10 @@ def score{modelPrefix}({inputVarList}):
                 if (x != "double" and x != "in_out" and x != "varchar(100)")
             ]
         )
-        endBlock = "method run();\n    set SASEP.IN;\n    score({});\nend;\nenddata;".format(
-            inputString
+        endBlock = (
+            "method run();\n    set SASEP.IN;\n    score({});\nend;\nenddata;".format(
+                inputString
+            )
         )
         replaceStrings = {
             "package pythonScore / overwrite=yes;": "data sasep.out;",

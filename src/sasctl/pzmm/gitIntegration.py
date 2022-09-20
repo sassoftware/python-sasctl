@@ -176,7 +176,10 @@ def model_exists(project, name, force):
 class GitIntegrate:
     @classmethod
     def pullViyaModel(
-        cls, model, gPath, project=None,
+        cls,
+        model,
+        gPath,
+        project=None,
     ):
         """Send an API request in order to pull a model from a project in
         SAS Model Manager in a zipped format. The contents of the zip file
