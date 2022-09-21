@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.cas_management &#8212; sasctl 1.7.2 documentation</title>
+    <title>sasctl._services.cas_management &#8212; sasctl 1.7.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -72,11 +72,77 @@
 <span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">TextIO</span>
 
 <span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
 
+<span class="n">QUERY_PARAMETERS</span> <span class="o">=</span> <span class="s2">&quot;query parameters&quot;</span>
 <span class="n">DEFAULT_SERVER</span> <span class="o">=</span> <span class="s2">&quot;cas-shared-default&quot;</span>
-<span class="n">DEFAULT_CASLIB</span> <span class="o">=</span> <span class="s2">&quot;casuser&quot;</span>
+<span class="n">DEFAULT_CASLIB</span> <span class="o">=</span> <span class="s2">&quot;Public&quot;</span>
+
+
+<div class="viewcode-block" id="check_keys"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.check_keys">[docs]</a><span class="k">def</span> <span class="nf">check_keys</span><span class="p">(</span><span class="n">valid_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">input_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compares the input_keys against the valid_keys</span>
+<span class="sd">    to see if they are allowed to be passed</span>
+<span class="sd">    as parameters in the request.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    valid_keys: list</span>
+<span class="sd">        List of allowed parameters</span>
+<span class="sd">    input_keys: list</span>
+<span class="sd">        List of input parameters</span>
+<span class="sd">    parameters: str</span>
+<span class="sd">        String describing the type of parameters</span>
+<span class="sd">        that are being tested.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    raises ValueError if input_keys are not valid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">key</span> <span class="ow">in</span> <span class="n">valid_keys</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">input_keys</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The only acceptable values for </span><span class="si">%s</span><span class="s2"> are </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">valid_keys</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_required_key"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.check_required_key">[docs]</a><span class="k">def</span> <span class="nf">check_required_key</span><span class="p">(</span>
+    <span class="n">required_key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">input_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check whether the required parameters</span>
+<span class="sd">    are in the list of input_key.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    required_key: str or list</span>
+<span class="sd">        Required parameters</span>
+<span class="sd">    input_keys: list</span>
+<span class="sd">        The input parameters</span>
+<span class="sd">    parameters: str</span>
+<span class="sd">        String describing the type of parameters</span>
+<span class="sd">        that are being tested.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    raises ValueError if required_key is not present.</span>
+<span class="sd">    raises TypeError if required_key is neither a list or a string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">required_key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">required_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">input_keys</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The </span><span class="si">%s</span><span class="s2"> is a required </span><span class="si">%s</span><span class="s2"> parameter.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">required_key</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+            <span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">required_key</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">required_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">required_key</span><span class="p">)</span>
+        <span class="n">input_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">input_keys</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">required_set</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">input_set</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The </span><span class="si">%s</span><span class="s2"> are required </span><span class="si">%s</span><span class="s2"> parameters.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">required_key</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;Please enter either a list or a string of required parameters.&quot;</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="CASManagement"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement">[docs]</a><span class="k">class</span> <span class="nc">CASManagement</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
@@ -88,8 +154,111 @@
 
     <span class="n">list_servers</span><span class="p">,</span> <span class="n">get_server</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span><span class="s2">&quot;/servers&quot;</span><span class="p">,</span> <span class="s2">&quot;server&quot;</span><span class="p">)</span>
 
+<div class="viewcode-block" id="CASManagement.list_sessions"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.list_sessions">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">list_sessions</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">query_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a collection of sessions available on the CAS server.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ------</span>
+<span class="sd">        query_params : dict, optional</span>
+<span class="sd">            Query parameters.</span>
+<span class="sd">            Valid keys are `start`, `limit`, `filter`,</span>
+<span class="sd">            `sortBy`, `excludeItemLink`, `sessionId`.</span>
+<span class="sd">        server : str, optional</span>
+<span class="sd">            Name of the CAS server. Defaults to &#39;cas-shared-default&#39;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            A collection of :class:`.RestObj` instances.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="ow">or</span> <span class="n">DEFAULT_SERVER</span>
+
+        <span class="k">if</span> <span class="n">query_params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">allowed_query</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;start&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;limit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;filter&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;sortBy&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;excludeItemLink&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;sessionId&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="n">check_keys</span><span class="p">(</span><span class="n">allowed_query</span><span class="p">,</span> <span class="n">query_params</span><span class="p">,</span> <span class="n">QUERY_PARAMETERS</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">query_params</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">sess_list</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/servers/</span><span class="si">%s</span><span class="s2">/sessions&quot;</span> <span class="o">%</span> <span class="n">server</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">query_params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sess_list</span></div>
+
+<div class="viewcode-block" id="CASManagement.create_session"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.create_session">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create_session</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">properties</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a new session on the CAS server.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ------</span>
+<span class="sd">        properties : dict</span>
+<span class="sd">            Properties of the session.</span>
+<span class="sd">            Valid keys are `authenticationType` (required),</span>
+<span class="sd">            `locale`, `name`, `nodeCount`, `timeOut`.</span>
+<span class="sd">        server : str</span>
+<span class="sd">            Name of the CAS server.  Defaults to &#39;cas-shared-default&#39;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="ow">or</span> <span class="n">DEFAULT_SERVER</span>
+
+        <span class="n">allowed_body</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;authenticationType&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;locale&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;nodeCount&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;timeOut&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">check_keys</span><span class="p">(</span><span class="n">allowed_body</span><span class="p">,</span> <span class="n">properties</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;body&quot;</span><span class="p">)</span>
+        <span class="n">check_required_key</span><span class="p">(</span><span class="s2">&quot;authenticationType&quot;</span><span class="p">,</span> <span class="n">properties</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;body&quot;</span><span class="p">)</span>
+
+        <span class="n">sess</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/servers/</span><span class="si">%s</span><span class="s2">/sessions&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server</span><span class="p">),</span> <span class="n">json</span><span class="o">=</span><span class="n">properties</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sess</span></div>
+
+<div class="viewcode-block" id="CASManagement.delete_session"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.delete_session">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">delete_session</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">sess_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">query_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Terminates a session on the CAS server.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ------</span>
+<span class="sd">        sess_id : str</span>
+<span class="sd">            A string indicating the Session id.</span>
+<span class="sd">        server : str</span>
+<span class="sd">            Name of the CAS server.  Defaults to &#39;cas-shared-default&#39;.</span>
+<span class="sd">        query_params : dict, optional</span>
+<span class="sd">            Query parameters.</span>
+<span class="sd">            Valid keys are `force`, `superUserSessionId`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="ow">or</span> <span class="n">DEFAULT_SERVER</span>
+
+        <span class="k">if</span> <span class="n">query_params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">allowed_query</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="s2">&quot;superUserSessionId&quot;</span><span class="p">]</span>
+            <span class="n">check_keys</span><span class="p">(</span><span class="n">allowed_query</span><span class="p">,</span> <span class="n">query_params</span><span class="p">,</span> <span class="n">QUERY_PARAMETERS</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">query_params</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">sess</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+            <span class="s2">&quot;/servers/</span><span class="si">%s</span><span class="s2">/sessions/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">sess_id</span><span class="p">),</span> <span class="n">params</span><span class="o">=</span><span class="n">query_params</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">sess</span></div>
+
 <div class="viewcode-block" id="CASManagement.list_caslibs"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.list_caslibs">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">list_caslibs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_caslibs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">filter_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List caslibs available on a server.</span>
 
 <span class="sd">        Parameters</span>
@@ -111,7 +280,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="CASManagement.get_caslib"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.get_caslib">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_caslib</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_caslib</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get a caslib by name.</span>
 
 <span class="sd">        Parameters</span>
@@ -119,7 +288,7 @@
 <span class="sd">        name : str</span>
 <span class="sd">            Name of the caslib</span>
 <span class="sd">        server : str, optional</span>
-<span class="sd">            Name of the CAS server.  Defaults to `cas-shared-default`.</span>
+<span class="sd">            Name of the CAS server. Defaults to &#39;cas-shared-default&#39;.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -134,7 +303,9 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="CASManagement.list_tables"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.list_tables">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">list_tables</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">caslib</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">list_tables</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">caslib</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">filter_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;List tables available in a caslib.</span>
 
 <span class="sd">        Parameters</span>
@@ -159,7 +330,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="CASManagement.get_table"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.get_table">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">caslib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">caslib</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get a table by name.</span>
 
 <span class="sd">        Parameters</span>
@@ -188,7 +359,15 @@
 
 <div class="viewcode-block" id="CASManagement.upload_file"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.upload_file">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">upload_file</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">caslib</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">format_</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TextIO</span><span class="p">],</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">header</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">format_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">detail</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Upload a file to a CAS table.</span>
 
@@ -202,7 +381,7 @@
 <span class="sd">        name : str</span>
 <span class="sd">            Name of the table to create</span>
 <span class="sd">        caslib : str, optional</span>
-<span class="sd">            caslib in which the table will be created.  Defaults to CASUSER.</span>
+<span class="sd">            caslib in which the table will be created. Defaults to &#39;Public&#39;.</span>
 <span class="sd">        server : str, optional</span>
 <span class="sd">            CAS server on which the table will be created.  Defaults to</span>
 <span class="sd">            cas-shared-default.</span>
@@ -212,6 +391,13 @@
 <span class="sd">        format_ : {&quot;csv&quot;, &quot;xls&quot;, &quot;xlsx&quot;, &quot;sas7bdat&quot;, &quot;sashdat&quot;}, optional</span>
 <span class="sd">            File of input `file`.  Not required if format can be discerned from</span>
 <span class="sd">            the file path.</span>
+<span class="sd">        detail : dict, optional</span>
+<span class="sd">            Additional body parameters. Allowed parameters are</span>
+<span class="sd">            &#39;sessionId&#39;, &#39;variables&#39;, &#39;label&#39;, &#39;scope&#39;, &#39;replace&#39;, &#39;encoding&#39;,</span>
+<span class="sd">            &#39;allowTruncation&#39;, &#39;allowEmbeddedNewLines&#39;, &#39;delimiter&#39;,</span>
+<span class="sd">            &#39;varchars&#39;, &#39;scanRows&#39;, &#39;threadCount&#39;, &#39;stripBlanks&#39;, &#39;sheetName&#39;,</span>
+<span class="sd">            &#39;password&#39;, &#39;decryptionKey&#39;, &#39;stringLengthMultiplier&#39;,</span>
+<span class="sd">            &#39;varcharConversionThreshold&#39;.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -245,10 +431,298 @@
         <span class="k">if</span> <span class="n">format_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">format_</span>
 
+        <span class="n">allowed_body</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;sessionId&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;variables&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;scope&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encoding&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;allowTruncation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;allowEmbeddedNewLines&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;delimiter&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;varchars&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;scanRows&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;threadCount&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;stripBlanks&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sheetName&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;password&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;decryptionKey&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;stringLengthMultiplier&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;varcharConversionThreshold&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">allowed_csv</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;sessionId&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;variables&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;scope&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encoding&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;allowTruncation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;allowEmbeddedNewLines&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;delimiter&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;varchars&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;scanRows&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;threadCount&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;stripBlanks&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">allowed_xls</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;sessionId&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;variables&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;scope&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sheetName&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">allowed_sas</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;sessionId&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;variables&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;scope&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;password&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;decryptionKey&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;stringLengthMultiplier&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;varcharConversionThreshold&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">detail</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">check_keys</span><span class="p">(</span><span class="n">allowed_body</span><span class="p">,</span> <span class="n">detail</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;body&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">format_</span> <span class="o">==</span> <span class="s2">&quot;csv&quot;</span><span class="p">:</span>
+                <span class="n">check_keys</span><span class="p">(</span><span class="n">allowed_csv</span><span class="p">,</span> <span class="n">detail</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;csv files&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">format_</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;xls&quot;</span><span class="p">,</span> <span class="s2">&quot;xlsx&quot;</span><span class="p">]:</span>
+                <span class="n">check_keys</span><span class="p">(</span><span class="n">allowed_xls</span><span class="p">,</span> <span class="n">detail</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;excel files&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">format_</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;sashdat&quot;</span><span class="p">,</span> <span class="s2">&quot;sas7bdat&quot;</span><span class="p">]:</span>
+                <span class="n">check_keys</span><span class="p">(</span><span class="n">allowed_sas</span><span class="p">,</span> <span class="n">detail</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;sas files&quot;</span><span class="p">)</span>
+
+            <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">detail</span><span class="p">)</span>
+
         <span class="n">tbl</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
             <span class="s2">&quot;/servers/</span><span class="si">%s</span><span class="s2">/caslibs/</span><span class="si">%s</span><span class="s2">/tables&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">caslib</span><span class="p">),</span>
             <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-            <span class="n">files</span><span class="o">=</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">file</span><span class="p">},</span>
+            <span class="n">files</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">file</span><span class="p">)},</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">tbl</span></div>
+
+<div class="viewcode-block" id="CASManagement.update_state_table"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.update_state_table">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">update_state_table</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">query_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">body</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Modifies the state of a table to loaded or unloaded.</span>
+<span class="sd">        Returns loaded or unloaded to indicate the state after the operation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : str</span>
+<span class="sd">            State to which to set the table. Valid values include `loaded` or `unloaded`.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Name of the table.</span>
+<span class="sd">        caslib : str, optional</span>
+<span class="sd">            Name of the caslib. Defaults to &#39;Public&#39;.</span>
+<span class="sd">        server : str, optional</span>
+<span class="sd">            Server where the `caslib` is registered.</span>
+<span class="sd">            Defaults to &#39;cas-shared-default&#39;.</span>
+<span class="sd">        query_params: dict, optional</span>
+<span class="sd">            Additional query parameters.</span>
+<span class="sd">            Valid keys are `sessionId`, `scope`, `sourceTableName`, `createRelationships`</span>
+<span class="sd">        body : dict, optional</span>
+<span class="sd">            Extra instructions providing greater control over the output when a state change to loaded is requested.</span>
+<span class="sd">            Valid keys are `copies`, `label`, `outputCaslibName`, `outputTableName`, `parameters`,</span>
+<span class="sd">            `replace`, `replaceMode`, `scope`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="ow">or</span> <span class="n">DEFAULT_SERVER</span>
+        <span class="n">caslib</span> <span class="o">=</span> <span class="n">caslib</span> <span class="ow">or</span> <span class="n">DEFAULT_CASLIB</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;loaded&quot;</span><span class="p">,</span> <span class="s2">&quot;unloaded&quot;</span><span class="p">]:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;The state can only have values of `loaded` or `unloaded`.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">query_params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">allowed_query</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;sessionId&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;scope&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;sourceTableName&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;createRelationships&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="n">check_keys</span><span class="p">(</span><span class="n">allowed_query</span><span class="p">,</span> <span class="n">query_params</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">QUERY_PARAMETERS</span><span class="p">)</span>
+            <span class="n">query</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">query_params</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">body</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">allowed_body</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;copies&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;label&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;outputCaslibName&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;outputTableName&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;parameters&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;replaceMode&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;scope&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="n">check_keys</span><span class="p">(</span><span class="n">allowed_body</span><span class="p">,</span> <span class="n">body</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;body parameters&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">tbl</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;/servers/</span><span class="si">%s</span><span class="s2">/caslibs/</span><span class="si">%s</span><span class="s2">/tables/</span><span class="si">%s</span><span class="s2">/state&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">caslib</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">tbl</span></div>
+
+<div class="viewcode-block" id="CASManagement.promote_table"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.promote_table">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">promote_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sess_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Changes the scope of a loaded CAS table from session to global scope.</span>
+<span class="sd">        Operation valid only on a session table.</span>
+<span class="sd">        Promote target is the same Caslib that contains the session table.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Name of the table.</span>
+<span class="sd">        sess_id: str</span>
+<span class="sd">            The session ID</span>
+<span class="sd">        caslib : str</span>
+<span class="sd">            Name of the caslib.</span>
+<span class="sd">        server : str</span>
+<span class="sd">            Server where the `caslib` is registered.</span>
+<span class="sd">            Defaults to &#39;cas-shared-default&#39;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="ow">or</span> <span class="n">DEFAULT_SERVER</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;global&quot;</span><span class="p">,</span> <span class="s2">&quot;sessionId&quot;</span><span class="p">:</span> <span class="n">sess_id</span><span class="p">}</span>
+
+        <span class="n">tbl</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;/servers/</span><span class="si">%s</span><span class="s2">/caslibs/</span><span class="si">%s</span><span class="s2">/tables/</span><span class="si">%s</span><span class="s2">/scope&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">caslib</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">tbl</span></div>
+
+<div class="viewcode-block" id="CASManagement.save_table"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.save_table">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">save_table</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">properties</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">sess_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Saves a CAS table to a source table</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Name of the table.</span>
+<span class="sd">        sess_id: str</span>
+<span class="sd">            The session ID</span>
+<span class="sd">        caslib : str</span>
+<span class="sd">            Name of the caslib.</span>
+<span class="sd">        properties : dict, optional</span>
+<span class="sd">            Properties of the table.</span>
+<span class="sd">            Valid keys are `caslibName`, `format`, `replace`,</span>
+<span class="sd">            `compress`, `tableName`, `sourceTableName`, `parameters`.</span>
+<span class="sd">        server : str</span>
+<span class="sd">            Server where the `caslib` is registered. Defaults to &#39;cas-shared-default&#39;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="ow">or</span> <span class="n">DEFAULT_SERVER</span>
+
+        <span class="k">if</span> <span class="n">properties</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">allowed_body</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;caslibName&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;format&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;compress&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;tableName&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;sourceTableName&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;parameters&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="n">check_keys</span><span class="p">(</span><span class="n">allowed_body</span><span class="p">,</span> <span class="n">properties</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;body&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sessionId&quot;</span><span class="p">:</span> <span class="n">sess_id</span><span class="p">}</span> <span class="k">if</span> <span class="n">sess_id</span> <span class="k">else</span> <span class="p">{}</span>
+
+        <span class="n">sess</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/servers/</span><span class="si">%s</span><span class="s2">/caslibs/</span><span class="si">%s</span><span class="s2">/tables/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">caslib</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="n">properties</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">sess</span></div>
+
+<div class="viewcode-block" id="CASManagement.del_table"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.del_table">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">del_table</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">query_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Deletes a table from Caslib source. Note that is not an unload.</span>
+<span class="sd">        This operation physically removes the source table (if the source is writable).</span>
+<span class="sd">        For path-based caslibs, this physically removes the file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Name of the table.</span>
+<span class="sd">        query_params : dict</span>
+<span class="sd">            Query parameters.</span>
+<span class="sd">            The allowed query parameters are `sessionId`,</span>
+<span class="sd">            `sourceTableName`, `quiet`, `removeAcs`.</span>
+<span class="sd">            Note that the last three are required.</span>
+<span class="sd">        caslib : str</span>
+<span class="sd">            Name of the caslib. Defaults to &#39;Public&#39;</span>
+<span class="sd">        server : str</span>
+<span class="sd">            Server where the `caslib` is registered.</span>
+<span class="sd">            Defaults to &#39;cas-shared-default&#39;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="ow">or</span> <span class="n">DEFAULT_SERVER</span>
+        <span class="n">caslib</span> <span class="o">=</span> <span class="n">caslib</span> <span class="ow">or</span> <span class="n">DEFAULT_CASLIB</span>
+
+        <span class="n">required_queries</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sourceTableName&quot;</span><span class="p">,</span> <span class="s2">&quot;quiet&quot;</span><span class="p">,</span> <span class="s2">&quot;removeAcs&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">query_params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">allowed_query</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sessionId&quot;</span><span class="p">,</span> <span class="s2">&quot;sourceTableName&quot;</span><span class="p">,</span> <span class="s2">&quot;quiet&quot;</span><span class="p">,</span> <span class="s2">&quot;removeAcs&quot;</span><span class="p">]</span>
+            <span class="n">check_keys</span><span class="p">(</span><span class="n">allowed_query</span><span class="p">,</span> <span class="n">query_params</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">QUERY_PARAMETERS</span><span class="p">)</span>
+            <span class="n">check_required_key</span><span class="p">(</span><span class="n">required_queries</span><span class="p">,</span> <span class="n">query_params</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="s2">&quot;query&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;You must provide these query parameters: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">required_queries</span>
+            <span class="p">)</span>
+
+        <span class="n">tbl</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+            <span class="s2">&quot;servers/</span><span class="si">%s</span><span class="s2">/caslibs/</span><span class="si">%s</span><span class="s2">/tables/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">caslib</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">query_params</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">tbl</span></div></div>
 </pre></div>
@@ -260,10 +734,10 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
+      &copy;('Copyright © 2019, SAS Institute Inc., ', 'Cary, NC, USA.  All Rights Reserved.').
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
