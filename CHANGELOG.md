@@ -1,6 +1,19 @@
 Unreleased
 ----------
- -
+
+v1.7.3 (2022-09-20)
+-------------------
+**Improvements**
+- Refactor astore model upload to fix 422 response from SAS Viya 4 
+  - ASTORE model import now uses SAS Viya to generate ASTORE model assets
+- Expanded usage for cas_management service (credit to @SilvestriStefano)
+
+**Bugfixes**
+- ASTORE model import no longer returns a 422 error
+- Fix improper filter usage for model_repository service
+- Fix error with loss of stream in add_model_content call for duplicate content
+- Update integration test cassettes for SAS Viya 4
+
 v1.7.2 (2022-06-16)
 -------------------
 **Improvements**
