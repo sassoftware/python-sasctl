@@ -387,7 +387,6 @@ class ModelRepository(Service):
         -------
         str
             The model content schema.
-
         """
         if cls.is_uuid(model):
             id_ = model
