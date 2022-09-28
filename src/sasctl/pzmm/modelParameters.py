@@ -40,7 +40,7 @@ class ModelParameters:
         from ..tasks import get_project_kpis
         from io import StringIO
 
-        kpis = get_project_kpis(cls, project, server, caslib)
+        kpis = get_project_kpis(project, server, caslib)
         modelsToUpdate = kpis["ModelUUID"].unique().tolist()
         for model in modelsToUpdate:
             currentParams = find_file(model, "hyperparameters")
@@ -70,8 +70,23 @@ class ModelParameters:
             id_ = model["id"]
         file = find_file(id_, "hyperparameters")
         return file.json()
+    
+    @classmethod
+    def add_hyperparameters(cls, model, **kwargs):
+        from io import StringIO
+        if not isinstance(model, dict):
+            model = mr.get_model(model)
+        hyperparameters = cls.get_hyperparameters(model.id)
+        for key, value in kwargs.items():
+            hyperparameters["hyperparameters"][key] = value
+        mr.add_model_content(
+                model,
+                StringIO((json.dumps(hyperparameters, indent=4))),
+                "{}Hyperparameters.json".format(model.name),
+            )
 
-    def sklearn_params(cls, model, modelPrefix, pPath):
+
+    def sklearn_params(model, modelPrefix, pPath):
         hyperparameters = model.get_params()
         modelJson = {"hyperparameters": hyperparameters}
         with open(
