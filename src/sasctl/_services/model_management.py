@@ -101,6 +101,7 @@ class ModelManagement(Service):
         models,
         library_name,
         table_prefix,
+        project=None,
         name=None,
         description=None,
         monitor_champion=False,
@@ -125,6 +126,8 @@ class ModelManagement(Service):
             The library containing the input data, default is 'Public'.
         table_prefix : str
             The name used for the performance data.
+        project      : str
+            The ID of the project
         name : str
             The name of the performance task.
         description : str
@@ -180,12 +183,12 @@ class ModelManagement(Service):
             )
 
         mr = ModelRepository()
-
         if not isinstance(models, list):
             models = [models]
-
-        models = [mr.get_model(m) for m in models]
-        project = mr.get_project(models[0].projectId)
+        for i, model in enumerate(models):
+            models[i] = mr.get_model(model)
+        if not project:
+            project = mr.get_project(models[0].projectId)
 
         # Performance data cannot be captured unless certain project properties
         # have been configured.
@@ -215,7 +218,7 @@ class ModelManagement(Service):
         request = {
             "projectId": project.id,
             "name": name or project.name + " Performance",
-            "modelIds": [m.id for m in models],
+            "modelIds": [model.id for model in models],
             "championMonitored": monitor_champion,
             "challengerMonitored": monitor_challenger,
             "maxBins": max_bins,
@@ -226,7 +229,7 @@ class ModelManagement(Service):
             "loadPerformanceResult": autoload_output,
             "dataLibrary": library_name or "Public",
             "description": description
-            or "Performance definition for models " + ', '.join(m.name for m in models),
+            or "Performance definition for model " + ', '.join([model.name for model in models]),
             "casServerId": cas_server or "cas-shared-default",
             "dataPrefix": table_prefix,
             "traceOn": trace,
