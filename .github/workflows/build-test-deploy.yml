@@ -41,13 +41,31 @@ jobs:
 
       - name: Install dependencies (Common)
         run: |
-          # Setup tox & Codecov uploader
+          # Setup tox & code coverage
           pip install --upgrade pip
           pip install tox tox-gh-actions pytest pytest-cov
 
       - name: Run Tests
         run: |
           tox
+
+      - name: Upload Unit Test Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./.reports/
+          fail_ci_if_error: true
+          files: unit.xml
+          flags: unit
+          verbose: true
+
+      - name: Upload Integration Test Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./.reports/
+          fail_ci_if_error: true
+          files: integration.xml
+          flags: integration
+          verbose: true
 
 
   gh-pages:
