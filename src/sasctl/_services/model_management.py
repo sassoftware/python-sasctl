@@ -229,7 +229,8 @@ class ModelManagement(Service):
             "loadPerformanceResult": autoload_output,
             "dataLibrary": library_name or "Public",
             "description": description
-            or "Performance definition for model " + ', '.join([model.name for model in models]),
+            or "Performance definition for model "
+            + ", ".join([model.name for model in models]),
             "casServerId": cas_server or "cas-shared-default",
             "dataPrefix": table_prefix,
             "traceOn": trace,
@@ -237,7 +238,9 @@ class ModelManagement(Service):
 
         # If model doesn't specify input/output variables, try to pull from project definition
         if models[0].get("inputVariables", []):
-            request["inputVariables"] = [v.get("name") for v in models[0]["inputVariables"]]
+            request["inputVariables"] = [
+                v.get("name") for v in models[0]["inputVariables"]
+            ]
             request["outputVariables"] = [
                 v.get("name") for v in models[0]["outputVariables"]
             ]

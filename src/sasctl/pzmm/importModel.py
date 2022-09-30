@@ -50,7 +50,7 @@ def project_exists(response, project):
 
 
 def model_exists(project, name, force, versionName="latest"):
-    """Checks if model already exists in the same project and either raises an error or deletes 
+    """Checks if model already exists in the same project and either raises an error or deletes
     the redundant model. If no project version is provided, the version is assumed to be "latest".
 
     Parameters
@@ -62,7 +62,7 @@ def model_exists(project, name, force, versionName="latest"):
     force : bool, optional
         Sets whether to overwrite models with the same name upon upload.
     versionName : str, optional
-        Name of project version to check if a model of the same name already exists. Default 
+        Name of project version to check if a model of the same name already exists. Default
         value is "latest".
 
     Raises
@@ -83,7 +83,9 @@ def model_exists(project, name, force, versionName="latest"):
             if versionName is version["name"]:
                 versionId = version["id"]
                 break
-    projectModels = mr.get("/projects/{}/projectVersions/{}/models".format(projectId, versionId))
+    projectModels = mr.get(
+        "/projects/{}/projectVersions/{}/models".format(projectId, versionId)
+    )
 
     for model in projectModels:
         # Throws a TypeError if only one model is in the project
@@ -283,7 +285,9 @@ class ImportModel:
             # Check if model with same name already exists in project.
             model_exists(project, modelPrefix, force)
 
-            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, projectVersion=projectVersion)
+            response = mr.import_model_from_zip(
+                modelPrefix, project, zipIOFile, projectVersion=projectVersion
+            )
             try:
                 print(
                     "Model was successfully imported into SAS Model Manager as {} with UUID: {}.".format(
@@ -304,7 +308,9 @@ class ImportModel:
             # Check if model with same name already exists in project.
             model_exists(project, modelPrefix, force)
 
-            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force, projectVersion=projectVersion)
+            response = mr.import_model_from_zip(
+                modelPrefix, project, zipIOFile, force, projectVersion=projectVersion
+            )
             try:
                 print(
                     "Model was successfully imported into SAS Model Manager as {} with UUID: {}.".format(
