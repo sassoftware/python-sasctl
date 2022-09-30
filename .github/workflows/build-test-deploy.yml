@@ -21,7 +21,7 @@ jobs:
       LANG: en_US.UTF-8
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8] #, 3.9, '3.10'] <-- auto fails due to lack of 3.9 & 3.10 env in tox.ini
+        python-version: [3.5, 3.6, 3.7, 3.8, 3.9] #, '3.10'] <-- auto fails due to lack of 3.9 & 3.10 env in tox.ini
         os-version: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
@@ -49,13 +49,31 @@ jobs:
         run: |
           tox
 
-      - name: Upload Test Coverage
+      - name: Upload Unit Test Coverage
         uses: codecov/codecov-action@v3
         with:
           directory: ./.reports/
           fail_ci_if_error: true
-          files: unit.xml, integration.xml, scenarios.xml
-          flags: unit, integration, scenarios
+          files: unit.xml
+          flags: unit
+          verbose: true
+
+      - name: Upload Integration Test Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./.reports/
+          fail_ci_if_error: true
+          files: integration.xml
+          flags: integration
+          verbose: true
+
+      - name: Upload Scenario Test Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./.reports/
+          fail_ci_if_error: true
+          files: scenarios.xml
+          flags: scenarios
           verbose: true
 
   gh-pages:
