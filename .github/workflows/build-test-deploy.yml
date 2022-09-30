@@ -50,30 +50,33 @@ jobs:
           tox
 
       - name: Upload Unit Test Coverage
+        if: matrix.os-version == 'ubuntu-latest'
         uses: codecov/codecov-action@v3
         with:
           directory: ./.reports/
           fail_ci_if_error: true
-          files: unit.xml
+          file: unit.xml
           flags: unit
           verbose: true
 
       - name: Upload Integration Test Coverage
+        if: matrix.os-version == 'ubuntu-latest'
         uses: codecov/codecov-action@v3
         with:
           directory: ./.reports/
           fail_ci_if_error: true
-          files: integration.xml
+          file: integration.xml
           flags: integration
           verbose: true
 
 # Uncomment when scenario test cases are working again
 #      - name: Upload Scenario Test Coverage
+#        if: matrix.os-version == 'ubuntu-latest'
 #        uses: codecov/codecov-action@v3
 #        with:
 #          directory: ./.reports/
 #          fail_ci_if_error: true
-#          files: scenarios.xml
+#          file: scenarios.xml
 #          flags: scenarios
 #          verbose: true
 
