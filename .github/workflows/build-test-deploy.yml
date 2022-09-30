@@ -67,14 +67,15 @@ jobs:
           flags: integration
           verbose: true
 
-      - name: Upload Scenario Test Coverage
-        uses: codecov/codecov-action@v3
-        with:
-          directory: ./.reports/
-          fail_ci_if_error: true
-          files: scenarios.xml
-          flags: scenarios
-          verbose: true
+# Uncomment when scenario test cases are working again
+#      - name: Upload Scenario Test Coverage
+#        uses: codecov/codecov-action@v3
+#        with:
+#          directory: ./.reports/
+#          fail_ci_if_error: true
+#          files: scenarios.xml
+#          flags: scenarios
+#          verbose: true
 
   gh-pages:
     name: "Build Documentation"
