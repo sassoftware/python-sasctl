@@ -4,7 +4,6 @@ import json
 from .._services.model_repository import ModelRepository as mr
 
 
-
 def find_file(model, fileName):
     from ..core import current_session
 
@@ -71,21 +70,21 @@ class ModelParameters:
             id_ = model["id"]
         file = find_file(id_, "hyperparameters")
         return file.json()
-    
+
     @classmethod
     def add_hyperparameters(cls, model, **kwargs):
         from io import StringIO
+
         if not isinstance(model, dict):
             model = mr.get_model(model)
         hyperparameters = cls.get_hyperparameters(model.id)
         for key, value in kwargs.items():
             hyperparameters["hyperparameters"][key] = value
         mr.add_model_content(
-                model,
-                StringIO((json.dumps(hyperparameters, indent=4))),
-                "{}Hyperparameters.json".format(model.name),
-            )
-
+            model,
+            StringIO((json.dumps(hyperparameters, indent=4))),
+            "{}Hyperparameters.json".format(model.name),
+        )
 
     def sklearn_params(model, modelPrefix, pPath):
         hyperparameters = model.get_params()

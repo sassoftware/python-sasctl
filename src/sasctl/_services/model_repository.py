@@ -245,7 +245,6 @@ class ModelRepository(Service):
         properties=None,
         input_variables=None,
         output_variables=None,
-        project_version="latest",
     ):
         """Create a model in an existing project or folder.
 
@@ -301,7 +300,7 @@ class ModelRepository(Service):
         output_variables : array_like, optional
             Model output variables. By default, these are the same as the model
              project.
-        projectVersion : str
+        project_version : str
             Name of project version to import model in to. Default
             value is "latest".
 
@@ -323,7 +322,6 @@ class ModelRepository(Service):
         # Use any explicitly passed parameter value first.
         # Fall back to values in the model dict.
         model["projectId"] = p["id"]
-        model["versionOption"] = project_version or model.get("versionOption")
         model["modeler"] = modeler or model.get("modeler") or current_session().username
         model["description"] = description or model.get("description")
         model["function"] = function or model.get("function")
@@ -387,6 +385,7 @@ class ModelRepository(Service):
         -------
         str
             The model content schema.
+
         """
         if cls.is_uuid(model):
             id_ = model
@@ -492,7 +491,7 @@ class ModelRepository(Service):
 
     @classmethod
     def import_model_from_zip(
-        cls, name, project, file, description=None, projectVersion="latest"
+        cls, name, project, file, description=None, version="latest"
     ):
         """Import a model and contents as a ZIP file into a model project.
 
@@ -526,7 +525,7 @@ class ModelRepository(Service):
             "description": description,
             "type": "ZIP",
             "projectId": project_info.id,
-            "versionOption": projectVersion,
+            "versionOption": version,
         }
         params = "&".join("{}={}".format(k, v) for k, v in params.items())
 
