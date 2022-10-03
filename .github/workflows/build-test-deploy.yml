@@ -49,6 +49,7 @@ jobs:
         run: |
           tox
 
+      # Separate upload task for unit test coverage allows for flagged analysis of test coverage
       - name: Upload Unit Test Coverage
         if: matrix.os-version == 'ubuntu-latest'
         uses: codecov/codecov-action@v3
@@ -59,6 +60,7 @@ jobs:
           flags: unit
           verbose: true
 
+      # Separate upload task for integration test coverage allows for flagged analysis of test coverage
       - name: Upload Integration Test Coverage
         if: matrix.os-version == 'ubuntu-latest'
         uses: codecov/codecov-action@v3
@@ -70,6 +72,7 @@ jobs:
           verbose: true
 
 # Uncomment when scenario test cases are working again
+#      Separate upload task for scenario test coverage allows for flagged analysis of test coverage
 #      - name: Upload Scenario Test Coverage
 #        if: matrix.os-version == 'ubuntu-latest'
 #        uses: codecov/codecov-action@v3
