@@ -158,7 +158,7 @@ class ImportModel:
             metrics: EM_EVENTPROBABILITY and EM_CLASSIFICATION.
         modelFileName : string, optional
             Name of the model file that contains the model. By default None and assigned as
-            modelPrefix + '.pickle'.
+            model_prefix + '.pickle'.
         pyPath : string, optional
             The local path of the score code file. By default None and assigned as the zPath.
         threshPrediction : float, optional

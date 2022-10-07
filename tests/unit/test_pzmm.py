@@ -14,28 +14,43 @@ from zipfile import ZipFile
 from pathlib import Path
 
 
-def test_zip_files():
+def _create_sample_archive(suffix, is_viya_4=False):
+    from sasctl.pzmm.zip_model import ZipModel as zm
+    tmp_dir = tempfile.TemporaryDirectory()
+    for s in suffix:
+        _ = tempfile.NamedTemporaryFile(delete=False, suffix=s, dir=tmp_dir.name)
+    bytes_zip = zm.zip_files(tmp_dir.name, "Unit_Test_Model", is_viya4=is_viya_4)
+    # Check that for files with a valid extension, the generated zip file contains the expected number of files
+    with closing(ZipFile(Path(tmp_dir.name) / "Unit_Test_Model.zip")) as archive:
+        num_files = len(archive.infolist())
+    (Path(tmp_dir.name) / "Unit_Test_Model.zip").unlink()
+    return bytes_zip, num_files
+
+
+def test_zip_files_return():
     """
-    Unit test for the zipFiles function in pzmm.zipModel. Verifies that globbing is working as expected and that a
-    BytesIO object is returned. Also checks that for models used for SAS Viya 3.5 python score code and other
-    unexpected extensions are not included in the zip file.
+    Unit test for the zip_files function in pzmm.zip_model. Verifies that a BytesIO object is returned.
     """
-    def create_test_archive(s, is_viya_4, flag):
-        tmp_dir = tempfile.TemporaryDirectory()
-        tmp_file = tempfile.NamedTemporaryFile(delete=False, suffix=s, dir=tmp_dir.name)
-        # Verify that the zipFiles output is in a BytesIO format
-        assert issubclass(BytesIO, type(zm.zipFiles(tmp_dir.name, "Unit_Test_Model", isViya4=is_viya_4)))
-        # Check that for files with a valid extension, the generated zip file contains the expected number of files
-        with closing(ZipFile(Path(tmp_dir.name) / "Unit_Test_Model.zip")) as archive:
-            assert len(archive.infolist()) == flag
-        (Path(tmp_dir.name) / "Unit_Test_Model.zip").unlink()
+    bytes_zip, _ = _create_sample_archive([".json"])
+    assert issubclass(BytesIO, type(bytes_zip))
 
-    from sasctl.pzmm.zipModel import ZipModel as zm
 
-    # Verify that the expected extensions are collected correctly in the generated zip file
-    for suffix in [".json", ".pickle", ".mojo", "Score.py"]:
-        create_test_archive(suffix, True, True)
+def test_zip_files_filter():
+    """
+    Unit test for _filter_files function in pzmm.zip_model. Verifies that proper file lists are returned and an error is
+    thrown if no valid files could be found.
+    """
+    suffix = [".json", ".pickle", ".mojo", "Score.py", ".txt"]
 
-    # Verify that unexpected extensions are not collected in the generated zip file
-    for suffix in [".txt", "Score.py"]:
-        create_test_archive(suffix, False, False)
+    # Viya 4 model
+    _, num_files = _create_sample_archive(suffix, True)
+    assert num_files == 4
+
+    # Viya 3.5 model
+    _, num_files = _create_sample_archive(suffix, False)
+    assert num_files == 3
+
+    # No valid files
+    with pytest.raises(FileNotFoundError):
+        _, _ = _create_sample_archive([".txt"])
+
