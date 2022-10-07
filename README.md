@@ -10,7 +10,7 @@
   </a>
         
   <a href="https://www.python.org/">
-    <img src="https://img.shields.io/badge/Python-3.5%2B-blue.svg" alt="Python Version">
+    <img src="https://img.shields.io/badge/Python-3.6%2B-blue.svg" alt="Python Version">
   </a>
 
   <a href="https://github.com/sassoftware/python-sasctl/actions/workflows/build-test-deploy.yml">
