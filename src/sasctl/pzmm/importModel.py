@@ -8,7 +8,7 @@ from warnings import warn
 from ..core import platform_version
 from .._services.model_repository import ModelRepository as mr
 from .writeScoreCode import ScoreCode as sc
-from .zipModel import ZipModel as zm
+from .zip_model import ZipModel as zm
 
 
 def project_exists(response, project):

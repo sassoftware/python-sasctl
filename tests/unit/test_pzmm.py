@@ -23,7 +23,7 @@ def _create_sample_archive(suffix, is_viya_4=False):
     # Check that for files with a valid extension, the generated zip file contains the expected number of files
     with closing(ZipFile(Path(tmp_dir.name) / "Unit_Test_Model.zip")) as archive:
         num_files = len(archive.infolist())
-    (Path(tmp_dir.name) / "Unit_Test_Model.zip").unlink()
+    # (Path(tmp_dir.name) / "Unit_Test_Model.zip").unlink()
     return bytes_zip, num_files
 
 
