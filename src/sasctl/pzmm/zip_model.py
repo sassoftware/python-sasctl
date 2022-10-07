@@ -32,7 +32,9 @@ def _filter_files(file_dir, is_viya4=False):
     if file_names:
         return file_names
     else:
-        raise FileNotFoundError("No valid model files were found in the provided file directory.")
+        raise FileNotFoundError(
+            "No valid model files were found in the provided file directory."
+        )
 
 
 class ZipModel:
