@@ -7,4 +7,4 @@ from .zip_model import ZipModel
 from .writeScoreCode import ScoreCode
 from .importModel import ImportModel
 from .gitIntegration import GitIntegrate
-from .mlflowModel import MLFlowModel
+from .mlflow_model import MLFlowModel
