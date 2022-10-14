@@ -11,7 +11,7 @@ class MLFlowModel:
         """
         Read and return model metadata and input/output variables as dictionaries from an MLFlow model directory.
 
-        Current implementation only handles simple pickled models currently. Future feature work is required to include
+        Current implementation only handles simple pickled models. Future feature work is required to include
         more types of MLFlow models.
 
         Parameters
@@ -28,9 +28,10 @@ class MLFlowModel:
         outputs_dict : dict
             Model output variables
         """
-        with open(Path(m_path) / "MLmodel", "r") as mFile:
-            m_lines = mFile.readlines()
+        with open(Path(m_path) / "MLmodel", "r") as m_file:
+            m_lines = m_file.readlines()
 
+        # Read in metadata and properties from the MLFlow model
         var_list = ["python_version", "serialization_format", "run_id", "model_path"]
         for i, var_string in enumerate(var_list):
             index = [i for i, s in enumerate(m_lines) if var_string in s]
@@ -41,6 +42,7 @@ class MLFlowModel:
         var_dict = {k: v for d in var_list for k, v in d.items()}
         var_dict["mlflowPath"] = m_path
 
+        # Read in the input and output variables
         ind_in = [i for i, s in enumerate(m_lines) if "inputs:" in s]
         ind_out = [i for i, s in enumerate(m_lines) if "outputs:" in s]
 

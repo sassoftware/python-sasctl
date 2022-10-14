@@ -255,7 +255,7 @@ class ImportModel:
                         Path(pyPath) / (modelPrefix + "Score.py")
                     )
                 )
-            zipIOFile = zm.zip_files(Path(zPath), modelPrefix, isViya4=True)
+            zipIOFile = zm.zip_files(Path(zPath), modelPrefix, is_viya4=True)
             print("All model files were zipped to {}.".format(Path(zPath)))
 
             # Check if project name provided exists and raise an error or create a new project
@@ -276,7 +276,7 @@ class ImportModel:
                 print("Model failed to import to SAS Model Manager.")
         # For SAS Viya 3.5, the score code is written after upload in order to know the model UUID
         else:
-            zipIOFile = zm.zip_files(Path(zPath), modelPrefix, isViya4=False)
+            zipIOFile = zm.zip_files(Path(zPath), modelPrefix, is_viya4=False)
             print("All model files were zipped to {}.".format(Path(zPath)))
 
             # Check if project name provided exists and raise an error or create a new project

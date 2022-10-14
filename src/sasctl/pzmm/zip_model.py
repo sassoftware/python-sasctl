@@ -69,5 +69,5 @@ class ZipModel:
             for file in file_names:
                 zFile.write(str(file), arcname=file.name)
 
-        with open(str(Path(file_dir) / (model_prefix + ".zip")), "rb") as zipFile:
-            return io.BytesIO(zipFile.read())
+        with open(str(Path(file_dir) / (model_prefix + ".zip")), "rb") as zip_file:
+            return io.BytesIO(zip_file.read())
