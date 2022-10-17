@@ -47,8 +47,8 @@ class MLFlowModel:
         ind_out = [i for i, s in enumerate(m_lines) if "outputs:" in s]
 
         if ind_in and ind_out:
-            inputs = m_lines[ind_in[0]: ind_out[0]]
-            outputs = m_lines[ind_out[0]: -1]
+            inputs = m_lines[ind_in[0] : ind_out[0]]
+            outputs = m_lines[ind_out[0] : -1]
 
             inputs_dict = json.loads("".join([s.strip() for s in inputs])[9:-1])
             outputs_dict = json.loads("".join([s.strip() for s in outputs])[10:-1])
