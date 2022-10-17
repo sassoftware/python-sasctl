@@ -27,7 +27,8 @@ def _create_sample_archive(suffix, is_viya_4=False):
 
 def test_zip_files_return():
     """
-    Unit test for the zip_files function in pzmm.zip_model. Verifies that a BytesIO object is returned.
+    Test cases:
+    - Returns proper BytesIO object
     """
     bytes_zip, _ = _create_sample_archive([".json"])
     assert issubclass(BytesIO, type(bytes_zip))
@@ -35,8 +36,10 @@ def test_zip_files_return():
 
 def test_zip_files_filter():
     """
-    Unit test for _filter_files function in pzmm.zip_model. Verifies that proper file lists are returned and an error is
-    thrown if no valid files could be found.
+    Test cases:
+    - Zip proper number of files for Viya 4 model
+    - Zip proper number of files for Viya 3.5 model
+    - Raise error if no valid files
     """
     suffix = [".json", ".pickle", ".mojo", "Score.py", ".txt"]
 
