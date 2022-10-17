@@ -23,9 +23,9 @@ class MLFlowModel:
         -------
         var_dict : dict
             Model properties and metadata
-        inputs_dict : dict
+        inputs_dict : list of dicts
             Model input variables
-        outputs_dict : dict
+        outputs_dict : list of dicts
             Model output variables
         """
         with open(Path(m_path) / "MLmodel", "r") as m_file:
