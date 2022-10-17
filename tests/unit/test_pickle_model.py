@@ -14,7 +14,7 @@ MODEL = []
 
 def test_pickle_trained_model():
     """
-    Check the following cases:
+    Test cases:
     - normal
     - h2o binary
     - h2o mojo
