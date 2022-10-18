@@ -490,7 +490,7 @@ def register_model(
 
 
 def publish_model(
-    model, destination, code=None, max_retries=60, replace=False, **kwargs
+    model, destination, code=None, name=None, max_retries=60, replace=False, **kwargs
 ):
     """Publish a model to a configured publishing destination.
 
@@ -501,6 +501,8 @@ def publish_model(
         the model.
     destination : str
     code : optional
+    name : str, optional
+        Name of custom publish name for publish calls that do not have code. Default is None.
     max_retries : int, optional
     replace : bool, optional
         Whether to overwrite the model if it already exists in
@@ -540,10 +542,10 @@ def publish_model(
 
             if dest_obj and dest_obj.destinationType == "cas":
                 publish_req = mm.publish_model(
-                    model, destination, force=replace, reload_model_table=True
+                    model, destination, force=replace, name=name, reload_model_table=True
                 )
             else:
-                publish_req = mm.publish_model(model, destination, force=replace)
+                publish_req = mm.publish_model(model, destination, force=replace, name=name)
         else:
             publish_req = mp.publish_model(model, destination, code=code, **kwargs)
 
