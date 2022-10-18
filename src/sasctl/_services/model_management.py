@@ -33,12 +33,15 @@ class ModelManagement(Service):
 
         Parameters
         ----------
-        model
-        destination
-        name
+        model : str or dict
+            The name or id of the model, or a dictionary representation of the model.
+        destination : str
+            Name of destination to publish the model to.
+        name : str, optional
+            Provide a custom name for the published model. Defaults to None.
         force : bool, optional
             Whether to overwrite the model if it already exists in the
-            publishing `destination`.
+            publishing `destination`. Defaults to False.
         reload_model_table : bool, optional
             Whether the model table in CAS should be reloaded.  Defaults to
             False.
@@ -73,7 +76,7 @@ class ModelManagement(Service):
             "notes": model_obj.get("description"),
             "modelContents": [
                 {
-                    "modelName": mp._publish_name(model_obj.get("name")),
+                    "modelName": mp._publish_name(model_name),
                     "sourceUri": model_uri.get("uri"),
                     "publishLevel": "model",
                 }
