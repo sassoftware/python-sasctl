@@ -542,10 +542,16 @@ def publish_model(
 
             if dest_obj and dest_obj.destinationType == "cas":
                 publish_req = mm.publish_model(
-                    model, destination, force=replace, name=name, reload_model_table=True
+                    model,
+                    destination,
+                    force=replace,
+                    name=name,
+                    reload_model_table=True,
                 )
             else:
-                publish_req = mm.publish_model(model, destination, force=replace, name=name)
+                publish_req = mm.publish_model(
+                    model, destination, force=replace, name=name
+                )
         else:
             publish_req = mp.publish_model(model, destination, code=code, **kwargs)
 
