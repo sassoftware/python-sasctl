@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from .pickle_model import PickleModel
-from .writeJSONFiles import JSONFiles
+from .write_json_files import JSONFiles
 from .zip_model import ZipModel
 from .writeScoreCode import ScoreCode
 from .importModel import ImportModel
