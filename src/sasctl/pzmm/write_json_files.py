@@ -13,7 +13,8 @@ import math
 
 
 class JSONFiles:
-    def writeVarJSON(self, inputData, isInput=True, jPath=Path.cwd()):
+    @classmethod
+    def writeVarJSON(cls, inputData, isInput=True, jPath=Path.cwd()):
         """
         Writes a variable descriptor JSON file for input or output variables,
         based on an input dataframe containing predictor and prediction columns.
@@ -116,8 +117,9 @@ class JSONFiles:
             )
         )
 
+    @classmethod
     def writeModelPropertiesJSON(
-        self,
+        cls,
         modelName,
         modelDesc,
         targetVariable,
@@ -235,7 +237,8 @@ class JSONFiles:
             )
         )
 
-    def writeFileMetadataJSON(self, modelPrefix, jPath=Path.cwd(), isH2OModel=False):
+    @classmethod
+    def writeFileMetadataJSON(cls, modelPrefix, jPath=Path.cwd(), isH2OModel=False):
         """
         Writes a file metadata JSON file pointing to all relevant files.
 
