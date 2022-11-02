@@ -529,6 +529,7 @@ class JSONFiles:
             GINI = (2 * auc) - 1
             fitStats["_GINI_"] = GINI
 
+            from scipy.stats import gamma # Holdover until fitstat generation via SWAT is sussed out
             _, _, scale = gamma.fit(dataSets[j][1])
             fitStats["_GAMMA_"] = 1 / scale
 
