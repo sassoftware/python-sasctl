@@ -529,7 +529,10 @@ class JSONFiles:
             GINI = (2 * auc) - 1
             fitStats["_GINI_"] = GINI
 
-            from scipy.stats import gamma # Holdover until fitstat generation via SWAT is sussed out
+            from scipy.stats import (
+                gamma,
+            )  # Holdover until fitstat generation via SWAT is sussed out
+
             _, _, scale = gamma.fit(dataSets[j][1])
             fitStats["_GAMMA_"] = 1 / scale
 
@@ -552,7 +555,9 @@ class JSONFiles:
             DIV = len(dataSets[j][0])
             fitStats["_DIV_"] = DIV
 
-            TAU = pd.Series(dataSets[j][0]).corr(pd.Series(dataSets[j][1]), method="kendall")
+            TAU = pd.Series(dataSets[j][0]).corr(
+                pd.Series(dataSets[j][1]), method="kendall"
+            )
             fitStats["_TAU_"] = TAU
 
             KSCut = None
