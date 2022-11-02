@@ -195,7 +195,7 @@ import codecs"""
                 )
             # Import math for imputation; pickle for serialized models; pandas for data management; numpy for computation
             cls.pyFile.write(
-                """\n
+                """\
 import math
 import {pickleType}
 import pandas as pd
@@ -208,7 +208,8 @@ import numpy as np""".format(
             if not isViya35:
                 cls.pyFile.write(
                     """\n
-import settings"""
+import settings
+from pathlib import Path"""
                 )
 
             # For H2O models, include the server initialization, or h2o.connect() call to use an H2O server
@@ -266,7 +267,7 @@ _thisModelFit = h2o.load_model('/models/resources/viya/{modelID}/{modelFileName}
             elif not isViya35 and not isH2OModel:
                 cls.pyFile.write(
                     """\n
-with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
+with open(Path(settings.pickle_path) / '{modelFileName}', 'rb') as _pFile:
     _thisModelFit = {pickleType}.load(_pFile)""".format(
                         modelFileName=modelFileName, pickleType=pickleType
                     )
@@ -274,18 +275,18 @@ with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
             elif not isViya35 and isBinaryModel:
                 cls.pyFile.write(
                     """\n
-_thisModelFit = h2o.load_model(settings.pickle_path + '{}')""".format(
+_thisModelFit = h2o.load_model(Path(settings.pickle_path) / '{}')""".format(
                         modelFileName=modelFileName
                     )
                 )
             elif not isViya35 and isH2OModel and not isBinaryModel:
                 cls.pyFile.write(
                     """\n
-with gzip.open(settings.pickle_path + '{modelFileName}', 'r') as fileIn, open(settings.pickle_path + '{
+with gzip.open(Path(settings.pickle_path) / '{modelFileName}', 'r') as fileIn, open(Path(settings.pickle_path) / '{
 modelZipFileName}', 'wb') as fileOut:
     shutil.copyfileobj(fileIn, fileOut)
-os.chmod(settings.pickle_path + '{modelZipFileName}', 0o777)
-_thisModelFit = h2o.import_mojo(settings.pickle_path + '{modelZipFileName}')""".format(
+os.chmod(Path(settings.pickle_path) / '{modelZipFileName}', 0o777)
+_thisModelFit = h2o.import_mojo(Path(settings.pickle_path) / '{modelZipFileName}')""".format(
                         modelFileName=modelFileName,
                         modelZipFileName=modelFileName[:-4] + "zip",
                     )
@@ -336,7 +337,7 @@ def score{modelPrefix}({inputVarList}):
                 elif not isViya35 and not isH2OModel:
                     cls.pyFile.write(
                         """
-        with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
+        with open(Path(settings.pickle_path) / '{modelFileName}', 'rb') as _pFile:
             _thisModelFit = {pickleType}.load(_pFile)""".format(
                             modelFileName=modelFileName, pickleType=pickleType
                         )
@@ -344,14 +345,14 @@ def score{modelPrefix}({inputVarList}):
                 elif not isViya35 and isH2OModel:
                     cls.pyFile.write(
                         """
-        _thisModelFit = h2o.import_mojo(settings.pickle_path + '{}')""".format(
+        _thisModelFit = h2o.import_mojo(Path(settings.pickle_path) / '{}')""".format(
                             modelFileName[:-4] + "zip"
                         )
                     )
                 elif not isViya35 and isBinaryModel:
                     cls.pyFile.write(
                         """\n
-        _thisModelFit = h2o.load_model(settings.pickle_path + '{}')""".format(
+        _thisModelFit = h2o.load_model(Path(settings.pickle_path) / '{}')""".format(
                             modelFileName=modelFileName
                         )
                     )
