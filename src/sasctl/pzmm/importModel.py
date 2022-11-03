@@ -49,17 +49,21 @@ def project_exists(response, project):
         return response
 
 
-def model_exists(project, name, force):
-    """Checks if model already exists and either raises an error or deletes the redundant model.
+def model_exists(project, name, force, versionName="latest"):
+    """Checks if model already exists in the same project and either raises an error or deletes
+    the redundant model. If no project version is provided, the version is assumed to be "latest".
 
     Parameters
     ----------
-    project : string or dict
+    project : str or dict
         The name or id of the model project, or a dictionary representation of the project.
     name : str or dict
         The name of the model.
     force : bool, optional
         Sets whether to overwrite models with the same name upon upload.
+    versionName : str, optional
+        Name of project version to check if a model of the same name already exists. Default
+        value is "latest".
 
     Raises
     ------
@@ -69,7 +73,19 @@ def model_exists(project, name, force):
     """
     project = mr.get_project(project)
     projectId = project["id"]
-    projectModels = mr.get("/projects/{}/models".format(projectId))
+    projectVersions = mr.list_project_versions(project)
+    if versionName == "latest":
+        modTime = [item["modified"] for item in projectVersions]
+        latestVersion = modTime.index(max(modTime))
+        versionId = projectVersions[latestVersion]["id"]
+    else:
+        for version in projectVersions:
+            if versionName is version["name"]:
+                versionId = version["id"]
+                break
+    projectModels = mr.get(
+        "/projects/{}/projectVersions/{}/models".format(projectId, versionId)
+    )
 
     for model in projectModels:
         # Throws a TypeError if only one model is in the project
@@ -106,6 +122,7 @@ class ImportModel:
         targetDF,
         predictmethod,
         metrics=["EM_EVENTPROBABILITY", "EM_CLASSIFICATION"],
+        projectVersion="latest",
         modelFileName=None,
         pyPath=None,
         threshPrediction=None,
@@ -156,9 +173,12 @@ class ImportModel:
         metrics : string list, optional
             The scoring metrics for the model. The default is a set of two
             metrics: EM_EVENTPROBABILITY and EM_CLASSIFICATION.
+        projectVersion : str, optional
+            Name of project version to check if a model of the same name already exists. Default
+            value is "latest".
         modelFileName : string, optional
             Name of the model file that contains the model. By default None and assigned as
-            model_prefix + '.pickle'.
+            modelPrefix + '.pickle'.
         pyPath : string, optional
             The local path of the score code file. By default None and assigned as the zPath.
         threshPrediction : float, optional
@@ -265,7 +285,9 @@ class ImportModel:
             # Check if model with same name already exists in project.
             model_exists(project, modelPrefix, force)
 
-            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile)
+            response = mr.import_model_from_zip(
+                modelPrefix, project, zipIOFile, version=projectVersion
+            )
             try:
                 print(
                     "Model was successfully imported into SAS Model Manager as {} with UUID: {}.".format(
@@ -286,7 +308,9 @@ class ImportModel:
             # Check if model with same name already exists in project.
             model_exists(project, modelPrefix, force)
 
-            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
+            response = mr.import_model_from_zip(
+                modelPrefix, project, zipIOFile, force, version=projectVersion
+            )
             try:
                 print(
                     "Model was successfully imported into SAS Model Manager as {} with UUID: {}.".format(
