@@ -80,7 +80,7 @@ def model_exists(project, name, force, versionName="latest"):
         versionId = projectVersions[latestVersion]["id"]
     else:
         for version in projectVersions:
-            if versionName is version["name"]:
+            if versionName == version["name"]:
                 versionId = version["id"]
                 break
     projectModels = mr.get(
@@ -283,7 +283,7 @@ class ImportModel:
             project = project_exists(projectResponse, project)
 
             # Check if model with same name already exists in project.
-            model_exists(project, modelPrefix, force)
+            model_exists(project, modelPrefix, force, versionName=projectVersion)
 
             response = mr.import_model_from_zip(
                 modelPrefix, project, zipIOFile, version=projectVersion
@@ -306,7 +306,7 @@ class ImportModel:
             project = project_exists(projectResponse, project)
 
             # Check if model with same name already exists in project.
-            model_exists(project, modelPrefix, force)
+            model_exists(project, modelPrefix, force, versionName=projectVersion)
 
             response = mr.import_model_from_zip(
                 modelPrefix, project, zipIOFile, force, version=projectVersion
