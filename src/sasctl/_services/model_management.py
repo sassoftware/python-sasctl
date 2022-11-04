@@ -101,10 +101,10 @@ class ModelManagement(Service):
     @classmethod
     def create_performance_definition(
         cls,
-        models,
-        library_name,
         table_prefix,
         project=None,
+        models=None,
+        library_name='Public',
         name=None,
         description=None,
         monitor_champion=False,
@@ -120,17 +120,19 @@ class ModelManagement(Service):
     ):
         """Create the performance task definition in the model project to
         monitor model performance.
-
+        Test
         Parameters
         ----------
-        models : str or dict
-            The name or id of the model(s), or a dictionary representation of the model(s).
-        library_name : str
-            The library containing the input data, default is 'Public'.
         table_prefix : str
             The name used for the performance data.
         project      : str
-            The ID of the project
+            Name or ID of the project
+        models : str, list, or dict
+            The name or id of the model(s), or a dictionary representation of the model(s). For
+            multiple models, input list of model names, or list of dictionaries. If None, will take
+            all models in specified project ID.
+        library_name : str
+            The library containing the input data, default is 'Public'.
         name : str
             The name of the performance task.
         description : str
@@ -185,7 +187,17 @@ class ModelManagement(Service):
                 "Received a value of '%s'." % max_bins
             )
 
+        if not project and not models:
+            raise ValueError(
+                "No project or model specified for performance definition creation"
+                "Please specifiy at least one of the two values."
+            )
+
         mr = ModelRepository()
+
+        if not models:
+            project = mr.get_project(project)
+            models = mr.list_models(parentId=project.id)
         if not isinstance(models, list):
             models = [models]
         for i, model in enumerate(models):
