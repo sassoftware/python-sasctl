@@ -75,14 +75,20 @@ def model_exists(project, name, force, versionName="latest"):
     projectId = project["id"]
     projectVersions = mr.list_project_versions(project)
     if versionName == "latest":
+        # The "latest" option specifies the most recently created version of the project. Search only in that version.
         modTime = [item["modified"] for item in projectVersions]
         latestVersion = modTime.index(max(modTime))
         versionId = projectVersions[latestVersion]["id"]
+    elif versionName == "new":
+        # The "new" option specifies a new project version, so no models with the same name will exist already.
+        return
     else:
+        # Otherwise, search for the version name specified. If the version name is not found, produce an error message.
         for version in projectVersions:
             if versionName == version["name"]:
                 versionId = version["id"]
                 break
+        ValueError("No version with the name specified could be found in the project.")
     projectModels = mr.get(
         "/projects/{}/projectVersions/{}/models".format(projectId, versionId)
     )
