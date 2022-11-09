@@ -804,13 +804,24 @@ class ModelRepository(Service):
             "/projects/{}/projectVersions".format(project_info.id)
         )
         versionList = []
-        for version in projectVersions:
+        try:
+            for version in projectVersions:
+                versionDict = {
+                    "name": version.name,
+                    "id": version.id,
+                    "number": version.versionNumber,
+                    "modified": datetime.strptime(
+                        version.modifiedTimeStamp, "%Y-%m-%dT%H:%M:%S.%fZ"
+                    ),
+                }
+                versionList.append(versionDict)
+        except AttributeError:
             versionDict = {
-                "name": version.name,
-                "id": version.id,
-                "number": version.versionNumber,
+                "name": projectVersions.name,
+                "id": projectVersions.id,
+                "number": projectVersions.versionNumber,
                 "modified": datetime.strptime(
-                    version.modifiedTimeStamp, "%Y-%m-%dT%H:%M:%S.%fZ"
+                    projectVersions.modifiedTimeStamp, "%Y-%m-%dT%H:%M:%S.%fZ"
                 ),
             }
             versionList.append(versionDict)
