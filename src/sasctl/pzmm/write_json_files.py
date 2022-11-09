@@ -173,10 +173,13 @@ class JSONFiles:
                 "WARNING: The provided model description was truncated to 1024 characters."
             )
 
-        if numTargetCategories > 2:
+        if numTargetCategories > 2 and not targetEvent:
             targetLevel = "NOMINAL"
+        elif numTargetCategories > 2 and targetEvent:
+            targetLevel = "ORDINAL"
         else:
             targetLevel = "BINARY"
+            targetEvent = 1
 
         if eventProbVar is None:
             try:
