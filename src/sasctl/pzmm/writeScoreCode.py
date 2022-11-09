@@ -68,7 +68,7 @@ class ScoreCode:
             that the model files are being created from an MLFlow model.
         targetDF : DataFrame
             The `DataFrame` object contains the training data for the target variable. Note that
-            for MLFlow models, this can set as None.
+            for MLFlow models, this can be set as None.
         modelPrefix : string
             The variable for the model name that is used when naming model files.
             (For example: hmeqClassTree + [Score.py || .pickle]).
@@ -80,8 +80,16 @@ class ScoreCode:
         modelFileName : string
             Name of the model file that contains the model.
         metrics : string list, optional
-            The scoring metrics for the model. The default is a set of two
-            metrics: EM_EVENTPROBABILITY and EM_CLASSIFICATION.
+            The scoring metrics for the model. For classification models, it is assumed that the last value in the list
+            represents the classification output. The default is a list of two metrics: EM_EVENTPROBABILITY and
+            EM_CLASSIFICATION. The following scenarios are supported:
+                1) If only one value is provided, then it is assumed that the model returns either a binary response
+                prediction or a character output and is returned as the output.
+                1) If only two values are provided, a threshold value needs to be set: either by providing a
+                threshPrediction argument or the function taking the mean of the provided target column. Then the
+                threshold value sets the classification output for the prediction.
+                2) If more than two values are provided, the largest probability is accepted as the event and the
+                appropriate classification value is returned for the output.
         pyPath : string, optional
             The local path of the score code file. The default is the current
             working directory.
@@ -462,19 +470,23 @@ def score{modelPrefix}({inputVarList}):
                     )
                 )
             if not isH2OModel and not isMLFlow:
-                cls.pyFile.write(
-                    """\n
+                # TODO: Refactor arguments to better handle different classification types
+                if len(metrics) == 1:
+                    # For models that output the classification from the prediction
+                    cls.pyFile.write(
+                        """\n
+    {metric} = prediction""".format(metric=metrics[0]))
+                elif len(metrics) == 2:
+                    cls.pyFile.write(
+                        """\n
     try:
         {metric} = float(prediction)
     except TypeError:
-    # If the model expects non-binary responses, a TypeError will be raised.
-    # The except block shifts the prediction to accept a non-binary response.
-        {metric} = float(prediction[:,1])""".format(
-                        metric=metrics[0]
-                    )
-                )
-                if threshPrediction is None:
-                    threshPrediction = np.mean(targetDF)
+        # If the prediction returns as a list of values or improper value type, a TypeError will be raised.
+        # Attempt to handle the prediction output in the except block.
+        {metric} = float(prediction[0])""".format(metric=metrics[0]))
+                    if threshPrediction is None:
+                        threshPrediction = np.mean(targetDF)
                     cls.pyFile.write(
                         """\n
     if ({metric0} >= {threshold}):
@@ -486,6 +498,21 @@ def score{modelPrefix}({inputVarList}):
                             threshold=threshPrediction,
                         )
                     )
+                elif len(metrics) > 2:
+                    for i, metric in enumerate(metrics[:-1]):
+                        cls.pyFile.write(
+                            """\
+    {metric} = float(prediction[{i}]""".format(metric=metric, i=i)
+                        )
+                    cls.pyFile.write(
+                        """\
+    max_prediction = max({metric_list})
+    index_prediction = {metric_list}.index(max_prediction)
+    {classification} = index_prediction""".format(metric_list=metrics[:-1], classification=metrics[-1])
+                    )
+                else:
+                    ValueError("Improper metrics argument was provided. Please provide a list of string metrics.")
+
             elif isH2OModel and not isMLFlow:
                 cls.pyFile.write(
                     """\n
