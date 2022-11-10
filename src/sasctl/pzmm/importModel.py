@@ -293,7 +293,6 @@ class ImportModel:
 
             response = mr.import_model_from_zip(
                 modelPrefix, project, zipIOFile, version=projectVersion
-
             )
             try:
                 print(
