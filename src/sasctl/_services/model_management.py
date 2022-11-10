@@ -118,53 +118,53 @@ class ModelManagement(Service):
         cas_server=None,
         trace=False,
     ):
-        """Create the performance task definition in the model project to
-        monitor model performance.
-        Test
+        """Create the performance task definition in the model project to monitor model performance. In order to
+        execute the performance task definition, run the execute_performance_definition function with the output from
+        this function.
+
+        Note that the performance task definition cannot be created if the project is not a valid form of model, or if
+        targetVariable or targetLevel are not defined.
+
         Parameters
         ----------
         table_prefix : str
-            The name used for the performance data.
-        project      : str
-            Name or ID of the project
-        models : str, list, or dict
+            The name used for the prefix of the performance data.
+        project : str, optional
+            Name or ID of the project. If no project is specified, it is inferred from the models argument. Defaults to
+            None.
+        models : str, list, or dict, optional
             The name or id of the model(s), or a dictionary representation of the model(s). For
-            multiple models, input list of model names, or list of dictionaries. If None, will take
-            all models in specified project ID.
+            multiple models, input a list of model names, or a list of dictionaries. If no models are specified, all
+            models in the project specified will be used. Defaults to None.
         library_name : str
             The library containing the input data, default is 'Public'.
-        name : str
-            The name of the performance task.
-        description : str
-            The description of the performance task, default is 'Performance
-            monitoring for model' + model.name.
-        monitor_champion : bool
-            Indicates to monitor the project champion model.
-        monitor_challenger : bool
-            Indicates to monitor challenger models.
-        max_bins : int
-            The maximum bins number, Must be >= 2.  Defaults to 10.
-        scoring_required : bool
-            Whether model scoring must be performed on the input data before
-            performance results can be computed.  Should be `False` if target
-            values are included in the `table_prefix` tables.
-        all_data : bool
+        name : str, optional
+            The name of the performance task, default is None.
+        description : str, optional
+            The description of the performance task, default is None.
+        monitor_champion : bool, optional
+            Indicates to monitor the project champion model, default is None.
+        monitor_challenger : bool, optional
+            Indicates to monitor challenger models, default is None.
+        max_bins : int, optional
+            The maximum bins number. Must be >= 2.  Defaults to 10.
+        scoring_required : bool, optional
+            Whether model scoring must be performed on the input data before performance results can be computed.
+            Should be `False` if target values are included in the `table_prefix` tables. Defaults to `False`.
+        all_data : bool, optional
             Whether to run the performance job against all matching data tables
             in `library_name` or just the new tables.  Defaults to `False`.
-        save_output : bool
-            Whether to save the computed results to a table in `output_library`.
-            Defaults to True.
-        output_library : str
-            Name of a CASLIB where computed results should be saved.  Defaults to
-            'ModelPerformanceData'.
-        autoload_output : bool
-            Whether computed results should automatically be re-loaded
-            after a CAS server restart.
-        cas_server : str
+        save_output : bool, optional
+            Whether to save the computed results to a table in `output_library`. Defaults to True.
+        output_library : str, optional
+            Name of a CASLIB where computed results should be saved.  Defaults to 'ModelPerformanceData'.
+        autoload_output : bool, optional
+            Whether computed results should automatically be re-loaded after a CAS server restart, defaults to False.
+        cas_server : str, optional
             The CAS Server for the monitoring task, default is 'cas-shared-default'.
-        trace : bool
-            Whether to enable trace messages in the SAS job log when
-            executing the performance definition.
+        trace : bool, optional
+            Whether to enable trace messages in the SAS job log when executing the performance definition, defaults to
+            False.
 
         Returns
         -------
@@ -189,12 +189,11 @@ class ModelManagement(Service):
 
         if not project and not models:
             raise ValueError(
-                "No project or model specified for performance definition creation"
-                "Please specifiy at least one of the two values."
+                "No project or model specified for performance definition creation.\n"
+                "Please specify at least one of the two values."
             )
 
-        mr = ModelRepository()
-
+        # If no models were specified, search the supplied project for all models
         if not models:
             project = mr.get_project(project)
             models = mr.list_models(parentId=project.id)
@@ -205,8 +204,7 @@ class ModelManagement(Service):
         if not project:
             project = mr.get_project(models[0].projectId)
 
-        # Performance data cannot be captured unless certain project properties
-        # have been configured.
+        # Performance data cannot be captured unless certain project properties have been configured.
         for required in ["targetVariable", "targetLevel"]:
             if getattr(project, required, None) is None:
                 raise ValueError(
