@@ -104,7 +104,7 @@ class ModelManagement(Service):
         table_prefix,
         project=None,
         models=None,
-        library_name='Public',
+        library_name="Public",
         name=None,
         description=None,
         monitor_champion=False,
@@ -183,7 +183,8 @@ class ModelManagement(Service):
         max_bins = 10 if max_bins is None else int(max_bins)
         if int(max_bins) < 2:
             raise ValueError(
-                "Parameter 'max_bins' must be at least 2. Received a value of '%s'." % max_bins
+                "Parameter 'max_bins' must be at least 2. Received a value of '%s'."
+                % max_bins
             )
 
         if not project and not models:
@@ -195,7 +196,11 @@ class ModelManagement(Service):
         # If no models were specified, search the supplied project for all models
         if not models:
             project = mr.get_project(project)
-            models = mr.list_models(filter="eq(projectName, '{projectName}')".format(projectName=project.name))
+            models = mr.list_models(
+                filter="eq(projectName, '{projectName}')".format(
+                    projectName=project.name
+                )
+            )
 
         # Separate single models from multiple models
         if not isinstance(models, list):
