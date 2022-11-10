@@ -192,7 +192,9 @@ class ModelManagement(Service):
         # If no models were specified, search the supplied project for all models
         if not models:
             project = mr.get_project(project)
-            models = mr.list_models(parentId=project.id)
+            models = mr.list_models(filter="eq(projectName, '{projectName}')".format(projectName=project.name))
+
+        # Separate single models from multiple models
         if not isinstance(models, list):
             models = [models]
         for i, model in enumerate(models):
