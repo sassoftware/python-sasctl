@@ -286,7 +286,7 @@ class ImportModel:
             model_exists(project, modelPrefix, force)
 
             response = mr.import_model_from_zip(
-                modelPrefix, project, zipIOFile, projectVersion=projectVersion
+                modelPrefix, project, zipIOFile, version=projectVersion
             )
             try:
                 print(
