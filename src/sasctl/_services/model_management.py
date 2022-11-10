@@ -172,19 +172,18 @@ class ModelManagement(Service):
             The performance task definition schema
 
         """
-        from .model_repository import ModelRepository
+        from .model_repository import ModelRepository as mr
 
         if not scoring_required and "_" in table_prefix:
             raise ValueError(
                 "Parameter 'table_prefix' cannot contain underscores."
-                " Received a value of '%s'."
-            ) % table_prefix
+                " Received a value of '%s'." % table_prefix
+            )
 
         max_bins = 10 if max_bins is None else int(max_bins)
         if int(max_bins) < 2:
             raise ValueError(
-                "Parameter 'max_bins' must be at least 2.  "
-                "Received a value of '%s'." % max_bins
+                "Parameter 'max_bins' must be at least 2. Received a value of '%s'." % max_bins
             )
 
         if not project and not models:
