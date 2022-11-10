@@ -199,9 +199,11 @@ class ModelManagement(Service):
 
         # Separate single models from multiple models
         if not isinstance(models, list):
-            models = [models]
-        for i, model in enumerate(models):
-            models[i] = mr.get_model(model)
+            models = mr.get_model(models)
+        else:
+            # Collect all models into a list. This converts the PagedList response from mr.list_models to a normal list.
+            for i, model in enumerate(models):
+                models[i] = mr.get_model(model)
         if not project:
             project = mr.get_project(models[0].projectId)
 
