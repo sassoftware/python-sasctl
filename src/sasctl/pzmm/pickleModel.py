@@ -12,8 +12,9 @@ import codecs
 
 # %%
 class PickleModel:
+    @classmethod
     def pickleTrainedModel(
-        self,
+        cls,
         trainedModel,
         modelPrefix,
         pPath=Path.cwd(),
