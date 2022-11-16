@@ -985,7 +985,7 @@ class JSONFiles:
         return conversion
 
     @classmethod
-    def createRequirementsJSON(cls, jPath=Path.cwd()):
+    def create_requirements_json(cls, json_path=Path.cwd()):
         """
         Searches the model directory for Python scripts and pickle files and determines
         their Python package dependencies. Found dependencies are then matched to the package
@@ -999,15 +999,14 @@ class JSONFiles:
 
         This function works best when run in the model development environment and is likely to
         throw errors if run in another environment (and/or produce incorrect package versions).
-        In the case of using this function outside of the model development environment, it is
+        In the case of using this function outside the model development environment, it is
         recommended to the user that they adjust the requirements.json file's package versions
         to match the model development environment.
 
         Parameters
         ----------
-        jPath : str, optional
-            The path to a Python project, by default Path.cwd().
-
+        json_path : str, optional
+            The path to a Python project, by default the current working directory.
         Yields
         ------
         requirements.json : file
@@ -1015,35 +1014,35 @@ class JSONFiles:
             container.
         """
 
-        picklePackages = []
-        pickleFiles = cls.getPickleFile(jPath)
-        for pickleFile in pickleFiles:
-            picklePackages.append(cls.getDependenciesFromPickleFile(cls, pickleFile))
+        pickle_packages = []
+        pickle_files = cls.get_pickle_file(json_path)
+        for pickle_file in pickle_files:
+            pickle_packages.append(cls.get_pickle_dependencies(pickle_file))
 
-        codeDependencies = cls.getCodeDependencies(cls, jPath)
+        code_dependencies = cls.get_code_dependencies(json_path)
 
-        packageList = list(picklePackages) + codeDependencies
-        packageList = list(set(list(flatten(packageList))))
-        packageList = cls.removeStdlibPackages(packageList)
-        packageAndVersion = cls.getLocalPackageVersion(packageList)
+        package_list = list(pickle_packages) + code_dependencies
+        package_list = list(set(list(flatten(package_list))))
+        package_list = cls.remove_standard_library_packages(package_list)
+        package_and_version = cls.get_local_package_version(package_list)
         # Identify packages with missing versions
-        missingPackageVersions = [item[0] for item in packageAndVersion if not item[1]]
+        missing_package_versions = [item[0] for item in package_and_version if not item[1]]
 
-        with open(Path(jPath) / "requirements.json", "w") as file:
-            if missingPackageVersions:
-                jsonStep = json.dumps(
+        with open(Path(json_path) / "requirements.json", "w") as file:
+            if missing_package_versions:
+                json_step = json.dumps(
                         [
                             {
                                 "Warning": "The versions for the following packages could not be determined:",
-                                "Packages": ", ".join(missingPackageVersions)
+                                "Packages": ", ".join(missing_package_versions)
                             }
                         ],
                         indent=4,
                     )
-                file.write(jsonStep)
-            for package, version in packageAndVersion:
+                file.write(json_step)
+            for package, version in package_and_version:
                 if version:
-                    jsonStep = json.dumps(
+                    json_step = json.dumps(
                         [
                             {
                                 "step": "install " + package,
@@ -1053,7 +1052,7 @@ class JSONFiles:
                         indent=4,
                     )
                 else:
-                    jsonStep = json.dumps(
+                    json_step = json.dumps(
                         [
                             {
                                 "step": "install " + package,
@@ -1062,58 +1061,62 @@ class JSONFiles:
                         ],
                         indent=4,
                     )
-                file.write(jsonStep)
+                file.write(json_step)
 
-    def getLocalPackageVersion(packageList):
-'''Get package versions from the local environment. If the package
+    @classmethod
+    def get_local_package_version(cls, package_list):
+        """
+Get package_name versions from the local environment. If the package_name
         does not contain an attribute of "__version__", "version", or
-        "VERSION", no package version will be found.
+        "VERSION", no package_name version will be found.
 
         Parameters
         ----------
-        packageList : list
+        package_list : list
             List of Python packages.
 
         Returns
         -------
         list
-            Nested list of Python package names and found versions.
-        '''
-        def packageNotFoundOutput(package, packageAndVersion):
-            print("Warning: Package {} was not found in the local environment, so a version could not be determined.".format(package))
-            print("The pip installation command will not include a version number for {}.".format(package))
-            packageAndVersion.append([package, None])
-            return packageAndVersion
+            Nested list of Python package_name names and found versions.
+        """
+        def package_not_found_output(package_name, package_versions):
+            print(f"Warning: Package {package_name} was not found in the local environment, so a version could not be "
+                  "determined.")
+            print(f"The pip installation command will not include a version number for {package_name}.")
+            package_versions.append([package_name, None])
+            return package_versions
 
-        packageAndVersion = []
+        package_and_version = []
         import importlib
-        for package in packageList:
+        for package in package_list:
             try:
                 name = importlib.import_module(package)
                 try:
-                    packageAndVersion.append([package, name.__version__])
+                    package_and_version.append([package, name.__version__])
                 except AttributeError:
-                    pass
                     try:
-                        packageAndVersion.append([package, name.version])
+                        package_and_version.append([package, name.version])
                     except AttributeError:
                         try:
-                            packageAndVersion.append([package, name.VERSION])
+                            package_and_version.append([package, name.VERSION])
                         except AttributeError:
-                            packageAndVersion = packageNotFoundOutput(package, packageAndVersion)
+                            package_and_version = package_not_found_output(package, package_and_version)
             except ModuleNotFoundError:
-                packageAndVersion = packageNotFoundOutput(package, packageAndVersion)
+                package_and_version = package_not_found_output(package, package_and_version)
 
-        return packageAndVersion
+        return package_and_version
 
-    def getCodeDependencies(cls, jPath=Path.cwd()):
-        '''Get the package dependencies for all Python scripts in the
+    @classmethod
+    def get_code_dependencies(cls, json_path=Path.cwd()):
+        """
+        Get the package dependencies for all Python scripts in the
         provided directory path. Note that currently this functionality
         only works for .py files.
 
         Parameters
         ----------
-        jPath : string, optional
+        json_path : string, optional
             File location for the output JSON file. Default is the current
             working directory.
 
@@ -1121,37 +1124,38 @@ class JSONFiles:
         -------
         list
             List of found package dependencies.
-        '''
-        fileNames = []
-        fileNames.extend(sorted(Path(jPath).glob("*.py")))
+        """
+        file_names = []
+        file_names.extend(sorted(Path(json_path).glob("*.py")))
 
-        importInfo = []
-        for file in fileNames:
-            importInfo.append(cls.findImports(file))
-        importInfo = list(set(flatten(importInfo)))
-        return importInfo
+        import_info = []
+        for file in file_names:
+            import_info.append(cls.find_imports(file))
+        import_info = list(set(flatten(import_info)))
+        return import_info
 
-    def findImports(fPath):
-        '''Find import calls in provided Python code path. Ignores
+    @classmethod
+    def find_imports(cls, file_path):
+        """
+        Find import calls in provided Python code path. Ignores
         built in Python modules.
 
         Credit: modified from https://stackoverflow.com/questions/44988487/regex-to-parse-import-statements-in-python
 
         Parameters
         ----------
-        fPath : string
+        file_path : string or Path
             File location for the Python file to be parsed.
-
         Returns
         -------
         list
             List of found package dependencies.
-        '''
+        """
         import ast
 
-        fileText = open(fPath).read()
+        file_text = open(file_path).read()
 # Parse the file to get the abstract syntax tree representation
-        tree = ast.parse(fileText)
+        tree = ast.parse(file_text)
         modules = []
 
         # Walk through each node in the ast to find import calls
@@ -1174,27 +1178,27 @@ class JSONFiles:
         except ValueError:
             return modules
 
-    def getPickleFile(pPath=Path.cwd()):
+    @classmethod
+    def get_pickle_file(cls, pickle_folder=Path.cwd()):
         """
         Given a file path, retrieve the pickle file(s).
 
         Parameters
         ----------
-        pPath : str
-            File location for the input pickle file. Default is the current
-            working directory.
-
+        pickle_folder : str
+            File location for the input pickle file. Default is the current working directory.
         Returns
         -------
         list
             A list of pickle files.
         """
 
-        fileNames = []
-        fileNames.extend(sorted(Path(pPath).glob("*.pickle")))
-        return fileNames
+        file_names = []
+        file_names.extend(sorted(Path(pickle_folder).glob("*.pickle")))
+        return file_names
 
-    def getDependenciesFromPickleFile(cls, pickleFile):
+    @classmethod
+    def get_pickle_dependencies(cls, pickle_file):
         """
         Reads the pickled byte stream from a file object, serializes the pickled byte
         stream as a bytes object, and inspects the bytes object for all Python modules
@@ -1212,15 +1216,16 @@ class JSONFiles:
             Python built-in modules are removed.
         """
 
-        with (open(pickleFile, "rb")) as openfile:
-            obj = pickle.load(openfile)
+        with (open(pickle_file, "rb")) as open_file:
+            obj = pickle.load(open_file)
             dumps = pickle.dumps(obj)
 
-        modules = {mod.split(".")[0] for mod, _ in cls.getPackageNames(dumps)}
+        modules = {mod.split(".")[0] for mod, _ in cls.get_package_names(dumps)}
         modules.discard("builtins")
         return list(modules)
 
-    def getPackageNames(stream):
+    @classmethod
+    def get_package_names(cls, stream):
         """
         Generates (module, class_name) tuples from a pickle stream. Extracts all class names referenced
         by GLOBAL and STACK_GLOBAL opcodes.
@@ -1239,62 +1244,62 @@ class JSONFiles:
             Generated (module, class_name) tuples.
         """
 
-        stack, markstack, memo = [], [], []
+        stack, mark_stack, memo = [], [], []
         mark = pickletools.markobject
 
         # Step through the pickle stack and retrieve names used by STACK_GLOBAL
         for opcode, arg, pos in pickletools.genops(stream):
 
             before, after = opcode.stack_before, opcode.stack_after
-            numtopop = len(before)
+            number_to_pop = len(before)
 
             if opcode.name == "GLOBAL":
                 yield tuple(arg.split(1, None))
             elif opcode.name == "STACK_GLOBAL":
-                yield (stack[-2], stack[-1])
+                yield stack[-2], stack[-1]
             elif mark in before or (opcode.name == "POP" and stack and stack[-1] is mark):
-                markpos = markstack.pop()
+                mark_stack.pop()
                 while stack[-1] is not mark:
                     stack.pop()
                 stack.pop()
                 try:
-                    numtopop = before.index(mark)
+                    number_to_pop = before.index(mark)
                 except ValueError:
-                    numtopop = 0
+                    number_to_pop = 0
             elif opcode.name in {"PUT", "BINPUT", "LONG_BINPUT", "MEMOIZE"}:
                 if opcode.name == "MEMOIZE":
                     memo.append(stack[-1])
                 else:
                     memo[arg] = stack[-1]
-                numtopop, after = 0, []  # memoize and put; do not pop the stack
+                number_to_pop, after = 0, []  # memoize and put; do not pop the stack
             elif opcode.name in {"GET", "BINGET", "LONG_BINGET"}:
                 arg = memo[arg]
 
-            if numtopop:
-                del stack[-numtopop:]
+            if number_to_pop:
+                del stack[-number_to_pop:]
             if mark in after:
-                markstack.append(pos)
+                mark_stack.append(pos)
 
             if len(after) == 1 and opcode.arg is not None:
                 stack.append(arg)
             else:
                 stack.extend(after)
 
-    def removeStdlibPackages(packageList):
-        '''Remove any packages from the required list of installed packages that are part of the Python
-        Standard Library.
+    @classmethod
+    def remove_standard_library_packages(cls, package_list):
+        """
+        Remove any packages from the required list of installed packages that are part of the Python Standard Library.
 
         Parameters
         ----------
-        packageList : list
+        package_list : list
             List of all packages found that are not Python built-in packages.
 
         Returns
         -------
         list
-            List of all packages found that are not Python built-in packages or part of the Python
-            Standard Library.
-        '''
+            List of all packages found that are not Python built-in packages or part of the Python Standard Library.
+        """
         py10stdlib = ['_aix_support', '_heapq', 'lzma', 'gc', 'mailcap', 'winsound', 'sre_constants', 'netrc', 'audioop',
                       'xdrlib', 'code', '_pyio', '_gdbm', 'unicodedata', 'pwd', 'xml', '_symtable', 'pkgutil', '_decimal',
                       '_compat_pickle', '_frozen_importlib_external', '_signal', 'fcntl', 'wsgiref', 'uu', 'textwrap',
@@ -1330,5 +1335,5 @@ class JSONFiles:
                       '_curses_panel', 'wave', 'mmap', 'warnings', 'functools', 'ipaddress', 'nturl2path', 'optparse', '_queue',
                       'turtle', 'spwd', 'stat', 'configparser', '_warnings', 'bdb', '_osx_support', 'typing', 'zipfile', 'glob',
                       'random', 'smtplib', 'plistlib', 'hashlib', '_struct']
-        packageList = [package for package in packageList if package not in py10stdlib]
-        return packageList
+        package_list = [package for package in package_list if package not in py10stdlib]
+        return package_list
