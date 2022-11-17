@@ -15,8 +15,9 @@ import pickle
 import pickletools
 from collections.abc import Iterable
 
+
 def flatten(nestedList):
-    '''Flatten a nested list. Controls for str values in list, such that the str
+    """Flatten a nested list. Controls for str values in list, such that the str
     values are not expanded into a list of single characters.
 
     Parameters
@@ -28,12 +29,13 @@ def flatten(nestedList):
     ------
     list
         A flattened list of strings.
-    '''
+    """
     for item in nestedList:
         if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
             yield from flatten(item)
         else:
             yield item
+
 
 class JSONFiles:
     @classmethod
@@ -1026,19 +1028,21 @@ class JSONFiles:
         package_list = cls.remove_standard_library_packages(package_list)
         package_and_version = cls.get_local_package_version(package_list)
         # Identify packages with missing versions
-        missing_package_versions = [item[0] for item in package_and_version if not item[1]]
+        missing_package_versions = [
+            item[0] for item in package_and_version if not item[1]
+        ]
 
         with open(Path(json_path) / "requirements.json", "w") as file:
             if missing_package_versions:
                 json_step = json.dumps(
-                        [
-                            {
-                                "Warning": "The versions for the following packages could not be determined:",
-                                "Packages": ", ".join(missing_package_versions)
-                            }
-                        ],
-                        indent=4,
-                    )
+                    [
+                        {
+                            "Warning": "The versions for the following packages could not be determined:",
+                            "Packages": ", ".join(missing_package_versions),
+                        }
+                    ],
+                    indent=4,
+                )
                 file.write(json_step)
             for package, version in package_and_version:
                 if version:
@@ -1066,7 +1070,7 @@ class JSONFiles:
     @classmethod
     def get_local_package_version(cls, package_list):
         """
-Get package_name versions from the local environment. If the package_name
+        Get package_name versions from the local environment. If the package_name
         does not contain an attribute of "__version__", "version", or
         "VERSION", no package_name version will be found.
 
@@ -1080,15 +1084,21 @@ Get package_name versions from the local environment. If the package_name
         list
             Nested list of Python package_name names and found versions.
         """
+
         def package_not_found_output(package_name, package_versions):
-            print(f"Warning: Package {package_name} was not found in the local environment, so a version could not be "
-                  "determined.")
-            print(f"The pip installation command will not include a version number for {package_name}.")
+            print(
+                f"Warning: Package {package_name} was not found in the local environment, so a version could not be "
+                "determined."
+            )
+            print(
+                f"The pip installation command will not include a version number for {package_name}."
+            )
             package_versions.append([package_name, None])
             return package_versions
 
         package_and_version = []
         import importlib
+
         for package in package_list:
             try:
                 name = importlib.import_module(package)
@@ -1101,9 +1111,13 @@ Get package_name versions from the local environment. If the package_name
                         try:
                             package_and_version.append([package, name.VERSION])
                         except AttributeError:
-                            package_and_version = package_not_found_output(package, package_and_version)
+                            package_and_version = package_not_found_output(
+                                package, package_and_version
+                            )
             except ModuleNotFoundError:
-                package_and_version = package_not_found_output(package, package_and_version)
+                package_and_version = package_not_found_output(
+                    package, package_and_version
+                )
 
         return package_and_version
 
@@ -1154,7 +1168,7 @@ Get package_name versions from the local environment. If the package_name
         import ast
 
         file_text = open(file_path).read()
-# Parse the file to get the abstract syntax tree representation
+        # Parse the file to get the abstract syntax tree representation
         tree = ast.parse(file_text)
         modules = []
 
@@ -1173,7 +1187,7 @@ Get package_name versions from the local environment. If the package_name
         modules = list(set(modules))
         try:
             # Remove 'settings' module that is auto generated for SAS Model Manager score code
-            modules.remove('settings')
+            modules.remove("settings")
             return modules
         except ValueError:
             return modules
@@ -1257,7 +1271,9 @@ Get package_name versions from the local environment. If the package_name
                 yield tuple(arg.split(1, None))
             elif opcode.name == "STACK_GLOBAL":
                 yield stack[-2], stack[-1]
-            elif mark in before or (opcode.name == "POP" and stack and stack[-1] is mark):
+            elif mark in before or (
+                opcode.name == "POP" and stack and stack[-1] is mark
+            ):
                 mark_stack.pop()
                 while stack[-1] is not mark:
                     stack.pop()
@@ -1300,40 +1316,312 @@ Get package_name versions from the local environment. If the package_name
         list
             List of all packages found that are not Python built-in packages or part of the Python Standard Library.
         """
-        py10stdlib = ['_aix_support', '_heapq', 'lzma', 'gc', 'mailcap', 'winsound', 'sre_constants', 'netrc', 'audioop',
-                      'xdrlib', 'code', '_pyio', '_gdbm', 'unicodedata', 'pwd', 'xml', '_symtable', 'pkgutil', '_decimal',
-                      '_compat_pickle', '_frozen_importlib_external', '_signal', 'fcntl', 'wsgiref', 'uu', 'textwrap',
-                      '_codecs_iso2022', 'keyword', 'distutils', 'binascii', 'email', 'reprlib', 'cmd', 'cProfile',
-                      'dataclasses', '_sha512', 'ntpath', 'readline', 'signal', '_elementtree', 'dis', 'rlcompleter',
-                      '_json', '_ssl', '_sha3', '_winapi', 'telnetlib', 'pyexpat', '_lzma', 'http', 'poplib', 'tokenize',
-                      '_dbm', '_io', 'linecache', 'json', 'faulthandler', 'hmac', 'aifc', '_csv', '_codecs_hk', 'selectors',
-                      '_random', '_pickle', '_lsprof', 'turtledemo', 'cgitb', '_sitebuiltins', 'binhex', 'fnmatch',
-                      'sysconfig', 'datetime', 'quopri', 'copyreg', '_pydecimal', 'pty', 'stringprep', 'bisect', '_abc',
-                      '_codecs_jp', '_md5', 'errno', 'compileall', '_threading_local', 'dbm', 'builtins', 'difflib',
-                      'imghdr', '__future__', '_statistics', 'getopt', 'xmlrpc', '_sqlite3', '_sha1', 'shelve',
-                      '_posixshmem', 'struct', 'timeit', 'ensurepip', 'pathlib', 'ctypes', '_multiprocessing', 'tty',
-                      '_weakrefset', 'sqlite3', 'tracemalloc', 'venv', 'unittest', '_blake2', 'mailbox', 'resource',
-                      'shutil', 'winreg', '_opcode', '_codecs_tw', '_operator', 'imp', '_string', 'os', 'opcode',
-                      '_zoneinfo', '_posixsubprocess', 'copy', 'symtable', 'itertools', 'sre_parse', '_bisect', '_imp', 're',
-                      'ast', 'zlib', 'fractions', 'pickle', 'profile', 'sys', 'ssl', 'cgi', 'enum', 'modulefinder',
-                      'py_compile', '_curses', '_functools', 'cmath', '_crypt', 'contextvars', 'math', 'uuid', 'argparse',
-                      '_frozen_importlib', 'inspect', 'posix', 'statistics', 'marshal', 'nis', '_bz2', 'pipes',
-                      'socketserver', 'pstats', 'site', 'trace', 'lib2to3', 'zipapp', 'runpy', 'sre_compile', 'time',
-                      'pprint', 'base64', '_stat', '_ast', 'pdb', '_markupbase', '_bootsubprocess', '_collections', '_sre',
-                      'msilib', 'crypt', 'gettext', 'mimetypes', '_overlapped', 'asyncore', 'zipimport', 'chunk', 'atexit',
-                      'graphlib', '_multibytecodec', 'gzip', 'io', 'logging', 'nntplib', 'genericpath', 'syslog', 'token',
-                      '_msi', 'idlelib', '_hashlib', 'threading', 'select', 'doctest', 'getpass', '_sha256', 'importlib',
-                      '_tracemalloc', 'multiprocessing', 'calendar', '_codecs_cn', '_tkinter', '_uuid', 'socket',
-                      'antigravity', 'string', '_locale', '_thread', 'grp', 'this', 'zoneinfo', 'abc', 'operator', 'colorsys',
-                      'tabnanny', '_weakref', 'imaplib', 'concurrent', 'subprocess', '_compression', 'pyclbr', 'tarfile',
-                      'numbers', 'queue', 'posixpath', 'smtpd', 'webbrowser', 'asynchat', 'weakref', 'filecmp', 'decimal',
-                      '_py_abc', 'collections', 'tempfile', '_collections_abc', 'sched', 'locale', 'secrets', 'msvcrt',
-                      'asyncio', 'array', '_codecs_kr', '_scproxy', '_strptime', 'heapq', '_socket', 'sndhdr', 'types', 'nt',
-                      '_datetime', 'shlex', 'tkinter', 'curses', 'encodings', 'pickletools', 'html', '_codecs', 'codeop',
-                      '_ctypes', 'bz2', 'contextlib', 'platform', 'termios', '_asyncio', 'ftplib', 'pydoc_data',
-                      '_contextvars', 'codecs', 'traceback', 'pydoc', 'fileinput', 'ossaudiodev', 'urllib', 'csv', 'sunau',
-                      '_curses_panel', 'wave', 'mmap', 'warnings', 'functools', 'ipaddress', 'nturl2path', 'optparse', '_queue',
-                      'turtle', 'spwd', 'stat', 'configparser', '_warnings', 'bdb', '_osx_support', 'typing', 'zipfile', 'glob',
-                      'random', 'smtplib', 'plistlib', 'hashlib', '_struct']
-        package_list = [package for package in package_list if package not in py10stdlib]
+        py10stdlib = [
+            "_aix_support",
+            "_heapq",
+            "lzma",
+            "gc",
+            "mailcap",
+            "winsound",
+            "sre_constants",
+            "netrc",
+            "audioop",
+            "xdrlib",
+            "code",
+            "_pyio",
+            "_gdbm",
+            "unicodedata",
+            "pwd",
+            "xml",
+            "_symtable",
+            "pkgutil",
+            "_decimal",
+            "_compat_pickle",
+            "_frozen_importlib_external",
+            "_signal",
+            "fcntl",
+            "wsgiref",
+            "uu",
+            "textwrap",
+            "_codecs_iso2022",
+            "keyword",
+            "distutils",
+            "binascii",
+            "email",
+            "reprlib",
+            "cmd",
+            "cProfile",
+            "dataclasses",
+            "_sha512",
+            "ntpath",
+            "readline",
+            "signal",
+            "_elementtree",
+            "dis",
+            "rlcompleter",
+            "_json",
+            "_ssl",
+            "_sha3",
+            "_winapi",
+            "telnetlib",
+            "pyexpat",
+            "_lzma",
+            "http",
+            "poplib",
+            "tokenize",
+            "_dbm",
+            "_io",
+            "linecache",
+            "json",
+            "faulthandler",
+            "hmac",
+            "aifc",
+            "_csv",
+            "_codecs_hk",
+            "selectors",
+            "_random",
+            "_pickle",
+            "_lsprof",
+            "turtledemo",
+            "cgitb",
+            "_sitebuiltins",
+            "binhex",
+            "fnmatch",
+            "sysconfig",
+            "datetime",
+            "quopri",
+            "copyreg",
+            "_pydecimal",
+            "pty",
+            "stringprep",
+            "bisect",
+            "_abc",
+            "_codecs_jp",
+            "_md5",
+            "errno",
+            "compileall",
+            "_threading_local",
+            "dbm",
+            "builtins",
+            "difflib",
+            "imghdr",
+            "__future__",
+            "_statistics",
+            "getopt",
+            "xmlrpc",
+            "_sqlite3",
+            "_sha1",
+            "shelve",
+            "_posixshmem",
+            "struct",
+            "timeit",
+            "ensurepip",
+            "pathlib",
+            "ctypes",
+            "_multiprocessing",
+            "tty",
+            "_weakrefset",
+            "sqlite3",
+            "tracemalloc",
+            "venv",
+            "unittest",
+            "_blake2",
+            "mailbox",
+            "resource",
+            "shutil",
+            "winreg",
+            "_opcode",
+            "_codecs_tw",
+            "_operator",
+            "imp",
+            "_string",
+            "os",
+            "opcode",
+            "_zoneinfo",
+            "_posixsubprocess",
+            "copy",
+            "symtable",
+            "itertools",
+            "sre_parse",
+            "_bisect",
+            "_imp",
+            "re",
+            "ast",
+            "zlib",
+            "fractions",
+            "pickle",
+            "profile",
+            "sys",
+            "ssl",
+            "cgi",
+            "enum",
+            "modulefinder",
+            "py_compile",
+            "_curses",
+            "_functools",
+            "cmath",
+            "_crypt",
+            "contextvars",
+            "math",
+            "uuid",
+            "argparse",
+            "_frozen_importlib",
+            "inspect",
+            "posix",
+            "statistics",
+            "marshal",
+            "nis",
+            "_bz2",
+            "pipes",
+            "socketserver",
+            "pstats",
+            "site",
+            "trace",
+            "lib2to3",
+            "zipapp",
+            "runpy",
+            "sre_compile",
+            "time",
+            "pprint",
+            "base64",
+            "_stat",
+            "_ast",
+            "pdb",
+            "_markupbase",
+            "_bootsubprocess",
+            "_collections",
+            "_sre",
+            "msilib",
+            "crypt",
+            "gettext",
+            "mimetypes",
+            "_overlapped",
+            "asyncore",
+            "zipimport",
+            "chunk",
+            "atexit",
+            "graphlib",
+            "_multibytecodec",
+            "gzip",
+            "io",
+            "logging",
+            "nntplib",
+            "genericpath",
+            "syslog",
+            "token",
+            "_msi",
+            "idlelib",
+            "_hashlib",
+            "threading",
+            "select",
+            "doctest",
+            "getpass",
+            "_sha256",
+            "importlib",
+            "_tracemalloc",
+            "multiprocessing",
+            "calendar",
+            "_codecs_cn",
+            "_tkinter",
+            "_uuid",
+            "socket",
+            "antigravity",
+            "string",
+            "_locale",
+            "_thread",
+            "grp",
+            "this",
+            "zoneinfo",
+            "abc",
+            "operator",
+            "colorsys",
+            "tabnanny",
+            "_weakref",
+            "imaplib",
+            "concurrent",
+            "subprocess",
+            "_compression",
+            "pyclbr",
+            "tarfile",
+            "numbers",
+            "queue",
+            "posixpath",
+            "smtpd",
+            "webbrowser",
+            "asynchat",
+            "weakref",
+            "filecmp",
+            "decimal",
+            "_py_abc",
+            "collections",
+            "tempfile",
+            "_collections_abc",
+            "sched",
+            "locale",
+            "secrets",
+            "msvcrt",
+            "asyncio",
+            "array",
+            "_codecs_kr",
+            "_scproxy",
+            "_strptime",
+            "heapq",
+            "_socket",
+            "sndhdr",
+            "types",
+            "nt",
+            "_datetime",
+            "shlex",
+            "tkinter",
+            "curses",
+            "encodings",
+            "pickletools",
+            "html",
+            "_codecs",
+            "codeop",
+            "_ctypes",
+            "bz2",
+            "contextlib",
+            "platform",
+            "termios",
+            "_asyncio",
+            "ftplib",
+            "pydoc_data",
+            "_contextvars",
+            "codecs",
+            "traceback",
+            "pydoc",
+            "fileinput",
+            "ossaudiodev",
+            "urllib",
+            "csv",
+            "sunau",
+            "_curses_panel",
+            "wave",
+            "mmap",
+            "warnings",
+            "functools",
+            "ipaddress",
+            "nturl2path",
+            "optparse",
+            "_queue",
+            "turtle",
+            "spwd",
+            "stat",
+            "configparser",
+            "_warnings",
+            "bdb",
+            "_osx_support",
+            "typing",
+            "zipfile",
+            "glob",
+            "random",
+            "smtplib",
+            "plistlib",
+            "hashlib",
+            "_struct",
+        ]
+        package_list = [
+            package for package in package_list if package not in py10stdlib
+        ]
         return package_list
