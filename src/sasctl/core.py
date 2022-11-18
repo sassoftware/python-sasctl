@@ -293,7 +293,7 @@ class Session(requests.Session):
         verify_ssl=None,
         token=None,
         client_id=None,
-        client_secret=None
+        client_secret=None,
     ):
         super(Session, self).__init__()
 
@@ -417,8 +417,11 @@ class Session(requests.Session):
 
         # Find a suitable authentication mechanism and build an auth header
         self.auth = self.get_auth(
-            self._settings["username"], self._settings["password"], token,
-            client_id=client_id, client_secret=client_secret
+            self._settings["username"],
+            self._settings["password"],
+            token,
+            client_id=client_id,
+            client_secret=client_secret,
         )
 
         # Used for context manager
@@ -702,7 +705,7 @@ class Session(requests.Session):
         password=None,
         token=None,
         client_id=None,
-        client_secret=None
+        client_secret=None,
     ):
         """Attempt to authenticate with the Viya environment.
 
@@ -735,23 +738,22 @@ class Session(requests.Session):
         Returns
         -------
         OAuth2Token
-            Authorization header to use with requests to the evironent
+            Authorization header to use with requests to the environment
 
         """
+        # TODO: Refactor this function to a single set of cases
 
         # If explicit username & password were provided, use them.
         if username and password:
+            return self.get_oauth_token(username, password)
+
+        if client_id and client_secret:
             return self.get_oauth_token(
-                username, password
-            )
-        if client_id is not None and client_secret is not None:
-            return self.get_oauth_token(
-                client_id=client_id,
-                client_secret=client_secret
+                client_id=client_id, client_secret=client_secret
             )
 
         # If an existing access token was provided, use it
-        if token is not None:
+        if token:
             return OAuth2Token(token)
 
         # Kerberos doesn't require any interruption to the user, so try that first if username/password
