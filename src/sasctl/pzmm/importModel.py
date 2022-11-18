@@ -75,20 +75,14 @@ def model_exists(project, name, force, versionName="latest"):
     projectId = project["id"]
     projectVersions = mr.list_project_versions(project)
     if versionName == "latest":
-        # The "latest" option specifies the most recently created version of the project. Search only in that version.
         modTime = [item["modified"] for item in projectVersions]
         latestVersion = modTime.index(max(modTime))
         versionId = projectVersions[latestVersion]["id"]
-    elif versionName == "new":
-        # The "new" option specifies a new project version, so no models with the same name will exist already.
-        return
     else:
-        # Otherwise, search for the version name specified. If the version name is not found, produce an error message.
         for version in projectVersions:
-            if versionName == version["name"]:
+            if versionName is version["name"]:
                 versionId = version["id"]
                 break
-        ValueError("No version with the name specified could be found in the project.")
     projectModels = mr.get(
         "/projects/{}/projectVersions/{}/models".format(projectId, versionId)
     )
@@ -179,9 +173,9 @@ class ImportModel:
         metrics : string list, optional
             The scoring metrics for the model. The default is a set of two
             metrics: EM_EVENTPROBABILITY and EM_CLASSIFICATION.
-        projectVersion : str, optional
-            Name of project version to check if a model of the same name already exists. Default
-            value is "latest".
+        projectVersion : string, optional
+            The project version to import the model in to on SAS Model Manager. The default value
+            is latest.
         modelFileName : string, optional
             Name of the model file that contains the model. By default None and assigned as
             modelPrefix + '.pickle'.
@@ -315,8 +309,7 @@ class ImportModel:
             model_exists(project, modelPrefix, force, versionName=projectVersion)
 
             response = mr.import_model_from_zip(
-                modelPrefix, project, zipIOFile, force, version=projectVersion
-
+                modelPrefix, project, zipIOFile, force, projectVersion=projectVersion
             )
             try:
                 print(
