@@ -475,7 +475,10 @@ def score{modelPrefix}({inputVarList}):
                     # For models that output the classification from the prediction
                     cls.pyFile.write(
                         """\n
-    {metric} = prediction""".format(metric=metrics[0]))
+    {metric} = prediction""".format(
+                            metric=metrics[0]
+                        )
+                    )
                 elif len(metrics) == 2:
                     cls.pyFile.write(
                         """\n
@@ -484,7 +487,10 @@ def score{modelPrefix}({inputVarList}):
     except TypeError:
         # If the prediction returns as a list of values or improper value type, a TypeError will be raised.
         # Attempt to handle the prediction output in the except block.
-        {metric} = float(prediction[0])""".format(metric=metrics[0]))
+        {metric} = float(prediction[0])""".format(
+                            metric=metrics[0]
+                        )
+                    )
                     if threshPrediction is None:
                         threshPrediction = np.mean(targetDF)
                     cls.pyFile.write(
@@ -502,16 +508,22 @@ def score{modelPrefix}({inputVarList}):
                     for i, metric in enumerate(metrics[:-1]):
                         cls.pyFile.write(
                             """\
-    {metric} = float(prediction[{i}]""".format(metric=metric, i=i)
+    {metric} = float(prediction[{i}]""".format(
+                                metric=metric, i=i
+                            )
                         )
                     cls.pyFile.write(
                         """\
     max_prediction = max({metric_list})
     index_prediction = {metric_list}.index(max_prediction)
-    {classification} = index_prediction""".format(metric_list=metrics[:-1], classification=metrics[-1])
+    {classification} = index_prediction""".format(
+                            metric_list=metrics[:-1], classification=metrics[-1]
+                        )
                     )
                 else:
-                    ValueError("Improper metrics argument was provided. Please provide a list of string metrics.")
+                    ValueError(
+                        "Improper metrics argument was provided. Please provide a list of string metrics."
+                    )
 
             elif isH2OModel and not isMLFlow:
                 cls.pyFile.write(
