@@ -740,11 +740,11 @@ class Session(requests.Session):
         """
 
         # If explicit username & password were provided, use them.
-        if username is not None and password is not None:
+        if username and password:
             return self.get_oauth_token(
                 username, password
             )
-        elif client_id is not None and client_secret is not None:
+        if client_id is not None and client_secret is not None:
             return self.get_oauth_token(
                 client_id=client_id,
                 client_secret=client_secret
@@ -782,7 +782,7 @@ class Session(requests.Session):
         client_secret=None,
     ):
         """Request an OAuth2 access token using either a username & password,
-        client_id and client_secret or an auth token.
+        client_id and client_secret, or an auth token.
 
         Parameters
         ----------
