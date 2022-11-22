@@ -16,7 +16,8 @@ def test_create_performance_definition():
     from sasctl import current_session
 
     PROJECT = RestObj({'name': 'Test Project', 'id': '98765'})
-    MODEL = RestObj({'name': 'Test Model', 'id': '12345', 'projectId': PROJECT['id']})
+    MODELS = [RestObj({'name': 'Test Model 1', 'id': '12345', 'projectId': PROJECT['id']}),
+              RestObj({'name': 'Test Model 2', 'id': '67890', 'projectId': PROJECT['id']})]
     USER = 'username'
 
     with mock.patch('sasctl.core.Session.get_auth'):
@@ -29,76 +30,146 @@ def test_create_performance_definition():
             'sasctl._services.model_repository.ModelRepository' '.get_project'
         ) as get_project:
             with mock.patch(
-                'sasctl._services.model_management.ModelManagement' '.post'
-            ) as post:
-                get_model.return_value = MODEL
+                'sasctl._services.model_repository.ModelRepository' '.list_models'
+            ) as list_models:
+                with mock.patch(
+                    'sasctl._services.model_management.ModelManagement' '.post'
+                ) as post_models:
+                    list_models.return_value = copy.deepcopy(MODELS)
+                    get_model.side_effect = copy.deepcopy(MODELS)
 
-                with pytest.raises(ValueError):
-                    # Project missing all required properties
-                    get_project.return_value = copy.deepcopy(PROJECT)
-                    _ = mm.create_performance_definition(
-                        'model', 'TestLibrary', 'TestData'
-                    )
+                    with pytest.raises(ValueError):
+                        # Function call missing both models and project arguments
+                        _ = mm.create_performance_definition(
+                            library_name='TestLibrary',
+                            table_prefix='TestData'
+                        )
 
-                with pytest.raises(ValueError):
-                    # Project missing some required properties
+                    with pytest.raises(ValueError):
+                        # Project missing all required properties & specified by model
+                        get_project.return_value = copy.deepcopy(PROJECT)
+                        _ = mm.create_performance_definition(
+                            models=['model1', 'model2'],
+                            library_name='TestLibrary',
+                            table_prefix='TestData'
+                        )
+
+                    with pytest.raises(ValueError):
+                        # Project missing all required properties & specified by project
+                        get_model.reset_mock(side_effect=True)
+                        _ = mm.create_performance_definition(
+                            project='project',
+                            library_name='TestLibrary',
+                            table_prefix='TestData'
+                        )
+
+                    with pytest.raises(ValueError):
+                        # Project missing some required properties
+                        get_model.reset_mock(side_effect=True)
+                        get_project.return_value = copy.deepcopy(PROJECT)
+                        get_project.return_value['targetVariable'] = 'target'
+                        _ = mm.create_performance_definition(
+                            models=['model1', 'model2'],
+                            library_name='TestLibrary',
+                            table_prefix='TestData'
+                        )
+
+                    with pytest.raises(ValueError):
+                        # Project missing some required properties
+                        get_model.reset_mock()
+                        get_project.return_value = copy.deepcopy(PROJECT)
+                        get_project.return_value['targetLevel'] = 'interval'
+                        _ = mm.create_performance_definition(
+                            models=['model1', 'model2'],
+                            library_name='TestLibrary',
+                            table_prefix='TestData'
+                        )
+
+                    with pytest.raises(ValueError):
+                        # Project missing some required properties
+                        get_model.reset_mock()
+                        get_project.return_value = copy.deepcopy(PROJECT)
+                        get_project.return_value['function'] = 'classification'
+                        _ = mm.create_performance_definition(
+                            models=['model1', 'model2'],
+                            library_name='TestLibrary',
+                            table_prefix='TestData'
+                        )
+
+                    with pytest.raises(ValueError):
+                        # Project missing some required properties
+                        get_model.reset_mock()
+                        get_project.return_value = copy.deepcopy(PROJECT)
+                        get_project.return_value['function'] = 'prediction'
+                        _ = mm.create_performance_definition(
+                            models=['model1', 'model2'],
+                            library_name='TestLibrary',
+                            table_prefix='TestData'
+                        )
+
                     get_project.return_value = copy.deepcopy(PROJECT)
                     get_project.return_value['targetVariable'] = 'target'
-                    _ = mm.create_performance_definition(
-                        'model', 'TestLibrary', 'TestData'
-                    )
-
-                with pytest.raises(ValueError):
-                    # Project missing some required properties
-                    get_project.return_value = copy.deepcopy(PROJECT)
                     get_project.return_value['targetLevel'] = 'interval'
-                    _ = mm.create_performance_definition(
-                        'model', 'TestLibrary', 'TestData'
-                    )
-
-                with pytest.raises(ValueError):
-                    # Project missing some required properties
-                    get_project.return_value = copy.deepcopy(PROJECT)
-                    get_project.return_value['function'] = 'classification'
-                    _ = mm.create_performance_definition(
-                        'model', 'TestLibrary', 'TestData'
-                    )
-
-                with pytest.raises(ValueError):
-                    # Project missing some required properties
-                    get_project.return_value = copy.deepcopy(PROJECT)
+                    get_project.return_value['predictionVariable'] = 'predicted'
                     get_project.return_value['function'] = 'prediction'
+                    get_model.side_effect = copy.deepcopy(MODELS)
                     _ = mm.create_performance_definition(
-                        'model', 'TestLibrary', 'TestData'
+                        models=['model1', 'model2'],
+                        library_name='TestLibrary',
+                        table_prefix='TestData',
+                        max_bins=3,
+                        monitor_challenger=True,
+                        monitor_champion=True,
                     )
 
-                get_project.return_value = copy.deepcopy(PROJECT)
-                get_project.return_value['targetVariable'] = 'target'
-                get_project.return_value['targetLevel'] = 'interval'
-                get_project.return_value['predictionVariable'] = 'predicted'
-                get_project.return_value['function'] = 'prediction'
-                _ = mm.create_performance_definition(
-                    'model',
-                    'TestLibrary',
-                    'TestData',
-                    max_bins=3,
-                    monitor_challenger=True,
-                    monitor_champion=True,
-                )
+                assert post_models.call_count == 1
+                url, data = post_models.call_args
 
-            assert post.call_count == 1
-            url, data = post.call_args
+                assert PROJECT['id'] == data['json']['projectId']
+                assert MODELS[0]['id'] in data['json']['modelIds']
+                assert MODELS[1]['id'] in data['json']['modelIds']
+                assert 'TestLibrary' == data['json']['dataLibrary']
+                assert 'TestData' == data['json']['dataPrefix']
+                assert 'cas-shared-default' == data['json']['casServerId']
+                assert data['json']['name']
+                assert data['json']['description']
+                assert data['json']['maxBins'] == 3
+                assert data['json']['championMonitored'] is True
+                assert data['json']['challengerMonitored'] is True
 
-            assert PROJECT['id'] == data['json']['projectId']
-            assert MODEL['id'] in data['json']['modelIds']
-            assert 'TestLibrary' == data['json']['dataLibrary']
-            assert 'TestData' == data['json']['dataPrefix']
-            assert 'cas-shared-default' == data['json']['casServerId']
-            assert data['json']['name'] is not None
-            assert data['json']['description'] is not None
-            assert data['json']['maxBins'] == 3
-            assert data['json']['championMonitored'] == True
-            assert data['json']['challengerMonitored'] == True
+                with mock.patch(
+                    'sasctl._services.model_management.ModelManagement' '.post'
+                ) as post_project:
+                    list_models.return_value = copy.deepcopy(MODELS)
+                    get_project.return_value = copy.deepcopy(PROJECT)
+                    get_project.return_value['targetVariable'] = 'target'
+                    get_project.return_value['targetLevel'] = 'interval'
+                    get_project.return_value['predictionVariable'] = 'predicted'
+                    get_project.return_value['function'] = 'prediction'
+                    get_model.side_effect = copy.deepcopy(MODELS)
+                    _ = mm.create_performance_definition(
+                        project='project',
+                        library_name='TestLibrary',
+                        table_prefix='TestData',
+                        max_bins=3,
+                        monitor_challenger=True,
+                        monitor_champion=True,
+                    )
+
+                assert post_project.call_count == 1
+                url, data = post_project.call_args
+
+                assert PROJECT['id'] == data['json']['projectId']
+                assert MODELS[0]['id'] in data['json']['modelIds']
+                assert MODELS[1]['id'] in data['json']['modelIds']
+                assert 'TestLibrary' == data['json']['dataLibrary']
+                assert 'TestData' == data['json']['dataPrefix']
+                assert 'cas-shared-default' == data['json']['casServerId']
+                assert data['json']['name']
+                assert data['json']['description']
+                assert data['json']['maxBins'] == 3
+                assert data['json']['championMonitored'] is True
+                assert data['json']['challengerMonitored'] is True
 
     def test_table_prefix_format():
         with pytest.raises(ValueError):
