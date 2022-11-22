@@ -1,6 +1,10 @@
 import pytest
 import warnings
 import os
+import pandas as pd
+import tempfile
+from pathlib import Path
+
 from sasctl.pzmm import ModelParameters as mp
 
 
@@ -16,17 +20,7 @@ def bad_model():
 @pytest.fixture
 def train_data():
     """Returns the Iris data set as (X, y)"""
-
-    try:
-        import pandas as pd
-    except ImportError:
-        pytest.skip('Package `pandas` not found.')
-
-    try:
-        from sklearn import datasets
-    except ImportError:
-        pytest.skip('Package `sklearn` not found.')
-
+    from sklearn import datasets
     raw = datasets.load_iris()
     iris = pd.DataFrame(raw.data, columns=raw.feature_names)
     iris = iris.join(pd.DataFrame(raw.target))
@@ -39,12 +33,7 @@ def train_data():
 @pytest.fixture
 def sklearn_model(train_data):
     """Returns a simple Scikit-Learn model"""
-
-    try:
-        from sklearn.linear_model import LogisticRegression
-    except ImportError:
-        pytest.skip('Package `sklearn` not found.')
-
+    from sklearn.linear_model import LogisticRegression
     X, y = train_data
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
@@ -57,13 +46,13 @@ def sklearn_model(train_data):
 class TestSKLearnModel:
     PROJECT_NAME = 'PZMM SKLearn Test Project'
     MODEL_NAME = 'SKLearnModel'
-    PATH = '.'
 
     def test_generate_hyperparameters(self, sklearn_model):
-        mp.generate_hyperparameters(sklearn_model, self.MODEL_NAME, self.PATH)
-        assert os.path.exists('./PythonModelHyperparameters.json')
-        os.remove('./PythonModelHyperparameters.json')
+        tmp_dir = tempfile.TemporaryDirectory()
+        mp.generate_hyperparameters(sklearn_model, self.MODEL_NAME, Path(tmp_dir.name))
+        assert Path(Path(tmp_dir.name) / f'./{self.MODEL_NAME}Hyperparameters.json').exists()
 
     def test_bad_model_hyperparameters(self, bad_model):
+        tmp_dir = tempfile.TemporaryDirectory()
         with pytest.raises(ValueError):
-            mp.generate_hyperparameters(bad_model, self.MODEL_NAME, self.PATH)
+            mp.generate_hyperparameters(bad_model, self.MODEL_NAME, Path(tmp_dir.name))
