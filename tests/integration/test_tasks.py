@@ -238,7 +238,7 @@ class TestSklearnLinearModel:
         project['predictionVariable'] = 'var1'
         project = mr.update_project(project)
 
-        mm.create_performance_definition(self.MODEL_NAME, 'Public', 'boston')
+        mm.create_performance_definition(models=[self.MODEL_NAME], table_prefix='boston', library_name='Public')
 
     def test_update_model_performance(self, sklearn_linear_model, cas_session):
         from sasctl.tasks import update_model_performance
