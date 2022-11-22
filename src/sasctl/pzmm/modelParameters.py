@@ -51,7 +51,7 @@ class ModelParameters:
         if all(hasattr(model, attr) for attr in ["_estimator_type", "get_params"]):
             cls.sklearn_params(model, modelPrefix, pPath)
         else:
-            print(
+            raise ValueError(
                 "Other model types not currently supported for hyperparameter generation."
             )
 
