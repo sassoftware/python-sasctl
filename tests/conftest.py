@@ -8,22 +8,22 @@ import builtins
 import os
 import re
 import warnings
+from contextlib import contextmanager
 from unittest import mock
 from urllib.parse import urlsplit
 
 import betamax
-from betamax_serializers import pretty_json
-from betamax.cassette.cassette import Placeholder
 import pytest
+from betamax.cassette.cassette import Placeholder
+from betamax.fixtures.pytest import _casette_name
+from betamax_serializers import pretty_json
 
-from sasctl import Session
-
-from .matcher import RedactedPathMatcher
+from sasctl import Session, current_session
+from .betamax_utils import BinarySerializer, RedactedPathMatcher
 
 
 def redact(interaction, cassette):
-    """Remove sensitive or environment-specific information from cassettes
-    before they are saved.
+    """Remove sensitive or environment-specific information from cassettes before they are saved.
 
     Parameters
     ----------
@@ -32,6 +32,7 @@ def redact(interaction, cassette):
 
     Returns
     -------
+    None
 
     """
 
@@ -59,6 +60,7 @@ def redact(interaction, cassette):
                 Placeholder(placeholder=placeholder, replace=old_text)
             )
 
+    # Redact the password
     if 'string' in interaction.data['request']['body']:
         add_placeholder(
             r"(?<=&password=)([^&]*)\b",
@@ -67,6 +69,7 @@ def redact(interaction, cassette):
             1,
         )
 
+    # Redact the value of the access_token parameter
     if 'string' in interaction.data['response']['body']:
         add_placeholder(
             '(?<=access_token":")[^"]*',
@@ -75,6 +78,23 @@ def redact(interaction, cassette):
             0,
         )
 
+    # Redact the value of the id_token parameter
+    if 'string' in interaction.data['response']['body']:
+        add_placeholder(
+            '(?<=id_token":")[^"]*',
+            interaction.data['response']['body']['string'],
+            '[redacted]',
+            0,
+        )
+
+    # Redact the value of the scope parameter
+    if 'string' in interaction.data['response']['body']:
+        add_placeholder(
+            '(?<=scope":")[^"]*',
+            interaction.data['response']['body']['string'],
+            '[redacted]',
+            0,
+        )
     for index, header in enumerate(
         interaction.data['request']['headers'].get('Authorization', [])
     ):
@@ -87,48 +107,26 @@ def redact(interaction, cassette):
 
 
 betamax.Betamax.register_serializer(pretty_json.PrettyJSONSerializer)
+betamax.Betamax.register_serializer(BinarySerializer)
 betamax.Betamax.register_request_matcher(RedactedPathMatcher)
-
-from .matcher import PartialBodyMatcher
-
-betamax.Betamax.register_request_matcher(PartialBodyMatcher)
 
 # Replay cassettes only by default
 # Can be overridden as necessary to update cassettes
 # See https://betamax.readthedocs.io/en/latest/record_modes.html for details.
 # NOTE: We've added a custom "live" record mode that bypasses all cassettes
 #       and allows test suite to be run against a live server.
-os.environ.setdefault('SASCTL_RECORD_MODE', 'once')
-if os.environ['SASCTL_RECORD_MODE'] not in (
-    'once',
-    'new_episodes',
-    'all',
-    'none',
-    'live',
-):
-    os.environ['SASCTL_RECORD_MODE'] = 'once'
+record_mode = os.environ.get('SASCTL_RECORD_MODE', 'once').lower()
+if record_mode not in ('once', 'new_episodes', 'all', 'none', 'live'):
+    record_mode = 'once'
 
 # Set a flag to indicate whether bypassing Betamax altogether.
-if os.environ['SASCTL_RECORD_MODE'].lower() == 'live':
+if record_mode == 'live':
     SKIP_REPLAY = True
 
     # Setting this back to a valid Betamax value to avoid downstream errors.
-    os.environ['SASCTL_RECORD_MODE'] = 'once'
+    record_mode = 'once'
 else:
     SKIP_REPLAY = False
-
-with betamax.Betamax.configure() as config:
-    config.cassette_library_dir = "tests/cassettes"
-    config.default_cassette_options['record_mode'] = os.environ['SASCTL_RECORD_MODE']
-    config.default_cassette_options['match_requests_on'] = [
-        'method',
-        'redacted_path',
-        # 'partial_body',
-        'query',
-    ]
-    config.before_record(callback=redact)
-    config.before_playback(callback=redact)
-
 
 # Use the SASCTL_TEST_SERVERS variable to specify one or more servers that will
 # be used for recording test cases
@@ -136,20 +134,34 @@ os.environ.setdefault('SASCTL_TEST_SERVERS', 'sasctl.example.com')
 hostnames = [host.strip() for host in os.environ['SASCTL_TEST_SERVERS'].split(',')]
 
 # Set dummy credentials if none were provided.
-# Credentials don't matter if rerunning Betamax cassettes, but new recordings
-# will fail.
+# Credentials don't matter if rerunning Betamax cassettes, but new recordings will fail.
 os.environ.setdefault('SASCTL_SERVER_NAME', hostnames[0])
 os.environ.setdefault('SASCTL_USER_NAME', 'dummyuser')
 os.environ.setdefault('SASCTL_PASSWORD', 'dummypass')
 os.environ.setdefault('SSLREQCERT', 'no')
 
-with betamax.Betamax.configure() as config:
-    for hostname in hostnames:
-        config.define_cassette_placeholder('hostname.com', hostname)
+# Configure Betamax
+config = betamax.Betamax.configure()
+config.cassette_library_dir = 'tests/cassettes'
+config.default_cassette_options['serialize_with'] = 'prettyjson'
+config.default_cassette_options['record_mode'] = record_mode
+config.default_cassette_options['match_requests_on'] = [
+    'method',
+    'redacted_path',
+    # 'partial_body',
+    'query',
+]
 
-    config.define_cassette_placeholder('hostname.com', os.environ['SASCTL_SERVER_NAME'])
-    config.define_cassette_placeholder('USERNAME', os.environ['SASCTL_USER_NAME'])
-    config.define_cassette_placeholder('*****', os.environ['SASCTL_PASSWORD'])
+# Create placeholder replacement values for any sensitive data that we know in advance.
+config.define_cassette_placeholder('hostname.com', os.environ['SASCTL_SERVER_NAME'])
+config.define_cassette_placeholder('USERNAME', os.environ['SASCTL_USER_NAME'])
+config.define_cassette_placeholder('*****', os.environ['SASCTL_PASSWORD'])
+for hostname in hostnames:
+    config.define_cassette_placeholder('hostname.com', hostname)
+
+# Call redact() to remove sensitive data that isn't known in advance (like token values)
+config.before_record(callback=redact)
+config.before_playback(callback=redact)
 
 
 @pytest.fixture(scope='session', params=hostnames)
@@ -169,10 +181,6 @@ def credentials(request):
 
 @pytest.fixture(scope='function')
 def session(request, credentials):
-    import warnings
-    from betamax.fixtures.pytest import _casette_name
-    from sasctl import current_session
-
     if SKIP_REPLAY:
         yield Session(**credentials)
         current_session(None)
@@ -191,9 +199,7 @@ def session(request, credentials):
         recorded_session = Session()
         super(Session, recorded_session).__init__()
 
-    with betamax.Betamax(recorded_session).use_cassette(
-        cassette_name, serialize_with='prettyjson'
-    ) as recorder:
+    with betamax.Betamax(recorded_session).use_cassette(cassette_name) as recorder:
         recorder.start()
 
         # Manually run the sasctl.Session constructor.  Mock out calls to
@@ -220,10 +226,6 @@ def missing_packages():
             import os
 
     """
-
-    from unittest import mock
-    from contextlib import contextmanager
-
     @contextmanager
     def mocked_importer(packages):
         builtin_import = __import__
@@ -250,8 +252,6 @@ def missing_packages():
 @pytest.fixture
 def cas_session(request, credentials):
     import requests
-    from betamax.fixtures.pytest import _casette_name
-    from unittest import mock
 
     swat = pytest.importorskip('swat')
     from swat.exceptions import SWATError
@@ -273,9 +273,7 @@ def cas_session(request, credentials):
     # Must have an existing Session for Betamax to record
     recorded_session = requests.Session()
 
-    with betamax.Betamax(recorded_session).use_cassette(
-        cassette_name, serialize_with='prettyjson'
-    ) as recorder:
+    with betamax.Betamax(recorded_session).use_cassette(cassette_name) as recorder:
         recorder.start()
 
         # CAS connection tries to create its own Session instance.
