@@ -73,7 +73,7 @@ class ModelParameters:
                 f.write(json.dumps(model_json, indent=4))
 
         if all(hasattr(model, attr) for attr in ["_estimator_type", "get_params"]):
-            sklearn_params(model, model_prefix, pickle_path)
+            sklearn_params()
         else:
             raise ValueError(
                 "This model type is not currently supported for hyperparameter generation."
