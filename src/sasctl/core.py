@@ -411,6 +411,9 @@ class Session(requests.Session):
             self._settings["username"], self._settings["password"], token
         )
 
+        # Used to cache version info
+        self._version_info = None
+
         # Used for context manager
         self._old_session = current_session()
         current_session(self)
@@ -970,6 +973,52 @@ class Session(requests.Session):
                 # If refresh fails, dont return token, allow user to be prompted for login
                 if not token.is_expired:
                     return token
+
+    def version_info(self):
+        """Get version information from the connected SAS Viya environment
+
+        Returns
+        -------
+        VersionInfo
+
+        Notes
+        -----
+        The resulting version information is cached and returned on any subsequent calls.  This
+        allows repeatedly checking version information without making redundant network calls to the
+        SAS Viya server.
+
+        """
+        # The Viya environment isn't changing, so there's no need to repeatedly make
+        # service calls to check version information.  If we've already cached the info
+        # then just return it.
+        if self._version_info:
+            return self._version_info
+
+        try:
+            # Try to determine if we're talking to Viya 3 or 4
+            r = self.get('/licenses/grants')
+            version = r.json().get('release')
+
+            # Convert 'V03' and 'V04' to just 3 or 4.
+            major_version = int(version.upper().lstrip('V'))
+
+            # No good way to get detailed version info from a Viya 3 environment.
+            # At this point, we just assume it's Viya 3.5 and return
+            if major_version == 3:
+                self._version_info = VersionInfo(major_version)
+            else:
+                # Endpoint with detailed release info only available for Viya 4
+                release_info = self.get('/deploymentData/cadenceVersion').json()
+                name = release_info['cadenceName']
+                version = release_info['cadenceVersion']
+                self._version_info = VersionInfo(
+                    major_version, cadence=name, release=version
+                )
+        except HTTPError:
+            # Ignore.  We'll return None and (possibly) replace with correct info on subsequent call.
+            pass
+
+        return self._version_info
 
     def _get_token_with_kerberos(self):
         """Authenticate with a Kerberos ticket."""
