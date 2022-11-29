@@ -1470,6 +1470,110 @@ class PagedList(list):
         return string
 
 
+class VersionInfo:
+    """Stores the version information for a SAS Viya environment.
+
+    Parameters
+    ----------
+    major : int
+        Major version number (e.g. 3 for Viya 3.5 or 4 for Viya 4.0)
+    minor : int
+        Minor version number (e.g. 5 for Viya 3.5 or 0 for Viya 4.0)
+    cadence : str, optional
+        Release cadence for Viya 4.  Should be one of 'stable' or 'LTS'.
+    release : str, optional
+        Release number for Viya 4.  Two formats are currently possible:
+         - YYYY.R.U where R is the LTS release number in YYYY and U is the updates since R
+         - YYYY.MM where MM is the month of the release.
+
+    """
+
+    def __init__(self, major, minor=None, cadence=None, release=None):
+        self._major = major
+        self._minor = minor if minor else 5 if major == 3 else 0
+        self._cadence = str(cadence) if cadence else None
+        self._release = str(release) if release else None
+
+    def __gt__(self, other):
+        return self._compare(other) > 0
+
+    def __lt__(self, other):
+        return self._compare(other) < 0
+
+    def __eq__(self, other):
+        return self._compare(other) == 0
+
+    def __float__(self):
+        return float(self._major) + 0.1 * (self._minor or 0)
+
+    def _compare(self, other):
+        """Compare and return -1/0/1 indicating lt/eq/gt."""
+
+        # Compare Major/Minor versions (e.g. Viya 3.5 < Viya 4.0)
+        if float(self) > float(other):
+            return 1
+        if float(self) < float(other):
+            return -1
+
+        # If comparing two Viya 4 versions, may need to check actual release number  to determine order
+        if self.release and getattr(other, 'release', None):
+            if self._release == other.release:
+                return 0
+
+            parts = self.release.split('.')
+            other_parts = other.release.split('.')
+
+            # Release format was changed from YYYY.r.u to YYYY.MM so any release with 2 '.' is older than
+            # a release with 1 '.'
+            if len(parts) == 2 and len(other_parts) == 3:
+                return 1
+            if len(parts) == 3 and len(other_parts) == 2:
+                return -1
+
+            # If we got this far then both version numbers should have the same release format.
+            # Earlier release is the one with at least one component part that is lower
+            for a, b in zip(parts, other_parts):
+                if int(a) < int(b):
+                    return -1
+                if int(a) > int(b):
+                    return 1
+
+        # Either other doesn't have a .release or we compared all components of .release and
+        # they were all equal
+        return 0
+
+    def __repr__(self):
+        name = '%s(major=%s, minor=%s' % (
+            self.__class__.__name__,
+            self._major,
+            self._minor,
+        )
+
+        if self._cadence:
+            name += ", cadence='%s'" % self._cadence
+
+        if self._release:
+            name += ", release='%s'" % self._release
+
+        return name + ')'
+
+    @property
+    def cadence(self):
+        return self._cadence
+
+    @property
+    def major(self):
+        return self._major
+
+    @property
+    def minor(self):
+        return self._minor
+
+    @property
+    def release(self):
+        return self._release
+
+
 def is_uuid(id_):
     try:
         UUID(str(id_))
