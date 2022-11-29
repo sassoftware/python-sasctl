@@ -239,3 +239,5 @@ def test_version_info():
     assert VersionInfo(major=3, minor=5) == 3.5
     assert VersionInfo(major=4) == 4
     assert VersionInfo(major=4, release='2022.09') == 4
+    assert VersionInfo(major=4) >= 4
+    assert VersionInfo(major=3) <= 4

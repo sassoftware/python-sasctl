@@ -1542,11 +1542,17 @@ class VersionInfo:
         self._cadence = str(cadence) if cadence else None
         self._release = str(release) if release else None
 
+    def __ge__(self, other):
+        return self > other or self == other
+
     def __gt__(self, other):
         return self._compare(other) > 0
 
     def __lt__(self, other):
         return self._compare(other) < 0
+
+    def __le__(self, other):
+        return self < other or self == other
 
     def __eq__(self, other):
         return self._compare(other) == 0
