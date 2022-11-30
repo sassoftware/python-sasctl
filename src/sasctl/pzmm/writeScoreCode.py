@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from pathlib import Path
-import numpy as np
 import re
 from ..core import platform_version
 from .._services.model_repository import ModelRepository as modelRepo
@@ -66,8 +65,8 @@ class ScoreCode:
             columns. The writeScoreCode function currently supports int(64), float(64),
             and string data types for scoring. Providing a list of dict objects signals
             that the model files are being created from an MLFlow model.
-        targetDF : DataFrame
-            The `DataFrame` object contains the training data for the target variable. Note that
+        targetDF : pandas Series
+            The `DataFrame Series` object contains the training data for the target variable. Note that
             for MLFlow models, this can be set as None.
         modelPrefix : string
             The variable for the model name that is used when naming model files.
@@ -492,7 +491,7 @@ def score{modelPrefix}({inputVarList}):
                         )
                     )
                     if threshPrediction is None:
-                        threshPrediction = np.mean(targetDF)
+                        threshPrediction = targetDF.mean()
                     cls.pyFile.write(
                         """\n
     if ({metric0} >= {threshold}):

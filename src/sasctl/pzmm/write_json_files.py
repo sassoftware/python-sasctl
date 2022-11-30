@@ -4,11 +4,9 @@
 # %%
 from pathlib import Path
 import sys
-
 import getpass
 import json
 import pandas as pd
-from sklearn import metrics
 import math
 
 
@@ -476,10 +474,16 @@ class JSONFiles:
         """
         # If numpy inputs are supplied, then it is assumed that numpy is installed in the environment
         try:
-            # noinspection PyPackageRequirements
             import numpy as np
         except ImportError:
             np = None
+
+        try:
+            from sklearn import metrics
+        except ImportError:
+            raise RuntimeError(
+                "The 'scikit-learn' package is required to use the calculateFitStat function."
+            )
 
         nullJSONPath = Path(__file__).resolve().parent / "null_dmcas_fitstat.json"
         nullJSONDict = self.readJSONFile(nullJSONPath)
