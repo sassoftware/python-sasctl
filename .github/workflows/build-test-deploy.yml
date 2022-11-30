@@ -44,7 +44,7 @@ jobs:
         run: |
           # Setup tox & code coverage
           pip install --upgrade pip
-          pip install tox tox-gh-actions pytest pytest-cov
+          pip install tox tox-gh-actions pytest pytest-cov sklearn
 
       - name: Run Tests
         run: |
