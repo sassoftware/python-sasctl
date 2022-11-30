@@ -56,12 +56,17 @@ sasctl folders list
 
 sasctl requires the following Python packages be installed.
 If not already present, these packages will be downloaded and installed automatically.  
+- pandas
 - requests
 - pyyaml
+- packaging
 
 The following additional packages are recommended for full functionality:
 - swat
 - kerberos
+- GitPython
+- numpy
+- scikit-learn
 
 
 ### Installation
