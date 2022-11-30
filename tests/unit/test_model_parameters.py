@@ -1,9 +1,10 @@
 import pytest
 import warnings
-import os
 import pandas as pd
 import tempfile
 from pathlib import Path
+from sklearn.linear_model import LogisticRegression
+from sklearn import datasets
 
 from sasctl.pzmm import ModelParameters as mp
 
@@ -20,7 +21,6 @@ def bad_model():
 @pytest.fixture
 def train_data():
     """Returns the Iris data set as (X, y)"""
-    from sklearn import datasets
     raw = datasets.load_iris()
     iris = pd.DataFrame(raw.data, columns=raw.feature_names)
     iris = iris.join(pd.DataFrame(raw.target))
@@ -33,7 +33,6 @@ def train_data():
 @pytest.fixture
 def sklearn_model(train_data):
     """Returns a simple Scikit-Learn model"""
-    from sklearn.linear_model import LogisticRegression
     X, y = train_data
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
