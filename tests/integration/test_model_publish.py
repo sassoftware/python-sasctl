@@ -6,6 +6,7 @@
 
 import pytest
 
+from sasctl import current_session
 from sasctl.services import model_publish as mp
 
 # Every test function in the module will automatically receive the session fixture
@@ -47,7 +48,8 @@ class TestModelPublish:
         assert dest is None
 
     def test_create_mas_destination(self):
-        pytest.skip('Publishing destinations for a remote SAS Micro Analytic Service are currently not supported.')
+        if current_session().version_info() == 4:
+            pytest.skip('Publishing destinations for a remote SAS Micro Analytic Service are currently not supported.')
 
         dest = mp.create_mas_destination('sasctlmas', 'localhost')
 

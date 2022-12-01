@@ -46,7 +46,9 @@ def get_cassette_file(request, version):
     cassette_folder = f'tests/{test_type}/cassettes'
 
     if test_class:
-        cassette_name = f"{test_set}.{test_class}.{test_name}.viya_{str(version).replace('.', '')}"
+        cassette_name = (
+            f"{test_set}.{test_class}.{test_name}.viya_{str(version).replace('.', '')}"
+        )
     else:
         cassette_name = f"{test_set}.{test_name}.viya_{str(version).replace('.', '')}"
 
@@ -67,20 +69,8 @@ def redact(interaction, cassette):
 
     """
 
-    # Server name in Origin header may differ from hostname that was sent the
-    # request.
-    for origin in interaction.data['response']['headers'].get('Origin', []):
-        host = urlsplit(origin).netloc
-        if (
-            host != ''
-            and Placeholder(placeholder='hostname.com', replace=host)
-            not in cassette.placeholders
-        ):
-            cassette.placeholders.append(
-                Placeholder(placeholder='hostname.com', replace=host)
-            )
-
     def add_placeholder(pattern, string, placeholder, group):
+        """Use regex `pattern` to search `string` and replace any match with `placeholder`."""
         if isinstance(string, bytes):
             pattern = pattern.encode('utf-8')
 
@@ -91,8 +81,24 @@ def redact(interaction, cassette):
                 Placeholder(placeholder=placeholder, replace=old_text)
             )
 
+    request = interaction.data['request']
+    response = interaction.data['response']
+
+    # Server name in Origin header may differ from hostname that was sent the
+    # request.
+    for origin in response['headers'].get('Origin', []):
+        host = urlsplit(origin).netloc
+        if (
+            host != ''
+            and Placeholder(placeholder='hostname.com', replace=host)
+            not in cassette.placeholders
+        ):
+            cassette.placeholders.append(
+                Placeholder(placeholder='hostname.com', replace=host)
+            )
+
     # Redact the password
-    if 'string' in interaction.data['request']['body']:
+    if 'string' in request['body']:
         add_placeholder(
             r"(?<=&password=)([^&]*)\b",
             interaction.data['request']['body']['string'],
@@ -100,39 +106,37 @@ def redact(interaction, cassette):
             1,
         )
 
-    # Redact the value of the access_token parameter
-    if 'string' in interaction.data['response']['body']:
+    # If the response is from a login attempt then we need to redact the token details.
+    if 'string' in response['body'] and '"access_token":' in response['body']['string']:
+        # Redact value of access token
         add_placeholder(
-            '(?<=access_token":")[^"]*',
+            '(?<="access_token":")[^"]*',
+            response['body']['string'],
+            '[redacted]',
+            0,
+        )
+
+        # Redact value of id token
+        add_placeholder(
+            '(?<="id_token":")[^"]*',
+            response['body']['string'],
+            '[redacted]',
+            0,
+        )
+
+        # Redact the names of the authorized scopes
+        add_placeholder(
+            '(?<="scope":")[^"]*',
             interaction.data['response']['body']['string'],
             '[redacted]',
             0,
         )
 
-    # Redact the value of the id_token parameter
-    if 'string' in interaction.data['response']['body']:
-        add_placeholder(
-            '(?<=id_token":")[^"]*',
-            interaction.data['response']['body']['string'],
-            '[redacted]',
-            0,
-        )
-
-    # Redact the value of the scope parameter
-    if 'string' in interaction.data['response']['body']:
-        add_placeholder(
-            '(?<=scope":")[^"]*',
-            interaction.data['response']['body']['string'],
-            '[redacted]',
-            0,
-        )
-    for index, header in enumerate(
-        interaction.data['request']['headers'].get('Authorization', [])
-    ):
+    for index, header in enumerate(request['headers'].get('Authorization', [])):
         # Betamax tries to replace Placeholders on all headers.  Mixed str/bytes headers will cause Betamax to break.
         if isinstance(header, bytes):
             header = header.decode('utf-8')
-            interaction.data['request']['headers']['Authorization'][index] = header
+            request['headers']['Authorization'][index] = header
         add_placeholder(r'(?<=Basic ).*', header, '[redacted]', 0)  # swat
         add_placeholder(r'(?<=Bearer ).*', header, '[redacted]', 0)  # sasctl
 
@@ -171,7 +175,8 @@ os.environ.setdefault('SSLREQCERT', 'no')
 
 # Configure Betamax
 config = betamax.Betamax.configure()
-config.cassette_library_dir = 'tests/cassettes'
+# config.cassette_library_dir = 'tests/cassettes'
+# config.default_cassette_options['serialize_with'] = 'prettyjson'
 config.default_cassette_options['serialize_with'] = 'binary'
 config.default_cassette_options['record_mode'] = record_mode
 config.default_cassette_options['match_requests_on'] = [
@@ -182,13 +187,14 @@ config.default_cassette_options['match_requests_on'] = [
 ]
 
 # Create placeholder replacement values for any sensitive data that we know in advance.
+config.define_cassette_placeholder('hostname.com', os.environ['SASCTL_TEST_SERVER'])
 config.define_cassette_placeholder('hostname.com', os.environ['SASCTL_SERVER_NAME'])
 config.define_cassette_placeholder('USERNAME', os.environ['SASCTL_USER_NAME'])
 config.define_cassette_placeholder('*****', os.environ['SASCTL_PASSWORD'])
 
 # Call redact() to remove sensitive data that isn't known in advance (like token values)
 config.before_record(callback=redact)
-config.before_playback(callback=redact)
+# config.before_playback(callback=redact)
 
 # We need to be able to run tests against a specific version of Viya when recording cassettes, but then run tests
 # against all versions of Viya when replaying cassettes.  Use an environment variable during recording to track which
@@ -197,9 +203,11 @@ if record_mode in ('all', 'once', 'new_episodes'):
     viya_versions = os.getenv('SASCTL_SERVER_VERSION')
 
     if viya_versions is None:
-        raise RuntimeError('The SASCTL_SERVER_VERSION environment variable must be set when recording cassettes.'
-                           'This variable should be set to the version number of the Viya environment to which you '
-                           'are connecting.')
+        raise RuntimeError(
+            'The SASCTL_SERVER_VERSION environment variable must be set when recording cassettes.'
+            'This variable should be set to the version number of the Viya environment to which you '
+            'are connecting.'
+        )
 
     # Convert to a single-item list since pytest expects a list of values.
     viya_versions = [viya_versions]
@@ -254,7 +262,9 @@ def session(request, credentials):
         recorded_session = Session()
         super(Session, recorded_session).__init__()
 
-    with betamax.Betamax(recorded_session, cassette_library_dir=cassette_folder) as recorder:
+    with betamax.Betamax(
+        recorded_session, cassette_library_dir=cassette_folder
+    ) as recorder:
         try:
             recorder.use_cassette(cassette_name)
         except ValueError:
@@ -278,14 +288,19 @@ def session(request, credentials):
         # version Y.  Versions should be specified using version number (e.g. '3.5') for Viya 3 and release number
         # (e.g. '2022.01') for Viya 4.
         version = recorded_session.version_info()
-        if (version < 4 and version != float(expected_version)) or (version >= 4 and version.release != expected_version):
-            raise RuntimeError(f'You are connected to a Viya environment with version {version} but are trying to '
-                               f'record cassettes labeled as version {expected_version}.')
+        if (version < 4 and version != float(expected_version)) or (
+            version >= 4 and version.release != expected_version
+        ):
+            raise RuntimeError(
+                f'You are connected to a Viya environment with version {version} but are trying to '
+                f'record cassettes labeled as version {expected_version}.'
+            )
 
         yield recorded_session
         current_session(None)
 
 
+# betamax.cassette.interaction.Interaction  betamax.cassette.cassette.Cassette
 @pytest.fixture
 def missing_packages():
     """Creates a context manager that prevents the specified packages from being imported.
@@ -299,6 +314,7 @@ def missing_packages():
             import os
 
     """
+
     @contextmanager
     def mocked_importer(packages):
         builtin_import = __import__
@@ -361,7 +377,9 @@ def cas_session(request, credentials):
     # Must have an existing Session for Betamax to record
     recorded_session = requests.Session()
 
-    with betamax.Betamax(recorded_session, cassette_library_dir=cassette_folder) as recorder:
+    with betamax.Betamax(
+        recorded_session, cassette_library_dir=cassette_folder
+    ) as recorder:
         try:
             recorder.use_cassette(cassette_name)
         except ValueError:
@@ -523,7 +541,9 @@ def pytest_generate_tests(metafunc):
     """
 
     # We need to provide parameters for one or both of `session` and `cas_session` if they're being used by the test.
-    fixtures_to_parameterize = [f for f in ('session', 'cas_session') if f in metafunc.fixturenames]
+    fixtures_to_parameterize = [
+        f for f in ('session', 'cas_session') if f in metafunc.fixturenames
+    ]
 
     # Build a list of combinations that will be used to parameterize the test.
     # Example: [('3.5', '3.5'), ('2022.01', '2022.01'), ('2022.02', '2022.02')]
@@ -534,5 +554,3 @@ def pytest_generate_tests(metafunc):
     # should be passed to the fixtures (`session` and `cas_session`) which will use them to generate the values that
     # are provided to the test function parameters
     metafunc.parametrize(fixtures_to_parameterize, params, indirect=True)
-
-

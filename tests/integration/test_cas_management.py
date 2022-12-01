@@ -123,6 +123,7 @@ def sample_table(tmpdir_factory):
     path.write(tbl)
     return path
 
+
 def test_upload_file(sample_table):
     properties = {
         "authenticationType": "OAuth",
@@ -187,6 +188,7 @@ def test_save_table(sample_table):
 
     cm.update_state_table('unloaded',table,caslib,server)
 
+
 def test_del_table():
     table = "TEST_TABLE"
     caslib = 'Public'
@@ -207,6 +209,7 @@ def test_del_table():
 
     get_tbl = cm.get_table(table,caslib,server)
     assert get_tbl is None
+
 
 def test_promote_table(sample_table):
     properties = {

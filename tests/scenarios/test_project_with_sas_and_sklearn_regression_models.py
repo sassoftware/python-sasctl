@@ -20,7 +20,7 @@ Performs the following steps:
 
 import pytest
 
-from sasctl import publish_model, register_model
+from sasctl import current_session, publish_model, register_model
 from sasctl.services import model_repository as mr
 
 sklearn = pytest.importorskip('sklearn')
@@ -46,7 +46,9 @@ def run_around_tests(session):
 
 
 def test(cas_session, boston_dataset):
-    pytest.skip("Re-enable when sklearn score code is refactored for SAS Viya 4.")
+    if current_session().version_info() == 4:
+        pytest.skip("Re-enable when sklearn score code is refactored for SAS Viya 4.")
+
     cas_session.loadactionset('regression')
 
     tbl = cas_session.upload(boston_dataset).casTable

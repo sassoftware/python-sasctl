@@ -17,8 +17,8 @@ pytestmark = pytest.mark.usefixtures('session')
 
 @pytest.mark.incremental
 class TestAStoreModel:
-    PROJECT_NAME = 'SASCTL AStore Test Project'
-    MODEL_NAME = 'AStore Model'
+    PROJECT_NAME = 'sasctl_testing TestAstoreModel'
+    MODEL_NAME = 'IrisGradBoost'
 
     def test_model_import(self, iris_astore):
         """Import a model from an ASTORE"""
