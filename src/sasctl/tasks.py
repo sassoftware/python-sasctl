@@ -270,11 +270,9 @@ def register_model(
     except HTTPError as e:
         if e.code == 403:
             raise AuthorizationError(
-                "Unable to register model.  User account "
-                "does not have read permissions for the "
-                "/modelRepository/repositories/ URL. "
-                "Please contact your SAS Viya "
-                "administrator."
+                "Unable to register model.  User account does not have read permissions "
+                "for the /modelRepository/repositories/ URL. Please contact your SAS "
+                "Viya administrator."
             )
         raise e
 
@@ -285,8 +283,7 @@ def register_model(
     if repo_obj is None:
         raise ValueError("Unable to find repository '{}'".format(repository))
 
-    # If model is a CASTable then assume it holds an ASTORE model.
-    # Import these via a ZIP file.
+    # If model is a CASTable then assume it holds an ASTORE model.  Import these via a ZIP file.
     if "swat.cas.table.CASTable" in str(type(model)):
         if swat is None:
             raise RuntimeError(
@@ -297,6 +294,7 @@ def register_model(
                 "Parameter 'table' should be an instance of '%r' but "
                 "received '%r'." % (swat.CASTable, model)
             )
+
         if "DataStepSrc" in model.columns:
             zip_file = utils.create_package_from_datastep(model, input=input)
             if create_project:
@@ -333,43 +331,61 @@ def register_model(
             model = mr.import_model_from_zip(name, project, zip_file, version=version)
         # Assume ASTORE model if not a DataStep model
         else:
-            conn = model.session.get_connection()
-            conn.loadactionset("astore")
+            cas = model.session.get_connection()
+            cas.loadactionset("astore")
+
             if create_project:
-                result = conn.astore.describe(rstore=model, epcode=False)
+                result = cas.astore.describe(rstore=model, epcode=False)
                 model_props = utils.astore._get_model_properties(result)
-                in_var = [
-                    utils.astore.get_variable_properties(var)
-                    for var in result.InputVariables.itertuples()
+
+                # Format input & output variable info as lists of dicts
+                input_vars = [
+                    utils.astore.get_variable_properties(v)
+                    for v in result.InputVariables.itertuples()
                 ]
-                for var in in_var:
-                    if not var.get("role"):
-                        var["role"] = "INPUT"
-                out_var = [
-                    utils.astore.get_variable_properties(var)
-                    for var in result.OutputVariables.itertuples()
+                output_vars = [
+                    utils.astore.get_variable_properties(v)
+                    for v in result.OutputVariables.itertuples()
                 ]
-                for var in out_var:
-                    if not var.get("role"):
-                        var["role"] = "OUTPUT"
+
+                # Set the variable 'role' if it wasn't included (not all astores specify)
+                for v in input_vars:
+                    v.setdefault('role', 'INPUT')
+                for v in output_vars:
+                    v.setdefault('role', 'OUTPUT')
+
+                # Some astores include the target variable in the 'InputVariable' data frame.  Exclude anything not
+                # marked as INPUT.
+                input_vars = [v for v in input_vars if v['role'] == 'INPUT']
+
                 project = _create_project(
-                    project, model_props, repo_obj, in_var, out_var
+                    project, model_props, repo_obj, input_vars, output_vars
                 )
             else:
                 project = mr.get_project(project)
-            astore = conn.astore.download(rstore=model)
-            params = {
-                "name": name,
-                "projectId": project.id,
-                "type": "ASTORE",
-            }
-            model = mr.post(
-                "/models",
-                files={
-                    "files": ("{}.sasast".format(model.params["name"]), astore["blob"])
-                },
-                data=params,
-            )
+
+            if current_session().version_info() < 4:
+                # Upload the model as a ZIP file if using Viya 3.
+                zipfile = utils.create_package(model, input=input)
+                model = mr.import_model_from_zip(
+                    name, project, zipfile, version=version
+                )
+                return model
+            else:
+                # If using Viya 4, just upload the raw AStore and Model Manager will handle inspection.
+                astore = cas.astore.download(rstore=model)
+                params = {
+                    'name': name,
+                    'projectId': project.id,
+                    'type': "ASTORE",
+                }
+                model = mr.post(
+                    '/models',
+                    files={
+                        'files': (f'{model.params["name"]}.sasast"', astore['blob'])
+                    },
+                    data=params,
+                )
         return model
 
     # If the model is a scikit-learn model, generate the model dictionary
