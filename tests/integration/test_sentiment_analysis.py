@@ -8,7 +8,7 @@ import time
 
 import pytest
 
-from sasctl.core import request_link
+from sasctl.core import current_session, request_link
 from sasctl.services import sentiment_analysis as sa
 
 
@@ -34,6 +34,9 @@ def assert_job_succeeds(job):
 def test_from_table(cas_session, airline_dataset):
     from sasctl.services import cas_management as cm
 
+    if current_session().version_info() > 3:
+        pytest.skip('Sentiment Analysis service was removed in Viya 4.')
+
     TABLE_NAME = 'airline_tweets'
     cas_session.upload(airline_dataset, casout=dict(name=TABLE_NAME,
                                                     replace=True))
@@ -51,6 +54,9 @@ def test_from_table(cas_session, airline_dataset):
 def test_from_inline_docs():
     from sasctl.services import cas_management as cm
 
+    if current_session().version_info() > 3:
+        pytest.skip('Sentiment Analysis service was removed in Viya 4.')
+
     caslib = cm.get_caslib('Public')
     input = [
         "Oh yes, the, uh, the Norwegian Blue. What's wrong with it?",
@@ -67,3 +73,12 @@ def test_from_inline_docs():
     job = sa.analyze_sentiment(input, caslib=caslib)
 
     assert_job_succeeds(job)
+
+
+def test_service_removed_error():
+    if current_session().version_info() < 4:
+        pytest.skip('Sentiment Analysis service was not removed until Viya 4.')
+
+    with pytest.raises(RuntimeError):
+        sa.analyze_sentiment(input, caslib='Public')
+

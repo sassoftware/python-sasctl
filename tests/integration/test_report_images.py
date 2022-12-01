@@ -14,7 +14,7 @@ pytestmark = pytest.mark.usefixtures('session')
 
 @pytest.mark.incremental
 class TestReportImages:
-    REPORT_NAME = 'CAS Activity'
+    REPORT_NAME = 'Retail Insights'
 
     def test_get_report(self, request):
         """Verify that the report exists before using it in tests."""
@@ -37,10 +37,6 @@ class TestReportImages:
         assert isinstance(images, list)
         assert len(images) > 0
         assert all(i.startswith(b'<svg ') for i in images)
-
-    # def test_get_section_image(self):
-    #     pytest.skip('implement')
-    #     assert False
 
     def test_get_elements(self, request):
         report = request.config.cache.get('REPORT', None)

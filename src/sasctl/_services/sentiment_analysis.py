@@ -6,7 +6,7 @@
 
 
 from .service import Service
-from ..core import uri_as_str
+from ..core import current_session, uri_as_str
 
 
 class SentimentAnalysis(Service):
@@ -71,6 +71,9 @@ class SentimentAnalysis(Service):
         :meth:`cas_management.get_table <.CASManagement.get_table>`
 
         """
+        if current_session().version_info() > 3:
+            raise RuntimeError('The Sentiment Analysis service was removed from Viya 4.')
+
         if documents is None:
             raise TypeError("`documents` cannot be None.")
 

@@ -8,7 +8,7 @@ import time
 
 import pytest
 
-from sasctl.core import request_link
+from sasctl.core import current_session, request_link
 from sasctl.services import text_parsing as tp
 
 pytestmark = pytest.mark.usefixtures('session')
@@ -31,6 +31,9 @@ def assert_job_succeeds(job):
 
 
 def test_from_table(cas_session, airline_dataset):
+    if current_session().version_info() > 3:
+        pytest.skip('Text Parsing service was removed in Viya 4.')
+
     TABLE_NAME = 'airline_tweets'
     cas_session.upload(airline_dataset, casout=dict(name=TABLE_NAME,
                                                     replace=True))
@@ -49,6 +52,9 @@ def test_from_table(cas_session, airline_dataset):
 def test_parsing_inline_docs():
     from sasctl.services import cas_management as cm
 
+    if current_session().version_info() > 3:
+        pytest.skip('Text Parsing service was removed in Viya 4.')
+
     caslib = cm.get_caslib('Public')
     input = [
         'Halt! Who goes there?',
@@ -63,3 +69,11 @@ def test_parsing_inline_docs():
     job = tp.parse_documents(input, caslib=caslib, min_doc_count=1)
 
     assert_job_succeeds(job)
+
+
+def test_service_removed_error():
+    if current_session().version_info() < 4:
+        pytest.skip('Text Parsing service was not removed until Viya 4.')
+
+    with pytest.raises(RuntimeError):
+        tp.parse_documents('', caslib='Public', min_doc_count=1)
