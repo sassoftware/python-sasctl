@@ -419,8 +419,11 @@ class ModelRepository(Service):
                 for item in model_contents:
                     if item.name == name:
                         cls.delete("/models/{}/contents/{}".format(id_, item.id))
+
                         # Return json stream to beginning of file content
-                        files["files"][1].seek(0)
+                        if hasattr(files['files'][1], 'seek'):
+                            files["files"][1].seek(0)
+
                         return cls.post(
                             "/models/{}/contents".format(id_),
                             files=files,
