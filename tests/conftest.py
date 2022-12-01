@@ -22,7 +22,7 @@ from .betamax_utils import BinarySerializer, RedactedPathMatcher
 
 
 # All version numbers for which we will attempt to find cassettes when replaying tests.
-ALL_VIYA_VERSIONS = ['3.5']
+ALL_VIYA_VERSIONS = ['3.5', '2022.09']
 
 
 def get_cassette_file(request, version):
