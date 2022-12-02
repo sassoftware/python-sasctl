@@ -999,7 +999,7 @@ class Session(requests.Session):
             version = r.json().get("release")
 
             # Convert 'V03' and 'V04' to just 3 or 4.
-            major_version = int(version.upper().lstrip('V'))
+            major_version = int(version.upper().lstrip("V"))
 
             # No good way to get detailed version info from a Viya 3 environment.
             # At this point, we just assume it's Viya 3.5 and return

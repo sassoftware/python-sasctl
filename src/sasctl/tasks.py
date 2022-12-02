@@ -356,7 +356,7 @@ def register_model(
 
                 # Some astores include the target variable in the 'InputVariable' data frame.  Exclude anything not
                 # marked as INPUT.
-                input_vars = [v for v in input_vars if v['role'] == "INPUT"]
+                input_vars = [v for v in input_vars if v["role"] == "INPUT"]
 
                 project = _create_project(
                     project, model_props, repo_obj, input_vars, output_vars
@@ -381,9 +381,7 @@ def register_model(
                 }
                 model = mr.post(
                     "/models",
-                    files={
-                        "files": (f"{model.params['name']}.sasast", astore["blob"])
-                    },
+                    files={"files": (f"{model.params['name']}.sasast", astore["blob"])},
                     data=params,
                 )
         return model
