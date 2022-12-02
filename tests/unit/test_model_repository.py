@@ -44,7 +44,7 @@ def test_create_model():
         'properties': [
             {'name': 'custom1', 'value': 123, 'type': 'numeric'},
             {'name': 'custom2', 'value': 'somevalue', 'type': 'string'},
-            {'name': 'customDate', 'value': 1672462800000, 'type': 'date'},
+            # {'name': 'customDate', 'value': 1672462800000, 'type': 'date'},
             {'name': 'customDateTime', 'value': 1672481272000, 'type': 'dateTime'},
         ],
         'inputVariables': [],
@@ -78,7 +78,7 @@ def test_create_model():
                     properties=dict(
                         custom1=123,
                         custom2='somevalue',
-                        customDate=datetime.date(2022, 12, 31),
+                        # customDate=datetime.date(2022, 12, 31),
                         customDateTime=datetime.datetime(2022, 12, 31, 10, 7, 52, tzinfo=datetime.timezone.utc),
                     ),
                 )
