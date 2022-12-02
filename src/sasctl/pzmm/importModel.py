@@ -8,7 +8,7 @@ from warnings import warn
 from ..core import current_session
 from .._services.model_repository import ModelRepository as mr
 from .writeScoreCode import ScoreCode as sc
-from .zipModel import ZipModel as zm
+from .zip_model import ZipModel as zm
 
 
 def project_exists(response, project):
@@ -49,17 +49,21 @@ def project_exists(response, project):
         return response
 
 
-def model_exists(project, name, force):
-    """Checks if model already exists and either raises an error or deletes the redundant model.
+def model_exists(project, name, force, versionName="latest"):
+    """Checks if model already exists in the same project and either raises an error or deletes
+    the redundant model. If no project version is provided, the version is assumed to be "latest".
 
     Parameters
     ----------
-    project : string or dict
+    project : str or dict
         The name or id of the model project, or a dictionary representation of the project.
     name : str or dict
         The name of the model.
     force : bool, optional
         Sets whether to overwrite models with the same name upon upload.
+    versionName : str, optional
+        Name of project version to check if a model of the same name already exists. Default
+        value is "latest".
 
     Raises
     ------
@@ -69,7 +73,19 @@ def model_exists(project, name, force):
     """
     project = mr.get_project(project)
     projectId = project["id"]
-    projectModels = mr.get("/projects/{}/models".format(projectId))
+    projectVersions = mr.list_project_versions(project)
+    if versionName == "latest":
+        modTime = [item["modified"] for item in projectVersions]
+        latestVersion = modTime.index(max(modTime))
+        versionId = projectVersions[latestVersion]["id"]
+    else:
+        for version in projectVersions:
+            if versionName is version["name"]:
+                versionId = version["id"]
+                break
+    projectModels = mr.get(
+        "/projects/{}/projectVersions/{}/models".format(projectId, versionId)
+    )
 
     for model in projectModels:
         # Throws a TypeError if only one model is in the project
@@ -106,6 +122,7 @@ class ImportModel:
         targetDF,
         predictmethod,
         metrics=["EM_EVENTPROBABILITY", "EM_CLASSIFICATION"],
+        projectVersion="latest",
         modelFileName=None,
         pyPath=None,
         threshPrediction=None,
@@ -156,6 +173,9 @@ class ImportModel:
         metrics : string list, optional
             The scoring metrics for the model. The default is a set of two
             metrics: EM_EVENTPROBABILITY and EM_CLASSIFICATION.
+        projectVersion : string, optional
+            The project version to import the model in to on SAS Model Manager. The default value
+            is latest.
         modelFileName : string, optional
             Name of the model file that contains the model. By default None and assigned as
             modelPrefix + '.pickle'.
@@ -256,7 +276,7 @@ class ImportModel:
                         Path(pyPath) / (modelPrefix + "Score.py")
                     )
                 )
-            zipIOFile = zm.zipFiles(Path(zPath), modelPrefix, isViya4=True)
+            zipIOFile = zm.zip_files(Path(zPath), modelPrefix, is_viya4=True)
             print("All model files were zipped to {}.".format(Path(zPath)))
 
             # Check if project name provided exists and raise an error or create a new project
@@ -264,9 +284,11 @@ class ImportModel:
             project = project_exists(projectResponse, project)
 
             # Check if model with same name already exists in project.
-            model_exists(project, modelPrefix, force)
+            model_exists(project, modelPrefix, force, versionName=projectVersion)
 
-            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile)
+            response = mr.import_model_from_zip(
+                modelPrefix, project, zipIOFile, version=projectVersion
+            )
             try:
                 print(
                     "Model was successfully imported into SAS Model Manager as {} with UUID: {}.".format(
@@ -277,7 +299,7 @@ class ImportModel:
                 print("Model failed to import to SAS Model Manager.")
         # For SAS Viya 3.5, the score code is written after upload in order to know the model UUID
         else:
-            zipIOFile = zm.zipFiles(Path(zPath), modelPrefix, isViya4=False)
+            zipIOFile = zm.zip_files(Path(zPath), modelPrefix, is_viya4=False)
             print("All model files were zipped to {}.".format(Path(zPath)))
 
             # Check if project name provided exists and raise an error or create a new project
@@ -285,9 +307,11 @@ class ImportModel:
             project = project_exists(projectResponse, project)
 
             # Check if model with same name already exists in project.
-            model_exists(project, modelPrefix, force)
+            model_exists(project, modelPrefix, force, versionName=projectVersion)
 
-            response = mr.import_model_from_zip(modelPrefix, project, zipIOFile, force)
+            response = mr.import_model_from_zip(
+                modelPrefix, project, zipIOFile, force, projectVersion=projectVersion
+            )
             try:
                 print(
                     "Model was successfully imported into SAS Model Manager as {} with UUID: {}.".format(

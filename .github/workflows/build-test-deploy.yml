@@ -7,7 +7,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Black
         uses: psf/black@stable
@@ -21,15 +21,16 @@ jobs:
       LANG: en_US.UTF-8
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8, 3.9, '3.10']
+        python-version: [3.6, 3.7, 3.8] #, 3.9, '3.10'] <-- auto fails due to lack of 3.9 & 3.10 env in tox.ini
+        # Removing support for Python 3.5
         os-version: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -41,15 +42,47 @@ jobs:
 
       - name: Install dependencies (Common)
         run: |
-          # Setup tox
+          # Setup tox & code coverage
           pip install --upgrade pip
-          pip install tox tox-gh-actions codecov
+          pip install tox tox-gh-actions pytest pytest-cov scikit-learn
 
       - name: Run Tests
         run: |
           tox
-          codecov
 
+      # Separate upload task for unit test coverage allows for flagged analysis of test coverage
+      - name: Upload Unit Test Coverage
+        if: matrix.os-version == 'ubuntu-latest'
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./.reports/
+          fail_ci_if_error: true
+          file: unit.xml
+          flags: unit
+          verbose: true
+
+      # Separate upload task for integration test coverage allows for flagged analysis of test coverage
+      - name: Upload Integration Test Coverage
+        if: matrix.os-version == 'ubuntu-latest'
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./.reports/
+          fail_ci_if_error: true
+          file: integration.xml
+          flags: integration
+          verbose: true
+
+# Uncomment when scenario test cases are working again
+#      Separate upload task for scenario test coverage allows for flagged analysis of test coverage
+#      - name: Upload Scenario Test Coverage
+#        if: matrix.os-version == 'ubuntu-latest'
+#        uses: codecov/codecov-action@v3
+#        with:
+#          directory: ./.reports/
+#          fail_ci_if_error: true
+#          file: scenarios.xml
+#          flags: scenarios
+#          verbose: true
 
   gh-pages:
     name: "Build Documentation"
@@ -59,7 +92,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -92,7 +125,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Python
         uses: actions/setup-python@v2

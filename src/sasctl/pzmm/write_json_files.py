@@ -4,17 +4,15 @@
 # %%
 from pathlib import Path
 import sys
-
 import getpass
 import json
 import pandas as pd
-from sklearn import metrics
-import numpy as np
-from scipy.stats import kendalltau, gamma
+import math
 
-# %%
+
 class JSONFiles:
-    def writeVarJSON(self, inputData, isInput=True, jPath=Path.cwd()):
+    @classmethod
+    def writeVarJSON(cls, inputData, isInput=True, jPath=Path.cwd()):
         """
         Writes a variable descriptor JSON file for input or output variables,
         based on an input dataframe containing predictor and prediction columns.
@@ -117,8 +115,9 @@ class JSONFiles:
             )
         )
 
+    @classmethod
     def writeModelPropertiesJSON(
-        self,
+        cls,
         modelName,
         modelDesc,
         targetVariable,
@@ -172,10 +171,13 @@ class JSONFiles:
                 "WARNING: The provided model description was truncated to 1024 characters."
             )
 
-        if numTargetCategories > 2:
+        if numTargetCategories > 2 and not targetEvent:
             targetLevel = "NOMINAL"
+        elif numTargetCategories > 2 and targetEvent:
+            targetLevel = "ORDINAL"
         else:
             targetLevel = "BINARY"
+            targetEvent = 1
 
         if eventProbVar is None:
             try:
@@ -236,7 +238,8 @@ class JSONFiles:
             )
         )
 
-    def writeFileMetadataJSON(self, modelPrefix, jPath=Path.cwd(), isH2OModel=False):
+    @classmethod
+    def writeFileMetadataJSON(cls, modelPrefix, jPath=Path.cwd(), isH2OModel=False):
         """
         Writes a file metadata JSON file pointing to all relevant files.
 
@@ -469,6 +472,18 @@ class JSONFiles:
         'dmcas_fitstat.json'
             Output JSON file located at jPath.
         """
+        # If numpy inputs are supplied, then it is assumed that numpy is installed in the environment
+        try:
+            import numpy as np
+        except ImportError:
+            np = None
+
+        try:
+            from sklearn import metrics
+        except ImportError:
+            raise RuntimeError(
+                "The 'scikit-learn' package is required to use the calculateFitStat function."
+            )
 
         nullJSONPath = Path(__file__).resolve().parent / "null_dmcas_fitstat.json"
         nullJSONDict = self.readJSONFile(nullJSONPath)
@@ -479,12 +494,12 @@ class JSONFiles:
         for i, data in enumerate([validateData, trainData, testData]):
             if data is not None:
                 dataPartitionExists.append(i)
-                if type(data) is np.ndarray:
-                    dataSets[i] = data.tolist()
-                elif type(data) is pd.core.frame.DataFrame:
+                if type(data) is pd.core.frame.DataFrame:
                     dataSets[i] = data.transpose().values.tolist()
                 elif type(data) is list:
                     dataSets[i] = data
+                elif type(data) is np.ndarray:
+                    dataSets[i] = data.tolist()
 
         if len(dataPartitionExists) == 0:
             try:
@@ -511,7 +526,7 @@ class JSONFiles:
                 dataSets[j][1] = tempSet[0]
                 fpr, tpr, _ = metrics.roc_curve(dataSets[j][0], dataSets[j][1])
 
-            RASE = np.sqrt(metrics.mean_squared_error(dataSets[j][0], dataSets[j][1]))
+            RASE = math.sqrt(metrics.mean_squared_error(dataSets[j][0], dataSets[j][1]))
             fitStats["_RASE_"] = RASE
 
             NObs = len(dataSets[j][0])
@@ -520,6 +535,10 @@ class JSONFiles:
             auc = metrics.roc_auc_score(dataSets[j][0], dataSets[j][1])
             GINI = (2 * auc) - 1
             fitStats["_GINI_"] = GINI
+
+            from scipy.stats import (
+                gamma,
+            )  # Holdover until fitstat generation via SWAT is sussed out
 
             _, _, scale = gamma.fit(dataSets[j][1])
             fitStats["_GAMMA_"] = 1 / scale
@@ -534,7 +553,7 @@ class JSONFiles:
             MCLL = metrics.log_loss(dataSets[j][0], dataSets[j][1])
             fitStats["_MCLL_"] = MCLL
 
-            KS = max(np.abs(fpr - tpr))
+            KS = max(math.fabs(fpr - tpr))
             fitStats["_KS_"] = KS
 
             KSPostCutoff = None
@@ -543,7 +562,9 @@ class JSONFiles:
             DIV = len(dataSets[j][0])
             fitStats["_DIV_"] = DIV
 
-            TAU, _ = kendalltau(dataSets[j][0], dataSets[j][1])
+            TAU = pd.Series(dataSets[j][0]).corr(
+                pd.Series(dataSets[j][1]), method="kendall"
+            )
             fitStats["_TAU_"] = TAU
 
             KSCut = None
@@ -607,6 +628,12 @@ class JSONFiles:
         'dmcas_lift.json'
             Output JSON file located at jPath.
         """
+        # If numpy inputs are supplied, then it is assumed that numpy is installed in the environment
+        try:
+            # noinspection PyPackageRequirements
+            import numpy as np
+        except ImportError:
+            np = None
         try:
             import swat
         except ImportError:
@@ -628,13 +655,8 @@ class JSONFiles:
         for i, data in enumerate([validateData, trainData, testData]):
             if data is not None:
                 dataPartitionExists.append(i)
-                if type(data) is np.ndarray:
-                    try:
-                        dataSets[i][columns] = data
-                    except ValueError:
-                        dataSets[i][columns] = data.transpose()
-                elif type(data) is list:
-                    dataSets[i][columns] = np.array(data).transpose()
+                if type(data) is list:
+                    dataSets[i][columns] = list(zip(*data))
                 elif type(data) is pd.core.frame.DataFrame:
                     try:
                         dataSets[i][columns[0]] = data.iloc[:, 0]
@@ -644,6 +666,11 @@ class JSONFiles:
                             columns={data.columns[0]: columns[0]}
                         )
                         dataSets[i][columns[1]] = data.iloc[:, 1]
+                elif type(data) is np.ndarray:
+                    try:
+                        dataSets[i][columns] = data
+                    except ValueError:
+                        dataSets[i][columns] = data.transpose()
 
         if len(dataPartitionExists) == 0:
             print(

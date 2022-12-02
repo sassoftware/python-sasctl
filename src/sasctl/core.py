@@ -259,6 +259,13 @@ class Session(requests.Session):
         to true.  Ignored for HTTP connections.
     token : str, optional
         OAuth token to use for authorization.
+    client_id : str, optional
+        Client ID requesting access.  Use if connection to Viya should be
+        made using `client_credentials` method.
+    client_secret : str, optional
+        Client secret for client requesting access. Required if `client_id`
+        is provided.
+
 
     Attributes
     ----------
@@ -284,6 +291,8 @@ class Session(requests.Session):
         port=None,
         verify_ssl=None,
         token=None,
+        client_id=None,
+        client_secret=None,
     ):
         super(Session, self).__init__()
 
@@ -372,7 +381,7 @@ class Session(requests.Session):
             "password": password,
         }
 
-        if self._settings["password"] is None:
+        if self._settings["password"] is None and client_secret is None:
             # Try to get credentials from .authinfo or .netrc files.
             # If no file path was specified, the default locations will
             # be checked.
@@ -407,7 +416,11 @@ class Session(requests.Session):
 
         # Find a suitable authentication mechanism and build an auth header
         self.auth = self.get_auth(
-            self._settings["username"], self._settings["password"], token
+            self._settings["username"],
+            self._settings["password"],
+            token,
+            client_id=client_id,
+            client_secret=client_secret,
         )
 
         # Used to cache version info
@@ -688,12 +701,23 @@ class Session(requests.Session):
     def delete(self, url, **kwargs):
         return self.request("DELETE", url, **kwargs)
 
-    def get_auth(self, username=None, password=None, token=None):
+    def get_auth(
+        self,
+        username=None,
+        password=None,
+        token=None,
+        client_id=None,
+        client_secret=None,
+    ):
         """Attempt to authenticate with the Viya environment.
 
-        If `username` and `password` or `token` are provided, they will be used exclusively.  If neither of these
-        is specified, Kerberos authorization will be attempted.  If this fails, authorization using an
-        OAuth2 authorization code will be attempted.  Be aware that this requires prompting the user for input and
+        If `username` and `password` or `token` are provided, they will be used
+        exclusively. Alternatively `client_id` and `client_secret` can be
+        provided without `username` and `password` which will result in
+        authentication using `client_credentials` flow. If neither of these is
+        specified, Kerberos authorization will be attempted.  If this fails,
+        authorization using an OAuth2 authorization code will be attempted.
+        Be aware that this requires prompting the user for input and
         should NOT be used in a non-interactive session.
 
         Parameters
@@ -701,23 +725,37 @@ class Session(requests.Session):
         username : str, optional
             Username to use for authentication.
         password : str, optional
-            Password to use for authentication.  Required if `username` is provided.
+            Password to use for authentication.  Required if `username` is
+            provided.
+        client_id : str, optional
+            Client ID requesting access.  Use if connection to Viya should be
+            made using a `client_credentials` method.
+        client_secret : str, optional
+            Client secret for client requesting access.  Required if `client_id`
+            is provided.
+
         token : str, optional
             An existing OAuth2 access token to use.
 
         Returns
         -------
         OAuth2Token
-            Authorization header to use with requests to the evironent
+            Authorization header to use with requests to the environment
 
         """
+        # TODO: Refactor this function to a single set of cases
 
         # If explicit username & password were provided, use them.
-        if username is not None and password is not None:
+        if username and password:
             return self.get_oauth_token(username, password)
 
+        if client_id and client_secret:
+            return self.get_oauth_token(
+                client_id=client_id, client_secret=client_secret
+            )
+
         # If an existing access token was provided, use it
-        if token is not None:
+        if token:
             return OAuth2Token(token)
 
         # Kerberos doesn't require any interruption to the user, so try that first if username/password
@@ -747,22 +785,27 @@ class Session(requests.Session):
         client_id=None,
         client_secret=None,
     ):
-        """Request an OAuth2 access token using either a username & password or an auth token.
+        """Request an OAuth2 access token using either a username & password,
+        client_id and client_secret, or an auth token.
 
         Parameters
         ----------
         username : str, optional
             Username to use for authentication.
         password : str, optional
-            Password to use for authentication.  Required if `username` is provided.
+            Password to use for authentication.  Required if `username` is
+            provided.
         auth_code : str, optional
             Authorization code to use.
         refresh_token : str, optinoal
             Valid refresh token to use.
         client_id : str, optional
-            Client ID requesting access.  Use if connection to Viya should be made using a non-default client id.
+            Client ID requesting access.  Use if connection to Viya should be
+            made using a non-default client id or using `client_credentials`
+            method.
         client_secret : str, optional
-            Client secret for client requesting access.  Required if `client_id` is provided
+            Client secret for client requesting access.  Required if `client_id`
+            is provided.
 
         Returns
         -------
@@ -780,6 +823,8 @@ class Session(requests.Session):
                 "username": username,
                 "password": password,
             }
+        elif username is None and client_secret is not None:
+            data = {"grant_type": "client_credentials"}
         elif auth_code is not None:
             data = {"grant_type": "authorization_code", "code": auth_code}
         elif refresh_token is not None:
@@ -832,7 +877,7 @@ class Session(requests.Session):
 
         # No reason to cache token if username & password were provided - they'd just be re-provided on future
         # connections.  Cache for auth code & refresh token to prevent frequent interruptions for the user.
-        if username is None:
+        if username is None and client_secret is None:
             self.cache_token(token, self.PROFILE_PATH)
 
         return token

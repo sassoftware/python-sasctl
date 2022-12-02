@@ -1,10 +1,11 @@
 # Copyright (c) 2021, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-from .pickleModel import PickleModel
-from .writeJSONFiles import JSONFiles
-from .zipModel import ZipModel
+from .pickle_model import PickleModel
+from .write_json_files import JSONFiles
+from .zip_model import ZipModel
 from .writeScoreCode import ScoreCode
 from .importModel import ImportModel
 from .gitIntegration import GitIntegrate
-from .mlflowModel import MLFlowModel
+from .mlflow_model import MLFlowModel
+from .modelParameters import ModelParameters

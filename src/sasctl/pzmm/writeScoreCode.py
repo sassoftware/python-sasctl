@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from pathlib import Path
-import numpy as np
 import re
 from ..core import current_session
 from .._services.model_repository import ModelRepository as modelRepo
@@ -66,9 +65,9 @@ class ScoreCode:
             columns. The writeScoreCode function currently supports int(64), float(64),
             and string data types for scoring. Providing a list of dict objects signals
             that the model files are being created from an MLFlow model.
-        targetDF : DataFrame
-            The `DataFrame` object contains the training data for the target variable. Note that
-            for MLFlow models, this can set as None.
+        targetDF : pandas Series
+            The `DataFrame Series` object contains the training data for the target variable. Note that
+            for MLFlow models, this can be set as None.
         modelPrefix : string
             The variable for the model name that is used when naming model files.
             (For example: hmeqClassTree + [Score.py || .pickle]).
@@ -80,8 +79,16 @@ class ScoreCode:
         modelFileName : string
             Name of the model file that contains the model.
         metrics : string list, optional
-            The scoring metrics for the model. The default is a set of two
-            metrics: EM_EVENTPROBABILITY and EM_CLASSIFICATION.
+            The scoring metrics for the model. For classification models, it is assumed that the last value in the list
+            represents the classification output. The default is a list of two metrics: EM_EVENTPROBABILITY and
+            EM_CLASSIFICATION. The following scenarios are supported:
+                1) If only one value is provided, then it is assumed that the model returns either a binary response
+                prediction or a character output and is returned as the output.
+                1) If only two values are provided, a threshold value needs to be set: either by providing a
+                threshPrediction argument or the function taking the mean of the provided target column. Then the
+                threshold value sets the classification output for the prediction.
+                2) If more than two values are provided, the largest probability is accepted as the event and the
+                appropriate classification value is returned for the output.
         pyPath : string, optional
             The local path of the score code file. The default is the current
             working directory.
@@ -195,7 +202,7 @@ import codecs"""
                 )
             # Import math for imputation; pickle for serialized models; pandas for data management; numpy for computation
             cls.pyFile.write(
-                """\n
+                """\
 import math
 import {pickleType}
 import pandas as pd
@@ -208,7 +215,8 @@ import numpy as np""".format(
             if not isViya35:
                 cls.pyFile.write(
                     """\n
-import settings"""
+import settings
+from pathlib import Path"""
                 )
 
             # For H2O models, include the server initialization, or h2o.connect() call to use an H2O server
@@ -266,7 +274,7 @@ _thisModelFit = h2o.load_model('/models/resources/viya/{modelID}/{modelFileName}
             elif not isViya35 and not isH2OModel:
                 cls.pyFile.write(
                     """\n
-with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
+with open(Path(settings.pickle_path) / '{modelFileName}', 'rb') as _pFile:
     _thisModelFit = {pickleType}.load(_pFile)""".format(
                         modelFileName=modelFileName, pickleType=pickleType
                     )
@@ -274,18 +282,18 @@ with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
             elif not isViya35 and isBinaryModel:
                 cls.pyFile.write(
                     """\n
-_thisModelFit = h2o.load_model(settings.pickle_path + '{}')""".format(
+_thisModelFit = h2o.load_model(Path(settings.pickle_path) / '{}')""".format(
                         modelFileName=modelFileName
                     )
                 )
             elif not isViya35 and isH2OModel and not isBinaryModel:
                 cls.pyFile.write(
                     """\n
-with gzip.open(settings.pickle_path + '{modelFileName}', 'r') as fileIn, open(settings.pickle_path + '{
+with gzip.open(Path(settings.pickle_path) / '{modelFileName}', 'r') as fileIn, open(Path(settings.pickle_path) / '{
 modelZipFileName}', 'wb') as fileOut:
     shutil.copyfileobj(fileIn, fileOut)
-os.chmod(settings.pickle_path + '{modelZipFileName}', 0o777)
-_thisModelFit = h2o.import_mojo(settings.pickle_path + '{modelZipFileName}')""".format(
+os.chmod(Path(settings.pickle_path) / '{modelZipFileName}', 0o777)
+_thisModelFit = h2o.import_mojo(Path(settings.pickle_path) / '{modelZipFileName}')""".format(
                         modelFileName=modelFileName,
                         modelZipFileName=modelFileName[:-4] + "zip",
                     )
@@ -336,7 +344,7 @@ def score{modelPrefix}({inputVarList}):
                 elif not isViya35 and not isH2OModel:
                     cls.pyFile.write(
                         """
-        with open(settings.pickle_path + '{modelFileName}', 'rb') as _pFile:
+        with open(Path(settings.pickle_path) / '{modelFileName}', 'rb') as _pFile:
             _thisModelFit = {pickleType}.load(_pFile)""".format(
                             modelFileName=modelFileName, pickleType=pickleType
                         )
@@ -344,14 +352,14 @@ def score{modelPrefix}({inputVarList}):
                 elif not isViya35 and isH2OModel:
                     cls.pyFile.write(
                         """
-        _thisModelFit = h2o.import_mojo(settings.pickle_path + '{}')""".format(
+        _thisModelFit = h2o.import_mojo(Path(settings.pickle_path) / '{}')""".format(
                             modelFileName[:-4] + "zip"
                         )
                     )
                 elif not isViya35 and isBinaryModel:
                     cls.pyFile.write(
                         """\n
-        _thisModelFit = h2o.load_model(settings.pickle_path + '{}')""".format(
+        _thisModelFit = h2o.load_model(Path(settings.pickle_path) / '{}')""".format(
                             modelFileName=modelFileName
                         )
                     )
@@ -461,19 +469,29 @@ def score{modelPrefix}({inputVarList}):
                     )
                 )
             if not isH2OModel and not isMLFlow:
-                cls.pyFile.write(
-                    """\n
+                # TODO: Refactor arguments to better handle different classification types
+                if len(metrics) == 1:
+                    # For models that output the classification from the prediction
+                    cls.pyFile.write(
+                        """\n
+    {metric} = prediction""".format(
+                            metric=metrics[0]
+                        )
+                    )
+                elif len(metrics) == 2:
+                    cls.pyFile.write(
+                        """\n
     try:
         {metric} = float(prediction)
     except TypeError:
-    # If the model expects non-binary responses, a TypeError will be raised.
-    # The except block shifts the prediction to accept a non-binary response.
-        {metric} = float(prediction[:,1])""".format(
-                        metric=metrics[0]
+        # If the prediction returns as a list of values or improper value type, a TypeError will be raised.
+        # Attempt to handle the prediction output in the except block.
+        {metric} = float(prediction[0])""".format(
+                            metric=metrics[0]
+                        )
                     )
-                )
-                if threshPrediction is None:
-                    threshPrediction = np.mean(targetDF)
+                    if threshPrediction is None:
+                        threshPrediction = targetDF.mean()
                     cls.pyFile.write(
                         """\n
     if ({metric0} >= {threshold}):
@@ -485,6 +503,27 @@ def score{modelPrefix}({inputVarList}):
                             threshold=threshPrediction,
                         )
                     )
+                elif len(metrics) > 2:
+                    for i, metric in enumerate(metrics[:-1]):
+                        cls.pyFile.write(
+                            """\
+    {metric} = float(prediction[{i}]""".format(
+                                metric=metric, i=i
+                            )
+                        )
+                    cls.pyFile.write(
+                        """\
+    max_prediction = max({metric_list})
+    index_prediction = {metric_list}.index(max_prediction)
+    {classification} = index_prediction""".format(
+                            metric_list=metrics[:-1], classification=metrics[-1]
+                        )
+                    )
+                else:
+                    ValueError(
+                        "Improper metrics argument was provided. Please provide a list of string metrics."
+                    )
+
             elif isH2OModel and not isMLFlow:
                 cls.pyFile.write(
                     """\n

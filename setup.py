@@ -41,11 +41,13 @@ setup(
     include_package_data=True,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    python_requires=">=3.5",
-    install_requires=["pandas", "scikit-learn", "requests", "pyyaml", "packaging"],
+    python_requires=">=3.6",
+    install_requires=["pandas", "requests", "pyyaml", "packaging"],
     extras_require={
         "swat": ["swat"],
         "GitPython": ["GitPython"],
+        "numpy": ["numpy"],
+        "scikit-learn": ["scikit-learn"],
         "kerberos": [
             'kerberos ; platform_system != "Windows"',
             'winkerberos ; platform_system == "Windows"',
@@ -66,7 +68,6 @@ setup(
         "Intended Audience :: Developers",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",

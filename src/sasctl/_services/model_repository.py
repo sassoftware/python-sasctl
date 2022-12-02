@@ -55,7 +55,7 @@ class ModelRepository(Service):
 
     @classmethod
     def get_astore(cls, model):
-        """Get the ASTORE for a model registered int he model repository.
+        """Get the ASTORE for a model registered in the model repository.
 
         Parameters
         ----------
@@ -301,6 +301,9 @@ class ModelRepository(Service):
         output_variables : array_like, optional
             Model output variables. By default, these are the same as the model
              project.
+        project_version : str
+            Name of project version to import model in to. Default
+            value is "latest".
 
         Returns
         -------
@@ -520,6 +523,8 @@ class ModelRepository(Service):
             The ZIP file containing the model and contents.
         description : str
             The description of the model.
+        version : str, optional
+            Name of the project version. Default value is "latest".
 
         Returns
         -------
@@ -786,3 +791,58 @@ class ModelRepository(Service):
             id_ = model["id"]
 
         return cls.get("/models/%s" % id_)
+
+    @classmethod
+    def list_project_versions(cls, project):
+        """_summary_
+
+        Parameters
+        ----------
+        project : str or dict
+            The name or id of the model project, or a dictionary representation
+            of the model project.
+
+        Returns
+        -------
+        list of dicts
+            List of dicts representing different project versions. Dict key/value
+            pairs are as follows.
+                name : str
+                id : str
+                number : str
+                modified : datetime
+
+        """
+        from datetime import datetime
+
+        project_info = cls.get_project(project)
+
+        if project_info is None:
+            raise ValueError("Project `%s` could not be found." % str(project))
+
+        projectVersions = cls.get(
+            "/projects/{}/projectVersions".format(project_info.id)
+        )
+        versionList = []
+        try:
+            for version in projectVersions:
+                versionDict = {
+                    "name": version.name,
+                    "id": version.id,
+                    "number": version.versionNumber,
+                    "modified": datetime.strptime(
+                        version.modifiedTimeStamp, "%Y-%m-%dT%H:%M:%S.%fZ"
+                    ),
+                }
+                versionList.append(versionDict)
+        except AttributeError:
+            versionDict = {
+                "name": projectVersions.name,
+                "id": projectVersions.id,
+                "number": projectVersions.versionNumber,
+                "modified": datetime.strptime(
+                    projectVersions.modifiedTimeStamp, "%Y-%m-%dT%H:%M:%S.%fZ"
+                ),
+            }
+            versionList.append(versionDict)
+        return versionList

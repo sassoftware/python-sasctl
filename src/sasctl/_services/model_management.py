@@ -3,6 +3,7 @@
 #
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
+import json
 
 from .service import Service
 from ..utils.decorators import experimental
@@ -33,12 +34,15 @@ class ModelManagement(Service):
 
         Parameters
         ----------
-        model
-        destination
-        name
+        model : str or dict
+            The name or id of the model, or a dictionary representation of the model.
+        destination : str
+            Name of destination to publish the model to.
+        name : str, optional
+            Provide a custom name for the published model. Defaults to None.
         force : bool, optional
             Whether to overwrite the model if it already exists in the
-            publishing `destination`.
+            publishing `destination`. Defaults to False.
         reload_model_table : bool, optional
             Whether the model table in CAS should be reloaded.  Defaults to
             False.
@@ -73,7 +77,7 @@ class ModelManagement(Service):
             "notes": model_obj.get("description"),
             "modelContents": [
                 {
-                    "modelName": mp._publish_name(model_obj.get("name")),
+                    "modelName": mp._publish_name(model_name),
                     "sourceUri": model_uri.get("uri"),
                     "publishLevel": "model",
                 }
@@ -97,9 +101,10 @@ class ModelManagement(Service):
     @classmethod
     def create_performance_definition(
         cls,
-        model,
-        library_name,
         table_prefix,
+        project=None,
+        models=None,
+        library_name="Public",
         name=None,
         description=None,
         monitor_champion=False,
@@ -113,49 +118,53 @@ class ModelManagement(Service):
         cas_server=None,
         trace=False,
     ):
-        """Create the performance task definition in the model project to
-        monitor model performance.
+        """Create the performance task definition in the model project to monitor model performance. In order to
+        execute the performance task definition, run the execute_performance_definition function with the output from
+        this function.
+
+        Note that the performance task definition cannot be created if the project is not a valid form of model, or if
+        targetVariable or targetLevel are not defined.
 
         Parameters
         ----------
-        model : str or dict
-            The name or id of the model, or a dictionary representation of the model.
+        table_prefix : str
+            The name used for the prefix of the performance data.
+        project : str, optional
+            Name or ID of the project. If no project is specified, it is inferred from the models argument. Defaults to
+            None.
+        models : str, list, or dict, optional
+            The name or id of the model(s), or a dictionary representation of the model(s). For
+            multiple models, input a list of model names, or a list of dictionaries. If no models are specified, all
+            models in the project specified will be used. Defaults to None.
         library_name : str
             The library containing the input data, default is 'Public'.
-        table_prefix : str
-            The name used for the performance data.
-        name : str
-            The name of the performance task.
-        description : str
-            The description of the performance task, default is 'Performance
-            monitoring for model' + model.name.
-        monitor_champion : bool
-            Indicates to monitor the project champion model.
-        monitor_challenger : bool
-            Indicates to monitor challenger models.
-        max_bins : int
-            The maximum bins number, Must be >= 2.  Defaults to 10.
-        scoring_required : bool
-            Whether model scoring must be performed on the input data before
-            performance results can be computed.  Should be `False` if target
-            values are included in the `table_prefix` tables.
-        all_data : bool
+        name : str, optional
+            The name of the performance task, default is None.
+        description : str, optional
+            The description of the performance task, default is None.
+        monitor_champion : bool, optional
+            Indicates to monitor the project champion model, default is None.
+        monitor_challenger : bool, optional
+            Indicates to monitor challenger models, default is None.
+        max_bins : int, optional
+            The maximum bins number. Must be >= 2.  Defaults to 10.
+        scoring_required : bool, optional
+            Whether model scoring must be performed on the input data before performance results can be computed.
+            Should be `False` if target values are included in the `table_prefix` tables. Defaults to `False`.
+        all_data : bool, optional
             Whether to run the performance job against all matching data tables
             in `library_name` or just the new tables.  Defaults to `False`.
-        save_output : bool
-            Whether to save the computed results to a table in `output_library`.
-            Defaults to True.
-        output_library : str
-            Name of a CASLIB where computed results should be saved.  Defaults to
-            'ModelPerformanceData'.
-        autoload_output : bool
-            Whether computed results should automatically be re-loaded
-            after a CAS server restart.
-        cas_server : str
+        save_output : bool, optional
+            Whether to save the computed results to a table in `output_library`. Defaults to True.
+        output_library : str, optional
+            Name of a CASLIB where computed results should be saved.  Defaults to 'ModelPerformanceData'.
+        autoload_output : bool, optional
+            Whether computed results should automatically be re-loaded after a CAS server restart, defaults to False.
+        cas_server : str, optional
             The CAS Server for the monitoring task, default is 'cas-shared-default'.
-        trace : bool
-            Whether to enable trace messages in the SAS job log when
-            executing the performance definition.
+        trace : bool, optional
+            Whether to enable trace messages in the SAS job log when executing the performance definition, defaults to
+            False.
 
         Returns
         -------
@@ -163,27 +172,47 @@ class ModelManagement(Service):
             The performance task definition schema
 
         """
-        from .model_repository import ModelRepository
+        from .model_repository import ModelRepository as mr
 
         if not scoring_required and "_" in table_prefix:
             raise ValueError(
                 "Parameter 'table_prefix' cannot contain underscores."
-                " Received a value of '%s'."
-            ) % table_prefix
+                " Received a value of '%s'." % table_prefix
+            )
 
         max_bins = 10 if max_bins is None else int(max_bins)
         if int(max_bins) < 2:
             raise ValueError(
-                "Parameter 'max_bins' must be at least 2.  "
-                "Received a value of '%s'." % max_bins
+                "Parameter 'max_bins' must be at least 2. Received a value of '%s'."
+                % max_bins
             )
 
-        mr = ModelRepository()
-        model = mr.get_model(model)
-        project = mr.get_project(model.projectId)
+        if not project and not models:
+            raise ValueError(
+                "No project or model specified for performance definition creation.\n"
+                "Please specify at least one of the two values."
+            )
 
-        # Performance data cannot be captured unless certain project properties
-        # have been configured.
+        # If no models were specified, search the supplied project for all models
+        if not models:
+            project = mr.get_project(project)
+            models = mr.list_models(
+                filter="eq(projectName, '{projectName}')".format(
+                    projectName=project.name
+                )
+            )
+
+        # Separate single models from multiple models
+        if not isinstance(models, list):
+            models = mr.get_model(models)
+        else:
+            # Collect all models into a list. This converts the PagedList response from mr.list_models to a normal list.
+            for i, model in enumerate(models):
+                models[i] = mr.get_model(model)
+        if not project:
+            project = mr.get_project(models[0].projectId)
+
+        # Performance data cannot be captured unless certain project properties have been configured.
         for required in ["targetVariable", "targetLevel"]:
             if getattr(project, required, None) is None:
                 raise ValueError(
@@ -209,8 +238,8 @@ class ModelManagement(Service):
 
         request = {
             "projectId": project.id,
-            "name": name or model.name + " Performance",
-            "modelIds": [model.id],
+            "name": name or project.name + " Performance",
+            "modelIds": [model.id for model in models],
             "championMonitored": monitor_champion,
             "challengerMonitored": monitor_challenger,
             "maxBins": max_bins,
@@ -221,17 +250,20 @@ class ModelManagement(Service):
             "loadPerformanceResult": autoload_output,
             "dataLibrary": library_name or "Public",
             "description": description
-            or "Performance definition for model " + model.name,
+            or "Performance definition for model "
+            + ", ".join([model.name for model in models]),
             "casServerId": cas_server or "cas-shared-default",
             "dataPrefix": table_prefix,
             "traceOn": trace,
         }
 
         # If model doesn't specify input/output variables, try to pull from project definition
-        if model.get("inputVariables", []):
-            request["inputVariables"] = [v.get("name") for v in model["inputVariables"]]
+        if models[0].get("inputVariables", []):
+            request["inputVariables"] = [
+                v.get("name") for v in models[0]["inputVariables"]
+            ]
             request["outputVariables"] = [
-                v.get("name") for v in model["outputVariables"]
+                v.get("name") for v in models[0]["outputVariables"]
             ]
         else:
             request["inputVariables"] = [
@@ -393,4 +425,77 @@ class ModelManagement(Service):
             headers={
                 "Content-Type": "application/vnd.sas.workflow.object.association+json"
             },
+        )
+
+    @classmethod
+    def create_custom_kpi(
+        cls, model, project, timeLabel, kpiName, kpiValue, timeSK=None
+    ):
+        """Post a user supplied custom KPI to a SAS Model Manager project's MM_STD_KPI
+        table. A custom KPI consists of the time label, KPI name, KPI value, and optionally
+        the timeSK. Additionally, the model and project associated with the custom KPI are
+        required.
+
+        Multiple custom KPIs can be uploaded at once by passing lists in for the four
+        arguments mentioned above.
+
+        Parameters
+        ----------
+        model : str or dict
+            The name or id of the model, or a dictionary representation of the model.
+        project : str or dict
+        The name or id of the project, or a dictionary representation of
+        the project.
+        timeLabel : str or list
+            Label associated with the dataset used within the performance definition.
+        kpiName : str or list
+            Name of the custom KPI.
+        kpiValue : int or float or list
+            Value of the custom KPI.
+        timeSK : int or list, by default None
+            Indicator for the MM_STD_KPI table to denote performance task order.
+        """
+        from .model_repository import ModelRepository
+
+        mr = ModelRepository()
+
+        # Step through options to determine project UUID
+        if cls.is_uuid(project):
+            projectId = project
+        elif isinstance(project, dict) and "id" in project:
+            projectId = project["id"]
+        else:
+            project = mr.get_project(project)
+            projectId = project["id"]
+
+        # Step through options to determine model UUID
+        if cls.is_uuid(model):
+            modelId = model
+        elif isinstance(model, dict) and "id" in model:
+            modelId = model["id"]
+        else:
+            model = mr.list_models(
+                filter="eq('projectId','{}')&eq('name','{}')".format(projectId, model)
+            )
+            modelId = model["id"]
+
+        model = mr.get_model(modelId)
+
+        # If no timeSK is provided, create a list of 0's for the API call
+        if not timeSK:
+            timeSK = [0] * len(timeLabel)
+
+        # Create a list of dicts mapped to each custom KPI value
+        customKPI = [
+            {"TimeLabel": label, "KPI": name, "Value": str(value), "TimeSK": SK}
+            for label, name, value, SK in zip(timeLabel, kpiName, kpiValue, timeSK)
+        ]
+        headers = {"Accept": "application/vnd.sas.collection+json"}
+        requestData = {"ProjectID": projectId, "ModelID": modelId, "KPIs": customKPI}
+        # Include a terminal output, since it can take up to 60 seconds to POST the API
+        print("Uploading custom kpis to SAS Viya...")
+        return cls.post(
+            "/projects/{}/kpis".format(projectId),
+            headers=headers,
+            data=json.dumps(requestData),
         )

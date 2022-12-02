@@ -14,6 +14,7 @@ import os
 import re
 import sys
 import warnings
+import pandas as pd
 
 try:
     import swat
@@ -504,7 +505,7 @@ def register_model(
 
 
 def publish_model(
-    model, destination, code=None, max_retries=60, replace=False, **kwargs
+    model, destination, code=None, name=None, max_retries=60, replace=False, **kwargs
 ):
     """Publish a model to a configured publishing destination.
 
@@ -515,6 +516,8 @@ def publish_model(
         the model.
     destination : str
     code : optional
+    name : str, optional
+        Name of custom publish name for publish calls that do not have code. Default is None.
     max_retries : int, optional
     replace : bool, optional
         Whether to overwrite the model if it already exists in
@@ -554,10 +557,16 @@ def publish_model(
 
             if dest_obj and dest_obj.destinationType == "cas":
                 publish_req = mm.publish_model(
-                    model, destination, force=replace, reload_model_table=True
+                    model,
+                    destination,
+                    force=replace,
+                    name=name,
+                    reload_model_table=True,
                 )
             else:
-                publish_req = mm.publish_model(model, destination, force=replace)
+                publish_req = mm.publish_model(
+                    model, destination, force=replace, name=name
+                )
         else:
             publish_req = mp.publish_model(model, destination, code=code, **kwargs)
 
@@ -817,3 +826,114 @@ def _parse_module_url(msg):
         module_url = match.group(1) if match else None
 
     return module_url
+
+
+def get_project_kpis(
+    project,
+    server="cas-shared-default",
+    caslib="ModelPerformanceData",
+    filterColumn=None,
+    filterValue=None,
+):
+    """Create a call to CAS to return the MM_STD_KPI table (Model Manager Standard KPI)
+    generated when custom KPIs are uploaded or when a performance definition is executed
+    on SAS Model Manager on SAS Viya 4.
+
+    Filtering options are available as additional arguments. The filtering is based on
+    column name and column value. Currently, only exact matches are available when filtering
+    by this method.
+
+    Parameters
+    ----------
+    project : str or dict
+        The name or id of the project, or a dictionary representation of
+        the project.
+    server : str, optional
+        SAS Viya 4 server where the MM_STD_KPI table exists,
+        by default "cas-shared-default"
+    caslib : str, optional
+        SAS Viya 4 caslib where the MM_STD_KPI table exists,
+        by default "ModelPerformanceData"
+    filterColumn : str, optional
+        Column name from the MM_STD_KPI table to be filtered, by default None
+    filterValue : str, optional
+        Column value to be filtered, by default None
+    Returns
+    -------
+    kpiTableDf : DataFrame
+        A pandas DataFrame representing the MM_STD_KPI table. Note that SAS
+        missing values are replaced with pandas valid missing values.
+    """
+    from .core import is_uuid
+    from distutils.version import StrictVersion
+
+    # Check the pandas version for where the json_normalize function exists
+    if pd.__version__ >= StrictVersion("1.0.3"):
+        from pandas import json_normalize
+    else:
+        from pandas.io.json import json_normalize
+
+    # Collect the current session for authentication of API calls
+    sess = current_session()
+
+    # Step through options to determine project UUID
+    if is_uuid(project):
+        projectId = project
+    elif isinstance(project, dict) and "id" in project:
+        projectId = project["id"]
+    else:
+        project = mr.get_project(project)
+        projectId = project["id"]
+
+    # TODO: include case for large MM_STD_KPI tables
+    # Call the casManagement service to collect the column names in the table
+    kpiTableColumns = sess.get(
+        "casManagement/servers/{}/".format(server)
+        + "caslibs/{}/tables/".format(caslib)
+        + "{}.MM_STD_KPI/columns?limit=10000".format(projectId)
+    )
+    if not kpiTableColumns:
+        project = mr.get_project(project)
+        raise SystemError(
+            "No KPI table exists for project {}.".format(project.name)
+            + " Please confirm that the performance definition completed"
+            + " or custom KPIs have been uploaded successfully."
+        )
+    # Parse through the json response to create a pandas DataFrame
+    cols = json_normalize(kpiTableColumns.json(), "items")
+    # Convert the columns to a readable list
+    colNames = cols["name"].to_list()
+
+    # Filter rows returned by column and value provided in arguments
+    whereStatement = ""
+    if filterColumn and filterValue:
+        whereStatement = "&where={}='{}'".format(filterColumn, filterValue)
+
+    # Call the casRowSets service to return row values; optional where statement is included
+    kpiTableRows = sess.get(
+        "casRowSets/servers/{}/".format(server)
+        + "caslibs/{}/tables/".format(caslib)
+        + "{}.MM_STD_KPI/rows?limit=10000".format(projectId)
+        + "{}".format(whereStatement)
+    )
+    # If no "cells" are found in the json response, return an error based on provided arguments
+    try:
+        kpiTableDf = pd.DataFrame(
+            json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
+            columns=colNames,
+        )
+    except KeyError:
+        if filterColumn and filterValue:
+            raise SystemError(
+                "No KPIs were found when filtering with {}='{}'.".format(
+                    filterColumn, filterValue
+                )
+            )
+        else:
+            projectName = mr.get_project(project)["name"]
+            raise SystemError("No KPIs were found for project {}.".format(projectName))
+
+    # Strip leading spaces from all cells of KPI table and convert missing values to None
+    kpiTableDf = kpiTableDf.apply(lambda x: x.str.strip()).replace([".", ""], None)
+
+    return kpiTableDf
