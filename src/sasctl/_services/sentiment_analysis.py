@@ -73,7 +73,7 @@ class SentimentAnalysis(Service):
         """
         if current_session().version_info() > 3:
             raise RuntimeError(
-                'The Sentiment Analysis service was removed from Viya 4.'
+                "The Sentiment Analysis service was removed from Viya 4."
             )
 
         if documents is None:

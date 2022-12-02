@@ -101,7 +101,7 @@ class TextParsing(Service):
 
         """
         if current_session().version_info() > 3:
-            raise RuntimeError('The Text Parsing service was removed from Viya 4.')
+            raise RuntimeError("The Text Parsing service was removed from Viya 4.")
 
         if documents is None:
             raise TypeError("`documents` cannot be None.")

@@ -66,7 +66,7 @@ class TextCategorization(Service):
         """
         if current_session().version_info() > 3:
             raise RuntimeError(
-                'The Text Categorization service was removed from Viya 4.'
+                "The Text Categorization service was removed from Viya 4."
             )
 
         if documents is None:

@@ -350,13 +350,13 @@ def register_model(
 
                 # Set the variable 'role' if it wasn't included (not all astores specify)
                 for v in input_vars:
-                    v.setdefault('role', 'INPUT')
+                    v.setdefault("role", "INPUT")
                 for v in output_vars:
-                    v.setdefault('role', 'OUTPUT')
+                    v.setdefault("role", "OUTPUT")
 
                 # Some astores include the target variable in the 'InputVariable' data frame.  Exclude anything not
                 # marked as INPUT.
-                input_vars = [v for v in input_vars if v['role'] == 'INPUT']
+                input_vars = [v for v in input_vars if v['role'] == "INPUT"]
 
                 project = _create_project(
                     project, model_props, repo_obj, input_vars, output_vars
@@ -375,14 +375,14 @@ def register_model(
                 # If using Viya 4, just upload the raw AStore and Model Manager will handle inspection.
                 astore = cas.astore.download(rstore=model)
                 params = {
-                    'name': name,
-                    'projectId': project.id,
-                    'type': "ASTORE",
+                    "name": name,
+                    "projectId": project.id,
+                    "type": "ASTORE",
                 }
                 model = mr.post(
-                    '/models',
+                    "/models",
                     files={
-                        'files': (f'{model.params["name"]}.sasast"', astore['blob'])
+                        "files": (f"{model.params['name']}.sasast", astore["blob"])
                     },
                     data=params,
                 )

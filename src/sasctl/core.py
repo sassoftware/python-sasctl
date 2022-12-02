@@ -163,7 +163,7 @@ class OAuth2Token(requests.auth.AuthBase):
         refresh_token=None,
         expiration=None,
         expires_in=None,
-        **kwargs
+        **kwargs,
     ):
         self.access_token = access_token
         self.refresh_token = refresh_token
@@ -995,8 +995,8 @@ class Session(requests.Session):
 
         try:
             # Try to determine if we're talking to Viya 3 or 4
-            r = self.get('/licenses/grants')
-            version = r.json().get('release')
+            r = self.get("/licenses/grants")
+            version = r.json().get("release")
 
             # Convert 'V03' and 'V04' to just 3 or 4.
             major_version = int(version.upper().lstrip('V'))
@@ -1007,9 +1007,9 @@ class Session(requests.Session):
                 self._version_info = VersionInfo(major_version)
             else:
                 # Endpoint with detailed release info only available for Viya 4
-                release_info = self.get('/deploymentData/cadenceVersion').json()
-                name = release_info['cadenceName']
-                version = release_info['cadenceVersion']
+                release_info = self.get("/deploymentData/cadenceVersion").json()
+                name = release_info["cadenceName"]
+                version = release_info["cadenceVersion"]
                 self._version_info = VersionInfo(
                     major_version, cadence=name, release=version
                 )
@@ -1570,12 +1570,12 @@ class VersionInfo:
             return -1
 
         # If comparing two Viya 4 versions, may need to check actual release number  to determine order
-        if self.release and getattr(other, 'release', None):
+        if self.release and getattr(other, "release", None):
             if self._release == other.release:
                 return 0
 
-            parts = self.release.split('.')
-            other_parts = other.release.split('.')
+            parts = self.release.split(".")
+            other_parts = other.release.split(".")
 
             # Release format was changed from YYYY.r.u to YYYY.MM so any release with 2 '.' is older than
             # a release with 1 '.'
@@ -1597,11 +1597,7 @@ class VersionInfo:
         return 0
 
     def __repr__(self):
-        name = '%s(major=%s, minor=%s' % (
-            self.__class__.__name__,
-            self._major,
-            self._minor,
-        )
+        name = f"{self.__class__.__name__}(major={self._major}, minor={self._minor}"
 
         if self._cadence:
             name += ", cadence='%s'" % self._cadence
@@ -1609,7 +1605,7 @@ class VersionInfo:
         if self._release:
             name += ", release='%s'" % self._release
 
-        return name + ')'
+        return name + ")"
 
     @property
     def cadence(self):
@@ -2108,8 +2104,8 @@ def platform_version():
 
     """
     warnings.warn(
-        'platform_version() has been deprecated and will be removed in a future version.  '
-        'Please use Session.version_info() instead.',
+        "platform_version() has been deprecated and will be removed in a future version.  "
+        "Please use Session.version_info() instead.",
         DeprecationWarning,
     )
 
