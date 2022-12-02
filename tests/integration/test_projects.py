@@ -14,6 +14,7 @@ pytestmark = pytest.mark.usefixtures('session')
 
 PROJECT_NAME = 'Test Project'
 
+
 def test_list_projects():
     projects = proj.list_projects()
     assert all(isinstance(f, RestObj) for f in projects)

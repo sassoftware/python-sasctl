@@ -2107,10 +2107,11 @@ def platform_version():
         SAS Viya version number
 
     """
-    warnings.warn('platform_version() has been deprecated and will be removed in a future version.  '
-                  'Please use Session.version_info() instead.',
-                  DeprecationWarning
-                  )
+    warnings.warn(
+        'platform_version() has been deprecated and will be removed in a future version.  '
+        'Please use Session.version_info() instead.',
+        DeprecationWarning,
+    )
 
     from .services import model_repository as mr
 
