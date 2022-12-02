@@ -6,6 +6,7 @@
 
 """The Model Repository service supports registering and managing models."""
 
+import datetime
 from warnings import warn
 
 from .service import Service
@@ -331,9 +332,22 @@ class ModelRepository(Service):
         elif is_challenger:
             model["role"] = "challenger"
 
-        model.setdefault(
-            "properties", [{"name": k, "value": v} for k, v in properties.items()]
-        )
+        model.setdefault("properties", [])
+        for k, v in properties.items():
+            if type(v) in (int, float):
+                t = 'numeric'
+            elif type(v) == datetime.date:
+                v = v.strftime('%m-%d-%Y')
+                t = 'date'
+            elif type(v) == datetime.datetime:
+                v = v.strftime('%m-%d-%Y %H:%M')
+                t = 'dateTime'
+            else:
+                t = 'string'
+
+            v = str(v)
+            model['properties'].append({"name": k, "value": v, "type": t})
+
         model["scoreCodeType"] = score_code_type or model.get("scoreCodeType")
         model["trainTable"] = training_table or model.get("trainTable")
         model[
