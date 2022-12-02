@@ -125,6 +125,9 @@ def test_current_session():
             assert current_session().username == 'user5'
         assert current_session().username == 'user4'
 
+    # Cleanup
+    current_session(None)
+
 
 def test_swat_connection_reuse():
     import base64

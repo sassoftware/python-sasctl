@@ -553,4 +553,5 @@ def pytest_generate_tests(metafunc):
     # (the version numbers) should not be passed directly to the test function as parameter values.  Instead, they
     # should be passed to the fixtures (`session` and `cas_session`) which will use them to generate the values that
     # are provided to the test function parameters
-    metafunc.parametrize(fixtures_to_parameterize, params, indirect=True)
+    if fixtures_to_parameterize:
+        metafunc.parametrize(fixtures_to_parameterize, params, indirect=True)
