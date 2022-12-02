@@ -342,9 +342,7 @@ class ModelRepository(Service):
                 t = "numeric"
             elif type(v) == datetime.date:
                 # Convert to datetime to extract timestamp and then scale to milliseconds
-                v = datetime.datetime.combine(
-                    v, datetime.datetime.min.time()
-                ).timestamp()
+                v = datetime.datetime(v.year, v.month, v.day).timestamp()
                 v = int(v * 1000)
                 t = "date"
             elif type(v) == datetime.datetime:

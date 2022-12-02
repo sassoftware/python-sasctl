@@ -45,7 +45,7 @@ def test_create_model():
             {'name': 'custom1', 'value': 123, 'type': 'numeric'},
             {'name': 'custom2', 'value': 'somevalue', 'type': 'string'},
             {'name': 'customDate', 'value': 1672462800000, 'type': 'date'},
-            {'name': 'customDateTime', 'value': 1672499272000, 'type': 'dateTime'},
+            {'name': 'customDateTime', 'value': 1672481272000, 'type': 'dateTime'},
         ],
         'inputVariables': [],
         'outputVariables': [],
@@ -79,15 +79,14 @@ def test_create_model():
                         custom1=123,
                         custom2='somevalue',
                         customDate=datetime.date(2022, 12, 31),
-                        customDateTime=datetime.datetime(2022, 12, 31, 10, 7, 52),
+                        customDateTime=datetime.datetime(2022, 12, 31, 10, 7, 52, tzinfo=datetime.timezone.utc),
                     ),
                 )
                 assert post.call_count == 1
             url, data = post.call_args
 
-            # dict isn't guaranteed to preserve order
-            # so k/v pairs of properties=dict() may be
-            # returned in a different order
+            # dict isn't guaranteed to preserve order so k/v pairs of properties=dict()
+            # may be returned in a different order
             assert sorted(target['properties'], key=lambda d: d['name']) == sorted(
                 data['json']['properties'], key=lambda d: d['name']
             )
