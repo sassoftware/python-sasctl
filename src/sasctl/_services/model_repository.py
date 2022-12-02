@@ -293,8 +293,9 @@ class ModelRepository(Service):
             Indicates whether the model can be retrained or not.
         is_immutable : bool
             Indicates whether the model can be changed or not.
-        properties : array_like, optional (custom properties)
-            Custom model properties that can be set: name, value, type
+        properties : dict, optional
+            Custom model properties provided as name: value pairs.
+            Allowed types are int, float, string, datetime.date, and datetime.datetime
         input_variables : array_like, optional
             Model input variables. By default, these are the same as the model
             project.
@@ -338,18 +339,23 @@ class ModelRepository(Service):
         model.setdefault("properties", [])
         for k, v in properties.items():
             if type(v) in (int, float):
-                t = 'numeric'
+                t = "numeric"
             elif type(v) == datetime.date:
-                v = v.strftime('%m-%d-%Y')
-                t = 'date'
+                # Convert to datetime to extract timestamp and then scale to milliseconds
+                v = datetime.datetime.combine(
+                    v, datetime.datetime.min.time()
+                ).timestamp()
+                v = int(v * 1000)
+                t = "date"
             elif type(v) == datetime.datetime:
-                v = v.strftime('%m-%d-%Y %H:%M')
-                t = 'dateTime'
+                # Extract timestamp and scale to milliseconds
+                v = int(v.timestamp() * 1000)
+                t = "dateTime"
             else:
-                t = 'string'
+                t = "string"
+                v = str(v)
 
-            v = str(v)
-            model['properties'].append({"name": k, "value": v, "type": t})
+            model["properties"].append({"name": k, "value": v, "type": t})
 
         model["scoreCodeType"] = score_code_type or model.get("scoreCodeType")
         model["trainTable"] = training_table or model.get("trainTable")
