@@ -1,37 +1,54 @@
 Unreleased
 ----------
 
+**Improvements**
+ - Added `Session.version_info()` to check which version of Viya the session is connected to.
+  - Updated the `properties=` parameter of `model_repository.create_model()` to accept a dictionary containing
+   custom property names and values, and to correctly indicate their type (numeric, string, date, datetime) when
+   passing the values to Viya.
+
+**Changes**
+ - A `RuntimeError` is now raised if an obsolete service is called on a Viya 4 session (sentiment_analysis, 
+   text_categorization, and text_parsing)
+ - Replaced the JSON cassettes used for testing with compressed binary cassettes to save space.
+ - Updated the testing framework to allow regression testing of multiple Viya versions.
+     
+**Bugfixes**
+ - Fixed an issue with `register_model()` that caused invalid SAS score code to be generated when registering an
+   ASTORE model in Viya 3.5.
+   
+ 
 v1.7.3 (2022-09-20)
 -------------------
 **Improvements**
-- Refactor astore model upload to fix 422 response from SAS Viya 4 
-  - ASTORE model import now uses SAS Viya to generate ASTORE model assets
-- Expanded usage for cas_management service (credit to @SilvestriStefano)
+ - Refactor astore model upload to fix 422 response from SAS Viya 4 
+ - ASTORE model import now uses SAS Viya to generate ASTORE model assets
+ - Expanded usage for cas_management service (credit to @SilvestriStefano)
 
 **Bugfixes**
-- ASTORE model import no longer returns a 422 error
-- Fix improper filter usage for model_repository service
-- Fix error with loss of stream in add_model_content call for duplicate content
-- Update integration test cassettes for SAS Viya 4
+ - ASTORE model import no longer returns a 422 error
+ - Fix improper filter usage for model_repository service
+ - Fix error with loss of stream in add_model_content call for duplicate content
+ - Update integration test cassettes for SAS Viya 4
 
 v1.7.2 (2022-06-16)
 -------------------
 **Improvements**
-- Added a new example notebook for git integration
-- Added a model migration tool for migrating Python models from Viya 3.5 to Viya 4
-- Improved handling of CAS authentication with tokens
+ - Added a new example notebook for git integration
+ - Added a model migration tool for migrating Python models from Viya 3.5 to Viya 4
+ - Improved handling of CAS authentication with tokens
 
 **Bugfixes**
-- Fixed git integration failure caused by detached head
-- Fixed minor bugs in score code generation feature
-- Fixed 500 error when importing models to Viya 4 with prewritten score code
-- Fixed incorrect handling of optional packages in pzmm
+ - Fixed git integration failure caused by detached head
+ - Fixed minor bugs in score code generation feature
+ - Fixed 500 error when importing models to Viya 4 with prewritten score code
+ - Fixed incorrect handling of optional packages in pzmm
 
 v1.7.1 (2022-04-19)
 -------------------
 **Bugfixes**
-- Removed linux breaking import from new git integration feature
-- Various minor bug fixes in the git integration feature
+ - Removed linux breaking import from new git integration feature
+ - Various minor bug fixes in the git integration feature
 
 v1.7.0 (2022-04-07)
 -------------------
