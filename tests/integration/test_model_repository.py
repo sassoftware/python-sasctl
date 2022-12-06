@@ -55,7 +55,7 @@ class TestAStoreModel:
 
         assert job.state == 'pending'
 
-    def test_model_publish(self, request):
+    def test_model_publish(self, cache):
         """Publish the imported model to MAS"""
 
         module = publish_model(self.MODEL_NAME, 'maslocal',
@@ -65,11 +65,11 @@ class TestAStoreModel:
         assert 'score' in module.stepIds
 
         # Store module name so we can retrieve it in later tests
-        request.config.cache.set('CAS_MODULE_NAME', module.name)
+        cache.set('MAS_MODULE_NAME', module.name)
 
-    def test_module_execute(self, request, iris_dataset):
+    def test_module_execute(self, cache, iris_dataset):
         # Store module name so we can retrieve it in later tests
-        module_name = request.config.cache.get('CAS_MODULE_NAME', None)
+        module_name = cache.get('MAS_MODULE_NAME', None)
 
         x = iris_dataset.drop('Species', axis=1).iloc[0, :]
 
