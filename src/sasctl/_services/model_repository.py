@@ -340,12 +340,14 @@ class ModelRepository(Service):
         for k, v in properties.items():
             if type(v) in (int, float):
                 t = "numeric"
-            elif isinstance(v, datetime.date):
+            elif type(v) is datetime.date:
+                # NOTE: do not use isinstance() to compare types as isinstance(v, datetime.date) evaluates to True
+                #       even for datetime.datetime instances.
                 # Convert to datetime to extract timestamp and then scale to milliseconds
                 v = datetime.datetime(v.year, v.month, v.day).timestamp()
                 v = int(v * 1000)
                 t = "date"
-            elif isinstance(v, datetime.datetime):
+            elif type(v) is datetime.datetime:
                 # Extract timestamp and scale to milliseconds
                 v = int(v.timestamp() * 1000)
                 t = "dateTime"
