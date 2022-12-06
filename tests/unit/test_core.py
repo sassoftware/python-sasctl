@@ -202,3 +202,42 @@ def test_platform_version():
         mock_info.return_value = {'build': {'buildVersion': '3.12.77'}}
         version = platform_version()
     assert version == '4.0'
+
+
+def test_version_info():
+    from sasctl.core import VersionInfo
+
+    # Viya 3 should default to Viya 3.5
+    assert VersionInfo(major=3) == VersionInfo(major=3, minor=5)
+
+    # Viya 4 should default to Viya 4.0
+    assert VersionInfo(major=4) == VersionInfo(major=4, minor=0)
+
+    # Should be able to compare versions, taking into consideration Viya 4 release numbering
+    # NOTE: Switch from YYYY.r.u format to YYYY.MM format started with 2022.09 so all YYYY.MM releases
+    # should be more recent than all YYYY.r.u formats.
+    assert VersionInfo(major=3, minor=4) < VersionInfo(major=3, minor=5)
+    assert VersionInfo(major=3, minor=5) < VersionInfo(major=4)
+    assert VersionInfo(major=4, release='2021.1.3') < VersionInfo(
+        major=4, release='2021.1.4'
+    )
+    assert VersionInfo(major=4, release='2021.1.4') < VersionInfo(
+        major=4, release='2021.2.0'
+    )
+    assert VersionInfo(major=4, release='2022.2.3') < VersionInfo(
+        major=4, release='2022.09'
+    )
+    assert VersionInfo(major=4, release='2022.09') < VersionInfo(
+        major=4, release='2022.10'
+    )
+    assert VersionInfo(major=4, release='2022.10') < VersionInfo(
+        major=4, minor=1, release='2022.01'
+    )
+
+    # Should be able to compare with int/float shorthand.
+    assert VersionInfo(major=3, minor=4) < 3.5
+    assert VersionInfo(major=3, minor=5) == 3.5
+    assert VersionInfo(major=4) == 4
+    assert VersionInfo(major=4, release='2022.09') == 4
+    assert VersionInfo(major=4) >= 4
+    assert VersionInfo(major=3) <= 4

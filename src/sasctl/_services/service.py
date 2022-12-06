@@ -235,6 +235,9 @@ class Service(object):  # skipcq PYL-R0205
             calls when data is already available on the client.
 
             """
+            if item is None:
+                return item
+
             # If the input already appears to be the requested object just
             # return it, unless a refresh of the data was explicitly requested.
             if isinstance(item, dict) and all(k in item for k in ("id", "name")):

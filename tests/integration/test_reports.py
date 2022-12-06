@@ -15,6 +15,7 @@ pytestmark = pytest.mark.usefixtures('session')
 def test_list_reports():
     all_reports = reports.list_reports()
 
+    assert len(all_reports) > 0
     assert all(isinstance(x, RestObj) for x in all_reports)
     assert all(x.type == 'report' for x in all_reports)
 

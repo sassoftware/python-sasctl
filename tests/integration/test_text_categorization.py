@@ -8,7 +8,7 @@ import time
 
 import pytest
 
-from sasctl.core import request_link
+from sasctl.core import current_session, request_link
 from sasctl.services import text_categorization as tc
 
 pytestmark = pytest.mark.usefixtures('session')
@@ -41,3 +41,11 @@ def test_from_table():
                         text_column='Consumer_complaint_narrative')
 
     assert_job_succeeds(job)
+
+
+def test_service_removed_error():
+    if current_session().version_info() < 4:
+        pytest.skip('Text Categorization service was not removed until Viya 4.')
+
+    with pytest.raises(RuntimeError):
+        tc.categorize('', None, id_column='', text_column='')

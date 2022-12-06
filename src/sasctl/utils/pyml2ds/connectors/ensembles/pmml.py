@@ -57,7 +57,7 @@ class PmmlParser(EnsembleParser):
         super(PmmlParser, self).__init__()
 
         self._tree_root = tree_root
-        for elem in tree_root.getiterator():
+        for elem in tree_root.iter():
             if hasattr(elem.tag, "find"):
                 i = elem.tag.find("}")
                 if i >= 0:

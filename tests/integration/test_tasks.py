@@ -147,7 +147,7 @@ class TestModels:
         assert callable(p.predict)
         assert callable(p.predict_proba)
 
-    def test_publish_sklearn_again(self):
+    def test_publish_sklearn_again(self, cache):
         from sasctl.tasks import publish_model
         from sasctl.services import model_repository as mr
 
@@ -160,6 +160,10 @@ class TestModels:
         # Publish should succeed with replace flag
         p = publish_model(model, 'maslocal', max_retries=100, replace=True)
 
+        # Module name in MAS may not exactly match name of model.  Store the assigned name of the model as
+        # it appears in MAS so we can call it in subsequent test steps.
+        cache.set('MAS_MODULE_NAME', p.name)
+
         # Model functions should have been defined in the module
         assert 'predict' in p.stepIds
         assert 'predict_proba' in p.stepIds
@@ -168,10 +172,14 @@ class TestModels:
         assert callable(p.predict)
         assert callable(p.predict_proba)
 
-    def test_score_sklearn(self):
+    def test_score_sklearn(self, cache):
         from sasctl.services import microanalytic_score as mas
 
-        m = mas.get_module(SCIKIT_MODEL_NAME.replace(' ', ''))
+        # Read the expected MAS module name from the cache.  Should have been placed there after publishing
+        # in the previous test step.
+        module_name = cache.get('MAS_MODULE_NAME', None)
+
+        m = mas.get_module(module_name)
         m = mas.define_steps(m)
         r = m.predict(sepalwidth=1, sepallength=2, petallength=3, petalwidth=4)
         assert r == 'virginica'

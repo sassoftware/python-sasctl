@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import copy
+import datetime
 from unittest import mock
 
 import pytest
@@ -41,8 +42,10 @@ def test_create_model():
         'classificationTargetEventValue': None,
         'location': None,
         'properties': [
-            {'name': 'custom1', 'value': 123},
-            {'name': 'custom2', 'value': 'somevalue'},
+            {'name': 'custom1', 'value': 123, 'type': 'numeric'},
+            {'name': 'custom2', 'value': 'somevalue', 'type': 'string'},
+            # {'name': 'customDate', 'value': 1672462800000, 'type': 'date'},
+            {'name': 'customDateTime', 'value': 1672481272000, 'type': 'dateTime'},
         ],
         'inputVariables': [],
         'outputVariables': [],
@@ -72,14 +75,18 @@ def test_create_model():
                     is_champion=True,
                     is_immutable=True,
                     is_retrainable=True,
-                    properties=dict(custom1=123, custom2='somevalue'),
+                    properties=dict(
+                        custom1=123,
+                        custom2='somevalue',
+                        # customDate=datetime.date(2022, 12, 31),
+                        customDateTime=datetime.datetime(2022, 12, 31, 10, 7, 52, tzinfo=datetime.timezone.utc),
+                    ),
                 )
                 assert post.call_count == 1
             url, data = post.call_args
 
-            # dict isn't guaranteed to preserve order
-            # so k/v pairs of properties=dict() may be
-            # returned in a different order
+            # dict isn't guaranteed to preserve order so k/v pairs of properties=dict()
+            # may be returned in a different order
             assert sorted(target['properties'], key=lambda d: d['name']) == sorted(
                 data['json']['properties'], key=lambda d: d['name']
             )
@@ -177,29 +184,49 @@ def test_get_model_by_name():
 
 def test_add_model_content():
 
-    with mock.patch('sasctl._services.model_repository.ModelRepository.get_model', return_value={'id': 123}):
-        with mock.patch('sasctl._services.model_repository.ModelRepository.post') as post:
+    with mock.patch(
+        'sasctl._services.model_repository.ModelRepository.get_model',
+        return_value={'id': 123},
+    ):
+        with mock.patch(
+            'sasctl._services.model_repository.ModelRepository.post'
+        ) as post:
             text_data = 'Test text file contents'
 
             # Basic upload of text data
             mr.add_model_content(None, text_data, 'test.txt')
-            assert post.call_args[1]['files'] == {'files': ('test.txt', text_data, 'multipart/form-data')}
+            assert post.call_args[1]['files'] == {
+                'files': ('test.txt', text_data, 'multipart/form-data')
+            }
 
             # Upload of text data with content type
-            mr.add_model_content(None, text_data, 'test.txt', content_type='application/text')
-            assert post.call_args[1]['files'] == {'files': ('test.txt', text_data, 'application/text')}
+            mr.add_model_content(
+                None, text_data, 'test.txt', content_type='application/text'
+            )
+            assert post.call_args[1]['files'] == {
+                'files': ('test.txt', text_data, 'application/text')
+            }
 
             # Upload of dict data without content type
             import json
+
             dict_data = {'data': text_data}
             mr.add_model_content(None, dict_data, 'dict.json')
-            assert post.call_args[1]['files'] == {'files': ('dict.json', json.dumps(dict_data), 'multipart/form-data')}
+            assert post.call_args[1]['files'] == {
+                'files': ('dict.json', json.dumps(dict_data), 'multipart/form-data')
+            }
 
             # Upload of binary data should include content type
             binary_data = 'Test binary file contents'.encode()
             mr.add_model_content(None, binary_data, 'test.pkl')
-            assert post.call_args[1]['files'] == {'files': ('test.pkl', binary_data, 'application/octet-stream')}
+            assert post.call_args[1]['files'] == {
+                'files': ('test.pkl', binary_data, 'application/octet-stream')
+            }
 
             # Should be able to customize content type
-            mr.add_model_content(None, binary_data, 'test.pkl', content_type='application/image')
-            assert post.call_args[1]['files'] == {'files': ('test.pkl', binary_data, 'application/image')}
+            mr.add_model_content(
+                None, binary_data, 'test.pkl', content_type='application/image'
+            )
+            assert post.call_args[1]['files'] == {
+                'files': ('test.pkl', binary_data, 'application/image')
+            }

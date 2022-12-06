@@ -5,7 +5,7 @@ from pathlib import Path
 from uuid import UUID
 from warnings import warn
 
-from ..core import platform_version
+from ..core import current_session
 from .._services.model_repository import ModelRepository as mr
 from .writeScoreCode import ScoreCode as sc
 from .zip_model import ZipModel as zm
@@ -248,7 +248,8 @@ class ImportModel:
                 modelFileName = modelPrefix + ".pickle"
 
         # Check the SAS Viya version number being used
-        isViya35 = platform_version() == "3.5"
+
+        isViya35 = current_session().version_info() == 3.5
         # For SAS Viya 4, the score code can be written beforehand and imported with all of the model files
         if not isViya35:
             if noScoreCode:

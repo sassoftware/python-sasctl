@@ -8,6 +8,8 @@
 
 import pytest
 
+from sasctl import current_session
+
 # Every test function in the module will automatically receive the session fixture
 pytestmark = pytest.mark.usefixtures('session')
 
@@ -16,8 +18,8 @@ pytestmark = pytest.mark.usefixtures('session')
 class TestAStoreRegressionModel:
     PROJECT_NAME = 'sasctl_testing_pipeline_project'
     MODEL_NAME = 'sasctl_testing_pipeline_ASTORE_model'
-    CAS_DEST = 'sasctl_test_cas'
-    MAS_DEST = 'sasctl_test_mas'
+    CAS_DEST = 'sasctl_test_cas_TestAStoreRegressionModel'
+    MAS_DEST = 'sasctl_test_mas_TestAStoreRegressionModel'
     CAS_MODEL_TABLE = 'sasctl_test_model_table'
 
     def test_register_model(self, cas_session, boston_dataset):
@@ -64,14 +66,14 @@ class TestAStoreRegressionModel:
         cas_session.loadactionset('modelpublishing')
 
         module_name = request.config.cache.get('CAS_MODULE_NAME', None)
-        assert  module_name is not None
+        assert module_name is not None
 
-        result = cas_session.runModelLocal(modelName=module_name,
-                                           modelTable=dict(name=self.CAS_MODEL_TABLE,
-                                                           caslib='Public'),
-                                           inTable=tbl,
-                                           outTable=dict(name='boston_scored',
-                                                         caslib='Public'))
+        result = cas_session.runModelLocal(
+            modelName=module_name,
+            modelTable=dict(name=self.CAS_MODEL_TABLE, caslib='Public'),
+            inTable=tbl,
+            outTable=dict(name='boston_scored', caslib='Public'),
+        )
 
         assert result.status_code == 0
 
@@ -80,7 +82,10 @@ class TestAStoreRegressionModel:
         assert 'P_Price' in result.columns
 
     def test_create_mas_destination(self):
-        pytest.skip('Publishing destinations for a remote SAS Micro Analytic Service are currently not supported.')
+        if current_session().version_info() == 4:
+            pytest.skip(
+                'Publishing destinations for a remote SAS Micro Analytic Service are currently not supported.'
+            )
 
         from sasctl.services import model_publish as mp
 
@@ -125,8 +130,8 @@ class TestAStoreRegressionModel:
 class TestSklearnRegressionModel:
     PROJECT_NAME = 'sasctl_testing Pipeline Project'
     MODEL_NAME = 'sasctl_testing Pipeline Sklearn Model'
-    CAS_DEST = 'sasctl_test_cas'
-    MAS_DEST = 'sasctl_test_mas'
+    CAS_DEST = 'sasctl_test_cas_TestSklearnRegressionModel'
+    MAS_DEST = 'sasctl_test_mas_TestSklearnRegressionModel'
     CAS_MODEL_TABLE = 'sasctl_test_model_table'
 
     def test_register_model(self, boston_dataset):
@@ -142,7 +147,9 @@ class TestSklearnRegressionModel:
         model = GradientBoostingRegressor()
         model.fit(X, y)
 
-        model = register_model(model, self.MODEL_NAME, self.PROJECT_NAME, input=X, force=True)
+        model = register_model(
+            model, self.MODEL_NAME, self.PROJECT_NAME, input=X, force=True
+        )
         assert model.name == self.MODEL_NAME
         assert model.projectName == self.PROJECT_NAME
         assert model.function.lower() == 'prediction'
@@ -155,9 +162,9 @@ class TestSklearnRegressionModel:
 
         dest = mp.get_destination(self.CAS_DEST)
         if not dest:
-            dest = mp.create_cas_destination(self.CAS_DEST,
-                                             'Public',
-                                             self.CAS_MODEL_TABLE)
+            dest = mp.create_cas_destination(
+                self.CAS_DEST, 'Public', self.CAS_MODEL_TABLE
+            )
 
         assert dest.name == self.CAS_DEST
         assert dest.destinationType == 'cas'
@@ -176,19 +183,22 @@ class TestSklearnRegressionModel:
         assert module.publishType == 'casModel'
 
     def test_score_cas(self, cas_session, boston_dataset, request):
-        pytest.skip("Score code generated is not valid for SAS Viya 4.")
+        if current_session().version_info() == 4:
+            pytest.skip("Score code generated is not valid for SAS Viya 4.")
+
         tbl = cas_session.upload(boston_dataset).casTable
         cas_session.loadactionset('modelpublishing')
 
+        # Retrieve the name of the published module from the pytest cache.
         module_name = request.config.cache.get('CAS_MODULE_NAME', None)
         assert module_name is not None
 
-        result = cas_session.runModelLocal(modelName=module_name,
-                                           modelTable=dict(name=self.CAS_MODEL_TABLE,
-                                                           caslib='Public'),
-                                           inTable=tbl,
-                                           outTable=dict(name='boston_scored',
-                                                         caslib='Public'))
+        result = cas_session.runModelLocal(
+            modelName=module_name,
+            modelTable=dict(name=self.CAS_MODEL_TABLE, caslib='Public'),
+            inTable=tbl,
+            outTable=dict(name='boston_scored', caslib='Public'),
+        )
 
         assert result.status_code == 0
 
@@ -211,7 +221,9 @@ class TestSklearnRegressionModel:
         assert hasattr(module, 'predict')
 
     def test_score_mas(self, boston_dataset, request):
-        pytest.skip("Score code generated is not valid for SAS Viya 4.")
+        if current_session().version_info() == 4:
+            pytest.skip("Score code generated is not valid for SAS Viya 4.")
+
         from sasctl.services import microanalytic_score as mas
 
         module_name = request.config.cache.get('MAS_MODULE_NAME', None)
@@ -236,8 +248,8 @@ class TestSklearnRegressionModel:
 class TestSklearnClassificationModel:
     PROJECT_NAME = 'sasctl_testing Pipeline Classification Project'
     MODEL_NAME = 'sasctl_testing Pipeline Sklearn Iris Model'
-    CAS_DEST = 'sasctl_test_cas'
-    MAS_DEST = 'sasctl_test_mas'
+    CAS_DEST = 'sasctl_test_cas_TestSklearnClassificationModel'
+    MAS_DEST = 'sasctl_test_mas_TestSklearnClassificationModel'
     CAS_MODEL_TABLE = 'sasctl_test_model_table'
 
     def test_register_model(self, iris_dataset):
@@ -253,7 +265,9 @@ class TestSklearnClassificationModel:
         model = GradientBoostingClassifier()
         model.fit(X, y)
 
-        model = register_model(model, self.MODEL_NAME, self.PROJECT_NAME, input=X, force=True)
+        model = register_model(
+            model, self.MODEL_NAME, self.PROJECT_NAME, input=X, force=True
+        )
         assert model.name == self.MODEL_NAME
         assert model.projectName == self.PROJECT_NAME
         assert model.function.lower() == 'classification'
@@ -265,9 +279,9 @@ class TestSklearnClassificationModel:
 
         dest = mp.get_destination(self.CAS_DEST)
         if not dest:
-            dest = mp.create_cas_destination(self.CAS_DEST,
-                                             'Public',
-                                             self.CAS_MODEL_TABLE)
+            dest = mp.create_cas_destination(
+                self.CAS_DEST, 'Public', self.CAS_MODEL_TABLE
+            )
 
         assert dest.name == self.CAS_DEST
         assert dest.destinationType == 'cas'

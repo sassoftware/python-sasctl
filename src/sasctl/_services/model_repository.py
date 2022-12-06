@@ -6,6 +6,7 @@
 
 """The Model Repository service supports registering and managing models."""
 
+import datetime
 from warnings import warn
 
 from .service import Service
@@ -292,8 +293,9 @@ class ModelRepository(Service):
             Indicates whether the model can be retrained or not.
         is_immutable : bool
             Indicates whether the model can be changed or not.
-        properties : array_like, optional (custom properties)
-            Custom model properties that can be set: name, value, type
+        properties : dict, optional
+            Custom model properties provided as name: value pairs.
+            Allowed types are int, float, string, datetime.date, and datetime.datetime
         input_variables : array_like, optional
             Model input variables. By default, these are the same as the model
             project.
@@ -334,9 +336,27 @@ class ModelRepository(Service):
         elif is_challenger:
             model["role"] = "challenger"
 
-        model.setdefault(
-            "properties", [{"name": k, "value": v} for k, v in properties.items()]
-        )
+        model.setdefault("properties", [])
+        for k, v in properties.items():
+            if type(v) in (int, float):
+                t = "numeric"
+            elif type(v) is datetime.date:
+                # NOTE: do not use isinstance() to compare types as isinstance(v, datetime.date) evaluates to True
+                #       even for datetime.datetime instances.
+                # Convert to datetime to extract timestamp and then scale to milliseconds
+                v = datetime.datetime(v.year, v.month, v.day).timestamp()
+                v = int(v * 1000)
+                t = "date"
+            elif type(v) is datetime.datetime:
+                # Extract timestamp and scale to milliseconds
+                v = int(v.timestamp() * 1000)
+                t = "dateTime"
+            else:
+                t = "string"
+                v = str(v)
+
+            model["properties"].append({"name": k, "value": v, "type": t})
+
         model["scoreCodeType"] = score_code_type or model.get("scoreCodeType")
         model["trainTable"] = training_table or model.get("trainTable")
         model[
@@ -422,8 +442,11 @@ class ModelRepository(Service):
                 for item in model_contents:
                     if item.name == name:
                         cls.delete("/models/{}/contents/{}".format(id_, item.id))
+
                         # Return json stream to beginning of file content
-                        files["files"][1].seek(0)
+                        if hasattr(files["files"][1], "seek"):
+                            files["files"][1].seek(0)
+
                         return cls.post(
                             "/models/{}/contents".format(id_),
                             files=files,
@@ -777,7 +800,7 @@ class ModelRepository(Service):
 
     @classmethod
     def list_project_versions(cls, project):
-        """_summary_
+        """Get a list of all versions of a project.
 
         Parameters
         ----------
@@ -796,8 +819,6 @@ class ModelRepository(Service):
                 modified : datetime
 
         """
-        from datetime import datetime
-
         project_info = cls.get_project(project)
 
         if project_info is None:
@@ -813,7 +834,7 @@ class ModelRepository(Service):
                     "name": version.name,
                     "id": version.id,
                     "number": version.versionNumber,
-                    "modified": datetime.strptime(
+                    "modified": datetime.datetime.strptime(
                         version.modifiedTimeStamp, "%Y-%m-%dT%H:%M:%S.%fZ"
                     ),
                 }
@@ -823,7 +844,7 @@ class ModelRepository(Service):
                 "name": projectVersions.name,
                 "id": projectVersions.id,
                 "number": projectVersions.versionNumber,
-                "modified": datetime.strptime(
+                "modified": datetime.datetime.strptime(
                     projectVersions.modifiedTimeStamp, "%Y-%m-%dT%H:%M:%S.%fZ"
                 ),
             }

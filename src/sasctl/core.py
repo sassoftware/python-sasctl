@@ -12,7 +12,6 @@ import netrc
 import os
 import re
 import ssl
-import sys
 import warnings
 from datetime import datetime, timedelta
 from uuid import UUID, uuid4
@@ -164,7 +163,7 @@ class OAuth2Token(requests.auth.AuthBase):
         refresh_token=None,
         expiration=None,
         expires_in=None,
-        **kwargs
+        **kwargs,
     ):
         self.access_token = access_token
         self.refresh_token = refresh_token
@@ -423,6 +422,9 @@ class Session(requests.Session):
             client_id=client_id,
             client_secret=client_secret,
         )
+
+        # Used to cache version info
+        self._version_info = None
 
         # Used for context manager
         self._old_session = current_session()
@@ -1016,6 +1018,52 @@ class Session(requests.Session):
                 if not token.is_expired:
                     return token
 
+    def version_info(self):
+        """Get version information from the connected SAS Viya environment
+
+        Returns
+        -------
+        VersionInfo
+
+        Notes
+        -----
+        The resulting version information is cached and returned on any subsequent calls.  This
+        allows repeatedly checking version information without making redundant network calls to the
+        SAS Viya server.
+
+        """
+        # The Viya environment isn't changing, so there's no need to repeatedly make
+        # service calls to check version information.  If we've already cached the info
+        # then just return it.
+        if self._version_info:
+            return self._version_info
+
+        try:
+            # Try to determine if we're talking to Viya 3 or 4
+            r = self.get("/licenses/grants")
+            release = r.json().get("release")
+
+            # Convert 'V03' and 'V04' to just 3 or 4.
+            major_version = int(release.upper().lstrip("V"))
+
+            # No good way to get detailed version info from a Viya 3 environment.
+            # At this point, we just assume it's Viya 3.5 and return
+            if major_version == 3:
+                self._version_info = VersionInfo(major_version)
+            else:
+                # Endpoint with detailed release info only available for Viya 4
+                cadence_info = self.get("/deploymentData/cadenceVersion").json()
+                name = cadence_info["cadenceName"]
+                release = cadence_info["cadenceVersion"]
+                self._version_info = VersionInfo(
+                    major_version, cadence=name, release=release
+                )
+        except HTTPError:
+            # Ignore.  We'll return None and (possibly) replace with correct info on subsequent call.
+            pass
+
+        return self._version_info
+
     def _get_token_with_kerberos(self):
         """Authenticate with a Kerberos ticket."""
         if kerberos is None:
@@ -1515,6 +1563,125 @@ class PagedList(list):
         return string
 
 
+class VersionInfo:
+    """Stores the version information for a SAS Viya environment.
+
+    Parameters
+    ----------
+    major : int
+        Major version number (e.g. 3 for Viya 3.5 or 4 for Viya 4.0)
+    minor : int
+        Minor version number (e.g. 5 for Viya 3.5 or 0 for Viya 4.0)
+    cadence : str, optional
+        Release cadence for Viya 4.  Should be one of 'stable' or 'LTS'.
+    release : str, optional
+        Release number for Viya 4.  Two formats are currently possible:
+         - YYYY.R.U where R is the LTS release number in YYYY and U is the updates since R
+         - YYYY.MM where MM is the month of the release.
+
+    """
+
+    def __init__(self, major, minor=None, cadence=None, release=None):
+        self._major = major
+        self._minor = minor if minor else 5 if major == 3 else 0
+        self._cadence = str(cadence) if cadence else None
+        self._release = str(release) if release else None
+
+    def __ge__(self, other):
+        return self > other or self == other
+
+    def __gt__(self, other):
+        return self._compare(other) > 0
+
+    def __lt__(self, other):
+        return self._compare(other) < 0
+
+    def __le__(self, other):
+        return self < other or self == other
+
+    def __eq__(self, other):
+        return self._compare(other) == 0
+
+    def __float__(self):
+        return float(self._major) + 0.1 * (self._minor or 0)
+
+    def __hash__(self):
+        return hash((self.major, self.minor, self.release))
+
+    def _compare(self, other):
+        """Compare and return -1/0/1 indicating lt/eq/gt.
+
+        Parameters
+        ----------
+        other : any
+
+        Returns
+        -------
+        int
+            -1 if < `other`, 0 if equal, and 1 if > `other`.
+
+        """
+        # Compare Major/Minor versions (e.g. Viya 3.5 < Viya 4.0)
+        if float(self) > float(other):
+            return 1
+        if float(self) < float(other):
+            return -1
+
+        # If comparing two Viya 4 versions, may need to check actual release number  to determine order
+        if self.release and getattr(other, "release", None):
+            if self._release == other.release:
+                return 0
+
+            parts = self.release.split(".")
+            other_parts = other.release.split(".")
+
+            # Release format was changed from YYYY.r.u to YYYY.MM so any release with 2 '.' is older than
+            # a release with 1 '.'
+            if len(parts) == 2 and len(other_parts) == 3:
+                return 1
+            if len(parts) == 3 and len(other_parts) == 2:
+                return -1
+
+            # If we got this far then both version numbers should have the same release format.
+            # Earlier release is the one with at least one component part that is lower
+            for a, b in zip(parts, other_parts):
+                if int(a) < int(b):
+                    return -1
+                if int(a) > int(b):
+                    return 1
+
+        # Either other doesn't have a .release or we compared all components of .release and
+        # they were all equal
+        return 0
+
+    def __repr__(self):
+        name = f"{self.__class__.__name__}(major={self._major}, minor={self._minor}"
+
+        if self._cadence:
+            name += ", cadence='%s'" % self._cadence
+
+        if self._release:
+            name += ", release='%s'" % self._release
+
+        return name + ")"
+
+    @property
+    def cadence(self):
+        return self._cadence
+
+    @property
+    def major(self):
+        return self._major
+
+    @property
+    def minor(self):
+        return self._minor
+
+    @property
+    def release(self):
+        return self._release
+
+
 def is_uuid(id_):
     try:
         UUID(str(id_))
@@ -1994,6 +2161,12 @@ def platform_version():
         SAS Viya version number
 
     """
+    warnings.warn(
+        "platform_version() has been deprecated and will be removed in a future version.  "
+        "Please use Session.version_info() instead.",
+        DeprecationWarning,
+    )
+
     from .services import model_repository as mr
 
     response = mr.info()

@@ -74,7 +74,7 @@ def sasctl_command(name, subname=None):
 
         def parse_args():
             """Retrieve argument metadata from function signature and docstring."""
-            arg_spec = inspect.getargspec(func)
+            arg_spec = inspect.getfullargspec(func)
             defaults = list(arg_spec.defaults) if arg_spec.defaults is not None else []
             required = [True] * (len(arg_spec.args) - len(defaults)) + [False] * len(
                 defaults

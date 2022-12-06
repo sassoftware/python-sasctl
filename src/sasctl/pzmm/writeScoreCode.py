@@ -3,7 +3,7 @@
 
 from pathlib import Path
 import re
-from ..core import platform_version
+from ..core import current_session
 from .._services.model_repository import ModelRepository as modelRepo
 
 
@@ -133,7 +133,7 @@ class ScoreCode:
             isMLFlow = False
 
         # Call REST API to check SAS Viya version
-        isViya35 = platform_version() == "3.5"
+        isViya35 = current_session().version_info() == 3.5
 
         # Initialize modelID to remove unbound variable warnings
         modelID = None
