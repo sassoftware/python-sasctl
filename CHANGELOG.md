@@ -8,14 +8,17 @@ Unreleased
    passing the values to Viya.
 
 **Changes**
+ - Deprecated `core.platform_version()` in favor of `Session.version_info()`.
  - A `RuntimeError` is now raised if an obsolete service is called on a Viya 4 session (sentiment_analysis, 
    text_categorization, and text_parsing)
  - Replaced the JSON cassettes used for testing with compressed binary cassettes to save space.
  - Updated the testing framework to allow regression testing of multiple Viya versions.
-     
+
 **Bugfixes**
  - Fixed an issue with `register_model()` that caused invalid SAS score code to be generated when registering an
    ASTORE model in Viya 3.5.
+ - Fixed a bug where calling a "get_item()" function and passing `None` would throw an error on most services instead
+   of returning `None`. 
    
  
 v1.7.3 (2022-09-20)
