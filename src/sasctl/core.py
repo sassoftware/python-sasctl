@@ -1041,10 +1041,10 @@ class Session(requests.Session):
         try:
             # Try to determine if we're talking to Viya 3 or 4
             r = self.get("/licenses/grants")
-            version = r.json().get("release")
+            release = r.json().get("release")
 
             # Convert 'V03' and 'V04' to just 3 or 4.
-            major_version = int(version.upper().lstrip("V"))
+            major_version = int(release.upper().lstrip("V"))
 
             # No good way to get detailed version info from a Viya 3 environment.
             # At this point, we just assume it's Viya 3.5 and return
@@ -1052,11 +1052,11 @@ class Session(requests.Session):
                 self._version_info = VersionInfo(major_version)
             else:
                 # Endpoint with detailed release info only available for Viya 4
-                release_info = self.get("/deploymentData/cadenceVersion").json()
-                name = release_info["cadenceName"]
-                version = release_info["cadenceVersion"]
+                cadence_info = self.get("/deploymentData/cadenceVersion").json()
+                name = cadence_info["cadenceName"]
+                release = cadence_info["cadenceVersion"]
                 self._version_info = VersionInfo(
-                    major_version, cadence=name, release=version
+                    major_version, cadence=name, release=release
                 )
         except HTTPError:
             # Ignore.  We'll return None and (possibly) replace with correct info on subsequent call.
@@ -1605,9 +1605,22 @@ class VersionInfo:
     def __float__(self):
         return float(self._major) + 0.1 * (self._minor or 0)
 
-    def _compare(self, other):
-        """Compare and return -1/0/1 indicating lt/eq/gt."""
+    def __hash__(self):
+        return hash((self.major, self.minor, self.release))
 
+    def _compare(self, other):
+        """Compare and return -1/0/1 indicating lt/eq/gt.
+
+        Parameters
+        ----------
+        other : any
+
+        Returns
+        -------
+        int
+            -1 if < `other`, 0 if equal, and 1 if > `other`.
+
+        """
         # Compare Major/Minor versions (e.g. Viya 3.5 < Viya 4.0)
         if float(self) > float(other):
             return 1

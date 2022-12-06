@@ -340,12 +340,12 @@ class ModelRepository(Service):
         for k, v in properties.items():
             if type(v) in (int, float):
                 t = "numeric"
-            elif type(v) == datetime.date:
+            elif isinstance(v, datetime.date):
                 # Convert to datetime to extract timestamp and then scale to milliseconds
                 v = datetime.datetime(v.year, v.month, v.day).timestamp()
                 v = int(v * 1000)
                 t = "date"
-            elif type(v) == datetime.datetime:
+            elif isinstance(v, datetime.datetime):
                 # Extract timestamp and scale to milliseconds
                 v = int(v.timestamp() * 1000)
                 t = "dateTime"
@@ -798,7 +798,7 @@ class ModelRepository(Service):
 
     @classmethod
     def list_project_versions(cls, project):
-        """_summary_
+        """Get a list of all versions of a project.
 
         Parameters
         ----------
@@ -817,8 +817,6 @@ class ModelRepository(Service):
                 modified : datetime
 
         """
-        from datetime import datetime
-
         project_info = cls.get_project(project)
 
         if project_info is None:
@@ -834,7 +832,7 @@ class ModelRepository(Service):
                     "name": version.name,
                     "id": version.id,
                     "number": version.versionNumber,
-                    "modified": datetime.strptime(
+                    "modified": datetime.datetime.strptime(
                         version.modifiedTimeStamp, "%Y-%m-%dT%H:%M:%S.%fZ"
                     ),
                 }
@@ -844,7 +842,7 @@ class ModelRepository(Service):
                 "name": projectVersions.name,
                 "id": projectVersions.id,
                 "number": projectVersions.versionNumber,
-                "modified": datetime.strptime(
+                "modified": datetime.datetime.strptime(
                     projectVersions.modifiedTimeStamp, "%Y-%m-%dT%H:%M:%S.%fZ"
                 ),
             }

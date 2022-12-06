@@ -371,7 +371,6 @@ def register_model(
                 model = mr.import_model_from_zip(
                     name, project, zipfile, version=version
                 )
-                return model
             else:
                 # If using Viya 4, just upload the raw AStore and Model Manager will handle inspection.
                 astore = cas.astore.download(rstore=model)
