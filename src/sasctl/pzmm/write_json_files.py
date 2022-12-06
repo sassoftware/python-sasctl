@@ -1009,11 +1009,11 @@ class JSONFiles:
         ----------
         json_path : str, optional
             The path to a Python project, by default the current working directory.
+
         Yields
         ------
         requirements.json : file
-            JSON file used to create a specific Python environment in a SAS Model Manager published
-            container.
+            JSON file used to create a specific Python environment in a SAS Model Manager published container.
         """
 
         pickle_packages = []
@@ -1037,13 +1037,15 @@ class JSONFiles:
                 json_step = json.dumps(
                     [
                         {
-                            "Warning": "The versions for the following packages could not be determined:",
+                            "Warning": "The existence and/or versions for the following packages could not be "
+                            "determined:",
                             "Packages": ", ".join(missing_package_versions),
                         }
                     ],
                     indent=4,
                 )
                 file.write(json_step)
+
             for package, version in package_and_version:
                 if version:
                     json_step = json.dumps(
@@ -1051,16 +1053,6 @@ class JSONFiles:
                             {
                                 "step": "install " + package,
                                 "command": "pip install " + package + "==" + version,
-                            }
-                        ],
-                        indent=4,
-                    )
-                else:
-                    json_step = json.dumps(
-                        [
-                            {
-                                "step": "install " + package,
-                                "command": "pip install " + package,
                             }
                         ],
                         indent=4,
@@ -1087,11 +1079,10 @@ class JSONFiles:
 
         def package_not_found_output(package_name, package_versions):
             print(
-                f"Warning: Package {package_name} was not found in the local environment, so a version could not be "
-                "determined."
-            )
-            print(
-                f"The pip installation command will not include a version number for {package_name}."
+                f"Warning: Package {package_name} was not found in the local environment. Either {package_name} is not "
+                f"a valid Python package, or the package is not present in this environment. The requirements.json file"
+                f" will include a commented out version of the pip installation command at the bottom of the file. "
+                f"Please review the file and verify that the package exists and input the version needed."
             )
             package_versions.append([package_name, None])
             return package_versions
@@ -1234,16 +1225,17 @@ class JSONFiles:
             obj = pickle.load(open_file)
             dumps = pickle.dumps(obj)
 
-        modules = {mod.split(".")[0] for mod, _ in cls.get_package_names(dumps)}
-        modules.discard("builtins")
-        return list(modules)
+        modules = cls.get_package_names(dumps)
+        return modules
 
     @classmethod
     def get_package_names(cls, stream):
         """
-        Generates (module, class_name) tuples from a pickle stream. Extracts all class names referenced
-        by GLOBAL and STACK_GLOBAL opcodes.
+        Generates a list of found `package` names from a pickle stream. In most cases, the `packages` returned by the
+        function will be valid Python packages. A check is made in get_local_package_version to ensure that the package
+        is in fact a valid Python package.
 
+        This code has been adapted from the following stackoverflow example and utilizes the pickletools package.
         Credit: modified from https://stackoverflow.com/questions/64850179/inspecting-a-pickle-dump-for-dependencies
         More information here: https://github.com/python/cpython/blob/main/Lib/pickletools.py
 
@@ -1252,54 +1244,48 @@ class JSONFiles:
         stream : bytes or str
             A file like object or string containing the pickle.
 
-        Yields
-        ------
-        tuple
-            Generated (module, class_name) tuples.
+        Returns
+        -------
+        list
+            List of package names found as module dependencies in the pickle file.
         """
+        # Collect all the opcodes, arguments, and position values from the pickle stream into three lists
+        opcode, arg, pos = [], [], []
+        for o, a, p in pickletools.genops(stream):
+            opcode.append(o.name)
+            arg.append(a)
+            pos.append(p)
 
-        stack, mark_stack, memo = [], [], []
-        mark = pickletools.markobject
+        # Convert to a pandas dataframe for ease of conditional filtering
+        df_pickle = pd.DataFrame({"opcode": opcode, "arg": arg, "pos": pos})
 
-        # Step through the pickle stack and retrieve names used by STACK_GLOBAL
-        for opcode, arg, pos in pickletools.genops(stream):
+        # For all opcodes labelled GLOBAL or STACK_GLOBAL pull out the package names
+        global_stack = df_pickle[
+            (df_pickle.opcode == "GLOBAL") | (df_pickle.opcode == "STACK_GLOBAL")
+        ]
+        # From the argument column, split the string of the form `X.Y.Z` by `.` and return only the unique `X's`
+        stack_packages = (
+            global_stack.arg.str.split().str[0].str.split(".").str[0].unique().tolist()
+        )
 
-            before, after = opcode.stack_before, opcode.stack_after
-            number_to_pop = len(before)
+        # For all opcodes labelled BINUNICODE or SHORT_BINUNICODE pull out the package names
+        binunicode = df_pickle[
+            (df_pickle.opcode == "BINUNICODE")
+            | (df_pickle.opcode == "SHORT_BINUNICODE")
+        ]
+        # From the argument column, split the string by `.`, then return only unique cells with at least one split
+        arg_binunicode = binunicode.arg.str.split(".")
+        unicode_packages = (
+            arg_binunicode.loc[arg_binunicode.str.len() > 1].str[0].unique().tolist()
+        )
+        # Remove invalid `package` names from the list
+        unicode_packages = [x for x in unicode_packages if x.isidentifier()]
 
-            if opcode.name == "GLOBAL":
-                yield tuple(arg.split(1, None))
-            elif opcode.name == "STACK_GLOBAL":
-                yield stack[-2], stack[-1]
-            elif mark in before or (
-                opcode.name == "POP" and stack and stack[-1] is mark
-            ):
-                mark_stack.pop()
-                while stack[-1] is not mark:
-                    stack.pop()
-                stack.pop()
-                try:
-                    number_to_pop = before.index(mark)
-                except ValueError:
-                    number_to_pop = 0
-            elif opcode.name in {"PUT", "BINPUT", "LONG_BINPUT", "MEMOIZE"}:
-                if opcode.name == "MEMOIZE":
-                    memo.append(stack[-1])
-                else:
-                    memo[arg] = stack[-1]
-                number_to_pop, after = 0, []  # memoize and put; do not pop the stack
-            elif opcode.name in {"GET", "BINGET", "LONG_BINGET"}:
-                arg = memo[arg]
+        # Combine the two package lists and remove any duplicates
+        packages = list(set(stack_packages + unicode_packages))
 
-            if number_to_pop:
-                del stack[-number_to_pop:]
-            if mark in after:
-                mark_stack.append(pos)
-
-            if len(after) == 1 and opcode.arg is not None:
-                stack.append(arg)
-            else:
-                stack.extend(after)
+        # Return the package list without any None values
+        return [x for x in packages if x]
 
     @classmethod
     def remove_standard_library_packages(cls, package_list):
