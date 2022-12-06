@@ -64,7 +64,7 @@ class TextCategorization(Service):
         :meth:`cas_management.get_table <.CASManagement.get_table>`
 
         """
-        if current_session().version_info() > 3:
+        if current_session().version_info() >= 4:
             raise RuntimeError(
                 "The Text Categorization service was removed from Viya 4."
             )
