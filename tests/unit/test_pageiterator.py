@@ -68,8 +68,10 @@ def test_no_paging_required():
             assert item.name == RestObj(items[idx]).name
 
     # No request should have been made to retrieve additional data.
-    request.assert_not_called()
-
+    try:
+        request.assert_not_called()
+    except AssertionError as e:
+        raise AssertionError(f'method_calls={request.method_calls}  call_args={request.call_args}')
 
 def test_paging_required(paging):
     """Requests should be made to retrieve additional pages."""

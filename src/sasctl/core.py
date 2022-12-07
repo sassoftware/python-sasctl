@@ -1304,7 +1304,7 @@ class PageIterator:
             self._min_queue_len = 0
             self._start = 0
             self._limit = 0
-        if link is not None:
+        else:
             link = link["href"]
             start = re.search(r"(?<=start=)[\d]+", link)
             limit = re.search(r"(?<=limit=)[\d]+", link)
