@@ -6,11 +6,8 @@ from pathlib import Path
 import sys
 import getpass
 import json
-from importlib_metadata import PackageNotFoundError
 import pandas as pd
 import math
-import numpy as np
-from scipy.stats import kendalltau, gamma
 import pickle
 import pickletools
 from collections.abc import Iterable
