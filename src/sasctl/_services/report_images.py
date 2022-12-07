@@ -85,7 +85,7 @@ class ReportImages(Service):
 
         lod = lod or HIGH
 
-        if lod not in _LOD_VALUES.keys():
+        if lod not in _LOD_VALUES:
             raise ValueError(
                 "LOD value of '%s' is invalid.  Expected one of " "LOW, MEDIUM, HIGH."
             )
