@@ -71,7 +71,8 @@ def test_no_paging_required():
     try:
         request.assert_not_called()
     except AssertionError as e:
-        raise AssertionError(f'method_calls={request.method_calls}  call_args={request.call_args}')
+        raise AssertionError(f'method_calls={request.mock_calls}  call_args={request.call_args_list}')
+
 
 def test_paging_required(paging):
     """Requests should be made to retrieve additional pages."""
