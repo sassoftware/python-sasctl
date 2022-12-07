@@ -17,7 +17,7 @@ class ScoreCode:
         modelPrefix,
         predictMethod,
         modelFileName,
-        metrics=["EM_EVENTPROBABILITY", "EM_CLASSIFICATION"],
+        metrics=None,
         pyPath=Path.cwd(),
         threshPrediction=None,
         otherVariable=False,
@@ -120,6 +120,10 @@ class ScoreCode:
         pickleType : string, optional
             Indicator for MLFlow models, which may pickle by non-standard methods. By default 'pickle'.
         """
+        # Set metrics internal to function call if no value is given
+        if metrics is None:
+            metrics = ["EM_EVENTPROBABILITY", "EM_CLASSIFICATION"]
+
         # Check if binary string model
         if binaryString is not None:
             isBinaryString = True
