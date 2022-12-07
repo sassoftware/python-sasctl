@@ -11,34 +11,34 @@ import pytest
 from sasctl.core import current_session, request_link
 from sasctl.services import text_categorization as tc
 
-pytestmark = pytest.mark.usefixtures('session')
+pytestmark = pytest.mark.usefixtures("session")
 
 
 def assert_job_succeeds(job):
-    assert job.state == 'pending'
+    assert job.state == "pending"
 
-    while request_link(job, 'state') in ('pending', 'running'):
+    while request_link(job, "state") in ("pending", "running"):
         time.sleep(1)
 
-    state = request_link(job, 'state')
+    state = request_link(job, "state")
 
-    if state == 'failed':
+    if state == "failed":
         # Refresh to get 'errors' ref
-        job = request_link(job, 'self')
-        errors = request_link(job, 'errors')
-        pytest.fail('Job failed: ' + str(errors))
-    assert state == 'completed'
+        job = request_link(job, "self")
+        errors = request_link(job, "errors")
+        pytest.fail("Job failed: " + str(errors))
+    assert state == "completed"
 
 
 def test_from_table():
     from sasctl.services import cas_management as cm
 
-    pytest.xfail('Need to input model URI.  Where to pull from?')
+    pytest.xfail("Need to input model URI.  Where to pull from?")
 
-    input = cm.get_table('COMPLAINTS', 'Public')
-    job = tc.categorize(input,
-                        id_column='__uniqueid__',
-                        text_column='Consumer_complaint_narrative')
+    input = cm.get_table("COMPLAINTS", "Public")
+    job = tc.categorize(
+        input, id_column="__uniqueid__", text_column="Consumer_complaint_narrative"
+    )
 
     assert_job_succeeds(job)
 

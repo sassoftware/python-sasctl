@@ -9,7 +9,7 @@ import pytest
 from sasctl import RestObj
 from sasctl.services import relationships as rel
 
-pytestmark = pytest.mark.usefixtures('session')
+pytestmark = pytest.mark.usefixtures("session")
 
 
 def test_list_relationships():

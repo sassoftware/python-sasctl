@@ -13,10 +13,10 @@ from .test_pageiterator import paging
 def test_no_paging_required():
     """If "next" link not present, current items should be included."""
 
-    items = [{'name': 'a'}, {'name': 'b'}, {'name': 'c'}]
+    items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
     obj = RestObj(items=items, count=len(items))
 
-    with mock.patch('sasctl.core.request') as request:
+    with mock.patch("sasctl.core.request") as request:
         pager = PagedItemIterator(obj)
 
         for i, o in enumerate(pager):
@@ -28,10 +28,10 @@ def test_no_paging_required():
 
 def test_is_iterator():
     """PagedItemIterator should be an iterator itself."""
-    items = [{'name': 'a'}, {'name': 'b'}, {'name': 'c'}]
+    items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
     obj = RestObj(items=items, count=len(items))
 
-    with mock.patch('sasctl.core.request') as request:
+    with mock.patch("sasctl.core.request") as request:
         pager = PagedItemIterator(obj)
 
         for i in range(len(items)):
@@ -44,10 +44,10 @@ def test_is_iterator():
 
 def test_convert_to_list():
     """Converts correctly to a list."""
-    items = [{'name': 'a'}, {'name': 'b'}, {'name': 'c'}]
+    items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
     obj = RestObj(items=items, count=len(items))
 
-    with mock.patch('sasctl.core.request') as request:
+    with mock.patch("sasctl.core.request") as request:
         pager = PagedItemIterator(obj)
 
         # Can convert to list
@@ -78,9 +78,9 @@ def test_paging_inflated_count():
 
     # Only defines 20 items to return
     pages = [
-        [{'name': x} for x in list('abcdefghi')],
-        [{'name': x} for x in list('klmnopqrs')],
-        [{'name': x} for x in list('uv')],
+        [{"name": x} for x in list("abcdefghi")],
+        [{"name": x} for x in list("klmnopqrs")],
+        [{"name": x} for x in list("uv")],
     ]
     actual_num_items = sum(len(page) for page in pages)
 
@@ -92,15 +92,15 @@ def test_paging_inflated_count():
         items=pages[0],
         count=num_items,
         links=[
-            {'rel': 'next', 'href': '/moaritems?start=%d&limit=%d' % (start, limit)}
+            {"rel": "next", "href": "/moaritems?start=%d&limit=%d" % (start, limit)}
         ],
     )
 
-    with mock.patch('sasctl.core.request') as req:
+    with mock.patch("sasctl.core.request") as req:
 
         def side_effect(_, link, **kwargs):
-            assert 'limit=%d' % limit in link
-            start = int(re.search(r'(?<=start=)[\d]+', link).group())
+            assert "limit=%d" % limit in link
+            start = int(re.search(r"(?<=start=)[\d]+", link).group())
             if start == 10:
                 return RestObj(items=pages[1])
             elif start == 20:

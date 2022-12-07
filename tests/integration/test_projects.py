@@ -10,9 +10,10 @@ from sasctl import current_session, RestObj
 from sasctl.services import projects as proj
 
 
-pytestmark = pytest.mark.usefixtures('session')
+pytestmark = pytest.mark.usefixtures("session")
 
-PROJECT_NAME = 'Test Project'
+PROJECT_NAME = "Test Project"
+
 
 
 def test_list_projects():
@@ -21,7 +22,7 @@ def test_list_projects():
 
 
 def test_get_project():
-    project = proj.get_project('Not a Project')
+    project = proj.get_project("Not a Project")
     assert project is None
 
 

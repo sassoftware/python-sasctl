@@ -13,19 +13,19 @@ def test_build_parser():
     from sasctl.utils.cli import ArgInfo
 
     func = mock.MagicMock()
-    func._cli_arguments.return_value = [ArgInfo('name', 'str', True, None, '')]
-    func.__doc__ = 'docstring for a mock function.'
+    func._cli_arguments.return_value = [ArgInfo("name", "str", True, None, "")]
+    func.__doc__ = "docstring for a mock function."
 
-    parser = _build_parser({'folders': {'delete': func}})
-    args = parser.parse_args('folders delete myfolder'.split())
+    parser = _build_parser({"folders": {"delete": func}})
+    args = parser.parse_args("folders delete myfolder".split())
 
-    assert 'folders' == args.service
-    assert 'delete' == args.command
+    assert "folders" == args.service
+    assert "delete" == args.command
 
-    args = parser.parse_args('-vv -k folders delete myfolder'.split())
+    args = parser.parse_args("-vv -k folders delete myfolder".split())
 
-    assert 'folders' == args.service
-    assert 'delete' == args.command
+    assert "folders" == args.service
+    assert "delete" == args.command
     assert 2 == args.verbose
     assert args.insecure
 
@@ -35,7 +35,7 @@ def test_get_func_description():
     from sasctl.utils.cli import _get_func_description
 
     def func():
-        '''A function
+        """A function
 
         Some other info about the function
 
@@ -46,9 +46,9 @@ def test_get_func_description():
         Returns
         -------
 
-        '''
+        """
 
-        assert 'A function' == _get_func_description(func)
+        assert "A function" == _get_func_description(func)
 
 
 def test_service_names():
@@ -58,7 +58,7 @@ def test_service_names():
 
     assert all(isinstance(service, str) for service in services)
 
-    for service in ['folders', 'models', 'projects', 'repositories']:
+    for service in ["folders", "models", "projects", "repositories"]:
         assert service in services
 
 
@@ -70,37 +70,43 @@ def test_decorator():
     def command1(x):
         return x
 
-    assert 'testing' == command1('testing')
-    assert 'command1' == command1._cli_command
+    assert "testing" == command1("testing")
+    assert "command1" == command1._cli_command
     assert command1._cli_service is None
     args = command1._cli_arguments()
     assert 1 == len(args)
-    assert ArgInfo(name='x', type='str', required=True, default=None, doc=None) == args[0]
+    assert (
+        ArgInfo(name="x", type="str", required=True, default=None, doc=None) == args[0]
+    )
 
-    @sasctl_command('mycmd')
+    @sasctl_command("mycmd")
     def command2(x):
         return x
 
-    assert 'testing' == command2('testing')
-    assert 'mycmd' == command2._cli_command
+    assert "testing" == command2("testing")
+    assert "mycmd" == command2._cli_command
     assert command2._cli_service is None
     args = command2._cli_arguments()
     assert 1 == len(args)
-    assert ArgInfo(name='x', type='str', required=True, default=None, doc=None) == args[0]
+    assert (
+        ArgInfo(name="x", type="str", required=True, default=None, doc=None) == args[0]
+    )
 
-    @sasctl_command('myservice', 'mycmd')
+    @sasctl_command("myservice", "mycmd")
     def command3(x):
         return x
 
-    assert 'testing' == command3('testing')
-    assert 'mycmd' == command3._cli_command
-    assert 'myservice' == command3._cli_service
+    assert "testing" == command3("testing")
+    assert "mycmd" == command3._cli_command
+    assert "myservice" == command3._cli_service
     args = command3._cli_arguments()
     assert 1 == len(args)
-    assert ArgInfo(name='x', type='str', required=True, default=None, doc=None) == args[0]
+    assert (
+        ArgInfo(name="x", type="str", required=True, default=None, doc=None) == args[0]
+    )
 
     @sasctl_command
-    def list_widgets(name, method='default'):
+    def list_widgets(name, method="default"):
         """List the widgets
 
         Parameters
@@ -117,12 +123,28 @@ def test_decorator():
         result = method + str(name)
         return result
 
-    assert 'defaultwidget' == list_widgets('widget')
-    assert 'list' == list_widgets._cli_command
-    assert 'widgets' == list_widgets._cli_service
+    assert "defaultwidget" == list_widgets("widget")
+    assert "list" == list_widgets._cli_command
+    assert "widgets" == list_widgets._cli_service
     args = list_widgets._cli_arguments()
     assert 2 == len(args)
-    assert ArgInfo(name='name', type='str', required=True, default=None,
-                   doc='name of the widget') == args[0]
-    assert ArgInfo(name='method', type='str', required=False,
-                   default='default', doc='parameter with a default') == args[1]
+    assert (
+        ArgInfo(
+            name="name",
+            type="str",
+            required=True,
+            default=None,
+            doc="name of the widget",
+        )
+        == args[0]
+    )
+    assert (
+        ArgInfo(
+            name="method",
+            type="str",
+            required=False,
+            default="default",
+            doc="parameter with a default",
+        )
+        == args[1]
+    )

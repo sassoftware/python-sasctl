@@ -30,20 +30,20 @@ def train_data():
     try:
         import pandas as pd
     except ImportError:
-        pytest.skip('Package `pandas` not found.')
+        pytest.skip("Package `pandas` not found.")
 
     try:
         from sklearn import datasets
     except ImportError:
-        pytest.skip('Package `sklearn` not found.')
+        pytest.skip("Package `sklearn` not found.")
 
     raw = datasets.load_iris()
     iris = pd.DataFrame(raw.data, columns=raw.feature_names)
     iris = iris.join(pd.DataFrame(raw.target))
-    iris.columns = ['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth', 'Species']
-    iris['Species'] = iris['Species'].astype('category')
+    iris.columns = ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth", "Species"]
+    iris["Species"] = iris["Species"].astype("category")
     iris.Species.cat.categories = raw.target_names
-    return iris.iloc[:, 0:4], iris['Species']
+    return iris.iloc[:, 0:4], iris["Species"]
 
 
 @pytest.fixture
@@ -53,12 +53,12 @@ def sklearn_model(train_data):
     try:
         from sklearn.linear_model import LogisticRegression
     except ImportError:
-        pytest.skip('Package `sklearn` not found.')
+        pytest.skip("Package `sklearn` not found.")
 
     X, y = train_data
     with warnings.catch_warnings():
-        warnings.simplefilter('ignore')
-        model = LogisticRegression(multi_class='multinomial', solver='lbfgs')
+        warnings.simplefilter("ignore")
+        model = LogisticRegression(multi_class="multinomial", solver="lbfgs")
         model.fit(X, y)
     return model
 
@@ -74,13 +74,13 @@ def sklearn_pipeline(train_data):
     X, y = train_data
 
     numeric_transformer = Pipeline(
-        [('imputer', SimpleImputer(strategy='median')), ('scaler', StandardScaler())]
+        [("imputer", SimpleImputer(strategy="median")), ("scaler", StandardScaler())]
     )
 
-    preprocessor = ColumnTransformer([('num', numeric_transformer, X.columns)])
+    preprocessor = ColumnTransformer([("num", numeric_transformer, X.columns)])
 
     pipe = Pipeline(
-        [('preprocess', preprocessor), ('classifier', GradientBoostingClassifier())]
+        [("preprocess", preprocessor), ("classifier", GradientBoostingClassifier())]
     )
 
     pipe.fit(X, y)
@@ -94,8 +94,8 @@ def pickle_file(tmpdir_factory, sklearn_model):
     import os
 
     sklearn_model
-    filename = str(tmpdir_factory.mktemp('models').join('model.pkl'))
-    with open(filename, 'wb') as f:
+    filename = str(tmpdir_factory.mktemp("models").join("model.pkl"))
+    with open(filename, "wb") as f:
         pickle.dump(sklearn_model, f)
     yield str(filename)
     os.remove(filename)
@@ -106,12 +106,12 @@ def python_file(tmpdir_factory):
     """Returns the path to a file containing source code for a Python function."""
     import os
 
-    filename = str(tmpdir_factory.mktemp('models').join('model.py'))
-    with open(filename, 'w') as f:
+    filename = str(tmpdir_factory.mktemp("models").join("model.py"))
+    with open(filename, "w") as f:
         f.writelines(
             [
-                'def predict(a, b, c, d):\n',
-                '    # types: (int, int, int, int) -> double\n' '    pass\n',
+                "def predict(a, b, c, d):\n",
+                "    # types: (int, int, int, int) -> double\n" "    pass\n",
             ]
         )
 
@@ -139,12 +139,12 @@ def test_from_pickle(train_data, pickle_file):
 
     X, y = train_data
 
-    with mock.patch('sasctl.utils.pymas.core.random_string') as mock_rnd_string:
-        mock_rnd_string.return_value = 'randomMethodName'
-        with mock.patch('uuid.uuid4') as mocked:
-            mocked.return_value.hex = 'DF74A4B18C9E41A2A34B0053E123AA67'
+    with mock.patch("sasctl.utils.pymas.core.random_string") as mock_rnd_string:
+        mock_rnd_string.return_value = "randomMethodName"
+        with mock.patch("uuid.uuid4") as mocked:
+            mocked.return_value.hex = "DF74A4B18C9E41A2A34B0053E123AA67"
             p = from_pickle(
-                pickle_file, func_name='predict', input_types=X, array_input=True
+                pickle_file, func_name="predict", input_types=X, array_input=True
             )
 
     target = """
@@ -233,7 +233,7 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     
 endpackage;
 """.lstrip(
-        '\n'
+        "\n"
     )
 
     assert isinstance(p, PyMAS)
@@ -243,7 +243,7 @@ endpackage;
 
     # Ignore byte string during comparison.  Pickle seems to change with
     # time / Python versions
-    result = re.sub('bytes = .*', 'bytes = "X"\');', result)
+    result = re.sub("bytes = .*", 'bytes = "X"\');', result)
     assert result == target
 
 
@@ -251,7 +251,7 @@ def test_from_pickle_stream(train_data, pickle_stream):
     from sasctl.utils.pymas import PyMAS, from_pickle
 
     X, y = train_data
-    p = from_pickle(pickle_stream, func_name='predict', input_types=X)
+    p = from_pickle(pickle_stream, func_name="predict", input_types=X)
     assert isinstance(p, PyMAS)
 
 
@@ -335,17 +335,17 @@ package _DF74A4B18C9E41A2A34B0053E123AA6 / overwrite=yes;
     
 endpackage;
 """.lstrip(
-        '\n'
+        "\n"
     )
 
-    f = tmpdir.join('model.py')
+    f = tmpdir.join("model.py")
     f.write(code)
 
-    with mock.patch('sasctl.utils.pymas.core.random_string') as mock_rnd_string:
-        mock_rnd_string.return_value = 'randomMethodName'
-        with mock.patch('uuid.uuid4') as mocked:
-            mocked.return_value.hex = 'DF74A4B18C9E41A2A34B0053E123AA67'
-            p = from_python_file(str(f), 'hello_world')
+    with mock.patch("sasctl.utils.pymas.core.random_string") as mock_rnd_string:
+        mock_rnd_string.return_value = "randomMethodName"
+        with mock.patch("uuid.uuid4") as mocked:
+            mocked.return_value.hex = "DF74A4B18C9E41A2A34B0053E123AA67"
+            p = from_python_file(str(f), "hello_world")
 
     result = p.score_code()
 
@@ -356,13 +356,13 @@ def test_with_sklearn_pipeline(train_data, sklearn_pipeline):
     from sasctl.utils.pymas import PyMAS, from_pickle
 
     X, y = train_data
-    p = from_pickle(pickle.dumps(sklearn_pipeline), func_name='predict', input_types=X)
+    p = from_pickle(pickle.dumps(sklearn_pipeline), func_name="predict", input_types=X)
 
     assert isinstance(p, PyMAS)
     assert len(p.variables) > 4  # 4 input features in Iris data set
 
 
-@pytest.mark.usefixtures('session')
+@pytest.mark.usefixtures("session")
 def test_publish_and_execute(tmpdir, boston_dataset):
     import pickle
     from sasctl.utils.pymas import from_pickle
@@ -375,15 +375,15 @@ def test_publish_and_execute(tmpdir, boston_dataset):
     lm = LinearRegression()
     lm.fit(X, y)
     pkl = pickle.dumps(lm)
-    p = from_pickle(pkl, 'predict', X, array_input=True)
+    p = from_pickle(pkl, "predict", X, array_input=True)
 
     # Generate the score code & publish as a model
     code = p.score_code()
-    mas.create_module('sasctl_test', source=code, language='ds2')
+    mas.create_module("sasctl_test", source=code, language="ds2")
 
     x1 = {k.lower(): v for k, v in X.iloc[0, :].items()}
-    result = mas.execute_module_step('sasctl_test', 'predict', **x1)
+    result = mas.execute_module_step("sasctl_test", "predict", **x1)
 
-    assert round(result['var1'], 3) == 30.004
+    assert round(result["var1"], 3) == 30.004
 
-    mas.delete_module('sasctl_test')
+    mas.delete_module("sasctl_test")
