@@ -1333,14 +1333,21 @@ class PageIterator:
 
         # Store the current items to iterate over
         self._obj = obj
-        logging.debug("Initial params: start=%s, limit=%s, next_link=%s", self._start, self._limit, self._next_link)
+        logging.debug(
+            "Initial params: start=%s, limit=%s, next_link=%s",
+            self._start,
+            self._limit,
+            self._next_link,
+        )
 
     def __next__(self):
         if self._pool is None:
             self._pool = concurrent.futures.ThreadPoolExecutor(
                 max_workers=self._num_threads
             )
-            logging.debug("ThreadPoolExecutor created with %s threads", self._num_threads)
+            logging.debug(
+                "ThreadPoolExecutor created with %s threads", self._num_threads
+            )
 
         # Send request for new pages if we don't have enough cached
         num_req_needed = self._num_threads - len(self._requested)
@@ -1381,7 +1388,12 @@ class PageIterator:
 
         # Format the link to retrieve desired batch
         link = self._next_link.format(start=start, limit=self._limit)
-        logging.debug("Calling get() for %s using request %s and session %s", link, request, self._session)
+        logging.debug(
+            "Calling get() for %s using request %s and session %s",
+            link,
+            request,
+            self._session,
+        )
         r = get(link, format="json", session=self._session)
         logging.debug("Response from get() is %s", r)
         r = RestObj(r)
