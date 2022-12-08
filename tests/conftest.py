@@ -471,13 +471,14 @@ def airline_dataset():
 @pytest.fixture
 def boston_dataset():
     """Regression dataset."""
-    pytest.importorskip('sklearn')
     pd = pytest.importorskip('pandas')
-    from sklearn import datasets
 
-    raw = datasets.load_boston()
-    df = pd.DataFrame(raw.data, columns=raw.feature_names)
-    df['Price'] = raw.target
+    df = pd.read_csv('examples/data/boston_house_prices.csv')
+
+    # Uppercase column names to match names used by scikit-learn (dataset was originally loaded through
+    # sklearn before it was removed in v1.2).
+    df.columns = [c.upper() for c in df.columns]
+    df = df.rename(columns={"MEDV": "Price"})
     return df
 
 
