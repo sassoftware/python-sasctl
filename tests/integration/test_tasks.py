@@ -47,16 +47,14 @@ def sklearn_logistic_model():
 
 
 @pytest.fixture
-def sklearn_linear_model():
+def sklearn_linear_model(boston_dataset):
     """A Scikit-Learn linear regression fit to Boston housing data."""
 
     pd = pytest.importorskip('pandas')
-    datasets = pytest.importorskip('sklearn.datasets')
     linear_model = pytest.importorskip('sklearn.linear_model')
 
-    data = datasets.load_boston()
-    X = pd.DataFrame(data.data, columns=data.feature_names)
-    y = pd.DataFrame(data.target, columns=['Price'])
+    X = boston_dataset.drop(columns=['Price'])
+    y = boston_dataset['Price']
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
