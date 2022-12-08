@@ -16,9 +16,9 @@ from sasctl.services import model_repository as mr
 from sasctl.services import model_management as mm
 
 
-data = sklearn.datasets.load_boston()
-X = pd.DataFrame(data.data, columns=data.feature_names)
-y = pd.DataFrame(data.target, columns=['Price'])
+data = pd.read_csv('data/boston_house_prices.csv').rename(columns={'medv': 'Price'})
+X = data.drop(columns=['Price'])
+y = data['Price']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 
