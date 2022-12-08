@@ -1289,14 +1289,18 @@ class PageIterator:
     """
 
     def __init__(self, obj, session=None, threads=4):
+        logger.debug(f"PageIterator created for {obj}")
         self._num_threads = threads
 
         # Session to use when requesting items
+        logging.debug("Current request function=%s", request)
         self._session = session or current_session()
+        logging.debug("Session in use=%s", self._session)
         self._pool = None
         self._requested = []
 
         link = get_link(obj, "next")
+        logging.debug("Link to retrieve additional items: %s", link)
 
         # Dissect the "next" link so it can be reformatted and used by
         # parallel threads
@@ -1329,16 +1333,19 @@ class PageIterator:
 
         # Store the current items to iterate over
         self._obj = obj
+        logging.debug("Initial params: start=%s, limit=%s, next_link=%s", self._start, self._limit, self._next_link)
 
     def __next__(self):
         if self._pool is None:
             self._pool = concurrent.futures.ThreadPoolExecutor(
                 max_workers=self._num_threads
             )
+            logging.debug("ThreadPoolExecutor created with %s threads", self._num_threads)
 
         # Send request for new pages if we don't have enough cached
         num_req_needed = self._num_threads - len(self._requested)
         for _ in range(num_req_needed):
+            logging.debug("Submitted thread for items starting at %s", self._start)
             self._requested.append(self._pool.submit(self._request_async, self._start))
             self._start += self._limit
 
@@ -1346,13 +1353,14 @@ class PageIterator:
         # contained in the initial page.
         if self._obj is not None:
             result = [RestObj(x) for x in self._obj["items"]]
+            logging.debug("Initial page of items is %s", result)
             self._obj = None
             return result
 
         # Make sure the next page has been received
         if self._requested:
             items = self._requested.pop(0).result()
-
+            logging.debug("Thread-fetched page of items is %s", items)
             if not items:
                 raise StopIteration
 
@@ -1366,13 +1374,16 @@ class PageIterator:
 
     def _request_async(self, start):
         """Used by worker threads to retrieve next batch of items."""
-
+        logging.debug("request_async called for %s", start)
         if self._next_link is None:
+            logging.debug("next_link is None, request_async returning")
             return []
 
         # Format the link to retrieve desired batch
         link = self._next_link.format(start=start, limit=self._limit)
+        logging.debug("Calling get() for %s using request %s and session %s", link, request, self._session)
         r = get(link, format="json", session=self._session)
+        logging.debug("Response from get() is %s", r)
         r = RestObj(r)
         return [RestObj(x) for x in r["items"]]
 

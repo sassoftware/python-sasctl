@@ -3,7 +3,7 @@
 #
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
-
+import logging
 from unittest import mock
 
 import pytest
@@ -55,6 +55,7 @@ def paging(request):
 
 def test_no_paging_required():
     """If "next" link not present, current items should be included."""
+    logging.debug("test_no_paging_required() started.")
 
     items = [{'name': 'a'}, {'name': 'b'}, {'name': 'c'}]
     obj = RestObj(items=items, count=len(items))
@@ -64,8 +65,11 @@ def test_no_paging_required():
 
         # Returned page of items should preserve item order
         items = next(pager)
-        for idx, item in enumerate(items):
-            assert item.name == RestObj(items[idx]).name
+
+    logging.debug("Items returned PageIterator: %s", items)
+
+    for idx, item in enumerate(items):
+        assert item.name == RestObj(items[idx]).name
 
     # No request should have been made to retrieve additional data.
     try:
