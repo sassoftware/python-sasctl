@@ -71,7 +71,9 @@ def test_no_paging_required():
     try:
         request.assert_not_called()
     except AssertionError as e:
-        raise AssertionError(f'method_calls={request.mock_calls}  call_args={request.call_args_list}')
+        raise AssertionError(
+            f"method_calls={request.mock_calls}  call_args={request.call_args_list}"
+        )
 
 
 def test_paging_required(paging):

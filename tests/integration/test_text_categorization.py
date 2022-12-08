@@ -45,7 +45,7 @@ def test_from_table():
 
 def test_service_removed_error():
     if current_session().version_info() < 4:
-        pytest.skip('Text Categorization service was not removed until Viya 4.')
+        pytest.skip("Text Categorization service was not removed until Viya 4.")
 
     with pytest.raises(RuntimeError):
-        tc.categorize('', None, id_column='', text_column='')
+        tc.categorize("", None, id_column="", text_column="")

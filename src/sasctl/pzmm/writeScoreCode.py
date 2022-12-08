@@ -600,6 +600,7 @@ def score{modelPrefix}({inputVarList}):
                 model["scoreCodeType"] = "ds2MultiType"
                 modelRepo.update_model(model)
 
+    @classmethod
     def splitStringColumn(cls, inputSeries, otherVariable):
         """
         Splits a column of string values into a number of new variables equal
