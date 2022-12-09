@@ -17,7 +17,7 @@ from betamax.matchers.path import PathMatcher
 from urllib.parse import urlsplit
 
 
-log = logging.getLogger('sasctl.betamax')
+log = logging.getLogger("sasctl.betamax")
 
 
 class BinarySerializer(BaseSerializer):
@@ -32,17 +32,18 @@ class BinarySerializer(BaseSerializer):
     by the compression.
 
     """
-    name = 'binary'
+
+    name = "binary"
     stored_as_binary = False
 
     @staticmethod
     def generate_cassette_name(cassette_library_dir, cassette_name):
-        return os.path.join(cassette_library_dir, f'{cassette_name}.lzma')
+        return os.path.join(cassette_library_dir, f"{cassette_name}.lzma")
 
     def serialize(self, cassette_data):
         data = pickle.dumps(cassette_data)
         data = lzma.compress(data)
-        return base64.b85encode(data).decode('utf-8')
+        return base64.b85encode(data).decode("utf-8")
 
     def deserialize(self, cassette_data):
         try:
@@ -60,37 +61,37 @@ class RedactedPathMatcher(PathMatcher):
     ession ids in the path are ignored.
     """
 
-    name = 'redacted_path'
+    name = "redacted_path"
 
     def _strip_session_id(self, path):
-        match = re.search(r'(?<=sessions/)[0-9a-f\-]*', path)
+        match = re.search(r"(?<=sessions/)[0-9a-f\-]*", path)
         if match:
-            path = path.replace(match.group(0), '')
+            path = path.replace(match.group(0), "")
         return path
 
     def match(self, request, recorded_request):
         request_path = self._strip_session_id(urlsplit(request.url).path)
-        recorded_path = self._strip_session_id(urlsplit(recorded_request['uri']).path)
+        recorded_path = self._strip_session_id(urlsplit(recorded_request["uri"]).path)
         return request_path == recorded_path
 
 
 class PartialBodyMatcher(BaseMatcher):
     # Matches based on the body of the request
-    name = 'partial_body'
+    name = "partial_body"
 
     def match(self, request, recorded_request):
         recorded_request = util.deserialize_prepared_request(recorded_request)
 
-        request_body = b''
+        request_body = b""
         if request.body:
             request_body = util.coerce_content(request.body)
 
-        recorded_body = b''
+        recorded_body = b""
         if recorded_request.body:
             recorded_body = util.coerce_content(recorded_request.body)
 
         if recorded_body != request_body:
             diff = difflib.context_diff(recorded_body, request_body)
-            log.debug('** Cassette Differences: **\n' + '\n'.join(diff))
+            log.debug("** Cassette Differences: **\n" + "\n".join(diff))
 
         return recorded_body == request_body

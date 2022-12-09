@@ -173,7 +173,6 @@ def test_save_table(sample_table):
     cm.update_state_table("unloaded", table, caslib, server)
 
 
-
 def test_del_table():
     table = "TEST_TABLE"
     caslib = "Public"

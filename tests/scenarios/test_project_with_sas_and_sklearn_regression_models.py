@@ -23,15 +23,15 @@ import pytest
 from sasctl import current_session, publish_model, register_model
 from sasctl.services import model_repository as mr
 
-sklearn = pytest.importorskip('sklearn')
+sklearn = pytest.importorskip("sklearn")
 
 
 # Every test function in the module will automatically receive the session fixture
-pytestmark = pytest.mark.usefixtures('session')
+pytestmark = pytest.mark.usefixtures("session")
 
-SAS_MODEL_NAME = 'sasctl_test_SAS_Boston_regression'
-SCIKIT_MODEL_NAME = 'sasctl_test_scikit_Boston_regression'
-PROJECT_NAME = 'sasctl_test_Boston_Housing'
+SAS_MODEL_NAME = "sasctl_test_SAS_Boston_regression"
+SCIKIT_MODEL_NAME = "sasctl_test_scikit_Boston_regression"
+PROJECT_NAME = "sasctl_test_Boston_Housing"
 
 
 @pytest.fixture(autouse=True)
@@ -49,18 +49,19 @@ def test(cas_session, boston_dataset):
     if current_session().version_info() == 4:
         pytest.skip("Re-enable when sklearn score code is refactored for SAS Viya 4.")
 
-    cas_session.loadactionset('regression')
+    cas_session.loadactionset("regression")
 
     tbl = cas_session.upload(boston_dataset).casTable
-    features = tbl.columns[tbl.columns != 'Price']
+    features = tbl.columns[tbl.columns != "Price"]
 
     # Fit a linear regression model in CAS and output an ASTORE
-    tbl.glm(target='Price', inputs=list(features), savestate='model_table')
-    astore = cas_session.CASTable('model_table')
+    tbl.glm(target="Price", inputs=list(features), savestate="model_table")
+    astore = cas_session.CASTable("model_table")
 
     from sklearn.linear_model import LinearRegression
-    X = boston_dataset.drop('Price', axis=1)
-    y = boston_dataset['Price']
+
+    X = boston_dataset.drop("Price", axis=1)
+    y = boston_dataset["Price"]
     sk_model = LinearRegression()
     sk_model.fit(X, y)
 
@@ -68,12 +69,14 @@ def test(cas_session, boston_dataset):
     sk_model = register_model(sk_model, SCIKIT_MODEL_NAME, PROJECT_NAME, input=X)
 
     # Test overwriting model content
-    mr.add_model_content(sk_model, 'Your mother was a hamster!', 'insult.txt')
-    mr.add_model_content(sk_model, 'And your father smelt of elderberries!', 'insult.txt')
+    mr.add_model_content(sk_model, "Your mother was a hamster!", "insult.txt")
+    mr.add_model_content(
+        sk_model, "And your father smelt of elderberries!", "insult.txt"
+    )
 
     # Publish to MAS
-    sas_module = publish_model(sas_model, 'maslocal', replace=True)
-    sk_module = publish_model(sk_model, 'maslocal', replace=True)
+    sas_module = publish_model(sas_model, "maslocal", replace=True)
+    sk_module = publish_model(sk_model, "maslocal", replace=True)
 
     # Pass a row of data to MAS and receive the predicted result.
     first_row = tbl.head(1)

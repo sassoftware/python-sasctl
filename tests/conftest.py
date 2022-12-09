@@ -22,7 +22,7 @@ from .betamax_utils import BinarySerializer, RedactedPathMatcher
 
 
 # All version numbers for which we will attempt to find cassettes when replaying tests.
-ALL_VIYA_VERSIONS = ['3.5', '2022.09']
+ALL_VIYA_VERSIONS = ["3.5", "2022.09"]
 
 
 def get_cassette_file(request, version):
@@ -40,10 +40,10 @@ def get_cassette_file(request, version):
 
     """
     test_type = request.node.path.parent.name
-    test_set = request.node.path.with_suffix('').name
+    test_set = request.node.path.with_suffix("").name
     test_class = request.node.cls.__name__ if request.node.cls else None
     test_name = request.node.originalname
-    cassette_folder = f'tests/{test_type}/cassettes'
+    cassette_folder = f"tests/{test_type}/cassettes"
 
     if test_class:
         cassette_name = (
@@ -72,7 +72,7 @@ def redact(interaction, cassette):
     def add_placeholder(pattern, string, placeholder, group):
         """Use regex `pattern` to search `string` and replace any match with `placeholder`."""
         if isinstance(string, bytes):
-            pattern = pattern.encode('utf-8')
+            pattern = pattern.encode("utf-8")
 
         match = re.search(pattern, string)
         if match:
@@ -81,64 +81,64 @@ def redact(interaction, cassette):
                 Placeholder(placeholder=placeholder, replace=old_text)
             )
 
-    request = interaction.data['request']
-    response = interaction.data['response']
+    request = interaction.data["request"]
+    response = interaction.data["response"]
 
     # Server name in Origin header may differ from hostname that was sent the
     # request.
-    for origin in response['headers'].get('Origin', []):
+    for origin in response["headers"].get("Origin", []):
         host = urlsplit(origin).netloc
         if (
-            host != ''
-            and Placeholder(placeholder='hostname.com', replace=host)
+            host != ""
+            and Placeholder(placeholder="hostname.com", replace=host)
             not in cassette.placeholders
         ):
             cassette.placeholders.append(
-                Placeholder(placeholder='hostname.com', replace=host)
+                Placeholder(placeholder="hostname.com", replace=host)
             )
 
     # Redact the password
-    if 'string' in request['body']:
+    if "string" in request["body"]:
         add_placeholder(
             r"(?<=&password=)([^&]*)\b",
-            interaction.data['request']['body']['string'],
-            '*****',
+            interaction.data["request"]["body"]["string"],
+            "*****",
             1,
         )
 
     # If the response is from a login attempt then we need to redact the token details.
-    if 'string' in response['body'] and '"access_token":' in response['body']['string']:
+    if "string" in response["body"] and '"access_token":' in response["body"]["string"]:
         # Redact value of access token
         add_placeholder(
             '(?<="access_token":")[^"]*',
-            response['body']['string'],
-            '[redacted]',
+            response["body"]["string"],
+            "[redacted]",
             0,
         )
 
         # Redact value of id token
         add_placeholder(
             '(?<="id_token":")[^"]*',
-            response['body']['string'],
-            '[redacted]',
+            response["body"]["string"],
+            "[redacted]",
             0,
         )
 
         # Redact the names of the authorized scopes
         add_placeholder(
             '(?<="scope":")[^"]*',
-            interaction.data['response']['body']['string'],
-            '[redacted]',
+            interaction.data["response"]["body"]["string"],
+            "[redacted]",
             0,
         )
 
-    for index, header in enumerate(request['headers'].get('Authorization', [])):
+    for index, header in enumerate(request["headers"].get("Authorization", [])):
         # Betamax tries to replace Placeholders on all headers.  Mixed str/bytes headers will cause Betamax to break.
         if isinstance(header, bytes):
-            header = header.decode('utf-8')
-            request['headers']['Authorization'][index] = header
-        add_placeholder(r'(?<=Basic ).*', header, '[redacted]', 0)  # swat
-        add_placeholder(r'(?<=Bearer ).*', header, '[redacted]', 0)  # sasctl
+            header = header.decode("utf-8")
+            request["headers"]["Authorization"][index] = header
+        add_placeholder(r"(?<=Basic ).*", header, "[redacted]", 0)  # swat
+        add_placeholder(r"(?<=Bearer ).*", header, "[redacted]", 0)  # sasctl
 
 
 betamax.Betamax.register_serializer(pretty_json.PrettyJSONSerializer)
@@ -150,52 +150,52 @@ betamax.Betamax.register_request_matcher(RedactedPathMatcher)
 # See https://betamax.readthedocs.io/en/latest/record_modes.html for details.
 # NOTE: We've added a custom "live" record mode that bypasses all recording/replaying of cassettes
 #       and allows test suite to be run against a live server.
-record_mode = os.environ.get('SASCTL_RECORD_MODE', 'none').lower()
-if record_mode not in ('once', 'new_episodes', 'all', 'none', 'live'):
-    record_mode = 'none'
+record_mode = os.environ.get("SASCTL_RECORD_MODE", "none").lower()
+if record_mode not in ("once", "new_episodes", "all", "none", "live"):
+    record_mode = "none"
 
 # Set a flag to indicate whether bypassing Betamax altogether.
-if record_mode == 'live':
+if record_mode == "live":
     SKIP_REPLAY = True
 
     # Setting this back to a valid Betamax value to avoid downstream errors.
-    record_mode = 'once'
+    record_mode = "once"
 else:
     SKIP_REPLAY = False
 
 # Use the SASCTL_TEST_SERVER variable to specify which server will be used for recording test cases
-os.environ.setdefault('SASCTL_TEST_SERVER', 'sasctl.example.com')
+os.environ.setdefault("SASCTL_TEST_SERVER", "sasctl.example.com")
 
 # Set dummy credentials if none were provided.
 # Credentials don't matter if rerunning Betamax cassettes, but new recordings will fail.
-os.environ.setdefault('SASCTL_SERVER_NAME', 'sasctl.example.com')
-os.environ.setdefault('SASCTL_USER_NAME', 'dummyuser')
-os.environ.setdefault('SASCTL_PASSWORD', 'dummypass')
-os.environ.setdefault('SSLREQCERT', 'no')
+os.environ.setdefault("SASCTL_SERVER_NAME", "sasctl.example.com")
+os.environ.setdefault("SASCTL_USER_NAME", "dummyuser")
+os.environ.setdefault("SASCTL_PASSWORD", "dummypass")
+os.environ.setdefault("SSLREQCERT", "no")
 
 # NOTE: SWAT gives CAS_CLIENT_SSL_CA_LIST precedence over SSLREQCERT, which will result in failed SSL verification
 #       attempts unless CAS_CLIENT_SSL_CA_LIST is removed when bypassing SSL verification is desired.
-if os.environ['SSLREQCERT'].lower() in ('no', 'n', 'false'):
-    os.environ['CAS_CLIENT_SSL_CA_LIST'] = ''
+if os.environ["SSLREQCERT"].lower() in ("no", "n", "false"):
+    os.environ["CAS_CLIENT_SSL_CA_LIST"] = ""
 
 # Configure Betamax
 config = betamax.Betamax.configure()
 # config.cassette_library_dir = 'tests/cassettes'
 # config.default_cassette_options['serialize_with'] = 'prettyjson'
-config.default_cassette_options['serialize_with'] = 'binary'
-config.default_cassette_options['record_mode'] = record_mode
-config.default_cassette_options['match_requests_on'] = [
-    'method',
-    'redacted_path',
+config.default_cassette_options["serialize_with"] = "binary"
+config.default_cassette_options["record_mode"] = record_mode
+config.default_cassette_options["match_requests_on"] = [
+    "method",
+    "redacted_path",
     # 'partial_body',
-    'query',
+    "query",
 ]
 
 # Create placeholder replacement values for any sensitive data that we know in advance.
-config.define_cassette_placeholder('hostname.com', os.environ['SASCTL_TEST_SERVER'])
-config.define_cassette_placeholder('hostname.com', os.environ['SASCTL_SERVER_NAME'])
-config.define_cassette_placeholder('USERNAME', os.environ['SASCTL_USER_NAME'])
-config.define_cassette_placeholder('*****', os.environ['SASCTL_PASSWORD'])
+config.define_cassette_placeholder("hostname.com", os.environ["SASCTL_TEST_SERVER"])
+config.define_cassette_placeholder("hostname.com", os.environ["SASCTL_SERVER_NAME"])
+config.define_cassette_placeholder("USERNAME", os.environ["SASCTL_USER_NAME"])
+config.define_cassette_placeholder("*****", os.environ["SASCTL_PASSWORD"])
 
 # Call redact() to remove sensitive data that isn't known in advance (like token values)
 config.before_record(callback=redact)
@@ -204,19 +204,19 @@ config.before_record(callback=redact)
 # We need to be able to run tests against a specific version of Viya when recording cassettes, but then run tests
 # against all versions of Viya when replaying cassettes.  Use an environment variable during recording to track which
 # version of Viya is being used, but use a list of known versions during test replay.
-if record_mode in ('all', 'once', 'new_episodes'):
-    viya_versions = os.getenv('SASCTL_SERVER_VERSION')
+if record_mode in ("all", "once", "new_episodes"):
+    viya_versions = os.getenv("SASCTL_SERVER_VERSION")
 
     if viya_versions is None:
         raise RuntimeError(
-            'The SASCTL_SERVER_VERSION environment variable must be set when recording cassettes.'
-            'This variable should be set to the version number of the Viya environment to which you '
-            'are connecting.'
+            "The SASCTL_SERVER_VERSION environment variable must be set when recording cassettes."
+            "This variable should be set to the version number of the Viya environment to which you "
+            "are connecting."
         )
 
     # Convert to a single-item list since pytest expects a list of values.
     viya_versions = [viya_versions]
-elif record_mode == 'none':
+elif record_mode == "none":
     # If replaying only, then try to test against each version
     viya_versions = ALL_VIYA_VERSIONS
 else:
@@ -224,22 +224,22 @@ else:
     viya_versions = []
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def credentials():
     auth = {
-        'hostname': os.environ['SASCTL_TEST_SERVER'],
-        'username': os.environ['SASCTL_USER_NAME'],
-        'password': os.environ['SASCTL_PASSWORD'],
-        'verify_ssl': False,
+        "hostname": os.environ["SASCTL_TEST_SERVER"],
+        "username": os.environ["SASCTL_USER_NAME"],
+        "password": os.environ["SASCTL_PASSWORD"],
+        "verify_ssl": False,
     }
 
-    if 'SASCTL_AUTHINFO' in os.environ:
-        auth['authinfo'] = os.path.expanduser(os.environ['SASCTL_AUTHINFO'])
+    if "SASCTL_AUTHINFO" in os.environ:
+        auth["authinfo"] = os.path.expanduser(os.environ["SASCTL_AUTHINFO"])
 
     return auth
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def session(request, credentials):
     # If we're bypassing Betamax altogether then just return the Session and we can avoid the mess of
     # setting up the cassette.
@@ -263,7 +263,7 @@ def session(request, credentials):
     # but sasctl.Session makes requests (which should be recorded) during
     # __init__().  Mock __init__ to prevent from running and then manually
     # execute requests.Session.__init__() so Betamax can use the session.
-    with mock.patch('sasctl.core.Session.__init__', return_value=None):
+    with mock.patch("sasctl.core.Session.__init__", return_value=None):
         recorded_session = Session()
         super(Session, recorded_session).__init__()
 
@@ -276,7 +276,7 @@ def session(request, credentials):
             # If the requested cassette doesn't exist, Betamax will raise a ValueError.  If we are just replaying test
             # cases then we want to *try* to run tests against all versions of Viya.  However, don't fail if no test
             # has been recorded for the current Viya version - just skip the test and continue.
-            if record_mode == 'none':
+            if record_mode == "none":
                 pytest.skip(f"No cassette found for version '{request.param}'")
             else:
                 raise
@@ -284,7 +284,7 @@ def session(request, credentials):
         # Manually run the sasctl.Session constructor.  Mock out calls to
         # underlying requests.Session.__init__ to prevent hooks placed by
         # Betamax from being reset.
-        with mock.patch('sasctl.core.requests.Session.__init__'):
+        with mock.patch("sasctl.core.requests.Session.__init__"):
             recorded_session.__init__(**credentials)
             current_session(recorded_session)
 
@@ -297,8 +297,8 @@ def session(request, credentials):
             version >= 4 and version.release != expected_version
         ):
             raise RuntimeError(
-                f'You are connected to a Viya environment with version {version} but are trying to '
-                f'record cassettes labeled as version {expected_version}.'
+                f"You are connected to a Viya environment with version {version} but are trying to "
+                f"record cassettes labeled as version {expected_version}."
             )
 
         yield recorded_session
@@ -335,7 +335,7 @@ def missing_packages():
             return builtin_import(name, *args, **kwargs)
 
         try:
-            with mock.patch(builtins.__name__ + '.__import__', side_effect=_import):
+            with mock.patch(builtins.__name__ + ".__import__", side_effect=_import):
                 yield
         finally:
             pass
@@ -343,7 +343,7 @@ def missing_packages():
     return mocked_importer
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def cas_session(request, credentials):
     """
 
@@ -362,22 +362,22 @@ def cas_session(request, credentials):
         A CAS connection instance that is being recorded/replayed by Betamax.
 
     """
-    swat = pytest.importorskip('swat')
+    swat = pytest.importorskip("swat")
     from swat.exceptions import SWATError
 
     # Bypass Betamax entirely if requested.
     if SKIP_REPLAY:
         with swat.CAS(
-            'https://{}/cas-shared-default-http/'.format(credentials['hostname']),
-            username=credentials['username'],
-            password=credentials['password'],
+            "https://{}/cas-shared-default-http/".format(credentials["hostname"]),
+            username=credentials["username"],
+            password=credentials["password"],
         ) as s:
             yield s
         return
 
     # Use the test information from pytest request instance to determine the name and folder location for the cassette.
     cassette_folder, cassette_name = get_cassette_file(request, request.param)
-    cassette_name += '.swat'
+    cassette_name += ".swat"
 
     # Must have an existing Session for Betamax to record
     recorded_session = requests.Session()
@@ -391,31 +391,31 @@ def cas_session(request, credentials):
             # If the requested cassette doesn't exist, Betamax will raise a ValueError.  If we are just replaying test
             # cases then we want to *try* to run tests against all versions of Viya.  However, don't fail if no test
             # has been recorded for the current Viya version - just skip the test and continue.
-            if record_mode == 'none':
+            if record_mode == "none":
                 pytest.skip(f"No cassette found for version '{request.param}'")
             else:
                 raise
 
         # CAS connection tries to create its own Session instance.
         # Inject the session being recorded into the CAS connection
-        with mock.patch('swat.cas.rest.connection.requests.Session') as mocked:
+        with mock.patch("swat.cas.rest.connection.requests.Session") as mocked:
             mocked.return_value = recorded_session
             s = None
             try:
                 s = swat.CAS(
-                    'https://{}/cas-shared-default-http/'.format(
-                        credentials['hostname']
+                    "https://{}/cas-shared-default-http/".format(
+                        credentials["hostname"]
                     ),
-                    username=credentials['username'],
-                    password=credentials['password'],
+                    username=credentials["username"],
+                    password=credentials["password"],
                 )
 
                 # Strip out the session id from requests & responses.
-                recorder.config.define_cassette_placeholder('[session id]', s._session)
+                recorder.config.define_cassette_placeholder("[session id]", s._session)
                 yield s
             finally:
                 try:
-                    if hasattr(s, 'close'):
+                    if hasattr(s, "close"):
                         s.close()
                 except SWATError:
                     # session was closed during testing
@@ -424,23 +424,23 @@ def cas_session(request, credentials):
 
 @pytest.fixture
 def iris_astore(cas_session):
-    pd = pytest.importorskip('pandas')
-    datasets = pytest.importorskip('sklearn.datasets')
+    pd = pytest.importorskip("pandas")
+    datasets = pytest.importorskip("sklearn.datasets")
 
-    ASTORE_NAME = 'astore'
+    ASTORE_NAME = "astore"
 
-    cas_session.loadactionset('decisionTree')
+    cas_session.loadactionset("decisionTree")
 
     raw = datasets.load_iris()
     iris = pd.DataFrame(raw.data, columns=raw.feature_names)
     iris = iris.join(pd.DataFrame(raw.target))
-    iris.columns = ['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth', 'Species']
+    iris.columns = ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth", "Species"]
 
     tbl = cas_session.upload(iris).casTable
     _ = tbl.decisiontree.gbtreetrain(
-        target='Species',
-        inputs=['SepalLength', 'SepalWidth', 'PetalLength', 'PetalWidth'],
-        nominal=['Species'],
+        target="Species",
+        inputs=["SepalLength", "SepalWidth", "PetalLength", "PetalWidth"],
+        nominal=["Species"],
         ntree=10,
         savestate=ASTORE_NAME,
     )
@@ -450,19 +450,19 @@ def iris_astore(cas_session):
 @pytest.fixture
 def airline_dataset():
     """Sentiment analysis dataset."""
-    pd = pytest.importorskip('pandas')
+    pd = pytest.importorskip("pandas")
 
-    df = pd.read_csv('examples/data/airline_tweets.csv')
+    df = pd.read_csv("examples/data/airline_tweets.csv")
     df = df[
         [
-            'airline_sentiment',
-            'airline',
-            'name',
-            'tweet_location',
-            'tweet_id',
-            'tweet_created',
-            'retweet_count',
-            'text',
+            "airline_sentiment",
+            "airline",
+            "name",
+            "tweet_location",
+            "tweet_id",
+            "tweet_created",
+            "retweet_count",
+            "text",
         ]
     ]
     return df
@@ -471,9 +471,9 @@ def airline_dataset():
 @pytest.fixture
 def boston_dataset():
     """Regression dataset."""
-    pd = pytest.importorskip('pandas')
+    pd = pytest.importorskip("pandas")
 
-    df = pd.read_csv('examples/data/boston_house_prices.csv')
+    df = pd.read_csv("examples/data/boston_house_prices.csv")
 
     # Uppercase column names to match names used by scikit-learn (dataset was originally loaded through
     # sklearn before it was removed in v1.2).
@@ -485,14 +485,14 @@ def boston_dataset():
 @pytest.fixture
 def cancer_dataset():
     """Binary classification dataset."""
-    pytest.importorskip('sklearn')
-    pd = pytest.importorskip('pandas')
+    pytest.importorskip("sklearn")
+    pd = pytest.importorskip("pandas")
     from sklearn import datasets
 
     raw = datasets.load_breast_cancer()
     df = pd.DataFrame(raw.data, columns=raw.feature_names)
-    df['Type'] = raw.target
-    df.Type = df.Type.astype('category')
+    df["Type"] = raw.target
+    df.Type = df.Type.astype("category")
     df.Type.cat.categories = raw.target_names
     return df
 
@@ -500,10 +500,10 @@ def cancer_dataset():
 @pytest.fixture
 def iris_dataset():
     """Multi-class classification dataset."""
-    pd = pytest.importorskip('pandas')
+    pd = pytest.importorskip("pandas")
 
-    df = pd.read_csv('examples/data/iris.csv')
-    df.Species = df.Species.astype('category')
+    df = pd.read_csv("examples/data/iris.csv")
+    df.Species = df.Species.astype("category")
     return df
 
 
@@ -523,12 +523,13 @@ class Cache:
     it's data separately.
 
     """
+
     def __init__(self, request):
         self.__request = request
 
     @property
     def grouping(self):
-        return getattr(self.__request.node, 'grouping', '')
+        return getattr(self.__request.node, "grouping", "")
 
     def get(self, key, default):
         key = self._format_key(key)
@@ -540,7 +541,7 @@ class Cache:
 
     def _format_key(self, key):
         if self.grouping:
-            return f'{self.grouping}/{key}'
+            return f"{self.grouping}/{key}"
         return key
 
 
@@ -556,16 +557,16 @@ def pytest_runtest_makereport(item, call):
         if call.excinfo is not None:
             parent = item.parent
             # Create a dictionary to track which version(s) of the test failed
-            if not hasattr(parent, 'previousfailed'):
+            if not hasattr(parent, "previousfailed"):
                 parent._previousfailed = {}
 
             # The id of the test is deteremined by its parameterization.  We just want to know if the test was
             # for Viya 3.5 or 2020.01, 2022.09, etc.  Try to check the parameter assigned to known fixtures like
             # `session`.  If that fails, we'll just use the id generated by pytest.
-            if 'session' in item.callspec.params:
-                key = item.callspec.params['session']
-            elif 'cas_session' in item.callspec.params:
-                key = item.callspec.params['cas_session']
+            if "session" in item.callspec.params:
+                key = item.callspec.params["session"]
+            elif "cas_session" in item.callspec.params:
+                key = item.callspec.params["cas_session"]
             else:
                 key = item.callspec.id
 
@@ -580,11 +581,11 @@ def pytest_runtest_setup(item):
     # The `id` of each test is generated by py.test based on the test parameterization and may not match across all
     # test cases with the same Viya version, so we need an alternative method.  Instead, we use the parameter passed
     # to `session` or `cas_session` and only fall back to `id` if neither fixture was used.
-    if hasattr(item, 'callspec'):
-        if 'session' in item.callspec.params:
-            item.grouping = item.callspec.params['session']
-        elif 'cas_session' in item.callspec.params:
-            item.grouping = item.callspec.params['cas_session']
+    if hasattr(item, "callspec"):
+        if "session" in item.callspec.params:
+            item.grouping = item.callspec.params["session"]
+        elif "cas_session" in item.callspec.params:
+            item.grouping = item.callspec.params["cas_session"]
         else:
             item.grouping = item.callspec.id
 
@@ -593,7 +594,9 @@ def pytest_runtest_setup(item):
         if previousfailed is not None:
             # If a previous test for the same Viya version has failed then we can just skip this test.
             if item.grouping in previousfailed:
-                pytest.xfail(f"previous test failed {previousfailed[item.grouping].name}")
+                pytest.xfail(
+                    f"previous test failed {previousfailed[item.grouping].name}"
+                )
 
 
 def pytest_generate_tests(metafunc):
@@ -616,7 +619,7 @@ def pytest_generate_tests(metafunc):
 
     # We need to provide parameters for one or both of `session` and `cas_session` if they're being used by the test.
     fixtures_to_parameterize = [
-        f for f in ('session', 'cas_session') if f in metafunc.fixturenames
+        f for f in ("session", "cas_session") if f in metafunc.fixturenames
     ]
 
     # Build a list of combinations that will be used to parameterize the test.
