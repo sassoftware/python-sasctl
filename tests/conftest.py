@@ -482,6 +482,7 @@ def boston_dataset():
 
     return df
 
+
 @pytest.fixture
 def cancer_dataset():
     """Binary classification dataset."""
