@@ -10,6 +10,7 @@ import pandas as pd
 import math
 import pickle
 import pickletools
+import warnings
 from collections.abc import Iterable
 
 
@@ -196,7 +197,7 @@ class JSONFiles:
         # Check if model description provided is smaller than then 1024 character limit
         if len(modelDesc) > 1024:
             modelDesc = modelDesc[:1024]
-            print(
+            warnings.warn(
                 "WARNING: The provided model description was truncated to 1024 characters."
             )
 
@@ -533,15 +534,10 @@ class JSONFiles:
                     dataSets[i] = data.tolist()
 
         if len(dataPartitionExists) == 0:
-            try:
-                raise ValueError
-            except ValueError:
-                print(
-                    "No data was provided. Please provide the actual "
-                    + "and predicted values for at least one of the "
-                    + "partitions (VALIDATE, TRAIN, or TEST)."
-                )
-                raise
+            raise ValueError(
+                "No data was provided. Please provide the actual and predicted values for at least one of the "
+                "partitions (VALIDATE, TRAIN, or TEST). "
+            )
 
         for j in dataPartitionExists:
             fitStats = nullJSONDict["data"][j]["dataMap"]
@@ -705,12 +701,10 @@ class JSONFiles:
                         dataSets[i][columns] = data.transpose()
 
         if len(dataPartitionExists) == 0:
-            print(
-                "No data was provided. Please provide the actual "
-                + "and predicted values for at least one of the "
-                + "partitions (VALIDATE, TRAIN, or TEST)."
+            raise ValueError(
+                "No data was provided. Please provide the actual and predicted values for at least one "
+                "of the partitions (VALIDATE, TRAIN, or TEST)"
             )
-            raise ValueError
 
         nullLiftRow = list(range(1, 64))
         nullROCRow = list(range(1, 301))
@@ -1075,7 +1069,7 @@ class JSONFiles:
         """
 
         def package_not_found_output(package_name, package_versions):
-            print(
+            warnings.warn(
                 f"Warning: Package {package_name} was not found in the local environment. Either {package_name} is not "
                 f"a valid Python package, or the package is not present in this environment. The requirements.json file"
                 f" will include a commented out version of the pip installation command at the bottom of the file. "
