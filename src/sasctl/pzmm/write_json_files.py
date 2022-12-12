@@ -11,6 +11,7 @@ import math
 import pickle
 import pickletools
 import warnings
+import importlib
 from collections.abc import Iterable
 
 
@@ -1079,7 +1080,6 @@ class JSONFiles:
             return package_versions
 
         package_and_version = []
-        import importlib
 
         for package in package_list:
             try:
