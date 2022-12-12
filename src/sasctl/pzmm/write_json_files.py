@@ -1007,6 +1007,11 @@ class JSONFiles:
         json_path : str, optional
             The path to a Python project, by default the current working directory.
 
+        Returns
+        -------
+        list of dicts
+            List of dictionary representations of the json file contents, split into each package and/or warning.
+
         Yields
         ------
         requirements.json : file
@@ -1029,32 +1034,27 @@ class JSONFiles:
             item[0] for item in package_and_version if not item[1]
         ]
 
-        with open(Path(json_path) / "requirements.json", "w") as file:
-            if missing_package_versions:
-                json_step = json.dumps(
-                    [
-                        {
-                            "Warning": "The existence and/or versions for the following packages could not be "
-                            "determined:",
-                            "Packages": ", ".join(missing_package_versions),
-                        }
-                    ],
-                    indent=4,
+        # Create a list of dicts related to each package or warning
+        json_dicts = []
+        if missing_package_versions:
+            json_dicts.append(
+                {
+                    "Warning": "The existence and/or versions for the following packages could not be determined:",
+                    "Packages": ", ".join(missing_package_versions),
+                }
+            )
+        for package, version in package_and_version:
+            if version:
+                json_dicts.append(
+                    {
+                        "step": f"install {package}",
+                        "command": f"pip install {package}=={version}",
+                    }
                 )
-                file.write(json_step)
+        with open(Path(json_path) / "requirements.json", "w") as file:
+            file.write(json.dumps(json_dicts, indent=4))
 
-            for package, version in package_and_version:
-                if version:
-                    json_step = json.dumps(
-                        [
-                            {
-                                "step": "install " + package,
-                                "command": "pip install " + package + "==" + version,
-                            }
-                        ],
-                        indent=4,
-                    )
-                file.write(json_step)
+        return json_dicts
 
     @classmethod
     def get_local_package_version(cls, package_list):
