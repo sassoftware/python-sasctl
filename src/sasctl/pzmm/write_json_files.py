@@ -1170,7 +1170,9 @@ class JSONFiles:
         list
             A list of pickle files.
         """
-        return [p for p in Path(pickle_folder).iterdir() if p.suffix in [".pickle", ".pkl"]]
+        return [
+            p for p in Path(pickle_folder).iterdir() if p.suffix in [".pickle", ".pkl"]
+        ]
 
     @classmethod
     def get_pickle_dependencies(cls, pickle_file):
