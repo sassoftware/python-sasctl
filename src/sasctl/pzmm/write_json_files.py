@@ -1129,22 +1129,23 @@ class JSONFiles:
         """
         import ast
 
-        file_text = open(file_path).read()
-        # Parse the file to get the abstract syntax tree representation
-        tree = ast.parse(file_text)
-        modules = []
+        with open(file_path, "r") as file:
+            file_text = file.read()
+            # Parse the file to get the abstract syntax tree representation
+            tree = ast.parse(file_text)
+            modules = []
 
-        # Walk through each node in the ast to find import calls
-        for node in ast.walk(tree):
-            # Determine parent module for from * import * calls
-            if isinstance(node, ast.ImportFrom):
-                for name in node.names:
-                    if not name.asname:
-                        modules.append(node.module)
-            elif isinstance(node, ast.Import):
-                for name in node.names:
-                    if not node.names[0].asname:
-                        modules.append(node.names[0].name)
+            # Walk through each node in the ast to find import calls
+            for node in ast.walk(tree):
+                # Determine parent module for from * import * calls
+                if isinstance(node, ast.ImportFrom):
+                    for name in node.names:
+                        if not name.asname:
+                            modules.append(node.module)
+                elif isinstance(node, ast.Import):
+                    for name in node.names:
+                        if not node.names[0].asname:
+                            modules.append(node.names[0].name)
 
         modules = list(set(modules))
         try:
@@ -1169,10 +1170,7 @@ class JSONFiles:
         list
             A list of pickle files.
         """
-
-        file_names = []
-        file_names.extend(sorted(Path(pickle_folder).glob("*.pickle")))
-        return file_names
+        return [p for p in Path(pickle_folder).iterdir() if p.suffix in [".pickle", ".pkl"]]
 
     @classmethod
     def get_pickle_dependencies(cls, pickle_file):
