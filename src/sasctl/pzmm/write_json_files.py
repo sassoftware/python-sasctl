@@ -1102,11 +1102,8 @@ class JSONFiles:
         list
             List of found package dependencies.
         """
-        file_names = []
-        file_names.extend(sorted(Path(model_path).glob("*.py")))
-
         import_info = []
-        for file in file_names:
+        for file in sorted(Path(model_path).glob("*.py")):
             import_info.append(cls.find_imports(file))
         import_info = list(set(flatten(import_info)))
         return import_info
