@@ -960,7 +960,7 @@ class JSONFiles:
         return conversion
 
     @classmethod
-    def create_requirements_json(cls, json_path=Path.cwd()):
+    def create_requirements_json(cls, model_path=Path.cwd()):
         """
         Searches the model directory for Python scripts and pickle files and determines their Python package
         dependencies.
@@ -980,7 +980,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        json_path : str, optional
+        model_path : str, optional
             The path to a Python project, by default the current working directory.
 
         Returns
@@ -995,11 +995,11 @@ class JSONFiles:
         """
 
         pickle_packages = []
-        pickle_files = cls.get_pickle_file(json_path)
+        pickle_files = cls.get_pickle_file(model_path)
         for pickle_file in pickle_files:
             pickle_packages.append(cls.get_pickle_dependencies(pickle_file))
 
-        code_dependencies = cls.get_code_dependencies(json_path)
+        code_dependencies = cls.get_code_dependencies(model_path)
 
         package_list = list(pickle_packages) + code_dependencies
         package_list = list(set(list(flatten(package_list))))
@@ -1027,7 +1027,7 @@ class JSONFiles:
                         "command": f"pip install {package}=={version}",
                     }
                 )
-        with open(Path(json_path) / "requirements.json", "w") as file:
+        with open(Path(model_path) / "requirements.json", "w") as file:
             file.write(json.dumps(json_dicts, indent=4))
 
         return json_dicts
@@ -1086,7 +1086,7 @@ class JSONFiles:
         return package_and_version
 
     @classmethod
-    def get_code_dependencies(cls, json_path=Path.cwd()):
+    def get_code_dependencies(cls, model_path=Path.cwd()):
         """
         Get the package dependencies for all Python scripts in the provided directory path.
 
@@ -1094,7 +1094,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        json_path : string, optional
+        model_path : string, optional
             File location for the output JSON file. Default is the current working directory.
 
         Returns
@@ -1103,7 +1103,7 @@ class JSONFiles:
             List of found package dependencies.
         """
         file_names = []
-        file_names.extend(sorted(Path(json_path).glob("*.py")))
+        file_names.extend(sorted(Path(model_path).glob("*.py")))
 
         import_info = []
         for file in file_names:
