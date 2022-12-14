@@ -48,6 +48,8 @@ class JSONFiles:
         Writes a variable descriptor JSON file for input or output variables, based on input data containing predictor
         and prediction columns.
 
+        This function creates a JSON file named either InputVar.json or OutputVar.json based on argument inputs.
+
         Parameters
         ----------
         inputData : dataframe or list of dicts
@@ -58,11 +60,6 @@ class JSONFiles:
             Boolean flag to check if generating the input or output variable JSON.
         jPath : string, optional
             File location for the output JSON file. Default is the current working directory.
-
-        Yields
-        ------
-        JSON file
-            A JSON file named either InputVar.json or OutputVar.json based on argument inputs.
         """
         outputJSON = pd.DataFrame()
         if isinstance(inputData, list):
@@ -163,6 +160,7 @@ class JSONFiles:
         Writes a JSON file containing SAS Model Manager model properties.
 
         The JSON file format is required by the SAS Model Repository API service and only eventProbVar can be 'None'.
+        This function outputs a JSON file located named "ModelProperties.json".
 
         Parameters
         ----------
@@ -186,11 +184,6 @@ class JSONFiles:
             Location for the output JSON file. The default is the current working directory.
         modeler : string, optional
             The modeler name to be displayed in the model properties. The default value is None.
-
-        Yields
-        ------
-        'ModelProperties.json'
-            Output JSON file located at jPath.
         """
 
         # Check if model description provided is smaller than then 1024 character limit
@@ -272,6 +265,8 @@ class JSONFiles:
         """
         Writes a file metadata JSON file pointing to all relevant files.
 
+        This function outputs a JSON file named "fileMetadata.json".
+
         Parameters
         ----------
         modelPrefix : string
@@ -282,11 +277,6 @@ class JSONFiles:
         isH2OModel : boolean, optional
             Sets whether the model metadata is associated with an H2O.ai model. If set as True, the MOJO model file
             will be set as a score resource. The default value is False.
-
-        Yields
-        ------
-        'fileMetadata.json'
-            Output JSON file located at jPath.
         """
 
         if not isH2OModel:
@@ -353,6 +343,8 @@ class JSONFiles:
             * KSCut = KS Cutoff
             * C = Area Under ROC
 
+        This function outputs a JSON file named "dmcas_fitstat.json".
+
         Parameters
         ----------
         csvPath : string, optional
@@ -365,11 +357,6 @@ class JSONFiles:
             Input parameter tuples in the form of (parameterName, parameterLabel, parameterValue, dataRole). For
             example, a sample parameter call would be ('NObs', 'Sum of Frequencies', 3488, 'TRAIN'). Variable dataRole
             is typically either TRAIN, TEST, or VALIDATE or 1, 2, 3 respectively. The default value is None.
-
-        Yields
-        ------
-        'dmcas_fitstat.json'
-            Output JSON file located at jPath.
         """
 
         validParams = [
@@ -467,6 +454,8 @@ class JSONFiles:
         values come first and the predicted second
         * list; the actual and predicted values are their own indexed entry
 
+        This function outputs a JSON file named "dmcas_fitstat.json".
+
         Parameters
         ----------
         validateData : pandas dataframe, numpy array, or list, optional
@@ -481,11 +470,6 @@ class JSONFiles:
         jPath : string, optional
             Location for the output JSON file. The default value is the current
             working directory.
-
-        Yields
-        ------
-        'dmcas_fitstat.json'
-            Output JSON file located at jPath.
         """
         # If numpy inputs are supplied, then it is assumed that numpy is installed in the environment
         try:
@@ -611,6 +595,8 @@ class JSONFiles:
         ROC and Lift calculations are completed by CAS through a SWAT call. Note that if no data set is provided
         (validate, train, or test), this function raises an error and does not create any JSON files.
 
+        This function outputs a pair of JSON files named "dmcas_lift.json" and "dmcas_roc.json".
+
         Parameters
         ---------------
         targetName: str
@@ -631,13 +617,6 @@ class JSONFiles:
             probabilities. The default value is None.
         jPath : string, optional
             Location for the output JSON file. The default value is the current working directory.
-
-        Yields
-        ---------------
-        'dmcas_roc.json'
-            Output JSON file located at jPath.
-        'dmcas_lift.json'
-            Output JSON file located at jPath.
         """
         # If numpy inputs are supplied, then it is assumed that numpy is installed in the environment
         try:
@@ -980,6 +959,8 @@ class JSONFiles:
         model development environment, it is recommended to the user that they adjust the requirements.json file's
         package versions to match the model development environment.
 
+        This function outputs a JSON file named "requirements.json".
+
         Parameters
         ----------
         model_path : str, optional
@@ -989,11 +970,6 @@ class JSONFiles:
         -------
         list of dicts
             List of dictionary representations of the json file contents, split into each package and/or warning.
-
-        Yields
-        ------
-        requirements.json : file
-            JSON file used to create a specific Python environment in a SAS Model Manager published container.
         """
 
         pickle_packages = []
