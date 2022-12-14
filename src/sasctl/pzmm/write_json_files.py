@@ -22,8 +22,8 @@ def flatten(nestedList):
     """
     Flatten a nested list.
 
-    Flattens a nested list, while controlling for str values in list, such that the str values are not expanded into a
-    list of single characters.
+    Flattens a nested list, while controlling for str values in list, such that the
+    str values are not expanded into a list of single characters.
 
     Parameters
     ----------
@@ -46,21 +46,24 @@ class JSONFiles:
     @staticmethod
     def writeVarJSON(inputData, isInput=True, jPath=Path.cwd()):
         """
-        Writes a variable descriptor JSON file for input or output variables, based on input data containing predictor
-        and prediction columns.
+        Writes a variable descriptor JSON file for input or output variables,
+        based on input data containing predictor and prediction columns.
 
-        This function creates a JSON file named either InputVar.json or OutputVar.json based on argument inputs.
+        This function creates a JSON file named either InputVar.json or
+        OutputVar.json based on argument inputs.
 
         Parameters
         ----------
         inputData : dataframe or list of dicts
-            Input dataframe containing the training data set in a pandas.Dataframe format. Columns are used to define
-            predictor and prediction variables (ambiguously named "predict"). Providing a list of dict objects signals
+            Input dataframe containing the training data set in a pandas.Dataframe
+            format. Columns are used to define predictor and prediction variables
+            (ambiguously named "predict"). Providing a list of dict objects signals
             that the model files are being created from an MLFlow model.
         isInput : bool
             Boolean flag to check if generating the input or output variable JSON.
         jPath : string, optional
-            File location for the output JSON file. Default is the current working directory.
+            File location for the output JSON file. Default is the current working
+            directory.
         """
         outputJSON = pd.DataFrame()
         if isinstance(inputData, list):
@@ -159,8 +162,9 @@ class JSONFiles:
         """
         Writes a JSON file containing SAS Model Manager model properties.
 
-        The JSON file format is required by the SAS Model Repository API service and only eventProbVar can be 'None'.
-        This function outputs a JSON file located named "ModelProperties.json".
+        The JSON file format is required by the SAS Model Repository API service and
+        only eventProbVar can be 'None'. This function outputs a JSON file located
+        named "ModelProperties.json".
 
         Parameters
         ----------
@@ -181,16 +185,18 @@ class JSONFiles:
         eventProbVar : string, optional
             Model prediction metric for scoring. Default is None.
         jPath : string, optional
-            Location for the output JSON file. The default is the current working directory.
+            Location for the output JSON file. The default is the current working
+            directory.
         modeler : string, optional
-            The modeler name to be displayed in the model properties. The default value is None.
+            The modeler name to be displayed in the model properties. The default value
+            is None.
         """
-
-        # Check if model description provided is smaller than then 1024 character limit
+        # Check if model description provided is smaller than the 1024-character limit
         if len(modelDesc) > 1024:
             modelDesc = modelDesc[:1024]
             warnings.warn(
-                "WARNING: The provided model description was truncated to 1024 characters."
+                "WARNING: The provided model description was truncated to 1024 "
+                "characters. "
             )
 
         if numTargetCategories > 2 and not targetEvent:
@@ -270,15 +276,16 @@ class JSONFiles:
         Parameters
         ----------
         modelPrefix : string
-            The variable for the model name that is used when naming model files. (For example, hmeqClassTree +
-            [Score.py | .pickle]).
+            The variable for the model name that is used when naming model files. (For
+            example, hmeqClassTree + [Score.py | .pickle]).
         jPath : string, optional
-            Location for the output JSON file. The default value is the current working directory.
+            Location for the output JSON file. The default value is the current working
+            directory.
         isH2OModel : boolean, optional
-            Sets whether the model metadata is associated with an H2O.ai model. If set as True, the MOJO model file
-            will be set as a score resource. The default value is False.
+            Sets whether the model metadata is associated with an H2O.ai model. If set
+            as True, the MOJO model file will be set as a score resource. The default
+            value is False.
         """
-
         if not isH2OModel:
             fileMetadata = pd.DataFrame(
                 [
@@ -348,17 +355,20 @@ class JSONFiles:
         Parameters
         ----------
         csvPath : string, optional
-            Location for an input CSV file that contains parameter statistics. The default value is None.
+            Location for an input CSV file that contains parameter statistics. The
+            default value is None.
         jPath : string, optional
-            Location for the output JSON file. The default value is the current working directory.
+            Location for the output JSON file. The default value is the current working
+            directory.
         userInput : boolean, optional
             If true, prompt the user for more parameters. The default value is false.
         tupleList : list of tuples, optional
-            Input parameter tuples in the form of (parameterName, parameterLabel, parameterValue, dataRole). For
-            example, a sample parameter call would be ('NObs', 'Sum of Frequencies', 3488, 'TRAIN'). Variable dataRole
-            is typically either TRAIN, TEST, or VALIDATE or 1, 2, 3 respectively. The default value is None.
+            Input parameter tuples in the form of (parameterName, parameterLabel,
+            parameterValue, dataRole). For example, a sample parameter call would be
+            'NObs', 'Sum of Frequencies', 3488, or 'TRAIN'. Variable dataRole
+            is typically either TRAIN, TEST, or VALIDATE or 1, 2, 3 respectively. The
+            default value is None.
         """
-
         validParams = [
             "_RASE_",
             "_NObs_",
@@ -442,16 +452,16 @@ class JSONFiles:
         cls, validateData=None, trainData=None, testData=None, jPath=Path.cwd()
     ):
         """
-        Calculates fit statistics from user data and predictions and then writes to a JSON file for importing into the
-        common model repository.
+        Calculates fit statistics from user data and predictions and then writes to a
+        JSON file for importing into the common model repository.
 
-        Note that if no data set is provided (validate, train, or test), this function raises an error and does not
-        create a JSON file.
+        Note that if no data set is provided (validate, train, or test),
+        this function raises an error and does not create a JSON file.
 
         Datasets can be provided in the following forms:
         * pandas dataframe; the actual and predicted values are their own columns
-        * numpy array; the actual and predicted values are their own columns or rows and ordered such that the actual
-        values come first and the predicted second
+        * numpy array; the actual and predicted values are their own columns or rows and
+        ordered such that the actual values come first and the predicted second
         * list; the actual and predicted values are their own indexed entry
 
         This function outputs a JSON file named "dmcas_fitstat.json".
@@ -471,7 +481,7 @@ class JSONFiles:
             Location for the output JSON file. The default value is the current
             working directory.
         """
-        # If numpy inputs are supplied, then it is assumed that numpy is installed in the environment
+        # If numpy inputs are supplied, then assume numpy is installed
         try:
             import numpy as np
         except ImportError:
@@ -481,7 +491,8 @@ class JSONFiles:
             from sklearn import metrics
         except ImportError:
             raise RuntimeError(
-                "The 'scikit-learn' package is required to use the calculateFitStat function."
+                "The 'scikit-learn' package is required to use the calculateFitStat "
+                "function. "
             )
 
         nullJSONPath = Path(__file__).resolve().parent / "null_dmcas_fitstat.json"
@@ -502,8 +513,8 @@ class JSONFiles:
 
         if len(dataPartitionExists) == 0:
             raise ValueError(
-                "No data was provided. Please provide the actual and predicted values for at least one of the "
-                "partitions (VALIDATE, TRAIN, or TEST). "
+                "No data was provided. Please provide the actual and predicted values "
+                "for at least one of the partitions (VALIDATE, TRAIN, or TEST)."
             )
 
         for j in dataPartitionExists:
@@ -511,7 +522,8 @@ class JSONFiles:
 
             fitStats["_PartInd_"] = j
 
-            # If the data provided is Predicted | Actual instead of Actual | Predicted, catch the error and flip the columns
+            # If the data provided is Predicted | Actual instead of Actual |
+            # Predicted, catch the error and flip the columns
             try:
                 fpr, tpr, _ = metrics.roc_curve(dataSets[j][0], dataSets[j][1])
             except ValueError:
@@ -589,13 +601,15 @@ class JSONFiles:
         jPath=Path.cwd(),
     ):
         """
-        Calculates the ROC and Lift curves from user data and model predictions and the writes it to JSON files for
-        importing in to the common model repository.
+        Calculates the ROC and Lift curves from user data and model predictions and
+        the writes it to JSON files for importing in to the common model repository.
 
-        ROC and Lift calculations are completed by CAS through a SWAT call. Note that if no data set is provided
-        (validate, train, or test), this function raises an error and does not create any JSON files.
+        ROC and Lift calculations are completed by CAS through a SWAT call. Note that
+        if no data set is provided (validate, train, or test), this function raises
+        an error and does not create any JSON files.
 
-        This function outputs a pair of JSON files named "dmcas_lift.json" and "dmcas_roc.json".
+        This function outputs a pair of JSON files named "dmcas_lift.json" and
+        "dmcas_roc.json".
 
         Parameters
         ---------------
@@ -604,21 +618,22 @@ class JSONFiles:
         targetValue: int or float
             Value of target variable that indicates an event.
         swatConn: SWAT connection to CAS
-            Connection object to CAS service in SAS Model Manager or SAS® Open Model Manager through SWAT
+            Connection object to CAS service in SAS Model Manager through SWAT
             authentication.
         validateData : pandas dataframe, numpy array, or list, optional
-            Dataframe, array, or list of the validation data set, including both the actual values and the calculated
-            probabilities. The default value is None.
+            Dataframe, array, or list of the validation data set, including both the
+            actual values and the calculated probabilities. The default value is None.
         trainData : pandas dataframe, numpy array, or list, optional
-            Dataframe, array, or list of the train data set, including both the actual values and the calculated
-            probabilities. The default value is None.
+            Dataframe, array, or list of the train data set, including both the actual
+            values and the calculated probabilities. The default value is None.
         testData : pandas dataframe, numpy array, or list, optional
-            Dataframe, array, or list of the test data set, including both the actual values and the calculated
-            probabilities. The default value is None.
+            Dataframe, array, or list of the test data set, including both the actual
+            values and the calculated probabilities. The default value is None.
         jPath : string, optional
-            Location for the output JSON file. The default value is the current working directory.
+            Location for the output JSON file. The default value is the current working
+            directory.
         """
-        # If numpy inputs are supplied, then it is assumed that numpy is installed in the environment
+        # If numpy inputs are supplied, then assume numpy is installed
         try:
             # noinspection PyPackageRequirements
             import numpy as np
@@ -628,7 +643,8 @@ class JSONFiles:
             import swat
         except ImportError:
             raise RuntimeError(
-                "The 'swat' package is required to generate ROC and Lift charts with this function."
+                "The 'swat' package is required to generate ROC and Lift charts with "
+                "this function. "
             )
 
         nullJSONROCPath = Path(__file__).resolve().parent / "null_dmcas_roc.json"
@@ -664,8 +680,8 @@ class JSONFiles:
 
         if len(dataPartitionExists) == 0:
             raise ValueError(
-                "No data was provided. Please provide the actual and predicted values for at least one "
-                "of the partitions (VALIDATE, TRAIN, or TEST)"
+                "No data was provided. Please provide the actual and predicted values "
+                "for at least one of the partitions (VALIDATE, TRAIN, or TEST)"
             )
 
         nullLiftRow = list(range(1, 64))
@@ -870,7 +886,6 @@ class JSONFiles:
         json.load(jFile) : str
             String contents of JSON file.
         """
-
         with open(path) as jFile:
             return json.load(jFile)
 
@@ -891,7 +906,6 @@ class JSONFiles:
         paramName : string
             Name of the parameter.
         """
-
         if not (paramName.startswith("_") and paramName.endswith("_")):
             if not paramName.startswith("_"):
                 paramName = "_" + paramName
@@ -911,14 +925,14 @@ class JSONFiles:
         Parameters
         ----------
         dataRole : string or int
-            Identifier of the data set's role; either TRAIN, TEST, or VALIDATE, which correspond to 1, 2, or 3.
+            Identifier of the data set's role; either TRAIN, TEST, or VALIDATE, which
+            correspond to 1, 2, or 3.
 
         Returns
         -------
         conversion : int or string
             Converted data role identifier.
         """
-
         if type(dataRole) is int or type(dataRole) is float:
             dataRole = int(dataRole)
             if dataRole == 1:
@@ -946,21 +960,24 @@ class JSONFiles:
     @classmethod
     def create_requirements_json(cls, model_path=Path.cwd()):
         """
-        Searches the model directory for Python scripts and pickle files and determines their Python package
-        dependencies.
+        Searches the model directory for Python scripts and pickle files and
+        determines their Python package dependencies.
 
-        Found dependencies are then matched to the package version found in the current working environment. Then the
-        package and version are written to a requirements.json file.
+        Found dependencies are then matched to the package version found in the
+        current working environment. Then the package and version are written to a
+        requirements.json file.
 
-        WARNING:
-        The methods utilized in this function can determine package dependencies from provided scripts and pickle files,
-         but CANNOT determine the required package versions without being in the development environment which they were
-         originally created.
+        WARNING: The methods utilized in this function can determine package
+        dependencies from provided scripts and pickle files, but CANNOT determine the
+        required package versions without being in the development environment which
+        they were originally created.
 
-        This function works best when run in the model development environment and is likely to throw errors if run in
-        another environment (and/or produce incorrect package versions). In the case of using this function outside the
-        model development environment, it is recommended to the user that they adjust the requirements.json file's
-        package versions to match the model development environment.
+        This function works best when run in the model development environment and is
+        likely to throw errors if run in another environment (and/or produce
+        incorrect package versions). In the case of using this function outside the
+        model development environment, it is recommended to the user that they adjust
+        the requirements.json file's package versions to match the model development
+        environment.
 
         This function outputs a JSON file named "requirements.json".
 
@@ -969,12 +986,9 @@ class JSONFiles:
         model_path : str, optional
             The path to a Python project, by default the current working directory.
 
-        Returns
-        -------
-        list of dicts
-            List of dictionary representations of the json file contents, split into each package and/or warning.
+        Returns ------- list of dicts List of dictionary representations of the json
+        file contents, split into each package and/or warning.
         """
-
         pickle_packages = []
         pickle_files = cls.get_pickle_file(model_path)
         for pickle_file in pickle_files:
@@ -996,7 +1010,8 @@ class JSONFiles:
         if missing_package_versions:
             json_dicts.append(
                 {
-                    "Warning": "The existence and/or versions for the following packages could not be determined:",
+                    "Warning": "The existence and/or versions for the following "
+                    "packages could not be determined:",
                     "Packages": ", ".join(missing_package_versions),
                 }
             )
@@ -1008,7 +1023,9 @@ class JSONFiles:
                         "command": f"pip install {package}=={version}",
                     }
                 )
-        with open(Path(model_path) / "requirements.json", "w") as file:
+        with open(
+            Path(model_path) / "requirements.json", "w"
+        ) as file:  # skipcq: PTC-W6004 FLK-E501
             file.write(json.dumps(json_dicts, indent=4))
 
         return json_dicts
@@ -1018,8 +1035,8 @@ class JSONFiles:
         """
         Get package_name versions from the local environment.
 
-        If the package_name does not contain an attribute of "__version__", "version", or "VERSION", no package_name
-        version will be found.
+        If the package_name does not contain an attribute of "__version__",
+        "version", or "VERSION", no package_name version will be found.
 
         Parameters
         ----------
@@ -1034,10 +1051,13 @@ class JSONFiles:
 
         def package_not_found_output(package_name, package_versions):
             warnings.warn(
-                f"Warning: Package {package_name} was not found in the local environment. Either {package_name} is not "
-                f"a valid Python package, or the package is not present in this environment. The requirements.json file"
-                f" will include a commented out version of the pip installation command at the bottom of the file. "
-                f"Please review the file and verify that the package exists and input the version needed."
+                f"Warning: Package {package_name} was not found in the local "
+                f"environment. Either {package_name} is not a valid Python package, "
+                f"or the package is not present in this environment. The "
+                f"requirements.json file  will include a commented out version of the "
+                f"pip installation command at the bottom of the file. Please review "
+                f"the file and verify that the package exists and input the version "
+                f"needed. "
             )
             package_versions.append([package_name, None])
             return package_versions
@@ -1069,14 +1089,16 @@ class JSONFiles:
     @classmethod
     def get_code_dependencies(cls, model_path=Path.cwd()):
         """
-        Get the package dependencies for all Python scripts in the provided directory path.
+        Get the package dependencies for all Python scripts in the provided directory
+        path.
 
         Note that currently this functionality only works for .py files.
 
         Parameters
         ----------
         model_path : string, optional
-            File location for the output JSON file. Default is the current working directory.
+            File location for the output JSON file. Default is the current working
+            directory.
 
         Returns
         -------
@@ -1096,7 +1118,8 @@ class JSONFiles:
 
         Ignores built in Python modules.
 
-        Credit: modified from https://stackoverflow.com/questions/44988487/regex-to-parse-import-statements-in-python
+        Credit: modified from https://stackoverflow.com/questions/44988487/regex-to
+        -parse-import-statements-in-python
 
         Parameters
         ----------
@@ -1108,9 +1131,7 @@ class JSONFiles:
         list
             List of found package dependencies.
         """
-        import ast
-
-        with open(file_path, "r") as file:
+        with open(file_path, "r") as file:  # skipcq: PTC-W6004
             file_text = file.read()
             # Parse the file to get the abstract syntax tree representation
             tree = ast.parse(file_text)
@@ -1130,7 +1151,7 @@ class JSONFiles:
 
         modules = list(set(modules))
         try:
-            # Remove 'settings' module that is auto generated for SAS Model Manager score code
+            # Remove 'settings' module generated for SAS Model Manager score code
             modules.remove("settings")
             return modules
         except ValueError:
@@ -1144,7 +1165,8 @@ class JSONFiles:
         Parameters
         ----------
         pickle_folder : str
-            File location for the input pickle file. Default is the current working directory.
+            File location for the input pickle file. Default is the current working
+            directory.
 
         Returns
         -------
@@ -1158,8 +1180,9 @@ class JSONFiles:
     @classmethod
     def get_pickle_dependencies(cls, pickle_file):
         """
-        Reads the pickled byte stream from a file object, serializes the pickled byte stream as a bytes object, and
-        inspects the bytes object for all Python modules and aggregates them in a list.
+        Reads the pickled byte stream from a file object, serializes the pickled byte
+        stream as a bytes object, and inspects the bytes object for all Python
+        modules and aggregates them in a list.
 
         Parameters
         ----------
@@ -1169,12 +1192,11 @@ class JSONFiles:
         Returns
         -------
         list
-            A list of modules obtained from the pickle stream. Duplicates are removed and
-            Python built-in modules are removed.
+            A list of modules obtained from the pickle stream. Duplicates are removed
+            and Python built-in modules are removed.
         """
-
-        with (open(pickle_file, "rb")) as open_file:
-            obj = pickle.load(open_file)
+        with (open(pickle_file, "rb")) as open_file:  # skipcq: PTC-W6004
+            obj = pickle.load(open_file)  # skipcq: BAN-B301
             dumps = pickle.dumps(obj)
 
         modules = cls.get_package_names(dumps)
@@ -1185,12 +1207,17 @@ class JSONFiles:
         """
         Generates a list of found `package` names from a pickle stream.
 
-        In most cases, the `packages` returned by the function will be valid Python packages. A check is made in
-        get_local_package_version to ensure that the package is in fact a valid Python package.
+        In most cases, the `packages` returned by the function will be valid Python
+        packages. A check is made in get_local_package_version to ensure that the
+        package is in fact a valid Python package.
 
-        This code has been adapted from the following stackoverflow example and utilizes the pickletools package.
-        Credit: modified from https://stackoverflow.com/questions/64850179/inspecting-a-pickle-dump-for-dependencies
-        More information here: https://github.com/python/cpython/blob/main/Lib/pickletools.py
+        This code has been adapted from the following stackoverflow example and
+        utilizes the pickletools package.
+        Credit: modified from
+        https://stackoverflow.com/questions/64850179/inspecting-a-pickle-dump-for
+        -dependencies
+        More information here:
+        https://github.com/python/cpython/blob/main/Lib/pickletools.py
 
         Parameters
         ----------
@@ -1202,7 +1229,7 @@ class JSONFiles:
         list
             List of package names found as module dependencies in the pickle file.
         """
-        # Collect all the opcodes, arguments, and position values from the pickle stream into three lists
+        # Collect opcodes, arguments, and position values from the pickle stream
         opcode, arg, pos = [], [], []
         for o, a, p in pickletools.genops(stream):
             opcode.append(o.name)
@@ -1216,17 +1243,19 @@ class JSONFiles:
         global_stack = df_pickle[
             (df_pickle.opcode == "GLOBAL") | (df_pickle.opcode == "STACK_GLOBAL")
         ]
-        # From the argument column, split the string of the form `X.Y.Z` by `.` and return only the unique `X's`
+        # From the argument column, split the string of the form `X.Y.Z` by `.` and
+        # return only the unique `X's`
         stack_packages = (
             global_stack.arg.str.split().str[0].str.split(".").str[0].unique().tolist()
         )
 
-        # For all opcodes labelled BINUNICODE or SHORT_BINUNICODE pull out the package names
+        # For all opcodes labelled BINUNICODE or SHORT_BINUNICODE grab the package names
         binunicode = df_pickle[
             (df_pickle.opcode == "BINUNICODE")
             | (df_pickle.opcode == "SHORT_BINUNICODE")
         ]
-        # From the argument column, split the string by `.`, then return only unique cells with at least one split
+        # From the argument column, split the string by `.`, then return only unique
+        # cells with at least one split
         arg_binunicode = binunicode.arg.str.split(".")
         unicode_packages = (
             arg_binunicode.loc[arg_binunicode.str.len() > 1].str[0].unique().tolist()
@@ -1243,7 +1272,8 @@ class JSONFiles:
     @staticmethod
     def remove_standard_library_packages(package_list):
         """
-        Remove any packages from the required list of installed packages that are part of the Python Standard Library.
+        Remove any packages from the required list of installed packages that are
+        part of the Python Standard Library.
 
         Parameters
         ----------
@@ -1253,7 +1283,8 @@ class JSONFiles:
         Returns
         -------
         list
-            List of all packages found that are not Python built-in packages or part of the Python Standard Library.
+            List of all packages found that are not Python built-in packages or part of
+            the Python Standard Library.
         """
         py10stdlib = [
             "_aix_support",
