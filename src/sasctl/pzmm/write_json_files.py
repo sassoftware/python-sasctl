@@ -1023,9 +1023,9 @@ class JSONFiles:
                         "command": f"pip install {package}=={version}",
                     }
                 )
-        with open(
+        with open(  # skipcq: PTC-W6004
             Path(model_path) / "requirements.json", "w"
-        ) as file:  # skipcq: PTC-W6004 FLK-E501
+        ) as file:
             file.write(json.dumps(json_dicts, indent=4))
 
         return json_dicts
