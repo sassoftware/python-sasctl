@@ -1,18 +1,20 @@
 # Copyright (c) 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-# %%
-from pathlib import Path
-import sys
+# Standard Library Imports
 import getpass
+import importlib
 import json
-import pandas as pd
 import math
 import pickle
 import pickletools
+import sys
 import warnings
-import importlib
 from collections.abc import Iterable
+from pathlib import Path
+
+# Third Party Imports
+import pandas as pd
 
 
 def flatten(nestedList):
