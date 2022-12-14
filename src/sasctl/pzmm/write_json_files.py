@@ -42,8 +42,8 @@ def flatten(nestedList):
 
 
 class JSONFiles:
-    @classmethod
-    def writeVarJSON(cls, inputData, isInput=True, jPath=Path.cwd()):
+    @staticmethod
+    def writeVarJSON(inputData, isInput=True, jPath=Path.cwd()):
         """
         Writes a variable descriptor JSON file for input or output variables, based on input data containing predictor
         and prediction columns.
@@ -142,9 +142,8 @@ class JSONFiles:
             )
         )
 
-    @classmethod
+    @staticmethod
     def writeModelPropertiesJSON(
-        cls,
         modelName,
         modelDesc,
         targetVariable,
@@ -260,8 +259,8 @@ class JSONFiles:
             )
         )
 
-    @classmethod
-    def writeFileMetadataJSON(cls, modelPrefix, jPath=Path.cwd(), isH2OModel=False):
+    @staticmethod
+    def writeFileMetadataJSON(modelPrefix, jPath=Path.cwd(), isH2OModel=False):
         """
         Writes a file metadata JSON file pointing to all relevant files.
 
@@ -855,7 +854,8 @@ class JSONFiles:
             )
         )
 
-    def readJSONFile(self, path):
+    @staticmethod
+    def readJSONFile(path):
         """
         Reads a JSON file from a given path.
 
@@ -873,7 +873,8 @@ class JSONFiles:
         with open(path) as jFile:
             return json.load(jFile)
 
-    def formatParameter(self, paramName):
+    @staticmethod
+    def formatParameter(paramName):
         """
         Formats the parameter name to the JSON standard.
 
@@ -898,7 +899,8 @@ class JSONFiles:
 
         return paramName
 
-    def convertDataRole(self, dataRole):
+    @staticmethod
+    def convertDataRole(dataRole):
         """
         Converts the data role identifier from string to int or int to string.
 
@@ -1010,8 +1012,8 @@ class JSONFiles:
 
         return json_dicts
 
-    @classmethod
-    def get_local_package_version(cls, package_list):
+    @staticmethod
+    def get_local_package_version(package_list):
         """
         Get package_name versions from the local environment.
 
@@ -1086,8 +1088,8 @@ class JSONFiles:
         import_info = list(set(flatten(import_info)))
         return import_info
 
-    @classmethod
-    def find_imports(cls, file_path):
+    @staticmethod
+    def find_imports(file_path):
         """
         Find import calls in provided Python code path.
 
@@ -1133,8 +1135,8 @@ class JSONFiles:
         except ValueError:
             return modules
 
-    @classmethod
-    def get_pickle_file(cls, pickle_folder=Path.cwd()):
+    @staticmethod
+    def get_pickle_file(pickle_folder=Path.cwd()):
         """
         Given a file path, retrieve the pickle file(s).
 
@@ -1177,8 +1179,8 @@ class JSONFiles:
         modules = cls.get_package_names(dumps)
         return modules
 
-    @classmethod
-    def get_package_names(cls, stream):
+    @staticmethod
+    def get_package_names(stream):
         """
         Generates a list of found `package` names from a pickle stream.
 
@@ -1237,8 +1239,8 @@ class JSONFiles:
         # Return the package list without any None values
         return [x for x in packages if x]
 
-    @classmethod
-    def remove_standard_library_packages(cls, package_list):
+    @staticmethod
+    def remove_standard_library_packages(package_list):
         """
         Remove any packages from the required list of installed packages that are part of the Python Standard Library.
 
