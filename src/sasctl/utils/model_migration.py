@@ -137,19 +137,20 @@ def delete_sas_files(zip_path):
         file.unlink()
 
 
-def convertModelZip(zPath, pythonScoreCode=None):
+def convert_model_zip(zip_path, python_score_code=None):
     """Pass the directory path of the model to be converted from SAS Viya 3.5 to
-    SAS Viya 4. Then the function removes any .sas files, adjusts the ModelProperties.json
-    and fileMetaData.json files, and modifies the score code.
+    SAS Viya 4.
+    This will remove any .sas files, adjust the ModelProperties.json and
+    fileMetaData.json files, and modify the score code.
 
     Parameters
     ----------
-    zPath : string or Path object
+    zip_path : string or Path object
         Location of files in the SAS Viya 3.5 model zip.
-    pythonScoreCode : string, optional
-        File name of the Python score code. If None, then the name is
-        determined by the files in the model zip. Default value is None.
+    python_score_code : string, optional
+        File name of the Python score code. If None, then the name is determined by the
+        files in the model zip. Default value is None.
     """
-    delete_sas_files(zPath)
-    scoreResource, pythonScoreCode = convert_metadata(zPath, python_score_code=None)
-    convert_score_code(zPath, scoreResource, pythonScoreCode)
+    delete_sas_files(zip_path)
+    score_resource, python_score_code = convert_metadata(zip_path, python_score_code)
+    convert_score_code(zip_path, score_resource, python_score_code)
