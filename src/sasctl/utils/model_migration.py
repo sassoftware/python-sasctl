@@ -120,18 +120,20 @@ def convert_score_code(zip_path, score_resource, python_score_code):
         )
 
 
-def deleteSASFiles(zPath):
+def delete_sas_files(zip_path):
     """Remove .sas score files created for SAS Viya 3.5, which are no longer
-    needed in SAS Viya 4. These files are typically named score.sas,
-    dmcas_packagescorecode.sas, or dmcas_epscorescode.sas.
+    needed in SAS Viya 4. 
+    
+    These files are typically named score.sas, dmcas_packagescorecode.sas, or 
+    dmcas_epscorescode.sas.
 
     Parameters
     ----------
-    zPath : string or Path object
+    zip_path : string or Path object
         Location of files in the SAS Viya 3.5 model zip.
     """
-    zPath = Path(zPath)
-    for file in zPath.glob("*.sas"):
+    zip_path = Path(zip_path)
+    for file in zip_path.glob("*.sas"):
         file.unlink()
 
 
@@ -148,6 +150,6 @@ def convertModelZip(zPath, pythonScoreCode=None):
         File name of the Python score code. If None, then the name is
         determined by the files in the model zip. Default value is None.
     """
-    deleteSASFiles(zPath)
+    delete_sas_files(zPath)
     scoreResource, pythonScoreCode = convert_metadata(zPath, python_score_code=None)
     convert_score_code(zPath, scoreResource, pythonScoreCode)
