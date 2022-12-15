@@ -21,6 +21,9 @@
     <img src="https://codecov.io/gh/sassoftware/python-sasctl/branch/master/graph/badge.svg?token=mDcvtz2Als"/>
   </a>
 
+  <a href="https://pepy.tech/project/sasctl">
+    <img src="https://static.pepy.tech/personalized-badge/sasctl?period=month&units=international_system&left_color=black&right_color=orange&left_text=Downloads"/>
+  </a>
     
 </div>
 
