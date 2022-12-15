@@ -5,8 +5,8 @@ from pathlib import Path
 from uuid import UUID
 from warnings import warn
 
-from ..core import current_session
 from .._services.model_repository import ModelRepository as mr
+from ..core import current_session
 from .writeScoreCode import ScoreCode as sc
 from .zip_model import ZipModel as zm
 

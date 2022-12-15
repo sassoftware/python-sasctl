@@ -1,11 +1,11 @@
 # Copyright (c) 2022, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import io
+import zipfile
 from pathlib import Path
 from uuid import UUID
 from warnings import warn
-import zipfile
-import io
 
 from .._services.model_repository import ModelRepository as mr
 from ..core import RestObj
