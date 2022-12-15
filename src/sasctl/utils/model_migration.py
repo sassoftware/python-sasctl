@@ -6,7 +6,6 @@
 
 import re
 import json
-import pandas as pd
 
 from pathlib import Path
 
@@ -77,46 +76,47 @@ def convert_metadata(zip_path, python_score_code=None):
     return score_resource, python_score_code
 
 
-def convertScoreCode(zPath, scoreResource, pythonScoreCode):
+def convert_score_code(zip_path, score_resource, python_score_code):
     """Convert the Python score code used in SAS Viya 3.5 into score code usable in
-    SAS Viya 4. The two adjustments are including an 'import settings' statement and
+    SAS Viya 4.
+
+    The two main adjustments are including an 'import settings' statement and
     replacing score resource access calls that reference an explicit path with
-    'settings.pickle_path' + <scoreResource>.
+    'settings.pickle_path' + <score_resource>.
 
     Parameters
     ----------
-    zPath : string or Path object
+    zip_path : string or Path object
         Location of files in the SAS Viya 3.5 model zip.
-    scoreResource : list
+    score_resource : list
         File name(s) of the score resource file.
-    pythonScoreCode : string
+    python_score_code : string
         File name of the Python score code file.
     """
     # Read entire text of score code
-    with open(Path(zPath) / pythonScoreCode, "r") as pyFile:
-        scoreCode = pyFile.read()
+    with open(Path(zip_path) / python_score_code, "r") as pyFile:
+        score_code = pyFile.read()
 
     # Add the import settings line to the score code
-    scoreCode = "import settings\n" + scoreCode
+    score_code = "import settings\n" + score_code
 
-    # Search for all directory paths in score code that contain the scoreResource
-    oldString = re.findall(r"['\"]\/.*?\.[\w:]+['\"]", scoreCode)
-    parsedOldString = []
-    newString = []
-    for resource in scoreResource:
-        stringFound = []
-        stringFound = [s for s in oldString if resource in s]
-        parsedOldString = parsedOldString + stringFound
-        if stringFound:
-            newString.append("settings.pickle_path + '{}'".format(resource))
-    for old, new in zip(parsedOldString, newString):
-        scoreCode = scoreCode.replace(str(old), str(new))
+    # Search for all directory paths in score code that contain the score_resource
+    old_string = re.findall(r"['\"]\/.*?\.[\w:]+['\"]", score_code)
+    parsed_old_string = []
+    new_string = []
+    for resource in score_resource:
+        string_found = [s for s in old_string if resource in s]
+        parsed_old_string = parsed_old_string + string_found
+        if string_found:
+            new_string.append("settings.pickle_path + '{}'".format(resource))
+    for old, new in zip(parsed_old_string, new_string):
+        score_code = score_code.replace(str(old), str(new))
 
     # Write new text of score code to file
-    with open(Path(zPath) / pythonScoreCode, "w") as pyFile:
-        pyFile.write(scoreCode)
+    with open(Path(zip_path) / python_score_code, "w") as pyFile:
+        pyFile.write(score_code)
         print(
-            "{} has been modified and rewritten for SAS Viya 4".format(pythonScoreCode)
+            f"{python_score_code} has been modified and rewritten for SAS Viya 4"
         )
 
 
@@ -150,4 +150,4 @@ def convertModelZip(zPath, pythonScoreCode=None):
     """
     deleteSASFiles(zPath)
     scoreResource, pythonScoreCode = convert_metadata(zPath, python_score_code=None)
-    convertScoreCode(zPath, scoreResource, pythonScoreCode)
+    convert_score_code(zPath, scoreResource, pythonScoreCode)
