@@ -1,9 +1,12 @@
 # Copyright (c) 2022, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
-from pathlib import Path
 import json
+from io import StringIO
+from pathlib import Path
 
 from .._services.model_repository import ModelRepository as mr
+from ..core import current_session
+from ..tasks import get_project_kpis
 
 # TODO: Convert STRINGIO calls to string or dict format
 
@@ -25,7 +28,6 @@ def _find_file(model, file_name):
     RestObj
         The first file with a name containing file_name.
     """
-    from ..core import current_session
 
     sess = current_session()
     file_list = mr.get_model_contents(model)
@@ -99,9 +101,6 @@ class ModelParameters:
         caslib : str, optional
             CAS Library on which the KPI data table is stored. Defaults to "ModelPerformanceData".
         """
-        from ..tasks import get_project_kpis
-        from io import StringIO
-
         kpis = get_project_kpis(project, server, caslib)
         models_to_update = kpis["ModelUUID"].unique().tolist()
         for model in models_to_update:
@@ -158,7 +157,6 @@ class ModelParameters:
         kwargs
             Named variables pairs representing hyperparameters to be added to the hyperparameter file.
         """
-        from io import StringIO
 
         if not isinstance(model, dict):
             model = mr.get_model(model)

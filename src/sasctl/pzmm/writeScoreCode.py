@@ -1,10 +1,11 @@
 # Copyright (c) 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-from pathlib import Path
 import re
-from ..core import current_session
+from pathlib import Path
+
 from .._services.model_repository import ModelRepository as modelRepo
+from ..core import current_session
 
 
 # %%
