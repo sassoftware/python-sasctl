@@ -11,75 +11,70 @@ import pandas as pd
 from pathlib import Path
 
 
-def convertMetadata(zPath, pythonScoreCode=None):
-    """Modify the model metadata to match new requirements in SAS Viya 4. The
-    scoreCodeType in the ModelProperties.json file should be labelled as 'Python'.
+def convert_metadata(zip_path, python_score_code=None):
+    """Modify SAS Viya 3.5 model metadata to match new requirements in SAS Viya 4.
+
+    The scoreCodeType in the ModelProperties.json file should be labelled as 'Python'.
     The file associated with the 'score' role should be a Python file.
 
     Parameters
     ----------
-    zPath : string or Path object
-        Location of files in the SAS Viya 3.5 model zip.
-    pythonScoreCode : string, optional
-        File name of the Python score code. If None, then the name is
-        determined by the files in the model zip. Default value is None.
+    zip_path : string or Path object
+        Location of files in the SAS Viya 3.5 model zip directory.
+    python_score_code : string, optional
+        File name of the Python score code. If None, then the file name is assumed to be
+        the only Python file in the zip_path. An error is raised if this is not the
+        case. Default value is None.
 
     Returns
     -------
-    scoreResource : list
+    score_resource : list
         File name(s) of the score resource file.
-    pythonScoreCode : string
+    python_score_code : string
         File name of the Python score code file.
 
     Raises
     ------
-    SyntaxError :
-        If no pythonScoreCode name is provided, but there are multiple Python
-        files in the zPath, then a SyntaxError is raised asking for further
+    SyntaxError
+        If no python_score_code name is provided, but there are multiple Python
+        files in the zip_path, then a SyntaxError is raised asking for further
         clarification as to which file is the Python score code.
     """
     # Replace the value of scoreCodeType to 'Python' in ModelProperties.json
-    with open(Path(zPath) / "ModelProperties.json", "r") as jFile:
-        modelProperties = json.loads(jFile.read())
+    with open(Path(zip_path) / "ModelProperties.json", "r") as file:
+        model_properties = json.loads(file.read())
 
-    modelProperties.update({"scoreCodeType": "Python"})
-    propIndex = list(modelProperties.keys())
-    propValues = list(modelProperties.values())
-    outputJSON = pd.Series(propValues, index=propIndex)
+    model_properties.update({"scoreCodeType": "Python"})
 
-    with open(Path(zPath) / "ModelProperties.json", "w") as jFile:
-        dfDump = pd.Series.to_dict(outputJSON.transpose())
-        json.dump(dfDump, jFile, indent=4, skipkeys=True)
+    with open(Path(zip_path) / "ModelProperties.json", "w") as file:
+        json.dump(model_properties, file, indent=4)
         print("ModelProperties.json has been modified and rewritten for SAS Viya 4")
 
     # Replace the 'score' role file with Python score code file
-    with open(Path(zPath) / "fileMetaData.json", "r") as jFile:
-        metaData = json.loads(jFile.read())
-    if pythonScoreCode is None:
-        numPyFiles = 0
-        for file in zPath.glob("*.py"):
-            pythonScoreCode = file.name
-            numPyFiles = numPyFiles + 1
-        if numPyFiles > 1:
-            message = (
-                "More than one Python file was found, therefore the score code"
-                + " the score code could not be determined. Please provide the"
-                + " name of the Python score code file as an argument."
-            )
-            raise SyntaxError(message)
-    scoreResource = []
-    for i in range(len(metaData)):
-        if metaData[i]["role"] == "score":
-            metaData[i].update({"name": pythonScoreCode})
-        if metaData[i]["role"] == "scoreResource":
-            scoreResource.append(metaData[i]["name"])
-        if metaData[i]["role"] == "python pickle":
-            scoreResource.append(metaData[i]["name"])
-    with open(Path(zPath) / "fileMetaData.json", "w") as jFile:
-        json.dump(metaData, jFile, indent=4, skipkeys=True)
+    with open(Path(zip_path) / "fileMetaData.json", "r") as file:
+        meta_data = json.loads(file.read())
+    if python_score_code is None:
+        if len(list(zip_path.glob("*.py"))) > 1:
+            raise ValueError(f"More than one Python file was found at {zip_path}, "
+                             f"therefore the score code file could not be determined. "
+                             f"Please provide the name of the Python score code file "
+                             f"as an argument.")
+        else:
+            python_score_code = list(zip_path.glob("*.py"))[0].name
+
+    score_resource = []
+    for i in range(len(meta_data)):
+        if meta_data[i]["role"] == "score":
+            meta_data[i].update({"name": python_score_code})
+        if meta_data[i]["role"] == "scoreResource":
+            score_resource.append(meta_data[i]["name"])
+        if meta_data[i]["role"] == "python pickle":
+            score_resource.append(meta_data[i]["name"])
+    with open(Path(zip_path) / "fileMetaData.json", "w") as file:
+        json.dump(meta_data, file, indent=4, skipkeys=True)
         print("fileMetaData.json has been modified and rewritten for SAS Viya 4")
 
-    return scoreResource, pythonScoreCode
+    return score_resource, python_score_code
 
 
 def convertScoreCode(zPath, scoreResource, pythonScoreCode):
@@ -154,5 +149,5 @@ def convertModelZip(zPath, pythonScoreCode=None):
         determined by the files in the model zip. Default value is None.
     """
     deleteSASFiles(zPath)
-    scoreResource, pythonScoreCode = convertMetadata(zPath, pythonScoreCode=None)
+    scoreResource, pythonScoreCode = convert_metadata(zPath, python_score_code=None)
     convertScoreCode(zPath, scoreResource, pythonScoreCode)
