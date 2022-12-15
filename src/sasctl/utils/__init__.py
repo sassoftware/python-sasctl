@@ -9,4 +9,4 @@ from .astore import (
     create_package_from_astore,
     create_package_from_datastep,
 )
-from .modelMigration import convertModelZip
+from .model_migration import convertModelZip
