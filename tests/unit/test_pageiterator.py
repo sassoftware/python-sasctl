@@ -28,20 +28,20 @@ def paging(request):
 
     num_items, start, limit = request.param
 
-    with mock.patch('sasctl.core.request') as req:
-        items = [{'name': str(i)} for i in range(num_items)]
+    with mock.patch("sasctl.core.request") as req:
+        items = [{"name": str(i)} for i in range(num_items)]
 
         obj = RestObj(
             items=items[:start],
             count=len(items),
             links=[
-                {'rel': 'next', 'href': '/moaritems?start=%d&limit=%d' % (start, limit)}
+                {"rel": "next", "href": "/moaritems?start=%d&limit=%d" % (start, limit)}
             ],
         )
 
         def side_effect(_, link, **kwargs):
-            assert 'limit=%d' % limit in link
-            start = int(re.search(r'(?<=start=)[\d]+', link).group())
+            assert "limit=%d" % limit in link
+            start = int(re.search(r"(?<=start=)[\d]+", link).group())
             return RestObj(items=items[start : start + limit])
 
         req.side_effect = side_effect
@@ -56,10 +56,10 @@ def paging(request):
 def test_no_paging_required():
     """If "next" link not present, current items should be included."""
 
-    items = [{'name': 'a'}, {'name': 'b'}, {'name': 'c'}]
+    items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
     obj = RestObj(items=items, count=len(items))
 
-    with mock.patch('sasctl.core.request') as request:
+    with mock.patch("sasctl.core.request") as request:
         pager = PageIterator(obj)
 
         # Returned page of items should preserve item order
@@ -71,7 +71,9 @@ def test_no_paging_required():
     try:
         request.assert_not_called()
     except AssertionError as e:
-        raise AssertionError(f'method_calls={request.mock_calls}  call_args={request.call_args_list}')
+        raise AssertionError(
+            f"method_calls={request.mock_calls}  call_args={request.call_args_list}"
+        )
 
 
 def test_paging_required(paging):

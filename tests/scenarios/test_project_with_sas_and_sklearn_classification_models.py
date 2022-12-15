@@ -23,16 +23,16 @@ import pytest
 from sasctl import publish_model, register_model
 from sasctl.services import model_repository as mr
 
-sklearn = pytest.importorskip('sklearn')
+sklearn = pytest.importorskip("sklearn")
 
 
 # Every test function in the module will automatically receive the session fixture
-pytestmark = pytest.mark.usefixtures('session')
+pytestmark = pytest.mark.usefixtures("session")
 
-SAS_MODEL_NAME = 'sasctl_test_SAS_Iris_Gradboost'
-SCIKIT_MODEL_NAME = 'sasctl_test_scikit_Iris_Gradboost'
-PROJECT_NAME = 'sasctl_test_Iris_Species'
-TARGET = 'Species'
+SAS_MODEL_NAME = "sasctl_test_SAS_Iris_Gradboost"
+SCIKIT_MODEL_NAME = "sasctl_test_scikit_Iris_Gradboost"
+PROJECT_NAME = "sasctl_test_Iris_Species"
+TARGET = "Species"
 
 
 @pytest.fixture(autouse=True)
@@ -47,18 +47,20 @@ def run_around_tests(session):
 
 
 def test(cas_session, iris_dataset):
-    pytest.skip('Re-enable once MAS publish no longer hangs.')
-    cas_session.loadactionset('decisiontree')
+    pytest.skip("Re-enable once MAS publish no longer hangs.")
+    cas_session.loadactionset("decisiontree")
 
     tbl = cas_session.upload(iris_dataset).casTable
     features = list(tbl.columns[tbl.columns != TARGET])
 
     # Fit a linear regression model in CAS and output an ASTORE
-    tbl.decisiontree.gbtreetrain(target=TARGET, inputs=features,
-                                 savestate='model_table')
-    astore = cas_session.CASTable('model_table')
+    tbl.decisiontree.gbtreetrain(
+        target=TARGET, inputs=features, savestate="model_table"
+    )
+    astore = cas_session.CASTable("model_table")
 
     from sklearn.ensemble import GradientBoostingClassifier
+
     X = iris_dataset.drop(TARGET, axis=1)
     y = iris_dataset[TARGET]
     sk_model = GradientBoostingClassifier()
@@ -68,8 +70,8 @@ def test(cas_session, iris_dataset):
     sk_model = register_model(sk_model, SCIKIT_MODEL_NAME, PROJECT_NAME, input=X)
 
     # Publish to MAS
-    sas_module = publish_model(sas_model, 'maslocal', replace=True)
-    sk_module = publish_model(sk_model, 'maslocal', replace=True)
+    sas_module = publish_model(sas_model, "maslocal", replace=True)
+    sk_module = publish_model(sk_model, "maslocal", replace=True)
 
     # Pass a row of data to MAS and receive the predicted result.
     first_row = tbl.head(1)
@@ -77,7 +79,7 @@ def test(cas_session, iris_dataset):
     p1, p1, p2, species, warning = result
 
     result2 = sk_module.predict(first_row)
-    assert result2 in ('setosa', 'virginica', 'versicolor')
+    assert result2 in ("setosa", "virginica", "versicolor")
 
     # SAS model may have CHAR variable that's padded with spaces.
     assert species.strip() == result2

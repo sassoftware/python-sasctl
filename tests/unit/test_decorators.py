@@ -11,6 +11,7 @@ from sasctl.utils.decorators import deprecated, experimental, ExperimentalWarnin
 
 def test_deprecated():
     """Function can be deprecated with @deprecated(version=XX)."""
+
     @deprecated(version=1.2)
     def old_function(a):
         """Do old stuff.
@@ -28,19 +29,23 @@ def test_deprecated():
 
     # Calling the function should raise a warning
     with pytest.warns(DeprecationWarning) as warnings:
-        result = old_function('spam')
+        result = old_function("spam")
 
     msg = warnings[0].message
-    assert 'old_function is deprecated since version 1.2 and may be removed in a future version.' == str(msg)
-    assert '.. deprecated:: 1.2' in old_function.__doc__
+    assert (
+        "old_function is deprecated since version 1.2 and may be removed in a future version."
+        == str(msg)
+    )
+    assert ".. deprecated:: 1.2" in old_function.__doc__
 
     # Return value from function should be unchanged.
-    assert result == 'spam'
+    assert result == "spam"
 
 
 def test_deprecated_with_reason():
     """Function can be deprecated with @deprecated(reason, version=XX)."""
-    @deprecated('Use new_function instead.', version=1.3)
+
+    @deprecated("Use new_function instead.", version=1.3)
     def old_function(a):
         """Do old stuff.
 
@@ -57,14 +62,17 @@ def test_deprecated_with_reason():
 
     # Calling the function should raise a warning
     with pytest.warns(DeprecationWarning) as warnings:
-        result = old_function('spam')
+        result = old_function("spam")
 
     msg = warnings[0].message
-    assert 'old_function is deprecated since version 1.3 and may be removed in a future version.  Use new_function instead.' == str(msg)
-    assert '.. deprecated:: 1.3\n  Use new_function instead.' in old_function.__doc__
+    assert (
+        "old_function is deprecated since version 1.3 and may be removed in a future version.  Use new_function instead."
+        == str(msg)
+    )
+    assert ".. deprecated:: 1.3\n  Use new_function instead." in old_function.__doc__
 
     # Return value from function should be unchanged.
-    assert result == 'spam'
+    assert result == "spam"
 
 
 def test_experimental_function():
@@ -85,12 +93,12 @@ def test_experimental_function():
 
     # Calling the function should raise a warning
     with pytest.warns(ExperimentalWarning) as warnings:
-        result = new_function('norwegian blue')
+        result = new_function("norwegian blue")
 
-    assert '.. warning:: ' in new_function.__doc__
+    assert ".. warning:: " in new_function.__doc__
 
     # Return value from function should be unchanged.
-    assert result == 'norwegian blue'
+    assert result == "norwegian blue"
 
 
 def test_experimental_class():
@@ -102,4 +110,4 @@ def test_experimental_class():
     with pytest.warns(ExperimentalWarning) as warnings:
         result = NewClass()
 
-    assert '.. warning:: ' in NewClass.__doc__
+    assert ".. warning:: " in NewClass.__doc__

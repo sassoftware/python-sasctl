@@ -14,6 +14,7 @@ from pathlib import Path
 
 def _create_sample_archive(suffix, is_viya_4=False):
     from sasctl.pzmm.zip_model import ZipModel as zm
+
     tmp_dir = tempfile.TemporaryDirectory()
     for s in suffix:
         _ = tempfile.NamedTemporaryFile(delete=False, suffix=s, dir=tmp_dir.name)
@@ -54,4 +55,3 @@ def test_zip_files_filter():
     # No valid files
     with pytest.raises(FileNotFoundError):
         _, _ = _create_sample_archive([".txt"])
-

@@ -9,7 +9,7 @@ import pytest
 from sasctl import RestObj
 from sasctl.services import reports
 
-pytestmark = pytest.mark.usefixtures('session')
+pytestmark = pytest.mark.usefixtures("session")
 
 
 def test_list_reports():
@@ -17,14 +17,12 @@ def test_list_reports():
 
     assert len(all_reports) > 0
     assert all(isinstance(x, RestObj) for x in all_reports)
-    assert all(x.type == 'report' for x in all_reports)
+    assert all(x.type == "report" for x in all_reports)
 
 
 def test_get_report():
-    NAME = 'User Activity'
+    NAME = "User Activity"
     r = reports.get_report(NAME)
 
     assert isinstance(r, RestObj)
     assert r.name == NAME
-
-

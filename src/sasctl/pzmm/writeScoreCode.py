@@ -17,7 +17,7 @@ class ScoreCode:
         modelPrefix,
         predictMethod,
         modelFileName,
-        metrics=["EM_EVENTPROBABILITY", "EM_CLASSIFICATION"],
+        metrics=None,
         pyPath=Path.cwd(),
         threshPrediction=None,
         otherVariable=False,
@@ -120,6 +120,10 @@ class ScoreCode:
         pickleType : string, optional
             Indicator for MLFlow models, which may pickle by non-standard methods. By default 'pickle'.
         """
+        # Set metrics internal to function call if no value is given
+        if metrics is None:
+            metrics = ["EM_EVENTPROBABILITY", "EM_CLASSIFICATION"]
+
         # Check if binary string model
         if binaryString is not None:
             isBinaryString = True
@@ -147,7 +151,7 @@ class ScoreCode:
 
         # For SAS Viya 3.5, either return an error or return the model UUID as a string
         if isViya35:
-            if model == None:
+            if model is None:
                 raise ValueError(
                     "The model UUID is required for score code written for"
                     + " SAS Model Manager on SAS Viya 3.5."
@@ -596,6 +600,7 @@ def score{modelPrefix}({inputVarList}):
                 model["scoreCodeType"] = "ds2MultiType"
                 modelRepo.update_model(model)
 
+    @classmethod
     def splitStringColumn(cls, inputSeries, otherVariable):
         """
         Splits a column of string values into a number of new variables equal

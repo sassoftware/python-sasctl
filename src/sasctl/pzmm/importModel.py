@@ -121,7 +121,7 @@ class ImportModel:
         inputDF,
         targetDF,
         predictmethod,
-        metrics=["EM_EVENTPROBABILITY", "EM_CLASSIFICATION"],
+        metrics=None,
         projectVersion="latest",
         modelFileName=None,
         pyPath=None,
@@ -171,7 +171,7 @@ class ImportModel:
             the format() command.
             For example: '{}.predict_proba({})'.
         metrics : string list, optional
-            The scoring metrics for the model. The default is a set of two
+            The scoring metrics for the model. The default is a list of two
             metrics: EM_EVENTPROBABILITY and EM_CLASSIFICATION.
         projectVersion : string, optional
             The project version to import the model in to on SAS Model Manager. The default value
@@ -201,6 +201,10 @@ class ImportModel:
             Model details from an MLFlow model. This dictionary is created by the readMLModelFile function.
             By default None.
         """
+        # Set metrics internal to function call if no value is given
+        if metrics is None:
+            metrics = ["EM_EVENTPROBABILITY", "EM_CLASSIFICATION"]
+
         # Initialize no score code or binary H2O model flags
         noScoreCode = False
         binaryModel = False

@@ -1,0 +1,14 @@
+[
+    {
+        "step": "install pandas",
+        "command": "pip install pandas==1.2.4"
+    },
+    {
+        "step": "install numpy",
+        "command": "pip install numpy==1.20.1"
+    },
+    {
+        "step": "install sklearn",
+        "command": "pip install sklearn"
+    }
+]

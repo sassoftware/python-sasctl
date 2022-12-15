@@ -12,18 +12,19 @@ from sasctl.services import model_repository as mr
 from sasctl.tasks import register_model, publish_model
 
 # Every test function in the module will automatically receive the session fixture
-pytestmark = pytest.mark.usefixtures('session')
+pytestmark = pytest.mark.usefixtures("session")
 
 
 @pytest.mark.incremental
 class TestAStoreModel:
-    PROJECT_NAME = 'sasctl_testing TestAstoreModel'
-    MODEL_NAME = 'IrisGradBoost'
+    PROJECT_NAME = "sasctl_testing TestAstoreModel"
+    MODEL_NAME = "IrisGradBoost"
 
     def test_model_import(self, iris_astore):
         """Import a model from an ASTORE"""
-        model = register_model(iris_astore, self.MODEL_NAME, self.PROJECT_NAME,
-                               force=True)
+        model = register_model(
+            iris_astore, self.MODEL_NAME, self.PROJECT_NAME, force=True
+        )
 
         assert self.MODEL_NAME == model.name
 
@@ -35,10 +36,10 @@ class TestAStoreModel:
 
     def test_create_model_version(self):
         r = mr.create_model_version(self.MODEL_NAME)
-        assert r.modelVersionName == '2.0'
+        assert r.modelVersionName == "2.0"
 
         r = mr.create_model_version(self.MODEL_NAME, minor=True)
-        assert r.modelVersionName == '2.1'
+        assert r.modelVersionName == "2.1"
 
     def test_get_model_versions(self):
         versions = mr.list_model_versions(self.MODEL_NAME)
@@ -46,36 +47,42 @@ class TestAStoreModel:
 
         # NOTE: the current version (2.1) is NOT included
         assert len(versions) == 2
-        assert any(v.modelVersionName == '1.0' for v in versions)
-        assert any(v.modelVersionName == '2.0' for v in versions)
+        assert any(v.modelVersionName == "1.0" for v in versions)
+        assert any(v.modelVersionName == "2.0" for v in versions)
 
     def test_copy_astore(self):
         """Copy the ASTORE to filesystem for MAS"""
         job = mr.copy_analytic_store(self.MODEL_NAME)
 
-        assert job.state == 'pending'
+        assert job.state == "pending"
 
     def test_model_publish(self, cache):
         """Publish the imported model to MAS"""
 
-        module = publish_model(self.MODEL_NAME, 'maslocal',
-                               max_retries=60, replace=True)
+        module = publish_model(
+            self.MODEL_NAME, "maslocal", max_retries=60, replace=True
+        )
 
         # SAS module should have a "score" method
-        assert 'score' in module.stepIds
+        assert "score" in module.stepIds
 
         # Store module name so we can retrieve it in later tests
-        cache.set('MAS_MODULE_NAME', module.name)
+        cache.set("MAS_MODULE_NAME", module.name)
 
     def test_module_execute(self, cache, iris_dataset):
         # Store module name so we can retrieve it in later tests
-        module_name = cache.get('MAS_MODULE_NAME', None)
+        module_name = cache.get("MAS_MODULE_NAME", None)
 
-        x = iris_dataset.drop('Species', axis=1).iloc[0, :]
+        x = iris_dataset.drop("Species", axis=1).iloc[0, :]
 
-        response = microanalytic_score.execute_module_step(module_name, 'score', **x.to_dict())
+        response = microanalytic_score.execute_module_step(
+            module_name, "score", **x.to_dict()
+        )
 
-        assert all(k in response for k in ('P_Species0', 'P_Species1', 'P_Species2', 'I_Species'))
+        assert all(
+            k in response
+            for k in ("P_Species0", "P_Species1", "P_Species2", "I_Species")
+        )
 
     def test_delete_model(self):
         num_models = len(mr.list_models())
@@ -100,11 +107,10 @@ class TestAStoreModel:
         assert len(all_projects) == num_projects - 1
 
 
-
 @pytest.mark.incremental
 class TestBasicModel:
-    project_name = 'SASCTL Basic Test Project'
-    model_name = 'Basic Model'
+    project_name = "SASCTL Basic Test Project"
+    model_name = "Basic Model"
 
     def test_project_missing(self):
         # Creating a model in a non-existent project should fail
@@ -118,7 +124,7 @@ class TestBasicModel:
         project_count = len(projects)
 
         # Create a new project
-        repo = mr.default_repository().get('id')
+        repo = mr.default_repository().get("id")
 
         project = mr.create_project(self.project_name, repo)
         assert isinstance(project, RestObj)

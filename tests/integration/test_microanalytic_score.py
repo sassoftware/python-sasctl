@@ -8,44 +8,47 @@ import pytest
 
 from sasctl.services import microanalytic_score as mas
 
-pytestmark = pytest.mark.usefixtures('session')
+pytestmark = pytest.mark.usefixtures("session")
 
 
 @pytest.mark.incremental
 class TestMicroAnalyticScore:
-    MODULE_NAME = 'sasctl_testmodule'
+    MODULE_NAME = "sasctl_testmodule"
 
     def test_create_python_module(self):
-        source = '\n'.join(("def myfunction(var1, var2):",
-                            "    'Output: out1, out2'",
-                            "    out1 = var1 + 5",
-                            "    out2 = var2.upper()",
-                            "    return out1, out2",
-                            "def myfunction2(var1, var2):",
-                            "    'Output: out1'",
-                            "    return var1 + var2"
-                            ))
+        source = "\n".join(
+            (
+                "def myfunction(var1, var2):",
+                "    'Output: out1, out2'",
+                "    out1 = var1 + 5",
+                "    out2 = var2.upper()",
+                "    return out1, out2",
+                "def myfunction2(var1, var2):",
+                "    'Output: out1'",
+                "    return var1 + var2",
+            )
+        )
 
         r = mas.create_module(source=source, name=self.MODULE_NAME)
         assert self.MODULE_NAME == r.id
-        assert 'public' == r.scope
+        assert "public" == r.scope
 
     def test_call_python_module_steps(self):
         r = mas.define_steps(self.MODULE_NAME)
-        assert (6, 'TEST') == r.myfunction(1, 'test')
+        assert (6, "TEST") == r.myfunction(1, "test")
 
     def test_call_python_module_steps_pandas(self):
-        pd = pytest.importorskip('pandas')
+        pd = pytest.importorskip("pandas")
 
         r = mas.define_steps(self.MODULE_NAME)
-        df = pd.DataFrame(dict(var1=[1], var2=['test']))
-        assert (6, 'TEST') == r.myfunction(df.iloc[0, :])
+        df = pd.DataFrame(dict(var1=[1], var2=["test"]))
+        assert (6, "TEST") == r.myfunction(df.iloc[0, :])
 
         df = pd.DataFrame(dict(var1=[1.5], var2=[3]))
         assert r.myfunction2(df.iloc[0, :]) == 4.5
 
     def test_call_python_module_steps_numpy(self):
-        np = pytest.importorskip('numpy')
+        np = pytest.importorskip("numpy")
 
         r = mas.define_steps(self.MODULE_NAME)
         array = np.array([1.5, 3])
@@ -67,7 +70,7 @@ class TestMicroAnalyticScore:
         steps = mas.list_module_steps(self.MODULE_NAME)
 
         assert isinstance(steps, list)
-        assert any(s.id == 'myfunction' for s in steps)
+        assert any(s.id == "myfunction" for s in steps)
 
     def test_delete_module(self):
         assert mas.get_module(self.MODULE_NAME) is not None
@@ -75,4 +78,3 @@ class TestMicroAnalyticScore:
         mas.delete_module(self.MODULE_NAME)
 
         assert mas.get_module(self.MODULE_NAME) is None
-

@@ -11,15 +11,15 @@ import pytest
 from sasctl import RestObj
 from sasctl.services import files
 
-pytestmark = pytest.mark.usefixtures('session')
+pytestmark = pytest.mark.usefixtures("session")
 
-FILENAME = 'dummy_file'
+FILENAME = "dummy_file"
 
 
 @pytest.fixture
 def dummy_file(tmpdir):
-    path = tmpdir.join(FILENAME + '.txt')
-    path.write('Some test file content.')
+    path = tmpdir.join(FILENAME + ".txt")
+    path.write("Some test file content.")
     return str(path)
 
 
@@ -31,13 +31,13 @@ def test_list_files():
 
 @pytest.mark.incremental
 class TestTextFile:
-    filename = 'sasctl_test_file'
+    filename = "sasctl_test_file"
 
     def test_create_file_with_name(self, dummy_file):
         # Requests uses os.urandom(16) to generate boundaries for multi-part
         # form uploads.  Mock the output to ensure a consistent value so
         # that body request/responses always match.
-        with mock.patch('os.urandom', return_value='abcdefghijklmnop'.encode('utf-8')):
+        with mock.patch("os.urandom", return_value="abcdefghijklmnop".encode("utf-8")):
 
             """Create a file with an explicitly set filename."""
             file = files.create_file(dummy_file, filename=self.filename)
@@ -53,7 +53,7 @@ class TestTextFile:
 
     def test_get_file_content(self, dummy_file):
 
-        with open(dummy_file, 'r') as f:
+        with open(dummy_file, "r") as f:
             target = f.read()
 
         content = files.get_file_content(self.filename)
@@ -73,7 +73,7 @@ class TestTextFile:
         # Requests uses os.urandom(16) to generate boundaries for multi-part
         # form uploads.  Mock the output to ensure a consistent value so
         # that body request/responses always match.
-        with mock.patch('os.urandom', return_value='abcdefghijklmnop'.encode('utf-8')):
+        with mock.patch("os.urandom", return_value="abcdefghijklmnop".encode("utf-8")):
             file = files.create_file(dummy_file)
 
         assert isinstance(file, RestObj)
@@ -105,7 +105,7 @@ class TestTextFile:
             # form uploads.  Mock the output to ensure a consistent value so
             # that body request/responses always match.
             with mock.patch(
-                'os.urandom', return_value='abcdefghijklmnop'.encode('utf-8')
+                "os.urandom", return_value="abcdefghijklmnop".encode("utf-8")
             ):
                 file = files.create_file(f, filename=self.filename)
 
@@ -129,7 +129,7 @@ class TestTextFile:
 
 @pytest.mark.incremental
 class TestPickleFile:
-    filename = 'sasctl_test_pickle_file'
+    filename = "sasctl_test_pickle_file"
 
     def test_create_file_with_name(self, dummy_file):
         import io
@@ -137,10 +137,10 @@ class TestPickleFile:
         # Requests uses os.urandom(16) to generate boundaries for multi-part
         # form uploads.  Mock the output to ensure a consistent value so
         # that body request/responses always match.
-        with mock.patch('os.urandom', return_value='abcdefghijklmnop'.encode('utf-8')):
+        with mock.patch("os.urandom", return_value="abcdefghijklmnop".encode("utf-8")):
 
             # Read the file contents and pickle
-            with open(dummy_file, 'r') as f:
+            with open(dummy_file, "r") as f:
                 file = io.BytesIO(pickle.dumps(f.read()))
 
             """Create a file with an explicitly set filename."""
@@ -157,7 +157,7 @@ class TestPickleFile:
 
     def test_get_file_content(self, dummy_file):
 
-        with open(dummy_file, 'r') as f:
+        with open(dummy_file, "r") as f:
             target = f.read()
 
         # Should return binary pickle of text file contents
@@ -185,7 +185,7 @@ class TestPickleFile:
         # Requests uses os.urandom(16) to generate boundaries for multi-part
         # form uploads.  Mock the output to ensure a consistent value so
         # that body request/responses always match.
-        with mock.patch('os.urandom', return_value='abcdefghijklmnop'.encode('utf-8')):
+        with mock.patch("os.urandom", return_value="abcdefghijklmnop".encode("utf-8")):
             file = files.create_file(dummy_file)
 
         assert isinstance(file, RestObj)
@@ -217,7 +217,7 @@ class TestPickleFile:
             # form uploads.  Mock the output to ensure a consistent value so
             # that body request/responses always match.
             with mock.patch(
-                'os.urandom', return_value='abcdefghijklmnop'.encode('utf-8')
+                "os.urandom", return_value="abcdefghijklmnop".encode("utf-8")
             ):
                 file = files.create_file(f, filename=self.filename)
 

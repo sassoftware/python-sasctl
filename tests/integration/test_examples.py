@@ -28,13 +28,13 @@ def test_astore_model(session, cas_session, change_dir):
     def Session(*args, **kwargs):
         return session
 
-    change_dir('examples')
-    with open('register_sas_classification_model.py') as f:
+    change_dir("examples")
+    with open("register_sas_classification_model.py") as f:
         # Remove Session import and set CAS session to Betamax-recorded CAS
         # session
-        code = f.read().replace('from sasctl import Session', '')
+        code = f.read().replace("from sasctl import Session", "")
         code = code.replace(
-            "s = swat.CAS('hostname', 5570, 'username', 'password')", 's = cas_session'
+            "s = swat.CAS('hostname', 5570, 'username', 'password')", "s = cas_session"
         )
         # Exec the script.
         exec(code)
@@ -47,11 +47,11 @@ def test_register_sas_regression_model(session, cas_session, change_dir):
     def Session(*args, **kwargs):
         return session
 
-    change_dir('examples')
-    with open('register_sas_regression_model.py') as f:
+    change_dir("examples")
+    with open("register_sas_regression_model.py") as f:
         # Remove Session import and set CAS session to Betamax-recorded CAS
         # session
-        code = f.read().replace('from sasctl import Session', '')
+        code = f.read().replace("from sasctl import Session", "")
         code = code.replace(
             "with swat.CAS('hostname', 5570, 'username', 'password') as cas:",
             "with cas_session as cas:",
@@ -67,13 +67,13 @@ def test_sklearn_model(session, change_dir):
     def Session(*args, **kwargs):
         return session
 
-    change_dir('examples')
-    with open('register_scikit_classification_model.py') as f:
+    change_dir("examples")
+    with open("register_scikit_classification_model.py") as f:
         # Remove import of Session to ensure mock function will be used
         # instead.
         code = f.read().replace(
-            'from sasctl import Session, register_model',
-            'from sasctl import register_model',
+            "from sasctl import Session, register_model",
+            "from sasctl import register_model",
         )
         exec(code)
 
@@ -86,13 +86,13 @@ def test_scikit_regression_model(session, change_dir):
     def Session(*args, **kwargs):
         return session
 
-    change_dir('examples')
-    with open('register_scikit_regression_model.py') as f:
+    change_dir("examples")
+    with open("register_scikit_regression_model.py") as f:
         # Remove import of Session to ensure mock function will be used
         # instead.
         code = f.read().replace(
-            'from sasctl import Session, register_model, publish_model',
-            'from sasctl import register_model, publish_model',
+            "from sasctl import Session, register_model, publish_model",
+            "from sasctl import register_model, publish_model",
         )
         exec(code)
 
@@ -109,11 +109,11 @@ def test_full_lifecycle(session, change_dir):
     def Session(*args, **kwargs):
         return session
 
-    change_dir('examples')
-    with open('full_lifecycle.py') as f:
+    change_dir("examples")
+    with open("full_lifecycle.py") as f:
         # Remove import of Session to ensure mock function will be used
         # instead.
-        code = f.read().replace('from sasctl import Session', '')
+        code = f.read().replace("from sasctl import Session", "")
 
         exec(code)
 
@@ -126,13 +126,13 @@ def test_direct_rest_calls(session, change_dir):
     def Session(*args, **kwargs):
         return session
 
-    change_dir('examples')
-    with open('direct_REST_calls.py') as f:
+    change_dir("examples")
+    with open("direct_REST_calls.py") as f:
         # Remove import of Session to ensure mock function will be used
         # instead.
         code = f.read().replace(
-            'from sasctl import get, get_link, request_link, Session',
-            'from sasctl import get, get_link, request_link',
+            "from sasctl import get, get_link, request_link, Session",
+            "from sasctl import get, get_link, request_link",
         )
         try:
             exec(code)
@@ -153,13 +153,13 @@ def test_register_custom_model(session, change_dir):
     def Session(*args, **kwargs):
         return session
 
-    change_dir('examples')
-    with open('register_custom_model.py') as f:
+    change_dir("examples")
+    with open("register_custom_model.py") as f:
         # Remove import of Session to ensure mock function will be used
         # instead.
         code = f.read().replace(
-            'from sasctl import register_model, Session',
-            'from sasctl import register_model',
+            "from sasctl import register_model, Session",
+            "from sasctl import register_model",
         )
         try:
             exec(code)

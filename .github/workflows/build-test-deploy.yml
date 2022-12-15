@@ -12,7 +12,7 @@ jobs:
       - name: Black
         uses: psf/black@stable
         with:
-          src: "./src"
+          src: "./src ./tests"
 
   test:
     name: "Test"

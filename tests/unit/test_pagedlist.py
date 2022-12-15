@@ -12,13 +12,13 @@ from .test_pageiterator import paging
 
 def test_len_no_paging():
     """len() should return the correct # of objects if no paging is required."""
-    items = [{'name': 'a'}, {'name': 'b'}, {'name': 'c'}]
+    items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
     obj = RestObj(items=items, count=len(items))
 
     # PagedList should end up effectively identical to a standard list since no paging required.
     target = [RestObj(x) for x in items]
 
-    with mock.patch('sasctl.core.request') as request:
+    with mock.patch("sasctl.core.request") as request:
         l = PagedList(obj)
         assert str(l) == str(target)
         assert repr(l) == repr(target)
@@ -32,10 +32,10 @@ def test_len_no_paging():
 
 
 def test_getitem_no_paging():
-    items = [{'name': 'a'}, {'name': 'b'}, {'name': 'c'}]
+    items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
     obj = RestObj(items=items, count=len(items))
 
-    with mock.patch('sasctl.core.request') as request:
+    with mock.patch("sasctl.core.request") as request:
         l = PagedList(obj)
 
         for i in range(len(l)):
@@ -49,30 +49,30 @@ def test_getitem_no_paging():
 def test_str():
     """Check str formatting of list."""
     source_items = [
-        {'name': 'a'},
-        {'name': 'b'},
-        {'name': 'c'},
-        {'name': 'd'},
-        {'name': 'e'},
-        {'name': 'f'},
+        {"name": "a"},
+        {"name": "b"},
+        {"name": "c"},
+        {"name": "d"},
+        {"name": "e"},
+        {"name": "f"},
     ]
 
     start = 2
     limit = 2
 
-    with mock.patch('sasctl.core.request') as req:
+    with mock.patch("sasctl.core.request") as req:
         obj = RestObj(
             items=source_items[:2],
             count=len(source_items),
             links=[
-                {'rel': 'next', 'href': '/moaritems?start=%d&limit=%d' % (start, limit)}
+                {"rel": "next", "href": "/moaritems?start=%d&limit=%d" % (start, limit)}
             ],
         )
 
         def side_effect(_, link, **kwargs):
-            if 'start=2' in link:
+            if "start=2" in link:
                 result = source_items[1 : 1 + limit]
-            elif 'start=4' in link:
+            elif "start=4" in link:
                 result = source_items[3 : 3 + limit]
             return RestObj(items=result)
 
@@ -87,9 +87,9 @@ def test_str():
             if i < len(source_items) - 1:
                 # Ellipses should indicate unfetched results unless we're
                 # at the end of the list
-                assert str(l).endswith(', ...]')
+                assert str(l).endswith(", ...]")
             else:
-                assert not str(l).endswith(', ...]')
+                assert not str(l).endswith(", ...]")
 
 
 def test_getitem_paging(paging):
@@ -102,13 +102,13 @@ def test_getitem_paging(paging):
 
     # If number of items on first page don't match total number of items then
     # some paging is required, so repr() should contain elipses indicating more data.
-    if len(obj['items']) < obj.count:
-        assert str(l).endswith(', ...]')
+    if len(obj["items"]) < obj.count:
+        assert str(l).endswith(", ...]")
 
     for i, item in enumerate(l):
         assert item.name == RestObj(items[i]).name
 
-    assert not str(l).endswith(', ...]')
+    assert not str(l).endswith(", ...]")
 
 
 def test_get_item_inflated_len():
@@ -120,9 +120,9 @@ def test_get_item_inflated_len():
 
     # Only defines 20 items to return
     pages = [
-        [{'name': x} for x in list('abcdefghi')],
-        [{'name': x} for x in list('klmnopqrs')],
-        [{'name': x} for x in list('uv')],
+        [{"name": x} for x in list("abcdefghi")],
+        [{"name": x} for x in list("klmnopqrs")],
+        [{"name": x} for x in list("uv")],
     ]
     actual_num_items = sum(len(page) for page in pages)
 
@@ -134,15 +134,15 @@ def test_get_item_inflated_len():
         items=pages[0],
         count=num_items,
         links=[
-            {'rel': 'next', 'href': '/moaritems?start=%d&limit=%d' % (start, limit)}
+            {"rel": "next", "href": "/moaritems?start=%d&limit=%d" % (start, limit)}
         ],
     )
 
-    with mock.patch('sasctl.core.request') as req:
+    with mock.patch("sasctl.core.request") as req:
 
         def side_effect(_, link, **kwargs):
-            assert 'limit=%d' % limit in link
-            start = int(re.search(r'(?<=start=)[\d]+', link).group())
+            assert "limit=%d" % limit in link
+            start = int(re.search(r"(?<=start=)[\d]+", link).group())
             if start == 10:
                 return RestObj(items=pages[1])
             elif start == 20:
@@ -166,11 +166,11 @@ def test_get_item_inflated_len():
     assert len(pager) == actual_num_items
 
     # Recreate the pager
-    with mock.patch('sasctl.core.request') as req:
+    with mock.patch("sasctl.core.request") as req:
 
         def side_effect(_, link, **kwargs):
-            assert 'limit=%d' % limit in link
-            start = int(re.search(r'(?<=start=)[\d]+', link).group())
+            assert "limit=%d" % limit in link
+            start = int(re.search(r"(?<=start=)[\d]+", link).group())
             if start == 10:
                 return RestObj(items=pages[1])
             elif start == 20:
