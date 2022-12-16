@@ -72,7 +72,7 @@ def _redact(pattern, repl, string):
 
 def _filter_password(r):
     if hasattr(r, "body") and r.body is not None:
-        # Filter password from 'grant_type=password&username=<user>&password=<password>' during Post to Logon service.
+        # Filter password from 'grant_type=password&username=<user>&password=<password>' during Post to SASLogon service.
         r.body = _redact(r"(?<=&password=)([^&]*)\b", "*****", r.body)
 
         # Filter client secret {"client_secret": "<password>"}
@@ -97,7 +97,7 @@ def _filter_token(r):
     if hasattr(r, "headers") and "X-Consul-Token" in r.headers:
         r.headers["X-Consul-Token"] = "[redacted]"
 
-    # Redact "access_token":"<token>" in response from Logon service
+    # Redact "access_token":"<token>" in response from SASLogon service
     if hasattr(r, "_content"):
         r._content = _redact('(?<=access_token":")[^"]*', "[redacted]", r._content)
 
@@ -293,6 +293,7 @@ class Session(requests.Session):
         token=None,
         client_id=None,
         client_secret=None,
+            consul_token=None
     ):
         super(Session, self).__init__()
 
@@ -381,47 +382,46 @@ class Session(requests.Session):
             "password": password,
         }
 
-        if self._settings["password"] is None and client_secret is None:
+        if password is None and client_secret is None:
             # Try to get credentials from .authinfo or .netrc files.
             # If no file path was specified, the default locations will
             # be checked.
             try:
-                auth = swat.utils.authinfo.query_authinfo(
-                    domain, user=username, path=authinfo
-                )
-                self._settings["username"] = auth.get("user")
-                self._settings["password"] = auth.get("password")
+                auth = swat.utils.authinfo.query_authinfo(domain, user=username, path=authinfo)
+                if auth:
+                    self._settings["username"] = auth.get("user")
+                    self._settings["password"] = auth.get("password")
             except AttributeError:
                 # If swat package or authinfo module not available
                 pass
 
             # Not able to load credentials using SWAT.  Try Netrc.
-            # TODO: IF a username was specified, verify that the credentials
-            #       found are for that username.
             if self._settings["password"] is None:
                 try:
                     parser = netrc.netrc(authinfo)
                     values = parser.authenticators(domain)
                     if values:
-                        (
-                            self._settings["username"],
-                            _,
-                            self._settings["password"],
-                        ) = values
+                        found_user, _, found_pass = values
+
+                        # Only use the credentials if they match the specified user (if one was specified).
+                        if username is None or username.lower() == found_user:
+                            self._settings["username"] = found_user
+                            self._settings["password"] = found_pass
                 except (OSError, IOError):
                     pass  # netrc throws if $HOME is not set
 
         # Set this prior authentication attempts
         self.verify = verify_ssl
 
-        # Find a suitable authentication mechanism and build an auth header
-        self.auth = self.get_auth(
-            self._settings["username"],
-            self._settings["password"],
-            token,
-            client_id=client_id,
-            client_secret=client_secret,
-        )
+        if consul_token:
+            self.auth = self._request_token_with_consul(consul_token, client_id=client_id)
+        else:
+            # Find a suitable authentication mechanism and build an auth header
+            self.auth = self._get_authorization_token(token=token,
+                                                      username=self.username,
+                                                      password=self._settings["password"],
+                                                      client_id=client_id,
+                                                      client_secret=client_secret)
 
         # Used to cache version info
         self._version_info = None
@@ -701,6 +701,7 @@ class Session(requests.Session):
     def delete(self, url, **kwargs):
         return self.request("DELETE", url, **kwargs)
 
+    # TODO: deprecate / remove
     def get_auth(
         self,
         username=None,
@@ -761,7 +762,7 @@ class Session(requests.Session):
         # Kerberos doesn't require any interruption to the user, so try that first if username/password
         # were not provided.
         try:
-            token = self._get_token_with_kerberos()
+            token = self._request_token_with_kerberos(self.username)
             return OAuth2Token(token)
         except:
             logger.exception("Failed to connect with Kerberos")
@@ -773,7 +774,7 @@ class Session(requests.Session):
             return token
 
         # If we got this far, then no password and no kerberos.  Try prompting the user for an authorization code.
-        auth_code = self.prompt_for_auth_code()
+        auth_code = self.prompt_for_auth_code(client_id)
         return self.get_oauth_token(auth_code=auth_code)
 
     def get_oauth_token(
@@ -851,6 +852,7 @@ class Session(requests.Session):
             verify=self.verify,
         )
 
+        # TODO: Error message for 401 with: b'{"error":"invalid_client","error_description":"Unauthorized grant type: password"}'
         # Raise user-friendly error messages if issue is known
         if r.status_code == 400 and auth_code is not None:
             j = r.json()
@@ -1064,87 +1066,6 @@ class Session(requests.Session):
 
         return self._version_info
 
-    def _get_token_with_kerberos(self):
-        """Authenticate with a Kerberos ticket."""
-        if kerberos is None:
-            raise RuntimeError(
-                "Kerberos package not found.  Run 'pip "
-                "install sasctl[kerberos]' to install."
-            )
-
-        user = self.username
-        client_id = "sas.tkmtrb"
-        flags = kerberos.GSS_C_MUTUAL_FLAG | kerberos.GSS_C_SEQUENCE_FLAG
-        service = "HTTP@%s" % self._settings["domain"]
-
-        logger.info("Attempting Kerberos authentication to %s", service)
-
-        url = self._build_url(
-            "/SASLogon/oauth/authorize?client_id=%s&response_type=token" % client_id
-        )
-
-        # Get Kerberos challenge
-        r = self.get(url, allow_redirects=False, verify=self.verify)
-
-        if r.status_code != 401:
-            raise ValueError(
-                "Kerberos challenge response not received.  "
-                "Expected HTTP 401 but received %s" % r.status_code
-            )
-
-        if "www-authenticate" not in r.headers:
-            raise ValueError(
-                "Kerberos challenge response not received.  "
-                "'WWW-Authenticate' header not received."
-            )
-
-        if "Negotiate" not in r.headers["www-authenticate"]:
-            raise ValueError(
-                "Kerberos challenge response not received.  "
-                "'WWW-Authenticate' header contained '%s', "
-                "expected 'Negotiate'." % r.headers["www-authenticate"]
-            )
-
-        # Initialize a request to KDC for a ticket to access the service.
-        _, context = kerberos.authGSSClientInit(service, principal=user, gssflags=flags)
-
-        # Send the request.
-        # NOTE: empty-string parameter required for initial call.
-        kerberos.authGSSClientStep(context, "")
-
-        # Get the KDC response
-        auth_header = "Negotiate %s" % kerberos.authGSSClientResponse(context)
-
-        # Get the user that was used for authentication
-        username = kerberos.authGSSClientUserName(context)
-
-        # Drop @REALM from username and store
-        if username is not None:
-            self._settings["username"] = username.rsplit("@", maxsplit=1)[0]
-
-        # Response to Kerberos challenge with ticket
-        r = self.get(
-            url,
-            headers={"Authorization": auth_header},
-            allow_redirects=False,
-            verify=self.verify,
-        )
-
-        if "Location" not in r.headers:
-            raise ValueError(
-                "Invalid authentication response." "'Location' header not received."
-            )
-
-        match = re.search("(?<=access_token=)[^&]*", r.headers["Location"])
-
-        if match is None:
-            raise ValueError(
-                "Invalid authentication response.  'Location' "
-                "header does not contain an access token."
-            )
-
-        return match.group(0)
-
     def _build_url(self, url):
         """Build a complete URL from a path by substituting in session parameters."""
         components = urlsplit(url)
@@ -1164,6 +1085,105 @@ class Session(requests.Session):
                 components.fragment,
             ]
         )
+
+    def _get_authorization_token(self, token=None, username=None, password=None, client_id=None, client_secret=None):
+        """Authenticate with SAS Viya and obtain and access token.
+
+        This method supports multiple authentication methods:
+
+         - an existing OAuth2 token
+         - password authentication
+         - client credentials
+         - Kerberos
+         - cached tokens (from previous authorization codes)
+         - authorization code
+
+        If authentication using client credentials fails because the client_credentials grant type is not allowed
+        the token cache will be searched for a valid token.  If no valid token is found, the user will be prompted
+        to generate and enter an authorization code.
+
+        Parameters
+        ----------
+        token : str, optional
+            An existing access token to reuse.
+        username : str, optional
+            Name of the user account to use.  Used for password authentication and Kerberos authentication.
+        password : str, optional
+            Password corresponding to `username`.  Only used for password authentication.
+        client_id : str, optional
+            The id of the client to use during authentication.  Overrides the SASCTL_CLIENT_ID environment variable.
+            Used for password, client_credentials, and authorization_code access.
+        client_secret : str, optional
+            The client secret to use during authentication.  Overrides the SASCTL_CLIENT_SECRET environment variable.
+            Used for password, client_credentials, and authorization_code access.
+
+        Returns
+        -------
+        OAuth2Token
+
+        Raises
+        ------
+        AuthenticationError
+            For invalid username/password combination or invalid client id/secret combination.
+
+        AuthorizationError
+            If authorization code is invalid or if refresh token is expired.
+
+        ValueError
+            If a client id is specified (either through `client_id` or SASCTL_CLIENT ID) but no client secret is
+            provided.
+
+        """
+        if token:
+            return OAuth2Token(token)
+
+        if username and password:
+            return self._request_token_with_oauth(username, password, client_id, client_secret)
+
+        client_id_provided = client_id is not None or os.getenv('SASCTL_CLIENT_ID') is not None
+        client_secret_provided = client_secret is not None or os.getenv('SASCTL_CLIENT_SECRET') is not None
+
+        # Attempt authentication with just client credentials
+        if client_id_provided:
+            if not client_secret_provided:
+                # Authenticating with client credentials should require a client secret.
+                raise ValueError("A client secret must be provided whenever a client id is specified.")
+
+            try:
+                return self._request_token_with_oauth(client_id=client_id, client_secret=client_secret)
+            except RuntimeError:
+                # If all we have is a client id & client password, there's no way to know whether we're supposed to
+                # authenticate directly using the client credentials, or prompt the user for an authorization code.
+                # Try client credential authentication first since it doesn't require user prompts, but if that fails
+                # do not raise an exception, we'll try requesting an authorization code.
+                logger.debug("Authentication using client credentials is disallowed.")
+
+        # If the necessary Python package is installed, try to get a token using Kerberos.
+        # NOTE: username may be None since client may already have valid, cached Kerberos tickets.  If so,
+        #       Session.username will be updated with the username from Kerberos.
+        if kerberos:
+            try:
+                return self._request_token_with_kerberos(username)
+            except:
+                logger.exception("Encountered an error while attempting Kerberos authorization.")
+        else:
+            logger.debug("Skipping Kerberos authentication - kerberos and winkerberos packages not found.")
+
+        # Before we prompt the user for an authorization code, check if there's already a valid token in the cache
+        # from a previous session.
+        token = self.read_cached_token(self.PROFILE_PATH)
+
+        if token is not None:
+            return token
+
+        # If we got this far, then no password and no kerberos.  Try prompting the user for an authorization code.
+        auth_code = self.prompt_for_auth_code(client_id)
+        token = self._request_token_with_oauth(client_id=client_id, client_secret=client_secret, auth_code=auth_code)
+
+        # Cache the token so we don't have to request user input again until the token expires.
+        self.cache_token(token, self.PROFILE_PATH)
+
+        return token
 
     @staticmethod
     def _read_token_cache(path):
@@ -1202,6 +1222,264 @@ class Session(requests.Session):
 
             with open(yaml_file) as f:
                 return yaml.load(f, Loader=yaml.FullLoader)
+
+    def _request_token_with_consul(self, consul_token, client_id=None):
+        """Request an access token using a Consul token for authentication.
+
+        This functionality is reserved for system administrators as access to the Consul token is restricted.
+
+        Parameters
+        ----------
+        consul_token : str,
+
+        client_id
+
+        Returns
+        -------
+        OAuth2Token
+
+        """
+        client_id = client_id or ''
+
+        headers = {'X-Consul-Token': consul_token}
+        params = {'callback': False, 'serviceId': client_id}
+
+        url = self._build_url(f"/SASLogon/oauth/clients/consul")
+        response = super(Session, self).post(
+            url,
+            headers=headers,
+            params=params,
+            verify=self.verify,
+        )
+
+        response.raise_for_status()
+        data = response.json()
+        return OAuth2Token(**data)
+
+    def _request_token_with_kerberos(self, username=None):
+        """Authenticate with a Kerberos ticket.
+
+        Parameters
+        ----------
+        username : str, optional
+
+        Returns
+        -------
+        OAuth2Token
+
+        Raises
+        ------
+        RuntimeError
+            If required kerberos package is not installed.
+
+        ValueError
+            If there is any issue with the server's response to the authorization request.
+
+        """
+        if kerberos is None:
+            raise RuntimeError(
+                "Kerberos package not found.  Run 'pip "
+                "install sasctl[kerberos]' to install."
+            )
+
+        flags = kerberos.GSS_C_MUTUAL_FLAG | kerberos.GSS_C_SEQUENCE_FLAG
+        service = "HTTP@%s" % self._settings["domain"]
+
+        logger.info("Attempting Kerberos authentication to %s", service)
+
+        url = self._build_url(
+            "/SASLogon/oauth/authorize?client_id=sas.tkmtrb&response_type=token"
+        )
+
+        # Get Kerberos challenge
+        r = self.get(url, allow_redirects=False, verify=self.verify)
+
+        if r.status_code != 401:
+            raise ValueError(
+                "Kerberos challenge response not received.  "
+                "Expected HTTP 401 but received %s" % r.status_code
+            )
+
+        if "www-authenticate" not in r.headers:
+            raise ValueError(
+                "Kerberos challenge response not received.  "
+                "'WWW-Authenticate' header not received."
+            )
+
+        if "Negotiate" not in r.headers["www-authenticate"]:
+            raise ValueError(
+                "Kerberos challenge response not received.  "
+                "'WWW-Authenticate' header contained '%s', "
+                "expected 'Negotiate'." % r.headers["www-authenticate"]
+            )
+
+        # Initialize a request to KDC for a ticket to access the service.
+        _, context = kerberos.authGSSClientInit(service, principal=username, gssflags=flags)
+
+        # Send the request.
+        # NOTE: empty-string parameter required for initial call.
+        kerberos.authGSSClientStep(context, "")
+
+        # Get the KDC response
+        auth_header = "Negotiate %s" % kerberos.authGSSClientResponse(context)
+
+        # Get the user that was used for authentication
+        username = kerberos.authGSSClientUserName(context)
+
+        # Drop @REALM from username and store
+        if username is not None:
+            self._settings["username"] = username.rsplit("@", maxsplit=1)[0]
+
+        # Response to Kerberos challenge with ticket
+        r = self.get(
+            url,
+            headers={"Authorization": auth_header},
+            allow_redirects=False,
+            verify=self.verify,
+        )
+
+        if "Location" not in r.headers:
+            raise ValueError(
+                "Invalid authentication response." "'Location' header not received."
+            )
+
+        match = re.search("(?<=access_token=)[^&]*", r.headers["Location"])
+
+        if match is None:
+            raise ValueError(
+                "Invalid authentication response.  'Location' "
+                "header does not contain an access token."
+            )
+
+        # Extract access token and return as an Oauth token
+        return OAuth2Token(match.group(0))
+
+    def _request_token_with_oauth(self, username=None, password=None, client_id=None, client_secret=None, auth_code=None, refresh_token=None):
+        """Request a token from the SAS SASLogon service.
+
+        Supports four different flows:
+         - authenticate with a username & password and receive a token
+         - authenticate with a client id & secret and receive a token
+         - provide an authorization code and receive a token
+         - provide a refresh token and receive a new token
+
+        Parameters
+        ----------
+        username : str, optional
+            Username of the user in SAS Viya.  Required for password authentication flow.
+        password : str, optional
+            Password of the user in SAS Viya.  Required for password authentication flow.
+        client_id : str, optional
+            Client ID of a client registered with SAS Viya.  Required for client credentials flow, but will use
+            a default client ID if not provided during password or authorization code flows.
+        client_secret : str, optional
+            Client secret of a client registered with SAS Viya.  Required for client credentials flow, but will use
+            a default if not provided during password or authorization code flows.
+        auth_code : str, optional
+            An authorization code obtained by the user after authenticating with SAS Viya.  Required for authorization
+            code flow.
+        refresh_token : str, optional
+            A refresh token obtained during a previous authorization request.  Required if requesting a refreshed
+            access token.
+
+        Returns
+        -------
+        OAuth2Token
+
+        Raises
+        ------
+        ValueError
+            If no valid parameter combination is provided.
+
+        RuntimeError
+            If the requested grant type is not allowed for the given `client_id`.
+
+        AuthenticationError
+            For invalid username/password combination or invalid client id/secret combination.
+
+        AuthorizationError
+            If authorization code is invalid or if refresh token is expired.
+
+        requests.HTTPError
+            For any unexpected/unhandled HTTP error code (e.g. HTTP 404)
+
+        requests.ConnectionError
+            If there's an issue establishing a connection with the server.
+
+        """
+        client_id = client_id or os.getenv('SASCTL_CLIENT_ID', 'sas.ec')
+        client_secret = client_secret or os.getenv('SASCTL_CLIENT_SECRET', '')
+
+        # Order in which parameters are checked is important.  Passing client credentials could indicate password, auth
+        # code, or client credential authentication.  Only use client credential flow if first two are ruled out.
+        if username:
+            anchor = "#password"
+            data = {"grant_type": "password", "username": username, "password": password}
+            logger.debug(f"Attempting password authentication as user '{username}'.")
+        elif auth_code:
+            anchor = "#authorization_code"
+            data = {"grant_type": "authorization_code", "code": auth_code}
+            logging.debug("Attempting authorization using an auth code.")
+        elif client_secret:
+            anchor = "#client_credentials"
+            data = {"grant_type": "client_credentials"}
+            logger.debug(f"Attempting client credential authentication as client '{client_id}'.")
+        elif refresh_token:
+            anchor = ""
+            data = {"grant_type": "refresh_token", "refresh_token": refresh_token}
+        else:
+            raise ValueError("At least one set of parameters must be provided.")
+
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
+        }
+
+        url = self._build_url(f"/SASLogon/oauth/token{anchor}")
+        response = super(Session, self).post(
+            url,
+            headers=headers,
+            data=data,
+            auth=(client_id, client_secret),
+            verify=self.verify,
+        )
+
+        try:
+            data = response.json()
+        except json.JSONDecodeError:
+            # A valid response (and some HTTP errors) should contain valid JSON.  In the extremely unlikely event that
+            # an HTTP error is returned that doesn't include JSON (e.g. HTTP 404) just raise the HTTP error.
+            response.raise_for_status()
+
+        # If request failed for a known reason, raise a user-friendly error message.
+        if response.status_code == 400:
+            if auth_code is not None and "Invalid authorization code" in data.get("error_description", ""):
+                raise exceptions.AuthorizationError(f"Invalid authorization code: {auth_code}.")
+
+        if response.status_code == 401:
+            # Response is the same if either username/password or client id/secret is invalid
+            # Example: '{"error":"unauthorized","error_description":"Bad credentials"}'
+            # We're assuming that if a username was provided, that's probably the problem.
+            # NOTE: this does mean that valid credentials with incorrectly set client id & secret results in an error
+            #       message that blames the username/password.
+            if "bad credentials" in data.get("error_description", "").lower():
+                if username is not None:
+                    raise exceptions.AuthenticationError(username)
+                else:
+                    raise exceptions.AuthenticationError(msg="Invalid client id or secret.")
+
+            # If client used is not allowed to authenticate using the requested method an error is returned.
+            # Example: '{"error":"invalid_client","error_description":"Unauthorized grant type: password"}'
+            if "unauthorized grant type" in data.get("error_description", "").lower():
+                raise RuntimeError(data["error_description"])
+
+            if refresh_token is not None and data.get("error", "") == "invalid_token":
+                raise exceptions.AuthorizationError("Refresh token is incorrect, expired, or revoked.")
+
+        # Raise a generic exception for any other issues
+        response.raise_for_status()
+
+        return OAuth2Token(**data)
 
     @staticmethod
     def _write_token_cache(profiles, path):
