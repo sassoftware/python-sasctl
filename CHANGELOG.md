@@ -1,6 +1,9 @@
 Unreleased
 ----------
-
+ -
+ 
+v1.8.0 (2022-12-16)
+-------------------
 **Improvements**
  - Added `Session.version_info()` to check which version of Viya the session is connected to.
   - Updated the `properties=` parameter of `model_repository.create_model()` to accept a dictionary containing
