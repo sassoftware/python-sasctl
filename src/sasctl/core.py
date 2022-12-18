@@ -895,24 +895,29 @@ class Session(requests.Session):
          - cached tokens (from previous authorization codes)
          - authorization code
 
-        If authentication using client credentials fails because the client_credentials grant type is not allowed
-        the token cache will be searched for a valid token.  If no valid token is found, the user will be prompted
-        to generate and enter an authorization code.
+        If authentication using client credentials fails because the
+        client_credentials grant type is not allowed the token cache will
+        be searched for a valid token.  If no valid token is found, the
+        user will be prompted to generate and enter an authorization code.
 
         Parameters
         ----------
         token : str, optional
             An existing access token to reuse.
         username : str, optional
-            Name of the user account to use.  Used for password authentication and Kerberos authentication.
+            Name of the user account to use.  Used for password
+            authentication and Kerberos authentication.
         password : str, optional
-            Password corresponding to `username`.  Only used for password authentication.
+            Password corresponding to `username`.  Only used for password
+            authentication.
         client_id : str, optional
-            The id of the client to use during authentication.  Overrides the SASCTL_CLIENT_ID environment variable.
-            Used for password, client_credentials, and authorization_code access.
+            The id of the client to use during authentication.  Overrides
+            the SASCTL_CLIENT_ID environment variable.  Used for password,
+            client_credentials, and authorization_code access.
         client_secret : str, optional
-            The client secret to use during authentication.  Overrides the SASCTL_CLIENT_SECRET environment variable.
-            Used for password, client_credentials, and authorization_code access.
+            The client secret to use during authentication.  Overrides the
+            SASCTL_CLIENT_SECRET environment variable.  Used for password,
+            client_credentials, and authorization_code access.
 
         Returns
         -------
@@ -921,14 +926,15 @@ class Session(requests.Session):
         Raises
         ------
         AuthenticationError
-            For invalid username/password combination or invalid client id/secret combination.
+            For invalid username/password combination or invalid client id
+            and client secret combination.
 
         AuthorizationError
             If authorization code is invalid or if refresh token is expired.
 
         ValueError
-            If a client id is specified (either through `client_id` or SASCTL_CLIENT ID) but no client secret is
-            provided.
+            If a client id is specified (either through `client_id` or
+            SASCTL_CLIENT ID) but no client secret is provided.
 
         """
         if token:
@@ -959,15 +965,18 @@ class Session(requests.Session):
                     client_id=client_id, client_secret=client_secret
                 )
             except RuntimeError:
-                # If all we have is a client id & client password, there's no way to know whether we're supposed to
-                # authenticate directly using the client credentials, or prompt the user for an authorization code.
-                # Try client credential authentication first since it doesn't require user prompts, but if that fails
-                # do not raise an exception, we'll try requesting an authorization code.
+                # If all we have is a client id & client password, there's no way to
+                # know whether we're supposed to authenticate directly using the client
+                # credentials, or prompt the user for an authorization code.  Try
+                # client credential authentication first since it doesn't require user
+                # prompts, but if that fails do not raise an exception, we'll try
+                # requesting an authorization code.
                 logger.debug("Authentication using client credentials is disallowed.")
 
-        # If the necessary Python package is installed, try to get a token using Kerberos.
-        # NOTE: username may be None since client may already have valid, cached Kerberos tickets.  If so,
-        #       Session.username will be updated with the username from Kerberos.
+        # If the necessary Python package is installed try to get a token using Kerberos.
+        # NOTE: username may be None since client may already have valid, cached
+        #       Kerberos tickets.  If so, Session.username will be updated with the
+        #       username from Kerberos.
         if kerberos:
             try:
                 return self._request_token_with_kerberos(username)
@@ -977,23 +986,26 @@ class Session(requests.Session):
                 )
         else:
             logger.debug(
-                "Skipping Kerberos authentication - kerberos and winkerberos packages not found."
+                "Skipping Kerberos authentication - kerberos and winkerberos "
+                "packages not found."
             )
 
-        # Before we prompt the user for an authorization code, check if there's already a valid token in the cache
-        # from a previous session.
+        # Before we prompt the user for an authorization code, check if there's already
+        # a valid token in the cache from a previous session.
         token = self.read_cached_token(self.PROFILE_PATH)
 
         if token is not None:
             return token
 
-        # If we got this far, then no password and no kerberos.  Try prompting the user for an authorization code.
+        # If we got this far, then no password and no kerberos.  Try prompting the user
+        # for an authorization code.
         auth_code = self._prompt_for_auth_code(client_id)
         token = self._request_token_with_oauth(
             client_id=client_id, client_secret=client_secret, auth_code=auth_code
         )
 
-        # Cache the token so we don't have to request user input again until the token expires.
+        # Cache the token so we don't have to request user input again until the
+        # token expires.
         self.cache_token(token, self.PROFILE_PATH)
 
         return token
@@ -1001,7 +1013,8 @@ class Session(requests.Session):
     def _prompt_for_auth_code(self, client_id=None):
         """Prompt the user open a URL to generate an auth code.
 
-        Note that this halts program execution until input is received and should only be used for interactive sessions.
+        Note that this halts program execution until input is received and
+        should only be used for interactive sessions.
 
         Parameters
         ----------
@@ -1010,7 +1023,8 @@ class Session(requests.Session):
         Returns
         -------
         str
-            Authorization code that can be used to acquire an OAuth2 access token.
+            Authorization code that can be used to acquire an OAuth2
+            access token.
 
         See Also
         --------
@@ -1019,16 +1033,14 @@ class Session(requests.Session):
         """
         client_id = client_id or os.environ.get("SASCTL_CLIENT_ID", "sas.ec")
 
-        # User must open this URL in a browser and then enter the auth code that's generated.
+        # User must open this URL in a browser and enter the auth code that's generated.
         url = (
             self._build_url("/SASLogon/oauth/authorize")
             + "?response_type=code&client_id="
             + client_id
         )
-        message = (
-            "Please use a web browser to login at the following URL to get your authorization code:\n"
-            + url
-        )
+        message = f"Please use a web browser to login at the following URL to get your " \
+                  f"authorization code:\n{url}"
         print(message)
         auth_code = input("Authorization Code:")
 
@@ -1076,7 +1088,8 @@ class Session(requests.Session):
     def _request_token_with_consul(self, consul_token, client_id=None):
         """Request an OAuth token from Consul.
 
-        This functionality is reserved for system administrators as access to the Consul token is restricted.
+        This functionality is reserved for system administrators as access
+        to the Consul token is restricted.
 
         Parameters
         ----------
@@ -1134,7 +1147,8 @@ class Session(requests.Session):
             If required kerberos package is not installed.
 
         ValueError
-            If there is any issue with the server's response to the authorization request.
+            If there is any issue with the server's response to the
+            authorization request.
 
         """
         if kerberos is None:
@@ -1340,13 +1354,14 @@ class Session(requests.Session):
             response.raise_for_status()
 
         # If request failed for a known reason, raise a user-friendly error message.
-        if response.status_code == 400:
-            if auth_code is not None and "Invalid authorization code" in data.get(
-                "error_description", ""
-            ):
-                raise exceptions.AuthorizationError(
-                    f"Invalid authorization code: {auth_code}."
-                )
+        if (
+            response.status_code == 400
+            and auth_code is not None
+            and "Invalid authorization code" in data.get("error_description", "")
+        ):
+            raise exceptions.AuthorizationError(
+                f"Invalid authorization code: {auth_code}."
+            )
 
         if response.status_code == 401:
             # Response is the same if either username/password or client id/secret is
@@ -1593,7 +1608,8 @@ class PagedItemIterator:
         # Total number of items to iterate over
         if "count" in obj:
             # NOTE: "count" may be an (over) estimate of the number of items available
-            #       since some may be inaccessible due to user permissions & won't actually be returned.
+            #       since some may be inaccessible due to user permissions & won't
+            #       actually be returned.
             self._count = int(obj.count)
         else:
             self._count = len(obj["items"])

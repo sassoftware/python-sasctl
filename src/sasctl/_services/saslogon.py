@@ -4,6 +4,8 @@
 # Copyright © 2022, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+"""The SAS Logon service provides standard OAuth endpoints for client management."""
+
 from ..core import HTTPError
 from .service import Service
 
@@ -99,7 +101,8 @@ class SASLogon(Service):
             "redirect_uri": redirect_uri,
         }
 
-        # Use access token to define a new client, along with client secret & allowed authorization types (auth code)
+        # Use access token to define a new client, along with client secret & allowed
+        # authorization types (auth code)
         response = cls.post("/oauth/clients", json=data)
 
         return response
