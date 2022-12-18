@@ -72,8 +72,7 @@ def _redact(pattern, repl, string):
 
 def _filter_password(r):
     if hasattr(r, "body") and r.body is not None:
-        # Filter password from string during Post to SASLogon service e.g.
-        # 'grant_type=password&username=<user>&password=<password>'
+        # Filter password from 'grant_type=password&username=<user>&password=<password>' during Post to Logon service.
         r.body = _redact(r"(?<=&password=)([^&]*)\b", "*****", r.body)
 
         # Filter client secret {"client_secret": "<password>"}
