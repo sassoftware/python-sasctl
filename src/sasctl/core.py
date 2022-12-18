@@ -293,7 +293,7 @@ class Session(requests.Session):
         token=None,
         client_id=None,
         client_secret=None,
-            consul_token=None
+        consul_token=None,
     ):
         super(Session, self).__init__()
 
@@ -387,7 +387,9 @@ class Session(requests.Session):
             # If no file path was specified, the default locations will
             # be checked.
             try:
-                auth = swat.utils.authinfo.query_authinfo(domain, user=username, path=authinfo)
+                auth = swat.utils.authinfo.query_authinfo(
+                    domain, user=username, path=authinfo
+                )
                 if auth:
                     self._settings["username"] = auth.get("user")
                     self._settings["password"] = auth.get("password")
@@ -414,14 +416,18 @@ class Session(requests.Session):
         self.verify = verify_ssl
 
         if consul_token:
-            self.auth = self._request_token_with_consul(consul_token, client_id=client_id)
+            self.auth = self._request_token_with_consul(
+                consul_token, client_id=client_id
+            )
         else:
             # Find a suitable authentication mechanism and build an auth header
-            self.auth = self._get_authorization_token(token=token,
-                                                      username=self.username,
-                                                      password=self._settings["password"],
-                                                      client_id=client_id,
-                                                      client_secret=client_secret)
+            self.auth = self._get_authorization_token(
+                token=token,
+                username=self.username,
+                password=self._settings["password"],
+                client_id=client_id,
+                client_secret=client_secret,
+            )
 
         # Used to cache version info
         self._version_info = None
@@ -649,7 +655,7 @@ class Session(requests.Session):
                 # Access token expired, need to refresh it (if we can)
                 if "access token expired" in auth_header:
                     try:
-                        self.auth = self.get_oauth_token(
+                        self.auth = self._request_token_with_oauth(
                             refresh_token=self.auth.refresh_token
                         )
 
@@ -700,225 +706,6 @@ class Session(requests.Session):
 
     def delete(self, url, **kwargs):
         return self.request("DELETE", url, **kwargs)
-
-    # TODO: deprecate / remove
-    def get_auth(
-        self,
-        username=None,
-        password=None,
-        token=None,
-        client_id=None,
-        client_secret=None,
-    ):
-        """Attempt to authenticate with the Viya environment.
-
-        If `username` and `password` or `token` are provided, they will be used
-        exclusively. Alternatively `client_id` and `client_secret` can be
-        provided without `username` and `password` which will result in
-        authentication using `client_credentials` flow. If neither of these is
-        specified, Kerberos authorization will be attempted.  If this fails,
-        authorization using an OAuth2 authorization code will be attempted.
-        Be aware that this requires prompting the user for input and
-        should NOT be used in a non-interactive session.
-
-        Parameters
-        ----------
-        username : str, optional
-            Username to use for authentication.
-        password : str, optional
-            Password to use for authentication.  Required if `username` is
-            provided.
-        client_id : str, optional
-            Client ID requesting access.  Use if connection to Viya should be
-            made using a `client_credentials` method.
-        client_secret : str, optional
-            Client secret for client requesting access.  Required if `client_id`
-            is provided.
-
-        token : str, optional
-            An existing OAuth2 access token to use.
-
-        Returns
-        -------
-        OAuth2Token
-            Authorization header to use with requests to the environment
-
-        """
-        # TODO: Refactor this function to a single set of cases
-
-        # If explicit username & password were provided, use them.
-        if username and password:
-            return self.get_oauth_token(username, password)
-
-        if client_id and client_secret:
-            return self.get_oauth_token(
-                client_id=client_id, client_secret=client_secret
-            )
-
-        # If an existing access token was provided, use it
-        if token:
-            return OAuth2Token(token)
-
-        # Kerberos doesn't require any interruption to the user, so try that first if username/password
-        # were not provided.
-        try:
-            token = self._request_token_with_kerberos(self.username)
-            return OAuth2Token(token)
-        except:
-            logger.exception("Failed to connect with Kerberos")
-
-        # Try loading cached credentials
-        token = self.read_cached_token(self.PROFILE_PATH)
-
-        if token is not None:
-            return token
-
-        # If we got this far, then no password and no kerberos.  Try prompting the user for an authorization code.
-        auth_code = self.prompt_for_auth_code(client_id)
-        return self.get_oauth_token(auth_code=auth_code)
-
-    def get_oauth_token(
-        self,
-        username=None,
-        password=None,
-        auth_code=None,
-        refresh_token=None,
-        client_id=None,
-        client_secret=None,
-    ):
-        """Request an OAuth2 access token using either a username & password,
-        client_id and client_secret, or an auth token.
-
-        Parameters
-        ----------
-        username : str, optional
-            Username to use for authentication.
-        password : str, optional
-            Password to use for authentication.  Required if `username` is
-            provided.
-        auth_code : str, optional
-            Authorization code to use.
-        refresh_token : str, optinoal
-            Valid refresh token to use.
-        client_id : str, optional
-            Client ID requesting access.  Use if connection to Viya should be
-            made using a non-default client id or using `client_credentials`
-            method.
-        client_secret : str, optional
-            Client secret for client requesting access.  Required if `client_id`
-            is provided.
-
-        Returns
-        -------
-        OAuth2Token
-
-        See Also
-        --------
-        :meth:`Session.prompt_for_auth_code`
-
-        """
-
-        if username is not None:
-            data = {
-                "grant_type": "password",
-                "username": username,
-                "password": password,
-            }
-        elif username is None and client_secret is not None:
-            data = {"grant_type": "client_credentials"}
-        elif auth_code is not None:
-            data = {"grant_type": "authorization_code", "code": auth_code}
-        elif refresh_token is not None:
-            data = {"grant_type": "refresh_token", "refresh_token": refresh_token}
-        else:
-            raise ValueError(
-                "Either username and password or auth_code parameters must be specified."
-            )
-
-        client_id = client_id or os.environ.get("SASCTL_CLIENT_ID", "sas.ec")
-        client_secret = client_secret or os.environ.get("SASCTL_CLIENT_SECRET", "")
-
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded",
-        }
-
-        url = self._build_url("/SASLogon/oauth/token")
-        r = super(Session, self).post(
-            url,
-            headers=headers,
-            data=data,
-            auth=(client_id, client_secret),
-            verify=self.verify,
-        )
-
-        # TODO: Error message for 401 with: b'{"error":"invalid_client","error_description":"Unauthorized grant type: password"}'
-        # Raise user-friendly error messages if issue is known
-        if r.status_code == 400 and auth_code is not None:
-            j = r.json()
-            if "Invalid authorization code" in j.get("error_description", ""):
-                raise exceptions.AuthorizationError(
-                    "Invalid authorization code: '%s'" % auth_code
-                )
-        if r.status_code == 401:
-            if (
-                r.json().get("error_description", "").lower() == "bad credentials"
-                and username is None
-            ):
-                raise exceptions.AuthenticationError(msg="Invalid client id or secret.")
-            if r.json().get("error", "") == "invalid_token":
-                raise exceptions.AuthorizationError(
-                    "Refresh token is incorrect, expired, or revoked."
-                )
-            if username is not None:
-                raise exceptions.AuthenticationError(username)
-
-        r.raise_for_status()
-
-        token = OAuth2Token(**r.json())
-
-        # No reason to cache token if username & password were provided - they'd just be re-provided on future
-        # connections.  Cache for auth code & refresh token to prevent frequent interruptions for the user.
-        if username is None and client_secret is None:
-            self.cache_token(token, self.PROFILE_PATH)
-
-        return token
-
-    def prompt_for_auth_code(self, client_id=None):
-        """Prompt the user open a URL to generate an auth code.
-
-        Note that this halts program execution until input is received and should only be used for interactive sessions.
-
-        Parameters
-        ----------
-        client_id : str, optional
-
-        Returns
-        -------
-        str
-            Authorization code that can be used to acquire an OAuth2 access token.
-
-        See Also
-        --------
-        :meth:`Session.get_oauth_token`
-
-        """
-        client_id = client_id or os.environ.get("SASCTL_CLIENT_ID", "sas.ec")
-
-        # User must open this URL in a browser and then enter the auth code that's generated.
-        url = (
-            self._build_url("/SASLogon/oauth/authorize")
-            + "?response_type=code&client_id="
-            + client_id
-        )
-        message = (
-            "Please use a web browser to login at the following URL to get your authorization code:\n"
-            + url
-        )
-        print(message)
-        auth_code = input("Authorization Code:")
-
-        return auth_code
 
     def cache_token(self, token, path):
         """Write an OAuth2 token to the cache.
@@ -1009,7 +796,9 @@ class Session(requests.Session):
                 # Attempt to refresh if cached token has expired
                 if token.is_expired:
                     try:
-                        token = self.get_oauth_token(refresh_token=token.refresh_token)
+                        token = self._request_token_with_oauth(
+                            refresh_token=token.refresh_token
+                        )
                     except (
                         exceptions.AuthorizationError,
                         requests.exceptions.HTTPError,
@@ -1086,7 +875,14 @@ class Session(requests.Session):
             ]
         )
 
-    def _get_authorization_token(self, token=None, username=None, password=None, client_id=None, client_secret=None):
+    def _get_authorization_token(
+        self,
+        token=None,
+        username=None,
+        password=None,
+        client_id=None,
+        client_secret=None,
+    ):
         """Authenticate with SAS Viya and obtain and access token.
 
         This method supports multiple authentication methods:
@@ -1138,19 +934,29 @@ class Session(requests.Session):
             return OAuth2Token(token)
 
         if username and password:
-            return self._request_token_with_oauth(username, password, client_id, client_secret)
+            return self._request_token_with_oauth(
+                username, password, client_id, client_secret
+            )
 
-        client_id_provided = client_id is not None or os.getenv('SASCTL_CLIENT_ID') is not None
-        client_secret_provided = client_secret is not None or os.getenv('SASCTL_CLIENT_SECRET') is not None
+        client_id_provided = (
+            client_id is not None or os.getenv('SASCTL_CLIENT_ID') is not None
+        )
+        client_secret_provided = (
+            client_secret is not None or os.getenv('SASCTL_CLIENT_SECRET') is not None
+        )
 
         # Attempt authentication with just client credentials
         if client_id_provided:
             if not client_secret_provided:
                 # Authenticating with client credentials should require a client secret.
-                raise ValueError("A client secret must be provided whenever a client id is specified.")
+                raise ValueError(
+                    "A client secret must be provided whenever a client id is specified."
+                )
 
             try:
-                return self._request_token_with_oauth(client_id=client_id, client_secret=client_secret)
+                return self._request_token_with_oauth(
+                    client_id=client_id, client_secret=client_secret
+                )
             except RuntimeError:
                 # If all we have is a client id & client password, there's no way to know whether we're supposed to
                 # authenticate directly using the client credentials, or prompt the user for an authorization code.
@@ -1165,9 +971,13 @@ class Session(requests.Session):
             try:
                 return self._request_token_with_kerberos(username)
             except:
-                logger.exception("Encountered an error while attempting Kerberos authorization.")
+                logger.exception(
+                    "Encountered an error while attempting Kerberos authorization."
+                )
         else:
-            logger.debug("Skipping Kerberos authentication - kerberos and winkerberos packages not found.")
+            logger.debug(
+                "Skipping Kerberos authentication - kerberos and winkerberos packages not found."
+            )
 
         # Before we prompt the user for an authorization code, check if there's already a valid token in the cache
         # from a previous session.
@@ -1177,13 +987,51 @@ class Session(requests.Session):
             return token
 
         # If we got this far, then no password and no kerberos.  Try prompting the user for an authorization code.
-        auth_code = self.prompt_for_auth_code(client_id)
-        token = self._request_token_with_oauth(client_id=client_id, client_secret=client_secret, auth_code=auth_code)
+        auth_code = self._prompt_for_auth_code(client_id)
+        token = self._request_token_with_oauth(
+            client_id=client_id, client_secret=client_secret, auth_code=auth_code
+        )
 
         # Cache the token so we don't have to request user input again until the token expires.
         self.cache_token(token, self.PROFILE_PATH)
 
         return token
+
+    def _prompt_for_auth_code(self, client_id=None):
+        """Prompt the user open a URL to generate an auth code.
+
+        Note that this halts program execution until input is received and should only be used for interactive sessions.
+
+        Parameters
+        ----------
+        client_id : str, optional
+
+        Returns
+        -------
+        str
+            Authorization code that can be used to acquire an OAuth2 access token.
+
+        See Also
+        --------
+        :meth:`Session.get_oauth_token`
+
+        """
+        client_id = client_id or os.environ.get("SASCTL_CLIENT_ID", "sas.ec")
+
+        # User must open this URL in a browser and then enter the auth code that's generated.
+        url = (
+            self._build_url("/SASLogon/oauth/authorize")
+            + "?response_type=code&client_id="
+            + client_id
+        )
+        message = (
+            "Please use a web browser to login at the following URL to get your authorization code:\n"
+            + url
+        )
+        print(message)
+        auth_code = input("Authorization Code:")
+
+        return auth_code
 
     @staticmethod
     def _read_token_cache(path):
@@ -1224,19 +1072,25 @@ class Session(requests.Session):
                 return yaml.load(f, Loader=yaml.FullLoader)
 
     def _request_token_with_consul(self, consul_token, client_id=None):
-        """Request an access token using a Consul token for authentication.
+        """Request an OAuth token from Consul.
 
         This functionality is reserved for system administrators as access to the Consul token is restricted.
 
         Parameters
         ----------
-        consul_token : str,
-
-        client_id
+        consul_token : str
+            A Consul ACL token
+        client_id : str, optional
+            The name of the client being used to access the service.
 
         Returns
         -------
         OAuth2Token
+
+        Raises
+        ------
+        AuthenticationError
+            If unable to retrieve an access token for any reason.
 
         """
         client_id = client_id or ''
@@ -1252,9 +1106,14 @@ class Session(requests.Session):
             verify=self.verify,
         )
 
-        response.raise_for_status()
-        data = response.json()
-        return OAuth2Token(**data)
+        try:
+            response.raise_for_status()
+            data = response.json()
+            return OAuth2Token(**data)
+        except requests.HTTPError as e:
+            raise exceptions.AuthenticationError(
+                msg="Failed to authenticate using Consul token."
+            ) from e
 
     def _request_token_with_kerberos(self, username=None):
         """Authenticate with a Kerberos ticket.
@@ -1314,7 +1173,9 @@ class Session(requests.Session):
             )
 
         # Initialize a request to KDC for a ticket to access the service.
-        _, context = kerberos.authGSSClientInit(service, principal=username, gssflags=flags)
+        _, context = kerberos.authGSSClientInit(
+            service, principal=username, gssflags=flags
+        )
 
         # Send the request.
         # NOTE: empty-string parameter required for initial call.
@@ -1354,7 +1215,15 @@ class Session(requests.Session):
         # Extract access token and return as an Oauth token
         return OAuth2Token(match.group(0))
 
-    def _request_token_with_oauth(self, username=None, password=None, client_id=None, client_secret=None, auth_code=None, refresh_token=None):
+    def _request_token_with_oauth(
+        self,
+        username=None,
+        password=None,
+        client_id=None,
+        client_secret=None,
+        auth_code=None,
+        refresh_token=None,
+    ):
         """Request a token from the SAS SASLogon service.
 
         Supports four different flows:
@@ -1414,7 +1283,11 @@ class Session(requests.Session):
         # code, or client credential authentication.  Only use client credential flow if first two are ruled out.
         if username:
             anchor = "#password"
-            data = {"grant_type": "password", "username": username, "password": password}
+            data = {
+                "grant_type": "password",
+                "username": username,
+                "password": password,
+            }
             logger.debug(f"Attempting password authentication as user '{username}'.")
         elif auth_code:
             anchor = "#authorization_code"
@@ -1423,7 +1296,9 @@ class Session(requests.Session):
         elif client_secret:
             anchor = "#client_credentials"
             data = {"grant_type": "client_credentials"}
-            logger.debug(f"Attempting client credential authentication as client '{client_id}'.")
+            logger.debug(
+                f"Attempting client credential authentication as client '{client_id}'."
+            )
         elif refresh_token:
             anchor = ""
             data = {"grant_type": "refresh_token", "refresh_token": refresh_token}
@@ -1453,8 +1328,12 @@ class Session(requests.Session):
 
         # If request failed for a known reason, raise a user-friendly error message.
         if response.status_code == 400:
-            if auth_code is not None and "Invalid authorization code" in data.get("error_description", ""):
-                raise exceptions.AuthorizationError(f"Invalid authorization code: {auth_code}.")
+            if auth_code is not None and "Invalid authorization code" in data.get(
+                "error_description", ""
+            ):
+                raise exceptions.AuthorizationError(
+                    f"Invalid authorization code: {auth_code}."
+                )
 
         if response.status_code == 401:
             # Response is the same if either username/password or client id/secret is invalid
@@ -1466,7 +1345,9 @@ class Session(requests.Session):
                 if username is not None:
                     raise exceptions.AuthenticationError(username)
                 else:
-                    raise exceptions.AuthenticationError(msg="Invalid client id or secret.")
+                    raise exceptions.AuthenticationError(
+                        msg="Invalid client id or secret."
+                    )
 
             # If client used is not allowed to authenticate using the requested method an error is returned.
             # Example: '{"error":"invalid_client","error_description":"Unauthorized grant type: password"}'
@@ -1474,7 +1355,9 @@ class Session(requests.Session):
                 raise RuntimeError(data["error_description"])
 
             if refresh_token is not None and data.get("error", "") == "invalid_token":
-                raise exceptions.AuthorizationError("Refresh token is incorrect, expired, or revoked.")
+                raise exceptions.AuthorizationError(
+                    "Refresh token is incorrect, expired, or revoked."
+                )
 
         # Raise a generic exception for any other issues
         response.raise_for_status()

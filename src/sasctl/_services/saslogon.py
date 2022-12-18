@@ -4,27 +4,38 @@
 # Copyright © 2022, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-
+from ..core import HTTPError
 from .service import Service
 
-# TODO: Class docstring - note admin privs needed.  Reference REST documentation?  Correct sections defined?
-# TODO: delete_client() throws 404 if client not found.  Use Service CRUD functions?
 
 class SASLogon(Service):
-    """SAS SASLogon service.
+    """The SAS Logon service client management related endpoints.
 
-    Povides end points for managing client ids and secrets.  This class is somewhat different from the other
-    Service classes because many of the operations on the associated SAS SASLogon REST service are related to
-    authentication.  In sasctl all authentication is handled in the `Session` class, so only the operations that
-    are not related to authentication are implemented here.
+    Provides functionality for managing client IDs and secrets  This class
+    is somewhat different from the other Service classes because many of
+    the operations on the associated SA SLogon REST service are related to
+    authentication.  In sasctl all authentication is handled in the
+    `Session` class, so only the operations that are not related to
+    authentication are implemented here.
+
+    The operations provided by this service are only accessible to users
+    with administrator permissions.
 
     """
 
     _SERVICE_ROOT = "/SASLogon"
 
     @classmethod
-    def create_client(cls, client_id, client_secret, scopes=None, redirect_uri=None,
-                      allow_password=False, allow_client_secret=False, allow_auth_code=False):
+    def create_client(
+        cls,
+        client_id,
+        client_secret,
+        scopes=None,
+        redirect_uri=None,
+        allow_password=False,
+        allow_client_secret=False,
+        allow_auth_code=False,
+    ):
         """Register a new client with the SAS Viya environment.
 
         Parameters
@@ -54,7 +65,7 @@ class SASLogon(Service):
 
         """
 
-        scopes = set(scopes)
+        scopes = set() if scopes is None else set(scopes)
 
         # Include default scopes depending on allowed grant types
         if allow_password or allow_auth_code:
@@ -79,37 +90,42 @@ class SASLogon(Service):
             'client_secret': client_secret,
             'scope': list(scopes),
             'authorized_grant_types': list(grant_types),
-            'redirect_uri': redirect_uri
+            'redirect_uri': redirect_uri,
         }
 
         # Use access token to define a new client, along with client secret & allowed authorization types (auth code)
-        response = cls.post('/oauth/clients', json=data) # , format_='response')
-
-        # if response.status_code == 409:
-        #     pass
-
-        # HTTP 201 = data is JSON, convert to RestObj with client info
-        # HTTP Error 409: {"error":"invalid_client","error_description":"Client already exists: test_client_2"}
-        # HTTP Error 403: {"error":"insufficient_scope","error_description":"Insufficient scope for this resource","scope":"uaa.admin clients.write clients.admin zones.uaa.admin"}
+        response = cls.post('/oauth/clients', json=data)  # , format_='response')
 
         return response
 
     @classmethod
-    def delete_client(cls, client_id):
+    def delete_client(cls, client):
         """Remove and existing client.
 
         Parameters
         ----------
-        client_id : str
-            The id of the client to delete.
+        client : str or RestObj
+            The client ID or a RestObj containing the client details.
 
         Returns
         -------
         RestObj
             The deleted client
 
+        Raises
+        ------
+        ValueError
+            If `client` is not found.
+
         """
-        return cls.delete(f'/oauth/clients/{client_id}')
+        id_ = client.get("client_id") if isinstance(client, dict) else str(client)
+
+        try:
+            return cls.delete(f'/oauth/clients/{id_}')
+        except HTTPError as e:
+            if e.code == 404:
+                raise ValueError(f"Client with ID '{id_}' not found.") from e
+            raise
 
     @classmethod
     def get_client(cls, client_id):
@@ -122,21 +138,78 @@ class SASLogon(Service):
 
         Returns
         -------
-        RestObj
+        RestObj or None
 
         """
         return cls.get(f'/oauth/clients/{client_id}')
 
     @classmethod
-    def list_clients(cls):
-        # TODO: docstring
-        # TODO: page list iterator?
-        return cls.get('/oauth/clients')
+    def list_clients(cls, start_index=None, count=None, descending=False):
+        """Retrieve a details of multiple clients.
+
+        Parameters
+        ----------
+        start_index : int, optional
+            Index of first client to return.  Defaults to 1.
+        count : int, optiona;
+            Number of clients to retrieve.  Defaults to 100.
+        descending : bool, optional
+            Whether to clients should be returned in descending order.
+
+        Returns
+        -------
+        list of dict
+            Each dict contains details for a single client.  If no
+            clients were found and empty list is returned.
+
+        """
+        params = {}
+        if start_index:
+            params["startIndex"] = int(start_index)
+        if count:
+            params["count"] = int(count)
+        if descending:
+            params["sortOrder"] = "descending"
+
+        results = cls.get('/oauth/clients', params=params)
+
+        if results is None:
+            return []
+
+        # Response does not conform to format expected by PagedList (items
+        # under an 'items' property and a URL to request additional items).
+        # Instead, just return the raw list.
+        return results["resources"]
 
     @classmethod
-    def update_client(cls):
-        raise NotImplementedError()
+    def update_client_secret(cls, client, secret):
+        """
 
-    @classmethod
-    def update_client_secret(cls):
-        raise NotImplementedError()
+        Parameters
+        ----------
+        client : str or RestObj
+            The client ID or a RestObj containing the client details.
+        secret : str
+            The new client secret.
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        ValueError
+            If `client` is not found.
+
+        """
+        id_ = client.get("client_id") if isinstance(client, dict) else str(client)
+
+        data = {"secret": secret}
+
+        try:
+            # Ignoring response ({"status": "ok", "message": "secret updated"})
+            _ = cls.put(f"/oauth/clients/{id_}/secret", json=data)
+        except HTTPError as e:
+            if e.code == 404:
+                raise ValueError(f"Client with ID '{id_}' not found.") from e
+            raise
