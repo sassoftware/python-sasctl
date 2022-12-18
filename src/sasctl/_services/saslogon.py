@@ -45,56 +45,62 @@ class SASLogon(Service):
         client_secret : str
             The client secret used for authentication.
         scopes : list of string, optional
-            Specifies the levels of access that the client will be able to obtain on behalf of users when not using
-            client credential authentication.  If `allow_password` or `allow_auth_code` are true, the 'openid' scope
-            will also be included.  This is used to assert the identity of the user that the client is acting on
-            behalf of.  For clients that only use client credential authentication and therefore do not act on behalf
-            of users, the 'uaa.none' scope will automatically be included.
+            Specifies the levels of access that the client will be able to
+            obtain on behalf of users when not using client credential
+            authentication.  If `allow_password` or `allow_auth_code` are
+            true, the 'openid' scope will also be included.  This is used
+            to assert the identity of the user that the client is acting on
+            behalf of.  For clients that only use client credential
+            authentication and therefore do not act on behalf of users,
+            the 'uaa.none' scope will automatically be included.
         redirect_uri : str, optional
-            The allowed URI pattern for redirects during authorization.  Defaults to 'urn:ietf:wg:oauth:2.0:oob'.
+            The allowed URI pattern for redirects during authorization.
+            Defaults to 'urn:ietf:wg:oauth:2.0:oob'.
         allow_password : bool, optional
-            Whether to allow username & password authentication with this client.  Defaults to false.
+            Whether to allow username & password authentication with this
+            client.  Defaults to false.
         allow_client_secret : bool
-            Whether to allow authentication using just the client ID and client secret.  Defaults to false.
+            Whether to allow authentication using just the client ID and
+            client secret.  Defaults to false.
         allow_auth_code : bool, optional
-            Whether to allow authorization code access using this client.  Defaults to false.
+            Whether to allow authorization code access using this client.
+            Defaults to false.
 
         Returns
         -------
         RestObj
 
         """
-
         scopes = set() if scopes is None else set(scopes)
 
         # Include default scopes depending on allowed grant types
         if allow_password or allow_auth_code:
-            scopes.add('openid')
+            scopes.add("openid")
         elif allow_client_secret:
-            scopes.add('uaa.none')
+            scopes.add("uaa.none")
         else:
             raise ValueError("At least one authentication method must be allowed.")
 
-        redirect_uri = redirect_uri or 'urn:ietf:wg:oauth:2.0:oob'
+        redirect_uri = redirect_uri or "urn:ietf:wg:oauth:2.0:oob"
 
         grant_types = set()
         if allow_auth_code:
-            grant_types.update(['authorization_code', 'refresh_token'])
+            grant_types.update(["authorization_code", "refresh_token"])
         if allow_client_secret:
-            grant_types.add('client_credentials')
+            grant_types.add("client_credentials")
         if allow_password:
-            grant_types.update(['password', 'refresh_token'])
+            grant_types.update(["password", "refresh_token"])
 
         data = {
-            'client_id': client_id,
-            'client_secret': client_secret,
-            'scope': list(scopes),
-            'authorized_grant_types': list(grant_types),
-            'redirect_uri': redirect_uri,
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "scope": list(scopes),
+            "authorized_grant_types": list(grant_types),
+            "redirect_uri": redirect_uri,
         }
 
         # Use access token to define a new client, along with client secret & allowed authorization types (auth code)
-        response = cls.post('/oauth/clients', json=data)  # , format_='response')
+        response = cls.post("/oauth/clients", json=data)
 
         return response
 
@@ -121,7 +127,7 @@ class SASLogon(Service):
         id_ = client.get("client_id") if isinstance(client, dict) else str(client)
 
         try:
-            return cls.delete(f'/oauth/clients/{id_}')
+            return cls.delete(f"/oauth/clients/{id_}")
         except HTTPError as e:
             if e.code == 404:
                 raise ValueError(f"Client with ID '{id_}' not found.") from e
@@ -141,7 +147,7 @@ class SASLogon(Service):
         RestObj or None
 
         """
-        return cls.get(f'/oauth/clients/{client_id}')
+        return cls.get(f"/oauth/clients/{client_id}")
 
     @classmethod
     def list_clients(cls, start_index=None, count=None, descending=False):
@@ -171,7 +177,7 @@ class SASLogon(Service):
         if descending:
             params["sortOrder"] = "descending"
 
-        results = cls.get('/oauth/clients', params=params)
+        results = cls.get("/oauth/clients", params=params)
 
         if results is None:
             return []

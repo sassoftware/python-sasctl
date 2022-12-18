@@ -72,7 +72,8 @@ def _redact(pattern, repl, string):
 
 def _filter_password(r):
     if hasattr(r, "body") and r.body is not None:
-        # Filter password from 'grant_type=password&username=<user>&password=<password>' during Post to SASLogon service.
+        # Filter password from string during Post to SASLogon service e.g.
+        # 'grant_type=password&username=<user>&password=<password>'
         r.body = _redact(r"(?<=&password=)([^&]*)\b", "*****", r.body)
 
         # Filter client secret {"client_secret": "<password>"}
@@ -863,7 +864,7 @@ class Session(requests.Session):
 
         # Add port if a non-standard port was specified
         if self._settings["port"] is not None and ":" not in domain:
-            domain = "{}:{}".format(domain, self._settings["port"])
+            domain = f"{domain}:{self._settings['port']}"
 
         return urlunsplit(
             [
@@ -939,10 +940,10 @@ class Session(requests.Session):
             )
 
         client_id_provided = (
-            client_id is not None or os.getenv('SASCTL_CLIENT_ID') is not None
+            client_id is not None or os.getenv("SASCTL_CLIENT_ID") is not None
         )
         client_secret_provided = (
-            client_secret is not None or os.getenv('SASCTL_CLIENT_SECRET') is not None
+            client_secret is not None or os.getenv("SASCTL_CLIENT_SECRET") is not None
         )
 
         # Attempt authentication with just client credentials
@@ -1062,14 +1063,15 @@ class Session(requests.Session):
 
             if flags != "600":
                 raise RuntimeError(
-                    "Unable to read profile cache.  "
-                    "The file permissions for %s must be configured so that only the file owner has "
-                    "read/write permissions (equivalent to 600 on Linux systems)."
-                    % yaml_file
+                    f"Unable to read profile cache.  The file permissions for {yaml_file} "
+                    f"must be configured so that only the file owner has "
+                    f"read/write permissions (equivalent to 600 on Linux systems)."
                 )
 
             with open(yaml_file) as f:
-                return yaml.load(f, Loader=yaml.FullLoader)
+                return yaml.safe_load(f)
+
+        return None
 
     def _request_token_with_consul(self, consul_token, client_id=None):
         """Request an OAuth token from Consul.
@@ -1093,12 +1095,12 @@ class Session(requests.Session):
             If unable to retrieve an access token for any reason.
 
         """
-        client_id = client_id or ''
+        client_id = client_id or ""
 
-        headers = {'X-Consul-Token': consul_token}
-        params = {'callback': False, 'serviceId': client_id}
+        headers = {"X-Consul-Token": consul_token}
+        params = {"callback": False, "serviceId": client_id}
 
-        url = self._build_url(f"/SASLogon/oauth/clients/consul")
+        url = self._build_url("/SASLogon/oauth/clients/consul")
         response = super(Session, self).post(
             url,
             headers=headers,
@@ -1235,21 +1237,27 @@ class Session(requests.Session):
         Parameters
         ----------
         username : str, optional
-            Username of the user in SAS Viya.  Required for password authentication flow.
+            Username of the user in SAS Viya.  Required for password
+            authentication flow.
         password : str, optional
-            Password of the user in SAS Viya.  Required for password authentication flow.
+            Password of the user in SAS Viya.  Required for password
+            authentication flow.
         client_id : str, optional
-            Client ID of a client registered with SAS Viya.  Required for client credentials flow, but will use
-            a default client ID if not provided during password or authorization code flows.
+            Client ID of a client registered with SAS Viya.  Required for
+            client credentials flow, but will use
+            a default client ID if not provided during password or
+            authorization code flows.
         client_secret : str, optional
-            Client secret of a client registered with SAS Viya.  Required for client credentials flow, but will use
-            a default if not provided during password or authorization code flows.
+            Client secret of a client registered with SAS Viya.  Required
+            for client credentials flow, but will use a default if not
+            provided during password or authorization code flows.
         auth_code : str, optional
-            An authorization code obtained by the user after authenticating with SAS Viya.  Required for authorization
+            An authorization code obtained by the user after
+            authenticating with SAS Viya.  Required for authorization
             code flow.
         refresh_token : str, optional
-            A refresh token obtained during a previous authorization request.  Required if requesting a refreshed
-            access token.
+            A refresh token obtained during a previous authorization
+            request.  Required if requesting a refreshed access token.
 
         Returns
         -------
@@ -1261,10 +1269,12 @@ class Session(requests.Session):
             If no valid parameter combination is provided.
 
         RuntimeError
-            If the requested grant type is not allowed for the given `client_id`.
+            If the requested grant type is not allowed for the given
+            `client_id`.
 
         AuthenticationError
-            For invalid username/password combination or invalid client id/secret combination.
+            For invalid username/password combination or invalid
+            client id/secret combination.
 
         AuthorizationError
             If authorization code is invalid or if refresh token is expired.
@@ -1276,11 +1286,13 @@ class Session(requests.Session):
             If there's an issue establishing a connection with the server.
 
         """
-        client_id = client_id or os.getenv('SASCTL_CLIENT_ID', 'sas.ec')
-        client_secret = client_secret or os.getenv('SASCTL_CLIENT_SECRET', '')
+        client_id = client_id or os.getenv("SASCTL_CLIENT_ID", "sas.ec")
+        client_secret = client_secret or os.getenv("SASCTL_CLIENT_SECRET", "")
 
-        # Order in which parameters are checked is important.  Passing client credentials could indicate password, auth
-        # code, or client credential authentication.  Only use client credential flow if first two are ruled out.
+        # Order in which parameters are checked is important.  Passing client
+        # credentials could indicate password, auth code, or client credential
+        # authentication.  Only use client credential flow if first two are
+        # ruled out.
         if username:
             anchor = "#password"
             data = {
@@ -1288,7 +1300,7 @@ class Session(requests.Session):
                 "username": username,
                 "password": password,
             }
-            logger.debug(f"Attempting password authentication as user '{username}'.")
+            logger.debug("Attempting password authentication as user '%s'.", username)
         elif auth_code:
             anchor = "#authorization_code"
             data = {"grant_type": "authorization_code", "code": auth_code}
@@ -1297,7 +1309,7 @@ class Session(requests.Session):
             anchor = "#client_credentials"
             data = {"grant_type": "client_credentials"}
             logger.debug(
-                f"Attempting client credential authentication as client '{client_id}'."
+                "Attempting client credential authentication as client '%s'.", client_id
             )
         elif refresh_token:
             anchor = ""
@@ -1322,8 +1334,9 @@ class Session(requests.Session):
         try:
             data = response.json()
         except json.JSONDecodeError:
-            # A valid response (and some HTTP errors) should contain valid JSON.  In the extremely unlikely event that
-            # an HTTP error is returned that doesn't include JSON (e.g. HTTP 404) just raise the HTTP error.
+            # A valid response (and some HTTP errors) should contain valid JSON.  In
+            # the extremely unlikely event that an HTTP error is returned that doesn't
+            # include JSON (e.g. HTTP 404) just raise the HTTP error.
             response.raise_for_status()
 
         # If request failed for a known reason, raise a user-friendly error message.
@@ -1336,21 +1349,21 @@ class Session(requests.Session):
                 )
 
         if response.status_code == 401:
-            # Response is the same if either username/password or client id/secret is invalid
-            # Example: '{"error":"unauthorized","error_description":"Bad credentials"}'
+            # Response is the same if either username/password or client id/secret is
+            # invalid ('{"error":"unauthorized","error_description":"Bad credentials"}')
             # We're assuming that if a username was provided, that's probably the problem.
-            # NOTE: this does mean that valid credentials with incorrectly set client id & secret results in an error
-            #       message that blames the username/password.
+            # NOTE: this does mean that valid credentials with incorrectly set client
+            #       id & secret results in an error message that blames the username
+            #       and password combination.
             if "bad credentials" in data.get("error_description", "").lower():
                 if username is not None:
                     raise exceptions.AuthenticationError(username)
-                else:
-                    raise exceptions.AuthenticationError(
-                        msg="Invalid client id or secret."
-                    )
 
-            # If client used is not allowed to authenticate using the requested method an error is returned.
-            # Example: '{"error":"invalid_client","error_description":"Unauthorized grant type: password"}'
+                raise exceptions.AuthenticationError(msg="Invalid client id or secret.")
+
+            # If client used is not allowed to authenticate using the requested method
+            # an error is returned.  Example:
+            # '{"error":"invalid_client","error_description":"Unauthorized grant type: password"}'
             if "unauthorized grant type" in data.get("error_description", "").lower():
                 raise RuntimeError(data["error_description"])
 
