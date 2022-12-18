@@ -13,8 +13,8 @@ from sasctl import current_session
 from sasctl.core import RestObj
 
 
-with mock.patch('sasctl.core.Session._get_authorization_token'):
-    current_session('example.com', 'username', 'password')
+with mock.patch("sasctl.core.Session._get_authorization_token"):
+    current_session("example.com", "username", "password")
 
 
 def test_create_python_module():
