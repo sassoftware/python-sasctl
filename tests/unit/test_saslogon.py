@@ -21,16 +21,16 @@ from sasctl.services import saslogon
 # HTTPError raised if insufficient privileges (if auto parsed and not admin)
 #  HTTP Error 403: {"error":"insufficient_scope","error_description":"Insufficient scope for this resource","scope":"uaa.admin clients.write clients.admin zones.uaa.admin"}
 
-CLIENT_ID = 'SirRobin'
-CLIENT_SECRET = 'CapitalOfAssyriaIsAssur'
+CLIENT_ID = "SirRobin"
+CLIENT_SECRET = "CapitalOfAssyriaIsAssur"
 
 
 # Set the current session to a dummy session
-with mock.patch('sasctl.core.Session._get_authorization_token'):
-    current_session('example.com', 'username', 'password')
+with mock.patch("sasctl.core.Session._get_authorization_token"):
+    current_session("example.com", "username", "password")
 
 
-@mock.patch('sasctl.core.requests.Session.request')
+@mock.patch("sasctl.core.requests.Session.request")
 def test_create_client_password_auth(post):
     """Verify correct HTTP request when creating a client allowing password authentication."""
 
@@ -64,7 +64,7 @@ def test_create_client_password_auth(post):
     assert result["scope"] == ["uaa.none"]
 
 
-@mock.patch('sasctl.core.requests.Session.request')
+@mock.patch("sasctl.core.requests.Session.request")
 def test_create_client_unauthorized(post):
     """Creating a client without sufficient permissions should raise an HTTPError."""
 
@@ -87,7 +87,7 @@ def test_create_client_unauthorized(post):
     assert args[1].endswith("/SASLogon/oauth/clients")
 
 
-@mock.patch('sasctl.core.requests.Session.request')
+@mock.patch("sasctl.core.requests.Session.request")
 def test_delete_client_success(req):
     """Successful deletion should return deleted client info."""
 
@@ -115,7 +115,7 @@ def test_delete_client_success(req):
         assert CLIENT[k] == result[k]
 
 
-@mock.patch('sasctl.core.requests.Session.request')
+@mock.patch("sasctl.core.requests.Session.request")
 def test_delete_client_not_found(req):
     """ValueError should be raised if client id is not found."""
 
@@ -132,7 +132,7 @@ def test_delete_client_not_found(req):
     assert args[1].endswith(f"/SASLogon/oauth/clients/{CLIENT_ID}")
 
 
-@mock.patch('sasctl.core.requests.Session.request')
+@mock.patch("sasctl.core.requests.Session.request")
 def test_list_clients(req):
     """Should return a list of RestObjs containing client details."""
     CLIENTS = [
@@ -157,9 +157,9 @@ def test_list_clients(req):
 
     assert args[0] == "get"
     assert args[1].endswith("/SASLogon/oauth/clients")
-    assert args[2]['startIndex'] == 5
-    assert args[2]['sortOrder'] == 'descending'
-    assert args[2]['count'] == 10
+    assert args[2]["startIndex"] == 5
+    assert args[2]["sortOrder"] == "descending"
+    assert args[2]["count"] == 10
 
     assert isinstance(results, list)
     assert results == CLIENTS
