@@ -2,13 +2,14 @@ Unreleased
 ----------
  -
  
-v1.8.0 (2022-12-16)
+v1.8.0 (2022-12-19)
 -------------------
 **Improvements**
  - Added `Session.version_info()` to check which version of Viya the session is connected to.
-  - Updated the `properties=` parameter of `model_repository.create_model()` to accept a dictionary containing
+ - Updated the `properties=` parameter of `model_repository.create_model()` to accept a dictionary containing
    custom property names and values, and to correctly indicate their type (numeric, string, date, datetime) when
    passing the values to Viya.
+ - Added `services.saslogon` for creating and removing OAuth clients.
 
 **Changes**
  - Deprecated `core.platform_version()` in favor of `Session.version_info()`.
@@ -16,13 +17,15 @@ v1.8.0 (2022-12-16)
    text_categorization, and text_parsing)
  - Replaced the JSON cassettes used for testing with compressed binary cassettes to save space.
  - Updated the testing framework to allow regression testing of multiple Viya versions.
+ - Refactored the authentication functionality in `Session` to be more clear and less error prone.  Relevant
+   functions were also made private to reduce clutter in the class's public interface.
 
 **Bugfixes**
  - Fixed an issue with `register_model()` that caused invalid SAS score code to be generated when registering an
    ASTORE model in Viya 3.5.
  - Fixed a bug where calling a "get_item()" function and passing `None` would throw an error on most services instead
    of returning `None`. 
-   
+ - Fixed a bug that caused the authentication flow to be interrupted if Kerberos was missing.
  
 v1.7.3 (2022-09-20)
 -------------------
