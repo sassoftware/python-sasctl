@@ -12,7 +12,8 @@ from sasctl.services import microanalytic_score as mas
 from sasctl import current_session
 from sasctl.core import RestObj
 
-with mock.patch("sasctl.core.Session.get_auth"):
+
+with mock.patch("sasctl.core.Session._get_authorization_token"):
     current_session("example.com", "username", "password")
 
 
