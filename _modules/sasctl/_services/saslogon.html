@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sasctl._services.saslogon &#8212; sasctl 1.8.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">sasctl</a></h1>
+
+
+
+<p class="blurb">Python package and CLI for user-friendly integration with SAS Viya</p>
+
+
+
+
+
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">sasctl</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/sasctl.html">sasctl package</a></li>
+</ul>
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for sasctl._services.saslogon</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># encoding: utf-8</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright © 2022, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
+<span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
+
+<span class="sd">&quot;&quot;&quot;The SAS Logon service provides standard OAuth endpoints for client management.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+<span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
+
+
+<div class="viewcode-block" id="SASLogon"><a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon">[docs]</a><span class="k">class</span> <span class="nc">SASLogon</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The SAS Logon service client management related endpoints.</span>
+
+<span class="sd">    Provides functionality for managing client IDs and secrets  This class</span>
+<span class="sd">    is somewhat different from the other Service classes because many of</span>
+<span class="sd">    the operations on the associated SA SLogon REST service are related to</span>
+<span class="sd">    authentication.  In sasctl all authentication is handled in the</span>
+<span class="sd">    `Session` class, so only the operations that are not related to</span>
+<span class="sd">    authentication are implemented here.</span>
+
+<span class="sd">    The operations provided by this service are only accessible to users</span>
+<span class="sd">    with administrator permissions.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;/SASLogon&quot;</span>
+
+<div class="viewcode-block" id="SASLogon.create_client"><a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.create_client">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create_client</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">client_id</span><span class="p">,</span>
+        <span class="n">client_secret</span><span class="p">,</span>
+        <span class="n">scopes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">redirect_uri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">allow_password</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">allow_client_secret</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">allow_auth_code</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Register a new client with the SAS Viya environment.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        client_id : str</span>
+<span class="sd">            The ID to be assigned to the client.</span>
+<span class="sd">        client_secret : str</span>
+<span class="sd">            The client secret used for authentication.</span>
+<span class="sd">        scopes : list of string, optional</span>
+<span class="sd">            Specifies the levels of access that the client will be able to</span>
+<span class="sd">            obtain on behalf of users when not using client credential</span>
+<span class="sd">            authentication.  If `allow_password` or `allow_auth_code` are</span>
+<span class="sd">            true, the &#39;openid&#39; scope will also be included.  This is used</span>
+<span class="sd">            to assert the identity of the user that the client is acting on</span>
+<span class="sd">            behalf of.  For clients that only use client credential</span>
+<span class="sd">            authentication and therefore do not act on behalf of users,</span>
+<span class="sd">            the &#39;uaa.none&#39; scope will automatically be included.</span>
+<span class="sd">        redirect_uri : str, optional</span>
+<span class="sd">            The allowed URI pattern for redirects during authorization.</span>
+<span class="sd">            Defaults to &#39;urn:ietf:wg:oauth:2.0:oob&#39;.</span>
+<span class="sd">        allow_password : bool, optional</span>
+<span class="sd">            Whether to allow username &amp; password authentication with this</span>
+<span class="sd">            client.  Defaults to false.</span>
+<span class="sd">        allow_client_secret : bool</span>
+<span class="sd">            Whether to allow authentication using just the client ID and</span>
+<span class="sd">            client secret.  Defaults to false.</span>
+<span class="sd">        allow_auth_code : bool, optional</span>
+<span class="sd">            Whether to allow authorization code access using this client.</span>
+<span class="sd">            Defaults to false.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scopes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span> <span class="k">if</span> <span class="n">scopes</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">set</span><span class="p">(</span><span class="n">scopes</span><span class="p">)</span>
+
+        <span class="c1"># Include default scopes depending on allowed grant types</span>
+        <span class="k">if</span> <span class="n">allow_password</span> <span class="ow">or</span> <span class="n">allow_auth_code</span><span class="p">:</span>
+            <span class="n">scopes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;openid&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">allow_client_secret</span><span class="p">:</span>
+            <span class="n">scopes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;uaa.none&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;At least one authentication method must be allowed.&quot;</span><span class="p">)</span>
+
+        <span class="n">redirect_uri</span> <span class="o">=</span> <span class="n">redirect_uri</span> <span class="ow">or</span> <span class="s2">&quot;urn:ietf:wg:oauth:2.0:oob&quot;</span>
+
+        <span class="n">grant_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">allow_auth_code</span><span class="p">:</span>
+            <span class="n">grant_types</span><span class="o">.</span><span class="n">update</span><span class="p">([</span><span class="s2">&quot;authorization_code&quot;</span><span class="p">,</span> <span class="s2">&quot;refresh_token&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">allow_client_secret</span><span class="p">:</span>
+            <span class="n">grant_types</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;client_credentials&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">allow_password</span><span class="p">:</span>
+            <span class="n">grant_types</span><span class="o">.</span><span class="n">update</span><span class="p">([</span><span class="s2">&quot;password&quot;</span><span class="p">,</span> <span class="s2">&quot;refresh_token&quot;</span><span class="p">])</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="n">client_id</span><span class="p">,</span>
+            <span class="s2">&quot;client_secret&quot;</span><span class="p">:</span> <span class="n">client_secret</span><span class="p">,</span>
+            <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">scopes</span><span class="p">),</span>
+            <span class="s2">&quot;authorized_grant_types&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">grant_types</span><span class="p">),</span>
+            <span class="s2">&quot;redirect_uri&quot;</span><span class="p">:</span> <span class="n">redirect_uri</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Use access token to define a new client, along with client secret &amp; allowed</span>
+        <span class="c1"># authorization types (auth code)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/oauth/clients&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span></div>
+
+<div class="viewcode-block" id="SASLogon.delete_client"><a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.delete_client">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">delete_client</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">client</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove and existing client.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        client : str or RestObj</span>
+<span class="sd">            The client ID or a RestObj containing the client details.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+<span class="sd">            The deleted client</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `client` is not found.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">id_</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;client_id&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/oauth/clients/</span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Client with ID &#39;</span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s2">&#39; not found.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+            <span class="k">raise</span></div>
+
+<div class="viewcode-block" id="SASLogon.get_client"><a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.get_client">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_client</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">client_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve information about a specific client</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        client_id : str</span>
+<span class="sd">            The id of the client.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj or None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/oauth/clients/</span><span class="si">{</span><span class="n">client_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SASLogon.list_clients"><a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.list_clients">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">list_clients</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">start_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve a details of multiple clients.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        start_index : int, optional</span>
+<span class="sd">            Index of first client to return.  Defaults to 1.</span>
+<span class="sd">        count : int, optiona;</span>
+<span class="sd">            Number of clients to retrieve.  Defaults to 100.</span>
+<span class="sd">        descending : bool, optional</span>
+<span class="sd">            Whether to clients should be returned in descending order.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list of dict</span>
+<span class="sd">            Each dict contains details for a single client.  If no</span>
+<span class="sd">            clients were found and empty list is returned.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">start_index</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;startIndex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">count</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">descending</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sortOrder&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;descending&quot;</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/oauth/clients&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">results</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="c1"># Response does not conform to format expected by PagedList (items</span>
+        <span class="c1"># under an &#39;items&#39; property and a URL to request additional items).</span>
+        <span class="c1"># Instead, just return the raw list.</span>
+        <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;resources&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SASLogon.update_client_secret"><a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.update_client_secret">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">update_client_secret</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">secret</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        client : str or RestObj</span>
+<span class="sd">            The client ID or a RestObj containing the client details.</span>
+<span class="sd">        secret : str</span>
+<span class="sd">            The new client secret.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `client` is not found.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">id_</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;client_id&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;secret&quot;</span><span class="p">:</span> <span class="n">secret</span><span class="p">}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Ignoring response ({&quot;status&quot;: &quot;ok&quot;, &quot;message&quot;: &quot;secret updated&quot;})</span>
+            <span class="n">_</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/oauth/clients/</span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s2">/secret&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Client with ID &#39;</span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s2">&#39; not found.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+            <span class="k">raise</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;('Copyright © 2019, SAS Institute Inc., ', 'Cary, NC, USA.  All Rights Reserved.').
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

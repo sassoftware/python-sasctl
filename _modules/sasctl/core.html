@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.core &#8212; sasctl 1.7.3 documentation</title>
+    <title>sasctl.core &#8212; sasctl 1.8.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -13,6 +13,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -79,7 +80,6 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">ssl</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span><span class="p">,</span> <span class="n">uuid4</span>
@@ -165,7 +165,7 @@
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;headers&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;X-Consul-Token&quot;</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">headers</span><span class="p">:</span>
         <span class="n">r</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;X-Consul-Token&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;[redacted]&quot;</span>
 
-    <span class="c1"># Redact &quot;access_token&quot;:&quot;&lt;token&gt;&quot; in response from Logon service</span>
+    <span class="c1"># Redact &quot;access_token&quot;:&quot;&lt;token&gt;&quot; in response from SASLogon service</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;_content&quot;</span><span class="p">):</span>
         <span class="n">r</span><span class="o">.</span><span class="n">_content</span> <span class="o">=</span> <span class="n">_redact</span><span class="p">(</span><span class="s1">&#39;(?&lt;=access_token&quot;:&quot;)[^&quot;]*&#39;</span><span class="p">,</span> <span class="s2">&quot;[redacted]&quot;</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">_content</span><span class="p">)</span>
 
@@ -231,7 +231,7 @@
         <span class="n">refresh_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">expiration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">expires_in</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">access_token</span> <span class="o">=</span> <span class="n">access_token</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">refresh_token</span> <span class="o">=</span> <span class="n">refresh_token</span>
@@ -327,6 +327,13 @@
 <span class="sd">        to true.  Ignored for HTTP connections.</span>
 <span class="sd">    token : str, optional</span>
 <span class="sd">        OAuth token to use for authorization.</span>
+<span class="sd">    client_id : str, optional</span>
+<span class="sd">        Client ID requesting access.  Use if connection to Viya should be</span>
+<span class="sd">        made using `client_credentials` method.</span>
+<span class="sd">    client_secret : str, optional</span>
+<span class="sd">        Client secret for client requesting access. Required if `client_id`</span>
+<span class="sd">        is provided.</span>
+
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -352,6 +359,9 @@
         <span class="n">port</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">verify_ssl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">client_secret</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">consul_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
@@ -440,7 +450,7 @@
             <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="n">password</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">password</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">client_secret</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Try to get credentials from .authinfo or .netrc files.</span>
             <span class="c1"># If no file path was specified, the default locations will</span>
             <span class="c1"># be checked.</span>
@@ -448,35 +458,48 @@
                 <span class="n">auth</span> <span class="o">=</span> <span class="n">swat</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">authinfo</span><span class="o">.</span><span class="n">query_authinfo</span><span class="p">(</span>
                     <span class="n">domain</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">authinfo</span>
                 <span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">auth</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
                 <span class="c1"># If swat package or authinfo module not available</span>
                 <span class="k">pass</span>
 
             <span class="c1"># Not able to load credentials using SWAT.  Try Netrc.</span>
-            <span class="c1"># TODO: IF a username was specified, verify that the credentials</span>
-            <span class="c1">#       found are for that username.</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">parser</span> <span class="o">=</span> <span class="n">netrc</span><span class="o">.</span><span class="n">netrc</span><span class="p">(</span><span class="n">authinfo</span><span class="p">)</span>
                     <span class="n">values</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">authenticators</span><span class="p">(</span><span class="n">domain</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">values</span><span class="p">:</span>
-                        <span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],</span>
-                            <span class="n">_</span><span class="p">,</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">],</span>
-                        <span class="p">)</span> <span class="o">=</span> <span class="n">values</span>
+                        <span class="n">found_user</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">found_pass</span> <span class="o">=</span> <span class="n">values</span>
+
+                        <span class="c1"># Only use the credentials if they match the specified user (if</span>
+                        <span class="c1"># one was specified).</span>
+                        <span class="k">if</span> <span class="n">username</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">username</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">found_user</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">found_user</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">found_pass</span>
                 <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">IOError</span><span class="p">):</span>
                     <span class="k">pass</span>  <span class="c1"># netrc throws if $HOME is not set</span>
 
         <span class="c1"># Set this prior authentication attempts</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verify</span> <span class="o">=</span> <span class="n">verify_ssl</span>
 
-        <span class="c1"># Find a suitable authentication mechanism and build an auth header</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_auth</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">],</span> <span class="n">token</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">consul_token</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_token_with_consul</span><span class="p">(</span>
+                <span class="n">consul_token</span><span class="p">,</span> <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Find a suitable authentication mechanism and build an auth header</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_authorization_token</span><span class="p">(</span>
+                <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
+                <span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+                <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">],</span>
+                <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span>
+                <span class="n">client_secret</span><span class="o">=</span><span class="n">client_secret</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Used to cache version info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_version_info</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Used for context manager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_old_session</span> <span class="o">=</span> <span class="n">current_session</span><span class="p">()</span>
@@ -701,7 +724,7 @@
                 <span class="c1"># Access token expired, need to refresh it (if we can)</span>
                 <span class="k">if</span> <span class="s2">&quot;access token expired&quot;</span> <span class="ow">in</span> <span class="n">auth_header</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_oauth_token</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_token_with_oauth</span><span class="p">(</span>
                             <span class="n">refresh_token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">refresh_token</span>
                         <span class="p">)</span>
 
@@ -752,191 +775,6 @@
 
 <div class="viewcode-block" id="Session.delete"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Session.get_auth"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.get_auth">[docs]</a>    <span class="k">def</span> <span class="nf">get_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Attempt to authenticate with the Viya environment.</span>
-
-<span class="sd">        If `username` and `password` or `token` are provided, they will be used exclusively.  If neither of these</span>
-<span class="sd">        is specified, Kerberos authorization will be attempted.  If this fails, authorization using an</span>
-<span class="sd">        OAuth2 authorization code will be attempted.  Be aware that this requires prompting the user for input and</span>
-<span class="sd">        should NOT be used in a non-interactive session.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        username : str, optional</span>
-<span class="sd">            Username to use for authentication.</span>
-<span class="sd">        password : str, optional</span>
-<span class="sd">            Password to use for authentication.  Required if `username` is provided.</span>
-<span class="sd">        token : str, optional</span>
-<span class="sd">            An existing OAuth2 access token to use.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        OAuth2Token</span>
-<span class="sd">            Authorization header to use with requests to the evironent</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># If explicit username &amp; password were provided, use them.</span>
-        <span class="k">if</span> <span class="n">username</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">password</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_oauth_token</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
-
-        <span class="c1"># If an existing access token was provided, use it</span>
-        <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">OAuth2Token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-
-        <span class="c1"># Kerberos doesn&#39;t require any interruption to the user, so try that first if username/password</span>
-        <span class="c1"># were not provided.</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_token_with_kerberos</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">OAuth2Token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Failed to connect with Kerberos&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Try loading cached credentials</span>
-        <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_cached_token</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PROFILE_PATH</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">token</span>
-
-        <span class="c1"># If we got this far, then no password and no kerberos.  Try prompting the user for an authorization code.</span>
-        <span class="n">auth_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prompt_for_auth_code</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_oauth_token</span><span class="p">(</span><span class="n">auth_code</span><span class="o">=</span><span class="n">auth_code</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Session.get_oauth_token"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.get_oauth_token">[docs]</a>    <span class="k">def</span> <span class="nf">get_oauth_token</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">auth_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">refresh_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">client_secret</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Request an OAuth2 access token using either a username &amp; password or an auth token.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        username : str, optional</span>
-<span class="sd">            Username to use for authentication.</span>
-<span class="sd">        password : str, optional</span>
-<span class="sd">            Password to use for authentication.  Required if `username` is provided.</span>
-<span class="sd">        auth_code : str, optional</span>
-<span class="sd">            Authorization code to use.</span>
-<span class="sd">        refresh_token : str, optinoal</span>
-<span class="sd">            Valid refresh token to use.</span>
-<span class="sd">        client_id : str, optional</span>
-<span class="sd">            Client ID requesting access.  Use if connection to Viya should be made using a non-default client id.</span>
-<span class="sd">        client_secret : str, optional</span>
-<span class="sd">            Client secret for client requesting access.  Required if `client_id` is provided</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        OAuth2Token</span>
-
-<span class="sd">        See Also</span>
-<span class="sd">        --------</span>
-<span class="sd">        :meth:`Session.prompt_for_auth_code`</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="n">username</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span>
-                <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="n">password</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="k">elif</span> <span class="n">auth_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="s2">&quot;authorization_code&quot;</span><span class="p">,</span> <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="n">auth_code</span><span class="p">}</span>
-        <span class="k">elif</span> <span class="n">refresh_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="s2">&quot;refresh_token&quot;</span><span class="p">,</span> <span class="s2">&quot;refresh_token&quot;</span><span class="p">:</span> <span class="n">refresh_token</span><span class="p">}</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Either username and password or auth_code parameters must be specified.&quot;</span>
-            <span class="p">)</span>
-
-        <span class="n">client_id</span> <span class="o">=</span> <span class="n">client_id</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SASCTL_CLIENT_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;sas.ec&quot;</span><span class="p">)</span>
-        <span class="n">client_secret</span> <span class="o">=</span> <span class="n">client_secret</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SASCTL_CLIENT_SECRET&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-
-        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/x-www-form-urlencoded&quot;</span><span class="p">,</span>
-        <span class="p">}</span>
-
-        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_url</span><span class="p">(</span><span class="s2">&quot;/SASLogon/oauth/token&quot;</span><span class="p">)</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-            <span class="n">url</span><span class="p">,</span>
-            <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
-            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-            <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">),</span>
-            <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verify</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="c1"># Raise user-friendly error messages if issue is known</span>
-        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span> <span class="ow">and</span> <span class="n">auth_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">j</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-            <span class="k">if</span> <span class="s2">&quot;Invalid authorization code&quot;</span> <span class="ow">in</span> <span class="n">j</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;error_description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthorizationError</span><span class="p">(</span>
-                    <span class="s2">&quot;Invalid authorization code: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">auth_code</span>
-                <span class="p">)</span>
-        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;error_description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;bad credentials&quot;</span>
-                <span class="ow">and</span> <span class="n">username</span> <span class="ow">is</span> <span class="kc">None</span>
-            <span class="p">):</span>
-                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthenticationError</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Invalid client id or secret.&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;invalid_token&quot;</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthorizationError</span><span class="p">(</span>
-                    <span class="s2">&quot;Refresh token is incorrect, expired, or revoked.&quot;</span>
-                <span class="p">)</span>
-            <span class="k">if</span> <span class="n">username</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthenticationError</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
-
-        <span class="n">r</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-
-        <span class="n">token</span> <span class="o">=</span> <span class="n">OAuth2Token</span><span class="p">(</span><span class="o">**</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
-
-        <span class="c1"># No reason to cache token if username &amp; password were provided - they&#39;d just be re-provided on future</span>
-        <span class="c1"># connections.  Cache for auth code &amp; refresh token to prevent frequent interruptions for the user.</span>
-        <span class="k">if</span> <span class="n">username</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cache_token</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PROFILE_PATH</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">token</span></div>
-
-<div class="viewcode-block" id="Session.prompt_for_auth_code"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.prompt_for_auth_code">[docs]</a>    <span class="k">def</span> <span class="nf">prompt_for_auth_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Prompt the user open a URL to generate an auth code.</span>
-
-<span class="sd">        Note that this halts program execution until input is received and should only be used for interactive sessions.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        client_id : str, optional</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        str</span>
-<span class="sd">            Authorization code that can be used to acquire an OAuth2 access token.</span>
-
-<span class="sd">        See Also</span>
-<span class="sd">        --------</span>
-<span class="sd">        :meth:`Session.get_oauth_token`</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">client_id</span> <span class="o">=</span> <span class="n">client_id</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SASCTL_CLIENT_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;sas.ec&quot;</span><span class="p">)</span>
-
-        <span class="c1"># User must open this URL in a browser and then enter the auth code that&#39;s generated.</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_build_url</span><span class="p">(</span><span class="s2">&quot;/SASLogon/oauth/authorize&quot;</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot;?response_type=code&amp;client_id=&quot;</span>
-            <span class="o">+</span> <span class="n">client_id</span>
-        <span class="p">)</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Please use a web browser to login at the following URL to get your authorization code:</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="o">+</span> <span class="n">url</span>
-        <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-        <span class="n">auth_code</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Authorization Code:&quot;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">auth_code</span></div>
 
 <div class="viewcode-block" id="Session.cache_token"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.cache_token">[docs]</a>    <span class="k">def</span> <span class="nf">cache_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write an OAuth2 token to the cache.</span>
@@ -1027,7 +865,9 @@
                 <span class="c1"># Attempt to refresh if cached token has expired</span>
                 <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">is_expired</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
-                        <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_oauth_token</span><span class="p">(</span><span class="n">refresh_token</span><span class="o">=</span><span class="n">token</span><span class="o">.</span><span class="n">refresh_token</span><span class="p">)</span>
+                        <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_token_with_oauth</span><span class="p">(</span>
+                            <span class="n">refresh_token</span><span class="o">=</span><span class="n">token</span><span class="o">.</span><span class="n">refresh_token</span>
+                        <span class="p">)</span>
                     <span class="k">except</span> <span class="p">(</span>
                         <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthorizationError</span><span class="p">,</span>
                         <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">,</span>
@@ -1038,23 +878,362 @@
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">is_expired</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">token</span></div>
 
-    <span class="k">def</span> <span class="nf">_get_token_with_kerberos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Authenticate with a Kerberos ticket.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Session.version_info"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.version_info">[docs]</a>    <span class="k">def</span> <span class="nf">version_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get version information from the connected SAS Viya environment</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        VersionInfo</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The resulting version information is cached and returned on any subsequent calls.  This</span>
+<span class="sd">        allows repeatedly checking version information without making redundant network calls to the</span>
+<span class="sd">        SAS Viya server.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The Viya environment isn&#39;t changing, so there&#39;s no need to repeatedly make</span>
+        <span class="c1"># service calls to check version information.  If we&#39;ve already cached the info</span>
+        <span class="c1"># then just return it.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version_info</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version_info</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Try to determine if we&#39;re talking to Viya 3 or 4</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/licenses/grants&quot;</span><span class="p">)</span>
+            <span class="n">release</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;release&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Convert &#39;V03&#39; and &#39;V04&#39; to just 3 or 4.</span>
+            <span class="n">major_version</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">release</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;V&quot;</span><span class="p">))</span>
+
+            <span class="c1"># No good way to get detailed version info from a Viya 3 environment.</span>
+            <span class="c1"># At this point, we just assume it&#39;s Viya 3.5 and return</span>
+            <span class="k">if</span> <span class="n">major_version</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_version_info</span> <span class="o">=</span> <span class="n">VersionInfo</span><span class="p">(</span><span class="n">major_version</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Endpoint with detailed release info only available for Viya 4</span>
+                <span class="n">cadence_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/deploymentData/cadenceVersion&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">cadence_info</span><span class="p">[</span><span class="s2">&quot;cadenceName&quot;</span><span class="p">]</span>
+                <span class="n">release</span> <span class="o">=</span> <span class="n">cadence_info</span><span class="p">[</span><span class="s2">&quot;cadenceVersion&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_version_info</span> <span class="o">=</span> <span class="n">VersionInfo</span><span class="p">(</span>
+                    <span class="n">major_version</span><span class="p">,</span> <span class="n">cadence</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="n">release</span>
+                <span class="p">)</span>
+        <span class="k">except</span> <span class="n">HTTPError</span><span class="p">:</span>
+            <span class="c1"># Ignore.  We&#39;ll return None and (possibly) replace with correct info on subsequent call.</span>
+            <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version_info</span></div>
+
+    <span class="k">def</span> <span class="nf">_build_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Build a complete URL from a path by substituting in session parameters.&quot;&quot;&quot;</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="n">urlsplit</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="n">domain</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">netloc</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;domain&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Add port if a non-standard port was specified</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;port&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;:&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">domain</span><span class="p">:</span>
+            <span class="n">domain</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">domain</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s1">&#39;port&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="n">urlunsplit</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">components</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;protocol&quot;</span><span class="p">],</span>
+                <span class="n">domain</span><span class="p">,</span>
+                <span class="n">components</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+                <span class="n">components</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
+                <span class="n">components</span><span class="o">.</span><span class="n">fragment</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_authorization_token</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">client_secret</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Authenticate with SAS Viya and obtain and access token.</span>
+
+<span class="sd">        This method supports multiple authentication methods:</span>
+
+<span class="sd">         - an existing OAuth2 token</span>
+<span class="sd">         - password authentication</span>
+<span class="sd">         - client credentials</span>
+<span class="sd">         - Kerberos</span>
+<span class="sd">         - cached tokens (from previous authorization codes)</span>
+<span class="sd">         - authorization code</span>
+
+<span class="sd">        If authentication using client credentials fails because the</span>
+<span class="sd">        client_credentials grant type is not allowed the token cache will</span>
+<span class="sd">        be searched for a valid token.  If no valid token is found, the</span>
+<span class="sd">        user will be prompted to generate and enter an authorization code.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        token : str, optional</span>
+<span class="sd">            An existing access token to reuse.</span>
+<span class="sd">        username : str, optional</span>
+<span class="sd">            Name of the user account to use.  Used for password</span>
+<span class="sd">            authentication and Kerberos authentication.</span>
+<span class="sd">        password : str, optional</span>
+<span class="sd">            Password corresponding to `username`.  Only used for password</span>
+<span class="sd">            authentication.</span>
+<span class="sd">        client_id : str, optional</span>
+<span class="sd">            The id of the client to use during authentication.  Overrides</span>
+<span class="sd">            the SASCTL_CLIENT_ID environment variable.  Used for password,</span>
+<span class="sd">            client_credentials, and authorization_code access.</span>
+<span class="sd">        client_secret : str, optional</span>
+<span class="sd">            The client secret to use during authentication.  Overrides the</span>
+<span class="sd">            SASCTL_CLIENT_SECRET environment variable.  Used for password,</span>
+<span class="sd">            client_credentials, and authorization_code access.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        OAuth2Token</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AuthenticationError</span>
+<span class="sd">            For invalid username/password combination or invalid client id</span>
+<span class="sd">            and client secret combination.</span>
+
+<span class="sd">        AuthorizationError</span>
+<span class="sd">            If authorization code is invalid or if refresh token is expired.</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            If a client id is specified (either through `client_id` or</span>
+<span class="sd">            SASCTL_CLIENT ID) but no client secret is provided.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">token</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">OAuth2Token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">username</span> <span class="ow">and</span> <span class="n">password</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_token_with_oauth</span><span class="p">(</span>
+                <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span>
+            <span class="p">)</span>
+
+        <span class="n">client_id_provided</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">client_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SASCTL_CLIENT_ID&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="n">client_secret_provided</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">client_secret</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SASCTL_CLIENT_SECRET&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Attempt authentication with just client credentials</span>
+        <span class="k">if</span> <span class="n">client_id_provided</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">client_secret_provided</span><span class="p">:</span>
+                <span class="c1"># Authenticating with client credentials should require a client secret.</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;A client secret must be provided whenever a client id is specified.&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_token_with_oauth</span><span class="p">(</span>
+                    <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="o">=</span><span class="n">client_secret</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+                <span class="c1"># If all we have is a client id &amp; client password, there&#39;s no way to</span>
+                <span class="c1"># know whether we&#39;re supposed to authenticate directly using the client</span>
+                <span class="c1"># credentials, or prompt the user for an authorization code.  Try</span>
+                <span class="c1"># client credential authentication first since it doesn&#39;t require user</span>
+                <span class="c1"># prompts, but if that fails do not raise an exception, we&#39;ll try</span>
+                <span class="c1"># requesting an authorization code.</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Authentication using client credentials is disallowed.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If the necessary Python package is installed try to get a token using Kerberos.</span>
+        <span class="c1"># NOTE: username may be None since client may already have valid, cached</span>
+        <span class="c1">#       Kerberos tickets.  If so, Session.username will be updated with the</span>
+        <span class="c1">#       username from Kerberos.</span>
+        <span class="k">if</span> <span class="n">kerberos</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_token_with_kerberos</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Encountered an error while attempting Kerberos authorization.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Skipping Kerberos authentication - kerberos and winkerberos &quot;</span>
+                <span class="s2">&quot;packages not found.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Before we prompt the user for an authorization code, check if there&#39;s already</span>
+        <span class="c1"># a valid token in the cache from a previous session.</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_cached_token</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PROFILE_PATH</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">token</span>
+
+        <span class="c1"># If we got this far, then no password and no kerberos.  Try prompting the user</span>
+        <span class="c1"># for an authorization code.</span>
+        <span class="n">auth_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prompt_for_auth_code</span><span class="p">(</span><span class="n">client_id</span><span class="p">)</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_token_with_oauth</span><span class="p">(</span>
+            <span class="n">client_id</span><span class="o">=</span><span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="o">=</span><span class="n">client_secret</span><span class="p">,</span> <span class="n">auth_code</span><span class="o">=</span><span class="n">auth_code</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Cache the token so we don&#39;t have to request user input again until the</span>
+        <span class="c1"># token expires.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache_token</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PROFILE_PATH</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">token</span>
+
+    <span class="k">def</span> <span class="nf">_prompt_for_auth_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Prompt the user open a URL to generate an auth code.</span>
+
+<span class="sd">        Note that this halts program execution until input is received and</span>
+<span class="sd">        should only be used for interactive sessions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        client_id : str, optional</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Authorization code that can be used to acquire an OAuth2</span>
+<span class="sd">            access token.</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        :meth:`Session.get_oauth_token`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">client_id</span> <span class="o">=</span> <span class="n">client_id</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SASCTL_CLIENT_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;sas.ec&quot;</span><span class="p">)</span>
+
+        <span class="c1"># User must open this URL in a browser and enter the auth code that&#39;s generated.</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_build_url</span><span class="p">(</span><span class="s2">&quot;/SASLogon/oauth/authorize&quot;</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;?response_type=code&amp;client_id=&quot;</span>
+            <span class="o">+</span> <span class="n">client_id</span>
+        <span class="p">)</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Please use a web browser to login at the following URL to get your &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;authorization code:</span><span class="se">\n</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="n">auth_code</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Authorization Code:&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">auth_code</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_read_token_cache</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read cached OAuth2 access tokens from disk.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str</span>
+<span class="sd">            Path to file containing cached tokens.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict or None</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If file permissions are too permissive.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">yaml_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="c1"># See if a token has been cached for the hostname</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">):</span>
+            <span class="c1"># Get bit flags indicating access permissions</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">)</span><span class="o">.</span><span class="n">st_mode</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="nb">oct</span><span class="p">(</span><span class="n">mode</span><span class="p">)[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>
+
+            <span class="k">if</span> <span class="n">flags</span> <span class="o">!=</span> <span class="s2">&quot;600&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Unable to read profile cache.  The file permissions for &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">yaml_file</span><span class="si">}</span><span class="s2"> must be configured so that only the file owner has &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;read/write permissions (equivalent to 600 on Linux systems).&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_request_token_with_consul</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">consul_token</span><span class="p">,</span> <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Request an OAuth token from Consul.</span>
+
+<span class="sd">        This functionality is reserved for system administrators as access</span>
+<span class="sd">        to the Consul token is restricted.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        consul_token : str</span>
+<span class="sd">            A Consul ACL token</span>
+<span class="sd">        client_id : str, optional</span>
+<span class="sd">            The name of the client being used to access the service.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        OAuth2Token</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AuthenticationError</span>
+<span class="sd">            If unable to retrieve an access token for any reason.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">client_id</span> <span class="o">=</span> <span class="n">client_id</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;X-Consul-Token&quot;</span><span class="p">:</span> <span class="n">consul_token</span><span class="p">}</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;callback&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;serviceId&quot;</span><span class="p">:</span> <span class="n">client_id</span><span class="p">}</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_url</span><span class="p">(</span><span class="s2">&quot;/SASLogon/oauth/clients/consul&quot;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+            <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verify</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">OAuth2Token</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthenticationError</span><span class="p">(</span>
+                <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Failed to authenticate using Consul token.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+    <span class="k">def</span> <span class="nf">_request_token_with_kerberos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Authenticate with a Kerberos ticket.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        username : str, optional</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        OAuth2Token</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If required kerberos package is not installed.</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            If there is any issue with the server&#39;s response to the</span>
+<span class="sd">            authorization request.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">kerberos</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                 <span class="s2">&quot;Kerberos package not found.  Run &#39;pip &quot;</span>
                 <span class="s2">&quot;install sasctl[kerberos]&#39; to install.&quot;</span>
             <span class="p">)</span>
 
-        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span>
-        <span class="n">client_id</span> <span class="o">=</span> <span class="s2">&quot;sas.tkmtrb&quot;</span>
         <span class="n">flags</span> <span class="o">=</span> <span class="n">kerberos</span><span class="o">.</span><span class="n">GSS_C_MUTUAL_FLAG</span> <span class="o">|</span> <span class="n">kerberos</span><span class="o">.</span><span class="n">GSS_C_SEQUENCE_FLAG</span>
         <span class="n">service</span> <span class="o">=</span> <span class="s2">&quot;HTTP@</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;domain&quot;</span><span class="p">]</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Attempting Kerberos authentication to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">service</span><span class="p">)</span>
 
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_url</span><span class="p">(</span>
-            <span class="s2">&quot;/SASLogon/oauth/authorize?client_id=</span><span class="si">%s</span><span class="s2">&amp;response_type=token&quot;</span> <span class="o">%</span> <span class="n">client_id</span>
+            <span class="s2">&quot;/SASLogon/oauth/authorize?client_id=sas.tkmtrb&amp;response_type=token&quot;</span>
         <span class="p">)</span>
 
         <span class="c1"># Get Kerberos challenge</span>
@@ -1080,7 +1259,9 @@
             <span class="p">)</span>
 
         <span class="c1"># Initialize a request to KDC for a ticket to access the service.</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">context</span> <span class="o">=</span> <span class="n">kerberos</span><span class="o">.</span><span class="n">authGSSClientInit</span><span class="p">(</span><span class="n">service</span><span class="p">,</span> <span class="n">principal</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">gssflags</span><span class="o">=</span><span class="n">flags</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">context</span> <span class="o">=</span> <span class="n">kerberos</span><span class="o">.</span><span class="n">authGSSClientInit</span><span class="p">(</span>
+            <span class="n">service</span><span class="p">,</span> <span class="n">principal</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">gssflags</span><span class="o">=</span><span class="n">flags</span>
+        <span class="p">)</span>
 
         <span class="c1"># Send the request.</span>
         <span class="c1"># NOTE: empty-string parameter required for initial call.</span>
@@ -1117,65 +1298,169 @@
                 <span class="s2">&quot;header does not contain an access token.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># Extract access token and return as an Oauth token</span>
+        <span class="k">return</span> <span class="n">OAuth2Token</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">_build_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Build a complete URL from a path by substituting in session parameters.&quot;&quot;&quot;</span>
-        <span class="n">components</span> <span class="o">=</span> <span class="n">urlsplit</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_request_token_with_oauth</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">client_secret</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">auth_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">refresh_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Request a token from the SAS SASLogon service.</span>
 
-        <span class="n">domain</span> <span class="o">=</span> <span class="n">components</span><span class="o">.</span><span class="n">netloc</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;domain&quot;</span><span class="p">]</span>
-
-        <span class="c1"># Add port if a non-standard port was specified</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;port&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;:&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">domain</span><span class="p">:</span>
-            <span class="n">domain</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;port&quot;</span><span class="p">])</span>
-
-        <span class="k">return</span> <span class="n">urlunsplit</span><span class="p">(</span>
-            <span class="p">[</span>
-                <span class="n">components</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">[</span><span class="s2">&quot;protocol&quot;</span><span class="p">],</span>
-                <span class="n">domain</span><span class="p">,</span>
-                <span class="n">components</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
-                <span class="n">components</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
-                <span class="n">components</span><span class="o">.</span><span class="n">fragment</span><span class="p">,</span>
-            <span class="p">]</span>
-        <span class="p">)</span>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_read_token_cache</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Read cached OAuth2 access tokens from disk.</span>
+<span class="sd">        Supports four different flows:</span>
+<span class="sd">         - authenticate with a username &amp; password and receive a token</span>
+<span class="sd">         - authenticate with a client id &amp; secret and receive a token</span>
+<span class="sd">         - provide an authorization code and receive a token</span>
+<span class="sd">         - provide a refresh token and receive a new token</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        path : str</span>
-<span class="sd">            Path to file containing cached tokens.</span>
+<span class="sd">        username : str, optional</span>
+<span class="sd">            Username of the user in SAS Viya.  Required for password</span>
+<span class="sd">            authentication flow.</span>
+<span class="sd">        password : str, optional</span>
+<span class="sd">            Password of the user in SAS Viya.  Required for password</span>
+<span class="sd">            authentication flow.</span>
+<span class="sd">        client_id : str, optional</span>
+<span class="sd">            Client ID of a client registered with SAS Viya.  Required for</span>
+<span class="sd">            client credentials flow, but will use</span>
+<span class="sd">            a default client ID if not provided during password or</span>
+<span class="sd">            authorization code flows.</span>
+<span class="sd">        client_secret : str, optional</span>
+<span class="sd">            Client secret of a client registered with SAS Viya.  Required</span>
+<span class="sd">            for client credentials flow, but will use a default if not</span>
+<span class="sd">            provided during password or authorization code flows.</span>
+<span class="sd">        auth_code : str, optional</span>
+<span class="sd">            An authorization code obtained by the user after</span>
+<span class="sd">            authenticating with SAS Viya.  Required for authorization</span>
+<span class="sd">            code flow.</span>
+<span class="sd">        refresh_token : str, optional</span>
+<span class="sd">            A refresh token obtained during a previous authorization</span>
+<span class="sd">            request.  Required if requesting a refreshed access token.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        dict or None</span>
+<span class="sd">        OAuth2Token</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If no valid parameter combination is provided.</span>
+
 <span class="sd">        RuntimeError</span>
-<span class="sd">            If file permissions are too permissive.</span>
+<span class="sd">            If the requested grant type is not allowed for the given</span>
+<span class="sd">            `client_id`.</span>
+
+<span class="sd">        AuthenticationError</span>
+<span class="sd">            For invalid username/password combination or invalid</span>
+<span class="sd">            client id/secret combination.</span>
+
+<span class="sd">        AuthorizationError</span>
+<span class="sd">            If authorization code is invalid or if refresh token is expired.</span>
+
+<span class="sd">        requests.HTTPError</span>
+<span class="sd">            For any unexpected/unhandled HTTP error code (e.g. HTTP 404)</span>
+
+<span class="sd">        requests.ConnectionError</span>
+<span class="sd">            If there&#39;s an issue establishing a connection with the server.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">yaml_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">client_id</span> <span class="o">=</span> <span class="n">client_id</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SASCTL_CLIENT_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;sas.ec&quot;</span><span class="p">)</span>
+        <span class="n">client_secret</span> <span class="o">=</span> <span class="n">client_secret</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SASCTL_CLIENT_SECRET&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
-        <span class="c1"># See if a token has been cached for the hostname</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">):</span>
-            <span class="c1"># Get bit flags indicating access permissions</span>
-            <span class="n">mode</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">)</span><span class="o">.</span><span class="n">st_mode</span>
-            <span class="n">flags</span> <span class="o">=</span> <span class="nb">oct</span><span class="p">(</span><span class="n">mode</span><span class="p">)[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>
+        <span class="c1"># Order in which parameters are checked is important.  Passing client</span>
+        <span class="c1"># credentials could indicate password, auth code, or client credential</span>
+        <span class="c1"># authentication.  Only use client credential flow if first two are</span>
+        <span class="c1"># ruled out.</span>
+        <span class="k">if</span> <span class="n">username</span><span class="p">:</span>
+            <span class="n">anchor</span> <span class="o">=</span> <span class="s2">&quot;#password&quot;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span>
+                <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="n">password</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Attempting password authentication as user &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">auth_code</span><span class="p">:</span>
+            <span class="n">anchor</span> <span class="o">=</span> <span class="s2">&quot;#authorization_code&quot;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="s2">&quot;authorization_code&quot;</span><span class="p">,</span> <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="n">auth_code</span><span class="p">}</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Attempting authorization using an auth code.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">client_secret</span><span class="p">:</span>
+            <span class="n">anchor</span> <span class="o">=</span> <span class="s2">&quot;#client_credentials&quot;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="s2">&quot;client_credentials&quot;</span><span class="p">}</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Attempting client credential authentication as client &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span> <span class="n">client_id</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">refresh_token</span><span class="p">:</span>
+            <span class="n">anchor</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="s2">&quot;refresh_token&quot;</span><span class="p">,</span> <span class="s2">&quot;refresh_token&quot;</span><span class="p">:</span> <span class="n">refresh_token</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;At least one set of parameters must be provided.&quot;</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">flags</span> <span class="o">!=</span> <span class="s2">&quot;600&quot;</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="s2">&quot;Unable to read profile cache.  &quot;</span>
-                    <span class="s2">&quot;The file permissions for </span><span class="si">%s</span><span class="s2"> must be configured so that only the file owner has &quot;</span>
-                    <span class="s2">&quot;read/write permissions (equivalent to 600 on Linux systems).&quot;</span>
-                    <span class="o">%</span> <span class="n">yaml_file</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/x-www-form-urlencoded&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/SASLogon/oauth/token</span><span class="si">{</span><span class="n">anchor</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+            <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">),</span>
+            <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verify</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+            <span class="c1"># A valid response (and some HTTP errors) should contain valid JSON.  In</span>
+            <span class="c1"># the extremely unlikely event that an HTTP error is returned that doesn&#39;t</span>
+            <span class="c1"># include JSON (e.g. HTTP 404) just raise the HTTP error.</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+        <span class="c1"># If request failed for a known reason, raise a user-friendly error message.</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span>
+            <span class="ow">and</span> <span class="n">auth_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">and</span> <span class="s2">&quot;Invalid authorization code&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;error_description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthorizationError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Invalid authorization code: </span><span class="si">{</span><span class="n">auth_code</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
+            <span class="c1"># Response is the same if either username/password or client id/secret is</span>
+            <span class="c1"># invalid (&#39;{&quot;error&quot;:&quot;unauthorized&quot;,&quot;error_description&quot;:&quot;Bad credentials&quot;}&#39;)</span>
+            <span class="c1"># We&#39;re assuming that if a username was provided, that&#39;s probably the problem.</span>
+            <span class="c1"># NOTE: this does mean that valid credentials with incorrectly set client</span>
+            <span class="c1">#       id &amp; secret results in an error message that blames the username</span>
+            <span class="c1">#       and password combination.</span>
+            <span class="k">if</span> <span class="s2">&quot;bad credentials&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;error_description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">username</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthenticationError</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthenticationError</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Invalid client id or secret.&quot;</span><span class="p">)</span>
+
+            <span class="c1"># If client used is not allowed to authenticate using the requested method</span>
+            <span class="c1"># an error is returned.  Example:</span>
+            <span class="c1"># &#39;{&quot;error&quot;:&quot;invalid_client&quot;,&quot;error_description&quot;:&quot;Unauthorized grant type: password&quot;}&#39;</span>
+            <span class="k">if</span> <span class="s2">&quot;unauthorized grant type&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;error_description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;error_description&quot;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">refresh_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;invalid_token&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthorizationError</span><span class="p">(</span>
+                    <span class="s2">&quot;Refresh token is incorrect, expired, or revoked.&quot;</span>
                 <span class="p">)</span>
 
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">FullLoader</span><span class="p">)</span>
+        <span class="c1"># Raise a generic exception for any other issues</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">OAuth2Token</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_write_token_cache</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
@@ -1278,7 +1563,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_min_queue_len</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_start</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_limit</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="n">link</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="n">link</span> <span class="o">=</span> <span class="n">link</span><span class="p">[</span><span class="s2">&quot;href&quot;</span><span class="p">]</span>
             <span class="n">start</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;=start=)[\d]+&quot;</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
             <span class="n">limit</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;=limit=)[\d]+&quot;</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
@@ -1393,7 +1678,8 @@
         <span class="c1"># Total number of items to iterate over</span>
         <span class="k">if</span> <span class="s2">&quot;count&quot;</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
             <span class="c1"># NOTE: &quot;count&quot; may be an (over) estimate of the number of items available</span>
-            <span class="c1">#       since some may be inaccessible due to user permissions &amp; won&#39;t actually be returned.</span>
+            <span class="c1">#       since some may be inaccessible due to user permissions &amp; won&#39;t</span>
+            <span class="c1">#       actually be returned.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">])</span>
@@ -1535,6 +1821,125 @@
             <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;, ...]&quot;</span>
 
         <span class="k">return</span> <span class="n">string</span></div>
+
+
+<div class="viewcode-block" id="VersionInfo"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.VersionInfo">[docs]</a><span class="k">class</span> <span class="nc">VersionInfo</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Stores the version information for a SAS Viya environment.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    major : int</span>
+<span class="sd">        Major version number (e.g. 3 for Viya 3.5 or 4 for Viya 4.0)</span>
+<span class="sd">    minor : int</span>
+<span class="sd">        Minor version number (e.g. 5 for Viya 3.5 or 0 for Viya 4.0)</span>
+<span class="sd">    cadence : str, optional</span>
+<span class="sd">        Release cadence for Viya 4.  Should be one of &#39;stable&#39; or &#39;LTS&#39;.</span>
+<span class="sd">    release : str, optional</span>
+<span class="sd">        Release number for Viya 4.  Two formats are currently possible:</span>
+<span class="sd">         - YYYY.R.U where R is the LTS release number in YYYY and U is the updates since R</span>
+<span class="sd">         - YYYY.MM where MM is the month of the release.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cadence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_major</span> <span class="o">=</span> <span class="n">major</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_minor</span> <span class="o">=</span> <span class="n">minor</span> <span class="k">if</span> <span class="n">minor</span> <span class="k">else</span> <span class="mi">5</span> <span class="k">if</span> <span class="n">major</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cadence</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cadence</span><span class="p">)</span> <span class="k">if</span> <span class="n">cadence</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_release</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">release</span><span class="p">)</span> <span class="k">if</span> <span class="n">release</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">&gt;</span> <span class="n">other</span> <span class="ow">or</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">other</span>
+
+    <span class="k">def</span> <span class="fm">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compare</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compare</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">&lt;</span> <span class="n">other</span> <span class="ow">or</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">other</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compare</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__float__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_major</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_minor</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">major</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">minor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_compare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compare and return -1/0/1 indicating lt/eq/gt.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : any</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            -1 if &lt; `other`, 0 if equal, and 1 if &gt; `other`.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Compare Major/Minor versions (e.g. Viya 3.5 &lt; Viya 4.0)</span>
+        <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">float</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">float</span><span class="p">(</span><span class="n">other</span><span class="p">):</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="c1"># If comparing two Viya 4 versions, may need to check actual release number  to determine order</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">release</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="s2">&quot;release&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_release</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">release</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">0</span>
+
+            <span class="n">parts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+            <span class="n">other_parts</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">release</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Release format was changed from YYYY.r.u to YYYY.MM so any release with 2 &#39;.&#39; is older than</span>
+            <span class="c1"># a release with 1 &#39;.&#39;</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">other_parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">other_parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+            <span class="c1"># If we got this far then both version numbers should have the same release format.</span>
+            <span class="c1"># Earlier release is the one with at least one component part that is lower</span>
+            <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">parts</span><span class="p">,</span> <span class="n">other_parts</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Either other doesn&#39;t have a .release or we compared all components of .release and</span>
+        <span class="c1"># they were all equal</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(major=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_major</span><span class="si">}</span><span class="s2">, minor=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_minor</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cadence</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">+=</span> <span class="s2">&quot;, cadence=&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cadence</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_release</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">+=</span> <span class="s2">&quot;, release=&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_release</span>
+
+        <span class="k">return</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cadence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cadence</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">major</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_major</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">minor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minor</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_release</span></div>
 
 
 <div class="viewcode-block" id="is_uuid"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.is_uuid">[docs]</a><span class="k">def</span> <span class="nf">is_uuid</span><span class="p">(</span><span class="n">id_</span><span class="p">):</span>
@@ -2016,6 +2421,12 @@
 <span class="sd">        SAS Viya version number</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;platform_version() has been deprecated and will be removed in a future version.  &quot;</span>
+        <span class="s2">&quot;Please use Session.version_info() instead.&quot;</span><span class="p">,</span>
+        <span class="ne">DeprecationWarning</span><span class="p">,</span>
+    <span class="p">)</span>
+
     <span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">model_repository</span> <span class="k">as</span> <span class="n">mr</span>
 
     <span class="n">response</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
@@ -2039,7 +2450,7 @@
       &copy;('Copyright © 2019, SAS Institute Inc., ', 'Cary, NC, USA.  All Rights Reserved.').
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

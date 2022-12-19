@@ -4,9 +4,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>sasctl.services package &#8212; sasctl 1.7.3 documentation</title>
+    <title>sasctl.services package &#8212; sasctl 1.8.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -14,6 +14,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="sasctl.services.cas_management" href="services/cas_management.html" />
@@ -89,22 +90,230 @@
 <h1>sasctl.services package<a class="headerlink" href="#sasctl-services-package" title="Permalink to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="services/cas_management.html">sasctl.services.cas_management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/concepts.html">sasctl.services.concepts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/data_sources.html">sasctl.services.data_sources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/files.html">sasctl.services.files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/folders.html">sasctl.services.folders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/microanalytic_score.html">sasctl.services.microanalytic_score</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/model_management.html">sasctl.services.model_management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/model_publish.html">sasctl.services.model_publish</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/model_repository.html">sasctl.services.model_repository</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/projects.html">sasctl.services.projects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/relationships.html">sasctl.services.relationships</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/report_images.html">sasctl.services.report_images</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/reports.html">sasctl.services.reports</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/sentiment_analysis.html">sasctl.services.sentiment_analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/text_categorization.html">sasctl.services.text_categorization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/text_parsing.html">sasctl.services.text_parsing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="services/cas_management.html">sasctl.services.cas_management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement"><code class="docutils literal notranslate"><span class="pre">CASManagement</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.create_session"><code class="docutils literal notranslate"><span class="pre">CASManagement.create_session()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.del_table"><code class="docutils literal notranslate"><span class="pre">CASManagement.del_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.delete_session"><code class="docutils literal notranslate"><span class="pre">CASManagement.delete_session()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.get_caslib"><code class="docutils literal notranslate"><span class="pre">CASManagement.get_caslib()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.get_server"><code class="docutils literal notranslate"><span class="pre">CASManagement.get_server()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.get_table"><code class="docutils literal notranslate"><span class="pre">CASManagement.get_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.list_caslibs"><code class="docutils literal notranslate"><span class="pre">CASManagement.list_caslibs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.list_servers"><code class="docutils literal notranslate"><span class="pre">CASManagement.list_servers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.list_sessions"><code class="docutils literal notranslate"><span class="pre">CASManagement.list_sessions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.list_tables"><code class="docutils literal notranslate"><span class="pre">CASManagement.list_tables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.promote_table"><code class="docutils literal notranslate"><span class="pre">CASManagement.promote_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.save_table"><code class="docutils literal notranslate"><span class="pre">CASManagement.save_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.update_state_table"><code class="docutils literal notranslate"><span class="pre">CASManagement.update_state_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.CASManagement.upload_file"><code class="docutils literal notranslate"><span class="pre">CASManagement.upload_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.check_keys"><code class="docutils literal notranslate"><span class="pre">check_keys()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="services/cas_management.html#sasctl._services.cas_management.check_required_key"><code class="docutils literal notranslate"><span class="pre">check_required_key()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/concepts.html">sasctl.services.concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/concepts.html#sasctl._services.concepts.Concepts"><code class="docutils literal notranslate"><span class="pre">Concepts</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/concepts.html#sasctl._services.concepts.Concepts.assign_concepts"><code class="docutils literal notranslate"><span class="pre">Concepts.assign_concepts()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/data_sources.html">sasctl.services.data_sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/data_sources.html#sasctl._services.data_sources.DataSources"><code class="docutils literal notranslate"><span class="pre">DataSources</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/data_sources.html#sasctl._services.data_sources.DataSources.get_caslib"><code class="docutils literal notranslate"><span class="pre">DataSources.get_caslib()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/data_sources.html#sasctl._services.data_sources.DataSources.get_provider"><code class="docutils literal notranslate"><span class="pre">DataSources.get_provider()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/data_sources.html#sasctl._services.data_sources.DataSources.get_source"><code class="docutils literal notranslate"><span class="pre">DataSources.get_source()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/data_sources.html#sasctl._services.data_sources.DataSources.get_table"><code class="docutils literal notranslate"><span class="pre">DataSources.get_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/data_sources.html#sasctl._services.data_sources.DataSources.list_caslibs"><code class="docutils literal notranslate"><span class="pre">DataSources.list_caslibs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/data_sources.html#sasctl._services.data_sources.DataSources.list_providers"><code class="docutils literal notranslate"><span class="pre">DataSources.list_providers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/data_sources.html#sasctl._services.data_sources.DataSources.list_sources"><code class="docutils literal notranslate"><span class="pre">DataSources.list_sources()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/data_sources.html#sasctl._services.data_sources.DataSources.list_tables"><code class="docutils literal notranslate"><span class="pre">DataSources.list_tables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/data_sources.html#sasctl._services.data_sources.DataSources.table_uri"><code class="docutils literal notranslate"><span class="pre">DataSources.table_uri()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/files.html">sasctl.services.files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/files.html#sasctl._services.files.Files"><code class="docutils literal notranslate"><span class="pre">Files</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/files.html#sasctl._services.files.Files.create_file"><code class="docutils literal notranslate"><span class="pre">Files.create_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/files.html#sasctl._services.files.Files.delete_file"><code class="docutils literal notranslate"><span class="pre">Files.delete_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/files.html#sasctl._services.files.Files.get_file"><code class="docutils literal notranslate"><span class="pre">Files.get_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/files.html#sasctl._services.files.Files.get_file_content"><code class="docutils literal notranslate"><span class="pre">Files.get_file_content()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/files.html#sasctl._services.files.Files.list_files"><code class="docutils literal notranslate"><span class="pre">Files.list_files()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/files.html#sasctl._services.files.Files.update_file"><code class="docutils literal notranslate"><span class="pre">Files.update_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/folders.html">sasctl.services.folders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/folders.html#sasctl._services.folders.Folders"><code class="docutils literal notranslate"><span class="pre">Folders</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/folders.html#sasctl._services.folders.Folders.create_folder"><code class="docutils literal notranslate"><span class="pre">Folders.create_folder()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/folders.html#sasctl._services.folders.Folders.delete_folder"><code class="docutils literal notranslate"><span class="pre">Folders.delete_folder()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/folders.html#sasctl._services.folders.Folders.get_folder"><code class="docutils literal notranslate"><span class="pre">Folders.get_folder()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/folders.html#sasctl._services.folders.Folders.list_folders"><code class="docutils literal notranslate"><span class="pre">Folders.list_folders()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/folders.html#sasctl._services.folders.Folders.update_folder"><code class="docutils literal notranslate"><span class="pre">Folders.update_folder()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/microanalytic_score.html">sasctl.services.microanalytic_score</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore"><code class="docutils literal notranslate"><span class="pre">MicroAnalyticScore</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.create_module"><code class="docutils literal notranslate"><span class="pre">MicroAnalyticScore.create_module()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.define_steps"><code class="docutils literal notranslate"><span class="pre">MicroAnalyticScore.define_steps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.delete_module"><code class="docutils literal notranslate"><span class="pre">MicroAnalyticScore.delete_module()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.execute_module_step"><code class="docutils literal notranslate"><span class="pre">MicroAnalyticScore.execute_module_step()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.get_module"><code class="docutils literal notranslate"><span class="pre">MicroAnalyticScore.get_module()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.get_module_step"><code class="docutils literal notranslate"><span class="pre">MicroAnalyticScore.get_module_step()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.is_uuid"><code class="docutils literal notranslate"><span class="pre">MicroAnalyticScore.is_uuid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.list_module_steps"><code class="docutils literal notranslate"><span class="pre">MicroAnalyticScore.list_module_steps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.list_modules"><code class="docutils literal notranslate"><span class="pre">MicroAnalyticScore.list_modules()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.update_module"><code class="docutils literal notranslate"><span class="pre">MicroAnalyticScore.update_module()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/model_management.html">sasctl.services.model_management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement"><code class="docutils literal notranslate"><span class="pre">ModelManagement</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.create_custom_kpi"><code class="docutils literal notranslate"><span class="pre">ModelManagement.create_custom_kpi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.create_performance_definition"><code class="docutils literal notranslate"><span class="pre">ModelManagement.create_performance_definition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.delete_performance_definition"><code class="docutils literal notranslate"><span class="pre">ModelManagement.delete_performance_definition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.execute_model_workflow_definition"><code class="docutils literal notranslate"><span class="pre">ModelManagement.execute_model_workflow_definition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.execute_performance_definition"><code class="docutils literal notranslate"><span class="pre">ModelManagement.execute_performance_definition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.get_performance_definition"><code class="docutils literal notranslate"><span class="pre">ModelManagement.get_performance_definition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.list_model_workflow_definition"><code class="docutils literal notranslate"><span class="pre">ModelManagement.list_model_workflow_definition()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.list_model_workflow_executed"><code class="docutils literal notranslate"><span class="pre">ModelManagement.list_model_workflow_executed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.list_model_workflow_prompt"><code class="docutils literal notranslate"><span class="pre">ModelManagement.list_model_workflow_prompt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.list_performance_definitions"><code class="docutils literal notranslate"><span class="pre">ModelManagement.list_performance_definitions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.publish_model"><code class="docutils literal notranslate"><span class="pre">ModelManagement.publish_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.update_performance_definition"><code class="docutils literal notranslate"><span class="pre">ModelManagement.update_performance_definition()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/model_publish.html">sasctl.services.model_publish</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/model_publish.html#sasctl._services.model_publish.ModelPublish"><code class="docutils literal notranslate"><span class="pre">ModelPublish</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/model_publish.html#sasctl._services.model_publish.ModelPublish.create_cas_destination"><code class="docutils literal notranslate"><span class="pre">ModelPublish.create_cas_destination()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_publish.html#sasctl._services.model_publish.ModelPublish.create_destination"><code class="docutils literal notranslate"><span class="pre">ModelPublish.create_destination()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_publish.html#sasctl._services.model_publish.ModelPublish.create_mas_destination"><code class="docutils literal notranslate"><span class="pre">ModelPublish.create_mas_destination()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_publish.html#sasctl._services.model_publish.ModelPublish.delete_destination"><code class="docutils literal notranslate"><span class="pre">ModelPublish.delete_destination()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_publish.html#sasctl._services.model_publish.ModelPublish.get_destination"><code class="docutils literal notranslate"><span class="pre">ModelPublish.get_destination()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_publish.html#sasctl._services.model_publish.ModelPublish.list_destinations"><code class="docutils literal notranslate"><span class="pre">ModelPublish.list_destinations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_publish.html#sasctl._services.model_publish.ModelPublish.list_models"><code class="docutils literal notranslate"><span class="pre">ModelPublish.list_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_publish.html#sasctl._services.model_publish.ModelPublish.publish_model"><code class="docutils literal notranslate"><span class="pre">ModelPublish.publish_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_publish.html#sasctl._services.model_publish.ModelPublish.update_destination"><code class="docutils literal notranslate"><span class="pre">ModelPublish.update_destination()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/model_repository.html">sasctl.services.model_repository</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository"><code class="docutils literal notranslate"><span class="pre">ModelRepository</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.add_model_content"><code class="docutils literal notranslate"><span class="pre">ModelRepository.add_model_content()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.convert_python_to_ds2"><code class="docutils literal notranslate"><span class="pre">ModelRepository.convert_python_to_ds2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.copy_analytic_store"><code class="docutils literal notranslate"><span class="pre">ModelRepository.copy_analytic_store()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.copy_python_resources"><code class="docutils literal notranslate"><span class="pre">ModelRepository.copy_python_resources()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.create_model"><code class="docutils literal notranslate"><span class="pre">ModelRepository.create_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.create_model_version"><code class="docutils literal notranslate"><span class="pre">ModelRepository.create_model_version()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.create_project"><code class="docutils literal notranslate"><span class="pre">ModelRepository.create_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.default_repository"><code class="docutils literal notranslate"><span class="pre">ModelRepository.default_repository()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.delete_model"><code class="docutils literal notranslate"><span class="pre">ModelRepository.delete_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.delete_model_contents"><code class="docutils literal notranslate"><span class="pre">ModelRepository.delete_model_contents()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.delete_project"><code class="docutils literal notranslate"><span class="pre">ModelRepository.delete_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.delete_repository"><code class="docutils literal notranslate"><span class="pre">ModelRepository.delete_repository()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_astore"><code class="docutils literal notranslate"><span class="pre">ModelRepository.get_astore()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model"><code class="docutils literal notranslate"><span class="pre">ModelRepository.get_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_contents"><code class="docutils literal notranslate"><span class="pre">ModelRepository.get_model_contents()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_details"><code class="docutils literal notranslate"><span class="pre">ModelRepository.get_model_details()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_link"><code class="docutils literal notranslate"><span class="pre">ModelRepository.get_model_link()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_project"><code class="docutils literal notranslate"><span class="pre">ModelRepository.get_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_repository"><code class="docutils literal notranslate"><span class="pre">ModelRepository.get_repository()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_score_code"><code class="docutils literal notranslate"><span class="pre">ModelRepository.get_score_code()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.import_model_from_zip"><code class="docutils literal notranslate"><span class="pre">ModelRepository.import_model_from_zip()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.list_model_versions"><code class="docutils literal notranslate"><span class="pre">ModelRepository.list_model_versions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.list_models"><code class="docutils literal notranslate"><span class="pre">ModelRepository.list_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.list_project_versions"><code class="docutils literal notranslate"><span class="pre">ModelRepository.list_project_versions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.list_projects"><code class="docutils literal notranslate"><span class="pre">ModelRepository.list_projects()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.list_repositories"><code class="docutils literal notranslate"><span class="pre">ModelRepository.list_repositories()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.update_model"><code class="docutils literal notranslate"><span class="pre">ModelRepository.update_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.update_project"><code class="docutils literal notranslate"><span class="pre">ModelRepository.update_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.update_repository"><code class="docutils literal notranslate"><span class="pre">ModelRepository.update_repository()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/projects.html">sasctl.services.projects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/projects.html#sasctl._services.projects.Projects"><code class="docutils literal notranslate"><span class="pre">Projects</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/projects.html#sasctl._services.projects.Projects.create_project"><code class="docutils literal notranslate"><span class="pre">Projects.create_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/projects.html#sasctl._services.projects.Projects.delete_project"><code class="docutils literal notranslate"><span class="pre">Projects.delete_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/projects.html#sasctl._services.projects.Projects.get_project"><code class="docutils literal notranslate"><span class="pre">Projects.get_project()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/projects.html#sasctl._services.projects.Projects.list_projects"><code class="docutils literal notranslate"><span class="pre">Projects.list_projects()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/projects.html#sasctl._services.projects.Projects.update_project"><code class="docutils literal notranslate"><span class="pre">Projects.update_project()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/relationships.html">sasctl.services.relationships</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/relationships.html#sasctl._services.relationships.Relationships"><code class="docutils literal notranslate"><span class="pre">Relationships</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/relationships.html#sasctl._services.relationships.Relationships.delete_relationship"><code class="docutils literal notranslate"><span class="pre">Relationships.delete_relationship()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/relationships.html#sasctl._services.relationships.Relationships.get_relationship"><code class="docutils literal notranslate"><span class="pre">Relationships.get_relationship()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/relationships.html#sasctl._services.relationships.Relationships.list_relationships"><code class="docutils literal notranslate"><span class="pre">Relationships.list_relationships()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/relationships.html#sasctl._services.relationships.Relationships.update_relationship"><code class="docutils literal notranslate"><span class="pre">Relationships.update_relationship()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/report_images.html">sasctl.services.report_images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/report_images.html#sasctl._services.report_images.ReportImages"><code class="docutils literal notranslate"><span class="pre">ReportImages</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/report_images.html#sasctl._services.report_images.ReportImages.LOD_HIGH"><code class="docutils literal notranslate"><span class="pre">ReportImages.LOD_HIGH</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/report_images.html#sasctl._services.report_images.ReportImages.LOD_LOW"><code class="docutils literal notranslate"><span class="pre">ReportImages.LOD_LOW</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/report_images.html#sasctl._services.report_images.ReportImages.LOD_MEDIUM"><code class="docutils literal notranslate"><span class="pre">ReportImages.LOD_MEDIUM</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/report_images.html#sasctl._services.report_images.ReportImages.get_images"><code class="docutils literal notranslate"><span class="pre">ReportImages.get_images()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/report_images.html#sasctl._services.report_images.ReportImages.get_images_async"><code class="docutils literal notranslate"><span class="pre">ReportImages.get_images_async()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/reports.html">sasctl.services.reports</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/reports.html#sasctl._services.reports.Reports"><code class="docutils literal notranslate"><span class="pre">Reports</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/reports.html#sasctl._services.reports.Reports.get_report"><code class="docutils literal notranslate"><span class="pre">Reports.get_report()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/reports.html#sasctl._services.reports.Reports.get_visual_elements"><code class="docutils literal notranslate"><span class="pre">Reports.get_visual_elements()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/reports.html#sasctl._services.reports.Reports.list_reports"><code class="docutils literal notranslate"><span class="pre">Reports.list_reports()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/saslogon.html">sasctl.services.saslogon</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/saslogon.html#sasctl._services.saslogon.SASLogon"><code class="docutils literal notranslate"><span class="pre">SASLogon</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/saslogon.html#sasctl._services.saslogon.SASLogon.create_client"><code class="docutils literal notranslate"><span class="pre">SASLogon.create_client()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/saslogon.html#sasctl._services.saslogon.SASLogon.delete_client"><code class="docutils literal notranslate"><span class="pre">SASLogon.delete_client()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/saslogon.html#sasctl._services.saslogon.SASLogon.get_client"><code class="docutils literal notranslate"><span class="pre">SASLogon.get_client()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/saslogon.html#sasctl._services.saslogon.SASLogon.list_clients"><code class="docutils literal notranslate"><span class="pre">SASLogon.list_clients()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="services/saslogon.html#sasctl._services.saslogon.SASLogon.update_client_secret"><code class="docutils literal notranslate"><span class="pre">SASLogon.update_client_secret()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/sentiment_analysis.html">sasctl.services.sentiment_analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/sentiment_analysis.html#sasctl._services.sentiment_analysis.SentimentAnalysis"><code class="docutils literal notranslate"><span class="pre">SentimentAnalysis</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/sentiment_analysis.html#sasctl._services.sentiment_analysis.SentimentAnalysis.analyze_sentiment"><code class="docutils literal notranslate"><span class="pre">SentimentAnalysis.analyze_sentiment()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/text_categorization.html">sasctl.services.text_categorization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/text_categorization.html#sasctl._services.text_categorization.TextCategorization"><code class="docutils literal notranslate"><span class="pre">TextCategorization</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/text_categorization.html#sasctl._services.text_categorization.TextCategorization.categorize"><code class="docutils literal notranslate"><span class="pre">TextCategorization.categorize()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="services/text_parsing.html">sasctl.services.text_parsing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/text_parsing.html#sasctl._services.text_parsing.TextParsing"><code class="docutils literal notranslate"><span class="pre">TextParsing</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="services/text_parsing.html#sasctl._services.text_parsing.TextParsing.parse_documents"><code class="docutils literal notranslate"><span class="pre">TextParsing.parse_documents()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -120,7 +329,7 @@
       &copy;('Copyright © 2019, SAS Institute Inc., ', 'Cary, NC, USA.  All Rights Reserved.').
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
