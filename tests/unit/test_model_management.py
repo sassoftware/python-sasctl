@@ -22,7 +22,7 @@ def test_create_performance_definition():
     ]
     USER = "username"
 
-    with mock.patch("sasctl.core.Session.get_auth"):
+    with mock.patch("sasctl.core.Session._get_authorization_token"):
         current_session("example.com", USER, "password")
 
     with mock.patch(

@@ -20,6 +20,7 @@ from ._services.projects import Projects as projects
 from ._services.relationships import Relationships as relationships
 from ._services.reports import Reports as reports
 from ._services.report_images import ReportImages as report_images
+from ._services.saslogon import SASLogon as saslogon
 from ._services.sentiment_analysis import SentimentAnalysis as sentiment_analysis
 from ._services.text_categorization import TextCategorization as text_categorization
 from ._services.text_parsing import TextParsing as text_parsing
