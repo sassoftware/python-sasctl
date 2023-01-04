@@ -9,15 +9,17 @@ class MLFlowModel:
     @classmethod
     def read_mlflow_model_file(cls, m_path=Path.cwd()):
         """
-        Read and return model metadata and input/output variables as dictionaries from an MLFlow model directory.
+        Read and return model metadata and input/output variables as dictionaries from
+        an MLFlow model directory.
 
-        Current implementation only handles simple pickled models. Future feature work is required to include
-        more types of MLFlow models.
+        Current implementation only handles simple pickled models. Future feature work
+        is required to include more types of MLFlow models.
 
         Parameters
         ----------
         m_path : str or Path object, optional
-            Directory path of the MLFlow model files. Default is the current working directory.
+        Directory path of the MLFlow model files. Default is the current working
+        directory.
 
         Returns
         -------
@@ -47,13 +49,14 @@ class MLFlowModel:
         ind_out = [i for i, s in enumerate(m_lines) if "outputs:" in s]
 
         if ind_in and ind_out:
-            inputs = m_lines[ind_in[0] : ind_out[0]]
-            outputs = m_lines[ind_out[0] : -1]
+            inputs = m_lines[ind_in[0]: ind_out[0]]
+            outputs = m_lines[ind_out[0]: -1]
 
             inputs_dict = json.loads("".join([s.strip() for s in inputs])[9:-1])
             outputs_dict = json.loads("".join([s.strip() for s in outputs])[10:-1])
         else:
             raise ValueError(
-                "Improper or unset signature values for model. No input or output dicts could be generated."
+                "Improper or unset signature values for model. No input or output "
+                "dicts could be generated. "
             )
         return var_dict, inputs_dict, outputs_dict
