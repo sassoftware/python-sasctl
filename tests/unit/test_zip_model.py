@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 #
-# Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+# Copyright © 2023, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
 import pytest
@@ -19,10 +19,10 @@ def _create_sample_archive(suffix, is_viya_4=False):
     for s in suffix:
         _ = tempfile.NamedTemporaryFile(delete=False, suffix=s, dir=tmp_dir.name)
     bytes_zip = zm.zip_files(tmp_dir.name, "Unit_Test_Model", is_viya4=is_viya_4)
-    # Check that for files with a valid extension, the generated zip file contains the expected number of files
+    # Check that for files with a valid extension, the generated zip file contains
+    # the expected number of files
     with closing(ZipFile(Path(tmp_dir.name) / "Unit_Test_Model.zip")) as archive:
         num_files = len(archive.infolist())
-    # (Path(tmp_dir.name) / "Unit_Test_Model.zip").unlink()
     return bytes_zip, num_files
 
 
