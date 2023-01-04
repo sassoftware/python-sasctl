@@ -61,7 +61,7 @@ def test_generate_mlflow_variable_properties():
     assert len(dict_list) == 16
 
 
-def test_write_var_json(hmeq_dataset, mlflow_dataset):
+def test_write_var_json(hmeq_dataset):
     """
     Test cases:
     - Generate correctly named file based on is_input (assuming path provided)
