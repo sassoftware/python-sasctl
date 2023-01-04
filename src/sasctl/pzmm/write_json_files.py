@@ -77,10 +77,10 @@ def check_if_string(data: dict):
 class JSONFiles:
     @classmethod
     def write_var_json(
-            cls,
-            input_data: Union[dict, pd.DataFrame, pd.Series],
-            is_input=True,
-            json_path=None
+        cls,
+        input_data: Union[dict, pd.DataFrame, pd.Series],
+        is_input=True,
+        json_path=None,
     ):
         """
         Writes a variable descriptor JSON file for input or output variables,
@@ -160,7 +160,7 @@ class JSONFiles:
                     {
                         "level": "nominal",
                         "type": "string",
-                        "length": predict.str.len().max()
+                        "length": predict.str.len().max(),
                     }
                 )
             else:
@@ -188,13 +188,9 @@ class JSONFiles:
 
             var_dict = {"name": name}
             if is_str:
-                var_dict.update(
-                    {"level": "nominal", "type": "string", "length": 8}
-                )
+                var_dict.update({"level": "nominal", "type": "string", "length": 8})
             else:
-                var_dict.update(
-                    {"level": "interval", "type": "decimal", "length": 8}
-                )
+                var_dict.update({"level": "interval", "type": "decimal", "length": 8})
             dict_list.append(var_dict)
 
         return dict_list
