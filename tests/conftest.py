@@ -498,6 +498,17 @@ def cancer_dataset():
 
 
 @pytest.fixture
+def hmeq_dataset():
+    """Binary classification dataset with categorical predictors."""
+    pd = pytest.importorskip("pandas")
+
+    df = pd.read_csv("examples/data/hmeq.csv")
+    df.REASON = df.REASON.astype("category")
+    df.JOB = df.JOB.astype("category")
+    return df
+
+
+@pytest.fixture
 def iris_dataset():
     """Multi-class classification dataset."""
     pd = pytest.importorskip("pandas")
