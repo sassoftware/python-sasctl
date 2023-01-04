@@ -13,12 +13,17 @@ import sys
 import warnings
 from collections.abc import Iterable
 from pathlib import Path
+from typing import Union
 
 # Third Party Imports
 import pandas as pd
 
+# Constants
+INPUT = "inputVar.json"
+OUTPUT = "outputVar.json"
 
-def flatten(nestedList):
+
+def flatten(nested_list):
     """
     Flatten a nested list.
 
@@ -27,7 +32,7 @@ def flatten(nestedList):
 
     Parameters
     ----------
-    nestedList : list
+    nested_list : list
         A nested list of strings.
 
     Yields
@@ -35,7 +40,7 @@ def flatten(nestedList):
     list
         A flattened list of strings.
     """
-    for item in nestedList:
+    for item in nested_list:
         if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
             yield from flatten(item)
         else:
@@ -54,16 +59,21 @@ class JSONFiles:
 
         Parameters
         ----------
-        inputData : dataframe or list of dicts
+        input_data : dataframe or list of dicts
             Input dataframe containing the training data set in a pandas.Dataframe
             format. Columns are used to define predictor and prediction variables
             (ambiguously named "predict"). Providing a list of dict objects signals
             that the model files are being created from an MLFlow model.
-        isInput : bool
+        is_input : bool
             Boolean flag to check if generating the input or output variable JSON.
-        jPath : string, optional
-            File location for the output JSON file. Default is the current working
-            directory.
+        json_path : string or Path, optional
+            File location for the output JSON file. Default is None.
+
+        Returns
+        -------
+        dict
+            Dictionary containing a key-value pair representing the file name and json
+            dump respectively.
         """
         outputJSON = pd.DataFrame()
         if isinstance(inputData, list):
@@ -289,8 +299,8 @@ class JSONFiles:
         if not isH2OModel:
             fileMetadata = pd.DataFrame(
                 [
-                    ["inputVariables", "inputVar.json"],
-                    ["outputVariables", "outputVar.json"],
+                    ["inputVariables", INPUT],
+                    ["outputVariables", OUTPUT],
                     ["score", modelPrefix + "Score.py"],
                     ["scoreResource", modelPrefix + ".pickle"],
                 ],
@@ -299,8 +309,8 @@ class JSONFiles:
         else:
             fileMetadata = pd.DataFrame(
                 [
-                    ["inputVariables", "inputVar.json"],
-                    ["outputVariables", "outputVar.json"],
+                    ["inputVariables", INPUT],
+                    ["outputVariables", OUTPUT],
                     ["score", modelPrefix + "Score.py"],
                     ["scoreResource", modelPrefix + ".mojo"],
                 ],
@@ -542,8 +552,9 @@ class JSONFiles:
             GINI = (2 * auc) - 1
             fitStats["_GINI_"] = GINI
 
-            from scipy.stats import \
-                gamma  # Holdover until fitstat generation via SWAT is sussed out
+            from scipy.stats import (
+                gamma,
+            )  # Holdover until fitstat generation via SWAT is sussed out
 
             _, _, scale = gamma.fit(dataSets[j][1])
             fitStats["_GAMMA_"] = 1 / scale
@@ -985,8 +996,11 @@ class JSONFiles:
         model_path : str, optional
             The path to a Python project, by default the current working directory.
 
-        Returns ------- list of dicts List of dictionary representations of the json
-        file contents, split into each package and/or warning.
+        Returns
+        -------
+        list of dicts
+            List of dictionary representations of the json file contents, split into
+            each package and/or warning.
         """
         pickle_packages = []
         pickle_files = cls.get_pickle_file(model_path)
