@@ -34,7 +34,7 @@ def convert_metadata(zip_path, python_score_code=None):
 
     Raises
     ------
-    SyntaxError
+    ValueError
         If no python_score_code name is provided, but there are multiple Python
         files in the zip_path, then a SyntaxError is raised asking for further
         clarification as to which file is the Python score code.
@@ -108,7 +108,7 @@ def convert_score_code(zip_path, score_resource, python_score_code):
         string_found = [s for s in old_string if resource in s]
         parsed_old_string = parsed_old_string + string_found
         if string_found:
-            new_string.append("settings.pickle_path + '{}'".format(resource))
+            new_string.append(f"settings.pickle_path + '{resource}'")
     for old, new in zip(parsed_old_string, new_string):
         score_code = score_code.replace(str(old), str(new))
 
