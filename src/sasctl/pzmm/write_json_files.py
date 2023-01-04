@@ -47,15 +47,49 @@ def flatten(nested_list):
             yield item
 
 
+def check_if_string(data: dict):
+    """
+    Determine if an MLFlow variable in data is a string type.
+
+    Parameters
+    ----------
+    data : dict
+        Dictionary representation of a single variable from an MLFlow model.
+
+    Returns
+    -------
+    bool
+        True if the variable is a string. False otherwise.
+    """
+    if data["type"] == "string":
+        return True
+    elif data["type"] in ["double", "integer", "float", "long"]:
+        return False
+    elif data["type"] == "tensor":
+        if data["tensor-spec"]["dtype"] in "string":
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
 class JSONFiles:
-    @staticmethod
-    def writeVarJSON(inputData, isInput=True, jPath=Path.cwd()):
+    @classmethod
+    def write_var_json(
+            cls,
+            input_data: Union[dict, pd.DataFrame, pd.Series],
+            is_input=True,
+            json_path=None
+    ):
         """
         Writes a variable descriptor JSON file for input or output variables,
         based on input data containing predictor and prediction columns.
 
-        This function creates a JSON file named either InputVar.json or
-        OutputVar.json based on argument inputs.
+        If a path is provided, this function creates a JSON file named either
+        inputVar.json or outputVar.json based on argument inputs. Otherwise, a dict
+        is returned with the key-value pair representing the file name and json dump
+        respectively.
 
         Parameters
         ----------
@@ -75,86 +109,95 @@ class JSONFiles:
             Dictionary containing a key-value pair representing the file name and json
             dump respectively.
         """
-        outputJSON = pd.DataFrame()
-        if isinstance(inputData, list):
-            try:
-                predictNames = [var["name"] for var in inputData]
-            except KeyError:
-                predictNames = [var["type"] for var in inputData]
-            for i, name in enumerate(predictNames):
-                if inputData[i]["type"] == "string":
-                    isStr = True
-                elif inputData[i]["type"] in ["double", "integer", "float", "long"]:
-                    isStr = False
-                elif inputData[i]["type"] == "tensor":
-                    if inputData[i]["tensor-spec"]["dtype"] in "string":
-                        isStr = True
-                    else:
-                        isStr = False
-
-                if isStr:
-                    outputLevel = "nominal"
-                    outputType = "string"
-                    outputLength = 8
-                else:
-                    outputLevel = "interval"
-                    outputType = "decimal"
-                    outputLength = 8
-                outputRow = pd.Series(
-                    [name, outputLength, outputType, outputLevel],
-                    index=["name", "length", "type", "level"],
-                )
-                outputJSON = outputJSON.append([outputRow], ignore_index=True)
+        # MLFlow model handling
+        if isinstance(input_data, list):
+            dict_list = cls.generate_mlflow_variable_properties(input_data)
+        # Normal model handling
         else:
-            try:
-                predictNames = inputData.columns.values.tolist()
-                isSeries = False
-            except AttributeError:
-                predictNames = [inputData.name]
-                isSeries = True
+            dict_list = cls.generate_variable_properties(input_data)
+        if json_path:
+            if is_input:
+                file_name = INPUT
+            else:
+                file_name = OUTPUT
 
-            # loop through all predict variables to determine their name, length,
-            # type, and level; append each to outputJSON
-            for name in predictNames:
-                if isSeries:
-                    predict = inputData
-                else:
-                    predict = inputData[name]
-                firstRow = predict.loc[predict.first_valid_index()]
-                dType = predict.dtypes.name
-                isStr = type(firstRow) is str
-
-                if isStr:
-                    outputLevel = "nominal"
-                    outputType = "string"
-                    outputLength = predict.str.len().max()
-                else:
-                    if dType == "category":
-                        outputLevel = "nominal"
-                    else:
-                        outputLevel = "interval"
-                    outputType = "decimal"
-                    outputLength = 8
-
-                outputRow = pd.Series(
-                    [name, outputLength, outputType, outputLevel],
-                    index=["name", "length", "type", "level"],
-                )
-                outputJSON = outputJSON.append([outputRow], ignore_index=True)
-
-        if isInput:
-            fileName = "inputVar.json"
-        else:
-            fileName = "outputVar.json"
-
-        with open(Path(jPath) / fileName, "w") as jFile:
-            dfDump = pd.DataFrame.to_dict(outputJSON.transpose()).values()
-            json.dump(list(dfDump), jFile, indent=4, skipkeys=True)
-        print(
-            "{} was successfully written and saved to {}".format(
-                fileName, Path(jPath) / fileName
+            with open(Path(json_path) / file_name, "w") as json_file:
+                json_file.write(json.dumps(dict_list, indent=4))
+            print(
+                f"{file_name} was successfully written and saved to "
+                f"{Path(json_path) / file_name}"
             )
-        )
+        else:
+            if is_input:
+                return {INPUT: json.dumps(dict_list)}
+            else:
+                return {OUTPUT: json.dumps(dict_list)}
+
+    @staticmethod
+    def generate_variable_properties(input_data):
+        # Check if input_data is a Series or DataFrame
+        try:
+            predict_names = input_data.columns.values.tolist()
+            is_series = False
+        except AttributeError:
+            predict_names = [input_data.name]
+            is_series = True
+
+        dict_list = []
+        # Loop through variables to determine properties
+        for name in predict_names:
+            if is_series:
+                predict = input_data
+            else:
+                predict = input_data[name]
+            first_row = predict.loc[predict.first_valid_index()]
+            data_type = predict.dtypes.name
+            is_str = type(first_row) is str
+
+            var_dict = {"name": name}
+            if is_str:
+                var_dict.update(
+                    {
+                        "level": "nominal",
+                        "type": "string",
+                        "length": predict.str.len().max()
+                    }
+                )
+            else:
+                if data_type == "category":
+                    var_dict.update({"level": "nominal"})
+                else:
+                    var_dict.update({"level": "interval"})
+                var_dict.update({"type": "decimal", "length": 8})
+
+            dict_list.append(var_dict)
+
+        return dict_list
+
+    @staticmethod
+    def generate_mlflow_variable_properties(input_data):
+        # Handle MLFlow models with different `var` formatting
+        try:
+            predict_names = [var["name"] for var in input_data]
+        except KeyError:
+            predict_names = [var["type"] for var in input_data]
+
+        dict_list = []
+        for i, name in enumerate(predict_names):
+            is_str = check_if_string(input_data[i])
+
+            var_dict = {"name": name}
+            if is_str:
+                var_dict.update(
+                    {"level": "nominal", "type": "string", "length": 8}
+                )
+            else:
+                var_dict.update(
+                    {"level": "interval", "type": "decimal", "length": 8}
+                )
+            dict_list.append(var_dict)
+
+        return dict_list
 
     @staticmethod
     def writeModelPropertiesJSON(
