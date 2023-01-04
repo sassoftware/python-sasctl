@@ -54,10 +54,12 @@ def convert_metadata(zip_path, python_score_code=None):
         meta_data = json.loads(file.read())
     if python_score_code is None:
         if len(list(zip_path.glob("*.py"))) > 1:
-            raise ValueError(f"More than one Python file was found at {zip_path}, "
-                             f"therefore the score code file could not be determined. "
-                             f"Please provide the name of the Python score code file "
-                             f"as an argument.")
+            raise ValueError(
+                f"More than one Python file was found at {zip_path}, "
+                f"therefore the score code file could not be determined. "
+                f"Please provide the name of the Python score code file "
+                f"as an argument."
+            )
         else:
             python_score_code = list(zip_path.glob("*.py"))[0].name
 
@@ -115,16 +117,14 @@ def convert_score_code(zip_path, score_resource, python_score_code):
     # Write new text of score code to file
     with open(Path(zip_path) / python_score_code, "w") as pyFile:
         pyFile.write(score_code)
-        print(
-            f"{python_score_code} has been modified and rewritten for SAS Viya 4"
-        )
+        print(f"{python_score_code} has been modified and rewritten for SAS Viya 4")
 
 
 def delete_sas_files(zip_path):
     """Remove .sas score files created for SAS Viya 3.5, which are no longer
-    needed in SAS Viya 4. 
-    
-    These files are typically named score.sas, dmcas_packagescorecode.sas, or 
+    needed in SAS Viya 4.
+
+    These files are typically named score.sas, dmcas_packagescorecode.sas, or
     dmcas_epscorescode.sas.
 
     Parameters
