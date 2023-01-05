@@ -225,17 +225,17 @@ class JSONFiles:
 
     @staticmethod
     def write_model_properties_json(
-            model_name,
-            target_variable,
-            target_event,
-            num_target_categories,
-            event_prob_var=None,
-            json_path=None,
-            model_desc=None,
-            model_function=None,
-            model_type=None,
-            modeler=None,
-            train_table=None,
+        model_name,
+        target_variable,
+        target_event,
+        num_target_categories,
+        event_prob_var=None,
+        json_path=None,
+        model_desc=None,
+        model_function=None,
+        model_type=None,
+        modeler=None,
+        train_table=None,
     ):
         """
         Writes a JSON file containing SAS Model Manager model properties.
@@ -311,7 +311,7 @@ class JSONFiles:
             "event_prob_var": event_prob_var if event_prob_var else "",
             "modeler": modeler if modeler else os.getlogin(),
             "tool": "Python 3",
-            "toolVersion": python_version
+            "toolVersion": python_version,
         }
 
         if json_path:
@@ -373,7 +373,6 @@ class JSONFiles:
                 "fileMetaData.json", Path(jPath) / "fileMetaData.json"
             )
         )
-
 
     @classmethod
     def writeBaseFitStat(

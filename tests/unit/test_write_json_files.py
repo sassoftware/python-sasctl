@@ -93,7 +93,7 @@ def test_write_model_properties_json():
             target_variable="BAD",
             target_event="1",
             num_target_categories=2,
-            json_path=Path(tmp_dir)
+            json_path=Path(tmp_dir),
         )
         assert (Path(tmp_dir) / "ModelProperties.json").exists()
 
@@ -110,6 +110,6 @@ def test_write_model_properties_json():
         target_variable="BAD",
         target_event="1",
         num_target_categories=2,
-        model_desc="a" * 2000
+        model_desc="a" * 2000,
     )
     assert len(json.loads(prop_dict["ModelProperties.json"])["description"]) <= 1024
