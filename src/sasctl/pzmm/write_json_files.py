@@ -3,10 +3,10 @@
 
 # Standard Library Imports
 import ast
-import getpass
 import importlib
 import json
 import math
+import os
 import pickle
 import pickletools
 import sys
@@ -21,6 +21,7 @@ import pandas as pd
 # Constants
 INPUT = "inputVar.json"
 OUTPUT = "outputVar.json"
+PROP = "ModelProperties.json"
 
 
 def flatten(nested_list):
@@ -224,123 +225,104 @@ class JSONFiles:
 
     @staticmethod
     def write_model_properties_json(
-        model_name,
-        model_desc,
-        target_variable,
-        model_type,
-        model_predictors,
-        target_event,
-        num_target_categories,
-        event_prob_var=None,
-        json_path=Path.cwd(),
-        modeler=None,
+            model_name,
+            target_variable,
+            target_event,
+            num_target_categories,
+            event_prob_var=None,
+            json_path=None,
+            model_desc=None,
+            model_function=None,
+            model_type=None,
+            modeler=None,
+            train_table=None,
     ):
         """
         Writes a JSON file containing SAS Model Manager model properties.
 
         The JSON file format is required by the SAS Model Repository API service and
-        only event_prob_var can be 'None'. This function outputs a JSON file located
-        named "ModelProperties.json".
+        only event_prob_var can be 'None'. If a json_path is supplied, this function
+        outputs a JSON file named "ModelProperties.json". Otherwise, a dict is returned.
 
         Parameters
         ----------
         model_name : string
-            User-defined model name.
-        model_desc : string
-            User-defined model description.
+            User-defined model name. This value is overwritten by SAS Model Manager
+            based on the name of the zip file used for importing the model.
         target_variable : string
             Target variable to be predicted by the model.
-        model_type : string
-            User-defined model type.
-        model_predictors : list of strings
-            List of predictor variables for the model.
         target_event : string
-            Model target event (for example, 1 for a binary event).
+            Model target event. For example: 1 for a binary event.
         num_target_categories : int
-            Number of possible target categories (for example, 2 for a binary event).
+            Number of possible target categories. For example: 2 for a binary event.
         event_prob_var : string, optional
-            Model prediction metric for scoring. Default is None.
-        json_path : string, optional
-            Location for the output JSON file. The default is the current working
-            directory.
+            User-provided output event probability variable. This value should match the
+            value in outputVar.json. Default is "P_" + target_variable + target_event.
+        json_path : string or Path, optional
+            Path for an output ModelProperties.json file to be generated. If no value
+            is supplied a dict is returned instead. Default is None.
+        model_desc : string, optional
+            User-defined model description. Default is an empty string.
+        model_function : string, optional
+            User-defined model function. Default is an empty string.
+        model_type : string, optional
+            User-defined model type. Default is an empty string.
         modeler : string, optional
-            The modeler name to be displayed in the model properties. The default value
-            is None.
+            User-defined value for the name of the modeler. Default is an empty string.
+        train_table : string, optional
+            The path to the model's training table within SAS Viya. Default is an empty
+            string.
         """
-        # Check if model description provided is smaller than the 1024-character limit
-        if len(model_desc) > 1024:
-            model_desc = model_desc[:1024]
-            warnings.warn(
-                "WARNING: The provided model description was truncated to 1024 "
-                "characters. "
-            )
+        if model_desc:
+            # Check if model description is smaller than the 1024-character limit
+            if len(model_desc) > 1024:
+                model_desc = model_desc[:1024]
+                warnings.warn(
+                    "WARNING: The provided model description was truncated to 1024 "
+                    "characters. "
+                )
+        else:
+            model_desc = ""
 
-        if num_target_categories > 2 and not target_event:
-            target_level = "NOMINAL"
-        elif num_target_categories > 2 and target_event:
-            target_level = "ORDINAL"
+        if num_target_categories > 2:
+            target_level = "INTERVAL"
         else:
             target_level = "BINARY"
-            target_event = 1
 
         if event_prob_var is None:
             try:
                 event_prob_var = "P_" + target_variable + target_event
             except TypeError:
                 event_prob_var = None
-        # Replace <myUserID> with the user ID of the modeler that created the model.
-        if modeler is None:
-            try:
-                modeler = getpass.getuser()
-            except OSError:
-                modeler = "<myUserID>"
 
         python_version = sys.version.split(" ", 1)[0]
 
-        prop_index = [
-            "name",
-            "description",
-            "function",
-            "scoreCodeType",
-            "trainTable",
-            "trainCodeType",
-            "algorithm",
-            "target_variable",
-            "target_event",
-            "target_level",
-            "event_prob_var",
-            "modeler",
-            "tool",
-            "toolVersion",
-        ]
+        output_json = {
+            "name": model_name,
+            "description": model_desc,
+            "function": model_function,
+            "scoreCodeType": "python",
+            "trainTable": train_table if train_table else "",
+            "trainCodeType": "Python",
+            "algorithm": model_type if model_type else "",
+            "target_variable": target_variable,
+            "target_event": target_event,
+            "target_level": target_level,
+            "event_prob_var": event_prob_var if event_prob_var else "",
+            "modeler": modeler if modeler else os.getlogin(),
+            "tool": "Python 3",
+            "toolVersion": python_version
+        }
 
-        model_properties = [
-            model_name,
-            model_desc,
-            "classification",
-            "python",
-            " ",
-            "Python",
-            model_type,
-            target_variable,
-            target_event,
-            target_level,
-            event_prob_var,
-            modeler,
-            "Python 3",
-            python_version,
-        ]
-
-        output_json = pd.Series(model_properties, index=prop_index)
-
-        with open(Path(json_path) / "ModelProperties.json", "w") as jFile:
-            df_dump = pd.Series.to_dict(output_json.transpose())
-            json.dump(df_dump, jFile, indent=4, skipkeys=True)
-        print(
-            "{} was successfully written and saved to {}".format(
-                "ModelProperties.json", Path(json_path) / "ModelProperties.json"
+        if json_path:
+            with open(Path(json_path) / "ModelProperties.json", "w") as json_file:
+                json_file.write(json.dumps(output_json, indent=4))
+            print(
+                f"{PROP} was successfully written and saved to "
+                f"{Path(json_path) / PROP}"
             )
-        )
+        else:
+            return {PROP: json.dumps(output_json)}
 
     @staticmethod
     def writeFileMetadataJSON(modelPrefix, jPath=Path.cwd(), isH2OModel=False):
@@ -391,6 +373,7 @@ class JSONFiles:
                 "fileMetaData.json", Path(jPath) / "fileMetaData.json"
             )
         )
+
 
     @classmethod
     def writeBaseFitStat(
