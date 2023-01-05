@@ -22,6 +22,7 @@ import pandas as pd
 INPUT = "inputVar.json"
 OUTPUT = "outputVar.json"
 PROP = "ModelProperties.json"
+META = "fileMetadata.json"
 
 
 def flatten(nested_list):
@@ -315,7 +316,7 @@ class JSONFiles:
         }
 
         if json_path:
-            with open(Path(json_path) / "ModelProperties.json", "w") as json_file:
+            with open(Path(json_path) / PROP, "w") as json_file:
                 json_file.write(json.dumps(output_json, indent=4))
             print(
                 f"{PROP} was successfully written and saved to "
@@ -325,7 +326,7 @@ class JSONFiles:
             return {PROP: json.dumps(output_json)}
 
     @staticmethod
-    def writeFileMetadataJSON(modelPrefix, jPath=Path.cwd(), isH2OModel=False):
+    def write_file_metadata_json(model_prefix, json_path=None, is_h2o_model=False):
         """
         Writes a file metadata JSON file pointing to all relevant files.
 
@@ -333,46 +334,40 @@ class JSONFiles:
 
         Parameters
         ----------
-        modelPrefix : string
-            The variable for the model name that is used when naming model files. (For
-            example, hmeqClassTree + [Score.py | .pickle]).
-        jPath : string, optional
-            Location for the output JSON file. The default value is the current working
-            directory.
-        isH2OModel : boolean, optional
+        model_prefix : string
+            The variable for the model name that is used when naming model files. For
+            example: hmeqClassTree + [Score.py | .pickle].
+        json_path : string or Path, optional
+            Path for an output ModelProperties.json file to be generated. If no value
+            is supplied a dict is returned instead. Default is None.
+        is_h2o_model : boolean, optional
             Sets whether the model metadata is associated with an H2O.ai model. If set
             as True, the MOJO model file will be set as a score resource. The default
             value is False.
         """
-        if not isH2OModel:
-            fileMetadata = pd.DataFrame(
-                [
-                    ["inputVariables", INPUT],
-                    ["outputVariables", OUTPUT],
-                    ["score", modelPrefix + "Score.py"],
-                    ["scoreResource", modelPrefix + ".pickle"],
-                ],
-                columns=["role", "name"],
+        dict_list = [
+            {"role": "inputVariables", "name": INPUT},
+            {"role": "outputVariables", "name": OUTPUT},
+            {"role": "score", "name": model_prefix + "Score.py"}
+        ]
+        if is_h2o_model:
+            dict_list.append(
+                {"role": "scoreResource", "name": model_prefix + ".mojo"}
             )
         else:
-            fileMetadata = pd.DataFrame(
-                [
-                    ["inputVariables", INPUT],
-                    ["outputVariables", OUTPUT],
-                    ["score", modelPrefix + "Score.py"],
-                    ["scoreResource", modelPrefix + ".mojo"],
-                ],
-                columns=["role", "name"],
+            dict_list.append(
+                {"role": "scoreResource", "name": model_prefix + ".pickle"}
             )
 
-        with open(Path(jPath) / "fileMetadata.json", "w") as jFile:
-            dfDump = pd.DataFrame.to_dict(fileMetadata.transpose()).values()
-            json.dump(list(dfDump), jFile, indent=4, skipkeys=True)
-        print(
-            "{} was successfully written and saved to {}".format(
-                "fileMetaData.json", Path(jPath) / "fileMetaData.json"
+        if json_path:
+            with open(Path(json_path) / META, "w") as json_file:
+                json_file.write(json.dumps(dict_list, indent=4))
+            print(
+                f"{META} was successfully written and saved to "
+                f"{Path(json_path) / META}"
             )
-        )
+        else:
+            return {META: json.dumps(dict_list, indent=4)}
 
     @classmethod
     def writeBaseFitStat(
