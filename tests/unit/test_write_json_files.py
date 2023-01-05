@@ -78,3 +78,38 @@ def test_write_var_json(hmeq_dataset):
 
     var_mlflow_dict = jf.write_var_json(input_dict, True)
     assert "inputVar.json" in var_mlflow_dict
+
+
+def test_write_model_properties_json():
+    """
+    Test Cases:
+    - Generate correctly named file with json_path generated
+    - Return correctly labelled dict when no json_path is provided
+    - Truncate model description that is too long
+    """
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        jf.write_model_properties_json(
+            model_name="Test_Model",
+            target_variable="BAD",
+            target_event="1",
+            num_target_categories=2,
+            json_path=Path(tmp_dir)
+        )
+        assert (Path(tmp_dir) / "ModelProperties.json").exists()
+
+    prop_dict = jf.write_model_properties_json(
+        model_name="Test_Model",
+        target_variable="BAD",
+        target_event="1",
+        num_target_categories=2,
+    )
+    assert "ModelProperties.json" in prop_dict
+
+    prop_dict = jf.write_model_properties_json(
+        model_name="Test_Model",
+        target_variable="BAD",
+        target_event="1",
+        num_target_categories=2,
+        model_desc="a" * 2000
+    )
+    assert len(json.loads(prop_dict["ModelProperties.json"])["description"]) <= 1024
