@@ -130,7 +130,6 @@ def test_write_file_metadata_json():
     assert "fileMetadata.json" in meta_dict
 
     meta_dict = jf.write_file_metadata_json(
-        model_prefix="Test_Model",
-        is_h2o_model=True
+        model_prefix="Test_Model", is_h2o_model=True
     )
     assert json.loads(meta_dict["fileMetadata.json"])[3]["name"] == "Test_Model.mojo"

@@ -348,12 +348,10 @@ class JSONFiles:
         dict_list = [
             {"role": "inputVariables", "name": INPUT},
             {"role": "outputVariables", "name": OUTPUT},
-            {"role": "score", "name": model_prefix + "Score.py"}
+            {"role": "score", "name": model_prefix + "Score.py"},
         ]
         if is_h2o_model:
-            dict_list.append(
-                {"role": "scoreResource", "name": model_prefix + ".mojo"}
-            )
+            dict_list.append({"role": "scoreResource", "name": model_prefix + ".mojo"})
         else:
             dict_list.append(
                 {"role": "scoreResource", "name": model_prefix + ".pickle"}
