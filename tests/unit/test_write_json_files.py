@@ -83,7 +83,7 @@ def test_write_var_json(hmeq_dataset):
 def test_write_model_properties_json():
     """
     Test Cases:
-    - Generate correctly named file with json_path generated
+    - Generate correctly named file with json_path provided
     - Return correctly labelled dict when no json_path is provided
     - Truncate model description that is too long
     """
@@ -113,3 +113,24 @@ def test_write_model_properties_json():
         model_desc="a" * 2000,
     )
     assert len(json.loads(prop_dict["ModelProperties.json"])["description"]) <= 1024
+
+
+def test_write_file_metadata_json():
+    """
+    Test cases:
+    - Generate correctly named file with json_path provided
+    - Return correctly labelled dict when no json_path is provided
+    - Proper score resource name for H2O.ai model
+    """
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        jf.write_file_metadata_json(model_prefix="Test_Model", json_path=Path(tmp_dir))
+        assert (Path(tmp_dir) / "fileMetadata.json").exists()
+
+    meta_dict = jf.write_file_metadata_json(model_prefix="Test_Model")
+    assert "fileMetadata.json" in meta_dict
+
+    meta_dict = jf.write_file_metadata_json(
+        model_prefix="Test_Model",
+        is_h2o_model=True
+    )
+    assert json.loads(meta_dict["fileMetadata.json"])[3]["name"] == "Test_Model.mojo"
