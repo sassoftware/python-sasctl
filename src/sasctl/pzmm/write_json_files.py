@@ -135,6 +135,19 @@ class JSONFiles:
 
     @staticmethod
     def generate_variable_properties(input_data):
+        """
+        Generate a list of dictionaries of variable properties given an input dataframe.
+
+        Parameters
+        ----------
+        input_data : pandas Dataframe or Series
+            Dataset for either the input or output example data for the model.
+
+        Returns
+        -------
+        dict_list : list of dicts
+            List of dictionaries containing the variable properties.
+        """
         # Check if input_data is a Series or DataFrame
         try:
             predict_names = input_data.columns.values.tolist()
@@ -175,7 +188,21 @@ class JSONFiles:
         return dict_list
 
     @staticmethod
-    def generate_mlflow_variable_properties(input_data):
+    def generate_mlflow_variable_properties(input_data: list):
+        """
+        Create a list of dictionaries containing the variable properties found in the
+        MLModel file for MLFlow model runs.
+
+        Parameters
+        ----------
+        input_data : list of dicts
+            Data pulled from the MLModel file by mlflow_model.py.
+
+        Returns
+        -------
+        dict_list : list of dicts
+            List of dictionaries containing the variable properties.
+        """
         # Handle MLFlow models with different `var` formatting
         try:
             predict_names = [var["name"] for var in input_data]
@@ -196,44 +223,44 @@ class JSONFiles:
         return dict_list
 
     @staticmethod
-    def writeModelPropertiesJSON(
-        modelName,
-        modelDesc,
-        targetVariable,
-        modelType,
-        modelPredictors,
-        targetEvent,
-        numTargetCategories,
-        eventProbVar=None,
-        jPath=Path.cwd(),
+    def write_model_properties_json(
+        model_name,
+        model_desc,
+        target_variable,
+        model_type,
+        model_predictors,
+        target_event,
+        num_target_categories,
+        event_prob_var=None,
+        json_path=Path.cwd(),
         modeler=None,
     ):
         """
         Writes a JSON file containing SAS Model Manager model properties.
 
         The JSON file format is required by the SAS Model Repository API service and
-        only eventProbVar can be 'None'. This function outputs a JSON file located
+        only event_prob_var can be 'None'. This function outputs a JSON file located
         named "ModelProperties.json".
 
         Parameters
         ----------
-        modelName : string
+        model_name : string
             User-defined model name.
-        modelDesc : string
+        model_desc : string
             User-defined model description.
-        targetVariable : string
+        target_variable : string
             Target variable to be predicted by the model.
-        modelType : string
+        model_type : string
             User-defined model type.
-        modelPredictors : list of strings
+        model_predictors : list of strings
             List of predictor variables for the model.
-        targetEvent : string
+        target_event : string
             Model target event (for example, 1 for a binary event).
-        numTargetCategories : int
+        num_target_categories : int
             Number of possible target categories (for example, 2 for a binary event).
-        eventProbVar : string, optional
+        event_prob_var : string, optional
             Model prediction metric for scoring. Default is None.
-        jPath : string, optional
+        json_path : string, optional
             Location for the output JSON file. The default is the current working
             directory.
         modeler : string, optional
@@ -241,26 +268,26 @@ class JSONFiles:
             is None.
         """
         # Check if model description provided is smaller than the 1024-character limit
-        if len(modelDesc) > 1024:
-            modelDesc = modelDesc[:1024]
+        if len(model_desc) > 1024:
+            model_desc = model_desc[:1024]
             warnings.warn(
                 "WARNING: The provided model description was truncated to 1024 "
                 "characters. "
             )
 
-        if numTargetCategories > 2 and not targetEvent:
-            targetLevel = "NOMINAL"
-        elif numTargetCategories > 2 and targetEvent:
-            targetLevel = "ORDINAL"
+        if num_target_categories > 2 and not target_event:
+            target_level = "NOMINAL"
+        elif num_target_categories > 2 and target_event:
+            target_level = "ORDINAL"
         else:
-            targetLevel = "BINARY"
-            targetEvent = 1
+            target_level = "BINARY"
+            target_event = 1
 
-        if eventProbVar is None:
+        if event_prob_var is None:
             try:
-                eventProbVar = "P_" + targetVariable + targetEvent
+                event_prob_var = "P_" + target_variable + target_event
             except TypeError:
-                eventProbVar = None
+                event_prob_var = None
         # Replace <myUserID> with the user ID of the modeler that created the model.
         if modeler is None:
             try:
@@ -268,9 +295,9 @@ class JSONFiles:
             except OSError:
                 modeler = "<myUserID>"
 
-        pythonVersion = sys.version.split(" ", 1)[0]
+        python_version = sys.version.split(" ", 1)[0]
 
-        propIndex = [
+        prop_index = [
             "name",
             "description",
             "function",
@@ -278,40 +305,40 @@ class JSONFiles:
             "trainTable",
             "trainCodeType",
             "algorithm",
-            "targetVariable",
-            "targetEvent",
-            "targetLevel",
-            "eventProbVar",
+            "target_variable",
+            "target_event",
+            "target_level",
+            "event_prob_var",
             "modeler",
             "tool",
             "toolVersion",
         ]
 
-        modelProperties = [
-            modelName,
-            modelDesc,
+        model_properties = [
+            model_name,
+            model_desc,
             "classification",
             "python",
             " ",
             "Python",
-            modelType,
-            targetVariable,
-            targetEvent,
-            targetLevel,
-            eventProbVar,
+            model_type,
+            target_variable,
+            target_event,
+            target_level,
+            event_prob_var,
             modeler,
             "Python 3",
-            pythonVersion,
+            python_version,
         ]
 
-        outputJSON = pd.Series(modelProperties, index=propIndex)
+        output_json = pd.Series(model_properties, index=prop_index)
 
-        with open(Path(jPath) / "ModelProperties.json", "w") as jFile:
-            dfDump = pd.Series.to_dict(outputJSON.transpose())
-            json.dump(dfDump, jFile, indent=4, skipkeys=True)
+        with open(Path(json_path) / "ModelProperties.json", "w") as jFile:
+            df_dump = pd.Series.to_dict(output_json.transpose())
+            json.dump(df_dump, jFile, indent=4, skipkeys=True)
         print(
             "{} was successfully written and saved to {}".format(
-                "ModelProperties.json", Path(jPath) / "ModelProperties.json"
+                "ModelProperties.json", Path(json_path) / "ModelProperties.json"
             )
         )
 
