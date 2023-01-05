@@ -309,7 +309,7 @@ class JSONFiles:
             "target_event": target_event,
             "target_level": target_level,
             "event_prob_var": event_prob_var if event_prob_var else "",
-            "modeler": modeler if modeler else os.getlogin(),
+            "modeler": modeler if modeler else "",
             "tool": "Python 3",
             "toolVersion": python_version,
         }
