@@ -6,14 +6,13 @@ import ast
 import importlib
 import json
 import math
-import os
 import pickle
 import pickletools
 import sys
 import warnings
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Union
+from typing import List, Union
 
 # Third Party Imports
 import pandas as pd
@@ -23,6 +22,9 @@ INPUT = "inputVar.json"
 OUTPUT = "outputVar.json"
 PROP = "ModelProperties.json"
 META = "fileMetadata.json"
+FITSTAT = "dmcas_fitstat.json"
+ROC = "dmcas_roc.json"
+LIFT = "dmcas_lift.json"
 
 
 def flatten(nested_list):
@@ -368,8 +370,8 @@ class JSONFiles:
             return {META: json.dumps(dict_list, indent=4)}
 
     @classmethod
-    def writeBaseFitStat(
-        cls, csvPath=None, jPath=Path.cwd(), userInput=False, tupleList=None
+    def input_fit_statistics(
+        cls, csv_path=None, json_path=None, user_input=False, tuple_list=None
     ):
         """
         Writes a JSON file to display fit statistics for the model in SAS Model Manager.
@@ -385,8 +387,7 @@ class JSONFiles:
             3. Import values from a CSV file. Format should contain the above
             tuple in each row.
 
-        The following are the base statistical parameters SAS Model Manager
-        and SAS Open Model Manager currently supports:
+        The following are the base statistical parameters SAS Viya supports:
             * RASE = Root Average Squared Error
             * NObs = Sum of Frequencies
             * GINI = Gini Coefficient
@@ -405,22 +406,21 @@ class JSONFiles:
 
         Parameters
         ----------
-        csvPath : string, optional
+        csv_path : string, optional
             Location for an input CSV file that contains parameter statistics. The
             default value is None.
-        jPath : string, optional
-            Location for the output JSON file. The default value is the current working
-            directory.
-        userInput : boolean, optional
+        json_path : string or Path, optional
+            Location for the output JSON file. The default value is None.
+        user_input : boolean, optional
             If true, prompt the user for more parameters. The default value is false.
-        tupleList : list of tuples, optional
+        tuple_list : list of tuples, optional
             Input parameter tuples in the form of (parameterName, parameterLabel,
-            parameterValue, dataRole). For example, a sample parameter call would be
-            'NObs', 'Sum of Frequencies', 3488, or 'TRAIN'. Variable dataRole
+            parameterValue, data_role). For example, a sample parameter call would be
+            'NObs', 'Sum of Frequencies', 3488, or 'TRAIN'. Variable data_role
             is typically either TRAIN, TEST, or VALIDATE or 1, 2, 3 respectively. The
             default value is None.
         """
-        validParams = [
+        valid_params = [
             "_RASE_",
             "_NObs_",
             "_GINI_",
@@ -436,67 +436,161 @@ class JSONFiles:
             "_C_",
         ]
 
-        nullJSONPath = Path(__file__).resolve().parent / "null_dmcas_fitstat.json"
-        nullJSONDict = cls.readJSONFile(nullJSONPath)
+        json_template_path = Path(__file__).resolve().parent / \
+            "template_files/dmcas_fitstat.json"
+        json_dict = cls.readJSONFile(json_template_path)
 
-        dataMap = [{}, {}, {}]
+        data_map = [{}, {}, {}]
         for i in range(3):
-            dataMap[i] = nullJSONDict["data"][i]
+            data_map[i] = json_dict["data"][i]
 
-        if tupleList is not None:
-            for paramTuple in tupleList:
-                # ignore incorrectly formatted input arguments
-                if type(paramTuple) == tuple and len(paramTuple) == 3:
-                    paramName = cls.formatParameter(paramTuple[0])
-                    if paramName not in validParams:
-                        continue
-                    if type(paramTuple[2]) == str:
-                        dataRole = cls.convertDataRole(paramTuple[2])
-                    else:
-                        dataRole = paramTuple[2]
-                    dataMap[dataRole - 1]["dataMap"][paramName] = paramTuple[1]
+        if tuple_list:
+            data_map = cls.add_tuple_to_fitstat(data_map, tuple_list, valid_params)
 
-        if userInput:
-            while True:
-                paramName = input("Parameter name: ")
-                paramName = cls.formatParameter(paramName)
-                if paramName not in validParams:
-                    print("Not a valid parameter. Please see documentation.")
-                    if input("More parameters? (Y/N)") == "N":
-                        break
-                    continue
-                paramValue = input("Parameter value: ")
-                dataRole = input("Data role: ")
+        if user_input:
+            data_map = cls.user_input_fitstat(data_map, valid_params)
 
-                if type(dataRole) is str:
-                    dataRole = cls.convertDataRole(dataRole)
-                dataMap[dataRole - 1]["dataMap"][paramName] = paramValue
+        if csv_path is not None:
+            data_map = cls.add_csv_to_fitstat(csv_path, data_map, valid_params)
 
-                if input("More parameters? (Y/N)") == "N":
-                    break
-
-        if csvPath is not None:
-            csvData = pd.read_csv(csvPath)
-            for i, row in enumerate(csvData.values):
-                paramName, paramValue, dataRole = row
-                paramName = cls.formatParameter(paramName)
-                if paramName not in validParams:
-                    continue
-                if type(dataRole) is str:
-                    dataRole = cls.convertDataRole(dataRole)
-                dataMap[dataRole - 1]["dataMap"][paramName] = paramValue
-
-        outJSON = nullJSONDict
         for i in range(3):
-            outJSON["data"][i] = dataMap[i]
+            json_dict["data"][i] = data_map[i]
 
-        with open(Path(jPath) / "dmcas_fitstat.json", "w") as jFile:
-            json.dump(outJSON, jFile, indent=4, skipkeys=True)
-        print(
-            "{} was successfully written and saved to {}".format(
-                "dmcas_fitstat.json", Path(jPath) / "dmcas_fitstat.json"
+        if json_path:
+            with open(Path(json_path) / FITSTAT, "w") as json_file:
+                json_file.write(json.dumps(json_dict, indent=4))
+            print(
+                f"{FITSTAT} was successfully written and saved to "
+                f"{Path(json_path) / FITSTAT}"
             )
-        )
+        else:
+            return {FITSTAT: json.dumps(json_dict, indent=4)}
+
+    @classmethod
+    def add_tuple_to_fitstat(cls, data: List[dict], parameters, valid_params):
+        """
+        Using tuples defined in input_fit_statistics, add them to the dmcas_fitstat json
+        dictionary.
+
+        Warnings are produced for invalid parameters found in the tuple.
+
+        Parameters
+        ----------
+        data : list of dicts
+            List of dicts for the data values of each parameter. Split into the three
+            valid partitions (TRAIN, TEST, VALIDATE).
+        parameters : list of tuples
+            User-provided data for each parameter per partition provided.
+        valid_params : list
+            A list of valid parameters for dmcas_fitstat.json files.
+
+        Returns
+        -------
+        list of dicts
+            List of dicts with the tuple values inputted.
+
+        Raises
+        ------
+        ValueError
+            If an parameter within the tuple list is not a tuple or has a length
+            different from the expected three.
+
+        """
+        for param in parameters:
+            # Produce a warning or error for invalid parameter names or formatting
+            if isinstance(param, tuple) and len(param) == 3:
+                param_name = cls.format_parameter(param[0])
+                if param_name not in valid_params:
+                    warnings.warn(
+                        f"WARNING: {param_name} is not a valid parameter and has been "
+                        f"ignored. "
+                    )
+                    continue
+                if isinstance(param[2], str):
+                    data_role = cls.convert_data_role(param[2])
+                else:
+                    data_role = param[2]
+                data[data_role - 1]["data_map"][param_name] = param[1]
+            elif not isinstance(param, tuple):
+                raise ValueError(
+                    f"Expected a tuple, but got {str(type(param))} instead."
+                )
+            elif len(param) != 3:
+                raise ValueError(
+                    f"Expected a tuple with three parameters, but instead got tuple "
+                    f"with length {len(param)} "
+                )
+        return data
+
+    @classmethod
+    def user_input_fitstat(cls, data: List[dict], valid_params):
+        """
+        Prompt the user to enter parameters for dmcas_fitstat.json.
+
+        Parameters
+        ----------
+        data : list of dicts
+            List of dicts for the data values of each parameter. Split into the three
+            valid partitions (TRAIN, TEST, VALIDATE).
+        valid_params : list
+            A list of valid parameters for dmcas_fitstat.json files.
+
+        Returns
+        -------
+        list of dicts
+            List of dicts with the user provided values inputted.
+        """
+        while True:
+            param_name = input("What is the parameter name?\n")
+            param_name = cls.format_parameter(param_name)
+            if param_name not in valid_params:
+                print(f"{param_name} is not a valid parameter.")
+                if input("Would you like to input more parameters? (Y/N)") == "N":
+                    break
+                continue
+            param_value = input("What is the parameter's value?\n")
+            data_role = input("Which data role is the parameter associated with?\n")
+            if type(data_role) is str:
+                data_role = cls.convert_data_role(data_role)
+            elif data_role not in [1, 2, 3]:
+                print(f"{data_role} is not a valid role value. It should be either 1, "
+                      f"2, or 3.")
+                continue
+            data[data_role - 1]["data_map"][param_name] = param_value
+
+            if input("More parameters? (Y/N)") == "N":
+                break
+        return data
+
+    @classmethod
+    def add_csv_to_fitstat(cls, csv_path, data: List[dict], valid_params):
+        """
+
+        Parameters
+        ----------
+        csv_path : string
+            Location for an input CSV file that contains parameter statistics.
+        data : list of dicts
+            List of dicts for the data values of each parameter. Split into the three
+            valid partitions (TRAIN, TEST, VALIDATE).
+        valid_params : list
+            A list of valid parameters for dmcas_fitstat.json files.
+
+        Returns
+        -------
+        list of dicts
+            List of dicts with the user provided values inputted.
+        """
+        csv_data = pd.read_csv(csv_path)
+        for i, row in enumerate(csv_data.values):
+            param_name, param_value, data_role = row
+            param_name = cls.format_parameter(param_name)
+            if param_name not in valid_params:
+                continue
+            if type(data_role) is str:
+                data_role = cls.convert_data_role(data_role)
+            data[data_role - 1]["data_map"][param_name] = param_value
+        return data
 
     @classmethod
     def calculateFitStat(
@@ -546,7 +640,7 @@ class JSONFiles:
                 "function. "
             )
 
-        nullJSONPath = Path(__file__).resolve().parent / "null_dmcas_fitstat.json"
+        nullJSONPath = Path(__file__).resolve().parent / "dmcas_fitstat.json"
         nullJSONDict = cls.readJSONFile(nullJSONPath)
 
         dataSets = [[[None], [None]], [[None], [None]], [[None], [None]]]
@@ -632,11 +726,11 @@ class JSONFiles:
 
             nullJSONDict["data"][j]["dataMap"] = fitStats
 
-        with open(Path(jPath) / "dmcas_fitstat.json", "w") as jFile:
+        with open(Path(jPath) / FITSTAT, "w") as jFile:
             json.dump(nullJSONDict, jFile, indent=4)
         print(
             "{} was successfully written and saved to {}".format(
-                "dmcas_fitstat.json", Path(jPath) / "dmcas_fitstat.json"
+                FITSTAT, Path(jPath) / FITSTAT
             )
         )
 
@@ -698,10 +792,10 @@ class JSONFiles:
                 "this function. "
             )
 
-        nullJSONROCPath = Path(__file__).resolve().parent / "null_dmcas_roc.json"
+        nullJSONROCPath = Path(__file__).resolve().parent / "dmcas_roc.json"
         nullJSONROCDict = cls.readJSONFile(nullJSONROCPath)
 
-        nullJSONLiftPath = Path(__file__).resolve().parent / "null_dmcas_lift.json"
+        nullJSONLiftPath = Path(__file__).resolve().parent / "dmcas_lift.json"
         nullJSONLiftDict = cls.readJSONFile(nullJSONLiftPath)
 
         dataSets = [pd.DataFrame(), pd.DataFrame(), pd.DataFrame()]
@@ -906,19 +1000,19 @@ class JSONFiles:
             for i, _ in enumerate(nullJSONROCDict["data"]):
                 nullJSONROCDict["data"][i]["rowNumber"] = i + 1
 
-        with open(Path(jPath) / "dmcas_roc.json", "w") as jFile:
+        with open(Path(jPath) / ROC, "w") as jFile:
             json.dump(nullJSONROCDict, jFile, indent=4)
         print(
             "{} was successfully written and saved to {}".format(
-                "dmcas_roc.json", Path(jPath) / "dmcas_roc.json"
+                ROC, Path(jPath) / ROC
             )
         )
 
-        with open(Path(jPath) / "dmcas_lift.json", "w") as jFile:
+        with open(Path(jPath) / LIFT, "w") as jFile:
             json.dump(nullJSONLiftDict, jFile, indent=4)
         print(
             "{} was successfully written and saved to {}".format(
-                "dmcas_lift.json", Path(jPath) / "dmcas_lift.json"
+                LIFT, Path(jPath) / LIFT
             )
         )
 
@@ -941,15 +1035,13 @@ class JSONFiles:
             return json.load(jFile)
 
     @staticmethod
-    def formatParameter(paramName):
+    def format_parameter(param_name):
         """
-        Formats the parameter name to the JSON standard.
-
-        Note that no changes are applied if the string is already formatted correctly.
+        Formats the parameter name to the JSON standard expected for dmcas_fitstat.json.
 
         Parameters
         ----------
-        paramName : string
+        param_name : string
             Name of the parameter.
 
         Returns
@@ -957,16 +1049,16 @@ class JSONFiles:
         paramName : string
             Name of the parameter.
         """
-        if not (paramName.startswith("_") and paramName.endswith("_")):
-            if not paramName.startswith("_"):
-                paramName = "_" + paramName
-            if not paramName.endswith("_"):
-                paramName = paramName + "_"
+        if not (param_name.startswith("_") and param_name.endswith("_")):
+            if not param_name.startswith("_"):
+                param_name = "_" + param_name
+            if not param_name.endswith("_"):
+                param_name = param_name + "_"
 
-        return paramName
+        return param_name
 
     @staticmethod
-    def convertDataRole(dataRole):
+    def convert_data_role(data_role):
         """
         Converts the data role identifier from string to int or int to string.
 
@@ -975,31 +1067,31 @@ class JSONFiles:
 
         Parameters
         ----------
-        dataRole : string or int
-            Identifier of the data set's role; either TRAIN, TEST, or VALIDATE, which
-            correspond to 1, 2, or 3.
+        data_role : string or int
+            Identifier of the data set's role; either TRAIN, TEST, or VALIDATE, or
+            correspondingly 1, 2, or 3.
 
         Returns
         -------
         conversion : int or string
             Converted data role identifier.
         """
-        if type(dataRole) is int or type(dataRole) is float:
-            dataRole = int(dataRole)
-            if dataRole == 1:
+        if isinstance(data_role, int) or isinstance(data_role, float):
+            data_role = int(data_role)
+            if data_role == 1:
                 conversion = "TRAIN"
-            elif dataRole == 2:
+            elif data_role == 2:
                 conversion = "TEST"
-            elif dataRole == 3:
+            elif data_role == 3:
                 conversion = "VALIDATE"
             else:
                 conversion = "TRAIN"
-        elif type(dataRole) is str:
-            if dataRole == "TRAIN":
+        elif isinstance(data_role, str):
+            if data_role.upper() == "TRAIN":
                 conversion = 1
-            elif dataRole == "TEST":
+            elif data_role.upper() == "TEST":
                 conversion = 2
-            elif dataRole == "VALIDATE":
+            elif data_role.upper() == "VALIDATE":
                 conversion = 3
             else:
                 conversion = 1
@@ -1050,7 +1142,7 @@ class JSONFiles:
 
         code_dependencies = cls.get_code_dependencies(model_path)
 
-        package_list = list(pickle_packages) + code_dependencies
+        package_list = list(pickle_packages) + list(code_dependencies)
         package_list = list(set(list(flatten(package_list))))
         package_list = cls.remove_standard_library_packages(package_list)
         package_and_version = cls.get_local_package_version(package_list)
@@ -1207,9 +1299,9 @@ class JSONFiles:
         try:
             # Remove 'settings' module generated for SAS Model Manager score code
             modules.remove("settings")
-            return modules
         except ValueError:
-            return modules
+            pass
+        return modules
 
     @staticmethod
     def get_pickle_file(pickle_folder=Path.cwd()):
