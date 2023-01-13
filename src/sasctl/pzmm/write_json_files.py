@@ -371,11 +371,11 @@ class JSONFiles:
 
     @classmethod
     def input_fit_statistics(
-            cls,
-            fitstat_df: pd.DataFrame = None,
-            user_input: bool = False,
-            tuple_list: List[tuple] = None,
-            json_path: Union[str, Path] = None
+        cls,
+        fitstat_df: pd.DataFrame = None,
+        user_input: bool = False,
+        tuple_list: List[tuple] = None,
+        json_path: Union[str, Path] = None,
     ):
         """
         Writes a JSON file to display fit statistics for the model in SAS Model Manager.
@@ -439,8 +439,9 @@ class JSONFiles:
             "_C_",
         ]
 
-        json_template_path = Path(__file__).resolve().parent / \
-            "template_files/dmcas_fitstat.json"
+        json_template_path = (
+            Path(__file__).resolve().parent / "template_files/dmcas_fitstat.json"
+        )
         json_dict = cls.readJSONFile(json_template_path)
 
         data_map = [{}, {}, {}]
@@ -471,10 +472,7 @@ class JSONFiles:
 
     @classmethod
     def add_tuple_to_fitstat(
-            cls,
-            data: List[dict],
-            parameters: List[tuple],
-            valid_params
+        cls, data: List[dict], parameters: List[tuple], valid_params
     ):
         """
         Using tuples defined in input_fit_statistics, add them to the dmcas_fitstat json
@@ -512,7 +510,7 @@ class JSONFiles:
                     warnings.warn(
                         f"WARNING: {param[0]} is not a valid parameter and has been "
                         f"ignored.",
-                        category=UserWarning
+                        category=UserWarning,
                     )
                     continue
                 if isinstance(param[2], str):
@@ -555,7 +553,7 @@ class JSONFiles:
             if param_name not in valid_params:
                 warnings.warn(
                     f"{input_param_name} is not a valid parameter.",
-                    category=UserWarning
+                    category=UserWarning,
                 )
                 if input("Would you like to input more parameters? (Y/N)") == "N":
                     break
@@ -572,7 +570,7 @@ class JSONFiles:
                 warnings.warn(
                     f"{input_data_role} is not a valid role value. It should be either "
                     f"1, 2, or 3 or TRAIN, TEST, or VALIDATE respectively.",
-                    category=UserWarning
+                    category=UserWarning,
                 )
                 if input("Would you like to input more parameters? (Y/N)") == "N":
                     break
@@ -609,7 +607,7 @@ class JSONFiles:
             if param_name not in valid_params:
                 warnings.warn(
                     f"{input_param_name} is not a valid parameter.",
-                    category=UserWarning
+                    category=UserWarning,
                 )
                 continue
             if isinstance(data_role, str):
@@ -618,7 +616,7 @@ class JSONFiles:
                 warnings.warn(
                     f"{data_role} is not a valid role value. It should be either "
                     f"1, 2, or 3 or TRAIN, TEST, or VALIDATE respectively.",
-                    category=UserWarning
+                    category=UserWarning,
                 )
                 continue
             data[data_role - 1]["dataMap"][param_name] = param_value
@@ -1035,9 +1033,7 @@ class JSONFiles:
         with open(Path(jPath) / ROC, "w") as jFile:
             json.dump(nullJSONROCDict, jFile, indent=4)
         print(
-            "{} was successfully written and saved to {}".format(
-                ROC, Path(jPath) / ROC
-            )
+            "{} was successfully written and saved to {}".format(ROC, Path(jPath) / ROC)
         )
 
         with open(Path(jPath) / LIFT, "w") as jFile:

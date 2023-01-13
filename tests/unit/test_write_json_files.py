@@ -146,8 +146,8 @@ def test_add_tuple_to_fitstat():
     invalid_tuple = 1
     tuple_list = [invalid_tuple]
     with pytest.raises(
-            ValueError,
-            match=f"Expected a tuple, but got {str(type(invalid_tuple))} instead."
+        ValueError,
+        match=f"Expected a tuple, but got {str(type(invalid_tuple))} instead.",
     ):
         jf.add_tuple_to_fitstat([], tuple_list, [])
 
@@ -156,7 +156,7 @@ def test_add_tuple_to_fitstat():
     with pytest.raises(
         ValueError,
         match=f"Expected a tuple with three parameters, but instead got tuple with "
-              f"length {len(invalid_tuple)} "
+        f"length {len(invalid_tuple)} ",
     ):
         jf.add_tuple_to_fitstat([], tuple_list, [])
 
@@ -164,7 +164,7 @@ def test_add_tuple_to_fitstat():
     data_map = [
         {"dataMap": {"_RASE_": None, "_NObs_": None}},
         {"dataMap": {"_RASE_": None, "_NObs_": None}},
-        {"dataMap": {"_RASE_": None, "_NObs_": None}}
+        {"dataMap": {"_RASE_": None, "_NObs_": None}},
     ]
     tuple_list = [("RASE", 10, 1), ("_NObs_", 33, "TEST")]
     new_map = jf.add_tuple_to_fitstat(data_map, tuple_list, valid_params)
@@ -175,7 +175,7 @@ def test_add_tuple_to_fitstat():
     tuple_list.append((invalid_param, 0, 2))
     with pytest.warns(
         UserWarning,
-        match=f"WARNING: {invalid_param} is not a valid parameter and has been ignored."
+        match=f"WARNING: {invalid_param} is not a valid parameter and has been ignored.",
     ):
         warn_map = jf.add_tuple_to_fitstat(data_map, tuple_list, valid_params)
         assert warn_map[0]["dataMap"]["_RASE_"] == 10
@@ -189,6 +189,7 @@ def test_user_input_fitstat(monkeypatch):
     - Produce a warning for invalid role, then stop input
     - Updated data_map is returned with inputted values
     """
+
     def mock_input(prompt):
         return next(input_value)
 
@@ -196,14 +197,11 @@ def test_user_input_fitstat(monkeypatch):
     data_map = [
         {"dataMap": {"_RASE_": None, "_NObs_": None}},
         {"dataMap": {"_RASE_": None, "_NObs_": None}},
-        {"dataMap": {"_RASE_": None, "_NObs_": None}}
+        {"dataMap": {"_RASE_": None, "_NObs_": None}},
     ]
     valid_params = ["_RASE_", "_NObs_"]
     invalid_param = "BAD"
-    with pytest.warns(
-        UserWarning,
-        match=f"{invalid_param} is not a valid parameter."
-    ):
+    with pytest.warns(UserWarning, match=f"{invalid_param} is not a valid parameter."):
         input_value = iter([invalid_param, "N"])
         warn1_map = jf.user_input_fitstat(data_map, valid_params)
         assert warn1_map == data_map
@@ -212,7 +210,7 @@ def test_user_input_fitstat(monkeypatch):
     with pytest.warns(
         UserWarning,
         match=f"{invalid_role} is not a valid role value. It should be either 1, 2, or "
-              f"3 or TRAIN, TEST, or VALIDATE respectively."
+        f"3 or TRAIN, TEST, or VALIDATE respectively.",
     ):
         input_value = iter(["_NObs_", 10, invalid_role, "N"])
         warn2_map = jf.user_input_fitstat(data_map, valid_params)
@@ -234,23 +232,20 @@ def test_add_df_to_fitstat():
     data_map = [
         {"dataMap": {"_RASE_": None, "_NObs_": None}},
         {"dataMap": {"_RASE_": None, "_NObs_": None}},
-        {"dataMap": {"_RASE_": None, "_NObs_": None}}
+        {"dataMap": {"_RASE_": None, "_NObs_": None}},
     ]
     invalid_param = "BAD"
     valid_params = ["_RASE_", "_NObs_"]
     df = pd.DataFrame(data=[[invalid_param, 10, 1]])
-    with pytest.warns(
-            UserWarning,
-            match=f"{invalid_param} is not a valid parameter."
-    ):
+    with pytest.warns(UserWarning, match=f"{invalid_param} is not a valid parameter."):
         warn1_map = jf.add_df_to_fitstat(df, data_map, valid_params)
         assert data_map == warn1_map
 
     invalid_role = 5
     with pytest.warns(
-            UserWarning,
-            match=f"{invalid_role} is not a valid role value. It should be either 1, "
-                  f"2, or 3 or TRAIN, TEST, or VALIDATE respectively."
+        UserWarning,
+        match=f"{invalid_role} is not a valid role value. It should be either 1, "
+        f"2, or 3 or TRAIN, TEST, or VALIDATE respectively.",
     ):
         df = pd.DataFrame(data=[["_NObs_", 10, invalid_role]])
         warn2_map = jf.add_df_to_fitstat(df, data_map, valid_params)
@@ -283,6 +278,7 @@ def test_input_fit_statistics(monkeypatch):
 
     def mock_input(prompt):
         return next(input_value)
+
     monkeypatch.setattr("builtins.input", mock_input)
     input_value = iter(["_RASE_", 10, 1, "Y", "_NObs_", 33, "TEST", "N"])
     fitstat_dict = jf.input_fit_statistics(user_input=True)
