@@ -133,3 +133,157 @@ def test_write_file_metadata_json():
         model_prefix="Test_Model", is_h2o_model=True
     )
     assert json.loads(meta_dict["fileMetadata.json"])[3]["name"] == "Test_Model.mojo"
+
+
+def test_add_tuple_to_fitstat():
+    """
+    Test cases:
+    - Raise error if non-tuple provided in list
+    - Raise error if tuple provided has an invalid shape
+    - Updated data_map is returned with a valid tuple list
+    - Produce a warning if an invalid parameter is provided, but still complete function
+    """
+    invalid_tuple = 1
+    tuple_list = [invalid_tuple]
+    with pytest.raises(
+            ValueError,
+            match=f"Expected a tuple, but got {str(type(invalid_tuple))} instead."
+    ):
+        jf.add_tuple_to_fitstat([], tuple_list, [])
+
+    invalid_tuple = (1, 2, 3, 4, 5)
+    tuple_list = [invalid_tuple]
+    with pytest.raises(
+        ValueError,
+        match=f"Expected a tuple with three parameters, but instead got tuple with "
+              f"length {len(invalid_tuple)} "
+    ):
+        jf.add_tuple_to_fitstat([], tuple_list, [])
+
+    valid_params = ["_RASE_", "_NObs_"]
+    data_map = [
+        {"dataMap": {"_RASE_": None, "_NObs_": None}},
+        {"dataMap": {"_RASE_": None, "_NObs_": None}},
+        {"dataMap": {"_RASE_": None, "_NObs_": None}}
+    ]
+    tuple_list = [("RASE", 10, 1), ("_NObs_", 33, "TEST")]
+    new_map = jf.add_tuple_to_fitstat(data_map, tuple_list, valid_params)
+    assert new_map[0]["dataMap"]["_RASE_"] == 10
+    assert new_map[1]["dataMap"]["_NObs_"] == 33
+
+    invalid_param = "BAD"
+    tuple_list.append((invalid_param, 0, 2))
+    with pytest.warns(
+        UserWarning,
+        match=f"WARNING: {invalid_param} is not a valid parameter and has been ignored."
+    ):
+        warn_map = jf.add_tuple_to_fitstat(data_map, tuple_list, valid_params)
+        assert warn_map[0]["dataMap"]["_RASE_"] == 10
+        assert warn_map[1]["dataMap"]["_NObs_"] == 33
+
+
+def test_user_input_fitstat(monkeypatch):
+    """
+    Test cases:
+    - Produce a warning for invalid parameters, then stop input
+    - Produce a warning for invalid role, then stop input
+    - Updated data_map is returned with inputted values
+    """
+    def mock_input(prompt):
+        return next(input_value)
+
+    monkeypatch.setattr("builtins.input", mock_input)
+    data_map = [
+        {"dataMap": {"_RASE_": None, "_NObs_": None}},
+        {"dataMap": {"_RASE_": None, "_NObs_": None}},
+        {"dataMap": {"_RASE_": None, "_NObs_": None}}
+    ]
+    valid_params = ["_RASE_", "_NObs_"]
+    invalid_param = "BAD"
+    with pytest.warns(
+        UserWarning,
+        match=f"{invalid_param} is not a valid parameter."
+    ):
+        input_value = iter([invalid_param, "N"])
+        warn1_map = jf.user_input_fitstat(data_map, valid_params)
+        assert warn1_map == data_map
+
+    invalid_role = 5
+    with pytest.warns(
+        UserWarning,
+        match=f"{invalid_role} is not a valid role value. It should be either 1, 2, or "
+              f"3 or TRAIN, TEST, or VALIDATE respectively."
+    ):
+        input_value = iter(["_NObs_", 10, invalid_role, "N"])
+        warn2_map = jf.user_input_fitstat(data_map, valid_params)
+        assert warn2_map == data_map
+
+    input_value = iter(["_RASE_", 10, 1, "Y", "_NObs_", 33, "TEST", "N"])
+    new_map = jf.user_input_fitstat(data_map, valid_params)
+    assert new_map[0]["dataMap"]["_RASE_"] == 10
+    assert new_map[1]["dataMap"]["_NObs_"] == 33
+
+
+def test_add_df_to_fitstat():
+    """
+    Test cases:
+    - Produce warning for invalid parameter, but still return a data map
+    - Produce warning for invalid role, but still return a data map
+    - Updated data map is returned with valid values
+    """
+    data_map = [
+        {"dataMap": {"_RASE_": None, "_NObs_": None}},
+        {"dataMap": {"_RASE_": None, "_NObs_": None}},
+        {"dataMap": {"_RASE_": None, "_NObs_": None}}
+    ]
+    invalid_param = "BAD"
+    valid_params = ["_RASE_", "_NObs_"]
+    df = pd.DataFrame(data=[[invalid_param, 10, 1]])
+    with pytest.warns(
+            UserWarning,
+            match=f"{invalid_param} is not a valid parameter."
+    ):
+        warn1_map = jf.add_df_to_fitstat(df, data_map, valid_params)
+        assert data_map == warn1_map
+
+    invalid_role = 5
+    with pytest.warns(
+            UserWarning,
+            match=f"{invalid_role} is not a valid role value. It should be either 1, "
+                  f"2, or 3 or TRAIN, TEST, or VALIDATE respectively."
+    ):
+        df = pd.DataFrame(data=[["_NObs_", 10, invalid_role]])
+        warn2_map = jf.add_df_to_fitstat(df, data_map, valid_params)
+        assert warn2_map == data_map
+
+    df = pd.DataFrame(data=[["_RASE_", 10, 1], ["_NObs_", 33, "TEST"]])
+    new_map = jf.add_df_to_fitstat(df, data_map, valid_params)
+    assert new_map[0]["dataMap"]["_RASE_"] == 10
+    assert new_map[1]["dataMap"]["_NObs_"] == 33
+
+
+def test_input_fit_statistics(monkeypatch):
+    """
+    Test cases:
+    - Generate correctly named file with json_path provided (tuple list)
+    - Return correctly labelled dict when no json_path is provided (tuple list)
+    - Repeat above with user input
+    - Repeat above with input Dataframe
+    """
+    tuple_list = [("RASE", 10, 1), ("_NObs_", 33, "TEST")]
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        jf.input_fit_statistics(tuple_list=tuple_list, json_path=Path(tmp_dir))
+        assert (Path(tmp_dir) / "dmcas_fitstat.json").exists()
+
+    fitstat_dict = jf.input_fit_statistics(tuple_list=tuple_list)
+    assert "dmcas_fitstat.json" in fitstat_dict
+
+    fitstat_dict = jf.input_fit_statistics(fitstat_df=pd.DataFrame(data=tuple_list))
+    assert "dmcas_fitstat.json" in fitstat_dict
+
+    def mock_input(prompt):
+        return next(input_value)
+    monkeypatch.setattr("builtins.input", mock_input)
+    input_value = iter(["_RASE_", 10, 1, "Y", "_NObs_", 33, "TEST", "N"])
+    fitstat_dict = jf.input_fit_statistics(user_input=True)
+    assert "dmcas_fitstat.json" in fitstat_dict
