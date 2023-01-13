@@ -371,7 +371,11 @@ class JSONFiles:
 
     @classmethod
     def input_fit_statistics(
-        cls, csv_path=None, json_path=None, user_input=False, tuple_list=None
+            cls,
+            fitstat_df: pd.DataFrame = None,
+            user_input: bool = False,
+            tuple_list: List[tuple] = None,
+            json_path: Union[str, Path] = None
     ):
         """
         Writes a JSON file to display fit statistics for the model in SAS Model Manager.
@@ -406,19 +410,18 @@ class JSONFiles:
 
         Parameters
         ----------
-        csv_path : string, optional
-            Location for an input CSV file that contains parameter statistics. The
-            default value is None.
-        json_path : string or Path, optional
-            Location for the output JSON file. The default value is None.
+        fitstat_df : pandas Dataframe, optional
+            Dataframe containing fitstat parameters and values. The default value is
+            None.
         user_input : boolean, optional
             If true, prompt the user for more parameters. The default value is false.
         tuple_list : list of tuples, optional
-            Input parameter tuples in the form of (parameterName, parameterLabel,
-            parameterValue, data_role). For example, a sample parameter call would be
-            'NObs', 'Sum of Frequencies', 3488, or 'TRAIN'. Variable data_role
-            is typically either TRAIN, TEST, or VALIDATE or 1, 2, 3 respectively. The
-            default value is None.
+            Input parameter tuples in the form of (parameterName, parameterValue,
+            data_role). For example, a sample parameter call would be
+            'NObs', 3488, or 'TRAIN'. Variable data_role is typically either TRAIN,
+            TEST, or VALIDATE or 1, 2, 3 respectively. The default value is None.
+        json_path : string or Path, optional
+            Location for the output JSON file. The default value is None.
         """
         valid_params = [
             "_RASE_",
@@ -450,8 +453,8 @@ class JSONFiles:
         if user_input:
             data_map = cls.user_input_fitstat(data_map, valid_params)
 
-        if csv_path is not None:
-            data_map = cls.add_csv_to_fitstat(csv_path, data_map, valid_params)
+        if fitstat_df is not None:
+            data_map = cls.add_df_to_fitstat(fitstat_df, data_map, valid_params)
 
         for i in range(3):
             json_dict["data"][i] = data_map[i]
@@ -467,7 +470,12 @@ class JSONFiles:
             return {FITSTAT: json.dumps(json_dict, indent=4)}
 
     @classmethod
-    def add_tuple_to_fitstat(cls, data: List[dict], parameters, valid_params):
+    def add_tuple_to_fitstat(
+            cls,
+            data: List[dict],
+            parameters: List[tuple],
+            valid_params
+    ):
         """
         Using tuples defined in input_fit_statistics, add them to the dmcas_fitstat json
         dictionary.
@@ -502,15 +510,16 @@ class JSONFiles:
                 param_name = cls.format_parameter(param[0])
                 if param_name not in valid_params:
                     warnings.warn(
-                        f"WARNING: {param_name} is not a valid parameter and has been "
-                        f"ignored. "
+                        f"WARNING: {param[0]} is not a valid parameter and has been "
+                        f"ignored.",
+                        category=UserWarning
                     )
                     continue
                 if isinstance(param[2], str):
                     data_role = cls.convert_data_role(param[2])
                 else:
                     data_role = param[2]
-                data[data_role - 1]["data_map"][param_name] = param[1]
+                data[data_role - 1]["dataMap"][param_name] = param[1]
             elif not isinstance(param, tuple):
                 raise ValueError(
                     f"Expected a tuple, but got {str(type(param))} instead."
@@ -541,35 +550,48 @@ class JSONFiles:
             List of dicts with the user provided values inputted.
         """
         while True:
-            param_name = input("What is the parameter name?\n")
-            param_name = cls.format_parameter(param_name)
+            input_param_name = input("What is the parameter name?\n")
+            param_name = cls.format_parameter(input_param_name)
             if param_name not in valid_params:
-                print(f"{param_name} is not a valid parameter.")
+                warnings.warn(
+                    f"{input_param_name} is not a valid parameter.",
+                    category=UserWarning
+                )
                 if input("Would you like to input more parameters? (Y/N)") == "N":
                     break
                 continue
             param_value = input("What is the parameter's value?\n")
-            data_role = input("Which data role is the parameter associated with?\n")
-            if type(data_role) is str:
-                data_role = cls.convert_data_role(data_role)
-            elif data_role not in [1, 2, 3]:
-                print(f"{data_role} is not a valid role value. It should be either 1, "
-                      f"2, or 3.")
+            input_data_role = input(
+                "Which data role is the parameter associated with?\n"
+            )
+            if isinstance(input_data_role, str):
+                data_role = cls.convert_data_role(input_data_role)
+            elif input_data_role in [1, 2, 3]:
+                data_role = input_data_role
+            else:
+                warnings.warn(
+                    f"{input_data_role} is not a valid role value. It should be either "
+                    f"1, 2, or 3 or TRAIN, TEST, or VALIDATE respectively.",
+                    category=UserWarning
+                )
+                if input("Would you like to input more parameters? (Y/N)") == "N":
+                    break
                 continue
-            data[data_role - 1]["data_map"][param_name] = param_value
+            data[data_role - 1]["dataMap"][param_name] = param_value
 
             if input("More parameters? (Y/N)") == "N":
                 break
         return data
 
     @classmethod
-    def add_csv_to_fitstat(cls, csv_path, data: List[dict], valid_params):
+    def add_df_to_fitstat(cls, df, data: List[dict], valid_params):
         """
+        Add parameters from provided Dataframe to the fitstats dictionary.
 
         Parameters
         ----------
-        csv_path : string
-            Location for an input CSV file that contains parameter statistics.
+        df : pandas Dataframe
+            Dataframe containing fitstat parameters and values.
         data : list of dicts
             List of dicts for the data values of each parameter. Split into the three
             valid partitions (TRAIN, TEST, VALIDATE).
@@ -581,15 +603,25 @@ class JSONFiles:
         list of dicts
             List of dicts with the user provided values inputted.
         """
-        csv_data = pd.read_csv(csv_path)
-        for i, row in enumerate(csv_data.values):
-            param_name, param_value, data_role = row
-            param_name = cls.format_parameter(param_name)
+        for i, row in enumerate(df.values):
+            input_param_name, param_value, data_role = row
+            param_name = cls.format_parameter(input_param_name)
             if param_name not in valid_params:
+                warnings.warn(
+                    f"{input_param_name} is not a valid parameter.",
+                    category=UserWarning
+                )
                 continue
-            if type(data_role) is str:
+            if isinstance(data_role, str):
                 data_role = cls.convert_data_role(data_role)
-            data[data_role - 1]["data_map"][param_name] = param_value
+            elif isinstance(data_role, int) and data_role not in [1, 2, 3]:
+                warnings.warn(
+                    f"{data_role} is not a valid role value. It should be either "
+                    f"1, 2, or 3 or TRAIN, TEST, or VALIDATE respectively.",
+                    category=UserWarning
+                )
+                continue
+            data[data_role - 1]["dataMap"][param_name] = param_value
         return data
 
     @classmethod
