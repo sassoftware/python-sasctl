@@ -275,6 +275,12 @@ class JSONFiles:
         train_table : string, optional
             The path to the model's training table within SAS Viya. Default is an empty
             string.
+
+        Returns
+        -------
+        dict
+            Dictionary containing a key-value pair representing the file name and json
+            dump respectively.
         """
         if model_desc:
             # Check if model description is smaller than the 1024-character limit
@@ -422,6 +428,12 @@ class JSONFiles:
             TEST, or VALIDATE or 1, 2, 3 respectively. The default value is None.
         json_path : string or Path, optional
             Location for the output JSON file. The default value is None.
+
+        Returns
+        -------
+        dict
+            Dictionary containing a key-value pair representing the file name and json
+            dump respectively.
         """
         valid_params = [
             "_RASE_",
@@ -442,7 +454,7 @@ class JSONFiles:
         json_template_path = (
             Path(__file__).resolve().parent / "template_files/dmcas_fitstat.json"
         )
-        json_dict = cls.readJSONFile(json_template_path)
+        json_dict = cls.read_json_file(json_template_path)
 
         data_map = [{}, {}, {}]
         for i in range(3):
@@ -670,8 +682,8 @@ class JSONFiles:
                 "function. "
             )
 
-        nullJSONPath = Path(__file__).resolve().parent / "dmcas_fitstat.json"
-        nullJSONDict = cls.readJSONFile(nullJSONPath)
+        nullJSONPath = Path(__file__).resolve().parent / "template_files/dmcas_fitstat.json"
+        nullJSONDict = cls.read_json_file(nullJSONPath)
 
         dataSets = [[[None], [None]], [[None], [None]], [[None], [None]]]
 
@@ -822,11 +834,11 @@ class JSONFiles:
                 "this function. "
             )
 
-        nullJSONROCPath = Path(__file__).resolve().parent / "dmcas_roc.json"
-        nullJSONROCDict = cls.readJSONFile(nullJSONROCPath)
+        nullJSONROCPath = Path(__file__).resolve().parent / "template_files/dmcas_roc.json"
+        nullJSONROCDict = cls.read_json_file(nullJSONROCPath)
 
-        nullJSONLiftPath = Path(__file__).resolve().parent / "dmcas_lift.json"
-        nullJSONLiftDict = cls.readJSONFile(nullJSONLiftPath)
+        nullJSONLiftPath = Path(__file__).resolve().parent / "template_files/dmcas_lift.json"
+        nullJSONLiftDict = cls.read_json_file(nullJSONLiftPath)
 
         dataSets = [pd.DataFrame(), pd.DataFrame(), pd.DataFrame()]
         columns = ["actual", "predict"]
@@ -1045,7 +1057,7 @@ class JSONFiles:
         )
 
     @staticmethod
-    def readJSONFile(path):
+    def read_json_file(path):
         """
         Reads a JSON file from a given path.
 
@@ -1319,7 +1331,7 @@ class JSONFiles:
                         if not name.asname:
                             modules.append(node.module)
                 elif isinstance(node, ast.Import):
-                    for name in node.names:
+                    for _ in node.names:
                         if not node.names[0].asname:
                             modules.append(node.names[0].name)
 
