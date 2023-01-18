@@ -645,7 +645,7 @@ class JSONFiles:
         validate_data=None,
         train_data=None,
         test_data=None,
-        json_path=None
+        json_path=None,
     ):
         """
         Calculates fit statistics (including ROC and Lift curves) from datasets and then
@@ -711,7 +711,7 @@ class JSONFiles:
         json_dict = [{}, {}, {}]
         for i, name in enumerate(["dmcas_fitstat", "dmcas_roc", "dmcas_lift"]):
             json_template_path = (
-                    Path(__file__).resolve().parent / f"template_files/{name}.json"
+                Path(__file__).resolve().parent / f"template_files/{name}.json"
             )
             json_dict[i] = cls.read_json_file(json_template_path)
 
@@ -719,9 +719,9 @@ class JSONFiles:
 
         data_partition_exists = cls.check_for_data(validate_data, train_data, test_data)
 
-        for i, partition, data in enumerate(zip(
-                data_partition_exists, [validate_data, train_data, test_data]
-        )):
+        for i, partition, data in enumerate(
+            zip(data_partition_exists, [validate_data, train_data, test_data])
+        ):
             # If the data partition was not passed, skip to the next partition
             if not partition:
                 continue
@@ -742,8 +742,12 @@ class JSONFiles:
                 casout={"name": "Lift", "replace": True},
             )
 
-            fitstat_dict = pd.DataFrame(conn.CASTable("FitStat").to_frame())\
-                .transpose().squeeze().to_dict()
+            fitstat_dict = (
+                pd.DataFrame(conn.CASTable("FitStat").to_frame())
+                .transpose()
+                .squeeze()
+                .to_dict()
+            )
             json_dict[0]["data"][i]["dataMap"].update(fitstat_dict)
 
             roc_df = pd.DataFrame(conn.CASTable("ROC").to_frame())
@@ -802,7 +806,7 @@ class JSONFiles:
             data_partitions = [
                 1 if validate else 0,
                 1 if train else 0,
-                1 if test else 0
+                1 if test else 0,
             ]
         return data_partitions
 
@@ -858,8 +862,7 @@ class JSONFiles:
                 data["predict_proba"] = data.loc[:, "predict"].div(target_value)
             elif len(data) == 3:
                 data = pd.DataFrame(
-                    data=data,
-                    columns=["actual", "predict", "predict_proba"]
+                    data=data, columns=["actual", "predict", "predict_proba"]
                 )
         elif isinstance(data, np.ndarray):
             if len(data) == 2:
@@ -871,7 +874,8 @@ class JSONFiles:
                 )
         else:
             raise ValueError(
-                "Please provide the data in a list, dataframe, or numpy array.")
+                "Please provide the data in a list, dataframe, or numpy array."
+            )
 
         return data
 
@@ -905,7 +909,7 @@ class JSONFiles:
     @deprecated(
         "Please use the calculate_model_statistics method instead.",
         version="1.9",
-        removed_in="1.10"
+        removed_in="1.10",
     )
     @classmethod
     def calculateFitStat(
@@ -955,7 +959,9 @@ class JSONFiles:
                 "function. "
             )
 
-        nullJSONPath = Path(__file__).resolve().parent / "template_files/dmcas_fitstat.json"
+        nullJSONPath = (
+            Path(__file__).resolve().parent / "template_files/dmcas_fitstat.json"
+        )
         nullJSONDict = cls.read_json_file(nullJSONPath)
 
         dataSets = [[[None], [None]], [[None], [None]], [[None], [None]]]
@@ -1053,7 +1059,7 @@ class JSONFiles:
     @deprecated(
         "Please use the calculate_model_statistics method instead.",
         version="1.9",
-        removed_in="1.10"
+        removed_in="1.10",
     )
     @classmethod
     def generateROCLiftStat(
@@ -1113,10 +1119,14 @@ class JSONFiles:
                 "this function. "
             )
 
-        nullJSONROCPath = Path(__file__).resolve().parent / "template_files/dmcas_roc.json"
+        nullJSONROCPath = (
+            Path(__file__).resolve().parent / "template_files/dmcas_roc.json"
+        )
         nullJSONROCDict = cls.read_json_file(nullJSONROCPath)
 
-        nullJSONLiftPath = Path(__file__).resolve().parent / "template_files/dmcas_lift.json"
+        nullJSONLiftPath = (
+            Path(__file__).resolve().parent / "template_files/dmcas_lift.json"
+        )
         nullJSONLiftDict = cls.read_json_file(nullJSONLiftPath)
 
         dataSets = [pd.DataFrame(), pd.DataFrame(), pd.DataFrame()]
