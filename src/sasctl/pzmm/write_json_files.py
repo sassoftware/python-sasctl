@@ -17,6 +17,9 @@ from typing import List, Union
 # Third Party Imports
 import pandas as pd
 
+from ..core import current_session
+from ..utils.decorators import deprecated
+
 # Constants
 INPUT = "inputVar.json"
 OUTPUT = "outputVar.json"
@@ -635,6 +638,276 @@ class JSONFiles:
         return data
 
     @classmethod
+    def calculate_model_statistics(
+        cls,
+        target_value,
+        prob_value=None,
+        validate_data=None,
+        train_data=None,
+        test_data=None,
+        json_path=None
+    ):
+        """
+        Calculates fit statistics (including ROC and Lift curves) from datasets and then
+        either writes them to JSON files or returns them as a single dictionary.
+
+        Calculations are performed using a call to SAS CAS via the swat package. An
+        error will be raised if the swat package is not installed or if a connection to
+        a SAS Viya system is not possible.
+
+        Datasets must contain the actual and predicted values and may optionally contain
+        the predicted probabilities. If no probabilities are provided, a dummy
+        probability dataset is generated based on the predicted values and normalized by
+        the target value. If a probability threshold value is not provided, the
+        threshold value is set at 0.5.
+
+        Datasets can be provided in the following forms, with the assumption that data
+        is ordered as `actual`, `predict`, and `probability` respectively:
+        * pandas dataframe: the actual and predicted values are their own columns
+        * numpy array: the actual and predicted values are their own columns or rows and
+        ordered such that the actual values come first and the predicted second
+        * list: the actual and predicted values are their own indexed entry
+
+        If a json_path is supplied, then this function outputs a set of JSON files named
+        "dmcas_fitstat.json", "dmcas_roc.json", "dmcas_lift.json".
+
+        Parameters
+        ----------
+        target_value : str, int, or float
+            Target event value for model prediction events.
+        prob_value : int or float, optional
+            The threshold value for model predictions to indicate an event occurred. The
+            default value is 0.5.
+        validate_data : pandas DataFrame, list of lists, or numpy array, optional
+            Dataset pertaining to the validation data. The default value is None.
+        train_data : pandas DataFrame, list of lists, or numpy array, optional
+            Dataset pertaining to the training data. The default value is None.
+        test_data : pandas DataFrame, list of lists, or numpy array, optional
+            Dataset pertaining to the test data. The default value is None.
+        json_path : string or Path, optional
+            Location for the output JSON files. The default value is None.
+
+        Returns
+        -------
+        dict
+            Dictionary containing a key-value pair representing the files name and json
+            dumps respectively.
+
+        Raises
+        ------
+        RuntimeError
+            If swat is not installed, this function cannot perform the necessary
+            calculations.
+        """
+        try:
+            sess = current_session()
+            conn = sess.as_swat()
+        except ImportError:
+            raise RuntimeError(
+                "The `swat` package is required to generate fit statistics, ROC, and "
+                "Lift charts with the calculate_model_statistics function."
+            )
+
+        json_dict = [{}, {}, {}]
+        for i, name in enumerate(["dmcas_fitstat", "dmcas_roc", "dmcas_lift"]):
+            json_template_path = (
+                    Path(__file__).resolve().parent / f"template_files/{name}.json"
+            )
+            json_dict[i] = cls.read_json_file(json_template_path)
+
+        conn.loadactionset(actionset="percentile")
+
+        data_partition_exists = cls.check_for_data(validate_data, train_data, test_data)
+
+        for i, partition, data in enumerate(zip(
+                data_partition_exists, [validate_data, train_data, test_data]
+        )):
+            # If the data partition was not passed, skip to the next partition
+            if not partition:
+                continue
+
+            data = cls.stat_dataset_to_dataframe(data, target_value)
+
+            conn.upload(data, casout={"name": "assess_dataset", "replace": True})
+
+            conn.percentile.assess(
+                table={"name": "assess_table", "replace": True},
+                response="predict",
+                pVar="predict_proba",
+                event=str(target_value),
+                pEvent=prob_value if prob_value else 0.5,
+                inputs="actual",
+                fitStatOut={"name": "FitStat", "replace": True},
+                rocOut={"name": "ROC", "replace": True},
+                casout={"name": "Lift", "replace": True},
+            )
+
+            fitstat_dict = pd.DataFrame(conn.CASTable("FitStat").to_frame())\
+                .transpose().squeeze().to_dict()
+            json_dict[0]["data"][i]["dataMap"].update(fitstat_dict)
+
+            roc_df = pd.DataFrame(conn.CASTable("ROC").to_frame())
+            roc_dict = cls.apply_dataframe_to_json(json_dict[1]["data"], i, roc_df)
+            json_dict[1]["data"].update(roc_dict)
+
+            lift_df = pd.DataFrame(conn.CASTable("Lift").to_frame())
+            lift_dict = cls.apply_dataframe_to_json(json_dict[2]["data"], i, lift_df)
+            json_dict[2]["data"].update(lift_dict)
+
+        if json_path:
+            for name in [FITSTAT, ROC, LIFT]:
+                with open(Path(json_path) / name, "w") as json_file:
+                    json_file.write(json.dumps(json_dict, indent=4))
+                print(
+                    f"{name} was successfully written and saved to "
+                    f"{Path(json_path) / name}"
+                )
+        else:
+            return {
+                FITSTAT: json.dumps(json_dict[0], indent=4),
+                ROC: json.dumps(json_dict[1], indent=4),
+                LIFT: json.dumps(json_dict[2], indent=4),
+            }
+
+    @staticmethod
+    def check_for_data(validate, train, test):
+        """
+        Check which datasets were provided and return a list of flags.
+
+        Parameters
+        ----------
+        validate : pandas DataFrame, list of lists, or numpy array
+            Dataset pertaining to the validation data.
+        train : pandas DataFrame, list of lists, or numpy array
+            Dataset pertaining to the training data.
+        test : pandas DataFrame, list of lists, or numpy array
+            Dataset pertaining to the test data.
+
+        Returns
+        -------
+        data_partitions : list
+            A list of flags indicating which partitions have datasets.
+
+        Raises
+        ------
+        ValueError
+            If no data is provided, raises an exception.
+        """
+        if all(data is None for data in (validate, train, test)):
+            raise ValueError(
+                "No data was provided. Please provide the actual and predicted values "
+                "for at least one of the partitions (VALIDATE, TRAIN, or TEST)."
+            )
+        else:
+            data_partitions = [
+                1 if validate else 0,
+                1 if train else 0,
+                1 if test else 0
+            ]
+        return data_partitions
+
+    @staticmethod
+    def stat_dataset_to_dataframe(data, target_value):
+        """
+        Convert the user supplied statistical dataset from either a pandas DataFrame,
+        list of lists, or numpy array to a DataFrame formatted for SAS CAS upload.
+
+        If the prediction probabilities are not provided, the prediction data will be
+        duplicated to allow for calculation of the fit statistics through CAS. The data
+        is assumed to be in the order of "actual", "predicted", "probability"
+        respectively.
+
+        Parameters
+        ----------
+        data : pandas DataFrame, list of lists, or numpy array
+            Dataset representing the actual and predicted values of the model. May also
+            include the prediction probabilities.
+        target_value : str, int, or float
+            Target event value for model prediction events.
+
+        Returns
+        -------
+        data : pandas DataFrame
+            Dataset formatted for SAS CAS upload.
+
+        Raises
+        ------
+        ValueError
+            If an improper data format is provided, this error is raised.
+
+        """
+        # If numpy inputs are supplied, then assume numpy is installed
+        try:
+            # noinspection PyPackageRequirements
+            import numpy as np
+        except ImportError:
+            np = None
+
+        if isinstance(target_value, str):
+            target_value = float(target_value)
+
+        if isinstance(data, pd.DataFrame):
+            if len(data.columns) == 2:
+                data.columns = ["actual", "predict"]
+                data["predict_proba"] = data.loc[:, "predict"].div(target_value)
+            elif len(data.columns) == 3:
+                data.columns = ["actual", "predict", "predict_proba"]
+        elif isinstance(data, list):
+            if len(data) == 2:
+                data = pd.DataFrame(data=data, columns=["actual", "predict"])
+                data["predict_proba"] = data.loc[:, "predict"].div(target_value)
+            elif len(data) == 3:
+                data = pd.DataFrame(
+                    data=data,
+                    columns=["actual", "predict", "predict_proba"]
+                )
+        elif isinstance(data, np.ndarray):
+            if len(data) == 2:
+                data = pd.DataFrame({"actual": data[0], "predict": data[1]})
+                data["predict_proba"] = data.loc[:, "predict"].div(target_value)
+            elif len(data) == 3:
+                data = pd.DataFrame(
+                    {"actual": data[0], "predict": data[1], "predict_proba": data[2]}
+                )
+        else:
+            raise ValueError(
+                "Please provide the data in a list, dataframe, or numpy array.")
+
+        return data
+
+    @staticmethod
+    def apply_dataframe_to_json(json_dict, partition, stat_df):
+        """
+        Map the values of the ROC or Lift charts from SAS CAS to the dictionary
+        representation of the respective json file.
+
+        Parameters
+        ----------
+        json_dict : dict
+            Dictionary representation of the ROC or Lift chart json file.
+        partition : int
+            Numerical representation of the data partition. Either 0, 1, or 2.
+        stat_df : pandas DataFrame
+            ROC or Lift DataFrame generated from the SAS CAS percentile action set.
+
+        Returns
+        -------
+        json_dict : dict
+            Dictionary representation of the ROC or Lift chart json file, with the
+            values from the SAS CAS percentile action set added in.
+        """
+        for row_num in range(len(stat_df)):
+            row_dict = stat_df.iloc[row_num].to_dict()
+            json_dict[row_num + partition * len(stat_df)]["dataMap"].update(row_dict)
+        return json_dict
+
+    # noinspection PyCallingNonCallable,PyNestedDecorators
+    @deprecated(
+        "Please use the calculate_model_statistics method instead.",
+        version="1.9",
+        removed_in="1.10"
+    )
+    @classmethod
     def calculateFitStat(
         cls, validateData=None, trainData=None, testData=None, jPath=Path.cwd()
     ):
@@ -776,6 +1049,12 @@ class JSONFiles:
             )
         )
 
+    # noinspection PyCallingNonCallable,PyNestedDecorators
+    @deprecated(
+        "Please use the calculate_model_statistics method instead.",
+        version="1.9",
+        removed_in="1.10"
+    )
     @classmethod
     def generateROCLiftStat(
         cls,
