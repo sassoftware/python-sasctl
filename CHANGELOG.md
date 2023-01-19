@@ -1,6 +1,16 @@
 Unreleased
 ----------
  -
+
+v1.8.1 (2023-01-19)
+----------
+**Changes**
+ - Adjusted workflow for code coverage reporting. Prepped to add components in next release.
+ - Added `generate_requirements_json.ipynb` example.
+
+**Bugfixes**
+ - Fixed improper math.fabs use in `sasctl.pzmm.writeJSONFiles.calculateFitStat()`.
+ - Fixed incorrect ast node walk for module collection in `sasctl.pzmm.writeJSONFiles.create_requirements_json()`.
  
 v1.8.0 (2022-12-19)
 -------------------
@@ -10,6 +20,8 @@ v1.8.0 (2022-12-19)
    custom property names and values, and to correctly indicate their type (numeric, string, date, datetime) when
    passing the values to Viya.
  - Added `services.saslogon` for creating and removing OAuth clients.
+ - Added `pzmm.JSONFiles.create_requirements_json()` to create the requirements.json file for model deployment
+   to containers based on the user's model assets and Python environment.
 
 **Changes**
  - Deprecated `core.platform_version()` in favor of `Session.version_info()`.
@@ -19,6 +31,7 @@ v1.8.0 (2022-12-19)
  - Updated the testing framework to allow regression testing of multiple Viya versions.
  - Refactored the authentication functionality in `Session` to be more clear and less error prone.  Relevant
    functions were also made private to reduce clutter in the class's public interface.
+ - Began refactor for `sasctl.pzmm` to adhere to PEP8 guidelines and have better code coverage.
 
 **Bugfixes**
  - Fixed an issue with `register_model()` that caused invalid SAS score code to be generated when registering an
