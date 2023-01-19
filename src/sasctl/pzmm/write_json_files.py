@@ -544,11 +544,14 @@ class JSONFiles:
 
             try:
                 from scipy.stats import gamma
+
                 _, _, scale = gamma.fit(dataSets[j][1])
                 fitStats["_GAMMA_"] = 1 / scale
             except ImportError:
-                warnings.warn("scipy was not installed, so the gamma calculation could"
-                              "not be computed.")
+                warnings.warn(
+                    "scipy was not installed, so the gamma calculation could"
+                    "not be computed."
+                )
                 fitStats["_GAMMA_"] = None
 
             intPredict = [round(x) for x in dataSets[j][1]]
