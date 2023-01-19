@@ -53,22 +53,22 @@ jobs:
 
       # Separate upload task for unit test coverage allows for flagged analysis of test coverage
       - name: Upload Unit Test Coverage
-        if: matrix.os-version == 'ubuntu-latest'
+        if: startsWith(matrix.os-version, 'ubuntu')
         uses: codecov/codecov-action@v3
         with:
           directory: ./.reports/
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           file: unit.xml
           flags: unit
           verbose: true
 
       # Separate upload task for integration test coverage allows for flagged analysis of test coverage
       - name: Upload Integration Test Coverage
-        if: matrix.os-version == 'ubuntu-latest'
+        if: startsWith(matrix.os-version, 'ubuntu')
         uses: codecov/codecov-action@v3
         with:
           directory: ./.reports/
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           file: integration.xml
           flags: integration
           verbose: true
