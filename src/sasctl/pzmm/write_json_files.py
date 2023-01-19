@@ -542,12 +542,14 @@ class JSONFiles:
             GINI = (2 * auc) - 1
             fitStats["_GINI_"] = GINI
 
-            from scipy.stats import (
-                gamma,
-            )  # Holdover until fitstat generation via SWAT is sussed out
-
-            _, _, scale = gamma.fit(dataSets[j][1])
-            fitStats["_GAMMA_"] = 1 / scale
+            try:
+                from scipy.stats import gamma
+                _, _, scale = gamma.fit(dataSets[j][1])
+                fitStats["_GAMMA_"] = 1 / scale
+            except ImportError:
+                warnings.warn("scipy was not installed, so the gamma calculation could"
+                              "not be computed.")
+                fitStats["_GAMMA_"] = None
 
             intPredict = [round(x) for x in dataSets[j][1]]
             MCE = 1 - metrics.accuracy_score(dataSets[j][0], intPredict)
@@ -559,7 +561,7 @@ class JSONFiles:
             MCLL = metrics.log_loss(dataSets[j][0], dataSets[j][1])
             fitStats["_MCLL_"] = MCLL
 
-            KS = max(math.fabs(fpr - tpr))
+            KS = max(abs(fpr - tpr))
             fitStats["_KS_"] = KS
 
             KSPostCutoff = None
