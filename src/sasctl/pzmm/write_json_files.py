@@ -1144,15 +1144,12 @@ class JSONFiles:
 
             # Walk through each node in the ast to find import calls
             for node in ast.walk(tree):
-                # Determine parent module for from * import * calls
+                # Determine parent module for `from * import *` calls
                 if isinstance(node, ast.ImportFrom):
-                    for name in node.names:
-                        if not name.asname:
-                            modules.append(node.module)
+                    modules.append(node.module)
                 elif isinstance(node, ast.Import):
                     for name in node.names:
-                        if not node.names[0].asname:
-                            modules.append(node.names[0].name)
+                        modules.append(name.name)
 
         modules = list(set(modules))
         try:
