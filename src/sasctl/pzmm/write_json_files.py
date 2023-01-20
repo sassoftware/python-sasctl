@@ -30,7 +30,7 @@ ROC = "dmcas_roc.json"
 LIFT = "dmcas_lift.json"
 
 
-def flatten(nested_list):
+def _flatten(nested_list):
     """
     Flatten a nested list.
 
@@ -49,36 +49,9 @@ def flatten(nested_list):
     """
     for item in nested_list:
         if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
-            yield from flatten(item)
+            yield from _flatten(item)
         else:
             yield item
-
-
-def check_if_string(data: dict):
-    """
-    Determine if an MLFlow variable in data is a string type.
-
-    Parameters
-    ----------
-    data : dict
-        Dictionary representation of a single variable from an MLFlow model.
-
-    Returns
-    -------
-    bool
-        True if the variable is a string. False otherwise.
-    """
-    if data["type"] == "string":
-        return True
-    elif data["type"] in ["double", "integer", "float", "long"]:
-        return False
-    elif data["type"] == "tensor":
-        if data["tensor-spec"]["dtype"] in "string":
-            return True
-        else:
-            return False
-    else:
-        return False
 
 
 class JSONFiles:
@@ -194,8 +167,8 @@ class JSONFiles:
 
         return dict_list
 
-    @staticmethod
-    def generate_mlflow_variable_properties(input_data: list):
+    @classmethod
+    def generate_mlflow_variable_properties(cls, input_data: list):
         """
         Create a list of dictionaries containing the variable properties found in the
         MLModel file for MLFlow model runs.
@@ -218,7 +191,7 @@ class JSONFiles:
 
         dict_list = []
         for i, name in enumerate(predict_names):
-            is_str = check_if_string(input_data[i])
+            is_str = cls.check_if_string(input_data[i])
 
             var_dict = {"name": name}
             if is_str:
@@ -228,6 +201,31 @@ class JSONFiles:
             dict_list.append(var_dict)
 
         return dict_list
+
+    @staticmethod
+    def check_if_string(data: dict):
+        """
+        Determine if an MLFlow variable in data is a string type.
+
+        Parameters
+        ----------
+        data : dict
+            Dictionary representation of a single variable from an MLFlow model.
+
+        Returns
+        -------
+        bool
+            True if the variable is a string. False otherwise.
+        """
+        if data["type"] == "string":
+            return True
+        elif data["type"] == "tensor":
+            if data["tensor-spec"]["dtype"] in "string":
+                return True
+            else:
+                return False
+        else:
+            return False
 
     @staticmethod
     def write_model_properties_json(
@@ -1472,7 +1470,7 @@ class JSONFiles:
         code_dependencies = cls.get_code_dependencies(model_path)
 
         package_list = list(pickle_packages) + list(code_dependencies)
-        package_list = list(set(list(flatten(package_list))))
+        package_list = list(set(list(_flatten(package_list))))
         package_list = cls.remove_standard_library_packages(package_list)
         package_and_version = cls.get_local_package_version(package_list)
         # Identify packages with missing versions
@@ -1583,7 +1581,7 @@ class JSONFiles:
         import_info = []
         for file in sorted(Path(model_path).glob("*.py")):
             import_info.append(cls.find_imports(file))
-        import_info = list(set(flatten(import_info)))
+        import_info = list(set(_flatten(import_info)))
         return import_info
 
     @staticmethod
