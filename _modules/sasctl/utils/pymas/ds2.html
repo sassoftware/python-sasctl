@@ -5,13 +5,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.utils.pymas.ds2 &#8212; sasctl 1.8.0 documentation</title>
+    <title>sasctl.utils.pymas.ds2 &#8212; sasctl 1.8.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../_static/doctools.js"></script>
     <script src="../../../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -129,7 +126,7 @@
 
 <div class="viewcode-block" id="DS2BasePackage"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2BasePackage">[docs]</a><span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">DS2BasePackage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c1"># skipcq PYL-R0205</span>
-    <span class="sd">&quot;&quot;&quot;Defines a DS2 package.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Defines a DS2 package.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -151,17 +148,17 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Unique identifier generated for the package.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unique identifier generated for the package.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Unique name generated for the package.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unique name generated for the package.&quot;&quot;&quot;</span>
         <span class="c1"># Max length in some SAS products in 32 characters</span>
         <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">))[:</span><span class="mi">32</span><span class="p">]</span>
 
 <div class="viewcode-block" id="DS2BasePackage.code"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2BasePackage.code">[docs]</a>    <span class="k">def</span> <span class="nf">code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get the DS2 code for the package.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the DS2 code for the package.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -183,7 +180,7 @@
 
 <div class="viewcode-block" id="DS2PyMASPackage"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2PyMASPackage">[docs]</a><span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">DS2PyMASPackage</span><span class="p">(</span><span class="n">DS2BasePackage</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A DS2 package that uses PyMAS to invoke Python code.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A DS2 package that uses PyMAS to invoke Python code.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -218,7 +215,7 @@
         <span class="p">)</span>
 
 <div class="viewcode-block" id="DS2PyMASPackage.add_method"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2PyMASPackage.add_method">[docs]</a>    <span class="k">def</span> <span class="nf">add_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">variables</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add a DS2 method that calls a Python function defined by the package.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a DS2 method that calls a Python function defined by the package.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -308,7 +305,7 @@
 
 
 <div class="viewcode-block" id="DS2PyMASMethod"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2PyMASMethod">[docs]</a><span class="k">class</span> <span class="nc">DS2PyMASMethod</span><span class="p">(</span><span class="n">DS2BaseMethod</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A DS2 method that builds a PyMAS object.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A DS2 method that builds a PyMAS object.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -649,7 +646,7 @@
         <span class="k">return</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">,</span> <span class="n">role</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">viya_type</span><span class="p">)])</span></div>
 
 <div class="viewcode-block" id="DS2Variable.as_declaration"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2Variable.as_declaration">[docs]</a>    <span class="k">def</span> <span class="nf">as_declaration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;DS2 variable declaration statement.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;DS2 variable declaration statement.&quot;&quot;&quot;</span>
         <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\d+\]$&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;dcl </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -660,7 +657,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="DS2Variable.as_parameter"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2Variable.as_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">as_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;DS2 parameter syntax for method signatures.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;DS2 parameter syntax for method signatures.&quot;&quot;&quot;</span>
         <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[\d+\]$&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
         <span class="n">param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 
@@ -681,7 +678,7 @@
         <span class="k">return</span> <span class="mi">0</span>
 
 <div class="viewcode-block" id="DS2Variable.pymas_statement"><a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.ds2.DS2Variable.pymas_statement">[docs]</a>    <span class="k">def</span> <span class="nf">pymas_statement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">python_var_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns appropriate PyMAS get/set statements to move values between</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns appropriate PyMAS get/set statements to move values between</span>
 <span class="sd">        a Python variable and the DS2 variable.</span>
 
 <span class="sd">        Parameters</span>
@@ -758,8 +755,8 @@
       &copy;('Copyright © 2019, SAS Institute Inc., ', 'Cary, NC, USA.  All Rights Reserved.').
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

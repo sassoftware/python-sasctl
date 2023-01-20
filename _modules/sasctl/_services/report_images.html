@@ -5,13 +5,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.report_images &#8212; sasctl 1.8.0 documentation</title>
+    <title>sasctl._services.report_images &#8212; sasctl 1.8.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -84,7 +81,7 @@
 
 
 <div class="viewcode-block" id="ReportImages"><a class="viewcode-back" href="../../../api/services/report_images.html#sasctl._services.report_images.ReportImages">[docs]</a><span class="k">class</span> <span class="nc">ReportImages</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Delivers SVG images representing elements of a report.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delivers SVG images representing elements of a report.</span>
 
 <span class="sd">    The images are suitable to the current user, taking row-level-permissions</span>
 <span class="sd">    and other factors into consideration.</span>
@@ -99,17 +96,17 @@
     <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;reportImages&quot;</span>
 
     <span class="n">LOD_LOW</span> <span class="o">=</span> <span class="n">LOW</span>
-    <span class="sd">&quot;&quot;&quot;Renders the content with minimal details for creating thumbnails.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Renders the content with minimal details for creating thumbnails.&quot;&quot;&quot;</span>
 
     <span class="n">LOD_MEDIUM</span> <span class="o">=</span> <span class="n">MEDIUM</span>
-    <span class="sd">&quot;&quot;&quot;Renders the primary components of the content.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Renders the primary components of the content.&quot;&quot;&quot;</span>
 
     <span class="n">LOD_HIGH</span> <span class="o">=</span> <span class="n">HIGH</span>
-    <span class="sd">&quot;&quot;&quot;Renders all of the components of content.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Renders all of the components of content.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ReportImages.get_images_async"><a class="viewcode-back" href="../../../api/services/report_images.html#sasctl._services.report_images.ReportImages.get_images_async">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_images_async</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">report</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">elements</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lod</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create a job to render images of reports or report sections.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a job to render images of reports or report sections.</span>
 
 <span class="sd">        Report contents are sized and arranged dynamically to accommodate</span>
 <span class="sd">        browser viewing.  Some or all of these contents may be rendered at any</span>
@@ -220,7 +217,7 @@
 
 <div class="viewcode-block" id="ReportImages.get_images"><a class="viewcode-back" href="../../../api/services/report_images.html#sasctl._services.report_images.ReportImages.get_images">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_images</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">report</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">elements</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lod</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Render images of reports or report sections.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Render images of reports or report sections.</span>
 
 <span class="sd">        Report contents are sized and arranged dynamically to accommodate</span>
 <span class="sd">        browser viewing.  Some or all of these contents may be rendered at any</span>
@@ -298,8 +295,8 @@
       &copy;('Copyright © 2019, SAS Institute Inc., ', 'Cary, NC, USA.  All Rights Reserved.').
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 
