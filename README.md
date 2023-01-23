@@ -44,7 +44,7 @@
 The sasctl package enables easy communication between the SAS Viya 
 platform and a Python runtime. It can be used as a module or as a command line interface.
 ```
-sasctl.folders.list_folders()
+sasctl.services.folders.list_folders()
 ```
 
 ```
