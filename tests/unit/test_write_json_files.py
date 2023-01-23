@@ -6,9 +6,11 @@
 
 import json
 import pytest
+import random
 import tempfile
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 import sasctl.pzmm as pzmm
@@ -330,3 +332,73 @@ def test_input_fit_statistics(monkeypatch):
     input_value = iter(["_RASE_", 10, 1, "Y", "_NObs_", 33, "TEST", "N"])
     fitstat_dict = jf.input_fit_statistics(user_input=True)
     assert "dmcas_fitstat.json" in fitstat_dict
+
+
+def test_check_for_data():
+    """
+    Test cases:
+    - Raise error when no data provided
+    - Check bool returns for different data arguments
+    """
+    with pytest.raises(
+        ValueError,
+        match="No data was provided. Please provide the actual and predicted values "
+              r"for at least one of the partitions \(VALIDATE, TRAIN, or TEST\)."
+    ):
+        jf.check_for_data(None, None, None)
+
+    assert jf.check_for_data(1, 2, 3) == [1, 1, 1]
+    assert jf.check_for_data(1, None, None) == [1, 0, 0]
+
+
+def test_stat_dataset_to_dataframe():
+    """
+    Test cases:
+    - Raise ValueError if improper data is provided
+    - Convert data from each type to proper dataframe
+    - Create normalized probabilities for 2 column inputs (verify p E [0,1])
+    """
+    with pytest.raises(
+            ValueError,
+            match="Please provide the data in a list of lists, dataframe, or numpy "
+                  "array."
+    ):
+        jf.stat_dataset_to_dataframe((1, 2), 1)
+
+    dummy_target_value = 5
+    dummy_actual = [float(random.randint(0, 10)) for _ in range(10)]
+    dummy_predict = [float(random.randint(0, 10)) for _ in range(10)]
+    dummy_proba = [x / max(dummy_predict) for x in dummy_predict]
+
+    expected = pd.DataFrame(
+        {
+            "actual": dummy_actual,
+            "predict": dummy_predict,
+            "predict_proba": dummy_proba
+        }
+    )
+    expected_binary = expected.drop(["predict_proba"], axis=1)
+    expected_binary["predict_proba"] = expected["predict"].gt(dummy_target_value)\
+        .astype(int)
+    assert expected_binary["predict_proba"].between(0, 1).any()
+
+    # pandas DataFrame
+    df = pd.DataFrame({"a": dummy_actual, "p": dummy_predict, "pr": dummy_proba})
+    assert jf.stat_dataset_to_dataframe(df).equals(expected)
+    assert jf.stat_dataset_to_dataframe(
+        df.drop(["predict_proba"], axis=1), dummy_target_value
+    ).equals(expected_binary)
+
+    # list of lists
+    ll = [dummy_actual, dummy_predict, dummy_proba]
+    assert jf.stat_dataset_to_dataframe(ll).equals(expected)
+    assert jf.stat_dataset_to_dataframe(ll[0:2], dummy_target_value)\
+        .equals(expected_binary)
+
+    # numpy array
+    array = np.array(ll)
+    assert jf.stat_dataset_to_dataframe(array).equals(expected)
+    assert jf.stat_dataset_to_dataframe(array[0:2], dummy_target_value)\
+        .equals(expected_binary)
+
+
