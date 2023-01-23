@@ -1,16 +1,12 @@
-
-
 import math
 import pickle
 import pandas as pd
 import numpy as np
 
 import settings
+from pathlib import Path
 
-
-_thisModelFit
-
-with open(settings.pickle_path + 'GradientBoosting.pickle', 'rb') as _pFile:
+with open(Path(settings.pickle_path) / 'GradientBoosting.pickle', 'rb') as _pFile:
     _thisModelFit = pickle.load(_pFile)
 
 def scoreGradientBoosting(LOAN, MORTDUE, VALUE, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC):
@@ -20,7 +16,7 @@ def scoreGradientBoosting(LOAN, MORTDUE, VALUE, YOJ, DEROG, DELINQ, CLAGE, NINQ,
         global _thisModelFit
     except NameError:
 
-        with open(settings.pickle_path + 'GradientBoosting.pickle', 'rb') as _pFile:
+        with open(Path(settings.pickle_path) / 'GradientBoosting.pickle', 'rb') as _pFile:
             _thisModelFit = pickle.load(_pFile)
 
     try:
@@ -39,9 +35,9 @@ def scoreGradientBoosting(LOAN, MORTDUE, VALUE, YOJ, DEROG, DELINQ, CLAGE, NINQ,
     try:
         EM_EVENTPROBABILITY = float(prediction)
     except TypeError:
-    # If the model expects non-binary responses, a TypeError will be raised.
-    # The except block shifts the prediction to accept a non-binary response.
-        EM_EVENTPROBABILITY = float(prediction[:,1])
+        # If the prediction returns as a list of values or improper value type, a TypeError will be raised.
+        # Attempt to handle the prediction output in the except block.
+        EM_EVENTPROBABILITY = float(prediction[0])
 
     if (EM_EVENTPROBABILITY >= 0.199496644295302):
         EM_CLASSIFICATION = '1'

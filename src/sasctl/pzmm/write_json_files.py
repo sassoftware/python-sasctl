@@ -1006,12 +1006,17 @@ class JSONFiles:
             GINI = (2 * auc) - 1
             fitStats["_GINI_"] = GINI
 
-            from scipy.stats import (
-                gamma,
-            )  # Holdover until fitstat generation via SWAT is sussed out
+            try:
+                from scipy.stats import gamma
 
-            _, _, scale = gamma.fit(dataSets[j][1])
-            fitStats["_GAMMA_"] = 1 / scale
+                _, _, scale = gamma.fit(dataSets[j][1])
+                fitStats["_GAMMA_"] = 1 / scale
+            except ImportError:
+                warnings.warn(
+                    "scipy was not installed, so the gamma calculation could"
+                    "not be computed."
+                )
+                fitStats["_GAMMA_"] = None
 
             intPredict = [round(x) for x in dataSets[j][1]]
             MCE = 1 - metrics.accuracy_score(dataSets[j][0], intPredict)
@@ -1023,7 +1028,7 @@ class JSONFiles:
             MCLL = metrics.log_loss(dataSets[j][0], dataSets[j][1])
             fitStats["_MCLL_"] = MCLL
 
-            KS = max(math.fabs(fpr - tpr))
+            KS = max(abs(fpr - tpr))
             fitStats["_KS_"] = KS
 
             KSPostCutoff = None
@@ -1612,15 +1617,12 @@ class JSONFiles:
 
             # Walk through each node in the ast to find import calls
             for node in ast.walk(tree):
-                # Determine parent module for from * import * calls
+                # Determine parent module for `from * import *` calls
                 if isinstance(node, ast.ImportFrom):
-                    for name in node.names:
-                        if not name.asname:
-                            modules.append(node.module)
+                    modules.append(node.module)
                 elif isinstance(node, ast.Import):
-                    for _ in node.names:
-                        if not node.names[0].asname:
-                            modules.append(node.names[0].name)
+                    for name in node.names:
+                        modules.append(name.name)
 
         modules = list(set(modules))
         try:
