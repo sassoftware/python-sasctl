@@ -18,7 +18,7 @@ class Folders(Service):
 
     _SERVICE_ROOT = "/folders"
 
-    list_folders, get_folder, update_folder, delete_folder = Service._crud_funcs(
+    list_folders, _get_folder, update_folder, delete_folder = Service._crud_funcs(
         "/folders", "folder"
     )
 
@@ -61,3 +61,33 @@ class Folders(Service):
             params={"parentFolderUri": parent_uri},
             headers={"Content-Type": "application/vnd.sas.content.folder+json"},
         )
+
+    @classmethod
+    def get_folder(cls, folder, refresh=False):
+        """Return a folder instance.
+
+        Parameters
+        ----------
+        folder : str or dict
+            Name, ID, or dictionary representation of the folder.
+        refresh : bool, optional
+            Obtain an updated copy of the folder.
+
+        Returns
+        -------
+        RestObj or None
+            A dictionary containing the folder attributes or None.
+
+        Notes
+        -------
+        If `folder` is a complete representation of the folder it will be
+        returned unless `refresh` is set.  This prevents unnecessary REST
+        calls when data is already available on the client.
+
+        """
+        # If users pass in a folder name like "/Public" instead of "Public"
+        # then just cleanup the folder name so that it matches what's returned by Viya.
+        if isinstance(folder, str):
+            folder = folder.strip("/")
+
+        return cls._get_folder(folder, refresh=refresh)

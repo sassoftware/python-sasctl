@@ -75,3 +75,25 @@ def test_create_folder_with_parent():
         with mock.patch("sasctl._services.folders.Folders.post"):
             with pytest.raises(ValueError):
                 folders.create_folder(FOLDER_NAME, parent="Doesnt Matter")
+
+
+@mock.patch("sasctl.core.Session.request")
+def test_get_folder_with_path(request):
+    """Verify that simple folder paths instead of names are handled."""
+    request.return_value.status_code = 200
+    request.return_value.json.return_value = {"name": "Spam"}
+
+    folder = folders.get_folder("/Spam")
+    assert folder is not None
+    assert folder.name == "Spam"
+
+    # Service should do a search on folder name first followed by a get for folder details.
+    assert request.call_count == 2
+
+    url, params = request.call_args_list[0]
+    search_filter = params["params"]
+
+    # / should have been stripped out of folder name
+    assert '"Spam"' in search_filter
+    assert '"/Spam"' not in search_filter
+
