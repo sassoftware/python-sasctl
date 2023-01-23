@@ -96,4 +96,3 @@ def test_get_folder_with_path(request):
     # / should have been stripped out of folder name
     assert '"Spam"' in search_filter
     assert '"/Spam"' not in search_filter
-
