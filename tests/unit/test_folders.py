@@ -78,12 +78,12 @@ def test_create_folder_with_parent():
 
 
 @mock.patch("sasctl.core.Session.request")
-def test_get_folder_with_path(request):
-    """Verify that simple folder paths instead of names are handled."""
+def test_get_folder_by_name(request):
+    """Verify that looking up a folder by name works."""
     request.return_value.status_code = 200
     request.return_value.json.return_value = {"name": "Spam"}
 
-    folder = folders.get_folder("/Spam")
+    folder = folders.get_folder("Spam")
     assert folder is not None
     assert folder.name == "Spam"
 
@@ -95,4 +95,63 @@ def test_get_folder_with_path(request):
 
     # / should have been stripped out of folder name
     assert '"Spam"' in search_filter
-    assert '"/Spam"' not in search_filter
+
+
+@mock.patch("sasctl.core.Session.request")
+def test_get_folder_by_path(request):
+    """Verify that simple folder paths instead of names are handled."""
+    request.return_value.status_code = 200
+    request.return_value.json.return_value = {"name": "Spam"}
+
+    folder = folders.get_folder("/Spam")
+    assert folder is not None
+    assert folder.name == "Spam"
+
+    # Should not have called list_folders to search.  Should have been a direct call to lookup by path.
+    assert request.call_count == 1
+
+    url, params = request.call_args_list[0]
+    query_string = params["params"]
+
+    assert url[1] == "/folders/folders/@item"
+    assert query_string["path"] == "/Spam"
+
+
+@mock.patch("sasctl.core.Session.request")
+def test_get_folder_by_path(request):
+    """Verify that complex folder paths are handled."""
+    request.return_value.status_code = 200
+    request.return_value.json.return_value = {"name": "Spam"}
+
+    folder = folders.get_folder("Spam/Eggs/Spam")
+    assert folder is not None
+    assert folder.name == "Spam"
+
+    # Should not have called list_folders to search.  Should have been a direct call to lookup by path.
+    assert request.call_count == 1
+
+    url, params = request.call_args_list[0]
+    query_string = params["params"]
+
+    assert url[1] == "/folders/folders/@item"
+
+    # Leading "/" should have been added
+    assert query_string["path"] == "/Spam/Eggs/Spam"
+
+
+@mock.patch("sasctl.core.Session.request")
+def test_get_folder_by_delegate(request):
+    """Verify that folder can be found by using delegate strings (e.g. @public)."""
+    request.return_value.status_code = 200
+    request.return_value.json.return_value = {"name": "Spam"}
+
+    folder = folders.get_folder("@spam")
+    assert folder is not None
+    assert folder.name == "Spam"
+
+    # Should not have called list_folders to search.  Should have been a direct call to GET by id.
+    assert request.call_count == 1
+
+    url, params = request.call_args_list[0]
+    assert url[1] == "/folders/folders/@spam"
+    assert params == {}

@@ -1,7 +1,7 @@
 Unreleased
 ----------
 **Improvements**
- - `folders.get_folder()` can now handle folder names that include a leading or trailing "/" character.
+ - `folders.get_folder()` can now handle folder paths and delegates (e.g. @public).
 
 v1.8.1 (2023-01-19)
 ----------
