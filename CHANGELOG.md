@@ -3,6 +3,11 @@ Unreleased
 **Improvements**
  - `folders.get_folder()` can now handle folder paths and delegates (e.g. @public).
 
+**Bugfixes**
+ - Fixed an issue with `model_management.execute_model_workflow_definition()` where input values for
+   workflow prompts were not correctly submitted.  Note that the `input=` parameter was renamed to
+   `prompts=` to avoid conflicting with the built-in `input()`.
+
 v1.8.1 (2023-01-19)
 ----------
 **Changes**
