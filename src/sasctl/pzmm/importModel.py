@@ -50,8 +50,10 @@ def project_exists(response, project):
 
 
 def model_exists(project, name, force, versionName="latest"):
-    """Checks if model already exists in the same project and either raises an error or deletes
-    the redundant model. If no project version is provided, the version is assumed to be "latest".
+    """
+    Checks if model already exists in the same project and either raises an error or
+    deletes the redundant model. If no project version is provided, the version is
+    assumed to be "latest".
 
     Parameters
     ----------
@@ -62,14 +64,15 @@ def model_exists(project, name, force, versionName="latest"):
     force : bool, optional
         Sets whether to overwrite models with the same name upon upload.
     versionName : str, optional
-        Name of project version to check if a model of the same name already exists. Default
-        value is "latest".
+        Name of project version to check if a model of the same name already exists.
+        Default value is "latest".
 
     Raises
     ------
     ValueError
-        Model repository API cannot overwrite an already existing model with the upload model call.
-        Alerts user of the force argument to allow multi-call API overwriting.
+        Model repository API cannot overwrite an already existing model with the upload
+        model call. Alerts user of the force argument to allow multi-call API
+        overwriting.
     """
     project = mr.get_project(project)
     projectId = project["id"]
@@ -80,12 +83,17 @@ def model_exists(project, name, force, versionName="latest"):
         versionId = projectVersions[latestVersion]["id"]
     else:
         for version in projectVersions:
-            if versionName is version["name"]:
+            if versionName == version["name"]:
                 versionId = version["id"]
                 break
-    projectModels = mr.get(
-        "/projects/{}/projectVersions/{}/models".format(projectId, versionId)
-    )
+    try:
+        projectModels = mr.get(
+            "/projects/{}/projectVersions/{}/models".format(projectId, versionId)
+        )
+    except UnboundLocalError:
+        raise ValueError(
+            f"The project version {versionName} was not found in project {project}."
+        )
 
     for model in projectModels:
         # Throws a TypeError if only one model is in the project
@@ -95,9 +103,9 @@ def model_exists(project, name, force, versionName="latest"):
                     mr.delete_model(model.id)
                 else:
                     raise ValueError(
-                        "A model with the same model name exists in project {}. Include the force=True argument to overwrite models with the same name.".format(
-                            project.name
-                        )
+                        "A model with the same model name exists in project {}. "
+                        "Include the force=True argument to overwrite models with the "
+                        "same name.".format(project.name)
                     )
         except TypeError:
             if projectModels["name"] == name:
@@ -105,9 +113,9 @@ def model_exists(project, name, force, versionName="latest"):
                     mr.delete_model(projectModels.id)
                 else:
                     raise ValueError(
-                        "A model with the same model name exists in project {}. Include the force=True argument to overwrite models with the same name.".format(
-                            project.name
-                        )
+                        "A model with the same model name exists in project {}. "
+                        "Include the force=True argument to overwrite models with the "
+                        "same name.".format(project.name)
                     )
 
 
