@@ -5,13 +5,14 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
-import pytest
 import random
 import tempfile
+import unittest
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pytest
 
 import sasctl.pzmm as pzmm
 from sasctl.pzmm.write_json_files import JSONFiles as jf
@@ -396,6 +397,106 @@ def test_stat_dataset_to_dataframe():
     # numpy array
     array = np.array(ll)
     assert jf.stat_dataset_to_dataframe(array).equals(expected)
-    assert jf.stat_dataset_to_dataframe(array[0:2], dummy_target_value).equals(
+    assert jf.stat_dataset_to_dataframe(array[0:2], '5').equals(
         expected_binary
     )
+
+
+def test_convert_data_role():
+    """
+    Test Cases:
+    - Character to numeric (1, 2, 3)
+        - int
+        - float
+        - invalid numeric
+    - Numeric to character (TRAIN, TEST, VALIDATE)
+        - lowercase
+        - uppercase
+        - invalid
+    - Neither numeric nor character
+    """
+    test_data = [1, 2.0, 3.00, 5, "train", "TeSt", "VALIDATE", "other", (1, 2)]
+    expected = ["TRAIN", "TEST", "VALIDATE", "TRAIN", 1, 2, 3, 1, 1]
+    for data, exp in zip(test_data, expected):
+        assert jf.convert_data_role(data) == exp
+
+
+def test_get_pickle_file():
+    """
+    Test Cases:
+    - Single pickle file in path (.pickle)
+    - Multiple pickle files in path (.pickle and .pkl)
+    - No pickle files in path
+    """
+    tmp_dir = tempfile.TemporaryDirectory()
+    assert jf.get_pickle_file(Path(tmp_dir.name)) == []
+    for suffix in [".json", ".json", ".py", ".json"]:
+        _ = tempfile.NamedTemporaryFile(
+            delete=False,
+            suffix=suffix,
+            dir=Path(tmp_dir.name)
+        )
+    pickle_file = tempfile.NamedTemporaryFile(
+        delete=False,
+        suffix=".pickle",
+        dir=Path(tmp_dir.name)
+    )
+    unittest.TestCase().assertCountEqual(
+        first=[Path(pickle_file.name)],
+        second=jf.get_pickle_file(Path(tmp_dir.name))
+    )
+    pkl_file = tempfile.NamedTemporaryFile(
+        delete=False,
+        suffix=".pkl",
+        dir=Path(tmp_dir.name)
+    )
+    pkl_file2 = tempfile.NamedTemporaryFile(
+        delete=False,
+        suffix=".pkl",
+        dir=Path(tmp_dir.name)
+    )
+    assert len(jf.get_pickle_file(Path(tmp_dir.name))) == 3
+    unittest.TestCase().assertCountEqual(
+        first=[Path(pickle_file.name), Path(pkl_file.name), Path(pkl_file2.name)],
+        second=jf.get_pickle_file(Path(tmp_dir.name))
+    )
+
+
+def test_get_pickle_dependencies():
+    """
+    Test Cases:
+    -
+    """
+
+def test_get_package_names(sklearn_model):
+    """
+    Test Cases:
+    -
+    """
+
+
+def test_get_code_dependencies():
+    """
+    Test Cases:
+    -
+    """
+
+
+def test_remove_standard_library_packages():
+    """
+    Test Cases:
+    -
+    """
+
+def test_get_local_package_version():
+    """
+    Test Cases:
+    -
+    """
+
+def test_create_requirements_json():
+    """
+    Test Cases:
+    -
+    """
+
