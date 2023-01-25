@@ -389,6 +389,9 @@ class ModelManagement(Service):
         RestObj
             The executing workflow
 
+        .. versionchanged:: 1.8.2
+            Renamed the `input` parameter to `prompts`.
+
         """
         from .model_repository import ModelRepository
         from .workflow import Workflow
