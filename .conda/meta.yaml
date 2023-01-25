@@ -1,0 +1,45 @@
+{% set name = "sasctl" %}
+{% set version = "1.8.1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/sasctl-{{ version }}.tar.gz
+  sha256: eb42bb86188b93544555154c68b52c1b3b3e4dec08f233688eefd4e3391624ac
+
+build:
+  entry_points:
+    - sasctl = sasctl.utils.cli:main
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
+  number: 0
+
+requirements:
+  host:
+    - python >=3.6
+    - pip
+  run:
+    - python >=3.6
+    - pandas
+    - requests
+    - pyyaml
+    - packaging
+
+test:
+  imports:
+    - sasctl
+  commands:
+    - pip check
+    - sasctl --help
+  requires:
+    - pip
+
+about:
+  home: https://github.com/sassoftware/python-sasctl/
+  summary: "Python package and CLI for user-friendly integration with SAS Viya"
+  license: Apache-2.0
+  license_file: LICENSE
+  doc_url: https://sassoftware.github.io/python-sasctl/
+  dev_url: https://github.com/sassoftware/python-sasctl/
