@@ -274,11 +274,13 @@ class ModelParameters:
                 )
             else:
                 project_name = mr.get_project(project)["name"]
-                raise SystemError("No KPIs were found for project {}.".format(project_name))
+                raise SystemError(
+                    "No KPIs were found for project {}.".format(project_name)
+                )
 
         # Strip leading spaces from cells of KPI table; convert missing values to None
-        kpi_table_df = kpi_table_df.apply(lambda x: x.str.strip())\
-            .replace([".", ""], None)
+        kpi_table_df = kpi_table_df.apply(lambda x: x.str.strip()).replace(
+            [".", ""], None
+        )
 
         return kpi_table_df
-

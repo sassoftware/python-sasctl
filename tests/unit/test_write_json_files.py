@@ -343,7 +343,7 @@ def test_check_for_data():
     with pytest.raises(
         ValueError,
         match="No data was provided. Please provide the actual and predicted values "
-              r"for at least one of the partitions \(VALIDATE, TRAIN, or TEST\)."
+        r"for at least one of the partitions \(VALIDATE, TRAIN, or TEST\).",
     ):
         jf.check_for_data(None, None, None)
 
@@ -359,9 +359,9 @@ def test_stat_dataset_to_dataframe():
     - Create normalized probabilities for 2 column inputs (verify p E [0,1])
     """
     with pytest.raises(
-            ValueError,
-            match="Please provide the data in a list of lists, dataframe, or numpy "
-                  "array."
+        ValueError,
+        match="Please provide the data in a list of lists, dataframe, or numpy "
+        "array.",
     ):
         jf.stat_dataset_to_dataframe((1, 2), 1)
 
@@ -371,15 +371,12 @@ def test_stat_dataset_to_dataframe():
     dummy_proba = [x / max(dummy_predict) for x in dummy_predict]
 
     expected = pd.DataFrame(
-        {
-            "actual": dummy_actual,
-            "predict": dummy_predict,
-            "predict_proba": dummy_proba
-        }
+        {"actual": dummy_actual, "predict": dummy_predict, "predict_proba": dummy_proba}
     )
     expected_binary = expected.drop(["predict_proba"], axis=1)
-    expected_binary["predict_proba"] = expected["predict"].gt(dummy_target_value)\
-        .astype(int)
+    expected_binary["predict_proba"] = (
+        expected["predict"].gt(dummy_target_value).astype(int)
+    )
     assert expected_binary["predict_proba"].between(0, 1).any()
 
     # pandas DataFrame
@@ -392,13 +389,13 @@ def test_stat_dataset_to_dataframe():
     # list of lists
     ll = [dummy_actual, dummy_predict, dummy_proba]
     assert jf.stat_dataset_to_dataframe(ll).equals(expected)
-    assert jf.stat_dataset_to_dataframe(ll[0:2], dummy_target_value)\
-        .equals(expected_binary)
+    assert jf.stat_dataset_to_dataframe(ll[0:2], dummy_target_value).equals(
+        expected_binary
+    )
 
     # numpy array
     array = np.array(ll)
     assert jf.stat_dataset_to_dataframe(array).equals(expected)
-    assert jf.stat_dataset_to_dataframe(array[0:2], dummy_target_value)\
-        .equals(expected_binary)
-
-
+    assert jf.stat_dataset_to_dataframe(array[0:2], dummy_target_value).equals(
+        expected_binary
+    )
