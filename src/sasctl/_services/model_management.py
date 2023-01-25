@@ -369,7 +369,9 @@ class ModelManagement(Service):
 
     @classmethod
     @experimental
-    def execute_model_workflow_definition(cls, project_name, workflow_name, prompts=None):
+    def execute_model_workflow_definition(
+        cls, project_name, workflow_name, prompts=None
+    ):
         """Runs specific Workflow Processes Definitions.
 
         Parameters

@@ -148,13 +148,15 @@ class Workflow(Service):
                         # converted to UTC.
                         value = value.isoformat().replace("+00:00", "Z")
 
-                    variables.append({
-                        "name": name,
-                        "value": value,
-                        "scope": "local",
-                        "type": prompt["variableType"],
-                        "version": prompt["version"]
-                    })
+                    variables.append(
+                        {
+                            "name": name,
+                            "value": value,
+                            "scope": "local",
+                            "type": prompt["variableType"],
+                            "version": prompt["version"],
+                        }
+                    )
 
             return cls.post(
                 "/processes?definitionId=" + workflow["id"],
