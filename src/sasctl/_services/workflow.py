@@ -141,12 +141,20 @@ class Workflow(Service):
 
                         # Explicitly convert to local time zone if not set.
                         if value.tzinfo is None:
-                            value = value.astimezone()
+                            try:
+                                value = value.astimezone()
+                            except OSError:
+                                # On Windows pre-1970 dates will cause an issue.
+                                # See https://bugs.python.org/issue36759
+                                pass
 
-                        # Example: 2023-01-25T13:49:40.726162+00:00
-                        # and then replace timezone offset with "Z" since already
-                        # converted to UTC.
-                        value = value.isoformat().replace("+00:00", "Z")
+                        if value.tzinfo is None:
+                            # Failed to convert to local time.  Have to just assume it's UTC.
+                            # Example: 2023-01-25T13:49:40.726162Z
+                            value = value.isoformat() + "Z"
+                        else:
+                            # Example: 2023-01-25T13:49:40.726162-05:00
+                            value = value.isoformat()
 
                     variables.append(
                         {
