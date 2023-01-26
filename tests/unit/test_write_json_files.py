@@ -473,7 +473,8 @@ def test_get_code_dependencies():
     modules = jf.get_code_dependencies(
         Path(__file__) / "../../../examples/data/hmeqModels/DecisionTreeClassifier"
     )
-    unittest.TestCase().assertCountEqual(modules, ["sklearn", "numpy", "pandas"])
+    expected = ["pandas", "pickle", "pathlib", "math", "numpy"]
+    unittest.TestCase().assertCountEqual(modules, expected)
 
 
 def test_remove_standard_library_packages():
