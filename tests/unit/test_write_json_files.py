@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
+import os
 import pickle
 import random
 import tempfile
@@ -37,6 +38,18 @@ input_dict = [
     {"name": "JOB_Self", "type": "integer"},
     {"name": "REASON_HomeImp", "type": "integer"},
 ]
+
+
+@pytest.fixture
+def change_dir():
+    """Change working directory for the duration of the test."""
+    old_dir = os.path.abspath(os.curdir)
+
+    def change(new_dir):
+        os.chdir(new_dir)
+
+    yield change
+    os.chdir(old_dir)
 
 
 def test_flatten_list():
@@ -465,13 +478,15 @@ def test_get_pickle_dependencies(sklearn_classification_model):
     unittest.TestCase().assertCountEqual(modules, expected)
 
 
-def test_get_code_dependencies():
+def test_get_code_dependencies(change_dir):
     """
     Test Cases:
     - Return list of modules from example hmeq decision tree classifier model
     """
+    change_dir("examples")
+
     modules = jf.get_code_dependencies(
-        Path(__file__) / "../../../examples/data/hmeqModels/DecisionTreeClassifier"
+        Path.cwd() / "data/hmeqModels/DecisionTreeClassifier"
     )
     expected = ["pandas", "pickle", "pathlib", "math", "numpy"]
     unittest.TestCase().assertCountEqual(modules, expected)
@@ -499,7 +514,7 @@ def test_get_local_package_version():
         )
 
 
-def test_create_requirements_json():
+def test_create_requirements_json(change_dir):
     """
     Test Cases:
     - Output requirements.json file if output_path is provided
@@ -507,9 +522,10 @@ def test_create_requirements_json():
         - Verify expected values returned in dicts
     """
     sk = pytest.importorskip("sklearn")
+    change_dir("examples")
 
     example_model = (
-        Path(__file__) / "../../../examples/data/hmeqModels/DecisionTreeClassifier"
+        Path.cwd() / "data/hmeqModels/DecisionTreeClassifier"
     ).resolve()
     with tempfile.TemporaryDirectory() as tmp_dir:
         jf.create_requirements_json(example_model, Path(tmp_dir))
