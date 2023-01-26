@@ -524,9 +524,7 @@ def test_create_requirements_json(change_dir):
     sk = pytest.importorskip("sklearn")
     change_dir("examples")
 
-    example_model = (
-        Path.cwd() / "data/hmeqModels/DecisionTreeClassifier"
-    ).resolve()
+    example_model = (Path.cwd() / "data/hmeqModels/DecisionTreeClassifier").resolve()
     with tempfile.TemporaryDirectory() as tmp_dir:
         jf.create_requirements_json(example_model, Path(tmp_dir))
         assert (Path(tmp_dir) / "requirements.json").exists()
