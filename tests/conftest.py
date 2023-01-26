@@ -542,10 +542,7 @@ def sklearn_classification_model(sklearn_iris_data):
     X, y = sklearn_iris_data
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        model = sk.LogisticRegression(
-            multi_class="multinomial",
-            solver="lbfgs"
-        )
+        model = sk.LogisticRegression(multi_class="multinomial", solver="lbfgs")
         model.fit(X, y)
     return model
 

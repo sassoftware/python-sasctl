@@ -1441,7 +1441,7 @@ class JSONFiles:
         return conversion
 
     @classmethod
-    def create_requirements_json(cls, model_path=Path.cwd()):
+    def create_requirements_json(cls, model_path=Path.cwd(), output_path=None):
         """
         Searches the model directory for Python scripts and pickle files and
         determines their Python package dependencies.
@@ -1462,13 +1462,15 @@ class JSONFiles:
         the requirements.json file's package versions to match the model development
         environment.
 
-        This function outputs a JSON file named "requirements.json".
+        When provided with an output_path argument, this function outputs a JSON file
+        named "requirements.json". Otherwise, a list of dicts is returned.
 
         Parameters
         ----------
-        model_path : str, optional
+        model_path : str or Path, optional
             The path to a Python project, by default the current working directory.
-
+        output_path : str or Path, optional
+            The path for the output requirements.json file. Default is None.
         Returns
         -------
         list of dicts
@@ -1509,12 +1511,13 @@ class JSONFiles:
                         "command": f"pip install {package}=={version}",
                     }
                 )
-        with open(  # skipcq: PTC-W6004
-            Path(model_path) / "requirements.json", "w"
-        ) as file:
-            file.write(json.dumps(json_dicts, indent=4))
-
-        return json_dicts
+        if output_path:
+            with open(  # skipcq: PTC-W6004
+                Path(output_path) / "requirements.json", "w"
+            ) as file:
+                file.write(json.dumps(json_dicts, indent=4))
+        else:
+            return {"requirements.json": json.dumps(json_dicts)}
 
     @staticmethod
     def get_local_package_version(package_list):
@@ -1582,7 +1585,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        model_path : string, optional
+        model_path : string or Path, optional
             File location for the output JSON file. Default is the current working
             directory.
 
@@ -1647,7 +1650,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        pickle_folder : str
+        pickle_folder : str or Path
             File location for the input pickle file. Default is the current working
             directory.
 
@@ -1669,7 +1672,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        pickle_file : str
+        pickle_file : str or Path
             The file where you stored pickle data.
 
         Returns

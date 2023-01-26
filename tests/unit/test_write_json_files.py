@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
+import pickle
 import random
 import tempfile
 import unittest
@@ -397,9 +398,7 @@ def test_stat_dataset_to_dataframe():
     # numpy array
     array = np.array(ll)
     assert jf.stat_dataset_to_dataframe(array).equals(expected)
-    assert jf.stat_dataset_to_dataframe(array[0:2], '5').equals(
-        expected_binary
-    )
+    assert jf.stat_dataset_to_dataframe(array[0:2], "5").equals(expected_binary)
 
 
 def test_convert_data_role():
@@ -432,71 +431,100 @@ def test_get_pickle_file():
     assert jf.get_pickle_file(Path(tmp_dir.name)) == []
     for suffix in [".json", ".json", ".py", ".json"]:
         _ = tempfile.NamedTemporaryFile(
-            delete=False,
-            suffix=suffix,
-            dir=Path(tmp_dir.name)
+            delete=False, suffix=suffix, dir=Path(tmp_dir.name)
         )
     pickle_file = tempfile.NamedTemporaryFile(
-        delete=False,
-        suffix=".pickle",
-        dir=Path(tmp_dir.name)
+        delete=False, suffix=".pickle", dir=Path(tmp_dir.name)
     )
     unittest.TestCase().assertCountEqual(
-        first=[Path(pickle_file.name)],
-        second=jf.get_pickle_file(Path(tmp_dir.name))
+        first=[Path(pickle_file.name)], second=jf.get_pickle_file(Path(tmp_dir.name))
     )
     pkl_file = tempfile.NamedTemporaryFile(
-        delete=False,
-        suffix=".pkl",
-        dir=Path(tmp_dir.name)
+        delete=False, suffix=".pkl", dir=Path(tmp_dir.name)
     )
     pkl_file2 = tempfile.NamedTemporaryFile(
-        delete=False,
-        suffix=".pkl",
-        dir=Path(tmp_dir.name)
+        delete=False, suffix=".pkl", dir=Path(tmp_dir.name)
     )
     assert len(jf.get_pickle_file(Path(tmp_dir.name))) == 3
     unittest.TestCase().assertCountEqual(
         first=[Path(pickle_file.name), Path(pkl_file.name), Path(pkl_file2.name)],
-        second=jf.get_pickle_file(Path(tmp_dir.name))
+        second=jf.get_pickle_file(Path(tmp_dir.name)),
     )
 
 
-def test_get_pickle_dependencies():
+def test_get_pickle_dependencies(sklearn_classification_model):
     """
     Test Cases:
-    -
+    - Return list of modules from sklearn model
     """
-
-def test_get_package_names(sklearn_model):
-    """
-    Test Cases:
-    -
-    """
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        with open(Path(tmp_dir) / "test.pickle", "wb") as f:
+            pickle.dump(sklearn_classification_model, f)
+        modules = jf.get_pickle_dependencies(Path(tmp_dir) / "test.pickle")
+    expected = ["numpy", "sklearn"]
+    unittest.TestCase().assertCountEqual(modules, expected)
 
 
 def test_get_code_dependencies():
     """
     Test Cases:
-    -
+    - Return list of modules from example hmeq decision tree classifier model
     """
+    modules = jf.get_code_dependencies(
+        Path(__file__) / "../../../examples/data/hmeqModels/DecisionTreeClassifier"
+    )
+    unittest.TestCase().assertCountEqual(modules, ["sklearn", "numpy", "pandas"])
 
 
 def test_remove_standard_library_packages():
     """
     Test Cases:
-    -
+    - Remove standard library package from list
     """
+    assert jf.remove_standard_library_packages(["math", "gc", "numpy"]) == ["numpy"]
+
 
 def test_get_local_package_version():
     """
     Test Cases:
-    -
+    - Generate a warning for a package not found
+    - Return list with packages and versions from local environment
     """
+    modules = ["numpy", "DNE_Package"]
+    with pytest.warns(Warning):
+        modules_versions = jf.get_local_package_version(modules)
+        unittest.TestCase().assertCountEqual(
+            modules_versions, [["numpy", np.__version__], ["DNE_Package", None]]
+        )
+
 
 def test_create_requirements_json():
     """
     Test Cases:
-    -
+    - Output requirements.json file if output_path is provided
+    - Return list of dicts if output_path is None
+        - Verify expected values returned in dicts
     """
+    sk = pytest.importorskip("sklearn")
 
+    example_model = (
+        Path(__file__) / "../../../examples/data/hmeqModels/DecisionTreeClassifier"
+    ).resolve()
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        jf.create_requirements_json(example_model, Path(tmp_dir))
+        assert (Path(tmp_dir) / "requirements.json").exists()
+
+    json_dict = jf.create_requirements_json(example_model)
+    assert "requirements.json" in json_dict
+    expected = [
+        {"step": "install pandas", "command": f"pip install pandas=={pd.__version__}"},
+        {"step": "install numpy", "command": f"pip install numpy=={np.__version__}"},
+        {
+            "step": "install sklearn",
+            "command": f"pip install sklearn=={sk.__version__}",
+        },
+    ]
+    unittest.TestCase.maxDiff = None
+    unittest.TestCase().assertCountEqual(
+        json.loads(json_dict["requirements.json"]), expected
+    )
