@@ -10,6 +10,7 @@ from ..core import current_session
 
 # %%
 class ScoreCode:
+    # TODO: change predictMethod to accept Python object instead of string
     @classmethod
     def writeScoreCode(
         cls,

@@ -5,11 +5,16 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
-import pytest
+import os
+import pickle
+import random
 import tempfile
+import unittest
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
+import pytest
 
 import sasctl.pzmm as pzmm
 from sasctl.pzmm.write_json_files import JSONFiles as jf
@@ -33,6 +38,18 @@ input_dict = [
     {"name": "JOB_Self", "type": "integer"},
     {"name": "REASON_HomeImp", "type": "integer"},
 ]
+
+
+@pytest.fixture
+def change_dir():
+    """Change working directory for the duration of the test."""
+    old_dir = os.path.abspath(os.curdir)
+
+    def change(new_dir):
+        os.chdir(new_dir)
+
+    yield change
+    os.chdir(old_dir)
 
 
 def test_flatten_list():
@@ -330,3 +347,199 @@ def test_input_fit_statistics(monkeypatch):
     input_value = iter(["_RASE_", 10, 1, "Y", "_NObs_", 33, "TEST", "N"])
     fitstat_dict = jf.input_fit_statistics(user_input=True)
     assert "dmcas_fitstat.json" in fitstat_dict
+
+
+def test_check_for_data():
+    """
+    Test cases:
+    - Raise error when no data provided
+    - Check bool returns for different data arguments
+    """
+    with pytest.raises(
+        ValueError,
+        match="No data was provided. Please provide the actual and predicted values "
+        r"for at least one of the partitions \(VALIDATE, TRAIN, or TEST\).",
+    ):
+        jf.check_for_data(None, None, None)
+
+    assert jf.check_for_data(1, 2, 3) == [1, 1, 1]
+    assert jf.check_for_data(1, None, None) == [1, 0, 0]
+
+
+def test_stat_dataset_to_dataframe():
+    """
+    Test cases:
+    - Raise ValueError if improper data is provided
+    - Convert data from each type to proper dataframe
+    - Create normalized probabilities for 2 column inputs (verify p E [0,1])
+    """
+    with pytest.raises(
+        ValueError,
+        match="Please provide the data in a list of lists, dataframe, or numpy "
+        "array.",
+    ):
+        jf.stat_dataset_to_dataframe((1, 2), 1)
+
+    dummy_target_value = 5
+    dummy_actual = [float(random.randint(0, 10)) for _ in range(10)]
+    dummy_predict = [float(random.randint(0, 10)) for _ in range(10)]
+    dummy_proba = [x / max(dummy_predict) for x in dummy_predict]
+
+    expected = pd.DataFrame(
+        {"actual": dummy_actual, "predict": dummy_predict, "predict_proba": dummy_proba}
+    )
+    expected_binary = expected.drop(["predict_proba"], axis=1)
+    expected_binary["predict_proba"] = (
+        expected["predict"].gt(dummy_target_value).astype(int)
+    )
+    assert expected_binary["predict_proba"].between(0, 1).any()
+
+    # pandas DataFrame
+    df = pd.DataFrame({"a": dummy_actual, "p": dummy_predict, "pr": dummy_proba})
+    assert jf.stat_dataset_to_dataframe(df).equals(expected)
+    assert jf.stat_dataset_to_dataframe(
+        df.drop(["predict_proba"], axis=1), dummy_target_value
+    ).equals(expected_binary)
+
+    # list of lists
+    ll = [dummy_actual, dummy_predict, dummy_proba]
+    assert jf.stat_dataset_to_dataframe(ll).equals(expected)
+    assert jf.stat_dataset_to_dataframe(ll[0:2], dummy_target_value).equals(
+        expected_binary
+    )
+
+    # numpy array
+    array = np.array(ll)
+    assert jf.stat_dataset_to_dataframe(array).equals(expected)
+    assert jf.stat_dataset_to_dataframe(array[0:2], "5").equals(expected_binary)
+
+
+def test_convert_data_role():
+    """
+    Test Cases:
+    - Character to numeric (1, 2, 3)
+        - int
+        - float
+        - invalid numeric
+    - Numeric to character (TRAIN, TEST, VALIDATE)
+        - lowercase
+        - uppercase
+        - invalid
+    - Neither numeric nor character
+    """
+    test_data = [1, 2.0, 3.00, 5, "train", "TeSt", "VALIDATE", "other", (1, 2)]
+    expected = ["TRAIN", "TEST", "VALIDATE", "TRAIN", 1, 2, 3, 1, 1]
+    for data, exp in zip(test_data, expected):
+        assert jf.convert_data_role(data) == exp
+
+
+def test_get_pickle_file():
+    """
+    Test Cases:
+    - Single pickle file in path (.pickle)
+    - Multiple pickle files in path (.pickle and .pkl)
+    - No pickle files in path
+    """
+    tmp_dir = tempfile.TemporaryDirectory()
+    assert jf.get_pickle_file(Path(tmp_dir.name)) == []
+    for suffix in [".json", ".json", ".py", ".json"]:
+        _ = tempfile.NamedTemporaryFile(
+            delete=False, suffix=suffix, dir=Path(tmp_dir.name)
+        )
+    pickle_file = tempfile.NamedTemporaryFile(
+        delete=False, suffix=".pickle", dir=Path(tmp_dir.name)
+    )
+    unittest.TestCase().assertCountEqual(
+        first=[Path(pickle_file.name)], second=jf.get_pickle_file(Path(tmp_dir.name))
+    )
+    pkl_file = tempfile.NamedTemporaryFile(
+        delete=False, suffix=".pkl", dir=Path(tmp_dir.name)
+    )
+    pkl_file2 = tempfile.NamedTemporaryFile(
+        delete=False, suffix=".pkl", dir=Path(tmp_dir.name)
+    )
+    assert len(jf.get_pickle_file(Path(tmp_dir.name))) == 3
+    unittest.TestCase().assertCountEqual(
+        first=[Path(pickle_file.name), Path(pkl_file.name), Path(pkl_file2.name)],
+        second=jf.get_pickle_file(Path(tmp_dir.name)),
+    )
+
+
+def test_get_pickle_dependencies(sklearn_classification_model):
+    """
+    Test Cases:
+    - Return list of modules from sklearn model
+    """
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        with open(Path(tmp_dir) / "test.pickle", "wb") as f:
+            pickle.dump(sklearn_classification_model, f)
+        modules = jf.get_pickle_dependencies(Path(tmp_dir) / "test.pickle")
+    expected = ["numpy", "sklearn"]
+    unittest.TestCase().assertCountEqual(modules, expected)
+
+
+def test_get_code_dependencies(change_dir):
+    """
+    Test Cases:
+    - Return list of modules from example hmeq decision tree classifier model
+    """
+    change_dir("examples")
+
+    modules = jf.get_code_dependencies(
+        Path.cwd() / "data/hmeqModels/DecisionTreeClassifier"
+    )
+    expected = ["pandas", "pickle", "pathlib", "math", "numpy"]
+    unittest.TestCase().assertCountEqual(modules, expected)
+
+
+def test_remove_standard_library_packages():
+    """
+    Test Cases:
+    - Remove standard library package from list
+    """
+    assert jf.remove_standard_library_packages(["math", "gc", "numpy"]) == ["numpy"]
+
+
+def test_get_local_package_version():
+    """
+    Test Cases:
+    - Generate a warning for a package not found
+    - Return list with packages and versions from local environment
+    """
+    modules = ["numpy", "DNE_Package"]
+    with pytest.warns(Warning):
+        modules_versions = jf.get_local_package_version(modules)
+        unittest.TestCase().assertCountEqual(
+            modules_versions, [["numpy", np.__version__], ["DNE_Package", None]]
+        )
+
+
+def test_create_requirements_json(change_dir):
+    """
+    Test Cases:
+    - Output requirements.json file if output_path is provided
+    - Return list of dicts if output_path is None
+        - Verify expected values returned in dicts
+    """
+    sk = pytest.importorskip("sklearn")
+    change_dir("examples")
+
+    example_model = (Path.cwd() / "data/hmeqModels/DecisionTreeClassifier").resolve()
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        jf.create_requirements_json(example_model, Path(tmp_dir))
+        assert (Path(tmp_dir) / "requirements.json").exists()
+
+    json_dict = jf.create_requirements_json(example_model)
+    assert "requirements.json" in json_dict
+    expected = [
+        {"step": "install pandas", "command": f"pip install pandas=={pd.__version__}"},
+        {"step": "install numpy", "command": f"pip install numpy=={np.__version__}"},
+        {
+            "step": "install sklearn",
+            "command": f"pip install sklearn=={sk.__version__}",
+        },
+    ]
+    unittest.TestCase.maxDiff = None
+    unittest.TestCase().assertCountEqual(
+        json.loads(json_dict["requirements.json"]), expected
+    )

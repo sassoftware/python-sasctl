@@ -809,23 +809,25 @@ class JSONFiles:
         return data_partitions
 
     @staticmethod
-    def stat_dataset_to_dataframe(data, target_value):
+    def stat_dataset_to_dataframe(data, target_value=None):
         """
         Convert the user supplied statistical dataset from either a pandas DataFrame,
         list of lists, or numpy array to a DataFrame formatted for SAS CAS upload.
 
         If the prediction probabilities are not provided, the prediction data will be
-        duplicated to allow for calculation of the fit statistics through CAS. The data
-        is assumed to be in the order of "actual", "predicted", "probability"
-        respectively.
+        duplicated to allow for calculation of the fit statistics through CAS and then a
+        binary filter is applied to the duplicate column based off of a provided target
+        value. The data is assumed to be in the order of "actual", "predicted",
+        "probability" respectively.
 
         Parameters
         ----------
         data : pandas DataFrame, list of lists, or numpy array
             Dataset representing the actual and predicted values of the model. May also
             include the prediction probabilities.
-        target_value : str, int, or float
-            Target event value for model prediction events.
+        target_value : str, int, or float, optional
+            Target event value for model prediction events. Used for creating a binary
+            probability column when no probability values are provided. Default is None.
 
         Returns
         -------
@@ -835,7 +837,7 @@ class JSONFiles:
         Raises
         ------
         ValueError
-            If an improper data format is provided, this error is raised.
+            Raised if an improper data format is provided.
 
         """
         # If numpy inputs are supplied, then assume numpy is installed
@@ -845,34 +847,40 @@ class JSONFiles:
         except ImportError:
             np = None
 
+        # Convert target_value to numeric for creating binary probabilities
         if isinstance(target_value, str):
             target_value = float(target_value)
 
+        # Assume column order (actual, predicted, probability) per argument instructions
         if isinstance(data, pd.DataFrame):
             if len(data.columns) == 2:
                 data.columns = ["actual", "predict"]
-                data["predict_proba"] = data.loc[:, "predict"].div(target_value)
+                data["predict_proba"] = data["predict"].gt(target_value).astype(int)
             elif len(data.columns) == 3:
                 data.columns = ["actual", "predict", "predict_proba"]
         elif isinstance(data, list):
             if len(data) == 2:
-                data = pd.DataFrame(data=data, columns=["actual", "predict"])
-                data["predict_proba"] = data.loc[:, "predict"].div(target_value)
+                data = pd.DataFrame({"actual": data[0], "predict": data[1]})
+                data["predict_proba"] = data["predict"].gt(target_value).astype(int)
             elif len(data) == 3:
                 data = pd.DataFrame(
-                    data=data, columns=["actual", "predict", "predict_proba"]
+                    {
+                        "actual": data[0],
+                        "predict": data[1],
+                        "predict_proba": data[2],
+                    }
                 )
         elif isinstance(data, np.ndarray):
             if len(data) == 2:
-                data = pd.DataFrame({"actual": data[0], "predict": data[1]})
-                data["predict_proba"] = data.loc[:, "predict"].div(target_value)
+                data = pd.DataFrame({"actual": data[0, :], "predict": data[1, :]})
+                data["predict_proba"] = data["predict"].gt(target_value).astype(int)
             elif len(data) == 3:
                 data = pd.DataFrame(
                     {"actual": data[0], "predict": data[1], "predict_proba": data[2]}
                 )
         else:
             raise ValueError(
-                "Please provide the data in a list, dataframe, or numpy array."
+                "Please provide the data in a list of lists, dataframe, or numpy array."
             )
 
         return data
@@ -1433,7 +1441,7 @@ class JSONFiles:
         return conversion
 
     @classmethod
-    def create_requirements_json(cls, model_path=Path.cwd()):
+    def create_requirements_json(cls, model_path=Path.cwd(), output_path=None):
         """
         Searches the model directory for Python scripts and pickle files and
         determines their Python package dependencies.
@@ -1454,13 +1462,15 @@ class JSONFiles:
         the requirements.json file's package versions to match the model development
         environment.
 
-        This function outputs a JSON file named "requirements.json".
+        When provided with an output_path argument, this function outputs a JSON file
+        named "requirements.json". Otherwise, a list of dicts is returned.
 
         Parameters
         ----------
-        model_path : str, optional
+        model_path : str or Path, optional
             The path to a Python project, by default the current working directory.
-
+        output_path : str or Path, optional
+            The path for the output requirements.json file. Default is None.
         Returns
         -------
         list of dicts
@@ -1501,12 +1511,13 @@ class JSONFiles:
                         "command": f"pip install {package}=={version}",
                     }
                 )
-        with open(  # skipcq: PTC-W6004
-            Path(model_path) / "requirements.json", "w"
-        ) as file:
-            file.write(json.dumps(json_dicts, indent=4))
-
-        return json_dicts
+        if output_path:
+            with open(  # skipcq: PTC-W6004
+                Path(output_path) / "requirements.json", "w"
+            ) as file:
+                file.write(json.dumps(json_dicts, indent=4))
+        else:
+            return {"requirements.json": json.dumps(json_dicts)}
 
     @staticmethod
     def get_local_package_version(package_list):
@@ -1574,7 +1585,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        model_path : string, optional
+        model_path : string or Path, optional
             File location for the output JSON file. Default is the current working
             directory.
 
@@ -1639,7 +1650,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        pickle_folder : str
+        pickle_folder : str or Path
             File location for the input pickle file. Default is the current working
             directory.
 
@@ -1661,7 +1672,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        pickle_file : str
+        pickle_file : str or Path
             The file where you stored pickle data.
 
         Returns

@@ -153,10 +153,23 @@ def _register_sklearn_40(model, model_name, project_name, input_data, output_dat
 
         pzmm.JSONFiles.write_file_metadata_json(model_name, json_path=folder, is_h2o_model=False)
 
-        predict_method = "{}.predict_proba({})" if hasattr(model, "predict_proba") else "{}.predict({})"
+        predict_method = (
+            "{}.predict_proba({})"
+            if hasattr(model, "predict_proba")
+            else "{}.predict({})"
+        )
         predict_method = "{}.predict({})"
         metrics = ["EM_CLASSIFICATION"]  # NOTE: only valid for classification models.
-        pzmm.ImportModel.pzmmImportModel(folder, model_name, project_name, input_data, output_data, predict_method, metrics=metrics)
+        pzmm.ImportModel.pzmmImportModel(
+            folder,
+            model_name,
+            project_name,
+            input_data,
+            output_data,
+            predict_method,
+            metrics=metrics,
+        )
+
 
 def _create_project(project_name, model, repo, input_vars=None, output_vars=None):
     """Creates a project based on the model specifications.
