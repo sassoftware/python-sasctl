@@ -1,5 +1,9 @@
 Unreleased
 ----------
+ -
+ 
+v1.8.2 (2023-01-30)
+-------------------
 **Improvements**
  - `folders.get_folder()` can now handle folder paths and delegates (e.g. @public).
 
