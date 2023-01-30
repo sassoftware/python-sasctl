@@ -7,7 +7,7 @@ package:
   version: {{ data.version }}
 
 source:
-   path: ..
+  path: ..
 
 build:
   entry_points:
