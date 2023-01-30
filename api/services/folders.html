@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>sasctl.services.folders &#8212; sasctl 1.8.1 documentation</title>
+    <title>sasctl.services.folders &#8212; sasctl 1.8.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -131,12 +131,22 @@ If not specified, new folder will be created under root folder.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.folders.Folders.get_folder">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sasctl._services.folders.Folders.get_folder" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/folders.html#Folders.get_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.folders.Folders.get_folder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a folder instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>item</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – Name, ID, or dictionary representation of the folder.</p></li>
+<li><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – <dl class="simple">
+<dt>May be one of:</dt><dd><ul>
+<li><p>folder name</p></li>
+<li><p>folder ID</p></li>
+<li><p>folder path</p></li>
+<li><p>folder delegate string</p></li>
+<li><p>dictionary representation of the folder</p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
 <li><p><strong>refresh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Obtain an updated copy of the folder.</p></li>
 </ul>
 </dd>
@@ -148,9 +158,42 @@ If not specified, new folder will be created under root folder.</p></li>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>If <cite>item</cite> is a complete representation of the folder it will be
+<p>If <cite>folder</cite> is a complete representation of the folder it will be
 returned unless <cite>refresh</cite> is set.  This prevents unnecessary REST
 calls when data is already available on the client.</p>
+<p class="rubric">Examples</p>
+<p>The following four examples are all functionally equivalent.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_folder</span><span class="p">(</span><span class="s2">&quot;Public&quot;</span><span class="p">)</span>
+<span class="go">{&quot;name&quot;: &quot;Public&quot;, &quot;id&quot;: &quot;4a737209-5662&quot;}</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_folder</span><span class="p">(</span><span class="s2">&quot;/Public&quot;</span><span class="p">)</span>
+<span class="go">{&quot;name&quot;: &quot;Public&quot;, &quot;id&quot;: &quot;4a737209-5662&quot;}</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_folder</span><span class="p">(</span><span class="s2">&quot;@public&quot;</span><span class="p">)</span>
+<span class="go">{&quot;name&quot;: &quot;Public&quot;, &quot;id&quot;: &quot;4a737209-5662&quot;}</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_folder</span><span class="p">(</span><span class="s2">&quot;@public&quot;</span><span class="p">)</span>
+<span class="go">{&quot;name&quot;: &quot;Public&quot;, &quot;id&quot;: &quot;4a737209-5662&quot;}</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_folder</span><span class="p">(</span><span class="s2">&quot;4a737209-5662&quot;</span><span class="p">)</span>
+<span class="go">{&quot;name&quot;: &quot;Public&quot;, &quot;id&quot;: &quot;4a737209-5662&quot;}</span>
+</pre></div>
+</div>
+<p>The full folder path can also be specified.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_folder</span><span class="p">(</span><span class="s2">&quot;/Public/Demo&quot;</span><span class="p">)</span>
+<span class="go">{&quot;name&quot;: &quot;Demo&quot;, &quot;id&quot;: &quot;148081bf-1c86&quot;}</span>
+</pre></div>
+</div>
+<p>Special folders can be identified using a delegate string.  Currently supported
+are: &#64;myFolder, &#64;appDataFolder, &#64;myHistory, &#64;myFavorites, and &#64;public.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_folder</span><span class="p">(</span><span class="s2">&quot;@myFolder&quot;</span><span class="p">)</span>
+<span class="go">{&quot;name&quot;: &quot;My Folder&quot;, &quot;id&quot;: &quot;71687cd2-db4b&quot;}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
