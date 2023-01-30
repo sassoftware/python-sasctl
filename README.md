@@ -86,6 +86,10 @@ install the latest source code:
 
 ```pip install git+https://github.com/sassoftware/python-sasctl```
 
+Alternatively, if you're using Anaconda you can install with:
+```
+conda install -c sas-institute sasctl
+```
 
 ## Getting Started
 
