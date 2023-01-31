@@ -4,11 +4,15 @@
 # Copyright © 2023, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+from pathlib import Path
 import pytest
+import tempfile
 
 import pandas as pd
 
 from sasctl.pzmm.write_json_files import JSONFiles as jf
+
+pytestmark = pytest.mark.usefixtures("session")
 
 
 def _classification_model(data, target):
@@ -29,7 +33,8 @@ def _classification_model(data, target):
 def test_calculate_model_statistics(cas_session, hmeq_dataset):
     """
     Test Cases:
-    -
+    - No output files
+    - Output files for fitstat, roc, and lift
     """
     model, x, y = _classification_model(hmeq_dataset, "BAD")
 
@@ -38,10 +43,22 @@ def test_calculate_model_statistics(cas_session, hmeq_dataset):
     predict_proba = []
     for i, row in enumerate(proba):
         predict_proba.append(row[int(predict[i])])
-    pred_df = pd.DataFrame(
+    predict_df = pd.DataFrame(
         {"predict": list(predict), "proba": predict_proba}, index=y.index
     )
-    test_data = pd.concat([y, pred_df], axis=1)
+    test_data = pd.concat([y, predict_df], axis=1)
 
     json_dicts = jf.calculate_model_statistics(target_value="1", test_data=test_data)
-    assert ["dmcas_fitstat.json", "dmcas_roc.json", "dmcas_lift.json"] in json_dicts
+    assert "dmcas_fitstat.json" in json_dicts
+    assert "dmcas_roc.json" in json_dicts
+    assert "dmcas_lift.json" in json_dicts
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        jf.calculate_model_statistics(
+            target_value="1",
+            test_data=test_data,
+            json_path=Path(tmp_dir)
+        )
+        assert (Path(tmp_dir) / "dmcas_fitstat.json").exists()
+        assert (Path(tmp_dir) / "dmcas_roc.json").exists()
+        assert (Path(tmp_dir) / "dmcas_lift.json").exists()

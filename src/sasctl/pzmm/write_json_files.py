@@ -717,7 +717,7 @@ class JSONFiles:
 
         data_partition_exists = cls.check_for_data(validate_data, train_data, test_data)
 
-        for i, partition, data in enumerate(
+        for i, (partition, data) in enumerate(
             zip(data_partition_exists, [validate_data, train_data, test_data])
         ):
             # If the data partition was not passed, skip to the next partition
@@ -726,35 +726,40 @@ class JSONFiles:
 
             data = cls.stat_dataset_to_dataframe(data, target_value)
 
-            conn.upload(data, casout={"name": "assess_dataset", "replace": True})
+            conn.upload(
+                data,
+                casout={"name": "assess_dataset", "replace": True, "caslib": "Public"},
+            )
 
             conn.percentile.assess(
-                table={"name": "assess_table", "replace": True},
+                table={"name": "assess_dataset", "caslib": "Public"},
                 response="predict",
                 pVar="predict_proba",
                 event=str(target_value),
-                pEvent=prob_value if prob_value else 0.5,
+                pEvent=str(prob_value) if prob_value else str(0.5),
                 inputs="actual",
-                fitStatOut={"name": "FitStat", "replace": True},
-                rocOut={"name": "ROC", "replace": True},
-                casout={"name": "Lift", "replace": True},
+                fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
+                rocOut={"name": "ROC", "replace": True, "caslib": "Public"},
+                casout={"name": "Lift", "replace": True, "caslib": "Public"},
             )
 
             fitstat_dict = (
-                pd.DataFrame(conn.CASTable("FitStat").to_frame())
+                pd.DataFrame(conn.CASTable("FitStat", caslib="Public").to_frame())
                 .transpose()
                 .squeeze()
                 .to_dict()
             )
             json_dict[0]["data"][i]["dataMap"].update(fitstat_dict)
 
-            roc_df = pd.DataFrame(conn.CASTable("ROC").to_frame())
+            roc_df = pd.DataFrame(conn.CASTable("ROC", caslib="Public").to_frame())
             roc_dict = cls.apply_dataframe_to_json(json_dict[1]["data"], i, roc_df)
-            json_dict[1]["data"].update(roc_dict)
+            for j in range(len(roc_dict)):
+                json_dict[1]["data"][j].update(roc_dict[j])
 
-            lift_df = pd.DataFrame(conn.CASTable("Lift").to_frame())
+            lift_df = pd.DataFrame(conn.CASTable("Lift", caslib="Public").to_frame())
             lift_dict = cls.apply_dataframe_to_json(json_dict[2]["data"], i, lift_df)
-            json_dict[2]["data"].update(lift_dict)
+            for j in range(len(lift_dict)):
+                json_dict[2]["data"][j].update(lift_dict[j])
 
         if json_path:
             for name in [FITSTAT, ROC, LIFT]:
@@ -802,9 +807,9 @@ class JSONFiles:
             )
         else:
             data_partitions = [
-                1 if validate else 0,
-                1 if train else 0,
-                1 if test else 0,
+                1 if validate is not None else 0,
+                1 if train is not None else 0,
+                1 if test is not None else 0,
             ]
         return data_partitions
 
