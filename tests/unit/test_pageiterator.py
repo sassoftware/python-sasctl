@@ -11,8 +11,53 @@ import pytest
 from sasctl.core import PageIterator, RestObj
 
 
+@pytest.fixture(params=[(6, 2, 2), (6, 1, 4), (6, 5, 4), (6, 6, 2), (100, 10, 20)])
+def paging(request):
+    """Create a RestObj designed to page through a collection of items and the
+    collection itself.
+
+    Returns
+    -------
+    RestObj : initial RestObj that can be used to initialize a paging iterator
+    List[dict] : List of items being used as the "server-side" source
+    MagicMock : Mock of sasctl.request for performing additional validation
+
+    """
+    import math
+    import re
+
+    num_items, start, limit = request.param
+
+    with mock.patch("sasctl.core.request") as req:
+        items = [{"name": str(i)} for i in range(num_items)]
+
+        obj = RestObj(
+            items=items[:start],
+            count=len(items),
+            links=[
+                {
+                    "rel": "next",
+                    "href": "/moaritems?start=%d&limit=%d" % (start, limit),
+                }
+            ],
+        )
+
+        def side_effect(_, link, **kwargs):
+            assert "limit=%d" % limit in link
+            start = int(re.search(r"(?<=start=)[\d]+", link).group())
+            return RestObj(items=items[start: start + limit])
+
+        req.side_effect = side_effect
+        yield obj, items[:], req
+
+    # Enough requests should have been made to retrieve all the data.
+    # Additional requests may have been made by workers to non-existent pages.
+    call_count = (num_items - start) / float(limit)
+    assert req.call_count >= math.ceil(call_count)
+
+
 @pytest.mark.incremental
-class TestPageIterator():
+class TestPageIterator:
     def test_no_paging_required(self):
         """If "next" link not present, current items should be included."""
 
@@ -34,47 +79,6 @@ class TestPageIterator():
             raise AssertionError(
                 f"method_calls={request.mock_calls}  call_args={request.call_args_list}"
             )
-
-    @pytest.fixture(params=[(6, 2, 2), (6, 1, 4), (6, 5, 4), (6, 6, 2), (100, 10, 20)])
-    def paging(self, request):
-        """Create a RestObj designed to page through a collection of items and the
-        collection itself.
-
-        Returns
-        -------
-        RestObj : initial RestObj that can be used to initialize a paging iterator
-        List[dict] : List of items being used as the "server-side" source
-        MagicMock : Mock of sasctl.request for performing additional validation
-
-        """
-        import math
-        import re
-
-        num_items, start, limit = request.param
-
-        with mock.patch("sasctl.core.request") as req:
-            items = [{"name": str(i)} for i in range(num_items)]
-
-            obj = RestObj(
-                items=items[:start],
-                count=len(items),
-                links=[
-                    {"rel": "next", "href": "/moaritems?start=%d&limit=%d" % (start, limit)}
-                ],
-            )
-
-            def side_effect(_, link, **kwargs):
-                assert "limit=%d" % limit in link
-                start = int(re.search(r"(?<=start=)[\d]+", link).group())
-                return RestObj(items=items[start : start + limit])
-
-            req.side_effect = side_effect
-            yield obj, items[:], req
-
-        # Enough requests should have been made to retrieve all the data.
-        # Additional requests may have been made by workers to non-existent pages.
-        call_count = (num_items - start) / float(limit)
-        assert req.call_count >= math.ceil(call_count)
 
     def test_paging_required(self, paging):
         """Requests should be made to retrieve additional pages."""
