@@ -1,0 +1,47 @@
+codecov:
+  notify:
+    wait_for_ci: True
+
+coverage:
+  precision: 2
+  round: down
+  range: "75...100"
+
+comment:
+  layout: "header, diff, flags, components"
+
+flag_management:
+  default_rules:
+    carryforward: true
+    statuses:
+      - type: project
+        target: auto
+        threshold: 1%
+      - type: patch
+        target: 90%
+
+component_management:
+  default_rules:
+    statuses:
+      - type: project
+        target: auto
+        threshold: 1%
+      - type: patch
+        target: 90%
+  individual_components:
+    - component_id: module_services
+      name: services
+      paths:
+        - ./src/sasctl/_services/**
+    - component_id: module_pzmm
+      name: pzmm
+      paths:
+        - ./src/sasctl/pzmm/**
+    - component_id: module_utils
+      name: utils
+      paths:
+        - ./src/sasctl/utils/**
+    - component_id: module_core
+      name: core
+      paths:
+        - ./src/sasctl/
