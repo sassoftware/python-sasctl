@@ -7,7 +7,7 @@ from warnings import warn
 
 from .._services.model_repository import ModelRepository as mr
 from ..core import current_session
-from .writeScoreCode import ScoreCode as sc
+from .write_score_code import ScoreCode as sc
 from .zip_model import ZipModel as zm
 
 
@@ -229,7 +229,7 @@ class ImportModel:
             representation of the project.
         input_df : DataFrame
             The `DataFrame` object contains the training data, and includes only the 
-            predictor columns. The writeScoreCode function currently supports int(64), 
+            predictor columns. The write_score_code function currently supports int(64),
             float(64), and string data types for scoring.
         target_df : DataFrame
             The `DataFrame` object contains the training data for the target variable.
@@ -332,21 +332,21 @@ class ImportModel:
             if no_score_code:
                 print("No score code was generated.")
             else:
-                sc.writeScoreCode(
+                sc.write_score_code(
                     input_df,
                     target_df,
                     model_prefix,
                     predict_method,
                     model_file_name,
                     metrics=metrics,
-                    pyPath=score_code_path,
-                    threshPrediction=threshold,
-                    otherVariable=other_variable,
-                    isH2OModel=is_h2o_model,
-                    isBinaryModel=binary_model,
-                    binaryString=binary_string,
-                    missingValues=missing_values,
-                    pickleType=mlflow_details["serialization_format"],
+                    score_code_path=score_code_path,
+                    threshold=threshold,
+                    other_variable=other_variable,
+                    is_h2o_model=is_h2o_model,
+                    is_binary_model=binary_model,
+                    binary_string=binary_string,
+                    missing_values=missing_values,
+                    pickle_type=mlflow_details["serialization_format"],
                 )
                 print(
                     "Model score code was written successfully to {}.".format(
@@ -405,22 +405,22 @@ class ImportModel:
             if no_score_code:
                 print("No score code was generated.")
             else:
-                sc.writeScoreCode(
+                sc.write_score_code(
                     input_df,
                     target_df,
                     model_prefix,
                     predict_method,
                     model_file_name,
                     metrics=metrics,
-                    pyPath=score_code_path,
-                    threshPrediction=threshold,
-                    otherVariable=other_variable,
+                    score_code_path=score_code_path,
+                    threshold=threshold,
+                    other_variable=other_variable,
                     model=response.id,
-                    isH2OModel=is_h2o_model,
-                    isBinaryModel=binary_model,
-                    binaryString=binary_string,
-                    missingValues=missing_values,
-                    pickleType=mlflow_details["serialization_format"],
+                    is_h2o_model=is_h2o_model,
+                    is_binary_model=binary_model,
+                    binary_string=binary_string,
+                    missing_values=missing_values,
+                    pickle_type=mlflow_details["serialization_format"],
                 )
                 print(
                     "Model score code was written successfully to {} and uploaded to "

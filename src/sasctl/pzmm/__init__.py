@@ -7,5 +7,5 @@ from .mlflow_model import MLFlowModel
 from .modelParameters import ModelParameters
 from .pickle_model import PickleModel
 from .write_json_files import JSONFiles
-from .writeScoreCode import ScoreCode
+from .write_score_code import ScoreCode
 from .zip_model import ZipModel
