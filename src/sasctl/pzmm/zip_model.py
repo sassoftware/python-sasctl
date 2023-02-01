@@ -46,7 +46,7 @@ class ZipModel:
 
         Parameters
         ---------------
-        file_dir : string
+        file_dir : string or Path
             Location of *.json, *.pickle, *.mojo, and *Score.py files.
         model_prefix : string
             Variable name for the model to be displayed in SAS Open Model Manager

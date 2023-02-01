@@ -134,7 +134,7 @@ def _register_sklearn_40(model, model_name, project_name, input_data, output_dat
         )
         predict_method = "{}.predict({})"
         metrics = ["EM_CLASSIFICATION"]  # NOTE: only valid for classification models.
-        pzmm.ImportModel.pzmmImportModel(
+        pzmm.ImportModel.import_model(
             folder,
             model_name,
             project_name,

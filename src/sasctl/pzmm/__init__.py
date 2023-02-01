@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from .gitIntegration import GitIntegrate
-from .importModel import ImportModel
+from .import_model import ImportModel
 from .mlflow_model import MLFlowModel
 from .modelParameters import ModelParameters
 from .pickle_model import PickleModel

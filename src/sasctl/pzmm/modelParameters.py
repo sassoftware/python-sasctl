@@ -55,7 +55,7 @@ class ModelParameters:
         model : Python object
             Python object representing the model.
         model_prefix : str
-            Name used to create model files. (e.g. (modelPrefix) + "Hyperparameters.json")
+            Name used to create model files. (e.g. (model_prefix) + "Hyperparameters.json")
         pickle_path : str, Path
             Directory location of model files.
 
