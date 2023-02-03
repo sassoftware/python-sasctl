@@ -442,6 +442,7 @@ def test_as_swat():
 def test_version_info_35(get, _):
     """Verify that Session.version_info() makes the correct HTTP call."""
     from sasctl.core import VersionInfo
+
     s = Session("example.com", "user", "password")
 
     get.return_value.status_code = 200
@@ -452,7 +453,7 @@ def test_version_info_35(get, _):
     assert get.call_count == 1
 
     url, params = get.call_args
-    assert url[0] == '/licenses/grants'
+    assert url[0] == "/licenses/grants"
 
     assert isinstance(version, VersionInfo)
     assert version.major == 3
