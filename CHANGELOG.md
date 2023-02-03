@@ -1,6 +1,7 @@
 Unreleased
 ----------
- -
+**Bugfixes**
+ - Fixed an issue where invalid HTTP responses could cause an error when using `Session.version_info()`.
  
 v1.8.2 (2023-01-30)
 -------------------

@@ -835,6 +835,11 @@ class Session(requests.Session):
             r = self.get("/licenses/grants")
             release = r.json().get("release")
 
+            # If JSON response was not properly formatted then do not continue
+            # NOTE: response can be logged & debugged with .add_logger()
+            if release is None:
+                return None
+
             # Convert 'V03' and 'V04' to just 3 or 4.
             major_version = int(release.upper().lstrip("V"))
 

@@ -435,3 +435,37 @@ def test_as_swat():
                         username="testuser",
                         password=None,
                     )
+
+
+@mock.patch("sasctl.core.Session._get_authorization_token")
+@mock.patch("sasctl.core.Session.get")
+def test_version_info_35(get, _):
+    """Verify that Session.version_info() makes the correct HTTP call."""
+    from sasctl.core import VersionInfo
+    s = Session("example.com", "user", "password")
+
+    get.return_value.status_code = 200
+    get.return_value.json.return_value = {"release": "V03"}
+
+    version = s.version_info()
+
+    assert get.call_count == 1
+
+    url, params = get.call_args
+    assert url[0] == '/licenses/grants'
+
+    assert isinstance(version, VersionInfo)
+    assert version.major == 3
+
+
+@mock.patch("sasctl.core.Session._get_authorization_token")
+@mock.patch("sasctl.core.Session.get")
+def test_version_info_invalid_response(get, _):
+    """Verify that Session.version_info() returns None if the HTTP response is invalid."""
+    s = Session("example.com", "user", "password")
+
+    get.return_value.status_code = 200
+    get.return_value.json.return_value = {"not_a_release": "V03"}
+
+    version = s.version_info()
+    assert version is None
