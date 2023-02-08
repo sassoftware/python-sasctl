@@ -270,10 +270,6 @@ class ImportModel:
             Model details from an MLFlow model. This dictionary is created by the 
             read_mlflow_model_file function. Default is None.
         """
-        # Set default output metrics
-        if not metrics:
-            metrics = ["EM_EVENTPROBABILITY", "EM_CLASSIFICATION"]
-
         # Initialize no score code or binary H2O model flags
         no_score_code = False
         binary_model = False
@@ -391,7 +387,7 @@ class ImportModel:
             model_exists(project, model_prefix, force, versionName=project_version)
 
             response = mr.import_model_from_zip(
-                model_prefix, project, zip_io_file, force, version=project_version
+                model_prefix, project, zip_io_file, version=project_version
             )
             try:
                 print(
