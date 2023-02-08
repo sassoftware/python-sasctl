@@ -12,6 +12,9 @@ from ..core import current_session, is_uuid
 
 # TODO: Convert STRINGIO calls to string or dict format
 
+# TODO: change sess.get call in _find_file to a mr call (get_model_contents?)
+# TODO: Maybe just move _find_file altogether?
+
 
 def _find_file(model, file_name):
     """
@@ -39,8 +42,33 @@ def _find_file(model, file_name):
             correct_file = sess.get(
                 f"modelRepository/models/{model}/contents/{file.id}/content"
             )
-            return correct_file
+            file_name = sess.get(f"modelRepository/models/{model}/contents/{file.id}")
+            return correct_file, file_name.json()["name"]
 
+def _update_json(model, modelJSON, kpis):
+    """
+    Updates the contents of the hyperparameter json file
+    Parameters
+    ----------
+    model: str
+        The id of the model being updated
+    modelJSON: dict
+        The contents of the current JSON object within model manager
+    kpis: pandas.DataFrame
+        Dataframe containing the KPI values stored within model manager at runtime
+
+
+    Returns
+    -------
+    dict
+        The updated hyperparameter json object to be pushed to model manager
+    """
+    model_rows = kpis.loc[kpis["ModelUUID"] == model]
+    model_rows.set_index("TimeLabel", inplace=True)
+    kpi_json = model_rows.to_json(orient="index")
+    parsed_json = json.loads(kpi_json)
+    modelJSON["kpis"] = parsed_json
+    return modelJSON
 
 class ModelParameters:
     @classmethod
@@ -105,21 +133,14 @@ class ModelParameters:
         """
         kpis = cls.get_project_kpis(project, server, caslib)
         models_to_update = kpis["ModelUUID"].unique().tolist()
+        # 
         for model in models_to_update:
-            current_params = _find_file(model, "hyperparameters")
-            current_json = current_params.json()
-            model_rows = kpis.loc[kpis["ModelUUID"] == model]
-            model_rows.set_index("TimeLabel", inplace=True)
-            kpi_json = model_rows.to_json(orient="index")
-            parsed_json = json.loads(kpi_json)
-            current_json["kpis"] = parsed_json
-            file_name = "{}Hyperparameters.json".format(
-                current_json["kpis"][list(current_json["kpis"].keys())[0]]["ModelName"]
-            )
+            current_params, file_name = _find_file(model, "hyperparameters")
+            updated_json = _update_json(model, current_params.json(), kpis)
             mr.add_model_content(
                 model,
-                StringIO(json.dumps(current_json, indent=4)),
-                file_name,
+                StringIO(json.dumps(updated_json, indent=4)),
+                file_name
             )
 
     @classmethod
@@ -144,7 +165,7 @@ class ModelParameters:
         else:
             model = mr.get_model(model)
             id_ = model["id"]
-        file = _find_file(id_, "hyperparameters")
+        file, _ = _find_file(id_, "hyperparameters")
         return file.json()
 
     @classmethod
