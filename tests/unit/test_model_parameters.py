@@ -95,7 +95,7 @@ class TestSKLearnModel:
         assert updated_json["hyperparameters"] == self.TESTJSON["hyperparameters"]
         assert "kpis" in updated_json
         assert len(updated_json["kpis"]) == 1
-        assert updated_json["kpis"] == {'0': {'TestKPI': 1}}
+        assert updated_json["kpis"] == {"0": {"TestKPI": 1}}
         assert "TimeLabel" not in updated_json["kpis"]
 
     def test_find_file(self):
@@ -110,7 +110,7 @@ class TestSKLearnModel:
             current_session("example.com", USER, "password")
 
         with mock.patch(
-            "sasctl._services.model_repository.get_model_contents"
+            "sasctl._services.model_repository.ModelRepository.get_model_contents"
         ) as get_model_contents:
             get_model_contents.return_value = copy.deepcopy(self.MODEL_FILES)
             with pytest.raises(ValueError):

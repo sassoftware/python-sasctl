@@ -55,9 +55,7 @@ def test_calculate_model_statistics(cas_session, hmeq_dataset):
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         jf.calculate_model_statistics(
-            target_value="1",
-            test_data=test_data,
-            json_path=Path(tmp_dir)
+            target_value="1", test_data=test_data, json_path=Path(tmp_dir)
         )
         assert (Path(tmp_dir) / "dmcas_fitstat.json").exists()
         assert (Path(tmp_dir) / "dmcas_roc.json").exists()
