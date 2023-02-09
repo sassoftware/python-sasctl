@@ -37,13 +37,13 @@ def _find_file(model, file_name):
     sess = current_session()
     file_list = mr.get_model_contents(model)
     for file in file_list:
-        print(file.name)
         if file_name.lower() in file.name.lower():
             correct_file = sess.get(
                 f"modelRepository/models/{model}/contents/{file.id}/content"
             )
-            file_name = sess.get(f"modelRepository/models/{model}/contents/{file.id}")
-            return correct_file, file_name.json()["name"]
+            return correct_file, file.name
+    raise ValueError(f'No file containing "{file_name}" exists within model files.')
+
 
 def _update_json(model, modelJSON, kpis):
     """
@@ -63,12 +63,16 @@ def _update_json(model, modelJSON, kpis):
     dict
         The updated hyperparameter json object to be pushed to model manager
     """
+
     model_rows = kpis.loc[kpis["ModelUUID"] == model]
-    model_rows.set_index("TimeLabel", inplace=True)
-    kpi_json = model_rows.to_json(orient="index")
-    parsed_json = json.loads(kpi_json)
-    modelJSON["kpis"] = parsed_json
+    if not model_rows.empty:
+        model_rows = model_rows.drop(columns=["ModelUUID"])
+        model_rows.set_index("TimeLabel", inplace=True)
+        kpi_json = model_rows.to_json(orient="index")
+        parsed_json = json.loads(kpi_json)
+        modelJSON["kpis"] = parsed_json
     return modelJSON
+
 
 class ModelParameters:
     @classmethod
@@ -133,14 +137,12 @@ class ModelParameters:
         """
         kpis = cls.get_project_kpis(project, server, caslib)
         models_to_update = kpis["ModelUUID"].unique().tolist()
-        # 
+        #
         for model in models_to_update:
             current_params, file_name = _find_file(model, "hyperparameters")
             updated_json = _update_json(model, current_params.json(), kpis)
             mr.add_model_content(
-                model,
-                StringIO(json.dumps(updated_json, indent=4)),
-                file_name
+                model, StringIO(json.dumps(updated_json, indent=4)), file_name
             )
 
     @classmethod
