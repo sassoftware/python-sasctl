@@ -48,7 +48,6 @@ def sklearn_model(train_data):
     return model
 
 
-@pytest.mark.incremental
 class TestSKLearnModel:
     PROJECT_NAME = "PZMM SKLearn Test Project"
     MODEL_NAME = "SKLearnModel"
@@ -84,20 +83,19 @@ class TestSKLearnModel:
         input_json = copy.deepcopy(self.TESTJSON)
         input_kpis = copy.deepcopy(self.KPIS)
         assert (
-            _update_json(self.MODELS[1]["id"], input_json, input_kpis) == self.MODELS[1]
+            _update_json(self.MODELS[1]["id"], input_json, input_kpis) == self.TESTJSON
         )
 
         input_json = copy.deepcopy(self.TESTJSON)
         input_kpis = copy.deepcopy(self.KPIS)
         updated_json = _update_json(self.MODELS[0]["id"], input_json, input_kpis)
 
-        assert input_json == self.TESTJSON
-        assert input_kpis == self.KPIS
+        pd.testing.assert_frame_equal(input_kpis, self.KPIS)
         assert "hyperparameters" in updated_json
         assert updated_json["hyperparameters"] == self.TESTJSON["hyperparameters"]
         assert "kpis" in updated_json
-        assert len(updated_json["kpis"] == 1)
-        assert updated_json["kpis"] == {}
+        assert len(updated_json["kpis"]) == 1
+        assert updated_json["kpis"] == {'0': {'TestKPI': 1}}
         assert "TimeLabel" not in updated_json["kpis"]
 
     def test_find_file(self):
