@@ -44,6 +44,7 @@ def sklearn_model(train_data):
         model.fit(X, y)
     return model
 
+
 class TestSklearnModel:
     PROJECT_NAME = "Test SKLearn Model"
     MODEL_NAME = "SKLearnModel"

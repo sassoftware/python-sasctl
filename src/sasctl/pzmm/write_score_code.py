@@ -31,7 +31,7 @@ class ScoreCode:
         score_code_path=None,
         score_cas=True,
         pickle_type="pickle",
-        **kwargs
+        **kwargs,
     ):
         """
         Writes a Python score code file based on training data used to generate the model
@@ -161,7 +161,7 @@ class ScoreCode:
             pickle_type,
             mojo_model="mojo_model" in kwargs,
             binary_h2o_model="binary_h2o_model" in kwargs,
-            binary_string=binary_string
+            binary_string=binary_string,
         )
 
         # Generate model loading code for SAS Viya 3.5 models without binary strings
@@ -171,7 +171,7 @@ class ScoreCode:
                 pickle_type,
                 model_file_name,
                 mojo_model="mojo_model" in kwargs,
-                binary_h2o_model="binary_h2o_model" in kwargs
+                binary_h2o_model="binary_h2o_model" in kwargs,
             )
         # As above, but for SAS Viya 4 models
         elif not binary_string:
@@ -179,20 +179,24 @@ class ScoreCode:
                 pickle_type,
                 model_file_name,
                 mojo_model="mojo_model" in kwargs,
-                binary_h2o_model="binary_h2o_model" in kwargs
+                binary_h2o_model="binary_h2o_model" in kwargs,
             )
         else:
             model_load = None
 
         # Define the score function using the variables found in input_data
         # Set the output variables in the line below from metrics
-        cls.score_code += f"def score{model_prefix}({', '.join(input_var_list)}):\n" \
-                          f"{'':4}Output: {', '.join(metrics)}"
+        cls.score_code += (
+            f"def score{model_prefix}({', '.join(input_var_list)}):\n"
+            f"{'':4}Output: {', '.join(metrics)}"
+        )
 
         # Run a try/except block to catch errors for model loading (skip binary string)
         if model_load:
-            cls.score_code += f"{'':4}try:\n{'':8}global model\n{'':4}" \
-                              f"except NameError:\n{model_load}"
+            cls.score_code += (
+                f"{'':4}try:\n{'':8}global model\n{'':4}"
+                f"except NameError:\n{model_load}"
+            )
 
         if "missing_values" in kwargs:
             cls._impute_missing_values(input_data, input_var_list, input_dtypes_list)
@@ -200,29 +204,29 @@ class ScoreCode:
         # Create the appropriate style of input array and write out the predict method
         if any(x in ["mojo_model", "binary_h2o_model"] for x in kwargs):
             cls._predict_method(
-                predict_method,
-                input_var_list,
-                dtypes_list=input_dtypes_list
+                predict_method, input_var_list, dtypes_list=input_dtypes_list
             )
             cls._predictions_to_metrics(
                 metrics,
                 target_values=target_values,
                 predict_threshold=predict_threshold,
-                h2o_model=True
+                h2o_model=True,
             )
         else:
             cls._predict_method(
                 predict_method,
                 input_var_list,
-                statsmodels_model="statsmodels_model" in kwargs
+                statsmodels_model="statsmodels_model" in kwargs,
             )
 
         if model_id:
-            files = [{
-                "name": f"{model_prefix}_score.py",
-                "file": cls.score_code,
-                "role": "score"
-            }]
+            files = [
+                {
+                    "name": f"{model_prefix}_score.py",
+                    "file": cls.score_code,
+                    "role": "score",
+                }
+            ]
             cls.upload_and_copy_score_resources(model_id, files)
             mr.convert_python_to_ds2(model_id)
             if score_cas:
@@ -232,20 +236,24 @@ class ScoreCode:
                         mas_code = mr.get(f"models/{file.modelId}/contents/{file.id}")
                         cls.upload_and_copy_score_resources(
                             model_id,
-                            [{
-                                "name": MAS_CODE_NAME,
-                                "file": mas_code,
-                                "role": "score"
-                            }]
+                            [
+                                {
+                                    "name": MAS_CODE_NAME,
+                                    "file": mas_code,
+                                    "role": "score",
+                                }
+                            ],
                         )
                         cas_code = cls.convert_mas_to_cas(mas_code, model_id)
                         cls.upload_and_copy_score_resources(
                             model_id,
-                            [{
-                                "name": CAS_CODE_NAME,
-                                "file": cas_code,
-                                "role": "score"
-                            }]
+                            [
+                                {
+                                    "name": CAS_CODE_NAME,
+                                    "file": cas_code,
+                                    "role": "score",
+                                }
+                            ],
                         )
                         model = mr.get_model(model_id)
                         model["scoreCodeType"] = "ds2MultiType"
@@ -282,8 +290,10 @@ class ScoreCode:
     def _get_model_id(model):
         """"""
         if not model:
-            raise ValueError("No model identification was provided. Python score code"
-                             " generation for SAS Viya 3.5 requires the model's UUID.")
+            raise ValueError(
+                "No model identification was provided. Python score code"
+                " generation for SAS Viya 3.5 requires the model's UUID."
+            )
         else:
             model_response = mr.get_model(model)
             try:
@@ -307,97 +317,114 @@ class ScoreCode:
 
     @classmethod
     def _write_imports(
-            cls,
-            pickle_type,
-            mojo_model=False,
-            binary_h2o_model=False,
-            binary_string=None
+        cls, pickle_type, mojo_model=False, binary_h2o_model=False, binary_string=None
     ):
         """"""
         pickle_type = pickle_type if pickle_type else "pickle"
-        cls.score_code += f"import math\nimport {pickle_type}\nimport pandas as pd\n" \
-                          "import numpy as np\nfrom pathlib import Path\n\n"
+        cls.score_code += (
+            f"import math\nimport {pickle_type}\nimport pandas as pd\n"
+            "import numpy as np\nfrom pathlib import Path\n\n"
+        )
         if current_session().version_info() != 3.5:
             cls.score_code += "import settings\n\n"
         if mojo_model or binary_h2o_model:
-            cls.score_code += "import h2o\nimport gzip\nimport shutil\nimport os\n\n" \
-                              "h2o.init()\n\n"
+            cls.score_code += (
+                "import h2o\nimport gzip\nimport shutil\nimport os\n\n" "h2o.init()\n\n"
+            )
         elif binary_string:
-            cls.score_code += f"import codecs\n\nbinary_string = \"{binary_string}\"" \
-                              f"\nmodel = pickle.loads(codecs.decode(binary_string" \
-                              ".encode(), \"base64\"))\n\n"
+            cls.score_code += (
+                f'import codecs\n\nbinary_string = "{binary_string}"'
+                f"\nmodel = pickle.loads(codecs.decode(binary_string"
+                '.encode(), "base64"))\n\n'
+            )
 
     @classmethod
     def _viya35_model_load(
-            cls,
-            model_id,
-            pickle_type,
-            model_file_name=None,
-            mojo_model=False,
-            binary_h2o_model=False
+        cls,
+        model_id,
+        pickle_type,
+        model_file_name=None,
+        mojo_model=False,
+        binary_h2o_model=False,
     ):
         """"""
         if mojo_model:
-            cls.score_code += f"model_path = Path(\"/models/resources/viya/{model_id}" \
-                              f"\")\nwith gzip.open(model_path / \"{model_file_name}" \
-                              f"\", \"r\") as fileIn, open(model_path / " \
-                              f"\"{str(Path(model_file_name).with_suffix('.zip'))}\"," \
-                              " \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn," \
-                              " fileOut)\nos.chmod(model_path / " \
-                              f"\"{str(Path(model_file_name).with_suffix('.zip'))}\"" \
-                              ", 0o777)\nmodel = h2o.import_mojo(model_path / " \
-                              f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")" \
-                              "\n\n"
-            return f"{'':8}model = h2o.import_mojo(model_path / \"" \
-                   f"{str(Path(model_file_name).with_suffix('.zip'))}\")"
+            cls.score_code += (
+                f'model_path = Path("/models/resources/viya/{model_id}'
+                f'")\nwith gzip.open(model_path / "{model_file_name}'
+                f'", "r") as fileIn, open(model_path / '
+                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\","
+                " \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn,"
+                " fileOut)\nos.chmod(model_path / "
+                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\""
+                ", 0o777)\nmodel = h2o.import_mojo(model_path / "
+                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")"
+                "\n\n"
+            )
+            return (
+                f"{'':8}model = h2o.import_mojo(model_path / \""
+                f"{str(Path(model_file_name).with_suffix('.zip'))}\")"
+            )
         elif binary_h2o_model:
-            cls.score_code += "model = h2o.load(Path(\"/models/resources/viya/" \
-                              f"{model_id}/{model_file_name}\"))\n\n"
-            return f"        model = h2o.load(Path(\"/models/resources/viya/" \
-                   f"{model_id}/{model_file_name}\"))"
+            cls.score_code += (
+                'model = h2o.load(Path("/models/resources/viya/'
+                f'{model_id}/{model_file_name}"))\n\n'
+            )
+            return (
+                f'        model = h2o.load(Path("/models/resources/viya/'
+                f'{model_id}/{model_file_name}"))'
+            )
         else:
-            cls.score_code += f"model_path = Path(\"/models/resources/viya/{model_id}" \
-                              f"\")\nwith open(model_path / \"{model_file_name}\", " \
-                              f"\"rb\") as pickle_model:\n{'':4}model = {pickle_type}" \
-                              ".load(pickle_model)\n\n"
-            return f"{'':8}model_path = Path(\"/models/resources/viya/{model_id}" \
-                   f"\")\n{'':8}with open(model_path / \"{model_file_name}\", " \
-                   f"\"rb\") as pickle_model:\n{'':12}model = {pickle_type}" \
-                   ".load(pickle_model)"
+            cls.score_code += (
+                f'model_path = Path("/models/resources/viya/{model_id}'
+                f'")\nwith open(model_path / "{model_file_name}", '
+                f"\"rb\") as pickle_model:\n{'':4}model = {pickle_type}"
+                ".load(pickle_model)\n\n"
+            )
+            return (
+                f"{'':8}model_path = Path(\"/models/resources/viya/{model_id}"
+                f"\")\n{'':8}with open(model_path / \"{model_file_name}\", "
+                f"\"rb\") as pickle_model:\n{'':12}model = {pickle_type}"
+                ".load(pickle_model)"
+            )
 
     @classmethod
     def _viya4_model_load(
-            cls,
-            pickle_type,
-            model_file_name=None,
-            mojo_model=False,
-            binary_h2o_model=False
+        cls, pickle_type, model_file_name=None, mojo_model=False, binary_h2o_model=False
     ):
         """"""
         if mojo_model:
-            cls.score_code += f"with gzip.open(Path(settings.pickle_path) / " \
-                              "\"{model_file_name}\", \"r\") as fileIn, " \
-                              "open(Path(settings.pickle_path) / " \
-                              f"\"{str(Path(model_file_name).with_suffix('.zip'))}\"," \
-                              " \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn," \
-                              " fileOut)\nos.chmod(Path(settings.pickle_path) / " \
-                              f"\"{str(Path(model_file_name).with_suffix('.zip'))}\"" \
-                              ", 0o777)\nmodel = h2o.import_mojo(" \
-                              "Path(settings.pickle_path) / " \
-                              f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")" \
-                              "\n\n"
-            return f"{'':8}model = h2o.import_mojo(Path(settings.pickle_path) / " \
-                   f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")"
+            cls.score_code += (
+                f"with gzip.open(Path(settings.pickle_path) / "
+                '"{model_file_name}", "r") as fileIn, '
+                "open(Path(settings.pickle_path) / "
+                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\","
+                " \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn,"
+                " fileOut)\nos.chmod(Path(settings.pickle_path) / "
+                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\""
+                ", 0o777)\nmodel = h2o.import_mojo("
+                "Path(settings.pickle_path) / "
+                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")"
+                "\n\n"
+            )
+            return (
+                f"{'':8}model = h2o.import_mojo(Path(settings.pickle_path) / "
+                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")"
+            )
         elif binary_h2o_model:
             cls.score_code += "model = h2o.load(Path(settings.pickle_path))\n\n"
             return f"{'':8}model = h2o.load(Path(settings.pickle_path))"
         else:
-            cls.score_code += f"with open(Path(settings.pickle_path) / " \
-                              f"\"{model_file_name}\", \"rb\") as pickle_model:\n    " \
-                              f"model = {pickle_type}.load(pickle_model)\n\n"
-            return f"{'':8}with open(Path(settings.pickle_path) / " \
-                   f"\"{model_file_name}\", \"rb\") as pickle_model:\n    " \
-                   f"{'':12}model = {pickle_type}.load(pickle_model)"
+            cls.score_code += (
+                f"with open(Path(settings.pickle_path) / "
+                f'"{model_file_name}", "rb") as pickle_model:\n    '
+                f"model = {pickle_type}.load(pickle_model)\n\n"
+            )
+            return (
+                f"{'':8}with open(Path(settings.pickle_path) / "
+                f'"{model_file_name}", "rb") as pickle_model:\n    '
+                f"{'':12}model = {pickle_type}.load(pickle_model)"
+            )
 
     @classmethod
     def _impute_missing_values(cls, data, var_list, dtype_list):
@@ -414,30 +441,32 @@ class ScoreCode:
         """"""
         # If binary values, then compute the mode instead of the mean
         if data[var].isin([0, 1]).all():
-            cls.score_code += f"{'':4}try:\n{'':8}if math.isnan({var}):\n" \
-                              f"{'':12}{var} = {data[var].mode()[0]}\n" \
-                              f"{'':4}except TypeError:\n{'':8}{var} = " \
-                              f"{data[var].mode()[0]}\n"
+            cls.score_code += (
+                f"{'':4}try:\n{'':8}if math.isnan({var}):\n"
+                f"{'':12}{var} = {data[var].mode()[0]}\n"
+                f"{'':4}except TypeError:\n{'':8}{var} = "
+                f"{data[var].mode()[0]}\n"
+            )
         else:
-            cls.score_code += f"{'':4}try:\n{'':8}if math.isnan({var}):\n" \
-                              f"{'':12}{var} = {data[var].mean()}\n" \
-                              f"{'':4}except TypeError\n{'':8}{var} = " \
-                              f"{data[var].mean()}\n"
+            cls.score_code += (
+                f"{'':4}try:\n{'':8}if math.isnan({var}):\n"
+                f"{'':12}{var} = {data[var].mean()}\n"
+                f"{'':4}except TypeError\n{'':8}{var} = "
+                f"{data[var].mean()}\n"
+            )
 
     @classmethod
     def _impute_char(cls, var):
         """"""
         # Replace non-string values with blank strings
-        cls.score_code += f"{'':4}try:\n{'':8}{var} = {var}.strip()\n{'':4}except " \
-                          f"AttributeError:\n{'':8}{var} = \"\""
+        cls.score_code += (
+            f"{'':4}try:\n{'':8}{var} = {var}.strip()\n{'':4}except "
+            f"AttributeError:\n{'':8}{var} = \"\""
+        )
 
     @classmethod
     def _predict_method(
-            cls,
-            method,
-            var_list,
-            dtypes_list=None,
-            statsmodels_model=None
+        cls, method, var_list, dtypes_list=None, statsmodels_model=None
     ):
         """"""
         column_names = ", ".join("'%s'" % col for col in var_list)
@@ -449,35 +478,37 @@ class ScoreCode:
                     col_type = "numeric"
                 else:
                     col_type = "string"
-                column_types.append(f"\"{var}\" : \"{col_type}\"")
-            cls.score_code += f"{'':4}input_array = pd.DataFrame(" \
-                              f"[[{', '.join(var_list)}]],\n{'':31}columns=[" \
-                              f"{column_names}],\n{'':31}dtype=float,\n{'':31}" \
-                              f"index=[0])\n{'':4}column_types = {{{column_types}}}\n" \
-                              f"{'':4}h2o_array = h2o.H2OFrame(input_array, " \
-                              f"column_types=column_types)\n{'':4}prediction = " \
-                              f"model.{method.__name__}(h2o_array)\n{'':4}prediction" \
-                              f" = h2o.as_list(prediction, use_pandas=False)\n"
+                column_types.append(f'"{var}" : "{col_type}"')
+            cls.score_code += (
+                f"{'':4}input_array = pd.DataFrame("
+                f"[[{', '.join(var_list)}]],\n{'':31}columns=["
+                f"{column_names}],\n{'':31}dtype=float,\n{'':31}"
+                f"index=[0])\n{'':4}column_types = {{{column_types}}}\n"
+                f"{'':4}h2o_array = h2o.H2OFrame(input_array, "
+                f"column_types=column_types)\n{'':4}prediction = "
+                f"model.{method.__name__}(h2o_array)\n{'':4}prediction"
+                f" = h2o.as_list(prediction, use_pandas=False)\n"
+            )
         # Statsmodels models
         elif statsmodels_model:
-            cls.score_code += f"{'':4}inputArray = pd.DataFrame(" \
-                              f"[[1.0, {', '.join(var_list)}]],\n{'':29}columns=[" \
-                              f"\"const\", {column_names}],\n{'':29}dtype=float)\n" \
-                              f"{'':4}prediction = model.{method.__name__}" \
-                              f"(input_array)\n"
+            cls.score_code += (
+                f"{'':4}inputArray = pd.DataFrame("
+                f"[[1.0, {', '.join(var_list)}]],\n{'':29}columns=["
+                f"\"const\", {column_names}],\n{'':29}dtype=float)\n"
+                f"{'':4}prediction = model.{method.__name__}"
+                f"(input_array)\n"
+            )
         else:
-            cls.score_code += f"{'':4}input_array = pd.DataFrame(" \
-                              f"[[{', '.join(var_list)}]],\n{'':30}columns=[" \
-                              f"{column_names}],\n{'':30}dtype=float)\n{'':4}" \
-                              f"prediction = model.{method.__name__}(input_array)\n"
+            cls.score_code += (
+                f"{'':4}input_array = pd.DataFrame("
+                f"[[{', '.join(var_list)}]],\n{'':30}columns=["
+                f"{column_names}],\n{'':30}dtype=float)\n{'':4}"
+                f"prediction = model.{method.__name__}(input_array)\n"
+            )
 
     @classmethod
     def _predictions_to_metrics(
-            cls,
-            metrics,
-            target_values=None,
-            predict_threshold=None,
-            h2o_model=None
+        cls, metrics, target_values=None, predict_threshold=None, h2o_model=None
     ):
         """
 
@@ -502,12 +533,16 @@ class ScoreCode:
         elif len(target_values) > 1:
             cls._nonbinary_targets(metrics, target_values, h2o_model)
         elif len(target_values) == 1 and int(target_values) != 1:
-            raise ValueError("For non-binary target variables, please provide at"
-                             " least two target values.")
+            raise ValueError(
+                "For non-binary target variables, please provide at"
+                " least two target values."
+            )
         elif not target_values and predict_threshold:
-            raise ValueError("A threshold was provided to interpret the prediction "
-                             "results, however a target value was not, therefore, "
-                             "a valid output cannot be generated.")
+            raise ValueError(
+                "A threshold was provided to interpret the prediction "
+                "results, however a target value was not, therefore, "
+                "a valid output cannot be generated."
+            )
 
     @classmethod
     def _no_targets_no_thresholds(cls, metrics, h2o_model=None):
@@ -515,17 +550,20 @@ class ScoreCode:
         if len(metrics) == 1:
             # Assume no probability output & predict function returns classification
             if h2o_model:
-                cls.score_code += f"{'':4}{metrics} = prediction[1][0]\n\n{'':4}" \
-                                  f"return {metrics}"
+                cls.score_code += (
+                    f"{'':4}{metrics} = prediction[1][0]\n\n{'':4}" f"return {metrics}"
+                )
             else:
-                cls.score_code += f"{'':4}{metrics} = prediction\n\n{'':4}" \
-                                  f"return {metrics}"
+                cls.score_code += (
+                    f"{'':4}{metrics} = prediction\n\n{'':4}" f"return {metrics}"
+                )
         else:
             if h2o_model:
                 cls.score_code += f"{'':4}{metrics[0]} = prediction[1][0]\n"
                 for i in range(len(metrics) - 1):
-                    cls.score_code += f"{'':4}{metrics[i + 1]} = prediction[1]" \
-                                      f"[{i + 1}]\n"
+                    cls.score_code += (
+                        f"{'':4}{metrics[i + 1]} = prediction[1]" f"[{i + 1}]\n"
+                    )
             else:
                 # Assume predict call returns (classification, probabilities)
                 cls.score_code += f"{'':4}{metrics[0]} = prediction[0]\n"
@@ -542,23 +580,31 @@ class ScoreCode:
             threshold = 0.5
         if len(metrics) == 1:
             if h2o_model:
-                cls.score_code += f"{'':4}if prediction[1][2] > {threshold}:\n" \
-                                  f"{'':8}{metrics} = 1\n{'':4}else:\n{'':8}" \
-                                  f"{metrics} = 0\n\nreturn {metrics}"
+                cls.score_code += (
+                    f"{'':4}if prediction[1][2] > {threshold}:\n"
+                    f"{'':8}{metrics} = 1\n{'':4}else:\n{'':8}"
+                    f"{metrics} = 0\n\nreturn {metrics}"
+                )
             else:
-                cls.score_code += f"{'':4}if prediction > {threshold}:\n" \
-                                  f"{'':8}{metrics} = 1\n{'':4}else:\n{'':8}" \
-                                  f"{metrics} = 0\n\nreturn {metrics}"
+                cls.score_code += (
+                    f"{'':4}if prediction > {threshold}:\n"
+                    f"{'':8}{metrics} = 1\n{'':4}else:\n{'':8}"
+                    f"{metrics} = 0\n\nreturn {metrics}"
+                )
         elif len(metrics) == 2:
             if h2o_model:
-                cls.score_code += f"{'':4}if prediction[1][2] > {threshold}:\n" \
-                                  f"{'':8}{metrics[0]} = 1\n{'':4}else:\n{'':8}" \
-                                  f"{metrics[0]} = 0\n\nreturn {metrics[0]}, " \
-                                  f"prediction[1][2]"
+                cls.score_code += (
+                    f"{'':4}if prediction[1][2] > {threshold}:\n"
+                    f"{'':8}{metrics[0]} = 1\n{'':4}else:\n{'':8}"
+                    f"{metrics[0]} = 0\n\nreturn {metrics[0]}, "
+                    f"prediction[1][2]"
+                )
             else:
-                cls.score_code += f"{'':4}if prediction > {threshold}:\n" \
-                                  f"{'':8}{metrics[0]} = 1\n{'':4}else:\n{'':8}" \
-                                  f"{metrics[0]} = 0\n\nreturn {metrics[0]}, prediction"
+                cls.score_code += (
+                    f"{'':4}if prediction > {threshold}:\n"
+                    f"{'':8}{metrics[0]} = 1\n{'':4}else:\n{'':8}"
+                    f"{metrics[0]} = 0\n\nreturn {metrics[0]}, prediction"
+                )
         else:
             raise ValueError("Too many metrics were provided for a binary model.")
 
@@ -568,26 +614,35 @@ class ScoreCode:
         # Find the target value with the highest probability
         if len(metrics) == 1:
             if h2o_model:
-                cls.score_code += f"{'':4}target_values = {target_values}\n{'':4}" \
-                                  f"{metrics} = target_values[prediction[1][1:]." \
-                                  f"index(max(prediction[1][1:]))]\n{'':4}" \
-                                  f"return {metrics}"
+                cls.score_code += (
+                    f"{'':4}target_values = {target_values}\n{'':4}"
+                    f"{metrics} = target_values[prediction[1][1:]."
+                    f"index(max(prediction[1][1:]))]\n{'':4}"
+                    f"return {metrics}"
+                )
             else:
-                cls.score_code += f"{'':4}target_values = {target_values}\n{'':4}" \
-                                  f"{metrics} = target_values[prediction.index(" \
-                                  f"max(prediction))]\n{'':4}return {metrics}"
+                cls.score_code += (
+                    f"{'':4}target_values = {target_values}\n{'':4}"
+                    f"{metrics} = target_values[prediction.index("
+                    f"max(prediction))]\n{'':4}return {metrics}"
+                )
         else:
             if h2o_model:
-                cls.score_code += f"{'':4}target_values = {target_values}\n{'':4}" \
-                                  f"{metrics} = target_values[prediction[1][1:]." \
-                                  f"index(max(prediction[1][1:]))]\n{'':4}"
+                cls.score_code += (
+                    f"{'':4}target_values = {target_values}\n{'':4}"
+                    f"{metrics} = target_values[prediction[1][1:]."
+                    f"index(max(prediction[1][1:]))]\n{'':4}"
+                )
                 for i in range(len(metrics) - 1):
-                    cls.score_code += f"{'':4}{metrics[i + 1]} = " \
-                                      f"prediction[1][{i + 1}]\n"
+                    cls.score_code += (
+                        f"{'':4}{metrics[i + 1]} = " f"prediction[1][{i + 1}]\n"
+                    )
             else:
-                cls.score_code += f"{'':4}target_values = {target_values}\n{'':4}" \
-                                  f"{metrics[0]} = target_values[prediction.index(" \
-                                  f"max(prediction))]\n"
+                cls.score_code += (
+                    f"{'':4}target_values = {target_values}\n{'':4}"
+                    f"{metrics[0]} = target_values[prediction.index("
+                    f"max(prediction))]\n"
+                )
                 for i in range(len(metrics) - 1):
                     cls.score_code += f"{'':4}{metrics[i + 1]} = prediction[{i + 1}]\n"
             cls.score_code += f"{'':4}return {', '.join(metrics)}"
@@ -622,7 +677,7 @@ class ScoreCode:
             output_string = output_string + out_var["name"] + ";\n"
         start = mas_code.find("score(")
         finish = mas_code[start:].find(");")
-        score_vars = mas_code[start + 6: start + finish]
+        score_vars = mas_code[start + 6 : start + finish]
         input_string = " ".join(
             [
                 x
@@ -643,7 +698,6 @@ class ScoreCode:
         replace_strings = dict((re.escape(k), v) for k, v in replace_strings.items())
         pattern = re.compile("|".join(replace_strings.keys()))
         cas_code = pattern.sub(
-            lambda m: replace_strings[re.escape(m.group(0))],
-            mas_code
+            lambda m: replace_strings[re.escape(m.group(0))], mas_code
         )
         return cas_code

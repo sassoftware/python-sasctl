@@ -77,7 +77,7 @@ class PickleModel:
             return binary_string
         elif mlflow_details:
             ml_pickle_path = (
-                    Path(mlflow_details["mlflowPath"]) / mlflow_details["model_path"]
+                Path(mlflow_details["mlflowPath"]) / mlflow_details["model_path"]
             )
             if pickle_path:
                 # For models imported from MLFlow
@@ -91,8 +91,9 @@ class PickleModel:
             # For all other model types
             if not is_h2o_model:
                 if pickle_path:
-                    with open(Path(pickle_path) / (model_prefix + PICKLE), "wb") as \
-                            pickle_file:
+                    with open(
+                        Path(pickle_path) / (model_prefix + PICKLE), "wb"
+                    ) as pickle_file:
                         pickle.dump(trained_model, pickle_file)
                     print(
                         "Model {} was successfully pickled and saved to {}.".format(
@@ -117,6 +118,8 @@ class PickleModel:
                     )
                 )
             else:
-                raise ValueError("There is currently no support for file-less H2O.ai "
-                                 "model handling. Please include a value for the "
-                                 "pickle_path argument.")
+                raise ValueError(
+                    "There is currently no support for file-less H2O.ai "
+                    "model handling. Please include a value for the "
+                    "pickle_path argument."
+                )

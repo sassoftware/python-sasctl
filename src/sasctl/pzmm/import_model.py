@@ -228,7 +228,7 @@ class ImportModel:
             The name or id of the model project, or a dictionary
             representation of the project.
         input_df : DataFrame
-            The `DataFrame` object contains the training data, and includes only the 
+            The `DataFrame` object contains the training data, and includes only the
             predictor columns. The write_score_code function currently supports int(64),
             float(64), and string data types for scoring.
         target_df : DataFrame
@@ -242,10 +242,10 @@ class ImportModel:
             The scoring metrics for the model. The default is a list of two
             metrics: EM_EVENTPROBABILITY and EM_CLASSIFICATION.
         project_version : string, optional
-            The project version to import the model in to on SAS Model Manager. The 
+            The project version to import the model in to on SAS Model Manager. The
             default value is "latest".
         model_file_name : string, optional
-            Name of the model file that contains the model. Default is model_prefix + 
+            Name of the model file that contains the model. Default is model_prefix +
             '.pickle'.
         score_code_path : string, optional
             The local path of the score code file. Default is model_dir.
@@ -259,7 +259,7 @@ class ImportModel:
         is_h2o_model : boolean, optional
             Sets whether the model is an H2O.ai Python model. Default is False.
         force : boolean, optional
-            Sets whether to overwrite models with the same name upon upload. Default is 
+            Sets whether to overwrite models with the same name upon upload. Default is
             False.
         binary_string : string, optional
             Binary string representation of the model object. Default is None.
@@ -267,7 +267,7 @@ class ImportModel:
             Sets whether data used for scoring needs to go through imputation for
             missing values before passed to the model. Default is False.
         mlflow_details : dict, optional
-            Model details from an MLFlow model. This dictionary is created by the 
+            Model details from an MLFlow model. This dictionary is created by the
             read_mlflow_model_file function. Default is None.
         """
         # Initialize no score code or binary H2O model flags
@@ -366,9 +366,7 @@ class ImportModel:
             try:
                 print(
                     "Model was successfully imported into SAS Model Manager as {} "
-                    "with UUID: {}.".format(
-                        response.name, response.id
-                    )
+                    "with UUID: {}.".format(response.name, response.id)
                 )
             except AttributeError:
                 print("Model failed to import to SAS Model Manager.")
@@ -392,9 +390,7 @@ class ImportModel:
             try:
                 print(
                     "Model was successfully imported into SAS Model Manager as {} "
-                    "with UUID: {}.".format(
-                        response.name, response.id
-                    )
+                    "with UUID: {}.".format(response.name, response.id)
                 )
             except AttributeError:
                 print("Model failed to import to SAS Model Manager.")
