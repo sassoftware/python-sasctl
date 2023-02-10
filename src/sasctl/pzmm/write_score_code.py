@@ -4,31 +4,34 @@
 import re
 from pathlib import Path
 
-from .._services.model_repository import ModelRepository as modelRepo
+import pandas as pd
+
+from .._services.model_repository import ModelRepository as mr
 from ..core import current_session
+
+MAS_CODE_NAME = "dmcas_packagescorecode.sas"
+CAS_CODE_NAME = "dmcas_epscorecode.sas"
 
 
 class ScoreCode:
     # TODO: change predict_method to accept Python object instead of string
+    score_code = ""
+
     @classmethod
     def write_score_code(
         cls,
         input_data,
-        target_df,
         model_prefix,
         predict_method,
         model_file_name,
-        metrics=None,
-        score_code_path=Path.cwd(),
-        threshold=None,
-        other_variable=False,
+        metrics,
         model=None,
-        is_h2o_model=False,
-        missing_values=False,
+        target_values=None,
+        predict_threshold=None,
+        score_code_path=None,
         score_cas=True,
-        is_binary_model=False,
-        binary_string=None,
         pickle_type="pickle",
+        **kwargs
     ):
         """
         Writes a Python score code file based on training data used to generate the model
@@ -46,7 +49,7 @@ class ScoreCode:
         training data set. If you have missing values or values not included in your training
         data set, you must set the OtherVariable option to True.
 
-        Both the inputData and target_df dataframes have the following stipulations:
+        Both the input_data and target_data dataframes have the following stipulations:
         * Column names must be a valid Python variable name.
         * For categorical columns, the values must be a valid Python variable name.
         If either of these conditions is broken, an exception is raised.
@@ -66,7 +69,7 @@ class ScoreCode:
             columns. The write_score_code function currently supports int(64), float(64),
             and string data types for scoring. Providing a list of dict objects signals
             that the model files are being created from an MLFlow model.
-        target_df : pandas Series
+        target_data : pandas Series
             The `DataFrame Series` object contains the training data for the target variable. Note that
             for MLFlow models, this can be set as None.
         model_prefix : string
@@ -85,10 +88,10 @@ class ScoreCode:
             EM_CLASSIFICATION. The following scenarios are supported:
                 1) If only one value is provided, then it is assumed that the model returns either a binary response
                 prediction or a character output and is returned as the output.
-                1) If only two values are provided, a threshold value needs to be set: either by providing a
+                2) If only two values are provided, a threshold value needs to be set: either by providing a
                 threshold argument or the function taking the mean of the provided target column. Then the
                 threshold value sets the classification output for the prediction.
-                2) If more than two values are provided, the largest probability is accepted as the event and the
+                3) If more than two values are provided, the largest probability is accepted as the event and the
                 appropriate classification value is returned for the output.
         score_code_path : string, optional
             The local path of the score code file. The default is the current
@@ -121,579 +124,479 @@ class ScoreCode:
         pickle_type : string, optional
             Indicator for MLFlow models, which may pickle by non-standard methods. By default 'pickle'.
         """
-        # Set metrics internal to function call if no value is given
+        # Set default metrics if no value is given
         if not metrics:
             metrics = ["EM_EVENTPROBABILITY", "EM_CLASSIFICATION"]
 
-        # Check if binary string model
-        if binary_string:
-            is_binary_string = True
-        else:
-            is_binary_string = False
-
-        # Check if MLFlow Model
-        if isinstance(input_data, list):
-            is_mlflow = True
-        else:
-            is_mlflow = False
-
-        # Call REST API to check SAS Viya version
-        is_viya35 = current_session().version_info() == 3.5
-
-        # Initialize model_id to remove unbound variable warnings
-        model_id = None
-
-        # Helper method for uploading & migrating files
-        # TODO: Integrate with register_model() or publish_model() task.
-        def upload_and_copy_score_resources(model, files):
-            for file in files:
-                modelRepo.add_model_content(model, **file)
-            return modelRepo.copy_python_resources(model)
-
-        # For SAS Viya 3.5, either return an error or return the model UUID as a string
-        if is_viya35:
-            if model is None:
-                raise ValueError(
-                    "The model UUID is required for score code written for"
-                    + " SAS Model Manager on SAS Viya 3.5."
-                )
-            elif modelRepo.is_uuid(model):
-                model_id = model
-            elif isinstance(model, dict) and "id" in model:
-                model_id = model["id"]
-            else:
-                model = modelRepo.get_model(model)
-                model_id = model["id"]
-
-        if not is_mlflow:
-            # From the input dataframe columns, create a list of input variables, 
+        if isinstance(input_data, pd.DataFrame):
+            # From the input dataframe columns, create a list of input variables,
             # then check for viability
-            input_var_list = list(input_data.columns)
-            for name in input_var_list:
-                if not str(name).isidentifier():
-                    raise SyntaxError(
-                        "Invalid column name in input_data. Columns must be "
-                        + "valid as Python variables."
-                    )
-            new_var_list = list(input_var_list)
-            input_dtypes_list = list(input_data.dtypes)
-        elif is_mlflow:
+            input_var_list = input_data.columns.to_list()
+            cls._check_for_invalid_variable_names(input_var_list)
+            input_dtypes_list = input_data.dtypes.astype(str).to_list()
+        else:
+            # For MLFlow models, extract the variables and data types
             input_var_list = [var["name"] for var in input_data]
-            for name in input_var_list:
-                if not str(name).isidentifier():
-                    raise SyntaxError(
-                        "Invalid column name in input_data. Columns must be "
-                        + "valid as Python variables."
-                    )
-            new_var_list = input_var_list
+            cls._check_for_invalid_variable_names(input_var_list)
             input_dtypes_list = [var["type"] for var in input_data]
 
-        # Set the location for the Python score file to be written, then open the file
-        model_dir = Path(score_code_path)
-        score_code_path = Path(score_code_path) / (model_prefix + "Score.py")
-        with open(score_code_path, "w") as cls.score_file:
+        # For SAS Viya 3.5, either return an error or return the model UUID as a string
+        if current_session().version_info() == 3.5:
+            model_id = cls._get_model_id(model)
+        else:
+            model_id = None
 
-            # For H2O models, include the necessary packages
-            if is_h2o_model:
-                cls.score_file.write(
-                    """\
-import h2o
-import gzip, shutil, os"""
-                )
-            # For binary string models, include the necessary packages
-            if is_binary_string:
-                cls.score_file.write(
-                    """\
-import codecs"""
-                )
-            # Import math for imputation; pickle for serialized models; pandas for 
-            # data management; numpy for computation
-            cls.score_file.write(
-                """\
-import math
-import {pickleType}
-import pandas as pd
-import numpy as np""".format(
-                    pickleType=pickle_type
-                )
+        # Set the model_file_name based on kwargs input
+        if "model_file_name" in kwargs:
+            model_file_name = kwargs["model_file_name"]
+            binary_string = None
+        elif "binary_string" in kwargs:
+            model_file_name = None
+            binary_string = kwargs["binary_string"]
+        else:
+            binary_string = None
+
+        # Add the core imports to the score code with the specified model serializer
+        cls._write_imports(
+            pickle_type,
+            mojo_model="mojo_model" in kwargs,
+            binary_h2o_model="binary_h2o_model" in kwargs,
+            binary_string=binary_string
+        )
+
+        # Generate model loading code for SAS Viya 3.5 models without binary strings
+        if model_id and not binary_string:
+            model_load = cls._viya35_model_load(
+                model_id,
+                pickle_type,
+                model_file_name,
+                mojo_model="mojo_model" in kwargs,
+                binary_h2o_model="binary_h2o_model" in kwargs
             )
-            # In SAS Viya 4, a settings.py file is generated that points to the resource 
-            # location
-            if not is_viya35:
-                cls.score_file.write(
-                    """\n
-import settings
-from pathlib import Path"""
-                )
-
-            # For H2O models, include the server initialization, or h2o.connect() call to use an H2O server
-            if is_h2o_model:
-                cls.score_file.write(
-                    """\n
-h2o.init()"""
-                )
-
-            # For each case of SAS Viya version and H2O model or not, load the model file as variable _thisModelFit
-            if is_binary_string:
-                cls.score_file.write(
-                    '''\n
-binary_string = """{binaryString}"""
-_thisModelFit = pickle.loads(codecs.decode(binary_string.encode(), 'base64'))'''.format(
-                        binaryString=binary_string
-                    )
-                )
-            elif is_viya35 and is_h2o_model and not is_binary_model:
-                try:
-                    cls.score_file.write(
-                        """\n
-with gzip.open('/models/resources/viya/{modelID}/{modelFileName}', 'r') as fileIn, open('/models/resources/viya/{modelID}/{modelZipFileName}', 'wb') as fileOut:
-    shutil.copyfileobj(fileIn, fileOut)
-os.chmod('/models/resources/viya/{modelID}/{modelZipFileName}', 0o777)
-_thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelZipFileName}')""".format(
-                            modelID=model_id,
-                            modelFileName=model_file_name,
-                            modelZipFileName=model_file_name[:-4] + "zip",
-                        )
-                    )
-                except AttributeError:
-                    raise ValueError(
-                        "The following is not a valid model to register in this format. "
-                        + "Please verify that the appropriate arguments have been provided "
-                        + "to the import model function."
-                    )
-            elif is_viya35 and not is_h2o_model:
-                cls.score_file.write(
-                    """\n
-with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
-    _thisModelFit = {pickleType}.load(_pFile)""".format(
-                        modelID=model_id,
-                        modelFileName=model_file_name,
-                        pickleType=pickle_type,
-                    )
-                )
-            elif is_viya35 and is_binary_model:
-                cls.score_file.write(
-                    """\n
-_thisModelFit = h2o.load_model('/models/resources/viya/{modelID}/{modelFileName}')""".format(
-                        modelID=model_id, modelFileName=model_file_name
-                    )
-                )
-            elif not is_viya35 and not is_h2o_model:
-                cls.score_file.write(
-                    """\n
-with open(Path(settings.pickle_path) / '{modelFileName}', 'rb') as _pFile:
-    _thisModelFit = {pickleType}.load(_pFile)""".format(
-                        modelFileName=model_file_name, pickleType=pickle_type
-                    )
-                )
-            elif not is_viya35 and is_binary_model:
-                cls.score_file.write(
-                    """\n
-_thisModelFit = h2o.load_model(Path(settings.pickle_path) / '{}')""".format(
-                        modelFileName=model_file_name
-                    )
-                )
-            elif not is_viya35 and is_h2o_model and not is_binary_model:
-                cls.score_file.write(
-                    """\n
-with gzip.open(Path(settings.pickle_path) / '{modelFileName}', 'r') as fileIn, open(Path(settings.pickle_path) / '{
-modelZipFileName}', 'wb') as fileOut:
-    shutil.copyfileobj(fileIn, fileOut)
-os.chmod(Path(settings.pickle_path) / '{modelZipFileName}', 0o777)
-_thisModelFit = h2o.import_mojo(Path(settings.pickle_path) / '{modelZipFileName}')""".format(
-                        modelFileName=model_file_name,
-                        modelZipFileName=model_file_name[:-4] + "zip",
-                    )
-                )
-            # Create the score function with variables from the input dataframe provided and create the output variable line for SAS Model Manager
-            cls.score_file.write(
-                '''\n
-def score{modelPrefix}({inputVarList}):
-    "Output: {metrics}"'''.format(
-                    modelPrefix=model_prefix,
-                    inputVarList=", ".join(input_var_list),
-                    metrics=", ".join(metrics),
-                )
+        # As above, but for SAS Viya 4 models
+        elif not binary_string:
+            model_load = cls._viya4_model_load(
+                pickle_type,
+                model_file_name,
+                mojo_model="mojo_model" in kwargs,
+                binary_h2o_model="binary_h2o_model" in kwargs
             )
-            # As a check for missing model variables, run a try/except block that reattempts to load the model in as a variable
-            if not is_binary_string:
-                cls.score_file.write(
-                    """\n
-    try:
-        global _thisModelFit
-    except NameError:\n"""
-                )
-                if is_viya35 and not is_h2o_model:
-                    cls.score_file.write(
-                        """
-        with open('/models/resources/viya/{modelID}/{modelFileName}', 'rb') as _pFile:
-            _thisModelFit = {pickleType}.load(_pFile)""".format(
-                            modelID=model_id,
-                            modelFileName=model_file_name,
-                            pickleType=pickle_type,
-                        )
-                    )
-                elif is_viya35 and is_h2o_model and not is_binary_model:
-                    cls.score_file.write(
-                        """
-        _thisModelFit = h2o.import_mojo('/models/resources/viya/{modelID}/{modelZipFileName}')
-        """.format(
-                            modelID=model_id, modelZipFileName=model_file_name[:-4] + "zip"
-                        )
-                    )
-                elif is_viya35 and is_binary_model:
-                    cls.score_file.write(
-                        """
-        _thisModelFit = h2o.load_model('/models/resources/viya/{modelID}/{modelFileName}')""".format(
-                            modelID=model_id, modelFileName=model_file_name
-                        )
-                    )
-                elif not is_viya35 and not is_h2o_model:
-                    cls.score_file.write(
-                        """
-        with open(Path(settings.pickle_path) / '{modelFileName}', 'rb') as _pFile:
-            _thisModelFit = {pickleType}.load(_pFile)""".format(
-                            modelFileName=model_file_name, pickleType=pickle_type
-                        )
-                    )
-                elif not is_viya35 and is_h2o_model:
-                    cls.score_file.write(
-                        """
-        _thisModelFit = h2o.import_mojo(Path(settings.pickle_path) / '{}')""".format(
-                            model_file_name[:-4] + "zip"
-                        )
-                    )
-                elif not is_viya35 and is_binary_model:
-                    cls.score_file.write(
-                        """\n
-        _thisModelFit = h2o.load_model(Path(settings.pickle_path) / '{}')""".format(
-                            modelFileName=model_file_name
-                        )
-                    )
+        else:
+            model_load = None
 
-            if (
-                missing_values and not is_mlflow
-            ):  # MLFlow models are not guaranteed to have example input data
-                # For each input variable, impute for missing values based on variable dtype
-                for i, dtypes in enumerate(input_dtypes_list):
-                    dtypes = dtypes.name
-                    if "int" in dtypes or "float" in dtypes:
-                        if cls.check_if_binary(input_data[input_var_list[i]]):
-                            cls.score_file.write(
-                                """\n
-    try:
-        if math.isnan({inputVar}):
-            {inputVar} = {inputVarMode}
-    except TypeError:
-        {inputVar} = {inputVarMode}""".format(
-                                    inputVar=input_var_list[i],
-                                    inputVarMode=float(
-                                        list(input_data[input_var_list[i]].mode())[0]
-                                    ),
-                                )
-                            )
-                        else:
-                            cls.score_file.write(
-                                """\n
-    try:
-        if math.isnan({inputVar}):
-            {inputVar} = {inputVarMean}
-    except TypeError:
-        {inputVar} = {inputVarMean}""".format(
-                                    inputVar=input_var_list[i],
-                                    inputVarMean=float(
-                                        input_data[input_var_list[i]].mean(
-                                            axis=0, skipna=True
-                                        )
-                                    ),
-                                )
-                            )
-                    elif "str" in dtypes or "object" in dtypes:
-                        cls.score_file.write(
-                            """\n
-    try:
-        categoryStr = {inputVar}.strip()
-    except AttributeError:
-        categoryStr = 'Other'\n""".format(
-                                inputVar=input_var_list[i]
-                            )
-                        )
+        # Define the score function using the variables found in input_data
+        # Set the output variables in the line below from metrics
+        cls.score_code += f"def score{model_prefix}({', '.join(input_var_list)}):\n" \
+                          f"{'':4}Output: {', '.join(metrics)}"
 
-                        temp_var = cls.split_string_column(
-                            input_data[input_var_list[i]], other_variable
-                        )
-                        new_var_list.remove(input_var_list[i])
-                        new_var_list.extend(temp_var)
-            # For non-H2O models, insert the model into the provided predict_method call
-            if not is_h2o_model:
-                try:
-                    predict_method = predict_method.format("_thisModelFit", "inputArray")
-                except AttributeError:
-                    raise ValueError(
-                        "The following is not a valid model to register in this format. "
-                        + "Please verify that the appropriate arguments have been provided "
-                        + "to the import model function."
-                    )
-                cls.score_file.write(
-                    """\n
-    try:
-        inputArray = pd.DataFrame([[{newVars}]],
-                                  columns=[{columns}],
-                                  dtype=float)
-        prediction = {predictMethod}
-    except ValueError:
-    # For models requiring or including an intercept value, a 'const' column is required
-    # For example, many statsmodels models include an intercept value that must be included for the model prediction
-        inputArray = pd.DataFrame([[1.0, {newVars}]],
-                                columns=['const', {columns}],
-                                dtype=float)
-        prediction = {predictMethod}""".format(
-                        newVars=", ".join(new_var_list),
-                        columns=", ".join("'%s'" % x for x in new_var_list),
-                        predictMethod=predict_method,
-                    )
-                ),
-            elif is_h2o_model:
-                column_type = []
-                for (var, dtype) in zip(new_var_list, input_dtypes_list):
-                    if "string" in dtype.name:
-                        type = "string"
-                    else:
-                        type = "numeric"
-                    column_type.append("'" + var + "'" + ":" + "'" + type + "'")
-                cls.score_file.write(
-                    """\n
-    inputArray = pd.DataFrame([[{newVars}]],
-                              columns=[{columns}],
-                              dtype=float, index=[0])
-    columnTypes = {{{columnTypes}}}
-    h2oArray = h2o.H2OFrame(inputArray, column_types=columnTypes)
-    prediction = _thisModelFit.predict(h2oArray)
-    prediction = h2o.as_list(prediction, use_pandas=False)""".format(
-                        newVars=", ".join(new_var_list),
-                        columns=", ".join("'%s'" % x for x in new_var_list),
-                        columnTypes=", ".join(column_type),
-                    )
-                )
-            if not is_h2o_model and not is_mlflow:
-                # TODO: Refactor arguments to better handle different classification types
-                if len(metrics) == 1:
-                    # For models that output the classification from the prediction
-                    cls.score_file.write(
-                        """\n
-    {metric} = prediction""".format(
-                            metric=metrics[0]
-                        )
-                    )
-                elif len(metrics) == 2:
-                    cls.score_file.write(
-                        """\n
-    try:
-        {metric} = float(prediction)
-    except TypeError:
-        # If the prediction returns as a list of values or improper value type, a TypeError will be raised.
-        # Attempt to handle the prediction output in the except block.
-        {metric} = float(prediction[0])""".format(
-                            metric=metrics[0]
-                        )
-                    )
-                    if threshold is None:
-                        threshold = target_df.mean()
-                    cls.score_file.write(
-                        """\n
-    if ({metric0} >= {threshold}):
-        {metric1} = '1'
-    else:
-        {metric1} = '0' """.format(
-                            metric0=metrics[0],
-                            metric1=metrics[1],
-                            threshold=threshold,
-                        )
-                    )
-                elif len(metrics) > 2:
-                    for i, metric in enumerate(metrics[:-1]):
-                        cls.score_file.write(
-                            """\
-    {metric} = float(prediction[{i}]""".format(
-                                metric=metric, i=i
-                            )
-                        )
-                    cls.score_file.write(
-                        """\
-    max_prediction = max({metric_list})
-    index_prediction = {metric_list}.index(max_prediction)
-    {classification} = index_prediction""".format(
-                            metric_list=metrics[:-1], classification=metrics[-1]
-                        )
-                    )
-                else:
-                    ValueError(
-                        "Improper metrics argument was provided. Please provide a list of string metrics."
-                    )
+        # Run a try/except block to catch errors for model loading (skip binary string)
+        if model_load:
+            cls.score_code += f"{'':4}try:\n{'':8}global model\n{'':4}" \
+                              f"except NameError:\n{model_load}"
 
-            elif is_h2o_model and not is_mlflow:
-                cls.score_file.write(
-                    """\n
-    {} = float(prediction[1][2])
-    {} = prediction[1][0]""".format(
-                        metrics[0], metrics[1]
-                    )
-                )
-            elif not is_h2o_model and is_mlflow:
-                cls.score_file.write(
-                    """\n
-    {0} = prediction
-    if isinstance({0}, np.ndarray):
-        {0} = prediction.item(0)""".format(
-                        metrics[0]
-                    )
-                )
+        if "missing_values" in kwargs:
+            cls._impute_missing_values(input_data, input_var_list, input_dtypes_list)
 
-            metrics_list = ", ".join(metrics)
-            cls.score_file.write(
-                """\n
-    return({})""".format(
-                    metrics_list
-                )
+        # Create the appropriate style of input array and write out the predict method
+        if any(x in ["mojo_model", "binary_h2o_model"] for x in kwargs):
+            cls._predict_method(
+                predict_method,
+                input_var_list,
+                dtypes_list=input_dtypes_list
+            )
+            cls._predictions_to_metrics(
+                metrics,
+                target_values=target_values,
+                predict_threshold=predict_threshold,
+                h2o_model=True
+            )
+        else:
+            cls._predict_method(
+                predict_method,
+                input_var_list,
+                statsmodels_model="statsmodels_model" in kwargs
             )
 
-            cls.score_file.write("""\n""")
-
-        # For SAS Viya 3.5, the model is first registered to SAS Model Manager, then the model UUID can be
-        # added to the score code and reuploaded to the model file contents
-        if is_viya35:
-            with open(score_code_path, "r") as pFile:
-                files = [
-                    dict(
-                        name="{}Score.py".format(model_prefix), file=pFile, role="score"
-                    )
-                ]
-                upload_and_copy_score_resources(model_id, files)
-            # After uploading the score code and migrating score resources, call the wrapper API to create
-            # the Python score code wrapped in DS2
-            modelRepo.convert_python_to_ds2(model_id)
-            # Convert the DS2 wrapper code into two separate files: dmcas_epscorecode.sas and dmcas_packagescorecode.sas
-            # The former scores or validates in CAS and the latter in SAS Microanalytic Service
+        if model_id:
+            files = [{
+                "name": f"{model_prefix}_score.py",
+                "file": cls.score_code,
+                "role": "score"
+            }]
+            cls.upload_and_copy_score_resources(model_id, files)
+            mr.convert_python_to_ds2(model_id)
             if score_cas:
-                file_contents = modelRepo.get_model_contents(model_id)
-                for item in file_contents:
-                    if item.name == "score.sas":
-                        mas_code = modelRepo.get(
-                            "models/%s/contents/%s/content" % (item.modelId, item.id)
+                model_contents = mr.get_model_contents(model_id)
+                for file in model_contents:
+                    if file.name == "score.sas":
+                        mas_code = mr.get(f"models/{file.modelId}/contents/{file.id}")
+                        cls.upload_and_copy_score_resources(
+                            model_id,
+                            [{
+                                "name": MAS_CODE_NAME,
+                                "file": mas_code,
+                                "role": "score"
+                            }]
                         )
-                with open(model_dir / "dmcas_packagescorecode.sas", "w") as file:
-                    print(mas_code, file=file)
-                cas_code = cls.convert_mas_to_cas(mas_code, model_id)
-                with open(model_dir / "dmcas_epscorecode.sas", "w") as file:
-                    print(cas_code, file=file)
-                for score_code in [
-                    "dmcas_packagescorecode.sas",
-                    "dmcas_epscorecode.sas",
-                ]:
-                    with open(model_dir / score_code, "r") as file:
-                        if score_code == "dmcas_epscorecode.sas":
-                            upload_and_copy_score_resources(
-                                model_id, [dict(name=score_code, file=file, role="score")]
-                            )
-                        else:
-                            upload_and_copy_score_resources(
-                                model_id, [dict(name=score_code, file=file)]
-                            )
-                model = modelRepo.get_model(model_id)
-                model["scoreCodeType"] = "ds2MultiType"
-                modelRepo.update_model(model)
+                        cas_code = cls.convert_mas_to_cas(mas_code, model_id)
+                        cls.upload_and_copy_score_resources(
+                            model_id,
+                            [{
+                                "name": CAS_CODE_NAME,
+                                "file": cas_code,
+                                "role": "score"
+                            }]
+                        )
+                        model = mr.get_model(model_id)
+                        model["scoreCodeType"] = "ds2MultiType"
+                        mr.update_model(model)
+                        break
 
-    @classmethod
-    def split_string_column(cls, input_series, other_variable):
-        """
-        Splits a column of string values into a number of new variables equal
-        to the number of unique values in the original column (excluding None
-        values). It then writes to a file the statements that tokenize the newly
-        defined variables.
-
-        Here is an example: Given a series named strCol with values ['A', 'B', 'C',
-        None, 'A', 'B', 'A', 'D'], designates the following new variables:
-        strCol_A, strCol_B, strCol_D. It then writes the following to the file:
-            strCol_A = np.where(val == 'A', 1.0, 0.0)
-            strCol_B = np.where(val == 'B', 1.0, 0.0)
-            strCol_D = np.where(val == 'D', 1.0, 0.0)
-
-        Parameters
-        ---------------
-        input_series : string series
-            Series with the string dtype.
-        cls.score_file : file (class variable)
-            Open python file to write into.
-
-        Returns
-        ---------------
-        new_var_list : string list
-            List of all new variable names split from unique values.
-        """
-
-        unique_values = input_series.unique()
-        unique_values = list(filter(None, unique_values))
-        unique_values = [x for x in unique_values if str(x) != "nan"]
-        new_var_list = []
-        for i, uniq in enumerate(unique_values):
-            uniq = uniq.strip()
-            if not uniq.isidentifier():
-                raise SyntaxError(
-                    "Invalid column value in input_data. Values must be "
-                    + "valid as Python variables (or easily space strippable)."
-                )
-            new_var_list.append("{}_{}".format(input_series.name, uniq))
-            cls.score_file.write(
-                """
-    {0} = np.where(categoryStr == '{1}', 1.0, 0.0)""".format(
-                    new_var_list[i], uniq
-                )
-            )
-
-        if ("Other" not in unique_values) and other_variable:
-            new_var_list.append("{}_Other".format(input_series.name))
-            cls.score_file.write(
-                """
-    {}_Other = np.where(categoryStr == 'Other', 1.0, 0.0)""".format(
-                    input_series.name
-                )
-            )
-
-        return new_var_list
+        if score_code_path:
+            py_code_path = Path(score_code_path) / (model_prefix + "_score.py")
+            with open(py_code_path, "w") as py_file:
+                py_file.write(cls.score_code)
+            if model_id and score_cas:
+                with open(Path(score_code_path) / MAS_CODE_NAME, "w") as sas_file:
+                    # noinspection PyUnboundLocalVariable
+                    sas_file.write(mas_code)
+                with open(Path(score_code_path) / CAS_CODE_NAME, "w") as sas_file:
+                    # noinspection PyUnboundLocalVariable
+                    sas_file.write(cas_code)
+        else:
+            output_dict = {model_prefix + "_score.py": cls.score_code}
+            if model_id and score_cas:
+                # noinspection PyUnboundLocalVariable
+                output_dict[MAS_CODE_NAME] = mas_code
+                # noinspection PyUnboundLocalVariable
+                output_dict[CAS_CODE_NAME] = cas_code
+            return output_dict
 
     @staticmethod
-    def check_if_binary(input_series):
+    def upload_and_copy_score_resources(model, files):
+        for file in files:
+            mr.add_model_content(model, **file)
+        return mr.copy_python_resources(model)
+
+    @staticmethod
+    def _get_model_id(model):
+        """"""
+        if not model:
+            raise ValueError("No model identification was provided. Python score code"
+                             " generation for SAS Viya 3.5 requires the model's UUID.")
+        else:
+            model_response = mr.get_model(model)
+            try:
+                model_id = model_response["id"]
+            except TypeError:
+                raise ValueError(
+                    "No model could be found using the model argument provided."
+                )
+        return model_id
+
+    @staticmethod
+    def _check_for_invalid_variable_names(var_list):
+        """"""
+        for name in var_list:
+            if not str(name).isidentifier():
+                raise SyntaxError(
+                    f"{str(name)} is not a valid variable name. Please confirm that all"
+                    " variable names can be used as Python variables."
+                    " E.g. `str(name).isidentifier() == True`."
+                )
+
+    @classmethod
+    def _write_imports(
+            cls,
+            pickle_type,
+            mojo_model=False,
+            binary_h2o_model=False,
+            binary_string=None
+    ):
+        """"""
+        pickle_type = pickle_type if pickle_type else "pickle"
+        cls.score_code += f"import math\nimport {pickle_type}\nimport pandas as pd\n" \
+                          "import numpy as np\nfrom pathlib import Path\n\n"
+        if current_session().version_info() != 3.5:
+            cls.score_code += "import settings\n\n"
+        if mojo_model or binary_h2o_model:
+            cls.score_code += "import h2o\nimport gzip\nimport shutil\nimport os\n\n" \
+                              "h2o.init()\n\n"
+        elif binary_string:
+            cls.score_code += f"import codecs\n\nbinary_string = \"{binary_string}\"" \
+                              f"\nmodel = pickle.loads(codecs.decode(binary_string" \
+                              ".encode(), \"base64\"))\n\n"
+
+    @classmethod
+    def _viya35_model_load(
+            cls,
+            model_id,
+            pickle_type,
+            model_file_name=None,
+            mojo_model=False,
+            binary_h2o_model=False
+    ):
+        """"""
+        if mojo_model:
+            cls.score_code += f"model_path = Path(\"/models/resources/viya/{model_id}" \
+                              f"\")\nwith gzip.open(model_path / \"{model_file_name}" \
+                              f"\", \"r\") as fileIn, open(model_path / " \
+                              f"\"{str(Path(model_file_name).with_suffix('.zip'))}\"," \
+                              " \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn," \
+                              " fileOut)\nos.chmod(model_path / " \
+                              f"\"{str(Path(model_file_name).with_suffix('.zip'))}\"" \
+                              ", 0o777)\nmodel = h2o.import_mojo(model_path / " \
+                              f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")" \
+                              "\n\n"
+            return f"{'':8}model = h2o.import_mojo(model_path / \"" \
+                   f"{str(Path(model_file_name).with_suffix('.zip'))}\")"
+        elif binary_h2o_model:
+            cls.score_code += "model = h2o.load(Path(\"/models/resources/viya/" \
+                              f"{model_id}/{model_file_name}\"))\n\n"
+            return f"        model = h2o.load(Path(\"/models/resources/viya/" \
+                   f"{model_id}/{model_file_name}\"))"
+        else:
+            cls.score_code += f"model_path = Path(\"/models/resources/viya/{model_id}" \
+                              f"\")\nwith open(model_path / \"{model_file_name}\", " \
+                              f"\"rb\") as pickle_model:\n{'':4}model = {pickle_type}" \
+                              ".load(pickle_model)\n\n"
+            return f"{'':8}model_path = Path(\"/models/resources/viya/{model_id}" \
+                   f"\")\n{'':8}with open(model_path / \"{model_file_name}\", " \
+                   f"\"rb\") as pickle_model:\n{'':12}model = {pickle_type}" \
+                   ".load(pickle_model)"
+
+    @classmethod
+    def _viya4_model_load(
+            cls,
+            pickle_type,
+            model_file_name=None,
+            mojo_model=False,
+            binary_h2o_model=False
+    ):
+        """"""
+        if mojo_model:
+            cls.score_code += f"with gzip.open(Path(settings.pickle_path) / " \
+                              "\"{model_file_name}\", \"r\") as fileIn, " \
+                              "open(Path(settings.pickle_path) / " \
+                              f"\"{str(Path(model_file_name).with_suffix('.zip'))}\"," \
+                              " \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn," \
+                              " fileOut)\nos.chmod(Path(settings.pickle_path) / " \
+                              f"\"{str(Path(model_file_name).with_suffix('.zip'))}\"" \
+                              ", 0o777)\nmodel = h2o.import_mojo(" \
+                              "Path(settings.pickle_path) / " \
+                              f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")" \
+                              "\n\n"
+            return f"{'':8}model = h2o.import_mojo(Path(settings.pickle_path) / " \
+                   f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")"
+        elif binary_h2o_model:
+            cls.score_code += "model = h2o.load(Path(settings.pickle_path))\n\n"
+            return f"{'':8}model = h2o.load(Path(settings.pickle_path))"
+        else:
+            cls.score_code += f"with open(Path(settings.pickle_path) / " \
+                              f"\"{model_file_name}\", \"rb\") as pickle_model:\n    " \
+                              f"model = {pickle_type}.load(pickle_model)\n\n"
+            return f"{'':8}with open(Path(settings.pickle_path) / " \
+                   f"\"{model_file_name}\", \"rb\") as pickle_model:\n    " \
+                   f"{'':12}model = {pickle_type}.load(pickle_model)"
+
+    @classmethod
+    def _impute_missing_values(cls, data, var_list, dtype_list):
+        """"""
+        for i, (var, dtype) in enumerate(zip(var_list, dtype_list)):
+            # Split up between numeric and character variables
+            if any(t in dtype for t in ["int", "float"]):
+                cls._impute_numeric(data, var)
+            else:
+                cls._impute_char(var)
+
+    @classmethod
+    def _impute_numeric(cls, data, var):
+        """"""
+        # If binary values, then compute the mode instead of the mean
+        if data[var].isin([0, 1]).all():
+            cls.score_code += f"{'':4}try:\n{'':8}if math.isnan({var}):\n" \
+                              f"{'':12}{var} = {data[var].mode()[0]}\n" \
+                              f"{'':4}except TypeError:\n{'':8}{var} = " \
+                              f"{data[var].mode()[0]}\n"
+        else:
+            cls.score_code += f"{'':4}try:\n{'':8}if math.isnan({var}):\n" \
+                              f"{'':12}{var} = {data[var].mean()}\n" \
+                              f"{'':4}except TypeError\n{'':8}{var} = " \
+                              f"{data[var].mean()}\n"
+
+    @classmethod
+    def _impute_char(cls, var):
+        """"""
+        # Replace non-string values with blank strings
+        cls.score_code += f"{'':4}try:\n{'':8}{var} = {var}.strip()\n{'':4}except " \
+                          f"AttributeError:\n{'':8}{var} = \"\""
+
+    @classmethod
+    def _predict_method(
+            cls,
+            method,
+            var_list,
+            dtypes_list=None,
+            statsmodels_model=None
+    ):
+        """"""
+        column_names = ", ".join("'%s'" % col for col in var_list)
+        # H2O models
+        if dtypes_list:
+            column_types = []
+            for (var, dtype) in zip(var_list, dtypes_list):
+                if any(x in dtype for x in ["int", "float"]):
+                    col_type = "numeric"
+                else:
+                    col_type = "string"
+                column_types.append(f"\"{var}\" : \"{col_type}\"")
+            cls.score_code += f"{'':4}input_array = pd.DataFrame(" \
+                              f"[[{', '.join(var_list)}]],\n{'':31}columns=[" \
+                              f"{column_names}],\n{'':31}dtype=float,\n{'':31}" \
+                              f"index=[0])\n{'':4}column_types = {{{column_types}}}\n" \
+                              f"{'':4}h2o_array = h2o.H2OFrame(input_array, " \
+                              f"column_types=column_types)\n{'':4}prediction = " \
+                              f"model.{method.__name__}(h2o_array)\n{'':4}prediction" \
+                              f" = h2o.as_list(prediction, use_pandas=False)\n"
+        # Statsmodels models
+        elif statsmodels_model:
+            cls.score_code += f"{'':4}inputArray = pd.DataFrame(" \
+                              f"[[1.0, {', '.join(var_list)}]],\n{'':29}columns=[" \
+                              f"\"const\", {column_names}],\n{'':29}dtype=float)\n" \
+                              f"{'':4}prediction = model.{method.__name__}" \
+                              f"(input_array)\n"
+        else:
+            cls.score_code += f"{'':4}input_array = pd.DataFrame(" \
+                              f"[[{', '.join(var_list)}]],\n{'':30}columns=[" \
+                              f"{column_names}],\n{'':30}dtype=float)\n{'':4}" \
+                              f"prediction = model.{method.__name__}(input_array)\n"
+
+    @classmethod
+    def _predictions_to_metrics(
+            cls,
+            metrics,
+            target_values=None,
+            predict_threshold=None,
+            h2o_model=None
+    ):
         """
-        Checks a pandas series to determine whether the values are binary or nominal.
 
         Parameters
-        ---------------
-        input_series : float or int series
-            A series with numeric values.
-
-        Returns
-        ---------------
-        is_binary : boolean
-            The returned value is True if the series values are binary, and False if the series values
-            are nominal.
+        ----------
+        metrics : string list
+            A list of strings corresponding to the outputs of the model to SAS Model
+            Manager.
+        target_values : list of int, float, string
+            A list of target values for the target variable. Default is None.
+        predict_threshold : list of floats
+            A list of target value thresholds. Default is None.
         """
-        is_binary = False
-        binary_float = [float(1), float(0)]
+        if len(metrics) == 1 and isinstance(metrics, list):
+            # Flatten single valued list
+            metrics = metrics[0]
 
-        if input_series.value_counts().size == 2:
-            if binary_float[0] in input_series.astype("float") and binary_float[
-                1
-            ] in input_series.astype("float"):
-                is_binary = False
+        if not (target_values or predict_threshold):
+            cls._no_targets_no_thresholds(metrics, h2o_model)
+        elif int(target_values) == 1:
+            cls._binary_target(metrics, predict_threshold, h2o_model)
+        elif len(target_values) > 1:
+            cls._nonbinary_targets(metrics, target_values, h2o_model)
+        elif len(target_values) == 1 and int(target_values) != 1:
+            raise ValueError("For non-binary target variables, please provide at"
+                             " least two target values.")
+        elif not target_values and predict_threshold:
+            raise ValueError("A threshold was provided to interpret the prediction "
+                             "results, however a target value was not, therefore, "
+                             "a valid output cannot be generated.")
+
+    @classmethod
+    def _no_targets_no_thresholds(cls, metrics, h2o_model=None):
+        """"""
+        if len(metrics) == 1:
+            # Assume no probability output & predict function returns classification
+            if h2o_model:
+                cls.score_code += f"{'':4}{metrics} = prediction[1][0]\n\n{'':4}" \
+                                  f"return {metrics}"
             else:
-                is_binary = True
+                cls.score_code += f"{'':4}{metrics} = prediction\n\n{'':4}" \
+                                  f"return {metrics}"
+        else:
+            if h2o_model:
+                cls.score_code += f"{'':4}{metrics[0]} = prediction[1][0]\n"
+                for i in range(len(metrics) - 1):
+                    cls.score_code += f"{'':4}{metrics[i + 1]} = prediction[1]" \
+                                      f"[{i + 1}]\n"
+            else:
+                # Assume predict call returns (classification, probabilities)
+                cls.score_code += f"{'':4}{metrics[0]} = prediction[0]\n"
+                for i in range(len(metrics) - 1):
+                    cls.score_code += f"{'':4}{metrics[i + 1]} = prediction[{i + 1}]\n"
+            cls.score_code += f"\n{'':4}return {', '.join(metrics)}"
 
-        return is_binary
+    @classmethod
+    def _binary_target(cls, metrics, threshold=None, h2o_model=None):
+        """"""
+        # If a binary target value is provided, then classify the prediction
+        if not threshold:
+            # Set default threshold
+            threshold = 0.5
+        if len(metrics) == 1:
+            if h2o_model:
+                cls.score_code += f"{'':4}if prediction[1][2] > {threshold}:\n" \
+                                  f"{'':8}{metrics} = 1\n{'':4}else:\n{'':8}" \
+                                  f"{metrics} = 0\n\nreturn {metrics}"
+            else:
+                cls.score_code += f"{'':4}if prediction > {threshold}:\n" \
+                                  f"{'':8}{metrics} = 1\n{'':4}else:\n{'':8}" \
+                                  f"{metrics} = 0\n\nreturn {metrics}"
+        elif len(metrics) == 2:
+            if h2o_model:
+                cls.score_code += f"{'':4}if prediction[1][2] > {threshold}:\n" \
+                                  f"{'':8}{metrics[0]} = 1\n{'':4}else:\n{'':8}" \
+                                  f"{metrics[0]} = 0\n\nreturn {metrics[0]}, " \
+                                  f"prediction[1][2]"
+            else:
+                cls.score_code += f"{'':4}if prediction > {threshold}:\n" \
+                                  f"{'':8}{metrics[0]} = 1\n{'':4}else:\n{'':8}" \
+                                  f"{metrics[0]} = 0\n\nreturn {metrics[0]}, prediction"
+        else:
+            raise ValueError("Too many metrics were provided for a binary model.")
+
+    @classmethod
+    def _nonbinary_targets(cls, metrics, target_values, h2o_model=None):
+        """"""
+        # Find the target value with the highest probability
+        if len(metrics) == 1:
+            if h2o_model:
+                cls.score_code += f"{'':4}target_values = {target_values}\n{'':4}" \
+                                  f"{metrics} = target_values[prediction[1][1:]." \
+                                  f"index(max(prediction[1][1:]))]\n{'':4}" \
+                                  f"return {metrics}"
+            else:
+                cls.score_code += f"{'':4}target_values = {target_values}\n{'':4}" \
+                                  f"{metrics} = target_values[prediction.index(" \
+                                  f"max(prediction))]\n{'':4}return {metrics}"
+        else:
+            if h2o_model:
+                cls.score_code += f"{'':4}target_values = {target_values}\n{'':4}" \
+                                  f"{metrics} = target_values[prediction[1][1:]." \
+                                  f"index(max(prediction[1][1:]))]\n{'':4}"
+                for i in range(len(metrics) - 1):
+                    cls.score_code += f"{'':4}{metrics[i + 1]} = " \
+                                      f"prediction[1][{i + 1}]\n"
+            else:
+                cls.score_code += f"{'':4}target_values = {target_values}\n{'':4}" \
+                                  f"{metrics[0]} = target_values[prediction.index(" \
+                                  f"max(prediction))]\n"
+                for i in range(len(metrics) - 1):
+                    cls.score_code += f"{'':4}{metrics[i + 1]} = prediction[{i + 1}]\n"
+            cls.score_code += f"{'':4}return {', '.join(metrics)}"
 
     @staticmethod
     def convert_mas_to_cas(mas_code, model):
-        """Using the generated score.sas code from the Python wrapper API,
-        convert the SAS Microanalytic Service based code to CAS compatible.
+        """
+        Using the generated score.sas code from the Python wrapper API, convert the
+        SAS Microanalytic Service based code to CAS compatible.
 
         Parameters
         ----------
@@ -708,15 +611,15 @@ def score{modelPrefix}({inputVarList}):
         CASCode : str
             String representation of the epscorecode.sas DS2 wrapper code
         """
-        model = modelRepo.get_model(model)
+        model = mr.get_model(model)
         output_string = ""
-        for outVar in model["outputVariables"]:
+        for out_var in model["outputVariables"]:
             output_string = output_string + "dcl "
-            if outVar["type"] == "string":
+            if out_var["type"] == "string":
                 output_string = output_string + "varchar(100) "
             else:
                 output_string = output_string + "double "
-            output_string = output_string + outVar["name"] + ";\n"
+            output_string = output_string + out_var["name"] + ";\n"
         start = mas_code.find("score(")
         finish = mas_code[start:].find(");")
         score_vars = mas_code[start + 6: start + finish]
@@ -728,9 +631,8 @@ def score{modelPrefix}({inputVarList}):
             ]
         )
         end_block = (
-            "method run();\n    set SASEP.IN;\n    score({});\nend;\nenddata;".format(
-                input_string
-            )
+            f"method run();\n{'':4}set SASEP.IN;\n{'':4}score({input_string});\nend;"
+            f"\nenddata;"
         )
         replace_strings = {
             "package pythonScore / overwrite=yes;": "data sasep.out;",
@@ -740,5 +642,8 @@ def score{modelPrefix}({inputVarList}):
         }
         replace_strings = dict((re.escape(k), v) for k, v in replace_strings.items())
         pattern = re.compile("|".join(replace_strings.keys()))
-        cas_code = pattern.sub(lambda m: replace_strings[re.escape(m.group(0))], mas_code)
+        cas_code = pattern.sub(
+            lambda m: replace_strings[re.escape(m.group(0))],
+            mas_code
+        )
         return cas_code
