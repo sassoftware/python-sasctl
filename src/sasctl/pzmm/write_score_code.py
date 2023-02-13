@@ -3,6 +3,7 @@
 
 import re
 from pathlib import Path
+from warnings import warn
 
 import pandas as pd
 
@@ -126,11 +127,17 @@ class ScoreCode:
             cls._check_for_invalid_variable_names(input_var_list)
             input_dtypes_list = [var["type"] for var in input_data]
 
-        # For SAS Viya 3.5, either return an error or return the model UUID as a string
-        if current_session().version_info() == 3.5:
-            model_id = cls._get_model_id(model)
-        else:
+        try:
+            # For SAS Viya 3.5, either return an error or return the model UUID
+            if current_session().version_info() == 3.5:
+                model_id = cls._get_model_id(model)
+            else:
+                model_id = None
+        except AttributeError:
             model_id = None
+            warn("No current session connection was found to a SAS Viya server. Score "
+                 "code will be written under the assumption that the target server is "
+                 "SAS Viya 4.")
 
         # Set the model_file_name based on kwargs input
         if "model_file_name" in kwargs:
@@ -174,7 +181,7 @@ class ScoreCode:
         # Set the output variables in the line below from metrics
         cls.score_code += (
             f"def score{model_prefix}({', '.join(input_var_list)}):\n"
-            f"{'':4}Output: {', '.join(metrics)}"
+            f"{'':4}\"Output: {', '.join(metrics)}\"\n\n"
         )
 
         # Run a try/except block to catch errors for model loading (skip binary string)
@@ -342,13 +349,18 @@ class ScoreCode:
         SyntaxError
             If an invalid variable name is supplied.
         """
+        invalid_variables = []
         for name in var_list:
             if not str(name).isidentifier():
-                raise SyntaxError(
-                    f"{str(name)} is not a valid variable name. Please confirm that all"
-                    " variable names can be used as Python variables."
-                    " E.g. `str(name).isidentifier() == True`."
-                )
+                invalid_variables.append(str(name))
+
+        if len(invalid_variables) > 0:
+            raise SyntaxError(
+                f"The following are not valid variable names: "
+                f"{', '.join(invalid_variables)}. Please confirm that all variable names"
+                f" can be used as Python variables. E.g. `str(name).isidentifier() == "
+                f"True`."
+            )
 
     @classmethod
     def _write_imports(
@@ -384,8 +396,15 @@ class ScoreCode:
             f"import math\nimport {pickle_type}\nimport pandas as pd\n"
             "import numpy as np\nfrom pathlib import Path\n\n"
         )
-        if current_session().version_info() != 3.5:
-            cls.score_code += "import settings\n\n"
+
+        try:
+            if current_session().version_info() != 3.5:
+                cls.score_code += "import settings\n\n"
+        except AttributeError:
+            warn("No current session connection was found to a SAS Viya server. Score "
+                 "code will be written under the assumption that the target server is "
+                 "SAS Viya 4.")
+
         if mojo_model or binary_h2o_model:
             cls.score_code += (
                 "import h2o\nimport gzip\nimport shutil\nimport os\n\nh2o.init()\n\n"
@@ -393,7 +412,7 @@ class ScoreCode:
         elif binary_string:
             cls.score_code += (
                 f'import codecs\n\nbinary_string = "{binary_string}"'
-                f"\nmodel = pickle.loads(codecs.decode(binary_string"
+                f"\nmodel = {pickle_type}.loads(codecs.decode(binary_string"
                 '.encode(), "base64"))\n\n'
             )
 
@@ -425,9 +444,13 @@ class ScoreCode:
         binary_h2o_model : boolean, optional
             Flag to indicate that the model is a H2O.ai binary model. The default value
             is None.
+
+        Returns
+        -------
+        string
+            Preformatted string for the next section of score code.
         """
-        if pickle_type is None:
-            pickle_type = "pickle"
+        pickle_type = pickle_type if pickle_type else "pickle"
 
         if mojo_model:
             cls.score_code += (
@@ -435,7 +458,7 @@ class ScoreCode:
                 f'")\nwith gzip.open(model_path / "{model_file_name}'
                 f'", "r") as fileIn, open(model_path / '
                 f"\"{str(Path(model_file_name).with_suffix('.zip'))}\","
-                " \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn,"
+                f" \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn,"
                 " fileOut)\nos.chmod(model_path / "
                 f"\"{str(Path(model_file_name).with_suffix('.zip'))}\""
                 ", 0o777)\nmodel = h2o.import_mojo(model_path / "
@@ -471,7 +494,7 @@ class ScoreCode:
 
     @classmethod
     def _viya4_model_load(
-        cls, pickle_type, model_file_name=None, mojo_model=False, binary_h2o_model=False
+        cls, model_file_name, pickle_type=None, mojo_model=False, binary_h2o_model=False
     ):
         """
         Write the model load section of the score code assuming the model is being
@@ -491,13 +514,15 @@ class ScoreCode:
             Flag to indicate that the model is a H2O.ai binary model. The default value
             is None.
         """
+        pickle_type = pickle_type if pickle_type else "pickle"
+
         if mojo_model:
             cls.score_code += (
                 f"with gzip.open(Path(settings.pickle_path) / "
                 '"{model_file_name}", "r") as fileIn, '
                 "open(Path(settings.pickle_path) / "
                 f"\"{str(Path(model_file_name).with_suffix('.zip'))}\","
-                " \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn,"
+                f" \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn,"
                 " fileOut)\nos.chmod(Path(settings.pickle_path) / "
                 f"\"{str(Path(model_file_name).with_suffix('.zip'))}\""
                 ", 0o777)\nmodel = h2o.import_mojo("
@@ -507,11 +532,11 @@ class ScoreCode:
             )
             return (
                 f"{'':8}model = h2o.import_mojo(Path(settings.pickle_path) / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")"
+                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")\n\n"
             )
         elif binary_h2o_model:
             cls.score_code += "model = h2o.load(Path(settings.pickle_path))\n\n"
-            return f"{'':8}model = h2o.load(Path(settings.pickle_path))"
+            return f"{'':8}model = h2o.load(Path(settings.pickle_path))\n\n"
         else:
             cls.score_code += (
                 f"with open(Path(settings.pickle_path) / "
@@ -521,7 +546,7 @@ class ScoreCode:
             return (
                 f"{'':8}with open(Path(settings.pickle_path) / "
                 f'"{model_file_name}", "rb") as pickle_model:\n    '
-                f"{'':12}model = {pickle_type}.load(pickle_model)"
+                f"{'':12}model = {pickle_type}.load(pickle_model)\n\n"
             )
 
     @classmethod
@@ -539,12 +564,13 @@ class ScoreCode:
         dtype_list : list of strings
             List of variable data types
         """
-        for i, (var, dtype) in enumerate(zip(var_list, dtype_list)):
+        for (var, dtype) in zip(var_list, dtype_list):
             # Split up between numeric and character variables
             if any(t in dtype for t in ["int", "float"]):
                 cls._impute_numeric(data, var)
             else:
                 cls._impute_char(var)
+        cls.score_code += "\n"
 
     @classmethod
     def _impute_numeric(cls, data, var):
@@ -587,7 +613,7 @@ class ScoreCode:
         # Replace non-string values with blank strings
         cls.score_code += (
             f"{'':4}try:\n{'':8}{var} = {var}.strip()\n{'':4}except "
-            f"AttributeError:\n{'':8}{var} = \"\""
+            f"AttributeError:\n{'':8}{var} = \"\"\n"
         )
 
     @classmethod
@@ -613,7 +639,7 @@ class ScoreCode:
         -------
 
         """
-        column_names = ", ".join("'%s'" % col for col in var_list)
+        column_names = ", ".join(f"\"{col}\"" for col in var_list)
         # H2O models
         if dtype_list:
             column_types = []
@@ -709,7 +735,7 @@ class ScoreCode:
         h2o_model : boolean, optional
             Flag to indicate that the model is an H2O.ai model. The default is False.
         """
-        if len(metrics) == 1:
+        if len(metrics) == 1 or isinstance(metrics, str):
             # Assume no probability output & predict function returns classification
             if h2o_model:
                 cls.score_code += (
@@ -753,7 +779,7 @@ class ScoreCode:
         if not threshold:
             # Set default threshold
             threshold = 0.5
-        if len(metrics) == 1:
+        if len(metrics) == 1 or isinstance(metrics, str):
             if h2o_model:
                 cls.score_code += (
                     f"{'':4}if prediction[1][2] > {threshold}:\n"
@@ -864,7 +890,7 @@ class ScoreCode:
             output_string = output_string + out_var["name"] + ";\n"
         start = mas_code.find("score(")
         finish = mas_code[start:].find(");")
-        score_vars = mas_code[start + 6 : start + finish]
+        score_vars = mas_code[start + 6: start + finish]
         input_string = " ".join(
             [
                 x
