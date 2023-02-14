@@ -135,9 +135,11 @@ class ScoreCode:
                 model_id = None
         except AttributeError:
             model_id = None
-            warn("No current session connection was found to a SAS Viya server. Score "
-                 "code will be written under the assumption that the target server is "
-                 "SAS Viya 4.")
+            warn(
+                "No current session connection was found to a SAS Viya server. Score "
+                "code will be written under the assumption that the target server is "
+                "SAS Viya 4."
+            )
 
         # Set the model_file_name based on kwargs input
         if "model_file_name" in kwargs:
@@ -401,9 +403,11 @@ class ScoreCode:
             if current_session().version_info() != 3.5:
                 cls.score_code += "import settings\n\n"
         except AttributeError:
-            warn("No current session connection was found to a SAS Viya server. Score "
-                 "code will be written under the assumption that the target server is "
-                 "SAS Viya 4.")
+            warn(
+                "No current session connection was found to a SAS Viya server. Score "
+                "code will be written under the assumption that the target server is "
+                "SAS Viya 4."
+            )
 
         if mojo_model or binary_h2o_model:
             cls.score_code += (
@@ -639,7 +643,7 @@ class ScoreCode:
         -------
 
         """
-        column_names = ", ".join(f"\"{col}\"" for col in var_list)
+        column_names = ", ".join(f'"{col}"' for col in var_list)
         # H2O models
         if dtype_list:
             column_types = []
@@ -840,38 +844,40 @@ class ScoreCode:
                 )
         elif len(metrics) in (len(target_values), len(target_values) + 1):
             if h2o_model:
-                cls.score_code += (
-                    f"{'':4}target_values = {target_values}\n"
-                )
+                cls.score_code += f"{'':4}target_values = {target_values}\n"
                 for i in range(len(metrics) - 1):
                     cls.score_code += (
                         f"{'':4}{metrics[i + 1]} = prediction[1][{i + 1}]\n"
                     )
                 if len(metrics) == len(target_values) + 1:
-                    cls.score_code += f"{'':4}{metrics[0]} = target_values" \
-                                      f"[prediction[1][1:].index(max(" \
-                                      f"prediction[1][1:]))]\n"
+                    cls.score_code += (
+                        f"{'':4}{metrics[0]} = target_values"
+                        f"[prediction[1][1:].index(max("
+                        f"prediction[1][1:]))]\n"
+                    )
                     cls.score_code += f"{'':4}return {', '.join(metrics)}"
                 else:
                     cls.score_code += f"{'':4}return {', '.join(metrics)}"
             else:
-                cls.score_code += (
-                    f"{'':4}target_values = {target_values}\n"
-                )
+                cls.score_code += f"{'':4}target_values = {target_values}\n"
                 for i in range(len(metrics) - 1):
                     cls.score_code += f"{'':4}{metrics[i + 1]} = prediction[{i + 1}]\n"
                 if len(metrics) == len(target_values) + 1:
-                    cls.score_code += f"{'':4}{metrics[0]} = target_values" \
-                                      f"[prediction.index(max(prediction))]\n"
+                    cls.score_code += (
+                        f"{'':4}{metrics[0]} = target_values"
+                        f"[prediction.index(max(prediction))]\n"
+                    )
                     cls.score_code += f"{'':4}return {', '.join(metrics)}"
                 else:
                     cls.score_code += f"{'':4}return {', '.join(metrics)}"
         else:
-            raise ValueError("An invalid number of target values were provided with "
-                             "respect to the size of the metrics provided. The "
-                             "function is expecting metrics to be one, the same length"
-                             "as the target values list, or one more than the length"
-                             "of the target values list.")
+            raise ValueError(
+                "An invalid number of target values were provided with "
+                "respect to the size of the metrics provided. The "
+                "function is expecting metrics to be one, the same length"
+                "as the target values list, or one more than the length"
+                "of the target values list."
+            )
 
     @staticmethod
     def convert_mas_to_cas(mas_code, model):
@@ -902,7 +908,7 @@ class ScoreCode:
             output_string += out_var["name"] + ";\n"
         start = mas_code.find("score(")
         finish = mas_code[start:].find(");")
-        score_vars = mas_code[start + 6: start + finish]
+        score_vars = mas_code[start + 6 : start + finish]
         input_string = " ".join(
             [
                 x

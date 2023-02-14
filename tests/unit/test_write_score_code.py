@@ -223,18 +223,22 @@ def test_no_targets_no_thresholds():
 
     metrics = ["Classification", "Proba_A", "Proba_B", "Proba_C"]
     sc._no_targets_no_thresholds(metrics)
-    assert sc.score_code == f"{'':4}Classification = prediction[0]\n" \
-                            f"{'':4}Proba_A = prediction[1]\n" \
-                            f"{'':4}Proba_B = prediction[2]\n" \
-                            f"{'':4}Proba_C = prediction[3]\n\n" \
-                            f"{'':4}return Classification, Proba_A, Proba_B, Proba_C"
+    assert (
+        sc.score_code == f"{'':4}Classification = prediction[0]\n"
+        f"{'':4}Proba_A = prediction[1]\n"
+        f"{'':4}Proba_B = prediction[2]\n"
+        f"{'':4}Proba_C = prediction[3]\n\n"
+        f"{'':4}return Classification, Proba_A, Proba_B, Proba_C"
+    )
     sc.score_code = ""
     sc._no_targets_no_thresholds(metrics, h2o_model=True)
-    assert sc.score_code == f"{'':4}Classification = prediction[1][0]\n" \
-                            f"{'':4}Proba_A = prediction[1][1]\n" \
-                            f"{'':4}Proba_B = prediction[1][2]\n" \
-                            f"{'':4}Proba_C = prediction[1][3]\n\n" \
-                            f"{'':4}return Classification, Proba_A, Proba_B, Proba_C"
+    assert (
+        sc.score_code == f"{'':4}Classification = prediction[1][0]\n"
+        f"{'':4}Proba_A = prediction[1][1]\n"
+        f"{'':4}Proba_B = prediction[1][2]\n"
+        f"{'':4}Proba_C = prediction[1][3]\n\n"
+        f"{'':4}return Classification, Proba_A, Proba_B, Proba_C"
+    )
 
 
 def test_binary_target():
@@ -264,12 +268,12 @@ def test_binary_target():
     sc.score_code = ""
 
     metrics = ["Classification", "Probability"]
-    sc._binary_target(metrics, threshold=.7)
+    sc._binary_target(metrics, threshold=0.7)
     assert sc.score_code.endswith("return Classification, prediction")
     assert "prediction > 0.7" in sc.score_code
     sc.score_code = ""
 
-    sc._binary_target(metrics, threshold=.7, h2o_model=True)
+    sc._binary_target(metrics, threshold=0.7, h2o_model=True)
     assert sc.score_code.endswith("return Classification, prediction[1][2]")
     assert "prediction[1][2] > 0.7" in sc.score_code
     sc.score_code = ""
@@ -353,9 +357,9 @@ def test_predictions_to_metrics():
         func.assert_called_once_with(metrics, None, False)
 
     with pytest.raises(
-            ValueError,
-            match="For non-binary target variables, please provide at least two target "
-                  "values."
+        ValueError,
+        match="For non-binary target variables, please provide at least two target "
+        "values.",
     ):
         target_values = ["2"]
         sc._predictions_to_metrics(metrics, target_values)
@@ -363,7 +367,6 @@ def test_predictions_to_metrics():
     with pytest.raises(
         ValueError,
         match="A threshold was provided to interpret the prediction results, however "
-              "a target value was not, therefore, a valid output cannot be generated."
+        "a target value was not, therefore, a valid output cannot be generated.",
     ):
         sc._predictions_to_metrics(metrics, predict_threshold=0.7)
-
