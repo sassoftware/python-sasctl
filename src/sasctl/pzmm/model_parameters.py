@@ -2,15 +2,12 @@
 # SPDX-License-Identifier: Apache-2.0
 import json
 from distutils.version import StrictVersion
-from io import StringIO
 
 import pandas as pd
 from pathlib import Path
 
 from .._services.model_repository import ModelRepository as mr
 from ..core import current_session, is_uuid
-
-# TODO: Convert STRINGIO calls to string or dict format
 
 # TODO: change sess.get call in _find_file to a mr call (get_model_contents?)
 # TODO: Maybe just move _find_file altogether?
@@ -142,7 +139,7 @@ class ModelParameters:
             current_params, file_name = _find_file(model, "hyperparameters")
             updated_json = _update_json(model, current_params.json(), kpis)
             mr.add_model_content(
-                model, StringIO(json.dumps(updated_json, indent=4)), file_name
+                model, json.dumps(updated_json, indent=4), file_name
             )
 
     @classmethod
@@ -167,8 +164,8 @@ class ModelParameters:
         else:
             model = mr.get_model(model)
             id_ = model["id"]
-        file, _ = _find_file(id_, "hyperparameters")
-        return file.json()
+        file, file_name = _find_file(id_, "hyperparameters")
+        return file.json(), file_name
 
     @classmethod
     def add_hyperparameters(cls, model, **kwargs):
@@ -183,15 +180,20 @@ class ModelParameters:
             Named variables pairs representing hyperparameters to be added to the hyperparameter file.
         """
 
-        if not isinstance(model, dict):
+        if mr.is_uuid(model):
+            id_ = model
+        elif isinstance(model, dict) and "id" in model:
+            id_ = model["id"]
+        else:
             model = mr.get_model(model)
-        hyperparameters = cls.get_hyperparameters(model.id)
+            id_ = model["id"]
+        hyperparameters, file_name = cls.get_hyperparameters(id_)
         for key, value in kwargs.items():
             hyperparameters["hyperparameters"][key] = value
         mr.add_model_content(
             model,
-            StringIO(json.dumps(hyperparameters, indent=4)),
-            f"{model.name}Hyperparameters.json",
+            json.dumps(hyperparameters, indent=4),
+            file_name,
         )
 
     @staticmethod
@@ -253,14 +255,14 @@ class ModelParameters:
         # TODO: include case for large MM_STD_KPI tables
         # Call the casManagement service to collect the column names in the table
         kpi_table_columns = sess.get(
-            "casManagement/servers/{}/".format(server)
-            + "caslibs/{}/tables/".format(caslib)
-            + "{}.MM_STD_KPI/columns?limit=10000".format(project_id)
+            f"casManagement/servers/{server}/"
+            + f"caslibs/{caslib}/tables/"
+            + f"{project_id}.MM_STD_KPI/columns?limit=10000"
         )
         if not kpi_table_columns:
             project = mr.get_project(project)
             raise SystemError(
-                "No KPI table exists for project {}.".format(project.name)
+                f"No KPI table exists for project {project.name}."
                 + " Please confirm that the performance definition completed"
                 + " or custom KPIs have been uploaded successfully."
             )
@@ -272,15 +274,15 @@ class ModelParameters:
         # Filter rows returned by column and value provided in arguments
         where_statement = ""
         if filter_column and filter_value:
-            where_statement = "&where={}='{}'".format(filter_column, filter_value)
+            where_statement = f"&where={filter_column}='{filter_value}'"
 
         # Call the casRowSets service to return row values
         # Optional where statement is included
         kpi_table_rows = sess.get(
-            "casRowSets/servers/{}/".format(server)
-            + "caslibs/{}/tables/".format(caslib)
-            + "{}.MM_STD_KPI/rows?limit=10000".format(project_id)
-            + "{}".format(where_statement)
+            f"casRowSets/servers/{server}/"
+            + f"caslibs/{caslib}/tables/"
+            + f"{project_id}.MM_STD_KPI/rows?limit=10000"
+            + f"{where_statement}"
         )
         # If no "cells" are found in the json response, return an error
         try:
@@ -291,14 +293,12 @@ class ModelParameters:
         except KeyError:
             if filter_column and filter_value:
                 raise SystemError(
-                    "No KPIs were found when filtering with {}='{}'.".format(
-                        filter_column, filter_value
-                    )
+                    "No KPIs were found when filtering with {filter_column}='{filter_value}'."
                 )
             else:
                 project_name = mr.get_project(project)["name"]
                 raise SystemError(
-                    "No KPIs were found for project {}.".format(project_name)
+                    f"No KPIs were found for project {project_name}."
                 )
 
         # Strip leading spaces from cells of KPI table; convert missing values to None

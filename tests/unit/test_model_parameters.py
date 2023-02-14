@@ -1,3 +1,4 @@
+import ast
 import copy
 import json
 from unittest import mock
@@ -49,6 +50,7 @@ def sklearn_model(train_data):
 
 
 class TestSKLearnModel:
+    USER = "username"
     PROJECT_NAME = "PZMM SKLearn Test Project"
     MODEL_NAME = "SKLearnModel"
     PROJECT = RestObj({"name": "Test Project", "id": "98765"})
@@ -61,6 +63,8 @@ class TestSKLearnModel:
     )
     TESTJSON = {"hyperparameters": {"TEST": "1"}}
     MODEL_FILES = [RestObj({"name": "file1"}), RestObj({"name": "file2"})]
+    COLS = ['TimeSK', 'TimeLabel', 'ProjectUUID', 'ModelName', 'ModelUUID', 'ModelFlag', '_AUC_', '_F1_', '_TPR_',
+            '_FPR_']
 
     def test_generate_hyperparameters(self, sklearn_model):
         tmp_dir = tempfile.TemporaryDirectory()
@@ -75,7 +79,6 @@ class TestSKLearnModel:
             mp.generate_hyperparameters(bad_model, self.MODEL_NAME, Path(tmp_dir.name))
 
     def test_update_json(self):
-
         from sasctl.pzmm.model_parameters import _update_json
 
         # ensure that only relevant rows are added to hyperparameter json
@@ -83,7 +86,7 @@ class TestSKLearnModel:
         input_json = copy.deepcopy(self.TESTJSON)
         input_kpis = copy.deepcopy(self.KPIS)
         assert (
-            _update_json(self.MODELS[1]["id"], input_json, input_kpis) == self.TESTJSON
+                _update_json(self.MODELS[1]["id"], input_json, input_kpis) == self.TESTJSON
         )
 
         input_json = copy.deepcopy(self.TESTJSON)
@@ -99,7 +102,6 @@ class TestSKLearnModel:
         assert "TimeLabel" not in updated_json["kpis"]
 
     def test_find_file(self):
-        USER = "username"
         FILE_RESPONSE = Response()
         FILE_RESPONSE.status_code = 200
         FILE_RESPONSE.body = json.dumps(self.TESTJSON).encode("utf-8")
@@ -107,14 +109,81 @@ class TestSKLearnModel:
         from sasctl.pzmm.model_parameters import _find_file
 
         with mock.patch("sasctl.core.Session._get_authorization_token"):
-            current_session("example.com", USER, "password")
+            current_session("example.com", self.USER, "password")
 
         with mock.patch(
-            "sasctl._services.model_repository.ModelRepository.get_model_contents"
+                "sasctl._services.model_repository.ModelRepository.get_model_contents"
         ) as get_model_contents:
             get_model_contents.return_value = copy.deepcopy(self.MODEL_FILES)
             with pytest.raises(ValueError):
                 _find_file(self.MODEL_NAME, "file0")
+
+    def test_add_hyperparamters(self):
+        with mock.patch("sasctl.core.Session._get_authorization_token"):
+            current_session("example.com", self.USER, "password")
+
+        with mock.patch(
+                "sasctl._services.model_repository.ModelRepository" ".add_model_content"
+        ) as add_model_content:
+            with mock.patch(
+                    "sasctl.pzmm.model_parameters.ModelParameters.get_hyperparameters"
+            ) as get_hyperparameters:
+                with mock.patch(
+                        "sasctl._services.model_repository.ModelRepository.get_model"
+                ) as get_model:
+                    # TODO: test if model that doesn't exist gets passed into the system
+                    get_model.return_value = copy.deepcopy(self.MODELS[0])
+                    get_hyperparameters.return_value = (copy.deepcopy(self.TESTJSON), 'TestModel1Hyperparameters.json')
+
+                    # ensure that argument with no kwargs returns same file
+                    mp.add_hyperparameters('TestModel1')
+                    test = add_model_content.call_args_list[0]
+                    assert json.loads(add_model_content.call_args_list[0][0][1]) == self.TESTJSON
+
+                    # ensure that kwarg is added properly
+                    mp.add_hyperparameters('TestModel1', test_parameter='1')
+                    assert json.loads(add_model_content.call_args_list[1][0][1])['hyperparameters'][
+                               'test_parameter'] == '1'
+
+                    # ensure that overwriting works properly
+
+                    mp.add_hyperparameters('TestModel1', TEST='2')
+                    assert json.loads(add_model_content.call_args_list[2][0][1])['hyperparameters']['TEST'] == '2'
+
+    def test_get_project_kpis(self):
+        cols = Response()
+        cols.status_code = 200
+        cols._content = json.dumps({'items': [{'name': 'testName'}]}).encode('utf-8')
+
+        rows = Response()
+        rows.status_code = 200
+        rows._content = json.dumps({'items': {'cells': ['testValue']}}).encode('utf-8')
+        with mock.patch("sasctl.core.Session._get_authorization_token"):
+            current_session("example.com", self.USER, "password")
+
+        with mock.patch("sasctl._services.model_repository.ModelRepository" ".get_project") as get_project:
+            with mock.patch("sasctl.core.Session.get") as get:
+                get.side_effect = [cols, rows]
+                get_project.return_value = self.PROJECT
+                kpi_table = mp.get_project_kpis('Project')
+                # ensure basic table is made correctly
+                assert kpi_table.columns[0] == "testName"
+                assert kpi_table.loc[0]["testName"] == 'testValue'
+                assert len(kpi_table) == 1
+                assert len(kpi_table.columns) == 1
+
+                get.reset_mock(side_effect=True)
+                get.side_effect = [cols, rows]
+                rows._content = json.dumps({'items': [{'cells': 'testValue'}, {'cells': '.'}]}).encode('utf-8')
+
+                kpi_table = mp.get_project_kpis('Project')
+
+                assert len(kpi_table) == 2
+                assert len(kpi_table.columns) == 1
+
+                assert not kpi_table.loc[1]['testName']
+
+
 
     # def test_find_file(self, sklearn_model):
     #     PROJECT = RestObj({"name": "Test Project", "id": "98765"})
