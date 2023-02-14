@@ -38,7 +38,6 @@ class TestTextFile:
         # form uploads.  Mock the output to ensure a consistent value so
         # that body request/responses always match.
         with mock.patch("os.urandom", return_value="abcdefghijklmnop".encode("utf-8")):
-
             """Create a file with an explicitly set filename."""
             file = files.create_file(dummy_file, filename=self.filename)
 
@@ -52,7 +51,6 @@ class TestTextFile:
         assert self.filename == file.name
 
     def test_get_file_content(self, dummy_file):
-
         with open(dummy_file, "r") as f:
             target = f.read()
 
@@ -138,7 +136,6 @@ class TestPickleFile:
         # form uploads.  Mock the output to ensure a consistent value so
         # that body request/responses always match.
         with mock.patch("os.urandom", return_value="abcdefghijklmnop".encode("utf-8")):
-
             # Read the file contents and pickle
             with open(dummy_file, "r") as f:
                 file = io.BytesIO(pickle.dumps(f.read()))
@@ -156,7 +153,6 @@ class TestPickleFile:
         assert self.filename == file.name
 
     def test_get_file_content(self, dummy_file):
-
         with open(dummy_file, "r") as f:
             target = f.read()
 

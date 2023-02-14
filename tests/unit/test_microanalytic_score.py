@@ -56,7 +56,6 @@ def test_delete_module(caplog):
 
 
 def test_define_steps():
-
     # Mock module to be returned
     module = RestObj(
         name="unittestmodule", id="unittestmodule", stepIds=["step1", "step2"]

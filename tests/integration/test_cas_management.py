@@ -84,7 +84,6 @@ def test_list_sessions():
 
 
 def test_create_session():
-
     properties = {"authenticationType": "OAuth", "name": "SessionSimulation"}
     sess = cm.create_session(properties)
 
@@ -92,7 +91,6 @@ def test_create_session():
 
 
 def test_delete_session():
-
     properties = {"authenticationType": "OAuth", "name": "SessionSimulation"}
     sess = cm.create_session(properties)
 

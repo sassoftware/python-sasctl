@@ -109,9 +109,7 @@ def _register_sklearn_35():
 
 
 def _register_sklearn_40(model, model_name, project_name, input_data, output_data=None):
-
     with TemporaryDirectory() as folder:
-
         pzmm.PickleModel.pickle_trained_model(
             model, model_name, folder
         )  # generates folder/name.pickle
@@ -808,7 +806,6 @@ def update_model_performance(data, model, label, refresh=True):
 
     # Upload the performance data to CAS
     with sess.as_swat(server=cas_id) as s:
-
         s.setsessopt(messagelevel="warning")
 
         with swat.options(exception_on_severity=2):

@@ -12,7 +12,6 @@ from sasctl._services import workflow
 
 
 def test_list_workflow_prompt_invalidworkflow():
-
     WORKFLOWS = [
         {"name": "Test W", "id": "12345"},
         {
@@ -35,7 +34,6 @@ def test_list_workflow_prompt_invalidworkflow():
 
 
 def test_list_workflow_prompt_workflownoprompt():
-
     WORKFLOWS = [
         {"name": "Test W", "id": "12345"},
         {
@@ -65,7 +63,6 @@ def test_list_workflow_prompt_workflownoprompt():
 
 
 def test_list_workflow_prompt_workflowprompt():
-
     WORKFLOWS = [
         {"name": "Test W", "id": "12345"},
         {

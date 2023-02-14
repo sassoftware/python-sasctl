@@ -264,7 +264,6 @@ class DS2PyMASMethod(DS2BaseMethod):
         target="wrapper",
         method_name="score",
     ):
-
         # target = target or 'wrapper'
 
         if isinstance(python_code, str):
@@ -448,7 +447,6 @@ class DS2Thread(object):  # skipcq PYL-R0205
         package=None,
         method=None,
     ):
-
         self._id = uuid.uuid4().hex.upper()
         self.table = table
         self.variables = variables
@@ -551,7 +549,6 @@ class DS2Variable(namedtuple("Ds2Variable", ["name", "type", "out"])):
     )
 
     def __new__(cls, *args, **kwargs):
-
         # Convert Python types to DS2 types if necessary
         if "type" in kwargs:
             kwargs["type"] = DS2Variable._map_type(cls.PY_TYPE_TO_DS2, kwargs["type"])

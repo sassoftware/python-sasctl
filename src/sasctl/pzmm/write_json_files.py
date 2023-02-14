@@ -1695,7 +1695,7 @@ class JSONFiles:
             A list of modules obtained from the pickle stream. Duplicates are removed
             and Python built-in modules are removed.
         """
-        with (open(pickle_file, "rb")) as open_file:  # skipcq: PTC-W6004
+        with open(pickle_file, "rb") as open_file:  # skipcq: PTC-W6004
             obj = pickle.load(open_file)  # skipcq: BAN-B301
             dumps = pickle.dumps(obj)
 

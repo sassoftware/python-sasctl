@@ -568,7 +568,7 @@ class ScoreCode:
         dtype_list : list of strings
             List of variable data types
         """
-        for (var, dtype) in zip(var_list, dtype_list):
+        for var, dtype in zip(var_list, dtype_list):
             # Split up between numeric and character variables
             if any(t in dtype for t in ["int", "float"]):
                 cls._impute_numeric(data, var)
@@ -647,7 +647,7 @@ class ScoreCode:
         # H2O models
         if dtype_list:
             column_types = []
-            for (var, dtype) in zip(var_list, dtype_list):
+            for var, dtype in zip(var_list, dtype_list):
                 if any(x in dtype for x in ["int", "float"]):
                     col_type = "numeric"
                 else:

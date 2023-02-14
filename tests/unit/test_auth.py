@@ -455,7 +455,6 @@ profiles:
 
     # Fake file exists
     with mock.patch("os.path.exists", return_value=True):
-
         # Fake permissions on a (fake) file
         with mock.patch("os.stat") as mock_stat:
             mock_stat.return_value.st_mode = 0o600
