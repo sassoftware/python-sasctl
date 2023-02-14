@@ -278,19 +278,92 @@ def test_binary_target():
 def test_nonbinary_targets():
     """
     Test Cases:
+    - metrics == 1
+        - non-h2o
+        - h2o
+    - metrics > 1
+        - non-h2o (len(metrics) == len(target_values) + (1,0))
+        - h2o (len(metrics) == len(target_values) + (1,0))
+    - invalid metrics and target values numbers
     """
-    pass
+    metrics = "Classification"
+    target_values = ["A", "B", "C"]
+
+    sc._nonbinary_targets(metrics, target_values)
+    assert sc.score_code.endswith("return Classification")
+    assert "prediction.index(max(prediction))" in sc.score_code
+    sc.score_code = ""
+
+    sc._nonbinary_targets(metrics, target_values, h2o_model=True)
+    assert sc.score_code.endswith("return Classification")
+    assert "prediction[1][1:].index(max(prediction[1][1:]))" in sc.score_code
+    sc.score_code = ""
+
+    metrics = ["Classification", "Proba_A", "Proba_B", "Proba_C"]
+    sc._nonbinary_targets(metrics, target_values)
+    assert sc.score_code.endswith("return Classification, Proba_A, Proba_B, Proba_C")
+    assert "Classification = target_values[prediction.index" in sc.score_code
+
+    sc._nonbinary_targets(metrics, target_values, h2o_model=True)
+    assert sc.score_code.endswith("return Classification, Proba_A, Proba_B, Proba_C")
+    assert "Classification = target_values[prediction[1][1:].index" in sc.score_code
+    sc.score_code = ""
+
+    metrics = ["Proba_A", "Proba_B", "Proba_C"]
+    sc._nonbinary_targets(metrics, target_values)
+    assert sc.score_code.endswith("return Proba_A, Proba_B, Proba_C")
+    assert "Classification = target_values[prediction.index" not in sc.score_code
+    sc.score_code = ""
+
+    sc._nonbinary_targets(metrics, target_values, h2o_model=True)
+    assert sc.score_code.endswith("return Proba_A, Proba_B, Proba_C")
+    assert "Classification = target_values[prediction[1][1:].index" not in sc.score_code
+    sc.score_code = ""
+
+    with pytest.raises(ValueError):
+        metrics = ["Classification", "Proba_A"]
+        sc._nonbinary_targets(metrics, target_values)
 
 
 def test_predictions_to_metrics():
     """
     Test Cases:
+    - flattened list -> len(metrics) == 1
+    - no target_values or no thresholds
+    - len(target_values) > 1
+        - warning if threshold provided
+    - target_values == 1
+    - raise error for binary model w/ nonbinary targets
+    - raise error for no target_values, but thresholds provided
     """
-    pass
+    with mock.patch("sasctl.pzmm.ScoreCode._no_targets_no_thresholds") as func:
+        metrics = ["Classification"]
+        sc._predictions_to_metrics(metrics)
+        func.assert_called_once_with("Classification", False)
 
+    with mock.patch("sasctl.pzmm.ScoreCode._nonbinary_targets") as func:
+        target_values = ["A", "B", 5]
+        sc._predictions_to_metrics(metrics, target_values)
+        func.assert_called_once_with("Classification", target_values, False)
 
-def test_convert_mas_to_cas():
-    """
-    Test Cases:
-    """
-    pass
+    with mock.patch("sasctl.pzmm.ScoreCode._binary_target") as func:
+        metrics = ["Classification", "Probability"]
+        target_values = ["1"]
+        sc._predictions_to_metrics(metrics, target_values)
+        func.assert_called_once_with(metrics, None, False)
+
+    with pytest.raises(
+            ValueError,
+            match="For non-binary target variables, please provide at least two target "
+                  "values."
+    ):
+        target_values = ["2"]
+        sc._predictions_to_metrics(metrics, target_values)
+
+    with pytest.raises(
+        ValueError,
+        match="A threshold was provided to interpret the prediction results, however "
+              "a target value was not, therefore, a valid output cannot be generated."
+    ):
+        sc._predictions_to_metrics(metrics, predict_threshold=0.7)
+

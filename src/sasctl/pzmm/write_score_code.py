@@ -705,20 +705,19 @@ class ScoreCode:
 
         if not (target_values or predict_threshold):
             cls._no_targets_no_thresholds(metrics, h2o_model)
-        elif int(target_values) == 1:
-            cls._binary_target(metrics, predict_threshold, h2o_model)
-        elif len(target_values) > 1:
-            cls._nonbinary_targets(metrics, target_values, h2o_model)
-        elif len(target_values) == 1 and int(target_values) != 1:
-            raise ValueError(
-                "For non-binary target variables, please provide at"
-                " least two target values."
-            )
         elif not target_values and predict_threshold:
             raise ValueError(
-                "A threshold was provided to interpret the prediction "
-                "results, however a target value was not, therefore, "
-                "a valid output cannot be generated."
+                "A threshold was provided to interpret the prediction results, however "
+                "a target value was not, therefore, a valid output cannot be generated."
+            )
+        elif len(target_values) > 1:
+            cls._nonbinary_targets(metrics, target_values, h2o_model)
+        elif len(target_values) == 1 and int(target_values[0]) == 1:
+            cls._binary_target(metrics, predict_threshold, h2o_model)
+        elif len(target_values) == 1 and int(target_values[0]) != 1:
+            raise ValueError(
+                "For non-binary target variables, please provide at least two target "
+                "values."
             )
 
     @classmethod
@@ -825,7 +824,7 @@ class ScoreCode:
             Flag to indicate that the model is an H2O.ai model. The default is False.
         """
         # Find the target value with the highest probability
-        if len(metrics) == 1:
+        if len(metrics) == 1 or isinstance(metrics, str):
             if h2o_model:
                 cls.score_code += (
                     f"{'':4}target_values = {target_values}\n{'':4}"
@@ -839,26 +838,40 @@ class ScoreCode:
                     f"{metrics} = target_values[prediction.index("
                     f"max(prediction))]\n{'':4}return {metrics}"
                 )
-        else:
+        elif len(metrics) in (len(target_values), len(target_values) + 1):
             if h2o_model:
                 cls.score_code += (
-                    f"{'':4}target_values = {target_values}\n{'':4}"
-                    f"{metrics} = target_values[prediction[1][1:]."
-                    f"index(max(prediction[1][1:]))]\n{'':4}"
+                    f"{'':4}target_values = {target_values}\n"
                 )
                 for i in range(len(metrics) - 1):
                     cls.score_code += (
                         f"{'':4}{metrics[i + 1]} = prediction[1][{i + 1}]\n"
                     )
+                if len(metrics) == len(target_values) + 1:
+                    cls.score_code += f"{'':4}{metrics[0]} = target_values" \
+                                      f"[prediction[1][1:].index(max(" \
+                                      f"prediction[1][1:]))]\n"
+                    cls.score_code += f"{'':4}return {', '.join(metrics)}"
+                else:
+                    cls.score_code += f"{'':4}return {', '.join(metrics)}"
             else:
                 cls.score_code += (
-                    f"{'':4}target_values = {target_values}\n{'':4}"
-                    f"{metrics[0]} = target_values[prediction.index("
-                    f"max(prediction))]\n"
+                    f"{'':4}target_values = {target_values}\n"
                 )
                 for i in range(len(metrics) - 1):
                     cls.score_code += f"{'':4}{metrics[i + 1]} = prediction[{i + 1}]\n"
-            cls.score_code += f"{'':4}return {', '.join(metrics)}"
+                if len(metrics) == len(target_values) + 1:
+                    cls.score_code += f"{'':4}{metrics[0]} = target_values" \
+                                      f"[prediction.index(max(prediction))]\n"
+                    cls.score_code += f"{'':4}return {', '.join(metrics)}"
+                else:
+                    cls.score_code += f"{'':4}return {', '.join(metrics)}"
+        else:
+            raise ValueError("An invalid number of target values were provided with "
+                             "respect to the size of the metrics provided. The "
+                             "function is expecting metrics to be one, the same length"
+                             "as the target values list, or one more than the length"
+                             "of the target values list.")
 
     @staticmethod
     def convert_mas_to_cas(mas_code, model):
@@ -869,25 +882,24 @@ class ScoreCode:
         Parameters
         ----------
         mas_code : str
-            String representation of the packagescore.sas DS2 wrapper
+            String representation of the dmcas_packagescorecode.sas DS2 wrapper
         model : str or dict
-            The name or id of the model, or a dictionary representation of
-            the model
+            The name or id of the model, or a dictionary representation of the model
 
         Returns
         -------
         CASCode : str
-            String representation of the epscorecode.sas DS2 wrapper code
+            String representation of the dmcas_epscorecode.sas DS2 wrapper code
         """
         model = mr.get_model(model)
         output_string = ""
         for out_var in model["outputVariables"]:
-            output_string = output_string + "dcl "
+            output_string += "dcl "
             if out_var["type"] == "string":
                 output_string = output_string + "varchar(100) "
             else:
-                output_string = output_string + "double "
-            output_string = output_string + out_var["name"] + ";\n"
+                output_string += "double "
+            output_string += out_var["name"] + ";\n"
         start = mas_code.find("score(")
         finish = mas_code[start:].find(");")
         score_vars = mas_code[start + 6: start + finish]
