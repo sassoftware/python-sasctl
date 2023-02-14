@@ -20,6 +20,9 @@ import pandas as pd
 from ..core import current_session
 from ..utils.decorators import deprecated
 
+# TODO: file writing outputs should be dependent upon use in Jupyter notebook
+
+
 # Constants
 INPUT = "inputVar.json"
 OUTPUT = "outputVar.json"
@@ -353,6 +356,12 @@ class JSONFiles:
             Sets whether the model metadata is associated with an H2O.ai model. If set
             as True, the MOJO model file will be set as a score resource. The default
             value is False.
+
+        Returns
+        -------
+        dict
+            Dictionary containing a key-value pair representing the file name and json
+            dump respectively.
         """
         dict_list = [
             {"role": "inputVariables", "name": INPUT},
