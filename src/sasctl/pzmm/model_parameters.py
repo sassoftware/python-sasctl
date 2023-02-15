@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: Apache-2.0
 import json
 from distutils.version import StrictVersion
+from pathlib import Path
 
 import pandas as pd
-from pathlib import Path
 
 from .._services.model_repository import ModelRepository as mr
 from ..core import current_session, is_uuid
