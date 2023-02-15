@@ -112,6 +112,7 @@ def project_exists(response, project):
             )
         except ValueError:
             repo = mr.default_repository().get("id")
+            # TODO: implement _create_project() call instead of mr.create_project()
             response = mr.create_project(project, repo)
             print(f"A new project named {response.name} was created.")
             return response
@@ -148,13 +149,11 @@ def model_exists(project, name, force, version_name="latest"):
     project_id = project["id"]
     project_versions = mr.list_project_versions(project)
     if version_name == "latest":
-        latest_version = project["latestVersion"]
-        version_id = project_versions[latest_version]["id"]
-    else:
-        for version in project_versions:
-            if version_name == version["name"]:
-                version_id = version["id"]
-                break
+        version_name = project["latestVersion"]
+    for version in project_versions:
+        if version_name == version["name"]:
+            version_id = version["id"]
+            break
     project_models = mr.get(
         f"/projects/{project_id}/projectVersions/{version_id}/models"
     )
@@ -334,6 +333,9 @@ class ImportModel:
                 )
             except AttributeError:
                 print("Model failed to import to SAS Model Manager.")
+
+            if score_code_dict:
+                return model_files
         # For SAS Viya 3.5, the score code is written after upload in order to know
         # the model UUID
         else:
