@@ -22,7 +22,6 @@ class ScoreCode:
         input_data,
         predict_method,
         metrics,
-        model_file_name,
         pickle_type="pickle",
         model=None,
         predict_threshold=None,
@@ -73,8 +72,6 @@ class ScoreCode:
             The scoring metrics for the model. For classification models, it is assumed
             that the first value in the list represents the classification output. This
             function supports single- and multi-class classification models.
-        model_file_name : string
-            Name of the model file that contains the model.
         score_code_path : string, optional
             The local path of the score code file. The default is the current
             working directory.
@@ -97,6 +94,7 @@ class ScoreCode:
             prediction method. The default value is None.
         missing_values : boolean, optional
             Sets whether data handled by the score code will impute for missing values.
+            The default value is False.
         score_cas : boolean, optional
             Sets whether models registered to SAS Viya 3.5 should be able to be scored
             and validated through both CAS and SAS Micro Analytic Service. If set to
@@ -149,7 +147,10 @@ class ScoreCode:
             model_file_name = None
             binary_string = kwargs["binary_string"]
         else:
-            binary_string = None
+            raise ValueError(
+                "Either the binary_string or the model_file_name argument needs to be"
+                "specified in order to generate the score code."
+            )
 
         # Add the core imports to the score code with the specified model serializer
         cls._write_imports(
