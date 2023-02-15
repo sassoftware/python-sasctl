@@ -6,7 +6,7 @@ from uuid import UUID
 from warnings import warn
 
 from .._services.model_repository import ModelRepository as mr
-from ..core import current_session
+from ..core import current_session, RestObj, PagedList
 from .write_score_code import ScoreCode as sc
 from .zip_model import ZipModel as zm
 
@@ -158,9 +158,9 @@ def model_exists(project, name, force, version_name="latest"):
         f"/projects/{project_id}/projectVersions/{version_id}/models"
     )
 
-    if len(project_models) == 0:
+    if not project_models:
         return
-    elif len(project_models) == 1:
+    elif isinstance(project_models, RestObj):
         if project_models["name"] == name and force:
             mr.delete_model(project_models.id)
         elif project_models["name"] == name and not force:
@@ -169,7 +169,7 @@ def model_exists(project, name, force, version_name="latest"):
                 f"{project.name}. Include the force=True argument to overwrite "
                 f"models with the same name."
             )
-    else:
+    elif isinstance(project_models, PagedList):
         for model in project_models:
             if model["name"] == name and force:
                 mr.delete_model(model.id)

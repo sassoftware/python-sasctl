@@ -14,7 +14,7 @@ import pandas as pd
 import pytest
 
 from sasctl import current_session
-from sasctl.core import VersionInfo, RestObj
+from sasctl.core import VersionInfo, RestObj, PagedList
 from sasctl.pzmm.import_model import ImportModel as im
 from sasctl.pzmm.import_model import project_exists, model_exists
 
@@ -145,21 +145,32 @@ def test_model_exists(mock_project, mock_versions, mock_get, mock_delete):
     - > 1 model in version; with same name; overwrite
     - <As above>; raise ValueError with no overwrite
     """
-    mock_project.return_value = {"id": "abc123", "latestVersion": "Test Version"}
-    mock_versions.return_value = {{"name": "Test Version", "id": "def456"}}
+    mock_project.return_value = RestObj(
+        name="Test Project", id="abc123", latestVersion="Test Version"
+    )
+    mock_versions.return_value = [RestObj(name="Test Version", id="def456")]
     mock_get.return_value = []
     test = model_exists("Test_Project", "Test_Model", False)
     assert test is None
 
     with pytest.raises(ValueError):
-        mock_get.return_value = {"name": "Test_Model"}
+        mock_get.return_value = RestObj({"name": "Test_Model", "id": "ghi789"})
         model_exists("Test_Project", "Test_Model", False)
 
     model_exists("Test_Project", "Test_Model", True)
     mock_delete.assert_called_once()
+    mock_delete.reset_mock()
 
     with pytest.raises(ValueError):
-        mock_get.return_value = [{"name": "Test_Model"}, {"name": "Other_Model"}]
+        mock_get.return_value = PagedList(
+            RestObj(
+                items=[
+                    {"name": "Test_Model", "id": "ghi789"},
+                    {"name": "Other_Model", "id": "jkl012"},
+                ],
+                count=2,
+            )
+        )
         model_exists("Test_Project", "Test_Model", False)
 
     model_exists("Test_Project", "Test_Model", True)
