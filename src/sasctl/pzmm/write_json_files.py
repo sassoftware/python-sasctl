@@ -1075,9 +1075,7 @@ class JSONFiles:
         with open(Path(jPath) / FITSTAT, "w") as jFile:
             json.dump(nullJSONDict, jFile, indent=4)
         print(
-            "{} was successfully written and saved to {}".format(
-                FITSTAT, Path(jPath) / FITSTAT
-            )
+            f"{FITSTAT} was successfully written and saved to {Path(jPath) / FITSTAT}"
         )
 
     # noinspection PyCallingNonCallable,PyNestedDecorators
@@ -1358,17 +1356,11 @@ class JSONFiles:
 
         with open(Path(jPath) / ROC, "w") as jFile:
             json.dump(nullJSONROCDict, jFile, indent=4)
-        print(
-            "{} was successfully written and saved to {}".format(ROC, Path(jPath) / ROC)
-        )
+        print(f"{ROC} was successfully written and saved to {Path(jPath) / ROC}")
 
         with open(Path(jPath) / LIFT, "w") as jFile:
             json.dump(nullJSONLiftDict, jFile, indent=4)
-        print(
-            "{} was successfully written and saved to {}".format(
-                LIFT, Path(jPath) / LIFT
-            )
-        )
+        print(f"{LIFT} was successfully written and saved to {Path(jPath) / LIFT}")
 
     @staticmethod
     def read_json_file(path):

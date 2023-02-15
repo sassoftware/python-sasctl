@@ -51,7 +51,7 @@ def getZippedModel(model, gPath, project=None):
         is None.
     """
     params = {"format": "zip"}
-    modelZip = mr.get("models/%s" % (model), params=params, format_="content")
+    modelZip = mr.get(f"models/{model}", params=params, format_="content")
     modelName = mr.get_model(model).name
     # Check project argument to determine project name
     if isinstance(project, RestObj):
@@ -112,7 +112,7 @@ def project_exists(response, project):
     """
     if response is None:
         try:
-            warn("No project with the name or UUID {} was found.".format(project))
+            warn(f"No project with the name or UUID {project} was found.")
             UUID(project)
             raise SystemError(
                 "The provided UUID does not match any projects found in SAS Model Manager. "
@@ -121,7 +121,7 @@ def project_exists(response, project):
         except ValueError:
             repo = mr.default_repository().get("id")
             response = mr.create_project(project, repo)
-            print("A new project named {} was created.".format(response.name))
+            print(f"A new project named {response.name} was created.")
             return response
     else:
         return response
@@ -147,7 +147,7 @@ def model_exists(project, name, force):
     """
     project = mr.get_project(project)
     projectId = project["id"]
-    projectModels = mr.get("/projects/{}/models".format(projectId))
+    projectModels = mr.get(f"/projects/{projectId}/models")
 
     for model in projectModels:
         # Throws a TypeError if only one model is in the project
@@ -219,7 +219,7 @@ class GitIntegrate:
                 )
             projectName = projectResponse["name"]
             projectId = projectResponse["id"]
-            projectModels = mr.get("/projects/{}/models".format(projectId))
+            projectModels = mr.get(f"/projects/{projectId}/models")
             for model in projectModels:
                 # Throws a TypeError if only one model is in the project
                 try:
@@ -236,9 +236,7 @@ class GitIntegrate:
                         )
 
         # Unpack the pulled down zip model and overwrite any duplicate files
-        mPath = Path(gPath) / "{projectName}/{modelName}".format(
-            projectName=projectName, modelName=modelName
-        )
+        mPath = Path(gPath) / f"{projectName}/{modelName}"
         with zipfile.ZipFile(str(mPath / (modelName + ".zip")), mode="r") as zFile:
             zFile.extractall(str(mPath))
 
@@ -357,12 +355,8 @@ class GitIntegrate:
         if pPath.exists():
             models = [x for x in pPath.glob("*") if x.is_dir()]
             if len(models) == 0:
-                print("No models were found in project {}.".format(projectName))
-            print(
-                "{numModels} models were found in project {projectName}.".format(
-                    numModels=len(models), projectName=projectName
-                )
-            )
+                print(f"No models were found in project {projectName}.")
+            print(f"{len(models)} models were found in project {projectName}.")
         else:
             raise FileNotFoundError(
                 "No directory with the name {} was found in the specified git path.".format(
@@ -399,7 +393,7 @@ class GitIntegrate:
             Path(pPath).mkdir(parents=True, exist_ok=True)
 
         # Return a list of model names from SAS Model Manager project
-        modelResponse = mr.get("projects/{}/models".format(project.id))
+        modelResponse = mr.get(f"projects/{project.id}/models")
         if modelResponse == []:
             raise FileNotFoundError(
                 "No models were found in the specified project. A new project folder "
