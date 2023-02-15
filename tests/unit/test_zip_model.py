@@ -37,7 +37,7 @@ def test_zip_files():
     """
     model_files = {
         "Test.json": json.dumps({"Test": True, "TestNum": 1}),
-        "Test.py": f"import sasctl\ndef score():\n{'':4}return \"Test score\""
+        "Test.py": f"import sasctl\ndef score():\n{'':4}return \"Test score\"",
     }
     bytes_zip = zm.zip_files(model_files, "Unit_Test_Model")
     assert issubclass(BytesIO, type(bytes_zip))

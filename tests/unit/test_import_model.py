@@ -54,7 +54,7 @@ def test_import_model(mock_import, m, p, mock_project, mock_score):
 
         model_files = {
             "Test.json": json.dumps({"Test": True, "TestNum": 1}),
-            "Other_Test.json": json.dumps({"Other": None, "TestNum": 2})
+            "Other_Test.json": json.dumps({"Other": None, "TestNum": 2}),
         }
         return_files = im.import_model(
             model_files,
@@ -63,7 +63,7 @@ def test_import_model(mock_import, m, p, mock_project, mock_score):
             _fake_predict,
             ["C", "P"],
             "Test_Project",
-            mlflow_details={"serialization_format": "dill"}
+            mlflow_details={"serialization_format": "dill"},
         )
         _, _, kwargs = mock_score.mock_calls[0]
 
@@ -77,7 +77,7 @@ def test_import_model(mock_import, m, p, mock_project, mock_score):
             pd.DataFrame(data=[[1, 1]]),
             _fake_predict,
             ["C", "P"],
-            "Test_Project"
+            "Test_Project",
         )
         assert return_files
 
@@ -92,7 +92,7 @@ def test_import_model(mock_import, m, p, mock_project, mock_score):
             pd.DataFrame(data=[[1, 1]]),
             _fake_predict,
             ["C", "P"],
-            "Test_Project"
+            "Test_Project",
         )
         assert not return_files
 
@@ -103,7 +103,7 @@ def test_import_model(mock_import, m, p, mock_project, mock_score):
             pd.DataFrame(data=[[1, 1]]),
             _fake_predict,
             ["C", "P"],
-            "Test_Project"
+            "Test_Project",
         )
         assert not return_files
 
@@ -146,9 +146,7 @@ def test_model_exists(mock_project, mock_versions, mock_get, mock_delete):
     - <As above>; raise ValueError with no overwrite
     """
     mock_project.return_value = {"id": "abc123", "latestVersion": "Test Version"}
-    mock_versions.return_value = {
-        {"name": "Test Version", "id": "def456"}
-    }
+    mock_versions.return_value = {{"name": "Test Version", "id": "def456"}}
     mock_get.return_value = []
     test = model_exists("Test_Project", "Test_Model", False)
     assert test is None
@@ -166,7 +164,3 @@ def test_model_exists(mock_project, mock_versions, mock_get, mock_delete):
 
     model_exists("Test_Project", "Test_Model", True)
     mock_delete.assert_called_once()
-
-
-
-
