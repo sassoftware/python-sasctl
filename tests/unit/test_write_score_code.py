@@ -9,7 +9,7 @@ import os
 import pickle
 import random
 import tempfile
-from unittest import mock
+from unittest.mock import patch, MagicMock, DEFAULT
 from pathlib import Path
 
 import numpy as np
@@ -27,6 +27,24 @@ def predict_proba():
     pass
 
 
+@pytest.fixture()
+def score_code_mocks():
+    with patch.multiple(
+        "sasctl.pzmm.ScoreCode",
+        _input_var_lists=DEFAULT,
+        _check_viya_version=DEFAULT,
+        _write_imports=MagicMock(),
+        _viya35_model_load=DEFAULT,
+        _viya4_model_load=DEFAULT,
+        _check_valid_model_prefix=DEFAULT,
+        _impute_missing_values=MagicMock(),
+        _predict_method=MagicMock(),
+        _predictions_to_metrics=MagicMock(),
+        _viya35_score_code_import=DEFAULT,
+    ) as mocks:
+        yield mocks
+
+
 def test_get_model_id():
     """
     Test Cases:
@@ -37,9 +55,7 @@ def test_get_model_id():
     with pytest.raises(ValueError):
         sc._get_model_id(None)
 
-    with mock.patch(
-        "sasctl._services.model_repository.ModelRepository.get_model"
-    ) as model:
+    with patch("sasctl._services.model_repository.ModelRepository.get_model") as model:
         model.return_value = None
 
         with pytest.raises(ValueError):
@@ -75,10 +91,10 @@ def test_write_imports():
     - h2o model (mojo or binary)
     - binary string model
     """
-    with mock.patch("sasctl.core.Session._get_authorization_token"):
+    with patch("sasctl.core.Session._get_authorization_token"):
         current_session("example.com", "user", "password")
 
-    with mock.patch("sasctl.core.Session.version_info") as version:
+    with patch("sasctl.core.Session.version_info") as version:
         version.return_value = VersionInfo(3)
         sc._write_imports(pickle_type="dill")
         assert "import settings" not in sc.score_code
@@ -340,17 +356,17 @@ def test_predictions_to_metrics():
     - raise error for binary model w/ nonbinary targets
     - raise error for no target_values, but thresholds provided
     """
-    with mock.patch("sasctl.pzmm.ScoreCode._no_targets_no_thresholds") as func:
+    with patch("sasctl.pzmm.ScoreCode._no_targets_no_thresholds") as func:
         metrics = ["Classification"]
         sc._predictions_to_metrics(metrics)
         func.assert_called_once_with("Classification", False)
 
-    with mock.patch("sasctl.pzmm.ScoreCode._nonbinary_targets") as func:
+    with patch("sasctl.pzmm.ScoreCode._nonbinary_targets") as func:
         target_values = ["A", "B", 5]
         sc._predictions_to_metrics(metrics, target_values)
         func.assert_called_once_with("Classification", target_values, False)
 
-    with mock.patch("sasctl.pzmm.ScoreCode._binary_target") as func:
+    with patch("sasctl.pzmm.ScoreCode._binary_target") as func:
         metrics = ["Classification", "Probability"]
         target_values = ["1"]
         sc._predictions_to_metrics(metrics, target_values)
@@ -370,3 +386,144 @@ def test_predictions_to_metrics():
         "a target value was not, therefore, a valid output cannot be generated.",
     ):
         sc._predictions_to_metrics(metrics, predict_threshold=0.7)
+
+
+def test_input_var_lists():
+    """
+    Test Cases:
+    - var list & dtype list
+        - default
+        - mlflow
+    """
+    data = pd.DataFrame(data=[[1, "A"], [5, "B"]], columns=["First", "Second"])
+    var_list, dtypes_list = sc._input_var_lists(data)
+    assert var_list == ["First", "Second"]
+    assert dtypes_list == ["int64", "object"]
+
+    data = [{"name": "First", "type": "int"}, {"name": "Second", "type": "string"}]
+    var_list, dtypes_list = sc._input_var_lists(data)
+    assert var_list == ["First", "Second"]
+    assert dtypes_list == ["int", "string"]
+
+
+@patch("sasctl.pzmm.ScoreCode._get_model_id")
+@patch("sasctl.core.Session.version_info")
+def test_check_viya_version(mock_version, mock_get_model):
+    """
+    Test Cases:
+    - check Viya version
+        - Viya 3.5
+        - Viya 4
+        - No connection
+    """
+    model = {"name": "Test", "id": "abc123"}
+    with pytest.warns():
+        assert sc._check_viya_version(model) is None
+
+    with patch("sasctl.core.Session._get_authorization_token"):
+        current_session("example.com", "user", "password")
+
+    mock_version.return_value = VersionInfo(3, 5)
+    with pytest.raises(SystemError):
+        sc._check_viya_version(None)
+
+    mock_get_model.return_value = model["id"]
+    assert sc._check_viya_version(model) == "abc123"
+
+    mock_version.return_value = VersionInfo(4)
+    assert sc._check_viya_version(None) is None
+    assert sc._check_viya_version(model) is None
+
+
+def test_check_valid_model_prefix():
+    """
+    Test Cases:
+    - check model_prefix validity
+        - raise warning and replace if invalid
+    """
+    assert sc._check_valid_model_prefix("TestPrefix") == "TestPrefix"
+    assert sc._check_valid_model_prefix("Test Prefix") == "Test_Prefix"
+
+
+def test_write_score_code(score_code_mocks):
+    """
+    Test Cases:
+    - set model_file_name
+        - both; raise error
+        - neither; raise error
+        - model_file_name
+        - binary_string
+    - model_load cases
+        - binary_string
+        - Viya 3.5
+        - Viya 4
+    - create score file if score_code_path provided
+        - return dict if not
+    """
+    score_code_mocks["_check_viya_version"].return_value = None
+    score_code_mocks["_input_var_lists"].return_value = (["A", "B"], ["str", "int"])
+    score_code_mocks["_viya35_model_load"].return_value = "3.5"
+    score_code_mocks["_viya4_model_load"].return_value = "4"
+    score_code_mocks["_viya35_score_code_import"].return_value = ("MAS", "CAS")
+    score_code_mocks["_check_valid_model_prefix"].return_value = "TestModel"
+
+    with pytest.raises(ValueError):
+        sc.write_score_code(
+            "TestModel",
+            pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
+            predict_proba,
+            ["C", "P"],
+        )
+
+    with pytest.raises(ValueError):
+        sc.write_score_code(
+            "TestModel",
+            pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
+            predict_proba,
+            ["C", "P"],
+            model_file_name="model.pickle",
+            binary_string=b"Binary model string.",
+        )
+
+    sc.write_score_code(
+        "TestModel",
+        pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
+        predict_proba,
+        ["C", "P"],
+        model_file_name="model.pickle",
+    )
+    score_code_mocks["_viya4_model_load"].assert_called_once()
+
+    score_code_mocks["_check_viya_version"].return_value = "abc123"
+    sc.write_score_code(
+        "TestModel",
+        pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
+        predict_proba,
+        ["C", "P"],
+        model_file_name="model.pickle",
+    )
+    score_code_mocks["_viya35_model_load"].assert_called_once()
+
+    output_dict = sc.write_score_code(
+        "TestModel",
+        pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
+        predict_proba,
+        ["C", "P"],
+        binary_string=b"Binary model string.",
+    )
+    assert "TestModel_score.py" in output_dict
+    assert "dmcas_packagescorecode.sas" in output_dict
+    assert "dmcas_epscorecode.sas" in output_dict
+
+    tmp_dir = tempfile.TemporaryDirectory()
+    sc.write_score_code(
+        "TestModel",
+        pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
+        predict_proba,
+        ["C", "P"],
+        score_code_path=Path(tmp_dir.name),
+        binary_string=b"Binary model string.",
+    )
+    assert (Path(tmp_dir.name) / "dmcas_packagescorecode.sas").exists()
+    assert (Path(tmp_dir.name) / "dmcas_epscorecode.sas").exists()
+    assert (Path(tmp_dir.name) / "TestModel_score.py").exists()
