@@ -205,10 +205,10 @@ def test_predict_method():
 def test_no_targets_no_thresholds():
     """
     Test Cases:
-    - metrics == 1
+    - output_variables == 1
         - non-h2o
         - h2o
-    - metrics > 1
+    - output_variables > 1
         - non-h2o
         - h2o
     """
@@ -245,13 +245,13 @@ def test_binary_target():
     """
     Test Cases:
     - No threshold
-    - metrics == 1
+    - output_variables == 1
         - non-h2o
         - h2o
-    - metrics == 2
+    - output_variables == 2
         - non-h2o
         - h2o
-    - metrics > 2
+    - output_variables > 2
     """
     with pytest.raises(ValueError):
         sc._binary_target(["A", "B", "C"])
@@ -282,13 +282,13 @@ def test_binary_target():
 def test_nonbinary_targets():
     """
     Test Cases:
-    - metrics == 1
+    - output_variables == 1
         - non-h2o
         - h2o
-    - metrics > 1
-        - non-h2o (len(metrics) == len(target_values) + (1,0))
-        - h2o (len(metrics) == len(target_values) + (1,0))
-    - invalid metrics and target values numbers
+    - output_variables > 1
+        - non-h2o (len(output_variables) == len(target_values) + (1,0))
+        - h2o (len(output_variables) == len(target_values) + (1,0))
+    - invalid output_variables and target values numbers
     """
     metrics = "Classification"
     target_values = ["A", "B", "C"]
@@ -332,7 +332,7 @@ def test_nonbinary_targets():
 def test_predictions_to_metrics():
     """
     Test Cases:
-    - flattened list -> len(metrics) == 1
+    - flattened list -> len(output_variables) == 1
     - no target_values or no thresholds
     - len(target_values) > 1
         - warning if threshold provided

@@ -21,7 +21,7 @@ class ScoreCode:
         model_prefix,
         input_data,
         predict_method,
-        metrics,
+        output_variables,
         pickle_type="pickle",
         model=None,
         predict_threshold=None,
@@ -68,10 +68,10 @@ class ScoreCode:
             a Scikit-Learn DecisionTreeClassifier, then pass either of the following:
             sklearn.tree.DecisionTreeClassifier.predict
             sklearn.tree.DecisionTreeClassifier.predict_proba
-        metrics : string list
-            The scoring metrics for the model. For classification models, it is assumed
-            that the first value in the list represents the classification output. This
-            function supports single- and multi-class classification models.
+        output_variables : string list
+            The scoring output_variables for the model. For classification models, it is
+            assumed that the first value in the list represents the classification
+            output. This function supports single and multi-class classification models.
         score_code_path : string, optional
             The local path of the score code file. The default is the current
             working directory.
@@ -83,15 +83,15 @@ class ScoreCode:
             the model. The default value is None and is only necessary for models that
             will be hosted on SAS Viya 3.5.
         predict_threshold : float, optional
-            The prediction threshold for normalized probability metrics. Values are
-            expected to be between 0 and 1. The default value is None.
+            The prediction threshold for normalized probability output_variables. Values
+            are expected to be between 0 and 1. The default value is None.
         score_code_path : string or Path object, optional
             Path for output score code file(s) to be generated. If no value is supplied
             a dict is returned instead. The default value is None.
         target_values : list of strings, optional
             A list of target values for the target variable. This argument and the
-            metrics argument dictate the handling of the predicted values from the
-            prediction method. The default value is None.
+            output_variables argument dictate the handling of the predicted values from
+            the prediction method. The default value is None.
         missing_values : boolean, optional
             Sets whether data handled by the score code will impute for missing values.
             The default value is False.
@@ -110,8 +110,8 @@ class ScoreCode:
               mojo_model=None, binary_h2o_model=None)
             * sasctl.pzmm.ScoreCode._predict_method(predict_method, input_var_list,
               dtype_list=None, statsmodels_model=None)
-            * sasctl.pzmm.ScoreCode._predictions_to_metrics(metrics, target_values=None,
-              predict_threshold=None, h2o_model=None)
+            * sasctl.pzmm.ScoreCode._predictions_to_metrics(output_variables,
+              target_values=None, predict_threshold=None, h2o_model=None)
         """
         if isinstance(input_data, pd.DataFrame):
             # From the input dataframe columns, create a list of input variables,
@@ -181,10 +181,10 @@ class ScoreCode:
             model_load = None
 
         # Define the score function using the variables found in input_data
-        # Set the output variables in the line below from metrics
+        # Set the output variables in the line below from output_variables
         cls.score_code += (
             f"def score{model_prefix}({', '.join(input_var_list)}):\n"
-            f"{'':4}\"Output: {', '.join(metrics)}\"\n\n"
+            f"{'':4}\"Output: {', '.join(output_variables)}\"\n\n"
         )
 
         # Run a try/except block to catch errors for model loading (skip binary string)
@@ -203,7 +203,7 @@ class ScoreCode:
                 predict_method, input_var_list, dtype_list=input_dtypes_list
             )
             cls._predictions_to_metrics(
-                metrics,
+                output_variables,
                 target_values=target_values,
                 predict_threshold=predict_threshold,
                 h2o_model=True,
@@ -215,7 +215,7 @@ class ScoreCode:
                 statsmodels_model="statsmodels_model" in kwargs,
             )
             cls._predictions_to_metrics(
-                metrics,
+                output_variables,
                 target_values=target_values,
                 predict_threshold=predict_threshold,
             )
@@ -699,8 +699,8 @@ class ScoreCode:
         target_values : string list, optional
             A list of target values for the target variable. The default value is None.
         predict_threshold : float, optional
-            The prediction threshold for normalized probability metrics. Values are
-            expected to be between 0 and 1. The default value is None.
+            The prediction threshold for normalized probability output_variables. Values
+             are expected to be between 0 and 1. The default value is None.
         h2o_model : boolean, optional
             Flag to indicate that the model is an H2O.ai model. The default is False.
         """
@@ -774,8 +774,8 @@ class ScoreCode:
             A list of strings corresponding to the outputs of the model to SAS Model
             Manager.
         threshold : float, optional
-            The prediction threshold for normalized probability metrics. Values are
-            expected to be between 0 and 1. The default value is None.
+            The prediction threshold for normalized probability output_variables. Values
+             are expected to be between 0 and 1. The default value is None.
         h2o_model : boolean, optional
             Flag to indicate that the model is an H2O.ai model. The default is False.
         """
@@ -811,7 +811,8 @@ class ScoreCode:
                     f"{metrics[0]} = 0\n\nreturn {metrics[0]}, prediction"
                 )
         else:
-            raise ValueError("Too many metrics were provided for a binary model.")
+            raise ValueError("Too many output_variables were provided for a binary "
+                             "model.")
 
     @classmethod
     def _nonbinary_targets(cls, metrics, target_values, h2o_model=None):
@@ -874,8 +875,8 @@ class ScoreCode:
         else:
             raise ValueError(
                 "An invalid number of target values were provided with "
-                "respect to the size of the metrics provided. The "
-                "function is expecting metrics to be one, the same length"
+                "respect to the size of the output_variables provided. The "
+                "function is expecting output_variables to be one, the same length"
                 "as the target values list, or one more than the length"
                 "of the target values list."
             )

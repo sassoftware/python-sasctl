@@ -189,7 +189,7 @@ class ImportModel:
         model_prefix,
         input_data,
         predict_method,
-        metrics,
+        output_variables,
         project,
         pickle_type="pickle",
         project_version="latest",
@@ -235,10 +235,10 @@ class ImportModel:
             a Scikit-Learn DecisionTreeClassifier, then pass either of the following:
             sklearn.tree.DecisionTreeClassifier.predict
             sklearn.tree.DecisionTreeClassifier.predict_proba
-        metrics : string list
-            The scoring metrics for the model. For classification models, it is assumed
-            that the first value in the list represents the classification output. This
-            function supports single- and multi-class classification models.
+        output_variables : string list
+            The scoring output_variables for the model. For classification models, it is
+             assumed that the first value in the list represents the classification
+            output. This function supports single and multi-class classification models.
         project : str or dict
             The name or id of the model project, or a dictionary representation of the
             project.
@@ -263,12 +263,12 @@ class ImportModel:
             Model details from an MLFlow model. This dictionary is created by the
             read_mlflow_model_file function. Default is None.
         predict_threshold : float, optional
-            The prediction threshold for normalized probability metrics. Values are
-            expected to be between 0 and 1. The default value is None.
+            The prediction threshold for normalized probability output_variables. Values
+             are expected to be between 0 and 1. The default value is None.
         target_values : list of strings, optional
             A list of target values for the target variable. This argument and the
-            metrics argument dictate the handling of the predicted values from the
-            prediction method. The default value is None.
+            output_variables argument dictate the handling of the predicted values from
+            the prediction method. The default value is None.
         kwargs : dict, optional
             Other keyword arguments are passed to the following function:
             * sasctl.pzmm.ScoreCode.write_score_code(...,
@@ -290,7 +290,7 @@ class ImportModel:
                 model_prefix,
                 input_data,
                 predict_method,
-                metrics,
+                output_variables,
                 pickle_type=pickle_type,
                 predict_threshold=predict_threshold,
                 score_code_path=None if isinstance(model_files, dict) else model_files,
@@ -372,7 +372,7 @@ class ImportModel:
                 model_prefix,
                 input_data,
                 predict_method,
-                metrics,
+                output_variables,
                 model=model,
                 pickle_type=pickle_type,
                 predict_threshold=predict_threshold,
