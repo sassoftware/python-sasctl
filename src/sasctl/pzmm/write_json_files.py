@@ -21,7 +21,7 @@ from ..core import current_session
 from ..utils.decorators import deprecated
 
 # TODO: file writing outputs should be dependent upon use in Jupyter notebook
-
+# TODO: add converter for any type of dataset (list, dataframe, numpy array)
 
 # Constants
 INPUT = "inputVar.json"
@@ -230,6 +230,7 @@ class JSONFiles:
         else:
             return False
 
+    # TODO: multiclass support -> target_variable to target_variables
     @staticmethod
     def write_model_properties_json(
         model_name,

@@ -13,8 +13,12 @@ from ..core import current_session
 MAS_CODE_NAME = "dmcas_packagescorecode.sas"
 CAS_CODE_NAME = "dmcas_epscorecode.sas"
 
+# TODO: add converter for any type of dataset (list, dataframe, numpy array)
+
 
 class ScoreCode:
+    score_code = ""
+
     @classmethod
     def write_score_code(
         cls,
@@ -140,7 +144,13 @@ class ScoreCode:
             )
 
         # Set the model_file_name based on kwargs input
-        if "model_file_name" in kwargs:
+        if "model_file_name" in kwargs and "binary_string" in kwargs:
+            raise ValueError(
+                "Please specify either the binary_string or the model_file_name "
+                "argument. This function does not support a binary string model and a "
+                "serialized model file within the same model."
+            )
+        elif "model_file_name" in kwargs:
             model_file_name = kwargs["model_file_name"]
             binary_string = None
         elif "binary_string" in kwargs:
@@ -179,6 +189,14 @@ class ScoreCode:
             )
         else:
             model_load = None
+
+        # Replace model_prefix if a valid function name is not provided
+        if not model_prefix.isidentifier():
+            new_prefix = re.sub(r"\W|^(?=\d)", "_", model_prefix)
+            warn(f"The model_prefix argument needs to be a valid Python function "
+                 f"name. The provided value of {model_prefix} has been replaced "
+                 f"with {new_prefix}.")
+            model_prefix = new_prefix
 
         # Define the score function using the variables found in input_data
         # Set the output variables in the line below from output_variables
@@ -360,9 +378,9 @@ class ScoreCode:
         if len(invalid_variables) > 0:
             raise SyntaxError(
                 f"The following are not valid variable names: "
-                f"{', '.join(invalid_variables)}. Please confirm that all variable names"
-                f" can be used as Python variables. E.g. `str(name).isidentifier() == "
-                f"True`."
+                f"{', '.join(invalid_variables)}. Please confirm that all variable "
+                f"names can be used as Python variables. "
+                f"E.g. `str(name).isidentifier() == True`."
             )
 
     @classmethod

@@ -10,6 +10,8 @@ from ..core import current_session, RestObj, PagedList
 from .write_score_code import ScoreCode as sc
 from .zip_model import ZipModel as zm
 
+# TODO: add converter for any type of dataset (list, dataframe, numpy array)
+
 
 def _create_project(project_name, model, repo, input_vars=None, output_vars=None):
     """Creates a project based on the model specifications.
