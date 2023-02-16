@@ -8,7 +8,7 @@ import json
 import tempfile
 from uuid import uuid4
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 import pandas as pd
 import pytest
@@ -25,10 +25,13 @@ def _fake_predict():
 
 @patch("sasctl.pzmm.ScoreCode.write_score_code")
 @patch("sasctl._services.model_repository.ModelRepository.get_project")
-@patch("sasctl.pzmm.import_model.project_exists")
-@patch("sasctl.pzmm.import_model.model_exists")
 @patch("sasctl._services.model_repository.ModelRepository.import_model_from_zip")
-def test_import_model(mock_import, m, p, mock_project, mock_score):
+@patch.multiple(
+    "sasctl.pzmm.import_model",
+    project_exists=MagicMock(),
+    model_exists=MagicMock()
+)
+def test_import_model(mock_import, mock_project, mock_score):
     """
     Test Cases:
     - mlflow models set pickle type

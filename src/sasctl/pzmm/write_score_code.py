@@ -117,31 +117,10 @@ class ScoreCode:
             * sasctl.pzmm.ScoreCode._predictions_to_metrics(output_variables,
               target_values=None, predict_threshold=None, h2o_model=None)
         """
-        if isinstance(input_data, pd.DataFrame):
-            # From the input dataframe columns, create a list of input variables,
-            # then check for viability
-            input_var_list = input_data.columns.to_list()
-            cls._check_for_invalid_variable_names(input_var_list)
-            input_dtypes_list = input_data.dtypes.astype(str).to_list()
-        else:
-            # For MLFlow models, extract the variables and data types
-            input_var_list = [var["name"] for var in input_data]
-            cls._check_for_invalid_variable_names(input_var_list)
-            input_dtypes_list = [var["type"] for var in input_data]
+        # Extract the variable names and types from the input data
+        input_var_list, input_dtypes_list = cls._input_var_lists(input_data)
 
-        try:
-            # For SAS Viya 3.5, either return an error or return the model UUID
-            if current_session().version_info() == 3.5:
-                model_id = cls._get_model_id(model)
-            else:
-                model_id = None
-        except AttributeError:
-            model_id = None
-            warn(
-                "No current session connection was found to a SAS Viya server. Score "
-                "code will be written under the assumption that the target server is "
-                "SAS Viya 4."
-            )
+        model_id = cls._check_viya_version(model)
 
         # Set the model_file_name based on kwargs input
         if "model_file_name" in kwargs and "binary_string" in kwargs:
@@ -190,13 +169,7 @@ class ScoreCode:
         else:
             model_load = None
 
-        # Replace model_prefix if a valid function name is not provided
-        if not model_prefix.isidentifier():
-            new_prefix = re.sub(r"\W|^(?=\d)", "_", model_prefix)
-            warn(f"The model_prefix argument needs to be a valid Python function "
-                 f"name. The provided value of {model_prefix} has been replaced "
-                 f"with {new_prefix}.")
-            model_prefix = new_prefix
+        model_prefix = cls._check_valid_model_prefix(model_prefix)
 
         # Define the score function using the variables found in input_data
         # Set the output variables in the line below from output_variables
@@ -238,46 +211,13 @@ class ScoreCode:
                 predict_threshold=predict_threshold,
             )
 
+        # SAS Viya 3.5 model
         if model_id:
-            files = [
-                {
-                    "name": f"{model_prefix}_score.py",
-                    "file": cls.score_code,
-                    "role": "score",
-                }
-            ]
-            cls.upload_and_copy_score_resources(model_id, files)
-            mr.convert_python_to_ds2(model_id)
-            if score_cas:
-                model_contents = mr.get_model_contents(model_id)
-                for file in model_contents:
-                    if file.name == "score.sas":
-                        mas_code = mr.get(f"models/{file.modelId}/contents/{file.id}")
-                        cls.upload_and_copy_score_resources(
-                            model_id,
-                            [
-                                {
-                                    "name": MAS_CODE_NAME,
-                                    "file": mas_code,
-                                    "role": "score",
-                                }
-                            ],
-                        )
-                        cas_code = cls.convert_mas_to_cas(mas_code, model_id)
-                        cls.upload_and_copy_score_resources(
-                            model_id,
-                            [
-                                {
-                                    "name": CAS_CODE_NAME,
-                                    "file": cas_code,
-                                    "role": "score",
-                                }
-                            ],
-                        )
-                        model = mr.get_model(model_id)
-                        model["scoreCodeType"] = "ds2MultiType"
-                        mr.update_model(model)
-                        break
+            mas_code, cas_code = cls._viya35_score_code_import(
+                model_prefix,
+                model_id,
+                score_cas
+            )
 
         if score_code_path:
             py_code_path = Path(score_code_path) / (model_prefix + "_score.py")
@@ -298,8 +238,6 @@ class ScoreCode:
                 # noinspection PyUnboundLocalVariable
                 output_dict[CAS_CODE_NAME] = cas_code
             return output_dict
-
-    score_code = ""
 
     @staticmethod
     def upload_and_copy_score_resources(model, files):
@@ -928,7 +866,7 @@ class ScoreCode:
             output_string += out_var["name"] + ";\n"
         start = mas_code.find("score(")
         finish = mas_code[start:].find(");")
-        score_vars = mas_code[start + 6 : start + finish]
+        score_vars = mas_code[start + 6: start + finish]
         input_string = " ".join(
             [
                 x
@@ -952,3 +890,176 @@ class ScoreCode:
             lambda m: replace_strings[re.escape(m.group(0))], mas_code
         )
         return cas_code
+
+    @classmethod
+    def _input_var_lists(cls, input_data):
+        """
+        Using an input dataset, generate lists of variables and their types.
+
+        MLFlow models are handled differently and expect a list of dicts instead of a
+        Pandas DataFrame.
+
+        Parameters
+        ----------
+        input_data : pandas.DataFrame or list of dicts
+            The `DataFrame` object contains the training data, and includes only the
+            predictor columns. The write_score_code function currently supports int(64),
+            float(64), and string data types for scoring. Providing a list of dict
+            objects signals that the model files are being created from an MLFlow model.
+
+        Returns
+        -------
+        input_var_list : list of strings
+            A list of variable names for the input dataset.
+        input_dtypes_list : list of strings
+            A list of variable types for the input dataset.
+        """
+        if isinstance(input_data, pd.DataFrame):
+            # From the input dataframe columns, create a list of input variables,
+            # then check for viability
+            input_var_list = input_data.columns.to_list()
+            cls._check_for_invalid_variable_names(input_var_list)
+            input_dtypes_list = input_data.dtypes.astype(str).to_list()
+        else:
+            # For MLFlow models, extract the variables and data types
+            input_var_list = [var["name"] for var in input_data]
+            cls._check_for_invalid_variable_names(input_var_list)
+            input_dtypes_list = [var["type"] for var in input_data]
+
+        return input_var_list, input_dtypes_list
+
+    @classmethod
+    def _check_viya_version(cls, model):
+        """
+        Check that a valid SAS Viya version and model argument are provided.
+
+        For SAS Viya 3.5, model score code requires the model UUID.
+
+        Parameters
+        ----------
+        model : str or dict
+            The name or id of the model, or a dictionary representation of
+            the model. The default value is None and is only necessary for models that
+            will be hosted on SAS Viya 3.5.
+
+        Returns
+        -------
+        model_id : str or None
+            SAS Model Manager model uuid for SAS Viya 3.5 models or None
+        """
+        # No session supplied, assume SAS Viya 4 model
+        if not current_session():
+            warn(
+                "No current session connection was found to a SAS Viya server. Score "
+                "code will be written under the assumption that the target server is "
+                "SAS Viya 4."
+            )
+            return None
+        # Session and no model, raise error if SAS Viya 3.5 model
+        elif current_session() and not model:
+            if current_session().version_info() == 3.5:
+                raise SystemError("Score code for SAS Viya 3.5 requires the model's "
+                                  "UUID. Please provide either the model name, uuid, or"
+                                  "dictionary response from mr.get_model(model).")
+            else:
+                return None
+        # Session and model, return uuid if SAS Viya 3.5 model
+        elif current_session() and model:
+            if current_session().version_info() == 3.5:
+                return cls._get_model_id(model)
+            else:
+                return None
+
+    @staticmethod
+    def _check_valid_model_prefix(prefix):
+        """
+        Check the model_prefix for a valid Python function name.
+
+        Parameters
+        ----------
+        prefix : string
+            The variable for the model name that is used when naming model files.
+            (For example: hmeqClassTree + [Score.py || .pickle]).
+
+        Returns
+        -------
+        model_prefix : string
+            Returns a model_prefix, adjusted as needed for valid Python function names.
+        """
+        # Replace model_prefix if a valid function name is not provided
+        if not prefix.isidentifier():
+            new_prefix = re.sub(r"\W|^(?=\d)", "_", prefix)
+            warn(f"The model_prefix argument needs to be a valid Python function "
+                 f"name. The provided value of {prefix} has been replaced "
+                 f"with {new_prefix}.")
+            return new_prefix
+        else:
+            return prefix
+
+    @classmethod
+    def _viya35_score_code_import(cls, prefix, model_id, score_cas):
+        """
+        Upload the score code to SAS Model Manager and generate DS2 wrappers as needed.
+
+        If score_cas is True, then the function pulls down the score.sas default wrapper
+        generated in SAS Viya 3.5 and modifies it to work in both MAS and CAS.
+
+        Parameters
+        ----------
+        prefix : string
+            The variable for the model name that is used when naming model files.
+            (For example: hmeqClassTree + [Score.py || .pickle]).
+        model_id : string
+            SAS Model Manager uuid for the model.
+        score_cas : boolean
+            Sets whether models registered to SAS Viya 3.5 should be able to be scored
+            and validated through both CAS and SAS Micro Analytic Service. If set to
+            false, then the model will only be able to be scored and validated through
+            SAS Micro Analytic Service. The default value is True.
+
+        Returns
+        -------
+        mas_code : string
+            A string representation of the dmcas_packagescorecode.sas code used in MAS.
+        cas_code : string
+            A string representation of the dmcas_epscorecode.sas code used in CAS.
+        """
+        files = [
+            {
+                "name": f"{prefix}_score.py",
+                "file": cls.score_code,
+                "role": "score",
+            }
+        ]
+        cls.upload_and_copy_score_resources(model_id, files)
+        mr.convert_python_to_ds2(model_id)
+        if score_cas:
+            model_contents = mr.get_model_contents(model_id)
+            for file in model_contents:
+                if file.name == "score.sas":
+                    mas_code = mr.get(f"models/{file.modelId}/contents/{file.id}")
+                    cls.upload_and_copy_score_resources(
+                        model_id,
+                        [
+                            {
+                                "name": MAS_CODE_NAME,
+                                "file": mas_code,
+                                "role": "score",
+                            }
+                        ],
+                    )
+                    cas_code = cls.convert_mas_to_cas(mas_code, model_id)
+                    cls.upload_and_copy_score_resources(
+                        model_id,
+                        [
+                            {
+                                "name": CAS_CODE_NAME,
+                                "file": cas_code,
+                                "role": "score",
+                            }
+                        ],
+                    )
+                    model = mr.get_model(model_id)
+                    model["scoreCodeType"] = "ds2MultiType"
+                    mr.update_model(model)
+                    return mas_code, cas_code
