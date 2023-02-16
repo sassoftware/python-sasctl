@@ -378,7 +378,6 @@ def test_str():
     with mock.patch(
         "sasctl.core.Session._get_authorization_token", return_value="token"
     ):
-
         s = Session("hostname", "username", "password")
 
         assert (
@@ -399,7 +398,6 @@ def test_as_swat():
     with mock.patch("sasctl.core.Session._get_authorization_token"):
         with Session(HOST, USERNAME, PASSWORD) as s:
             with mock.patch("swat.CAS") as CAS:
-
                 # Verify default username/password parameters were passed.
                 with mock.patch("swat.__version__", "1.6.1"):
                     _ = s.as_swat()

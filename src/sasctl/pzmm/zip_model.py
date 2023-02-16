@@ -7,15 +7,18 @@ from pathlib import Path
 
 def _filter_files(file_dir, is_viya4=False):
     """
-    Filters file list to only contain files used for model import. Models imported into SAS Viya 3.5 and SAS Viya 4 have
-    a difference in total files imported, due to differences in Python handling.
+    Filters file list to only contain files used for model import. Models imported into
+    SAS Viya 3.5 and SAS Viya 4 have a difference in total files imported, due to
+    differences in Python handling.
+
     Parameters
     ----------
     file_dir : string
         Location of *.json, *.pickle, *.mojo, and *Score.py files.
     is_viya4 : boolean, optional
-        Boolean to indicate difference in logic between SAS Viya 3.5 and SAS Viya 4. For Viya 3.5 models, ignore score
-        code that is already in place in the file directory provided. Default value is False.
+        Boolean to indicate difference in logic between SAS Viya 3.5 and SAS Viya 4. For
+        Viya 3.5 models, ignore score code that is already in place in the file
+        directory provided. Default value is False.
 
     Returns
     -------
@@ -39,15 +42,20 @@ def _filter_files(file_dir, is_viya4=False):
 
 class ZipModel:
     @staticmethod
-    def zip_files(file_dir, model_prefix, is_viya4=False):
+    def zip_files(model_files, model_prefix, is_viya4=False):
         """
-        Combines all JSON files with the model pickle file and associated score code file
-        into a single archive ZIP file.
+        Combines all JSON files with the model pickle file and associated score code
+        file into a single archive ZIP file.
+
+        If the model_files argument is a string or Path object, then a zip file will
+        be created at the directory location. Otherwise, the zip file is created in
+        memory.
 
         Parameters
-        ---------------
-        file_dir : string
-            Location of *.json, *.pickle, *.mojo, and *Score.py files.
+        ----------
+        model_files : string, Path, or dict
+            Either the directory location of the model files (string or Path object), or
+            a dictionary containing the contents of all the model files.
         model_prefix : string
             Variable name for the model to be displayed in SAS Open Model Manager
             (i.e. hmeqClassTree + [Score.py || .pickle]).
@@ -55,19 +63,22 @@ class ZipModel:
             Boolean to indicate difference in logic between SAS Viya 3.5 and SAS Viya 4.
             For Viya 3.5 models, ignore score code that is already in place in the file
             directory provided. Default value is False.
-
-        Yields
-        ---------------
-        '*.zip'
-            Archived ZIP file for importing into SAS Open Model Manager. In this form,
-            the ZIP file can be imported into SAS Open Model Manager.
         """
-        file_names = _filter_files(file_dir, is_viya4)
-        with zipfile.ZipFile(
-            str(Path(file_dir) / (model_prefix + ".zip")), mode="w"
-        ) as zFile:
-            for file in file_names:
-                zFile.write(str(file), arcname=file.name)
+        if isinstance(model_files, dict):
+            byte_stream = io.BytesIO()
+            io_zip = zipfile.ZipFile(byte_stream, mode="w")
+            for key, value in model_files.items():
+                io_zip.writestr(key, value)
+            return byte_stream
+        else:
+            file_names = _filter_files(model_files, is_viya4)
+            with zipfile.ZipFile(
+                str(Path(model_files) / (model_prefix + ".zip")), mode="w"
+            ) as zFile:
+                for file in file_names:
+                    zFile.write(str(file), arcname=file.name)
 
-        with open(str(Path(file_dir) / (model_prefix + ".zip")), "rb") as zip_file:
-            return io.BytesIO(zip_file.read())
+            with open(
+                str(Path(model_files) / (model_prefix + ".zip")), "rb"
+            ) as zip_file:
+                return io.BytesIO(zip_file.read())

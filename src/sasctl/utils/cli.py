@@ -156,7 +156,6 @@ def _find_services(module="sasctl"):
         submodules = pkgutil.iter_modules(getattr(module, "__path__", []))
 
         for submodule in submodules:
-
             # ModuleInfo returned py 3.6 has .name
             # Tuple of (module_loader, name, ispkg) returned by older versions
             submodule_name = getattr(submodule, "name", submodule[1])

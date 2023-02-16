@@ -179,7 +179,6 @@ def test_create_performance_definition():
 
 
 def test_execute_model_workflow_definition_invalidworkflow():
-
     PROJECT = RestObj({"name": "Test Project", "id": "98765"})
     WORKFLOWS = [
         {"name": "Test W", "id": "12345"},

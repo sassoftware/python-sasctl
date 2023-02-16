@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from .gitIntegration import GitIntegrate
-from .importModel import ImportModel
+from .import_model import ImportModel
 from .mlflow_model import MLFlowModel
-from .modelParameters import ModelParameters
+from .model_parameters import ModelParameters
 from .pickle_model import PickleModel
 from .write_json_files import JSONFiles
-from .writeScoreCode import ScoreCode
+from .write_score_code import ScoreCode
 from .zip_model import ZipModel

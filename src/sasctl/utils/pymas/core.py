@@ -537,7 +537,6 @@ class PyMAS:
         func_prefix=None,
         **kwargs
     ):
-
         if return_code is not None or return_msg is not None:
             raise DeprecationWarning(
                 "The 'return_code' and 'return_msg' "

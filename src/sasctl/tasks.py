@@ -160,7 +160,7 @@ def _register_sklearn_40(model, model_name, project_name, input_data, output_dat
         )
         predict_method = "{}.predict({})"
         metrics = ["EM_CLASSIFICATION"]  # NOTE: only valid for classification models.
-        pzmm.ImportModel.pzmmImportModel(
+        pzmm.ImportModel.import_model(
             folder,
             model_name,
             project_name,
@@ -834,7 +834,6 @@ def update_model_performance(data, model, label, refresh=True):
 
     # Upload the performance data to CAS
     with sess.as_swat(server=cas_id) as s:
-
         s.setsessopt(messagelevel="warning")
 
         with swat.options(exception_on_severity=2):

@@ -626,7 +626,6 @@ class Session(requests.Session):
         cert=None,
         json=None,
     ):
-
         url = self._build_url(url)
         verify = verify or self.verify
 

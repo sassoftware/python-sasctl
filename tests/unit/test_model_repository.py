@@ -14,7 +14,6 @@ from sasctl.services import model_repository as mr
 
 
 def test_create_model():
-
     MODEL_NAME = "Test Model"
     PROJECT_NAME = "Test Project"
     PROJECT_ID = "12345"
@@ -138,7 +137,6 @@ def test_copy_analytic_store():
         with mock.patch(
             "sasctl._services.model_repository.ModelRepository" ".request_link"
         ) as request_link:
-
             # Return a dummy Model with a static id
             get_model.return_value = {"id": MODEL_ID}
             mr.copy_analytic_store(MODEL_ID)
@@ -185,7 +183,6 @@ def test_get_model_by_name():
 
 
 def test_add_model_content():
-
     with mock.patch(
         "sasctl._services.model_repository.ModelRepository.get_model",
         return_value={"id": 123},

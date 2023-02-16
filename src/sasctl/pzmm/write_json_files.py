@@ -20,6 +20,9 @@ import pandas as pd
 from ..core import current_session
 from ..utils.decorators import deprecated
 
+# TODO: file writing outputs should be dependent upon use in Jupyter notebook
+
+
 # Constants
 INPUT = "inputVar.json"
 OUTPUT = "outputVar.json"
@@ -353,6 +356,12 @@ class JSONFiles:
             Sets whether the model metadata is associated with an H2O.ai model. If set
             as True, the MOJO model file will be set as a score resource. The default
             value is False.
+
+        Returns
+        -------
+        dict
+            Dictionary containing a key-value pair representing the file name and json
+            dump respectively.
         """
         dict_list = [
             {"role": "inputVariables", "name": INPUT},
@@ -717,7 +726,7 @@ class JSONFiles:
 
         data_partition_exists = cls.check_for_data(validate_data, train_data, test_data)
 
-        for i, partition, data in enumerate(
+        for i, (partition, data) in enumerate(
             zip(data_partition_exists, [validate_data, train_data, test_data])
         ):
             # If the data partition was not passed, skip to the next partition
@@ -726,35 +735,40 @@ class JSONFiles:
 
             data = cls.stat_dataset_to_dataframe(data, target_value)
 
-            conn.upload(data, casout={"name": "assess_dataset", "replace": True})
+            conn.upload(
+                data,
+                casout={"name": "assess_dataset", "replace": True, "caslib": "Public"},
+            )
 
             conn.percentile.assess(
-                table={"name": "assess_table", "replace": True},
+                table={"name": "assess_dataset", "caslib": "Public"},
                 response="predict",
                 pVar="predict_proba",
                 event=str(target_value),
-                pEvent=prob_value if prob_value else 0.5,
+                pEvent=str(prob_value) if prob_value else str(0.5),
                 inputs="actual",
-                fitStatOut={"name": "FitStat", "replace": True},
-                rocOut={"name": "ROC", "replace": True},
-                casout={"name": "Lift", "replace": True},
+                fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
+                rocOut={"name": "ROC", "replace": True, "caslib": "Public"},
+                casout={"name": "Lift", "replace": True, "caslib": "Public"},
             )
 
             fitstat_dict = (
-                pd.DataFrame(conn.CASTable("FitStat").to_frame())
+                pd.DataFrame(conn.CASTable("FitStat", caslib="Public").to_frame())
                 .transpose()
                 .squeeze()
                 .to_dict()
             )
             json_dict[0]["data"][i]["dataMap"].update(fitstat_dict)
 
-            roc_df = pd.DataFrame(conn.CASTable("ROC").to_frame())
+            roc_df = pd.DataFrame(conn.CASTable("ROC", caslib="Public").to_frame())
             roc_dict = cls.apply_dataframe_to_json(json_dict[1]["data"], i, roc_df)
-            json_dict[1]["data"].update(roc_dict)
+            for j in range(len(roc_dict)):
+                json_dict[1]["data"][j].update(roc_dict[j])
 
-            lift_df = pd.DataFrame(conn.CASTable("Lift").to_frame())
+            lift_df = pd.DataFrame(conn.CASTable("Lift", caslib="Public").to_frame())
             lift_dict = cls.apply_dataframe_to_json(json_dict[2]["data"], i, lift_df)
-            json_dict[2]["data"].update(lift_dict)
+            for j in range(len(lift_dict)):
+                json_dict[2]["data"][j].update(lift_dict[j])
 
         if json_path:
             for name in [FITSTAT, ROC, LIFT]:
@@ -802,9 +816,9 @@ class JSONFiles:
             )
         else:
             data_partitions = [
-                1 if validate else 0,
-                1 if train else 0,
-                1 if test else 0,
+                1 if validate is not None else 0,
+                1 if train is not None else 0,
+                1 if test is not None else 0,
             ]
         return data_partitions
 
@@ -1061,9 +1075,7 @@ class JSONFiles:
         with open(Path(jPath) / FITSTAT, "w") as jFile:
             json.dump(nullJSONDict, jFile, indent=4)
         print(
-            "{} was successfully written and saved to {}".format(
-                FITSTAT, Path(jPath) / FITSTAT
-            )
+            f"{FITSTAT} was successfully written and saved to {Path(jPath) / FITSTAT}"
         )
 
     # noinspection PyCallingNonCallable,PyNestedDecorators
@@ -1344,17 +1356,11 @@ class JSONFiles:
 
         with open(Path(jPath) / ROC, "w") as jFile:
             json.dump(nullJSONROCDict, jFile, indent=4)
-        print(
-            "{} was successfully written and saved to {}".format(ROC, Path(jPath) / ROC)
-        )
+        print(f"{ROC} was successfully written and saved to {Path(jPath) / ROC}")
 
         with open(Path(jPath) / LIFT, "w") as jFile:
             json.dump(nullJSONLiftDict, jFile, indent=4)
-        print(
-            "{} was successfully written and saved to {}".format(
-                LIFT, Path(jPath) / LIFT
-            )
-        )
+        print(f"{LIFT} was successfully written and saved to {Path(jPath) / LIFT}")
 
     @staticmethod
     def read_json_file(path):
@@ -1681,7 +1687,7 @@ class JSONFiles:
             A list of modules obtained from the pickle stream. Duplicates are removed
             and Python built-in modules are removed.
         """
-        with (open(pickle_file, "rb")) as open_file:  # skipcq: PTC-W6004
+        with open(pickle_file, "rb") as open_file:  # skipcq: PTC-W6004
             obj = pickle.load(open_file)  # skipcq: BAN-B301
             dumps = pickle.dumps(obj)
 

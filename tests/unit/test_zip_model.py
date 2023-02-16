@@ -4,17 +4,19 @@
 # Copyright © 2023, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import pytest
+import json
 import tempfile
-from io import BytesIO
 from contextlib import closing
-from zipfile import ZipFile
+from io import BytesIO
 from pathlib import Path
+from zipfile import ZipFile
+
+import pytest
+
+from sasctl.pzmm.zip_model import ZipModel as zm
 
 
 def _create_sample_archive(suffix, is_viya_4=False):
-    from sasctl.pzmm.zip_model import ZipModel as zm
-
     tmp_dir = tempfile.TemporaryDirectory()
     for s in suffix:
         _ = tempfile.NamedTemporaryFile(delete=False, suffix=s, dir=tmp_dir.name)
@@ -26,11 +28,20 @@ def _create_sample_archive(suffix, is_viya_4=False):
     return bytes_zip, num_files
 
 
-def test_zip_files_return():
+def test_zip_files():
     """
     Test cases:
-    - Returns proper BytesIO object
+    - Creates in memory zip
+    - Writes zip to disk
+    - Returns proper BytesIO object in both cases
     """
+    model_files = {
+        "Test.json": json.dumps({"Test": True, "TestNum": 1}),
+        "Test.py": f"import sasctl\ndef score():\n{'':4}return \"Test score\"",
+    }
+    bytes_zip = zm.zip_files(model_files, "Unit_Test_Model")
+    assert issubclass(BytesIO, type(bytes_zip))
+
     bytes_zip, _ = _create_sample_archive([".json"])
     assert issubclass(BytesIO, type(bytes_zip))
 

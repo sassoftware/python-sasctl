@@ -1,6 +1,6 @@
 import pytest
 import warnings
-from sasctl.pzmm.modelParameters import ModelParameters as mp
+from sasctl.pzmm.model_parameters import ModelParameters as mp
 
 pytestmark = pytest.mark.usefixtures("session")
 
@@ -45,7 +45,6 @@ def sklearn_model(train_data):
     return model
 
 
-@pytest.mark.incremental
 class TestSklearnModel:
     PROJECT_NAME = "Test SKLearn Model"
     MODEL_NAME = "SKLearnModel"
