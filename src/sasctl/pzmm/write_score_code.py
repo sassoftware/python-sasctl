@@ -205,6 +205,10 @@ class ScoreCode:
                 input_var_list,
                 statsmodels_model="statsmodels_model" in kwargs,
             )
+            # Include check for numpy values and a conversion operation as needed
+            cls.score_code += f"{'':4}prediction = [val.item() if type(val)." \
+                              f"__module__ == np.__name__ else val for val in " \
+                              f"prediction]\n"
             cls._predictions_to_metrics(
                 output_variables,
                 target_values=target_values,
