@@ -8,8 +8,9 @@ import shutil
 from pathlib import Path
 from typing import Union, Optional
 
+from ..utils.misc import check_if_jupyter
+
 PICKLE = ".pickle"
-# TODO: file writing outputs should be dependent upon use in Jupyter notebook
 
 
 class PickleModel:
@@ -69,6 +70,7 @@ class PickleModel:
             models.
 
         """
+        notebook_output = check_if_jupyter()
 
         if is_binary_string:
             # For models that use a binary string representation
@@ -96,10 +98,11 @@ class PickleModel:
                         Path(pickle_path) / (model_prefix + PICKLE), "wb"
                     ) as pickle_file:
                         pickle.dump(trained_model, pickle_file)
-                    print(
-                        f"Model {model_prefix} was successfully pickled and saved to "
-                        f"{Path(pickle_path) / (model_prefix + PICKLE)}."
-                    )
+                    if notebook_output:
+                        print(
+                            f"Model {model_prefix} was successfully pickled and saved "
+                            f"to {Path(pickle_path) / (model_prefix + PICKLE)}."
+                        )
                 else:
                     return {model_prefix + PICKLE: pickle.dumps(trained_model)}
             # For binary H2O models, rename the binary file as a pickle file
@@ -112,10 +115,11 @@ class PickleModel:
                     Path(pickle_path) / (model_prefix + ".mojo"), "wb"
                 ) as fileOut:
                     fileOut.writelines(fileIn)
-                print(
-                    f"MOJO model {model_prefix} was successfully gzipped and saved to "
-                    f"{Path(pickle_path) / (model_prefix + '.mojo')}."
-                )
+                if notebook_output:
+                    print(
+                        f"MOJO model {model_prefix} was successfully gzipped and saved "
+                        f"to {Path(pickle_path) / (model_prefix + '.mojo')}."
+                    )
             else:
                 raise ValueError(
                     "There is currently no support for file-less H2O.ai model handling."
