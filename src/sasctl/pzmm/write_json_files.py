@@ -17,10 +17,11 @@ from typing import List, Union
 # Third Party Imports
 import pandas as pd
 
+# Package Imports
 from ..core import current_session
 from ..utils.decorators import deprecated
+from ..utils.misc import check_if_jupyter
 
-# TODO: file writing outputs should be dependent upon use in Jupyter notebook
 # TODO: add converter for any type of dataset (list, dataframe, numpy array)
 
 # Constants
@@ -58,6 +59,8 @@ def _flatten(nested_list):
 
 
 class JSONFiles:
+    notebook_output = check_if_jupyter()
+
     @classmethod
     def write_var_json(
         cls,
@@ -106,10 +109,11 @@ class JSONFiles:
 
             with open(Path(json_path) / file_name, "w") as json_file:
                 json_file.write(json.dumps(dict_list, indent=4))
-            print(
-                f"{file_name} was successfully written and saved to "
-                f"{Path(json_path) / file_name}"
-            )
+            if cls.notebook_output:
+                print(
+                    f"{file_name} was successfully written and saved to "
+                    f"{Path(json_path) / file_name}"
+                )
         else:
             if is_input:
                 return {INPUT: json.dumps(dict_list)}
@@ -230,8 +234,9 @@ class JSONFiles:
         else:
             return False
 
-    @staticmethod
+    @classmethod
     def write_model_properties_json(
+        cls,
         model_name,
         target_variable,
         target_event=None,
@@ -353,15 +358,16 @@ class JSONFiles:
         if json_path:
             with open(Path(json_path) / PROP, "w") as json_file:
                 json_file.write(json.dumps(output_json, indent=4))
-            print(
-                f"{PROP} was successfully written and saved to "
-                f"{Path(json_path) / PROP}"
-            )
+            if cls.notebook_output:
+                print(
+                    f"{PROP} was successfully written and saved to "
+                    f"{Path(json_path) / PROP}"
+                )
         else:
             return {PROP: json.dumps(output_json)}
 
-    @staticmethod
-    def write_file_metadata_json(model_prefix, json_path=None, is_h2o_model=False):
+    @classmethod
+    def write_file_metadata_json(cls, model_prefix, json_path=None, is_h2o_model=False):
         """
         Writes a file metadata JSON file pointing to all relevant files.
 
@@ -401,10 +407,11 @@ class JSONFiles:
         if json_path:
             with open(Path(json_path) / META, "w") as json_file:
                 json_file.write(json.dumps(dict_list, indent=4))
-            print(
-                f"{META} was successfully written and saved to "
-                f"{Path(json_path) / META}"
-            )
+            if cls.notebook_output:
+                print(
+                    f"{META} was successfully written and saved to "
+                    f"{Path(json_path) / META}"
+                )
         else:
             return {META: json.dumps(dict_list, indent=4)}
 
@@ -508,10 +515,11 @@ class JSONFiles:
         if json_path:
             with open(Path(json_path) / FITSTAT, "w") as json_file:
                 json_file.write(json.dumps(json_dict, indent=4))
-            print(
-                f"{FITSTAT} was successfully written and saved to "
-                f"{Path(json_path) / FITSTAT}"
-            )
+            if cls.notebook_output:
+                print(
+                    f"{FITSTAT} was successfully written and saved to "
+                    f"{Path(json_path) / FITSTAT}"
+                )
         else:
             return {FITSTAT: json.dumps(json_dict, indent=4)}
 
@@ -797,10 +805,11 @@ class JSONFiles:
             for name in [FITSTAT, ROC, LIFT]:
                 with open(Path(json_path) / name, "w") as json_file:
                     json_file.write(json.dumps(json_dict, indent=4))
-                print(
-                    f"{name} was successfully written and saved to "
-                    f"{Path(json_path) / name}"
-                )
+                if cls.notebook_output:
+                    print(
+                        f"{name} was successfully written and saved to "
+                        f"{Path(json_path) / name}"
+                    )
         else:
             return {
                 FITSTAT: json.dumps(json_dict[0], indent=4),
@@ -1097,9 +1106,11 @@ class JSONFiles:
 
         with open(Path(jPath) / FITSTAT, "w") as jFile:
             json.dump(nullJSONDict, jFile, indent=4)
-        print(
-            f"{FITSTAT} was successfully written and saved to {Path(jPath) / FITSTAT}"
-        )
+        if cls.notebook_output:
+            print(
+                f"{FITSTAT} was successfully written and saved to "
+                f"{Path(jPath) / FITSTAT}"
+            )
 
     # noinspection PyCallingNonCallable,PyNestedDecorators
     @deprecated(
@@ -1379,11 +1390,13 @@ class JSONFiles:
 
         with open(Path(jPath) / ROC, "w") as jFile:
             json.dump(nullJSONROCDict, jFile, indent=4)
-        print(f"{ROC} was successfully written and saved to {Path(jPath) / ROC}")
+        if cls.notebook_output:
+            print(f"{ROC} was successfully written and saved to {Path(jPath) / ROC}")
 
         with open(Path(jPath) / LIFT, "w") as jFile:
             json.dump(nullJSONLiftDict, jFile, indent=4)
-        print(f"{LIFT} was successfully written and saved to {Path(jPath) / LIFT}")
+        if cls.notebook_output:
+            print(f"{LIFT} was successfully written and saved to {Path(jPath) / LIFT}")
 
     @staticmethod
     def read_json_file(path):
