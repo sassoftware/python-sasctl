@@ -11,9 +11,12 @@ from typing import Union, Optional
 from ..utils.misc import check_if_jupyter
 
 PICKLE = ".pickle"
+# TODO: Break up function to lower CC
 
 
 class PickleModel:
+    notebook_output: bool = check_if_jupyter()
+
     @classmethod
     def pickle_trained_model(
         cls,
@@ -70,8 +73,6 @@ class PickleModel:
             models.
 
         """
-        notebook_output = check_if_jupyter()
-
         if is_binary_string:
             # For models that use a binary string representation
             binary_string = codecs.encode(
@@ -98,7 +99,7 @@ class PickleModel:
                         Path(pickle_path) / (model_prefix + PICKLE), "wb"
                     ) as pickle_file:
                         pickle.dump(trained_model, pickle_file)
-                    if notebook_output:
+                    if cls.notebook_output:
                         print(
                             f"Model {model_prefix} was successfully pickled and saved "
                             f"to {Path(pickle_path) / (model_prefix + PICKLE)}."
@@ -115,7 +116,7 @@ class PickleModel:
                     Path(pickle_path) / (model_prefix + ".mojo"), "wb"
                 ) as fileOut:
                     fileOut.writelines(fileIn)
-                if notebook_output:
+                if cls.notebook_output:
                     print(
                         f"MOJO model {model_prefix} was successfully gzipped and saved "
                         f"to {Path(pickle_path) / (model_prefix + '.mojo')}."
