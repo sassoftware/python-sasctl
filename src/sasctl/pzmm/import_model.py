@@ -7,6 +7,7 @@ from warnings import warn
 
 from .._services.model_repository import ModelRepository as mr
 from ..core import current_session, RestObj, PagedList
+from ..utils.misc import check_if_jupyter
 from .write_score_code import ScoreCode as sc
 from .zip_model import ZipModel as zm
 
@@ -184,6 +185,8 @@ def model_exists(project, name, force, version_name="latest"):
 
 
 class ImportModel:
+    notebook_output = check_if_jupyter()
+
     @classmethod
     def import_model(
         cls,
@@ -306,14 +309,16 @@ class ImportModel:
                 zip_io_file = zm.zip_files(model_files, model_prefix, is_viya4=True)
             else:
                 score_path = Path(model_files) / (model_prefix + "Score.py")
-                print(
-                    f"Model score code was written successfully to {score_path} and "
-                    f"uploaded to SAS Model Manager."
-                )
+                if cls.notebook_output:
+                    print(
+                        f"Model score code was written successfully to {score_path} and"
+                        f" uploaded to SAS Model Manager."
+                    )
                 zip_io_file = zm.zip_files(
                     Path(model_files), model_prefix, is_viya4=True
                 )
-                print(f"All model files were zipped to {Path(model_files)}.")
+                if cls.notebook_output:
+                    print(f"All model files were zipped to {Path(model_files)}.")
 
             # Check if project name provided exists and raise an error or create a
             # new project
@@ -328,13 +333,14 @@ class ImportModel:
             model = mr.import_model_from_zip(
                 model_prefix, project, zip_io_file, version=project_version
             )
-            try:
-                print(
-                    f"Model was successfully imported into SAS Model Manager as "
-                    f"{model.name} with the following UUID: {model.id}."
-                )
-            except AttributeError:
-                print("Model failed to import to SAS Model Manager.")
+            if cls.notebook_output:
+                try:
+                    print(
+                        f"Model was successfully imported into SAS Model Manager as "
+                        f"{model.name} with the following UUID: {model.id}."
+                    )
+                except AttributeError:
+                    print("Model failed to import to SAS Model Manager.")
 
             if score_code_dict:
                 return model_files
@@ -347,7 +353,8 @@ class ImportModel:
                 zip_io_file = zm.zip_files(
                     Path(model_files), model_prefix, is_viya4=False
                 )
-                print(f"All model files were zipped to {Path(model_files)}.")
+                if cls.notebook_output:
+                    print(f"All model files were zipped to {Path(model_files)}.")
 
             # Check if project name provided exists and raise an error or create a
             # new project
@@ -362,13 +369,14 @@ class ImportModel:
             model = mr.import_model_from_zip(
                 model_prefix, project, zip_io_file, version=project_version
             )
-            try:
-                print(
-                    f"Model was successfully imported into SAS Model Manager as "
-                    f"{model.name} with the following UUID: {model.id}."
-                )
-            except AttributeError:
-                print("Model failed to import to SAS Model Manager.")
+            if cls.notebook_output:
+                try:
+                    print(
+                        f"Model was successfully imported into SAS Model Manager as "
+                        f"{model.name} with the following UUID: {model.id}."
+                    )
+                except AttributeError:
+                    print("Model failed to import to SAS Model Manager.")
 
             score_code_dict = sc.write_score_code(
                 model_prefix,
@@ -389,7 +397,8 @@ class ImportModel:
                 return model_files
             else:
                 score_path = Path(model_files) / (model_prefix + "Score.py")
-                print(
-                    f"Model score code was written successfully to {score_path} and "
-                    f"uploaded to SAS Model Manager."
-                )
+                if cls.notebook_output:
+                    print(
+                        f"Model score code was written successfully to {score_path} and"
+                        f" uploaded to SAS Model Manager."
+                    )
