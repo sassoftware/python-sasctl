@@ -169,12 +169,25 @@ def test_write_model_properties_json():
     prop_dict = jf.write_model_properties_json(
         model_name="Test_Model",
         target_variable="BAD",
-        target_event="1",
+        target_event=[4, 3, 1, 4],
         num_target_categories=3,
         model_desc="a" * 2000,
+        event_prob_var=["A", "B", "C", "D"]
     )
     assert len(json.loads(prop_dict["ModelProperties.json"])["description"]) <= 1024
-    assert json.loads(prop_dict["ModelProperties.json"])["target_level"] == "INTERVAL"
+    assert json.loads(prop_dict["ModelProperties.json"])["target_level"] == "NOMINAL"
+    assert json.loads(prop_dict["ModelProperties.json"])["properties"] == [
+        {
+            "name": "multiclass_target_events",
+            "value": "4, 3, 1, 4",
+            "type": "string"
+        },
+        {
+            "name": "multiclass_proba_variables",
+            "value": "A, B, C, D",
+            "type": "string"
+        }
+    ]
 
 
 def test_write_file_metadata_json():

@@ -230,13 +230,12 @@ class JSONFiles:
         else:
             return False
 
-    # TODO: multiclass support -> target_variable to target_variables
     @staticmethod
     def write_model_properties_json(
         model_name,
         target_variable,
-        target_event,
-        num_target_categories,
+        target_event=None,
+        num_target_categories=None,
         event_prob_var=None,
         json_path=None,
         model_desc=None,
@@ -244,13 +243,17 @@ class JSONFiles:
         model_type=None,
         modeler=None,
         train_table=None,
+        properties=None,
     ):
         """
         Writes a JSON file containing SAS Model Manager model properties.
 
-        The JSON file format is required by the SAS Model Repository API service and
-        only event_prob_var can be 'None'. If a json_path is supplied, this function
-        outputs a JSON file named "ModelProperties.json". Otherwise, a dict is returned.
+        Property values for multiclass models are not supported on a model-level in SAS
+        Model Manager. If these values are detected, they will be supplied as custom
+        user properties.
+
+        If a json_path is supplied, this function outputs a JSON file named
+        "ModelProperties.json". Otherwise, a dict is returned.
 
         Parameters
         ----------
@@ -259,13 +262,15 @@ class JSONFiles:
             based on the name of the zip file used for importing the model.
         target_variable : string
             Target variable to be predicted by the model.
-        target_event : string
-            Model target event. For example: 1 for a binary event.
+        target_event : string or list, optional
+            Model target event(s). Providing a list will supply the values for the
+            different target events as a custom property. Default is None.
         num_target_categories : int
             Number of possible target categories. For example: 2 for a binary event.
-        event_prob_var : string, optional
-            User-provided output event probability variable. This value should match the
-            value in outputVar.json. Default is "P_" + target_variable + target_event.
+        event_prob_var : string or list, optional
+            User-provided output event probability variable(s). Providing a list will
+            supply the values for the probability variables as a custom property.
+            Default is None.
         json_path : string or Path, optional
             Path for an output ModelProperties.json file to be generated. If no value
             is supplied a dict is returned instead. Default is None.
@@ -280,6 +285,10 @@ class JSONFiles:
         train_table : string, optional
             The path to the model's training table within SAS Viya. Default is an empty
             string.
+        properties : List of dicts, optional
+            List of custom properties to be shown in the user-defined properties section
+            of the model in SAS Model Manager. Dict entries should contain the `name`,
+            `value`, and `type` keys. Default is an empty list.
 
         Returns
         -------
@@ -287,6 +296,9 @@ class JSONFiles:
             Dictionary containing a key-value pair representing the file name and json
             dump respectively.
         """
+        if properties is None:
+            properties = []
+
         if model_desc:
             # Check if model description is smaller than the 1024-character limit
             if len(model_desc) > 1024:
@@ -295,37 +307,47 @@ class JSONFiles:
                     "WARNING: The provided model description was truncated to 1024 "
                     "characters. "
                 )
-        else:
-            model_desc = ""
 
         if num_target_categories > 2:
-            target_level = "INTERVAL"
-        else:
+            target_level = "NOMINAL"
+        elif num_target_categories in [1, 2]:
             target_level = "BINARY"
+        else:
+            target_level = None
 
-        if event_prob_var is None:
-            try:
-                event_prob_var = "P_" + target_variable + target_event
-            except TypeError:
-                event_prob_var = None
+        if isinstance(target_event, list):
+            target_event = [str(x) for x in target_event]
+            properties.append({
+                "name": "multiclass_target_events",
+                "value": ", ".join(target_event),
+                "type": "string"
+            })
+
+        if isinstance(event_prob_var, list):
+            properties.append({
+                "name": "multiclass_proba_variables",
+                "value": ", ".join(event_prob_var),
+                "type": "string"
+            })
 
         python_version = sys.version.split(" ", 1)[0]
 
         output_json = {
             "name": model_name,
-            "description": model_desc,
-            "function": model_function,
+            "description": model_desc if model_desc else "",
+            "function": model_function if model_function else "",
             "scoreCodeType": "python",
             "trainTable": train_table if train_table else "",
             "trainCodeType": "Python",
             "algorithm": model_type if model_type else "",
-            "target_variable": target_variable,
-            "target_event": target_event,
-            "target_level": target_level,
+            "target_variable": target_variable if target_variable else "",
+            "target_event": target_event if target_event else "",
+            "target_level": target_level if target_level else "",
             "event_prob_var": event_prob_var if event_prob_var else "",
             "modeler": modeler if modeler else "",
             "tool": "Python 3",
             "toolVersion": python_version,
+            "properties": properties
         }
 
         if json_path:
