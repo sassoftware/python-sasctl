@@ -22,7 +22,7 @@ class PickleModel:
         cls,
         trained_model,
         model_prefix,
-        pickle_path: Optional[str, Path] = None,
+        pickle_path: Union[str, Path, None] = None,
         is_h2o_model: bool = False,
         is_binary_model: bool = False,
         is_binary_string: bool = False,
