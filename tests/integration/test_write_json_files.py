@@ -16,15 +16,15 @@ pytestmark = pytest.mark.usefixtures("session")
 
 
 def _classification_model(data, target):
-    from sklearn.ensemble import HistGradientBoostingClassifier
+    from sklearn.tree import DecisionTreeClassifier
     from sklearn.model_selection import train_test_split
 
-    data = pd.get_dummies(data, drop_first=True)
+    data = pd.get_dummies(data, drop_first=True).fillna(data.mean())
     x_train, x_test, y_train, y_test = train_test_split(
         data.drop(columns=target), data[target], test_size=0.3
     )
 
-    model = HistGradientBoostingClassifier()
+    model = DecisionTreeClassifier()
     model.fit(x_train, y_train)
 
     return model, x_test, y_test
