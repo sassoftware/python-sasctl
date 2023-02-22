@@ -4,6 +4,9 @@
 from pathlib import Path
 from uuid import UUID
 from warnings import warn
+from typing import Union, Optional, Callable, List
+
+from pandas import DataFrame
 
 from .._services.model_repository import ModelRepository as mr
 from ..core import current_session, RestObj, PagedList
@@ -14,89 +17,22 @@ from .zip_model import ZipModel as zm
 # TODO: add converter for any type of dataset (list, dataframe, numpy array)
 
 
-def _create_project(project_name, model, repo, input_vars=None, output_vars=None):
-    """Creates a project based on the model specifications.
-
-    Parameters
-    ----------
-    project_name : str
-        Name of the project to be created
-    model : dict
-        Model information
-    repo : str or dict
-        Repository in which to create the project
-    input_vars : list
-        Input variables formatted as {'name': 'varname'}
-    output_vars
-        Output variables formatted as {'name': 'varname'}
-
-    Returns
-    -------
-    RestObj
-        The created project
+def project_exists(response: RestObj, project: Union[str, RestObj]) -> RestObj:
     """
-    properties = {k: model[k] for k in model if k in ("function", "targetLevel")}
-
-    model_function = model.get("function", "").lower()
-    algorithm = model.get("algorithm", "").lower()
-
-    # Get input & output variable lists
-    # Note: copying lists to avoid altering original
-    input_vars = input_vars or model.get("inputVariables", [])
-    output_vars = output_vars or model.get("outputVariables", [])[:]
-    input_vars = input_vars[:]
-    output_vars = output_vars[:]
-
-    # Set prediction or eventProbabilityVariable
-    if output_vars:
-        if model_function == "prediction":
-            properties["predictionVariable"] = output_vars[0]["name"]
-        else:
-            properties["eventProbabilityVariable"] = output_vars[0]["name"]
-
-    # Set targetLevel
-    if properties.get("targetLevel") is None:
-        if model_function == "classification" and "logistic" in algorithm:
-            properties["targetLevel"] = "Binary"
-        elif model_function == "prediction" and "regression" in algorithm:
-            properties["targetLevel"] = "Interval"
-        else:
-            properties["targetLevel"] = None
-
-    project = mr.create_project(
-        project_name, repo, variables=input_vars + output_vars, **properties
-    )
-
-    # As of Viya 3.4 the 'predictionVariable' and 'eventProbabilityVariable'
-    # parameters are not set during project creation.  Update the project if
-    # necessary.
-    needs_update = False
-    for p in ("predictionVariable", "eventProbabilityVariable"):
-        if project.get(p) != properties.get(p):
-            project[p] = properties.get(p)
-            needs_update = True
-
-    if needs_update:
-        project = mr.update_project(project)
-
-    return project
-
-
-def project_exists(response, project):
-    """Checks if project exists on SAS Viya. If the project does not exist, then a new
+    Checks if project exists on SAS Viya. If the project does not exist, then a new
     project is created or an error is raised.
 
     Parameters
     ----------
-    response : dict
+    response : RestObj
         JSON response of the get_project() call to model repository service.
-    project : string or dict
+    project : str or RestObj
         The name or id of the model project, or a dictionary representation of the
         project.
 
     Returns
     -------
-    response : dict
+    response : RestObj
         JSON response of the get_project() call to model repository service.
 
     Raises
@@ -115,7 +51,7 @@ def project_exists(response, project):
             )
         except ValueError:
             repo = mr.default_repository().get("id")
-            # TODO: implement _create_project() call instead of mr.create_project()
+            # TODO: implement _create_project() call from tasks.py
             response = mr.create_project(project, repo)
             print(f"A new project named {response.name} was created.")
             return response
@@ -123,7 +59,12 @@ def project_exists(response, project):
         return response
 
 
-def model_exists(project, name, force, version_name="latest"):
+def model_exists(
+        project: Union[str, RestObj],
+        name: str,
+        force: bool,
+        version_name: str = "latest"
+) -> None:
     """
     Checks if model already exists in the same project and either raises an error or
     delete the redundant model. If no project version is provided, the version is
@@ -134,13 +75,13 @@ def model_exists(project, name, force, version_name="latest"):
     project : str or dict
         The name or id of the model project, or a dictionary representation of the
         project.
-    name : str or dict
+    name : str
         The name of the model.
     force : bool, optional
         Sets whether to overwrite models with the same name upon upload.
     version_name : str, optional
         Name of project version to check if a model of the same name already exists.
-        Default value is "latest".
+        The default value is "latest".
 
     Raises
     ------
@@ -190,20 +131,20 @@ class ImportModel:
     @classmethod
     def import_model(
         cls,
-        model_files,
-        model_prefix,
-        input_data,
-        predict_method,
-        output_variables,
-        project,
-        pickle_type="pickle",
-        project_version="latest",
-        missing_values=False,
-        overwrite_model=False,
-        score_cas=True,
-        mlflow_details=None,
-        predict_threshold=None,
-        target_values=None,
+        model_files: Union[str, Path, dict],
+        model_prefix: str,
+        input_data: DataFrame,
+        predict_method: Callable[..., List],
+        output_variables: List[str],
+        project: Union[str, RestObj],
+        pickle_type: str = "pickle",
+        project_version: str = "latest",
+        missing_values: bool = False,
+        overwrite_model: bool = False,
+        score_cas: bool = True,
+        mlflow_details: Optional[dict] = None,
+        predict_threshold: Optional[float] = None,
+        target_values: Optional[List[str]] = None,
         **kwargs,
     ):
         """Import model to SAS Model Manager using pzmm submodule.
@@ -266,7 +207,7 @@ class ImportModel:
             The default value is False.
         mlflow_details : dict, optional
             Model details from an MLFlow model. This dictionary is created by the
-            read_mlflow_model_file function. Default is None.
+            read_mlflow_model_file function. The default value is None.
         predict_threshold : float, optional
             The prediction threshold for normalized probability output_variables. Values
              are expected to be between 0 and 1. The default value is None.
