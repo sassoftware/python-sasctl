@@ -3,12 +3,14 @@
 
 import re
 from pathlib import Path
+from typing import Union, Optional, Callable, List, Tuple
 from warnings import warn
 
 import pandas as pd
+from pandas import DataFrame
 
 from .._services.model_repository import ModelRepository as mr
-from ..core import current_session
+from ..core import current_session, RestObj
 
 MAS_CODE_NAME = "dmcas_packagescorecode.sas"
 CAS_CODE_NAME = "dmcas_epscorecode.sas"
@@ -17,24 +19,24 @@ CAS_CODE_NAME = "dmcas_epscorecode.sas"
 
 
 class ScoreCode:
-    score_code = ""
+    score_code: str = ""
 
     @classmethod
     def write_score_code(
         cls,
-        model_prefix,
-        input_data,
-        predict_method,
-        output_variables,
-        pickle_type="pickle",
-        model=None,
-        predict_threshold=None,
-        score_code_path=None,
-        target_values=None,
-        missing_values=False,
-        score_cas=True,
+        model_prefix: str,
+        input_data: Union[DataFrame, List[dict]],
+        predict_method: Callable[..., List],
+        output_variables: List[str],
+        pickle_type: str = "pickle",
+        model: Union[RestObj, str, None] = None,
+        predict_threshold: Optional[float] = None,
+        score_code_path: Union[Path, str, None] = None,
+        target_values: Optional[List] = None,
+        missing_values: Optional[bool] = False,
+        score_cas: Optional[bool] = True,
         **kwargs,
-    ):
+    ) -> Union[dict, None]:
         """
         Generates Python score code based on training data used to create the model
         object.
@@ -79,52 +81,49 @@ class ScoreCode:
 
         Parameters
         ----------
-        model_prefix : string
+        model_prefix : str
             The variable for the model name that is used when naming model files.
             (For example: hmeqClassTree + [Score.py || .pickle]).
-        input_data : DataFrame or list of dicts
+        input_data : DataFrame or list of dict
             The `DataFrame` object contains the training data, and includes only the
             predictor columns. The write_score_code function currently supports int(64),
             float(64), and string data types for scoring. Providing a list of dict
             objects signals that the model files are being created from an MLFlow model.
-        predict_method : Python function
+        predict_method : function -> list
             The Python function used for model predictions. For example, if the model is
             a Scikit-Learn DecisionTreeClassifier, then pass either of the following:
             sklearn.tree.DecisionTreeClassifier.predict
             sklearn.tree.DecisionTreeClassifier.predict_proba
-        output_variables : string list
+        output_variables : list of str
             The scoring output_variables for the model. For classification models, it is
             assumed that the first value in the list represents the classification
             output. This function supports single and multi-class classification models.
-        score_code_path : string, optional
-            The local path of the score code file. The default is the current
-            working directory.
-        pickle_type : string, optional
+        pickle_type : str, optional
             Indicator for the package used to serialize the model file to be uploaded to
             SAS Model Manager. The default value is `pickle`.
-        model : str or dict, optional
+        model : str or RestObj, optional
             The name or id of the model, or a dictionary representation of
             the model. The default value is None and is only necessary for models that
             will be hosted on SAS Viya 3.5.
         predict_threshold : float, optional
             The prediction threshold for normalized probability output_variables. Values
             are expected to be between 0 and 1. The default value is None.
-        score_code_path : string or Path object, optional
+        score_code_path : str or Path, optional
             Path for output score code file(s) to be generated. If no value is supplied
             a dict is returned instead. The default value is None.
-        target_values : list of strings, optional
+        target_values : list of str, optional
             A list of target values for the target variable. This argument and the
             output_variables argument dictate the handling of the predicted values from
             the prediction method. The default value is None.
-        missing_values : boolean, optional
+        missing_values : bool, optional
             Sets whether data handled by the score code will impute for missing values.
             The default value is False.
-        score_cas : boolean, optional
+        score_cas : bool, optional
             Sets whether models registered to SAS Viya 3.5 should be able to be scored
             and validated through both CAS and SAS Micro Analytic Service. If set to
             false, then the model will only be able to be scored and validated through
             SAS Micro Analytic Service. The default value is True.
-        kwargs : dict, optional
+        kwargs
             Other keyword arguments are passed to one of the following functions:
             * sasctl.pzmm.ScoreCode._write_imports(pickle_type, mojo_model=None,
               binary_h2o_model=None, binary_string=None)
@@ -226,9 +225,11 @@ class ScoreCode:
                 statsmodels_model="statsmodels_model" in kwargs,
             )
             # Include check for numpy values and a conversion operation as needed
-            cls.score_code += f"{'':4}prediction = [val.item() if type(val)." \
-                              f"__module__ == np.__name__ else val for val in " \
-                              f"prediction]\n"
+            cls.score_code += (
+                f"{'':4}prediction = [val.item() if type(val)."
+                f"__module__ == np.__name__ else val for val in "
+                f"prediction]\n"
+            )
             cls._predictions_to_metrics(
                 output_variables,
                 target_values=target_values,
@@ -238,9 +239,7 @@ class ScoreCode:
         # SAS Viya 3.5 model
         if model_id:
             mas_code, cas_code = cls._viya35_score_code_import(
-                model_prefix,
-                model_id,
-                score_cas
+                model_prefix, model_id, score_cas
             )
 
         if score_code_path:
@@ -264,13 +263,15 @@ class ScoreCode:
             return output_dict
 
     @staticmethod
-    def upload_and_copy_score_resources(model, files):
+    def upload_and_copy_score_resources(
+        model: Union[str, RestObj], files: List[...]
+    ) -> RestObj:
         """
         Upload score resources to SAS Model Manager and copy them to the Compute server.
 
         Parameters
         ----------
-        model : str or dict
+        model : str or RestObj
             The name or id of the model, or a dictionary representation of the model.
         files : list of file objects
             The list of score resource files to upload.
@@ -285,13 +286,13 @@ class ScoreCode:
         return mr.copy_python_resources(model)
 
     @staticmethod
-    def _get_model_id(model):
+    def _get_model_id(model: Union[str, RestObj]) -> str:
         """
         Get the model uuid from SAS Model Manager.
 
         Parameters
         ----------
-        model : str or dict
+        model : str or RestObj
             The name or id of the model, or a dictionary representation of the model.
 
         Returns
@@ -315,7 +316,7 @@ class ScoreCode:
         return model_id
 
     @staticmethod
-    def _check_for_invalid_variable_names(var_list):
+    def _check_for_invalid_variable_names(var_list: List[str]) -> None:
         """
         Check for invalid variable names in the input dataset.
 
@@ -324,7 +325,7 @@ class ScoreCode:
 
         Parameters
         ----------
-        var_list : list of strings
+        var_list : list of str
             A list of strings pulled from the input dataset.
 
         Raises
@@ -348,11 +349,11 @@ class ScoreCode:
     @classmethod
     def _write_imports(
         cls,
-        pickle_type=None,
-        mojo_model=False,
-        binary_h2o_model=False,
-        binary_string=None,
-    ):
+        pickle_type: Optional[str] = None,
+        mojo_model: Optional[bool] = False,
+        binary_h2o_model: Optional[bool] = False,
+        binary_string: Optional[str] = None,
+    ) -> None:
         """
         Write the import section of the Python score code.
 
@@ -361,16 +362,16 @@ class ScoreCode:
 
         Parameters
         ----------
-        pickle_type : string, optional
+        pickle_type : str, optional
             Indicator for the package used to serialize the model file to be uploaded to
             SAS Model Manager. The default value is `pickle`.
-        mojo_model : boolean, optional
+        mojo_model : bool, optional
             Flag to indicate that the model is a H2O.ai MOJO model. The default value is
             None.
-        binary_h2o_model : boolean, optional
+        binary_h2o_model : bool, optional
             Flag to indicate that the model is a H2O.ai binary model. The default value
             is None.
-        binary_string : binary string, optional
+        binary_string : str, optional
             A binary representation of the Python model object. The default value is
             None.
         """
@@ -404,35 +405,35 @@ class ScoreCode:
     @classmethod
     def _viya35_model_load(
         cls,
-        model_id,
-        model_file_name,
-        pickle_type=None,
-        mojo_model=False,
-        binary_h2o_model=False,
-    ):
+        model_id: str,
+        model_file_name: str,
+        pickle_type: Optional[str] = None,
+        mojo_model: Optional[bool] = False,
+        binary_h2o_model: Optional[bool] = False,
+    ) -> str:
         """
         Write the model load section of the score code assuming the model is being
         uploaded to SAS Viya 3.5.
 
         Parameters
         ----------
-        model_id : string
+        model_id : str
             UUID representation of the model from SAS Model Manager.
-        model_file_name : string
+        model_file_name : str
             Name of the model file that contains the model.
-        pickle_type : string, optional
+        pickle_type : str, optional
             Indicator for the package used to serialize the model file to be uploaded to
             SAS Model Manager. The default value is `pickle`.
-        mojo_model : boolean, optional
+        mojo_model : bool, optional
             Flag to indicate that the model is a H2O.ai MOJO model. The default value is
             None.
-        binary_h2o_model : boolean, optional
+        binary_h2o_model : bool, optional
             Flag to indicate that the model is a H2O.ai binary model. The default value
             is None.
 
         Returns
         -------
-        string
+        str
             Preformatted string for the next section of score code.
         """
         pickle_type = pickle_type if pickle_type else "pickle"
@@ -479,8 +480,12 @@ class ScoreCode:
 
     @classmethod
     def _viya4_model_load(
-        cls, model_file_name, pickle_type=None, mojo_model=False, binary_h2o_model=False
-    ):
+        cls,
+        model_file_name: str,
+        pickle_type: Optional[str] = None,
+        mojo_model: Optional[bool] = False,
+        binary_h2o_model: Optional[bool] = False,
+    ) -> str:
         """
         Write the model load section of the score code assuming the model is being
         uploaded to SAS Viya 4.
@@ -535,7 +540,9 @@ class ScoreCode:
             )
 
     @classmethod
-    def _impute_missing_values(cls, data, var_list, dtype_list):
+    def _impute_missing_values(
+        cls, data: DataFrame, var_list: List[str], dtype_list: List[str]
+    ) -> None:
         """
         Write the missing value imputation section of the score code. This section of
         the score code is optional.
@@ -544,9 +551,9 @@ class ScoreCode:
         ----------
         data : pandas.DataFrame
             Input dataset for model training or predictions.
-        var_list : list of strings
+        var_list : list of str
             List of variable names
-        dtype_list : list of strings
+        dtype_list : list of str
             List of variable data types
         """
         for var, dtype in zip(var_list, dtype_list):
@@ -558,7 +565,7 @@ class ScoreCode:
         cls.score_code += "\n"
 
     @classmethod
-    def _impute_numeric(cls, data, var):
+    def _impute_numeric(cls, data: DataFrame, var: str) -> None:
         """
         Write imputation statement for a single numeric variable.
 
@@ -566,7 +573,7 @@ class ScoreCode:
         ----------
         data : pandas.DataFrame
             Input dataset for model training or predictions.
-        var : string
+        var : str
             Name of the variable to impute values for.
         """
         # If binary values, then compute the mode instead of the mean
@@ -586,13 +593,13 @@ class ScoreCode:
             )
 
     @classmethod
-    def _impute_char(cls, var):
+    def _impute_char(cls, var: str) -> None:
         """
         Write imputation statement for a single string variable.
 
         Parameters
         ----------
-        var : string
+        var : str
             Name of the variable to impute values for.
         """
         # Replace non-string values with blank strings
@@ -603,26 +610,26 @@ class ScoreCode:
 
     @classmethod
     def _predict_method(
-        cls, method, var_list, dtype_list=None, statsmodels_model=False
-    ):
+        cls,
+        method: Callable[..., List],
+        var_list: List[str],
+        dtype_list: Optional[List[str]] = None,
+        statsmodels_model: Optional[bool] = False,
+    ) -> None:
         """
         Write the model prediction section of the score code.
 
         Parameters
         ----------
-        method : Python function
+        method : function -> list
             The Python function used for model predictions.
-        var_list : list of strings
+        var_list : list of str
             List of variable names.
-        dtype_list : list of strings, optional
+        dtype_list : list of str, optional
             List of variable data types. The default value is None.
-        statsmodels_model : boolean, optional
+        statsmodels_model : bool, optional
             Flag to indicate that the model is a statsmodels model. The default value is
             False.
-
-        Returns
-        -------
-
         """
         column_names = ", ".join(f'"{col}"' for col in var_list)
         # H2O models
@@ -663,8 +670,12 @@ class ScoreCode:
 
     @classmethod
     def _predictions_to_metrics(
-        cls, metrics, target_values=None, predict_threshold=None, h2o_model=False
-    ):
+        cls,
+        metrics: List[str],
+        target_values: Optional[List[str]] = None,
+        predict_threshold: Optional[float] = None,
+        h2o_model: Optional[bool] = False,
+    ) -> None:
         """
         Using the provided arguments, write in to the score code the method for handling
         the generated predictions.
@@ -673,16 +684,17 @@ class ScoreCode:
 
         Parameters
         ----------
-        metrics : string list
+        metrics : list of str
             A list of strings corresponding to the outputs of the model to SAS Model
             Manager.
-        target_values : string list, optional
+        target_values : list of str, optional
             A list of target values for the target variable. The default value is None.
         predict_threshold : float, optional
             The prediction threshold for normalized probability output_variables. Values
              are expected to be between 0 and 1. The default value is None.
-        h2o_model : boolean, optional
-            Flag to indicate that the model is an H2O.ai model. The default is False.
+        h2o_model : bool, optional
+            Flag to indicate that the model is an H2O.ai model. The default value is
+            False.
         """
         if len(metrics) == 1 and isinstance(metrics, list):
             # Flatten single valued list
@@ -706,18 +718,21 @@ class ScoreCode:
             )
 
     @classmethod
-    def _no_targets_no_thresholds(cls, metrics, h2o_model=None):
+    def _no_targets_no_thresholds(
+        cls, metrics: Union[List[str], str], h2o_model: Optional[bool] = None
+    ) -> None:
         """
         Handle prediction outputs where the prediction does not expect handling by the
         score code.
 
         Parameters
         ----------
-        metrics : string list
+        metrics : list of str or str
             A list of strings corresponding to the outputs of the model to SAS Model
             Manager.
-        h2o_model : boolean, optional
-            Flag to indicate that the model is an H2O.ai model. The default is False.
+        h2o_model : bool, optional
+            Flag to indicate that the model is an H2O.ai model. The default value is
+            False.
         """
         if len(metrics) == 1 or isinstance(metrics, str):
             # Assume no probability output & predict function returns classification
@@ -744,20 +759,26 @@ class ScoreCode:
             cls.score_code += f"\n{'':4}return {', '.join(metrics)}"
 
     @classmethod
-    def _binary_target(cls, metrics, threshold=None, h2o_model=None):
+    def _binary_target(
+        cls,
+        metrics: Union[List[str], str],
+        threshold: Optional[float] = None,
+        h2o_model: Optional[bool] = None,
+    ) -> None:
         """
         Handle binary model prediction outputs.
 
         Parameters
         ----------
-        metrics : string list
+        metrics : list of str or str
             A list of strings corresponding to the outputs of the model to SAS Model
             Manager.
         threshold : float, optional
             The prediction threshold for normalized probability output_variables. Values
              are expected to be between 0 and 1. The default value is None.
-        h2o_model : boolean, optional
-            Flag to indicate that the model is an H2O.ai model. The default is False.
+        h2o_model : bool, optional
+            Flag to indicate that the model is an H2O.ai model. The default value is
+            False.
         """
         # If a binary target value is provided, then classify the prediction
         if not threshold:
@@ -791,23 +812,31 @@ class ScoreCode:
                     f"{metrics[0]} = 0\n\nreturn {metrics[0]}, prediction"
                 )
         else:
-            raise ValueError("Too many output_variables were provided for a binary "
-                             "model.")
+            raise ValueError(
+                "Too many output_variables were provided for a binary model."
+            )
 
+    # TODO: Lower cognitive complexity
     @classmethod
-    def _nonbinary_targets(cls, metrics, target_values, h2o_model=None):
+    def _nonbinary_targets(
+        cls,
+        metrics: Union[List[str], str],
+        target_values: List[str],
+        h2o_model: Optional[bool] = None,
+    ) -> None:
         """
         Handle multiclass model prediction outputs.
 
         Parameters
         ----------
-        metrics : string list
+        metrics : list of str or str
             A list of strings corresponding to the outputs of the model to SAS Model
             Manager.
-        target_values : string list, optional
+        target_values : list of str, optional
             A list of target values for the target variable. The default value is None.
-        h2o_model : boolean, optional
-            Flag to indicate that the model is an H2O.ai model. The default is False.
+        h2o_model : bool, optional
+            Flag to indicate that the model is an H2O.ai model. The default value is
+            False.
         """
         # Find the target value with the highest probability
         if len(metrics) == 1 or isinstance(metrics, str):
@@ -862,7 +891,7 @@ class ScoreCode:
             )
 
     @staticmethod
-    def convert_mas_to_cas(mas_code, model):
+    def convert_mas_to_cas(mas_code: str, model: Union[str, RestObj]) -> str:
         """
         Using the generated score.sas code from the Python wrapper API, convert the
         SAS Microanalytic Service based code to CAS compatible.
@@ -871,7 +900,7 @@ class ScoreCode:
         ----------
         mas_code : str
             String representation of the dmcas_packagescorecode.sas DS2 wrapper
-        model : str or dict
+        model : str or RestObj
             The name or id of the model, or a dictionary representation of the model
 
         Returns
@@ -890,7 +919,7 @@ class ScoreCode:
             output_string += out_var["name"] + ";\n"
         start = mas_code.find("score(")
         finish = mas_code[start:].find(");")
-        score_vars = mas_code[start + 6: start + finish]
+        score_vars = mas_code[start + 6 : start + finish]
         input_string = " ".join(
             [
                 x
@@ -916,7 +945,9 @@ class ScoreCode:
         return cas_code
 
     @classmethod
-    def _input_var_lists(cls, input_data):
+    def _input_var_lists(
+        cls, input_data: Union[DataFrame, List[dict]]
+    ) -> Tuple[List[str], List[str]]:
         """
         Using an input dataset, generate lists of variables and their types.
 
@@ -925,7 +956,7 @@ class ScoreCode:
 
         Parameters
         ----------
-        input_data : pandas.DataFrame or list of dicts
+        input_data : pandas.DataFrame or list of dict
             The `DataFrame` object contains the training data, and includes only the
             predictor columns. The write_score_code function currently supports int(64),
             float(64), and string data types for scoring. Providing a list of dict
@@ -933,9 +964,9 @@ class ScoreCode:
 
         Returns
         -------
-        input_var_list : list of strings
+        input_var_list : List of str
             A list of variable names for the input dataset.
-        input_dtypes_list : list of strings
+        input_dtypes_list : List of str
             A list of variable types for the input dataset.
         """
         if isinstance(input_data, pd.DataFrame):
@@ -953,7 +984,7 @@ class ScoreCode:
         return input_var_list, input_dtypes_list
 
     @classmethod
-    def _check_viya_version(cls, model):
+    def _check_viya_version(cls, model: Union[str, RestObj]) -> Union[str, None]:
         """
         Check that a valid SAS Viya version and model argument are provided.
 
@@ -961,7 +992,7 @@ class ScoreCode:
 
         Parameters
         ----------
-        model : str or dict
+        model : str or RestObj
             The name or id of the model, or a dictionary representation of
             the model. The default value is None and is only necessary for models that
             will be hosted on SAS Viya 3.5.
@@ -982,9 +1013,11 @@ class ScoreCode:
         # Session and no model, raise error if SAS Viya 3.5 model
         elif current_session() and not model:
             if current_session().version_info() == 3.5:
-                raise SystemError("Score code for SAS Viya 3.5 requires the model's "
-                                  "UUID. Please provide either the model name, uuid, or"
-                                  "dictionary response from mr.get_model(model).")
+                raise SystemError(
+                    "Score code for SAS Viya 3.5 requires the model's "
+                    "UUID. Please provide either the model name, uuid, or"
+                    "dictionary response from mr.get_model(model)."
+                )
             else:
                 return None
         # Session and model, return uuid if SAS Viya 3.5 model
@@ -995,33 +1028,37 @@ class ScoreCode:
                 return None
 
     @staticmethod
-    def _check_valid_model_prefix(prefix):
+    def _check_valid_model_prefix(prefix: str) -> str:
         """
         Check the model_prefix for a valid Python function name.
 
         Parameters
         ----------
-        prefix : string
+        prefix : str
             The variable for the model name that is used when naming model files.
             (For example: hmeqClassTree + [Score.py || .pickle]).
 
         Returns
         -------
-        model_prefix : string
+        model_prefix : str
             Returns a model_prefix, adjusted as needed for valid Python function names.
         """
         # Replace model_prefix if a valid function name is not provided
         if not prefix.isidentifier():
             new_prefix = re.sub(r"\W|^(?=\d)", "_", prefix)
-            warn(f"The model_prefix argument needs to be a valid Python function "
-                 f"name. The provided value of {prefix} has been replaced "
-                 f"with {new_prefix}.")
+            warn(
+                f"The model_prefix argument needs to be a valid Python function "
+                f"name. The provided value of {prefix} has been replaced "
+                f"with {new_prefix}."
+            )
             return new_prefix
         else:
             return prefix
 
     @classmethod
-    def _viya35_score_code_import(cls, prefix, model_id, score_cas):
+    def _viya35_score_code_import(
+        cls, prefix: str, model_id: str, score_cas: bool
+    ) -> Tuple[str, str]:
         """
         Upload the score code to SAS Model Manager and generate DS2 wrappers as needed.
 
@@ -1030,12 +1067,12 @@ class ScoreCode:
 
         Parameters
         ----------
-        prefix : string
+        prefix : str
             The variable for the model name that is used when naming model files.
             (For example: hmeqClassTree + [Score.py || .pickle]).
-        model_id : string
+        model_id : str
             SAS Model Manager uuid for the model.
-        score_cas : boolean
+        score_cas : bool
             Sets whether models registered to SAS Viya 3.5 should be able to be scored
             and validated through both CAS and SAS Micro Analytic Service. If set to
             false, then the model will only be able to be scored and validated through
@@ -1043,9 +1080,9 @@ class ScoreCode:
 
         Returns
         -------
-        mas_code : string
+        mas_code : str
             A string representation of the dmcas_packagescorecode.sas code used in MAS.
-        cas_code : string
+        cas_code : str
             A string representation of the dmcas_epscorecode.sas code used in CAS.
         """
         files = [
@@ -1061,7 +1098,9 @@ class ScoreCode:
             model_contents = mr.get_model_contents(model_id)
             for file in model_contents:
                 if file.name == "score.sas":
-                    mas_code = mr.get(f"models/{file.modelId}/contents/{file.id}")
+                    mas_code = mr.get(
+                        f"models/{file.modelId}/contents/{file.id}/content"
+                    )
                     cls.upload_and_copy_score_resources(
                         model_id,
                         [
