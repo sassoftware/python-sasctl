@@ -18,7 +18,7 @@ from .zip_model import ZipModel as zm
 
 
 def project_exists(
-    response: Union[dict, RestObj], project: Union[str, dict, RestObj]
+    project: Union[str, dict, RestObj], response: Union[str, dict, RestObj, None] = None
 ) -> RestObj:
     """
     Checks if project exists on SAS Viya. If the project does not exist, then a new
@@ -26,7 +26,7 @@ def project_exists(
 
     Parameters
     ----------
-    response : RestObj or dict
+    response : str, dict, or RestObj, optional
         JSON response of the get_project() call to model repository service.
     project : str, dict, or RestObj
         The name or id of the model project, or a dictionary representation of the
@@ -266,7 +266,7 @@ class ImportModel:
             # Check if project name provided exists and raise an error or create a
             # new project
             project_response = mr.get_project(project)
-            project = project_exists(project_response, project)
+            project = project_exists(project, project_response)
 
             # Check if model with same name already exists in project.
             model_exists(
@@ -302,7 +302,7 @@ class ImportModel:
             # Check if project name provided exists and raise an error or create a
             # new project
             project_response = mr.get_project(project)
-            project = project_exists(project_response, project)
+            project = project_exists(project, project_response)
 
             # Check if model with same name already exists in project.
             model_exists(

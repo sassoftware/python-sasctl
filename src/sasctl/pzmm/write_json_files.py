@@ -35,7 +35,7 @@ ROC = "dmcas_roc.json"
 LIFT = "dmcas_lift.json"
 
 
-def _flatten(nested_list: Iterable) -> Generator[Any]:
+def _flatten(nested_list: Iterable) -> Generator[Any, None, None]:
     """
     Flatten a nested list.
 

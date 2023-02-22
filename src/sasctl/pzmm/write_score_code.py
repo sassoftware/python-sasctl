@@ -3,7 +3,7 @@
 
 import re
 from pathlib import Path
-from typing import Union, Optional, Callable, List, Tuple
+from typing import Union, Optional, Callable, List, Tuple, Any
 from warnings import warn
 
 import pandas as pd
@@ -264,7 +264,7 @@ class ScoreCode:
 
     @staticmethod
     def upload_and_copy_score_resources(
-        model: Union[str, dict, RestObj], files: List[...]
+        model: Union[str, dict, RestObj], files: List[Any]
     ) -> RestObj:
         """
         Upload score resources to SAS Model Manager and copy them to the Compute server.

@@ -19,17 +19,15 @@ from sasctl.pzmm.import_model import ImportModel as im
 from sasctl.pzmm.import_model import project_exists, model_exists
 
 
-def _fake_predict():
-    pass
+def _fake_predict(fake="ABC"):
+    return list(fake)
 
 
 @patch("sasctl.pzmm.ScoreCode.write_score_code")
 @patch("sasctl._services.model_repository.ModelRepository.get_project")
 @patch("sasctl._services.model_repository.ModelRepository.import_model_from_zip")
 @patch.multiple(
-    "sasctl.pzmm.import_model",
-    project_exists=MagicMock(),
-    model_exists=MagicMock()
+    "sasctl.pzmm.import_model", project_exists=MagicMock(), model_exists=MagicMock()
 )
 def test_import_model(mock_import, mock_project, mock_score):
     """
@@ -122,15 +120,15 @@ def test_project_exists(r, mock_project, mock_get):
     - New project created
     """
     project = {"Name": "Test_Project"}
-    response = project_exists(project, "Test_Project")
+    response = project_exists("Test_Project", project)
     assert response == project
 
     with pytest.raises(SystemError):
-        response = project_exists(None, str(uuid4()))
+        project_exists(str(uuid4()))
 
     mock_get.return_value = "abc_repo"
     mock_project.return_value = RestObj(name="Test_Project")
-    response = project_exists(None, "Test_Project")
+    response = project_exists("Test_Project")
     assert RestObj(name="Test_Project") == response
 
 
@@ -153,8 +151,7 @@ def test_model_exists(mock_project, mock_versions, mock_get, mock_delete):
     )
     mock_versions.return_value = [RestObj(name="Test Version", id="def456")]
     mock_get.return_value = []
-    test = model_exists("Test_Project", "Test_Model", False)
-    assert test is None
+    model_exists("Test_Project", "Test_Model", False)
 
     with pytest.raises(ValueError):
         mock_get.return_value = RestObj({"name": "Test_Model", "id": "ghi789"})

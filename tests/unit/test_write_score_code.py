@@ -416,6 +416,7 @@ def test_check_viya_version(mock_version, mock_get_model):
         - Viya 4
         - No connection
     """
+    mock_version.return_value = None
     model = {"name": "Test", "id": "abc123"}
     with pytest.warns():
         assert sc._check_viya_version(model) is None
