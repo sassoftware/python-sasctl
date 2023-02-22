@@ -12,10 +12,11 @@ import sys
 import warnings
 from collections.abc import Iterable
 from pathlib import Path
-from typing import List, Union
+from typing import List, Union, Any, Optional, Generator, Callable, Type
 
 # Third Party Imports
 import pandas as pd
+from pandas import DataFrame, Series
 
 # Package Imports
 from ..core import current_session
@@ -34,7 +35,7 @@ ROC = "dmcas_roc.json"
 LIFT = "dmcas_lift.json"
 
 
-def _flatten(nested_list):
+def _flatten(nested_list: Iterable) -> Generator[Any]:
     """
     Flatten a nested list.
 
@@ -59,15 +60,30 @@ def _flatten(nested_list):
 
 
 class JSONFiles:
-    notebook_output = check_if_jupyter()
+    notebook_output: bool = check_if_jupyter()
+    valid_params: List[str] = [
+        "_RASE_",
+        "_NObs_",
+        "_GINI_",
+        "_GAMMA_",
+        "_MCE_",
+        "_ASE_",
+        "_MCLL_",
+        "_KS_",
+        "_KSPostCutoff_",
+        "_DIV_",
+        "_TAU_",
+        "_KSCut_",
+        "_C_",
+    ]
 
     @classmethod
     def write_var_json(
         cls,
-        input_data: Union[dict, pd.DataFrame, pd.Series],
-        is_input=True,
-        json_path=None,
-    ):
+        input_data: Union[dict, DataFrame, Series],
+        is_input: Optional[bool] = True,
+        json_path: Union[str, Path, None] = None,
+    ) -> Union[dict, None]:
         """
         Writes a variable descriptor JSON file for input or output variables,
         based on input data containing predictor and prediction columns.
@@ -79,15 +95,16 @@ class JSONFiles:
 
         Parameters
         ----------
-        input_data : dataframe or list of dicts
+        input_data : pandas.DataFrame, pandas.Series, or list of dict
             Input dataframe containing the training data set in a pandas.Dataframe
             format. Columns are used to define predictor and prediction variables
             (ambiguously named "predict"). Providing a list of dict objects signals
             that the model files are being created from an MLFlow model.
-        is_input : bool
-            Boolean flag to check if generating the input or output variable JSON.
-        json_path : string or Path, optional
-            File location for the output JSON file. Default is None.
+        is_input : bool, optional
+            Boolean flag to check if generating the input or output variable JSON. The
+            default value is True.
+        json_path : str or Path, optional
+            File location for the output JSON file. The default value is None.
 
         Returns
         -------
@@ -121,13 +138,15 @@ class JSONFiles:
                 return {OUTPUT: json.dumps(dict_list)}
 
     @staticmethod
-    def generate_variable_properties(input_data):
+    def generate_variable_properties(
+        input_data: Union[DataFrame, Series]
+    ) -> List[dict]:
         """
         Generate a list of dictionaries of variable properties given an input dataframe.
 
         Parameters
         ----------
-        input_data : pandas Dataframe or Series
+        input_data : pandas.Dataframe or pandas.Series
             Dataset for either the input or output example data for the model.
 
         Returns
@@ -175,19 +194,19 @@ class JSONFiles:
         return dict_list
 
     @classmethod
-    def generate_mlflow_variable_properties(cls, input_data: list):
+    def generate_mlflow_variable_properties(cls, input_data: list) -> List[dict]:
         """
         Create a list of dictionaries containing the variable properties found in the
         MLModel file for MLFlow model runs.
 
         Parameters
         ----------
-        input_data : list of dicts
+        input_data : list of dict
             Data pulled from the MLModel file by mlflow_model.py.
 
         Returns
         -------
-        dict_list : list of dicts
+        dict_list : list of dict
             List of dictionaries containing the variable properties.
         """
         # Handle MLFlow models with different `var` formatting
@@ -210,7 +229,7 @@ class JSONFiles:
         return dict_list
 
     @staticmethod
-    def check_if_string(data: dict):
+    def check_if_string(data: dict) -> bool:
         """
         Determine if an MLFlow variable in data is a string type.
 
@@ -237,19 +256,19 @@ class JSONFiles:
     @classmethod
     def write_model_properties_json(
         cls,
-        model_name,
-        target_variable,
-        target_event=None,
-        num_target_categories=None,
-        event_prob_var=None,
-        json_path=None,
-        model_desc=None,
-        model_function=None,
-        model_type=None,
-        modeler=None,
-        train_table=None,
-        properties=None,
-    ):
+        model_name: str,
+        target_variable: str,
+        target_event: Union[str, List[str], None] = None,
+        num_target_categories: Optional[int] = None,
+        event_prob_var: Union[str, List[str], None] = None,
+        json_path: Union[str, Path, None] = None,
+        model_desc: Optional[str] = None,
+        model_function: Optional[str] = None,
+        model_type: Optional[str] = None,
+        modeler: Optional[str] = None,
+        train_table: Optional[str] = None,
+        properties: Optional[List[dict]] = None,
+    ) -> Union[dict, None]:
         """
         Writes a JSON file containing SAS Model Manager model properties.
 
@@ -262,38 +281,39 @@ class JSONFiles:
 
         Parameters
         ----------
-        model_name : string
+        model_name : str
             User-defined model name. This value is overwritten by SAS Model Manager
             based on the name of the zip file used for importing the model.
-        target_variable : string
+        target_variable : str
             Target variable to be predicted by the model.
-        target_event : string or list, optional
+        target_event : str or list, optional
             Model target event(s). Providing a list will supply the values for the
-            different target events as a custom property. Default is None.
+            different target events as a custom property. The default value is None.
         num_target_categories : int
             Number of possible target categories. For example: 2 for a binary event.
-        event_prob_var : string or list, optional
+        event_prob_var : str or list, optional
             User-provided output event probability variable(s). Providing a list will
             supply the values for the probability variables as a custom property.
-            Default is None.
-        json_path : string or Path, optional
+            The default value is None.
+        json_path : str or Path, optional
             Path for an output ModelProperties.json file to be generated. If no value
-            is supplied a dict is returned instead. Default is None.
-        model_desc : string, optional
-            User-defined model description. Default is an empty string.
-        model_function : string, optional
-            User-defined model function. Default is an empty string.
-        model_type : string, optional
-            User-defined model type. Default is an empty string.
-        modeler : string, optional
-            User-defined value for the name of the modeler. Default is an empty string.
-        train_table : string, optional
-            The path to the model's training table within SAS Viya. Default is an empty
-            string.
-        properties : List of dicts, optional
+            is supplied a dict is returned instead. The default value is None.
+        model_desc : str, optional
+            User-defined model description. The default value is an empty string.
+        model_function : str, optional
+            User-defined model function. The default value is an empty string.
+        model_type : str, optional
+            User-defined model type. The default value is an empty string.
+        modeler : str, optional
+            User-defined value for the name of the modeler. The default value is an
+            empty string.
+        train_table : str, optional
+            The path to the model's training table within SAS Viya. The default value is
+            an empty string.
+        properties : List of dict, optional
             List of custom properties to be shown in the user-defined properties section
             of the model in SAS Model Manager. Dict entries should contain the `name`,
-            `value`, and `type` keys. Default is an empty list.
+            `value`, and `type` keys. The default value is an empty list.
 
         Returns
         -------
@@ -322,18 +342,22 @@ class JSONFiles:
 
         if isinstance(target_event, list):
             target_event = [str(x) for x in target_event]
-            properties.append({
-                "name": "multiclass_target_events",
-                "value": ", ".join(target_event),
-                "type": "string"
-            })
+            properties.append(
+                {
+                    "name": "multiclass_target_events",
+                    "value": ", ".join(target_event),
+                    "type": "string",
+                }
+            )
 
         if isinstance(event_prob_var, list):
-            properties.append({
-                "name": "multiclass_proba_variables",
-                "value": ", ".join(event_prob_var),
-                "type": "string"
-            })
+            properties.append(
+                {
+                    "name": "multiclass_proba_variables",
+                    "value": ", ".join(event_prob_var),
+                    "type": "string",
+                }
+            )
 
         python_version = sys.version.split(" ", 1)[0]
 
@@ -352,7 +376,7 @@ class JSONFiles:
             "modeler": modeler if modeler else "",
             "tool": "Python 3",
             "toolVersion": python_version,
-            "properties": properties
+            "properties": properties,
         }
 
         if json_path:
@@ -367,7 +391,12 @@ class JSONFiles:
             return {PROP: json.dumps(output_json)}
 
     @classmethod
-    def write_file_metadata_json(cls, model_prefix, json_path=None, is_h2o_model=False):
+    def write_file_metadata_json(
+        cls,
+        model_prefix: str,
+        json_path: Union[str, Path, None] = None,
+        is_h2o_model: Optional[bool] = False,
+    ) -> Union[dict, None]:
         """
         Writes a file metadata JSON file pointing to all relevant files.
 
@@ -375,13 +404,13 @@ class JSONFiles:
 
         Parameters
         ----------
-        model_prefix : string
+        model_prefix : str
             The variable for the model name that is used when naming model files. For
             example: hmeqClassTree + [Score.py | .pickle].
-        json_path : string or Path, optional
+        json_path : str or Path, optional
             Path for an output ModelProperties.json file to be generated. If no value
-            is supplied a dict is returned instead. Default is None.
-        is_h2o_model : boolean, optional
+            is supplied a dict is returned instead. The default value is None.
+        is_h2o_model : bool, optional
             Sets whether the model metadata is associated with an H2O.ai model. If set
             as True, the MOJO model file will be set as a score resource. The default
             value is False.
@@ -418,11 +447,11 @@ class JSONFiles:
     @classmethod
     def input_fit_statistics(
         cls,
-        fitstat_df: pd.DataFrame = None,
-        user_input: bool = False,
-        tuple_list: List[tuple] = None,
-        json_path: Union[str, Path] = None,
-    ):
+        fitstat_df: Optional[DataFrame] = None,
+        user_input: Optional[bool] = False,
+        tuple_list: Optional[List[tuple]] = None,
+        json_path: Optional[Union[str, Path]] = None,
+    ) -> Union[dict, None]:
         """
         Writes a JSON file to display fit statistics for the model in SAS Model Manager.
 
@@ -456,17 +485,17 @@ class JSONFiles:
 
         Parameters
         ----------
-        fitstat_df : pandas Dataframe, optional
+        fitstat_df : pandas.DataFrame, optional
             Dataframe containing fitstat parameters and values. The default value is
             None.
-        user_input : boolean, optional
+        user_input : bool, optional
             If true, prompt the user for more parameters. The default value is false.
-        tuple_list : list of tuples, optional
+        tuple_list : list of tuple, optional
             Input parameter tuples in the form of (parameterName, parameterValue,
             data_role). For example, a sample parameter call would be
             'NObs', 3488, or 'TRAIN'. Variable data_role is typically either TRAIN,
             TEST, or VALIDATE or 1, 2, 3 respectively. The default value is None.
-        json_path : string or Path, optional
+        json_path : str or Path, optional
             Location for the output JSON file. The default value is None.
 
         Returns
@@ -475,22 +504,6 @@ class JSONFiles:
             Dictionary containing a key-value pair representing the file name and json
             dump respectively.
         """
-        valid_params = [
-            "_RASE_",
-            "_NObs_",
-            "_GINI_",
-            "_GAMMA_",
-            "_MCE_",
-            "_ASE_",
-            "_MCLL_",
-            "_KS_",
-            "_KSPostCutoff_",
-            "_DIV_",
-            "_TAU_",
-            "_KSCut_",
-            "_C_",
-        ]
-
         json_template_path = (
             Path(__file__).resolve().parent / "template_files/dmcas_fitstat.json"
         )
@@ -501,13 +514,13 @@ class JSONFiles:
             data_map[i] = json_dict["data"][i]
 
         if tuple_list:
-            data_map = cls.add_tuple_to_fitstat(data_map, tuple_list, valid_params)
+            data_map = cls.add_tuple_to_fitstat(data_map, tuple_list)
 
         if user_input:
-            data_map = cls.user_input_fitstat(data_map, valid_params)
+            data_map = cls.user_input_fitstat(data_map)
 
         if fitstat_df is not None:
-            data_map = cls.add_df_to_fitstat(fitstat_df, data_map, valid_params)
+            data_map = cls.add_df_to_fitstat(fitstat_df, data_map)
 
         for i in range(3):
             json_dict["data"][i] = data_map[i]
@@ -525,8 +538,8 @@ class JSONFiles:
 
     @classmethod
     def add_tuple_to_fitstat(
-        cls, data: List[dict], parameters: List[tuple], valid_params
-    ):
+        cls, data: List[dict], parameters: List[tuple]
+    ) -> List[dict]:
         """
         Using tuples defined in input_fit_statistics, add them to the dmcas_fitstat json
         dictionary.
@@ -535,17 +548,15 @@ class JSONFiles:
 
         Parameters
         ----------
-        data : list of dicts
+        data : list of dict
             List of dicts for the data values of each parameter. Split into the three
             valid partitions (TRAIN, TEST, VALIDATE).
-        parameters : list of tuples
+        parameters : list of tuple
             User-provided data for each parameter per partition provided.
-        valid_params : list
-            A list of valid parameters for dmcas_fitstat.json files.
 
         Returns
         -------
-        list of dicts
+        list of dict
             List of dicts with the tuple values inputted.
 
         Raises
@@ -559,7 +570,7 @@ class JSONFiles:
             # Produce a warning or error for invalid parameter names or formatting
             if isinstance(param, tuple) and len(param) == 3:
                 param_name = cls.format_parameter(param[0])
-                if param_name not in valid_params:
+                if param_name not in cls.valid_params:
                     warnings.warn(
                         f"WARNING: {param[0]} is not a valid parameter and has been "
                         f"ignored.",
@@ -583,7 +594,7 @@ class JSONFiles:
         return data
 
     @classmethod
-    def user_input_fitstat(cls, data: List[dict], valid_params):
+    def user_input_fitstat(cls, data: List[dict]) -> List[dict]:
         """
         Prompt the user to enter parameters for dmcas_fitstat.json.
 
@@ -592,8 +603,6 @@ class JSONFiles:
         data : list of dicts
             List of dicts for the data values of each parameter. Split into the three
             valid partitions (TRAIN, TEST, VALIDATE).
-        valid_params : list
-            A list of valid parameters for dmcas_fitstat.json files.
 
         Returns
         -------
@@ -603,7 +612,7 @@ class JSONFiles:
         while True:
             input_param_name = input("What is the parameter name?\n")
             param_name = cls.format_parameter(input_param_name)
-            if param_name not in valid_params:
+            if param_name not in cls.valid_params:
                 warnings.warn(
                     f"{input_param_name} is not a valid parameter.",
                     category=UserWarning,
@@ -635,29 +644,27 @@ class JSONFiles:
         return data
 
     @classmethod
-    def add_df_to_fitstat(cls, df, data: List[dict], valid_params):
+    def add_df_to_fitstat(cls, df: DataFrame, data: List[dict]) -> List[dict]:
         """
-        Add parameters from provided Dataframe to the fitstats dictionary.
+        Add parameters from provided DataFrame to the fitstats dictionary.
 
         Parameters
         ----------
-        df : pandas Dataframe
+        df : pandas.DataFrame
             Dataframe containing fitstat parameters and values.
-        data : list of dicts
+        data : list of dict
             List of dicts for the data values of each parameter. Split into the three
             valid partitions (TRAIN, TEST, VALIDATE).
-        valid_params : list
-            A list of valid parameters for dmcas_fitstat.json files.
 
         Returns
         -------
-        list of dicts
+        list of dict
             List of dicts with the user provided values inputted.
         """
         for i, row in enumerate(df.values):
             input_param_name, param_value, data_role = row
             param_name = cls.format_parameter(input_param_name)
-            if param_name not in valid_params:
+            if param_name not in cls.valid_params:
                 warnings.warn(
                     f"{input_param_name} is not a valid parameter.",
                     category=UserWarning,
@@ -678,13 +685,13 @@ class JSONFiles:
     @classmethod
     def calculate_model_statistics(
         cls,
-        target_value,
-        prob_value=None,
-        validate_data=None,
-        train_data=None,
-        test_data=None,
-        json_path=None,
-    ):
+        target_value: Union[str, int, float],
+        prob_value: Union[int, float, None] = None,
+        validate_data: Union[DataFrame, List[list], Type["numpy.array"]] = None,
+        train_data: Union[DataFrame, List[list], Type["numpy.array"]] = None,
+        test_data: Union[DataFrame, List[list], Type["numpy.array"]] = None,
+        json_path: Union[str, Path, None] = None,
+    ) -> Union[dict, None]:
         """
         Calculates fit statistics (including ROC and Lift curves) from datasets and then
         either writes them to JSON files or returns them as a single dictionary.
@@ -716,13 +723,13 @@ class JSONFiles:
         prob_value : int or float, optional
             The threshold value for model predictions to indicate an event occurred. The
             default value is 0.5.
-        validate_data : pandas DataFrame, list of lists, or numpy array, optional
+        validate_data : pandas.DataFrame, list of list, or numpy array, optional
             Dataset pertaining to the validation data. The default value is None.
-        train_data : pandas DataFrame, list of lists, or numpy array, optional
+        train_data : pandas.DataFrame, list of list, or numpy array, optional
             Dataset pertaining to the training data. The default value is None.
-        test_data : pandas DataFrame, list of lists, or numpy array, optional
+        test_data : pandas.DataFrame, list of list, or numpy array, optional
             Dataset pertaining to the test data. The default value is None.
-        json_path : string or Path, optional
+        json_path : str or Path, optional
             Location for the output JSON files. The default value is None.
 
         Returns
@@ -818,18 +825,22 @@ class JSONFiles:
             }
 
     @staticmethod
-    def check_for_data(validate, train, test):
+    def check_for_data(
+        validate: Union[DataFrame, List[list], Type["numpy.array"]] = None,
+        train: Union[DataFrame, List[list], Type["numpy.array"]] = None,
+        test: Union[DataFrame, List[list], Type["numpy.array"]] = None,
+    ) -> list:
         """
         Check which datasets were provided and return a list of flags.
 
         Parameters
         ----------
-        validate : pandas DataFrame, list of lists, or numpy array
-            Dataset pertaining to the validation data.
-        train : pandas DataFrame, list of lists, or numpy array
-            Dataset pertaining to the training data.
-        test : pandas DataFrame, list of lists, or numpy array
-            Dataset pertaining to the test data.
+        validate : pandas.DataFrame, list of list, or numpy array, optional
+            Dataset pertaining to the validation data. The default value is None.
+        train : pandas.DataFrame, list of list, or numpy array, optional
+            Dataset pertaining to the training data. The default value is None.
+        test : pandas.DataFrame, list of list, or numpy array, optional
+            Dataset pertaining to the test data. The default value is None.
 
         Returns
         -------
@@ -855,7 +866,10 @@ class JSONFiles:
         return data_partitions
 
     @staticmethod
-    def stat_dataset_to_dataframe(data, target_value=None):
+    def stat_dataset_to_dataframe(
+        data: Union[DataFrame, List[list], Type["numpy.array"]] = None,
+        target_value: Union[str, int, float, None] = None,
+    ) -> DataFrame:
         """
         Convert the user supplied statistical dataset from either a pandas DataFrame,
         list of lists, or numpy array to a DataFrame formatted for SAS CAS upload.
@@ -868,16 +882,17 @@ class JSONFiles:
 
         Parameters
         ----------
-        data : pandas DataFrame, list of lists, or numpy array
+        data : pandas.DataFrame, list of list, or numpy array
             Dataset representing the actual and predicted values of the model. May also
             include the prediction probabilities.
         target_value : str, int, or float, optional
             Target event value for model prediction events. Used for creating a binary
-            probability column when no probability values are provided. Default is None.
+            probability column when no probability values are provided. The default
+            value is None.
 
         Returns
         -------
-        data : pandas DataFrame
+        data : pandas.DataFrame
             Dataset formatted for SAS CAS upload.
 
         Raises
@@ -932,7 +947,9 @@ class JSONFiles:
         return data
 
     @staticmethod
-    def apply_dataframe_to_json(json_dict, partition, stat_df):
+    def apply_dataframe_to_json(
+        json_dict: dict, partition: int, stat_df: DataFrame
+    ) -> dict:
         """
         Map the values of the ROC or Lift charts from SAS CAS to the dictionary
         representation of the respective json file.
@@ -943,7 +960,7 @@ class JSONFiles:
             Dictionary representation of the ROC or Lift chart json file.
         partition : int
             Numerical representation of the data partition. Either 0, 1, or 2.
-        stat_df : pandas DataFrame
+        stat_df : pandas.DataFrame
             ROC or Lift DataFrame generated from the SAS CAS percentile action set.
 
         Returns
@@ -1399,13 +1416,13 @@ class JSONFiles:
             print(f"{LIFT} was successfully written and saved to {Path(jPath) / LIFT}")
 
     @staticmethod
-    def read_json_file(path):
+    def read_json_file(path: Union[str, Path]) -> Any:
         """
         Reads a JSON file from a given path.
 
         Parameters
         ----------
-        path : str or pathlib Path
+        path : str or Path
             Location of the JSON file to be opened.
 
         Returns
@@ -1417,18 +1434,18 @@ class JSONFiles:
             return json.load(jFile)
 
     @staticmethod
-    def format_parameter(param_name):
+    def format_parameter(param_name: str):
         """
         Formats the parameter name to the JSON standard expected for dmcas_fitstat.json.
 
         Parameters
         ----------
-        param_name : string
+        param_name : str
             Name of the parameter.
 
         Returns
         -------
-        paramName : string
+        str
             Name of the parameter.
         """
         if not (param_name.startswith("_") and param_name.endswith("_")):
@@ -1440,7 +1457,7 @@ class JSONFiles:
         return param_name
 
     @staticmethod
-    def convert_data_role(data_role):
+    def convert_data_role(data_role: Union[str, int]) -> Union[str, int]:
         """
         Converts the data role identifier from string to int or int to string.
 
@@ -1449,13 +1466,13 @@ class JSONFiles:
 
         Parameters
         ----------
-        data_role : string or int
+        data_role : str or int
             Identifier of the data set's role; either TRAIN, TEST, or VALIDATE, or
             correspondingly 1, 2, or 3.
 
         Returns
         -------
-        conversion : int or string
+        conversion : str or int
             Converted data role identifier.
         """
         if isinstance(data_role, int) or isinstance(data_role, float):
@@ -1483,7 +1500,11 @@ class JSONFiles:
         return conversion
 
     @classmethod
-    def create_requirements_json(cls, model_path=Path.cwd(), output_path=None):
+    def create_requirements_json(
+        cls,
+        model_path: Union[str, Path, None] = Path.cwd(),
+        output_path: Union[str, Path, None] = None,
+    ) -> Union[dict, None]:
         """
         Searches the model directory for Python scripts and pickle files and
         determines their Python package dependencies.
@@ -1512,10 +1533,11 @@ class JSONFiles:
         model_path : str or Path, optional
             The path to a Python project, by default the current working directory.
         output_path : str or Path, optional
-            The path for the output requirements.json file. Default is None.
+            The path for the output requirements.json file. The default value is None.
+
         Returns
         -------
-        list of dicts
+        list of dict
             List of dictionary representations of the json file contents, split into
             each package and/or warning.
         """
@@ -1562,7 +1584,7 @@ class JSONFiles:
             return {"requirements.json": json.dumps(json_dicts)}
 
     @staticmethod
-    def get_local_package_version(package_list):
+    def get_local_package_version(package_list: List[str]) -> List[List[str]]:
         """
         Get package_name versions from the local environment.
 
@@ -1571,12 +1593,12 @@ class JSONFiles:
 
         Parameters
         ----------
-        package_list : list
+        package_list : list of str
             List of Python packages.
 
         Returns
         -------
-        list
+        list of list of str
             Nested list of Python package_name names and found versions.
         """
 
@@ -1618,7 +1640,9 @@ class JSONFiles:
         return package_and_version
 
     @classmethod
-    def get_code_dependencies(cls, model_path=Path.cwd()):
+    def get_code_dependencies(
+        cls, model_path: Union[str, Path] = Path.cwd()
+    ) -> List[str]:
         """
         Get the package dependencies for all Python scripts in the provided directory
         path.
@@ -1628,8 +1652,8 @@ class JSONFiles:
         Parameters
         ----------
         model_path : string or Path, optional
-            File location for the output JSON file. Default is the current working
-            directory.
+            File location for the output JSON file. The default value is the current
+            working directory.
 
         Returns
         -------
@@ -1643,7 +1667,7 @@ class JSONFiles:
         return import_info
 
     @staticmethod
-    def find_imports(file_path):
+    def find_imports(file_path: Union[str, Path]) -> List[str]:
         """
         Find import calls in provided Python code path.
 
@@ -1654,12 +1678,12 @@ class JSONFiles:
 
         Parameters
         ----------
-        file_path : string or Path
+        file_path : str or Path
             File location for the Python file to be parsed.
 
         Returns
         -------
-        list
+        list of str
             List of found package dependencies.
         """
         with open(file_path, "r") as file:  # skipcq: PTC-W6004
@@ -1686,19 +1710,19 @@ class JSONFiles:
         return modules
 
     @staticmethod
-    def get_pickle_file(pickle_folder=Path.cwd()):
+    def get_pickle_file(pickle_folder: Union[str, Path] = Path.cwd()) -> List[Path]:
         """
         Given a file path, retrieve the pickle file(s).
 
         Parameters
         ----------
         pickle_folder : str or Path
-            File location for the input pickle file. Default is the current working
+            File location for the input pickle file. The default value is the current working
             directory.
 
         Returns
         -------
-        list
+        list of Path
             A list of pickle files.
         """
         return [
@@ -1706,7 +1730,7 @@ class JSONFiles:
         ]
 
     @classmethod
-    def get_pickle_dependencies(cls, pickle_file):
+    def get_pickle_dependencies(cls, pickle_file: Union[str, Path]) -> List[str]:
         """
         Reads the pickled byte stream from a file object, serializes the pickled byte
         stream as a bytes object, and inspects the bytes object for all Python
@@ -1731,7 +1755,7 @@ class JSONFiles:
         return modules
 
     @staticmethod
-    def get_package_names(stream):
+    def get_package_names(stream: Union[bytes, str]) -> List[str]:
         """
         Generates a list of found `package` names from a pickle stream.
 
@@ -1754,7 +1778,7 @@ class JSONFiles:
 
         Returns
         -------
-        list
+        List of str
             List of package names found as module dependencies in the pickle file.
         """
         # Collect opcodes, arguments, and position values from the pickle stream
@@ -1798,19 +1822,19 @@ class JSONFiles:
         return [x for x in packages if x]
 
     @staticmethod
-    def remove_standard_library_packages(package_list):
+    def remove_standard_library_packages(package_list: List[str]) -> List[str]:
         """
         Remove any packages from the required list of installed packages that are
         part of the Python Standard Library.
 
         Parameters
         ----------
-        package_list : list
+        package_list : list of str
             List of all packages found that are not Python built-in packages.
 
         Returns
         -------
-        list
+        list of str
             List of all packages found that are not Python built-in packages or part of
             the Python Standard Library.
         """
