@@ -17,16 +17,18 @@ from .zip_model import ZipModel as zm
 # TODO: add converter for any type of dataset (list, dataframe, numpy array)
 
 
-def project_exists(response: RestObj, project: Union[str, RestObj]) -> RestObj:
+def project_exists(
+    response: Union[dict, RestObj], project: Union[str, dict, RestObj]
+) -> RestObj:
     """
     Checks if project exists on SAS Viya. If the project does not exist, then a new
     project is created or an error is raised.
 
     Parameters
     ----------
-    response : RestObj
+    response : RestObj or dict
         JSON response of the get_project() call to model repository service.
-    project : str or RestObj
+    project : str, dict, or RestObj
         The name or id of the model project, or a dictionary representation of the
         project.
 
@@ -60,10 +62,10 @@ def project_exists(response: RestObj, project: Union[str, RestObj]) -> RestObj:
 
 
 def model_exists(
-        project: Union[str, RestObj],
-        name: str,
-        force: bool,
-        version_name: str = "latest"
+    project: Union[str, dict, RestObj],
+    name: str,
+    force: bool,
+    version_name: str = "latest",
 ) -> None:
     """
     Checks if model already exists in the same project and either raises an error or
@@ -72,7 +74,7 @@ def model_exists(
 
     Parameters
     ----------
-    project : str or dict
+    project : str, dict, or RestObj
         The name or id of the model project, or a dictionary representation of the
         project.
     name : str
@@ -136,7 +138,7 @@ class ImportModel:
         input_data: DataFrame,
         predict_method: Callable[..., List],
         output_variables: List[str],
-        project: Union[str, RestObj],
+        project: Union[str, dict, RestObj],
         pickle_type: str = "pickle",
         project_version: str = "latest",
         missing_values: bool = False,
@@ -185,7 +187,7 @@ class ImportModel:
             The scoring output_variables for the model. For classification models, it is
              assumed that the first value in the list represents the classification
             output. This function supports single and multi-class classification models.
-        project : str or dict
+        project : str, dict, or RestObj
             The name or id of the model project, or a dictionary representation of the
             project.
         pickle_type : string, optional

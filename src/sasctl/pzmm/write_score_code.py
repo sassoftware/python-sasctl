@@ -29,7 +29,7 @@ class ScoreCode:
         predict_method: Callable[..., List],
         output_variables: List[str],
         pickle_type: str = "pickle",
-        model: Union[RestObj, str, None] = None,
+        model: Union[str, dict, RestObj, None] = None,
         predict_threshold: Optional[float] = None,
         score_code_path: Union[Path, str, None] = None,
         target_values: Optional[List] = None,
@@ -101,7 +101,7 @@ class ScoreCode:
         pickle_type : str, optional
             Indicator for the package used to serialize the model file to be uploaded to
             SAS Model Manager. The default value is `pickle`.
-        model : str or RestObj, optional
+        model : str, dict, or RestObj, optional
             The name or id of the model, or a dictionary representation of
             the model. The default value is None and is only necessary for models that
             will be hosted on SAS Viya 3.5.
@@ -264,14 +264,14 @@ class ScoreCode:
 
     @staticmethod
     def upload_and_copy_score_resources(
-        model: Union[str, RestObj], files: List[...]
+        model: Union[str, dict, RestObj], files: List[...]
     ) -> RestObj:
         """
         Upload score resources to SAS Model Manager and copy them to the Compute server.
 
         Parameters
         ----------
-        model : str or RestObj
+        model : str, dict, or RestObj
             The name or id of the model, or a dictionary representation of the model.
         files : list of file objects
             The list of score resource files to upload.
@@ -286,13 +286,13 @@ class ScoreCode:
         return mr.copy_python_resources(model)
 
     @staticmethod
-    def _get_model_id(model: Union[str, RestObj]) -> str:
+    def _get_model_id(model: Union[str, dict, RestObj]) -> str:
         """
         Get the model uuid from SAS Model Manager.
 
         Parameters
         ----------
-        model : str or RestObj
+        model : str, dict, or RestObj
             The name or id of the model, or a dictionary representation of the model.
 
         Returns
@@ -891,7 +891,7 @@ class ScoreCode:
             )
 
     @staticmethod
-    def convert_mas_to_cas(mas_code: str, model: Union[str, RestObj]) -> str:
+    def convert_mas_to_cas(mas_code: str, model: Union[str, dict, RestObj]) -> str:
         """
         Using the generated score.sas code from the Python wrapper API, convert the
         SAS Microanalytic Service based code to CAS compatible.
@@ -900,7 +900,7 @@ class ScoreCode:
         ----------
         mas_code : str
             String representation of the dmcas_packagescorecode.sas DS2 wrapper
-        model : str or RestObj
+        model : str, dict, or RestObj
             The name or id of the model, or a dictionary representation of the model
 
         Returns
@@ -984,7 +984,7 @@ class ScoreCode:
         return input_var_list, input_dtypes_list
 
     @classmethod
-    def _check_viya_version(cls, model: Union[str, RestObj]) -> Union[str, None]:
+    def _check_viya_version(cls, model: Union[str, dict, RestObj]) -> Union[str, None]:
         """
         Check that a valid SAS Viya version and model argument are provided.
 
@@ -992,7 +992,7 @@ class ScoreCode:
 
         Parameters
         ----------
-        model : str or RestObj
+        model : str, dict, or RestObj
             The name or id of the model, or a dictionary representation of
             the model. The default value is None and is only necessary for models that
             will be hosted on SAS Viya 3.5.
