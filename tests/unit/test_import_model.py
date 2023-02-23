@@ -33,6 +33,7 @@ def test_import_model(mock_import, mock_project, mock_score):
     """
     Test Cases:
     - mlflow models set pickle type
+    - no score code generation
     - viya 4
         - in memory files
         - disk files
@@ -57,56 +58,62 @@ def test_import_model(mock_import, mock_project, mock_score):
             "Test.json": json.dumps({"Test": True, "TestNum": 1}),
             "Other_Test.json": json.dumps({"Other": None, "TestNum": 2}),
         }
-        return_files = im.import_model(
+
+        with pytest.warns():
+            model, return_files = im.import_model(
+                model_files, "Test_Model", "Test_Project"
+            )
+
+        model, return_files = im.import_model(
             model_files,
             "Test_Model",
+            "Test_Project",
             pd.DataFrame(data=[[1, 1]]),
             _fake_predict,
             ["C", "P"],
-            "Test_Project",
             mlflow_details={"serialization_format": "dill"},
         )
         _, _, kwargs = mock_score.mock_calls[0]
 
         assert ("pickle_type", "dill") in kwargs.items()
-        assert return_files
+        assert isinstance(return_files, dict)
 
         mock_version.return_value = VersionInfo(3)
-        return_files = im.import_model(
+        model, return_files = im.import_model(
             model_files,
             "Test_Model",
+            "Test_Project",
             pd.DataFrame(data=[[1, 1]]),
             _fake_predict,
             ["C", "P"],
-            "Test_Project",
         )
-        assert return_files
+        assert isinstance(return_files, dict)
 
         tmp_dir = tempfile.TemporaryDirectory()
         _ = tempfile.NamedTemporaryFile(delete=False, suffix=".json", dir=tmp_dir.name)
         model_files = Path(tmp_dir.name)
         mock_score.return_value = None
 
-        return_files = im.import_model(
+        model, return_files = im.import_model(
             model_files,
             "Test_Model",
+            "Test_Project",
             pd.DataFrame(data=[[1, 1]]),
             _fake_predict,
             ["C", "P"],
-            "Test_Project",
         )
-        assert not return_files
+        assert not isinstance(return_files, dict)
 
         mock_version.return_value = VersionInfo(4)
-        return_files = im.import_model(
+        model, return_files = im.import_model(
             model_files,
             "Test_Model",
+            "Test_Project",
             pd.DataFrame(data=[[1, 1]]),
             _fake_predict,
             ["C", "P"],
-            "Test_Project",
         )
-        assert not return_files
+        assert not isinstance(return_files, dict)
 
 
 @patch("sasctl._services.service.Service.get")
