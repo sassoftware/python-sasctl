@@ -9,18 +9,28 @@ import pandas as pd
 
 sklearn = pytest.importorskip("sklearn")
 from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.ensemble import GradientBoostingClassifier, GradientBoostingRegressor, RandomForestClassifier, RandomForestRegressor
+from sklearn.ensemble import (
+    GradientBoostingClassifier,
+    GradientBoostingRegressor,
+    RandomForestClassifier,
+    RandomForestRegressor,
+)
 from sklearn.svm import SVC, SVR
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 
 from sasctl.utils.model_info import get_model_info
 
 
-@pytest.mark.parametrize("model, algorithm", [(LinearRegression(), "Linear regression"),
-                                            (DecisionTreeRegressor(), "Decision tree"),
-                                            (RandomForestRegressor(), "Forest"),
-                                            (GradientBoostingRegressor(), "Gradient boosting"),
-                                            (SVR(), "Support vector machine")])
+@pytest.mark.parametrize(
+    "model, algorithm",
+    [
+        (LinearRegression(), "Linear regression"),
+        (DecisionTreeRegressor(), "Decision tree"),
+        (RandomForestRegressor(), "Forest"),
+        (GradientBoostingRegressor(), "Gradient boosting"),
+        (SVR(), "Support vector machine"),
+    ],
+)
 def test_sklearn_regression(boston_dataset, model, algorithm):
     target = "Price"
     X = boston_dataset.drop(columns=target)
@@ -34,17 +44,23 @@ def test_sklearn_regression(boston_dataset, model, algorithm):
     assert not info.is_clusterer
     assert info.analytic_function == "prediction"
     assert info.algorithm == algorithm
-    assert info.output_column_names == ["I_Target"]  # y is a series so has no column name
+    assert info.output_column_names == [
+        "I_Target"
+    ]  # y is a series so has no column name
     assert info.target_values == None
     assert info.predict_function == model.predict
 
 
-
-@pytest.mark.parametrize("model, algorithm", [(LogisticRegression(), "Logistic regression"),
-                                            (DecisionTreeClassifier(), "Decision tree"),
-                                            (RandomForestClassifier(), "Forest"),
-                                            (GradientBoostingClassifier(), "Gradient boosting"),
-                                            (SVC(probability=True), "Support vector machine")])
+@pytest.mark.parametrize(
+    "model, algorithm",
+    [
+        (LogisticRegression(), "Logistic regression"),
+        (DecisionTreeClassifier(), "Decision tree"),
+        (RandomForestClassifier(), "Forest"),
+        (GradientBoostingClassifier(), "Gradient boosting"),
+        (SVC(probability=True), "Support vector machine"),
+    ],
+)
 def test_sklearn_binary_classifier(cancer_dataset, model, algorithm):
     target = "Type"
     X = cancer_dataset.drop(columns=target)
@@ -58,7 +74,9 @@ def test_sklearn_binary_classifier(cancer_dataset, model, algorithm):
     assert not info.is_clusterer
     assert info.analytic_function == "classification"
     assert info.algorithm == algorithm
-    assert info.output_column_names == ["I_Target"]  # y is a series so has no column name
+    assert info.output_column_names == [
+        "I_Target"
+    ]  # y is a series so has no column name
     assert info.target_values == ["malignant"]
     assert info.predict_function == model.predict
 
@@ -75,11 +93,16 @@ def test_sklearn_binary_classifier(cancer_dataset, model, algorithm):
     assert info.threshold == 0.5
 
 
-@pytest.mark.parametrize("model, algorithm", [(LogisticRegression(), "Logistic regression"),
-                                            (DecisionTreeClassifier(), "Decision tree"),
-                                            (RandomForestClassifier(), "Forest"),
-                                            (GradientBoostingClassifier(), "Gradient boosting"),
-                                            (SVC(probability=True), "Support vector machine")])
+@pytest.mark.parametrize(
+    "model, algorithm",
+    [
+        (LogisticRegression(), "Logistic regression"),
+        (DecisionTreeClassifier(), "Decision tree"),
+        (RandomForestClassifier(), "Forest"),
+        (GradientBoostingClassifier(), "Gradient boosting"),
+        (SVC(probability=True), "Support vector machine"),
+    ],
+)
 def test_sklearn_multiclass_classifier(iris_dataset, model, algorithm):
     target = "Species"
     X = iris_dataset.drop(columns=target)
@@ -93,7 +116,9 @@ def test_sklearn_multiclass_classifier(iris_dataset, model, algorithm):
     assert not info.is_clusterer
     assert info.analytic_function == "classification"
     assert info.algorithm == algorithm
-    assert info.output_column_names == ["I_Target"]  # y is a series so has no column name
+    assert info.output_column_names == [
+        "I_Target"
+    ]  # y is a series so has no column name
     assert info.target_values == ["setosa", "versicolor", "virginica"]
     assert info.predict_function == model.predict
 
