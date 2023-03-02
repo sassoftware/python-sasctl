@@ -10,6 +10,7 @@ import pickle
 import random
 import tempfile
 import unittest
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -140,20 +141,57 @@ def test_write_var_json(hmeq_dataset):
     assert "inputVar.json" in var_mlflow_dict
 
 
+def test_truncate_properties():
+    """
+    Test Cases:
+    - Normal sized key and value
+    - Key too big
+    - Value too big
+    - Key and value too big
+    """
+    test_property = {"test_key": "test_value"}
+    assert test_property == jf.truncate_properties(test_property)
+
+    big_key = "A" * 100
+    big_value = "a" * 1000
+    with pytest.warns(
+        UserWarning,
+        match=f"WARNING: The property name {big_key} was truncated to 60 characters.",
+    ):
+        test_property = {big_key: "test_value"}
+        assert {big_key[:60]: "test_value"} == jf.truncate_properties(test_property)
+
+    with pytest.warns(
+        UserWarning,
+        match=f"WARNING: The property value {big_value} was truncated to 512 "
+        f"characters.",
+    ):
+        test_property = {"test_key": big_value}
+        assert {"test_key": big_value[:512]} == jf.truncate_properties(test_property)
+
+    with warnings.catch_warnings(record=True) as w:
+        test_property = {big_key: big_value}
+        assert {big_key[:60]: big_value[:512]} == jf.truncate_properties(test_property)
+        assert len(w) == 2
+
+
 def test_write_model_properties_json():
     """
     Test Cases:
-    - Generate correctly named file with json_path provided
-    - Return correctly labelled dict when no json_path is provided
+    - File exists if json_path
+    - Dict return if not json_path
+    - Prediction model
+    - Binary classification model
+    - Multiclassification model
+    - Improper number of target values
     - Truncate model description that is too long
-    - Interval target_level and invalid event_prob_var
+    - Truncate custom property that is too long
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
         jf.write_model_properties_json(
             model_name="Test_Model",
             target_variable="BAD",
-            target_event="1",
-            num_target_categories=2,
+            target_values=[1, 0],
             json_path=Path(tmp_dir),
         )
         assert (Path(tmp_dir) / "ModelProperties.json").exists()
@@ -161,25 +199,43 @@ def test_write_model_properties_json():
     prop_dict = jf.write_model_properties_json(
         model_name="Test_Model",
         target_variable="BAD",
-        target_event="1",
-        num_target_categories=2,
+        target_values=None,
     )
     assert "ModelProperties.json" in prop_dict
+    assert json.loads(prop_dict["ModelProperties.json"])["function"] == "Prediction"
+    assert json.loads(prop_dict["ModelProperties.json"])["targetLevel"] == "INTERVAL"
+    assert json.loads(prop_dict["ModelProperties.json"])["targetEvent"] == ""
+    assert json.loads(prop_dict["ModelProperties.json"])["eventProbVar"] == ""
+
+    prop_dict = jf.write_model_properties_json(
+        model_name="Test_Model", target_variable="BAD", target_values=[1, 0]
+    )
+    assert json.loads(prop_dict["ModelProperties.json"])["function"] == "Classification"
+    assert json.loads(prop_dict["ModelProperties.json"])["targetLevel"] == "BINARY"
+    assert json.loads(prop_dict["ModelProperties.json"])["targetEvent"] == "1"
+    assert json.loads(prop_dict["ModelProperties.json"])["eventProbVar"] == "P_1"
 
     prop_dict = jf.write_model_properties_json(
         model_name="Test_Model",
         target_variable="BAD",
-        target_event=[4, 3, 1, 4],
-        num_target_categories=3,
-        model_desc="a" * 2000,
-        event_prob_var=["A", "B", "C", "D"],
+        target_values=[4, 3, 1, 4],
     )
-    assert len(json.loads(prop_dict["ModelProperties.json"])["description"]) <= 1024
     assert json.loads(prop_dict["ModelProperties.json"])["target_level"] == "NOMINAL"
     assert json.loads(prop_dict["ModelProperties.json"])["properties"] == [
         {"name": "multiclass_target_events", "value": "4, 3, 1, 4", "type": "string"},
         {"name": "multiclass_proba_variables", "value": "A, B, C, D", "type": "string"},
     ]
+
+    with pytest.warns():
+        prop_dict = jf.write_model_properties_json(
+            model_name="Test_Model", target_variable="BAD", model_desc="a" * 1000
+        )
+        assert len(json.loads(prop_dict["ModelProperties.json"])["description"]) <= 1024
+
+    with pytest.raises(ValueError):
+        prop_dict = jf.write_model_properties_json(
+            model_name="Test_Model", target_variable="BAD", target_values=[1]
+        )
 
 
 def test_write_file_metadata_json():

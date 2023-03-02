@@ -12,7 +12,7 @@ import sys
 import warnings
 from collections.abc import Iterable
 from pathlib import Path
-from typing import List, Union, Any, Optional, Generator, Callable, Type
+from typing import List, Union, Any, Optional, Generator, Type
 
 # Third Party Imports
 import pandas as pd
@@ -258,13 +258,10 @@ class JSONFiles:
         cls,
         model_name: str,
         target_variable: str,
-        target_event: Union[str, List[str], None] = None,
-        num_target_categories: Optional[int] = None,
-        event_prob_var: Union[str, List[str], None] = None,
+        target_values: Optional[List[Any]] = None,
         json_path: Union[str, Path, None] = None,
         model_desc: Optional[str] = None,
-        model_function: Optional[str] = None,
-        model_type: Optional[str] = None,
+        model_algorithm: Optional[str] = None,
         modeler: Optional[str] = None,
         train_table: Optional[str] = None,
         properties: Optional[List[dict]] = None,
@@ -286,23 +283,18 @@ class JSONFiles:
             based on the name of the zip file used for importing the model.
         target_variable : str
             Target variable to be predicted by the model.
-        target_event : str or list, optional
-            Model target event(s). Providing a list will supply the values for the
-            different target events as a custom property. The default value is None.
-        num_target_categories : int
-            Number of possible target categories. For example: 2 for a binary event.
-        event_prob_var : str or list, optional
-            User-provided output event probability variable(s). Providing a list will
-            supply the values for the probability variables as a custom property.
-            The default value is None.
+        target_values : list, optional
+            Model target event(s). Providing no target values indicates the model is a
+            regression model. Providing 2 target values indicates the model is a binary
+            classification model. Providing > 2 target values will supply the values
+            for the different target events as a custom property. An error is raised if
+            only 1 target value is supplied. The default value is None.
         json_path : str or Path, optional
             Path for an output ModelProperties.json file to be generated. If no value
             is supplied a dict is returned instead. The default value is None.
         model_desc : str, optional
             User-defined model description. The default value is an empty string.
-        model_function : str, optional
-            User-defined model function. The default value is an empty string.
-        model_type : str, optional
+        model_algorithm : str, optional
             User-defined model type. The default value is an empty string.
         modeler : str, optional
             User-defined value for the name of the modeler. The default value is an
@@ -330,34 +322,50 @@ class JSONFiles:
                 model_desc = model_desc[:1024]
                 warnings.warn(
                     "WARNING: The provided model description was truncated to 1024 "
-                    "characters. "
+                    "characters."
                 )
 
-        if num_target_categories > 2:
-            target_level = "NOMINAL"
-        elif num_target_categories in [1, 2]:
+        if not target_values:
+            model_function = "Prediction"
+            target_level = "INTERVAL"
+            target_event = ""
+            event_prob_var = ""
+        elif isinstance(target_values, list) and len(target_values) == 2:
+            model_function = "Classification"
             target_level = "BINARY"
-        else:
-            target_level = None
-
-        if isinstance(target_event, list):
-            target_event = [str(x) for x in target_event]
+            target_event = target_values[0]
+            event_prob_var = f"P_{target_values[0]}"
+        elif isinstance(target_values, list) and len(target_values) > 2:
+            model_function = "Classification"
+            target_level = "NOMINAL"
+            target_event = ""
+            event_prob_var = ""
+            targets = [str(x) for x in target_values]
             properties.append(
                 {
                     "name": "multiclass_target_events",
-                    "value": ", ".join(target_event),
+                    "value": ", ".join(targets),
                     "type": "string",
                 }
             )
-
-        if isinstance(event_prob_var, list):
+            prob_targets = ["P_" + str(x) for x in target_values]
             properties.append(
                 {
                     "name": "multiclass_proba_variables",
-                    "value": ", ".join(event_prob_var),
+                    "value": ", ".join(prob_targets),
                     "type": "string",
                 }
             )
+        else:
+            raise ValueError(
+                "Please provide all possible values for the target variable, including"
+                " a no-event value."
+            )
+
+        truncated_properties = []
+        for prop in properties:
+            prop = cls.truncate_properties(prop)
+            truncated_properties.append(prop)
 
         python_version = sys.version.split(" ", 1)[0]
 
@@ -368,7 +376,7 @@ class JSONFiles:
             "scoreCodeType": "python",
             "trainTable": train_table if train_table else "",
             "trainCodeType": "Python",
-            "algorithm": model_type if model_type else "",
+            "algorithm": model_algorithm if model_algorithm else "",
             "target_variable": target_variable if target_variable else "",
             "target_event": target_event if target_event else "",
             "target_level": target_level if target_level else "",
@@ -376,7 +384,7 @@ class JSONFiles:
             "modeler": modeler if modeler else "",
             "tool": "Python 3",
             "toolVersion": python_version,
-            "properties": properties,
+            "properties": truncated_properties,
         }
 
         if json_path:
@@ -389,6 +397,45 @@ class JSONFiles:
                 )
         else:
             return {PROP: json.dumps(output_json)}
+
+    @staticmethod
+    def truncate_properties(prop: dict) -> dict:
+        """
+        Check custom properties for values larger than SAS Model Manager expects.
+
+        Property names cannot be larger than 60 characters. Property values cannot be
+        larger than 512 characters.
+
+        Parameters
+        ----------
+        prop : dict
+            Key-value pair representing the property name and value.
+
+        Returns
+        -------
+        prop : dict
+            Key-value pair, which was truncated as needed by SAS Model Manager.
+        """
+        prop_key, prop_value = list(prop.items())[0]
+
+        if len(prop_key) > 60:
+            warnings.warn(
+                f"WARNING: The property name {prop_key} was truncated to 60 "
+                f"characters."
+            )
+            truncated_name = prop_key[:60]
+            prop[truncated_name] = prop.pop(prop_key)
+            prop_key = truncated_name
+
+        if len(prop_value) > 512:
+            warnings.warn(
+                f"WARNING: The property value {prop_value} was truncated to 512 "
+                f"characters."
+            )
+            truncated_value = prop_value[:512]
+            prop.update({prop_key: truncated_value})
+
+        return prop
 
     @classmethod
     def write_file_metadata_json(
@@ -1717,8 +1764,8 @@ class JSONFiles:
         Parameters
         ----------
         pickle_folder : str or Path
-            File location for the input pickle file. The default value is the current working
-            directory.
+            File location for the input pickle file. The default value is the current
+            working directory.
 
         Returns
         -------
