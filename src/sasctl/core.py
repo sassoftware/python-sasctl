@@ -1027,7 +1027,7 @@ class Session(requests.Session):
 
         See Also
         --------
-        :meth:`Session.get_oauth_token`
+        Session.get_oauth_token
 
         """
         client_id = client_id or os.environ.get("SASCTL_CLIENT_ID", "sas.ec")

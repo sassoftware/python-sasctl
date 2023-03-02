@@ -31,7 +31,7 @@ class Concepts(Service):
     ):
         """Performs sentiment analysis on the input data.
 
-        Creates a setiment analysis task that executes asynchronously.  There
+        Creates a sentiment analysis task that executes asynchronously.  There
         are two different interactions for sentiment analysis: analyzing
         documents in CAS tables and analyzing documents that are uploaded directly.
 
@@ -59,7 +59,6 @@ class Concepts(Service):
             Type of matches to return.  Defaults to 'all'.
         enable_facts : bool, optional
             Whether to enable facts in the results.  Defaults to False.
-
         language : str, optional
             Two letter
             `ISO 639-1 <https://en.wikipedia.org/wiki/ISO_639>`_
@@ -72,8 +71,8 @@ class Concepts(Service):
 
         See Also
         --------
-        :meth:`cas_management.get_caslib <.CASManagement.get_caslib>`
-        :meth:`cas_management.get_table <.CASManagement.get_table>`
+        cas_management.get_caslib
+        cas_management.get_table
 
         """
         if documents is None:
