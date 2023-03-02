@@ -22,6 +22,6 @@ Subpackages
 
 .. toctree::
 
+    sasctl.pzmm
     sasctl.services
     sasctl.utils
-    sasctl.pzmm

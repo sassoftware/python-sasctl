@@ -96,8 +96,8 @@ class TextParsing(Service):
 
         See Also
         --------
-        :meth:`cas_management.get_caslib <.CASManagement.get_caslib>`
-        :meth:`cas_management.get_table <.CASManagement.get_table>`
+        cas_management.get_caslib
+        cas_management.get_table
 
         """
         if current_session().version_info() >= 4:

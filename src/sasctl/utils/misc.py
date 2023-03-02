@@ -66,6 +66,7 @@ def random_string(length):
     chars = string.ascii_letters + string.digits
     return "".join(random.choice(chars) for _ in range(length))
 
+
 @versionadded(version="1.9.0")
 def check_if_jupyter() -> bool:
     """
