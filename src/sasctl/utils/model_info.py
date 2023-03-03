@@ -65,6 +65,7 @@ class ModelInfo(ABC):
         observation belongs to.  Returns None if not a binary classification model.
 
     """
+
     @property
     @abstractmethod
     def algorithm(self) -> str:
@@ -124,6 +125,8 @@ class ModelInfo(ABC):
     @property
     @abstractmethod
     def target_values(self):
+        # "target event"
+        # value that indicates the target event has occurred in bianry classi
         return
 
     @property
@@ -134,6 +137,7 @@ class ModelInfo(ABC):
 
 class SklearnModelInfo(ModelInfo):
     """Stores model information for a scikit-learn model instance."""
+
     # Map class names from sklearn to algorithm names used by SAS
     _algorithm_mappings = {
         "LogisticRegression": "Logistic regression",
@@ -145,7 +149,7 @@ class SklearnModelInfo(ModelInfo):
         "RandomForestClassifier": "Forest",
         "RandomForestRegressor": "Forest",
         "DecisionTreeClassifier": "Decision tree",
-        "DecisionTreeRegressor": "Decision tree"
+        "DecisionTreeRegressor": "Decision tree",
     }
 
     def __init__(self, model, X, y):
@@ -170,7 +174,7 @@ class SklearnModelInfo(ModelInfo):
         self._is_clusterer = is_clusterer
         self._model = model
 
-        if not hasattr(y, "columns"):
+        if not hasattr(y, "name") and not hasattr(y, "columns"):
             # If example output doesn't contain column names then our DataFrame equivalent
             # also lacks good column names.  Assign reasonable names for use downstream.
             if y_df.shape[1] == 1:

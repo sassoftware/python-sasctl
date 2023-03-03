@@ -14,15 +14,13 @@ import os
 import re
 import sys
 import warnings
-from tempfile import TemporaryDirectory
-
-import pandas as pd
 
 try:
     import swat
 except ImportError:
     swat = None
 
+import pandas as pd
 from urllib.error import HTTPError
 
 from . import pzmm, utils
@@ -33,7 +31,7 @@ from .services import model_publish as mp
 from .services import model_repository as mr
 from .utils.pymas import from_pickle
 from .utils.misc import installed_packages
-
+from .utils.model_info import get_model_info
 
 logger = logging.getLogger(__name__)
 
@@ -47,8 +45,11 @@ _PROP_VALUE_MAXLEN = 512
 _PROP_NAME_MAXLEN = 60
 
 
+
+
 def _property(k, v):
     return {"name": str(k)[:_PROP_NAME_MAXLEN], "value": str(v)[:_PROP_VALUE_MAXLEN]}
+
 
 
 def _sklearn_to_dict(model):
@@ -68,6 +69,7 @@ def _sklearn_to_dict(model):
         "regressor": "prediction",
     }
 
+    # If this is a Pipeline extract the final estimator step
     if hasattr(model, "_final_estimator"):
         estimator = model._final_estimator
     else:
@@ -97,78 +99,67 @@ def _sklearn_to_dict(model):
         trainCodeType="Python",
         targetLevel=target_level,
         function=analytic_function,
-        tool="Python %s.%s" % (sys.version_info.major, sys.version_info.minor),
+        tool=f"Python {sys.version_info.major}.{sys.version_info.minor}",
         properties=[_property(k, v) for k, v in model.get_params().items()],
     )
 
     return result
 
 
-def _register_sklearn_35():
-    pass
+def _register_sklearn_40(model, model_name, project_name, input_data, output_data, overwrite=False):
+    model_info = get_model_info(model, input_data, output_data)
 
+    # TODO: allow passing description in register_model()
 
-def _register_sklearn_40(model, model_name, project_name, input_data, output_data=None):
+    # Will store filename: file contents as we generate files
+    files = {}
 
-    # TODO: if not sklearn, raise ValueError
+    # Write model to a pickle file
+    files.update(pzmm.PickleModel.pickle_trained_model(model, model_name))
 
-    model_info = _sklearn_to_dict(model)
+    # Create a JSON file containing model input fields
+    files.update(pzmm.JSONFiles.write_var_json(input_data))
+    files.update(pzmm.JSONFiles.write_var_json(output_data, is_input=False))
 
-    with TemporaryDirectory() as folder:
+    if model_info.is_binary_classifier:
+        num_categories = 2
+    elif model_info.is_classifier:
+        num_categories = len(model_info.target_values)
+    else:
+        num_categories = 0
 
-        # Write model to a pickle file
-        pzmm.PickleModel.pickle_trained_model(model, model_name, folder)  # generates folder/name.pickle
+    files.update(pzmm.JSONFiles.write_model_properties_json(model_name,
+                                                                 target_variable=model_info.output_column_names,
+                                                                 target_event=model_info.target_values,
+                                                                 num_target_categories=num_categories,
+                                                                 event_prob_var=None,
+                                                                 model_desc=model_info.description[:_DESC_MAXLEN],
+                                                                 model_function=model_info.analytic_function,
+                                                                 model_type=model_info.algorithm
+                                                                 ))
+    """
+            target_variable : string
+                Target variable to be predicted by the model.
+            target_event : string
+                Model target event. For example: 1 for a binary event.
+            num_target_categories : int
+                Number of possible target categories. For example: 2 for a binary event.
+            event_prob_var : string, optional
+                User-provided output event probability variable. This value should match the
+                value in outputVar.json. Default is "P_" + target_variable + target_event.
+    """
+    files.update(pzmm.JSONFiles.write_file_metadata_json(model_name))
 
-        # Create a JSON file containing model input fields
-        pzmm.JSONFiles.write_var_json(input_data, is_input=True, json_path=folder)
-
-        # Create a JSON file containing model output fields
-        if output_data is not None:
-            if model_info["function"] == "classification":
-                output_fields = output_data.copy()
-
-                if hasattr(output_fields, "columns"):
-                    output_fields.columns = ["EM_CLASSIFICATION"]
-                else:
-                    output_fields.name = "EM_CLASSIFICATION"
-                pzmm.JSONFiles.write_var_json(output_fields, is_input=False, json_path=folder)
-            else:
-                pzmm.JSONFiles.write_var_json(output_data, is_input=False, json_path=folder)
-        # target_variable
-        # target_event (e.g 1 for binary)
-        # num_target_event
-        # event_prob
-
-        # TODO: allow passing description in register_model()
-
-        pzmm.JSONFiles.write_model_properties_json(model_name,
-                                                   target_event=None,
-                                                   target_variable=None,
-                                                   num_target_categories=1,
-                                                   model_desc=model_info["description"],
-                                                   model_function=model_info["function"],
-                                                   model_type=model_info["algorithm"],
-                                                   json_path=folder
-                                                   )
-
-        pzmm.JSONFiles.write_file_metadata_json(model_name, json_path=folder, is_h2o_model=False)
-
-        predict_method = (
-            "{}.predict_proba({})"
-            if hasattr(model, "predict_proba")
-            else "{}.predict({})"
-        )
-        predict_method = "{}.predict({})"
-        metrics = ["EM_CLASSIFICATION"]  # NOTE: only valid for classification models.
-        pzmm.ImportModel.import_model(
-            folder,
-            model_name,
-            project_name,
-            input_data,
-            output_data,
-            predict_method,
-            metrics=metrics,
-        )
+    # TODO: How to determine if should call .predict() or .predict_proba()?  Base on output data?
+    pzmm.ImportModel.import_model(model_files=files,
+                                  model_prefix=model_name,
+                                  project=project_name,
+                                  predict_method=model.predict,
+                                  input_data=input_data,
+                                  output_variables=[],
+                                  score_cas=True,
+                                  missing_values=False  # assuming Pipeline will be used for imputing.
+                                  )
 
 
 def _create_project(project_name, model, repo, input_vars=None, output_vars=None):
@@ -275,6 +266,8 @@ def register_model(
         information.  If a single type is provided, all columns will be assumed
         to be that type, otherwise a list of column types or a dictionary of
         column_name: type may be provided.
+    output : array-like
+        A Numpy array or Pandas DataFrame that contains
     version : {'new', 'latest', int}, optional
         Version number of the project in which the model should be created.
         Defaults to 'new'.
@@ -315,8 +308,6 @@ def register_model(
         Update ASTORE handling for ease of use and removal of SAS Viya 4 score code errors
 
     """
-    # TODO: Create new version if model already exists
-
     # If version not specified, default to creating a new version
     version = version or "new"
 
@@ -458,6 +449,7 @@ def register_model(
     # If the model is a scikit-learn model, generate the model dictionary
     # from it and pickle the model for storage
     if all(hasattr(model, attr) for attr in ["_estimator_type", "get_params"]):
+
         # Pickle the model so we can store it
         model_pkl = pickle.dumps(model)
         files.append({"name": "model.pkl", "file": model_pkl, "role": "Python Pickle"})

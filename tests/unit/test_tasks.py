@@ -6,13 +6,28 @@
 
 from unittest import mock
 
+import pandas as pd
 import pytest
 
 from sasctl.core import RestObj
 from sasctl._services.model_repository import ModelRepository
 
 
+# invlid model
+# parameterize with multiple algorithms?
+# binary classification
+# multiclass classification
+# regression
+# pipeline
+# gridsearch
+# check numpy inputs & outputs
+# check model with sparse arrays
+
+# correct calls to pzmm made and correct data passed.
+
+
 def test_sklearn_metadata():
+    """Verify that meta data is correctly extracted from various scikit-learn models."""
     pytest.importorskip("sklearn")
 
     from sasctl.tasks import _sklearn_to_dict
@@ -45,6 +60,74 @@ def test_sklearn_metadata():
     info = _sklearn_to_dict(RandomForestClassifier())
     assert info["algorithm"] == "Forest"
     assert info["function"] == "classification"
+
+
+def test_register_sklearn_with_pzmm(iris_dataset):
+    pytest.importorskip("sklearn")
+    from sklearn.linear_model import LogisticRegression
+    from sasctl.tasks import _register_sklearn_40
+
+    target = "Species"
+    X = iris_dataset.drop(columns=target)
+    y = iris_dataset[target]
+
+    model = LogisticRegression(multi_class="multinomial", solver="lbfgs")
+    model.fit(X, y)
+
+    MODEL_NAME = "Iris Logistic"
+    PROJECT_NAME = "Spam"
+
+    # Mock pzmm import_model call so there's no dependency on a Viya server.
+    with mock.patch("sasctl.pzmm.ImportModel.import_model") as import_model:
+        _register_sklearn_40(model, MODEL_NAME, PROJECT_NAME, X, y)
+
+    assert import_model.call_count == 1
+    args, kwargs = import_model.call_args
+
+    # Verify that expected files were generated.
+    files = kwargs["model_files"]
+    assert isinstance(files, dict)
+    assert all(f in files for f in (f"{MODEL_NAME}.pickle", "inputVar.json", "outputVar.json", "ModelProperties.json", "fileMetadata.json"))
+
+    assert kwargs["model_prefix"] == MODEL_NAME
+    assert kwargs["project"] == PROJECT_NAME
+    assert kwargs["predict_method"] == model.predict
+    assert kwargs["output_variables"]
+    assert kwargs["score_cas"] == True
+    assert kwargs["missing_values"] == False
+
+    pd.testing.assert_frame_equal(kwargs["input_data"], X)
+
+    pytest.fail("Verify import_model inputs are correct")
+
+"""
+        metrics : string list
+            The scoring metrics for the model. For classification models, it is assumed
+            that the first value in the list represents the classification output. This
+            function supports single- and multi-class classification models.
+        project_version : string, optional
+            The project version to import the model in to on SAS Model Manager. The
+            default value is "latest".
+        overwrite_model : bool, optional
+            Set whether models with the same name should be overwritten when attempting
+            to import the model. The default value is False.
+        predict_threshold : float, optional
+            The prediction threshold for normalized probability metrics. Values are
+            expected to be between 0 and 1. The default value is None.
+        target_values : list of strings, optional
+            A list of target values for the target variable. This argument and the
+            metrics argument dictate the handling of the predicted values from the
+            prediction method. The default value is None.
+        kwargs : dict, optional
+            Other keyword arguments are passed to the following function:
+            * sasctl.pzmm.ScoreCode.write_score_code(...,
+                binary_h2o_model=False,
+                binary_string=None,
+                model_file_name=None,
+                mojo_model=False,
+                statsmodels_model=False
+            )
+"""
 
 
 def test_parse_module_url():
