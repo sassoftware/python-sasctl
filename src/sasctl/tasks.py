@@ -453,6 +453,13 @@ def register_model(
                     files={"files": (f"{model.params['name']}.sasast", astore["blob"])},
                     data=params,
                 )
+        if files:
+            # Upload any additional files
+            for file in files:
+                if isinstance(file, dict):
+                    mr.add_model_content(model, **file)
+                else:
+                    mr.add_model_content(model, file)
         return model
 
     # If the model is a scikit-learn model, generate the model dictionary
