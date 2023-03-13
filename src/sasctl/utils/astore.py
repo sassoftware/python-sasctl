@@ -307,7 +307,12 @@ def _build_zip_from_files(files):
 
 
 def get_variable_properties(var):
-    type_mapping = {"interval": "", "num": "decimal", "character": "string"}
+    type_mapping = {
+        "interval": "",
+        "num": "decimal",
+        "character": "string",
+        "varchar": "string"
+    }
 
     meta = {"name": var.Name.strip(), "length": int(var.Length)}
 
