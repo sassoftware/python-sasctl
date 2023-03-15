@@ -218,27 +218,125 @@ def test_predict_method():
     sc.score_code = ""
 
 
+def test_determine_returns_type():
+    """
+    Test cases:
+    - example values
+    - example types
+    - mixture of values/types
+    - unexpected types
+    """
+    assert sc._determine_returns_type(["TestReturn", 1.2]) == [True, False]
+    assert sc._determine_returns_type([int, float, str]) == [False, False, True]
+    assert sc._determine_returns_type(["TestReturn", int, str]) == [True, False, True]
+    assert sc._determine_returns_type([dict]) == [True]
+
+
+def test_yield_score_metrics():
+    """
+    Test cases:
+    - Any order for classification/prediction values
+    - No target variable provided
+    """
+    metrics = sc._yield_score_metrics(
+        [False, True, False], ["Math", "English"], "ClassyVar"
+    )
+    assert [x for x in metrics] == ["P_Math", "I_ClassyVar", "P_English"]
+
+    with pytest.warns():
+        metrics = sc._yield_score_metrics([False, True, False], ["Math", "English"])
+        assert [x for x in metrics] == ["P_Math", "I_Classification", "P_English"]
+
+
+def test_determine_score_metrics():
+    """
+    Test cases:
+    - matrix...
+        - len(target_values) = [0, 1, 2, >2]
+        - len(predict_returns == True) = [0, 1, >1]
+        - len(predict_returns == False) = [0, =len(tv), Any]
+        - target_variable = [None, Any]
+    """
+    assert sc._determine_score_metrics([float], "TestPredict", None) == [
+        f"I_TestPredict"
+    ]
+
+    with pytest.warns():
+        assert sc._determine_score_metrics([float], None, None) == [f"I_Prediction"]
+
+    with pytest.raises(ValueError):
+        sc._determine_score_metrics([float, int], None, None)
+
+    with pytest.raises(ValueError):
+        sc._determine_score_metrics([float], None, ["A"])
+
+    with pytest.raises(ValueError):
+        sc._determine_score_metrics([float], None, "A")
+
+    with pytest.raises(ValueError):
+        sc._determine_score_metrics([float, float, int], None, ["A", "B"])
+
+    with pytest.raises(ValueError):
+        sc._determine_score_metrics([str, str], None, ["A", "B"])
+
+    assert sc._determine_score_metrics([float], None, ["A", "B"]) == ["P_A"]
+    assert sc._determine_score_metrics([float, int], None, ["A", "B"]) == ["P_A", "P_B"]
+    assert sc._determine_score_metrics([str], None, ["A", "B"]) == ["I_Classification"]
+    assert sc._determine_score_metrics([str, float], None, ["A", "B"]) == [
+        "I_Classification",
+        "P_A",
+    ]
+    assert sc._determine_score_metrics([float, str, int], "Classy", ["A", "B"]) == [
+        "P_A",
+        "I_Classy",
+        "P_B",
+    ]
+
+    with pytest.raises(ValueError):
+        sc._determine_score_metrics([str, str], None, ["A", "B", "C"])
+
+    with pytest.raises(ValueError):
+        sc._determine_score_metrics([str, float, float], None, ["A", "B", "C"])
+
+    assert sc._determine_score_metrics([str], None, ["A", "B", "C"]) == [
+        "I_Classification"
+    ]
+    assert sc._determine_score_metrics(
+        [str, float, float, float], None, ["A", "B", "C"]
+    ) == ["I_Classification", "P_A", "P_B", "P_C"]
+    assert sc._determine_score_metrics(
+        [float, float, float], None, ["A", "B", "C"]
+    ) == ["P_A", "P_B", "P_C"]
+
+
 def test_no_targets_no_thresholds():
     """
     Test Cases:
-    - output_variables == 1
+    - len(metrics) == 1
         - non-h2o
         - h2o
-    - output_variables > 1
+    - len(metrics) > 1
         - non-h2o
         - h2o
+    - raise error for invalid config (returns - metrics != 0)
     """
     metrics = "Classification"
-    sc._no_targets_no_thresholds(metrics)
+    returns = [1, "A"]
+    with pytest.raises(ValueError):
+        sc._no_targets_no_thresholds(metrics, returns)
+
+    returns = [1]
+    sc._no_targets_no_thresholds(metrics, returns)
     assert "Classification = prediction" in sc.score_code
     sc.score_code = ""
 
-    sc._no_targets_no_thresholds(metrics, h2o_model=True)
+    sc._no_targets_no_thresholds(metrics, returns, h2o_model=True)
     assert "Classification = prediction[1][0]"
     sc.score_code = ""
 
     metrics = ["Classification", "Proba_A", "Proba_B", "Proba_C"]
-    sc._no_targets_no_thresholds(metrics)
+    returns = ["I", 1, 2, 3]
+    sc._no_targets_no_thresholds(metrics, returns)
     assert (
         sc.score_code == f"{'':4}Classification = prediction[0]\n"
         f"{'':4}Proba_A = prediction[1]\n"
@@ -247,7 +345,7 @@ def test_no_targets_no_thresholds():
         f"{'':4}return Classification, Proba_A, Proba_B, Proba_C"
     )
     sc.score_code = ""
-    sc._no_targets_no_thresholds(metrics, h2o_model=True)
+    sc._no_targets_no_thresholds(metrics, returns, h2o_model=True)
     assert (
         sc.score_code == f"{'':4}Classification = prediction[1][0]\n"
         f"{'':4}Proba_A = prediction[1][1]\n"
@@ -261,94 +359,272 @@ def test_binary_target():
     """
     Test Cases:
     - No threshold
-    - output_variables == 1
-        - non-h2o
+    - score_metrics == 1
         - h2o
-    - output_variables == 2
-        - non-h2o
+        - len(returns) == 1
+            - calc proba
+        - len(returns) == 2
+            - class true
+            - class false
+        - len(returns) == 3
+        - error
+    - score_metrics == 2
         - h2o
-    - output_variables > 2
+        - len(returns) == 1 and class false
+            - warning
+        - len(returns) == 2
+            - class false
+                - warning
+            - class true
+    - score_metrics == 2
+        - h2o
+        - len(returns) == 1 and class false
+            - warning
+        - len(returns) == 2
+            - class false
+                - warning
+            - class true
+                - class first
+                - class last
+        - len(returns) == 3
+            - warning
+        - error
+    - score_metrics == 3
+        - h2o
+        - len(returns) = 1 and class false
+            - warning
+        - len(returns) == 2
+            - class false
+                - warning
+            - class true
+                - class first
+                - class last
+        - len(returns) == 3
+        - error
+    - error cases:
+        - len(returns) > 3
+        - sum(returns) >= 2
+        - len(metrics) > 3
     """
+    # Initial errors
     with pytest.raises(ValueError):
-        sc._binary_target(["A", "B", "C"])
+        sc._binary_target([], [], ["A", 1, 2, 3])
+    with pytest.raises(ValueError):
+        sc._binary_target([], [], ["A", "B"])
+    with pytest.raises(ValueError):
+        sc._binary_target(["A", "B", "C", "D"], [], [])
 
+    # # metrics == 1
     metrics = "Classification"
-    sc._binary_target(metrics)
-    assert sc.score_code.endswith("return Classification")
-    assert "prediction > " in sc.score_code
-    sc.score_code = ""
-
-    sc._binary_target(metrics, h2o_model=True)
+    sc._binary_target(metrics, ["A", "B"], [""], h2o_model=True)
     assert sc.score_code.endswith("return Classification")
     assert "prediction[1][2] > " in sc.score_code
     sc.score_code = ""
 
+    sc._binary_target(metrics, ["A", "B"], ["A"])
+    assert sc.score_code.endswith("\n\nreturn prediction")
+    sc.score_code = ""
+
+    sc._binary_target(metrics, ["A", "B"], [1])
+    assert sc.score_code.endswith("\n\nreturn Classification")
+    assert 'Classification = "A"' in sc.score_code
+    sc.score_code = ""
+
+    sc._binary_target(metrics, ["A", "B"], [1, "A"])
+    assert sc.score_code.endswith("return Classification")
+    sc.score_code = ""
+
+    with pytest.raises(ValueError):
+        sc._binary_target(metrics, ["A", "B"], [1, 2, 3])
+
+    # # metrics == 2
     metrics = ["Classification", "Probability"]
-    sc._binary_target(metrics, threshold=0.7)
+    with pytest.warns():
+        sc._binary_target(metrics, ["A", "B"], [], threshold=0.7, h2o_model=True)
+    assert sc.score_code.endswith("\n\nreturn prediction[1][0], prediction[1][2]")
+    sc.score_code = ""
+
+    with pytest.warns():
+        sc._binary_target(metrics, ["A", "B"], [1], threshold=0.7)
     assert sc.score_code.endswith("return Classification, prediction")
     assert "prediction > 0.7" in sc.score_code
     sc.score_code = ""
 
-    sc._binary_target(metrics, threshold=0.7, h2o_model=True)
-    assert sc.score_code.endswith("return Classification, prediction[1][2]")
-    assert "prediction[1][2] > 0.7" in sc.score_code
+    with pytest.warns():
+        sc._binary_target(metrics, ["A", "B"], [1, 2])
+    assert sc.score_code.endswith("return Classification, prediction[0]")
+    assert "prediction[0] > prediction[1]" in sc.score_code
     sc.score_code = ""
+
+    sc._binary_target(metrics, ["A", "B"], [1, "2"])
+    assert sc.score_code.endswith("return prediction[0], prediction[1]")
+    sc.score_code = ""
+
+    with pytest.warns():
+        sc._binary_target(metrics, ["A", "B"], [1, 2, "3"])
+    assert sc.score_code.endswith("return prediction[2], prediction[0]")
+    sc.score_code = ""
+
+    with pytest.warns():
+        sc._binary_target(metrics, ["A", "B"], ["1", 2, 3])
+    assert sc.score_code.endswith("return prediction[0], prediction[1]")
+    sc.score_code = ""
+
+    with pytest.raises(ValueError):
+        sc._binary_target(metrics, ["A", "B"], [1, 2, 3])
+    sc.score_code = ""
+
+    # # metrics == 3
+    metrics = ["C", "P1", "P2"]
+    sc._binary_target(metrics, ["A", "B"], [1, 2, "3"], h2o_model=True)
+    assert sc.score_code.endswith(
+        "\n\nreturn prediction[1][0], prediction[1][1], " "prediction[1][2]"
+    )
+    sc.score_code = ""
+
+    with pytest.warns():
+        sc._binary_target(metrics, ["A", "B"], [1])
+    assert sc.score_code.endswith("prediction, 1 - prediction")
+    assert "prediction > 0.5" in sc.score_code
+    sc.score_code = ""
+
+    with pytest.warns():
+        sc._binary_target(metrics, ["A", "B"], [1, 2])
+    assert sc.score_code.endswith("prediction[0], prediction[1]")
+    assert "prediction[0] > prediction[1]" in sc.score_code
+    sc.score_code = ""
+
+    sc._binary_target(metrics, ["A", "B"], ["1", 2])
+    assert sc.score_code.endswith("prediction[0], prediction[1], 1 - prediction[1]")
+    sc.score_code = ""
+
+    sc._binary_target(metrics, ["A", "B"], [1, "2"])
+    assert sc.score_code.endswith("prediction[1], prediction[0], 1 - prediction[0]")
+    sc.score_code = ""
+
+    sc._binary_target(metrics, ["A", "B"], ["1", 2, 3])
+    assert sc.score_code.endswith("prediction[0], prediction[1], prediction[2]")
+    sc.score_code = ""
+
+    # # metrics > 3
+    metrics = ["C", "P1", "P2", "P3"]
+    with pytest.raises(ValueError):
+        sc._binary_target(metrics, ["A", "B"], ["1", 2, 3])
 
 
 def test_nonbinary_targets():
     """
     Test Cases:
-    - output_variables == 1
-        - non-h2o
+    - too many class returns error
+    - score_metrics == 1
         - h2o
-    - output_variables > 1
-        - non-h2o (len(output_variables) == len(target_values) + (1,0))
-        - h2o (len(output_variables) == len(target_values) + (1,0))
-    - invalid output_variables and target values numbers
+        - len(returns) == 1
+        - len(returns) == len(tv)
+        - len(returns) == len(tv) + 1
+        - error
+    - score_metrics == 2
+        - h2o
+        - len(returns) == len(tv)
+        - len(returns) == len(tv) + 1
+        - error
+    - score_metrics > 2
+        - h2o
+            - len(returns) == len(tv)
+            - len(returns) == len(tv) + 1
+        - class == false, metrics == tv == returns
+        - class == true, metrics == tv + 1 == returns
+        - class == false, metrics == tv + 1 == returns + 1
+        - error
     """
     metrics = "Classification"
     target_values = ["A", "B", "C"]
+    returns = ["1", "2", 3]
 
-    sc._nonbinary_targets(metrics, target_values)
+    # Too many classification returns
+    with pytest.raises(ValueError):
+        sc._nonbinary_targets(metrics, target_values, returns)
+    sc.score_code = ""
+
+    # # metrics == 1
+    sc._nonbinary_targets(metrics, target_values, [1, 2, 3], h2o_model=True)
     assert sc.score_code.endswith("return Classification")
-    assert "prediction.index(max(prediction))" in sc.score_code
+    assert (
+        "target_values[prediction[1][1:].index(max(prediction[1][1:]))]"
+        in sc.score_code
+    )
     sc.score_code = ""
 
-    sc._nonbinary_targets(metrics, target_values, h2o_model=True)
+    sc._nonbinary_targets(metrics, target_values, ["1"])
     assert sc.score_code.endswith("return Classification")
-    assert "prediction[1][1:].index(max(prediction[1][1:]))" in sc.score_code
     sc.score_code = ""
 
-    metrics = ["Classification", "Proba_A", "Proba_B", "Proba_C"]
-    sc._nonbinary_targets(metrics, target_values)
-    assert sc.score_code.endswith("return Classification, Proba_A, Proba_B, Proba_C")
-    assert "Classification = target_values[prediction.index" in sc.score_code
-
-    sc._nonbinary_targets(metrics, target_values, h2o_model=True)
-    assert sc.score_code.endswith("return Classification, Proba_A, Proba_B, Proba_C")
-    assert "Classification = target_values[prediction[1][1:].index" in sc.score_code
+    sc._nonbinary_targets(metrics, target_values, [1, 2, 3])
+    assert sc.score_code.endswith("target_values[prediction.index(max(prediction))]")
     sc.score_code = ""
 
-    metrics = ["Proba_A", "Proba_B", "Proba_C"]
-    sc._nonbinary_targets(metrics, target_values)
-    assert sc.score_code.endswith("return Proba_A, Proba_B, Proba_C")
-    assert "Classification = target_values[prediction.index" not in sc.score_code
-    sc.score_code = ""
-
-    sc._nonbinary_targets(metrics, target_values, h2o_model=True)
-    assert sc.score_code.endswith("return Proba_A, Proba_B, Proba_C")
-    assert "Classification = target_values[prediction[1][1:].index" not in sc.score_code
+    sc._nonbinary_targets(metrics, target_values, ["A", 1, 2, 3])
+    assert sc.score_code.endswith("return prediction[0]")
     sc.score_code = ""
 
     with pytest.raises(ValueError):
-        metrics = ["Classification", "Proba_A"]
-        sc._nonbinary_targets(metrics, target_values)
+        sc._nonbinary_targets(metrics, target_values, [1, 2, 3, 4, 5])
+    sc.score_code = ""
+
+    # # metrics == # 2
+    metrics = ["C", "P"]
+    sc._nonbinary_targets(metrics, target_values, returns, h2o_model=True)
+    assert sc.score_code.endswith("max(prediction[1][1:])")
+    sc.score_code = ""
+
+    sc._nonbinary_targets(metrics, target_values, [1, 2, 3])
+    assert sc.score_code.endswith(", max(prediction)")
+    sc.score_code = ""
+
+    sc._nonbinary_targets(metrics, target_values, ["A", 1, 2, 3])
+    assert sc.score_code.endswith("max(prediction[:0] + prediction[1:])")
+    sc.score_code = ""
+
+    with pytest.raises(ValueError):
+        sc._nonbinary_targets(metrics, target_values, [1, 2, 3, 4, 5])
+    sc.score_code = ""
+
+    # # metrics > 2
+    metrics = ["P1", "P2", "P3"]
+    sc._nonbinary_targets(metrics, target_values, [1, 2, 3], h2o_model=True)
+    assert sc.score_code.endswith(
+        "prediction[1][1], prediction[1][2], prediction[1][3]"
+    )
+    sc.score_code = ""
+
+    sc._nonbinary_targets(["C"] + metrics, target_values, [1, 2, 3], h2o_model=True)
+    assert sc.score_code.endswith(
+        "prediction[1][0], prediction[1][1], prediction[1][2], prediction[1][3]"
+    )
+    sc.score_code = ""
+
+    sc._nonbinary_targets(metrics, target_values, [1, 2, 3])
+    assert sc.score_code.endswith("return prediction[0], prediction[1], prediction[2]")
+    sc.score_code = ""
+
+    sc._nonbinary_targets(["C"] + metrics, target_values, [1, 2, 3, "A"])
+    assert sc.score_code.endswith(
+        "return prediction[0], prediction[1], prediction[2], prediction[3]"
+    )
+    sc.score_code = ""
+
+    sc._nonbinary_targets(metrics + ["C"], target_values, [1, 2, 3])
+    assert "target_values = " in sc.score_code
+    sc.score_code = ""
+
+    with pytest.raises(ValueError):
+        sc._nonbinary_targets(metrics + ["C"], target_values, [1, 2, 3, "A", 4, 5])
+    sc.score_code = ""
 
 
 def test_predictions_to_metrics():
     """
     Test Cases:
-    - flattened list -> len(output_variables) == 1
+    - flattened list -> len(score_metrics) == 1
     - no target_values or no thresholds
     - len(target_values) > 1
         - warning if threshold provided
