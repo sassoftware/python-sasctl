@@ -109,15 +109,15 @@ def _register_sklearn_35():
 
 
 def _register_sklearn_40(model, model_name, project_name, input_data, output_data=None):
-
     # TODO: if not sklearn, raise ValueError
 
     model_info = _sklearn_to_dict(model)
 
     with TemporaryDirectory() as folder:
-
         # Write model to a pickle file
-        pzmm.PickleModel.pickle_trained_model(model, model_name, folder)  # generates folder/name.pickle
+        pzmm.PickleModel.pickle_trained_model(
+            model, model_name, folder
+        )  # generates folder/name.pickle
 
         # Create a JSON file containing model input fields
         pzmm.JSONFiles.write_var_json(input_data, is_input=True, json_path=folder)
@@ -131,9 +131,13 @@ def _register_sklearn_40(model, model_name, project_name, input_data, output_dat
                     output_fields.columns = ["EM_CLASSIFICATION"]
                 else:
                     output_fields.name = "EM_CLASSIFICATION"
-                pzmm.JSONFiles.write_var_json(output_fields, is_input=False, json_path=folder)
+                pzmm.JSONFiles.write_var_json(
+                    output_fields, is_input=False, json_path=folder
+                )
             else:
-                pzmm.JSONFiles.write_var_json(output_data, is_input=False, json_path=folder)
+                pzmm.JSONFiles.write_var_json(
+                    output_data, is_input=False, json_path=folder
+                )
         # target_variable
         # target_event (e.g 1 for binary)
         # num_target_event
@@ -141,17 +145,20 @@ def _register_sklearn_40(model, model_name, project_name, input_data, output_dat
 
         # TODO: allow passing description in register_model()
 
-        pzmm.JSONFiles.write_model_properties_json(model_name,
-                                                   target_event=None,
-                                                   target_variable=None,
-                                                   num_target_categories=1,
-                                                   model_desc=model_info["description"],
-                                                   model_function=model_info["function"],
-                                                   model_type=model_info["algorithm"],
-                                                   json_path=folder
-                                                   )
+        pzmm.JSONFiles.write_model_properties_json(
+            model_name,
+            target_values=None,
+            target_variable=None,
+            num_target_categories=1,
+            model_desc=model_info["description"],
+            model_function=model_info["function"],
+            model_algorithm=model_info["algorithm"],
+            json_path=folder,
+        )
 
-        pzmm.JSONFiles.write_file_metadata_json(model_name, json_path=folder, is_h2o_model=False)
+        pzmm.JSONFiles.write_file_metadata_json(
+            model_name, json_path=folder, is_h2o_model=False
+        )
 
         predict_method = (
             "{}.predict_proba({})"
@@ -616,8 +623,8 @@ def publish_model(
 
     See Also
     --------
-    :meth:`model_management.publish_model <.ModelManagement.publish_model>`
-    :meth:`model_publish.publish_model <.ModelPublish.publish_model>`
+    model_management.publish_model
+    model_publish.publish_model
 
 
     .. versionchanged:: 1.1.0
@@ -735,7 +742,7 @@ def update_model_performance(data, model, label, refresh=True):
 
     See Also
     --------
-     :meth:`model_management.create_performance_definition <.ModelManagement.create_performance_definition>`
+    model_management.create_performance_definition
 
     .. versionadded:: v1.3
 

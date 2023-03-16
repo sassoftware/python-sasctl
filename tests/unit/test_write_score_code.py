@@ -634,34 +634,27 @@ def test_predictions_to_metrics():
     """
     with patch("sasctl.pzmm.ScoreCode._no_targets_no_thresholds") as func:
         metrics = ["Classification"]
-        sc._predictions_to_metrics(metrics)
-        func.assert_called_once_with("Classification", False)
+        returns = [1]
+        sc._predictions_to_metrics(metrics, returns)
+        func.assert_called_once_with("Classification", returns, False)
 
     with patch("sasctl.pzmm.ScoreCode._nonbinary_targets") as func:
         target_values = ["A", "B", 5]
-        sc._predictions_to_metrics(metrics, target_values)
-        func.assert_called_once_with("Classification", target_values, False)
+        sc._predictions_to_metrics(metrics, returns, target_values)
+        func.assert_called_once_with("Classification", target_values, returns, False)
 
     with patch("sasctl.pzmm.ScoreCode._binary_target") as func:
         metrics = ["Classification", "Probability"]
-        target_values = ["1"]
-        sc._predictions_to_metrics(metrics, target_values)
-        func.assert_called_once_with(metrics, None, False)
-
-    with pytest.raises(
-        ValueError,
-        match="For non-binary target variables, please provide at least two target "
-        "values.",
-    ):
-        target_values = ["2"]
-        sc._predictions_to_metrics(metrics, target_values)
+        target_values = ["1", "0"]
+        sc._predictions_to_metrics(metrics, returns, target_values)
+        func.assert_called_once_with(metrics, ["1", "0"], returns, None, False)
 
     with pytest.raises(
         ValueError,
         match="A threshold was provided to interpret the prediction results, however "
         "a target value was not, therefore, a valid output cannot be generated.",
     ):
-        sc._predictions_to_metrics(metrics, predict_threshold=0.7)
+        sc._predictions_to_metrics(metrics, returns, predict_threshold=0.7)
 
 
 def test_input_var_lists():
@@ -692,6 +685,7 @@ def test_check_viya_version(mock_version, mock_get_model):
         - Viya 4
         - No connection
     """
+    current_session(None)
     mock_version.return_value = None
     model = {"name": "Test", "id": "abc123"}
     with pytest.warns():
@@ -744,20 +738,20 @@ def test_write_score_code(score_code_mocks):
     score_code_mocks["_viya35_score_code_import"].return_value = ("MAS", "CAS")
     score_code_mocks["_check_valid_model_prefix"].return_value = "TestModel"
 
+    # No binary string or model file provided
     with pytest.raises(ValueError):
         sc.write_score_code(
             "TestModel",
             pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
-            predict_proba,
-            ["C", "P"],
+            [predict_proba, []],
         )
 
+    # Binary string and model file provided
     with pytest.raises(ValueError):
         sc.write_score_code(
             "TestModel",
             pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
-            predict_proba,
-            ["C", "P"],
+            [predict_proba, []],
             model_file_name="model.pickle",
             binary_string=b"Binary model string.",
         )
@@ -765,8 +759,7 @@ def test_write_score_code(score_code_mocks):
     sc.write_score_code(
         "TestModel",
         pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
-        predict_proba,
-        ["C", "P"],
+        [predict_proba, []],
         model_file_name="model.pickle",
     )
     score_code_mocks["_viya4_model_load"].assert_called_once()
@@ -775,8 +768,7 @@ def test_write_score_code(score_code_mocks):
     sc.write_score_code(
         "TestModel",
         pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
-        predict_proba,
-        ["C", "P"],
+        [predict_proba, []],
         model_file_name="model.pickle",
     )
     score_code_mocks["_viya35_model_load"].assert_called_once()
@@ -784,8 +776,7 @@ def test_write_score_code(score_code_mocks):
     output_dict = sc.write_score_code(
         "TestModel",
         pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
-        predict_proba,
-        ["C", "P"],
+        [predict_proba, []],
         binary_string=b"Binary model string.",
     )
     assert "TestModel_score.py" in output_dict
@@ -796,8 +787,7 @@ def test_write_score_code(score_code_mocks):
     sc.write_score_code(
         "TestModel",
         pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
-        predict_proba,
-        ["C", "P"],
+        [predict_proba, []],
         score_code_path=Path(tmp_dir.name),
         binary_string=b"Binary model string.",
     )

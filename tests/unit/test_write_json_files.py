@@ -218,17 +218,21 @@ def test_write_model_properties_json():
     prop_dict = jf.write_model_properties_json(
         model_name="Test_Model",
         target_variable="BAD",
-        target_values=[4, 3, 1, 4],
+        target_values=[4, 3, 1, 5],
     )
-    assert json.loads(prop_dict["ModelProperties.json"])["target_level"] == "NOMINAL"
+    assert json.loads(prop_dict["ModelProperties.json"])["targetLevel"] == "NOMINAL"
     assert json.loads(prop_dict["ModelProperties.json"])["properties"] == [
-        {"name": "multiclass_target_events", "value": "4, 3, 1, 4", "type": "string"},
-        {"name": "multiclass_proba_variables", "value": "A, B, C, D", "type": "string"},
+        {"name": "multiclass_target_events", "value": "4, 3, 1, 5", "type": "string"},
+        {
+            "name": "multiclass_proba_variables",
+            "value": "P_4, P_3, P_1, P_5",
+            "type": "string",
+        },
     ]
 
     with pytest.warns():
         prop_dict = jf.write_model_properties_json(
-            model_name="Test_Model", target_variable="BAD", model_desc="a" * 1000
+            model_name="Test_Model", target_variable="BAD", model_desc="a" * 10000
         )
         assert len(json.loads(prop_dict["ModelProperties.json"])["description"]) <= 1024
 

@@ -333,7 +333,7 @@ class JSONFiles:
         elif isinstance(target_values, list) and len(target_values) == 2:
             model_function = "Classification"
             target_level = "BINARY"
-            target_event = target_values[0]
+            target_event = str(target_values[0])
             event_prob_var = f"P_{target_values[0]}"
         elif isinstance(target_values, list) and len(target_values) > 2:
             model_function = "Classification"
@@ -377,10 +377,10 @@ class JSONFiles:
             "trainTable": train_table if train_table else "",
             "trainCodeType": "Python",
             "algorithm": model_algorithm if model_algorithm else "",
-            "target_variable": target_variable if target_variable else "",
-            "target_event": target_event if target_event else "",
-            "target_level": target_level if target_level else "",
-            "event_prob_var": event_prob_var if event_prob_var else "",
+            "targetVariable": target_variable if target_variable else "",
+            "targetEvent": target_event if target_event else "",
+            "targetLevel": target_level if target_level else "",
+            "eventProbVar": event_prob_var if event_prob_var else "",
             "modeler": modeler if modeler else "",
             "tool": "Python 3",
             "toolVersion": python_version,

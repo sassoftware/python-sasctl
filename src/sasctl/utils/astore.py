@@ -311,7 +311,7 @@ def get_variable_properties(var):
         "interval": "",
         "num": "decimal",
         "character": "string",
-        "varchar": "string"
+        "varchar": "string",
     }
 
     meta = {"name": var.Name.strip(), "length": int(var.Length)}
