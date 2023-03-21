@@ -19,22 +19,21 @@ from sasctl.pzmm.import_model import ImportModel as im
 from sasctl.pzmm.import_model import project_exists, model_exists
 
 
-def _fake_predict():
-    pass
+def _fake_predict(fake="ABC"):
+    return list(fake)
 
 
 @patch("sasctl.pzmm.ScoreCode.write_score_code")
 @patch("sasctl._services.model_repository.ModelRepository.get_project")
 @patch("sasctl._services.model_repository.ModelRepository.import_model_from_zip")
 @patch.multiple(
-    "sasctl.pzmm.import_model",
-    project_exists=MagicMock(),
-    model_exists=MagicMock()
+    "sasctl.pzmm.import_model", project_exists=MagicMock(), model_exists=MagicMock()
 )
 def test_import_model(mock_import, mock_project, mock_score):
     """
     Test Cases:
     - mlflow models set pickle type
+    - no score code generation
     - viya 4
         - in memory files
         - disk files
@@ -59,56 +58,62 @@ def test_import_model(mock_import, mock_project, mock_score):
             "Test.json": json.dumps({"Test": True, "TestNum": 1}),
             "Other_Test.json": json.dumps({"Other": None, "TestNum": 2}),
         }
-        return_files = im.import_model(
+
+        with pytest.warns():
+            model, return_files = im.import_model(
+                model_files, "Test_Model", "Test_Project"
+            )
+
+        model, return_files = im.import_model(
             model_files,
             "Test_Model",
+            "Test_Project",
             pd.DataFrame(data=[[1, 1]]),
             _fake_predict,
             ["C", "P"],
-            "Test_Project",
             mlflow_details={"serialization_format": "dill"},
         )
         _, _, kwargs = mock_score.mock_calls[0]
 
         assert ("pickle_type", "dill") in kwargs.items()
-        assert return_files
+        assert isinstance(return_files, dict)
 
         mock_version.return_value = VersionInfo(3)
-        return_files = im.import_model(
+        model, return_files = im.import_model(
             model_files,
             "Test_Model",
+            "Test_Project",
             pd.DataFrame(data=[[1, 1]]),
             _fake_predict,
             ["C", "P"],
-            "Test_Project",
         )
-        assert return_files
+        assert isinstance(return_files, dict)
 
         tmp_dir = tempfile.TemporaryDirectory()
         _ = tempfile.NamedTemporaryFile(delete=False, suffix=".json", dir=tmp_dir.name)
         model_files = Path(tmp_dir.name)
         mock_score.return_value = None
 
-        return_files = im.import_model(
+        model, return_files = im.import_model(
             model_files,
             "Test_Model",
+            "Test_Project",
             pd.DataFrame(data=[[1, 1]]),
             _fake_predict,
             ["C", "P"],
-            "Test_Project",
         )
-        assert not return_files
+        assert not isinstance(return_files, dict)
 
         mock_version.return_value = VersionInfo(4)
-        return_files = im.import_model(
+        model, return_files = im.import_model(
             model_files,
             "Test_Model",
+            "Test_Project",
             pd.DataFrame(data=[[1, 1]]),
             _fake_predict,
             ["C", "P"],
-            "Test_Project",
         )
-        assert not return_files
+        assert not isinstance(return_files, dict)
 
 
 @patch("sasctl._services.service.Service.get")
@@ -122,15 +127,15 @@ def test_project_exists(r, mock_project, mock_get):
     - New project created
     """
     project = {"Name": "Test_Project"}
-    response = project_exists(project, "Test_Project")
+    response = project_exists("Test_Project", project)
     assert response == project
 
     with pytest.raises(SystemError):
-        response = project_exists(None, str(uuid4()))
+        project_exists(str(uuid4()))
 
     mock_get.return_value = "abc_repo"
     mock_project.return_value = RestObj(name="Test_Project")
-    response = project_exists(None, "Test_Project")
+    response = project_exists("Test_Project")
     assert RestObj(name="Test_Project") == response
 
 
@@ -153,8 +158,7 @@ def test_model_exists(mock_project, mock_versions, mock_get, mock_delete):
     )
     mock_versions.return_value = [RestObj(name="Test Version", id="def456")]
     mock_get.return_value = []
-    test = model_exists("Test_Project", "Test_Model", False)
-    assert test is None
+    model_exists("Test_Project", "Test_Model", False)
 
     with pytest.raises(ValueError):
         mock_get.return_value = RestObj({"name": "Test_Model", "id": "ghi789"})

@@ -6,7 +6,7 @@ Version |version|
 
 .. toctree::
     :maxdepth: 3
-    :hidden:
+    :hidden: true
 
     index
 
@@ -342,7 +342,7 @@ Given an object and a link name (`rel`) :func:`~sasctl.core.get_link` will retur
 API Reference
 -------------
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    api/sasctl
 

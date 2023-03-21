@@ -3,82 +3,85 @@
 import json
 from distutils.version import StrictVersion
 from pathlib import Path
+from typing import Union, Tuple, Optional, Any
 
 import pandas as pd
+from pandas import DataFrame
 
 from .._services.model_repository import ModelRepository as mr
-from ..core import current_session, is_uuid
+from ..core import current_session, is_uuid, RestObj
 
-# TODO: change sess.get call in _find_file to a mr call (get_model_contents?)
+
 # TODO: Maybe just move _find_file altogether?
-
-
-def _find_file(model, file_name):
+def _find_file(model: Union[str, dict, RestObj], file_name: str) -> Tuple[RestObj, str]:
     """
-    Retrieves the first file from a registered model on SAS Model Manager that contains the provided
-    file_name as an exact match or substring.
+    Retrieves the contents of the first file from a registered model on SAS Model
+    Manager that contains the provided file_name as an exact match or substring.
 
     Parameters
     ----------
     model : str or dict
         The name or id of the model, or a dictionary representation of the model.
     file_name : str
-        The name of the desired file, or a substring that is contained within the file name.
+        The name of the desired file or a substring that is contained within the file
+        name.
 
     Returns
     -------
-    RestObj
-        The first file with a name containing file_name.
+    RestObj, str
+        The contents and name of the first file with a name containing file_name.
     """
 
-    sess = current_session()
     file_list = mr.get_model_contents(model)
     for file in file_list:
         if file_name.lower() in file.name.lower():
-            correct_file = sess.get(
-                f"modelRepository/models/{model}/contents/{file.id}/content"
-            )
+            correct_file = mr.get(f"models/{model}/contents/{file.id}/content")
             return correct_file, file.name
     raise ValueError(f'No file containing "{file_name}" exists within model files.')
 
 
-def _update_json(model, model_json, kpis):
-    """
-    Updates the contents of the hyperparameter json file
-    Parameters
-    ----------
-    model: str
-        The id of the model being updated
-    model_json: dict
-        The contents of the current JSON object within model manager
-    kpis: pandas.DataFrame
-        Dataframe containing the KPI values stored within model manager at runtime
-
-
-    Returns
-    -------
-    dict
-        The updated hyperparameter json object to be pushed to model manager
-    """
-
-    model_rows = kpis.loc[kpis["ModelUUID"] == model]
-    if not model_rows.empty:
-        model_rows = model_rows.drop(columns=["ModelUUID"])
-        model_rows.set_index("TimeLabel", inplace=True)
-        kpi_json = model_rows.to_json(orient="index")
-        parsed_json = json.loads(kpi_json)
-        model_json["kpis"] = parsed_json
-    return model_json
-
-
 class ModelParameters:
-    @classmethod
-    def generate_hyperparameters(cls, model, model_prefix, pickle_path):
+    @staticmethod
+    def _update_json(model: str, model_json: dict, kpis: DataFrame) -> dict:
+        """
+        Updates the contents of the hyperparameter json file
+
+        Parameters
+        ----------
+        model: str
+            The id of the model being updated.
+        model_json: dict
+            The contents of the current KPI/parameters file within SAS Model Manager.
+        kpis: pandas.DataFrame
+            The dataframe containing the KPI/parameter values stored within SAS Model
+            Manager at runtime.
+
+        Returns
+        -------
+        dict
+            The updated hyperparameter json file to be uploaded to SAS Model Manager.
+        """
+
+        model_rows = kpis.loc[kpis["ModelUUID"] == model]
+        if not model_rows.empty:
+            model_rows = model_rows.drop(columns=["ModelUUID"])
+            model_rows.set_index("TimeLabel", inplace=True)
+            kpi_json = model_rows.to_json(orient="index")
+            parsed_json = json.loads(kpi_json)
+            model_json["kpis"] = parsed_json
+        return model_json
+
+    @staticmethod
+    def generate_hyperparameters(
+        model: Any, model_prefix: str, pickle_path: Union[str, Path]
+    ) -> None:
         """
         Generates hyperparameters for a given model and creates a JSON file
         representation.
 
         Currently only supports generation of scikit-learn model hyperparameters.
+
+        This function creates a json file named {model_prefix}Hyperparameters.json.
 
         Parameters
         ----------
@@ -89,11 +92,6 @@ class ModelParameters:
             "Hyperparameters.json")
         pickle_path : str, Path
             Directory location of model files.
-
-        Yields
-        ------
-        JSON file
-            Named {model_prefix}Hyperparameters.json.
         """
 
         def sklearn_params():
@@ -118,49 +116,51 @@ class ModelParameters:
     @classmethod
     def update_kpis(
         cls,
-        project,
-        server="cas-shared-default",
-        caslib="ModelPerformanceData",
-    ):
+        project: Union[str, dict, RestObj],
+        server: Optional[str] = "cas-shared-default",
+        caslib: Optional[str] = "ModelPerformanceData",
+    ) -> None:
         """
-        Updates hyperparameter file to include KPIs generated by performance definitions
-        , as well as any custom KPIs imported by user to the SAS KPI data table.
+        Updates hyperparameter file to include KPIs generated by performance
+        definitions, as well as any custom KPIs imported by user to the SAS KPI data
+        table.
 
         Parameters
         ----------
-        project : str or dict
+        project : str, dict, or RestObj
             The name or id of the project, or a dictionary representation of the
             project.
         server : str, optional
-            Server on which the KPI data table is stored. Defaults to
+            Server on which the KPI data table is stored. The default value is
             "cas-shared-default".
         caslib : str, optional
-            CAS Library on which the KPI data table is stored. Defaults to
+            CAS Library on which the KPI data table is stored. The default value is
             "ModelPerformanceData".
         """
         kpis = cls.get_project_kpis(project, server, caslib)
         models_to_update = kpis["ModelUUID"].unique().tolist()
-        #
+
         for model in models_to_update:
             current_params, file_name = _find_file(model, "hyperparameters")
-            updated_json = _update_json(model, current_params.json(), kpis)
+            updated_json = cls._update_json(model, current_params.json(), kpis)
             mr.add_model_content(model, json.dumps(updated_json, indent=4), file_name)
 
-    @classmethod
-    def get_hyperparameters(cls, model):
+    @staticmethod
+    def get_hyperparameters(model: Union[str, dict, RestObj]) -> Tuple[dict, str]:
         """
         Retrieves the hyperparameter json file from specified model on SAS Model
         Manager.
 
         Parameters
         ----------
-        model : str or dict
+        model : str, dict, or RestObj
             The name or id of the model, or a dictionary representation of the model.
 
         Returns
         -------
-        dict
-            Dictionary containing the contents of the hyperparameter file.
+        dict, str
+            Dictionary containing the contents of the hyperparameter file and the file
+            name.
         """
         if mr.is_uuid(model):
             id_ = model
@@ -173,14 +173,14 @@ class ModelParameters:
         return file_contents.json(), file_name
 
     @classmethod
-    def add_hyperparameters(cls, model, **kwargs):
+    def add_hyperparameters(cls, model: Union[str, dict, RestObj], **kwargs) -> None:
         """
         Adds custom hyperparameters to the hyperparameter file contained within the
         model in SAS Model Manager.
 
         Parameters
         ----------
-        model : str or dict
+        model : str, dict, or RestObj
             The name or id of the model, or a dictionary representation of the model.
         kwargs
             Named variables pairs representing hyperparameters to be added to the
@@ -205,13 +205,14 @@ class ModelParameters:
 
     @staticmethod
     def get_project_kpis(
-        project,
-        server="cas-shared-default",
-        caslib="ModelPerformanceData",
-        filter_column=None,
-        filter_value=None,
-    ):
-        """Create a call to CAS to return the MM_STD_KPI table (SAS Model Manager
+        project: Union[str, dict, RestObj],
+        server: Optional[str] = "cas-shared-default",
+        caslib: Optional[str] = "ModelPerformanceData",
+        filter_column: Optional[str] = None,
+        filter_value: Optional[str] = None,
+    ) -> DataFrame:
+        """
+        Create a call to CAS to return the MM_STD_KPI table (SAS Model Manager
         Standard KPI) generated when custom KPIs are uploaded or when a performance
         definition is executed on SAS Model Manager on SAS Viya 4.
 
@@ -221,25 +222,26 @@ class ModelParameters:
 
         Parameters
         ----------
-        project : str or dict
+        project : str, dict, RestObj
             The name or id of the project, or a dictionary representation of the
             project.
         server : str, optional
-            SAS Viya 4 server where the MM_STD_KPI table exists, by default
+            SAS Viya 4 server where the MM_STD_KPI table exists. The default value is
             "cas-shared-default".
         caslib : str, optional
-            SAS Viya 4 caslib where the MM_STD_KPI table exists, by default
+            SAS Viya 4 caslib where the MM_STD_KPI table exists. The default value is
             "ModelPerformanceData".
         filter_column : str, optional
-            Column name from the MM_STD_KPI table to be filtered, by default None.
+            Column name from the MM_STD_KPI table to be filtered. The default value is
+            None.
         filter_value : str, optional
-            Column value to be filtered, by default None.
+            Column value filter by. The default value is None
 
         Returns
         -------
         kpi_table_df : pandas DataFrame
             A pandas DataFrame representing the MM_STD_KPI table. Note that SAS
-            missing values are replaced with pandas valid missing values.
+            missing values are replaced with pandas-valid missing values.
         """
         # Check the pandas version for where the json_normalize function exists
         if pd.__version__ >= StrictVersion("1.0.3"):

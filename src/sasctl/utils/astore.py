@@ -41,7 +41,7 @@ def create_package(table, input=None):
 
     See Also
     --------
-    :meth:`model_repository.import_model_from_zip <.ModelRepository.import_model_from_zip>`
+    model_repository.import_model_from_zip
 
     """
     if swat is None:
@@ -81,7 +81,7 @@ def create_package_from_datastep(table, input=None):
 
     See Also
     --------
-    :meth:`model_repository.import_model_from_zip <.ModelRepository.import_model_from_zip>`
+    model_repository.import_model_from_zip
 
     """
     dscode = table.to_frame().loc[0, "DataStepSrc"]
@@ -162,7 +162,7 @@ def create_package_from_astore(table):
 
     See Also
     --------
-    :meth:`model_repository.import_model_from_zip <.ModelRepository.import_model_from_zip>`
+    model_repository.import_model_from_zip
 
     """
     files = create_files_from_astore(table)
@@ -307,7 +307,12 @@ def _build_zip_from_files(files):
 
 
 def get_variable_properties(var):
-    type_mapping = {"interval": "", "num": "decimal", "character": "string"}
+    type_mapping = {
+        "interval": "",
+        "num": "decimal",
+        "character": "string",
+        "varchar": "string",
+    }
 
     meta = {"name": var.Name.strip(), "length": int(var.Length)}
 

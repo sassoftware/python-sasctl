@@ -3,7 +3,7 @@
 
 import re
 from pathlib import Path
-from typing import Union, Optional, Callable, List, Tuple
+from typing import Union, Optional, Callable, List, Tuple, Any, Generator
 from warnings import warn
 
 import pandas as pd
@@ -26,15 +26,16 @@ class ScoreCode:
         cls,
         model_prefix: str,
         input_data: Union[DataFrame, List[dict]],
-        predict_method: Callable[..., List],
-        output_variables: List[str],
-        pickle_type: str = "pickle",
-        model: Union[RestObj, str, None] = None,
-        predict_threshold: Optional[float] = None,
-        score_code_path: Union[Path, str, None] = None,
+        predict_method: [Callable[..., List], List[Any]],
+        target_variable: Optional[str] = None,
         target_values: Optional[List] = None,
+        score_metrics: Optional[List[str]] = None,
+        predict_threshold: Optional[float] = None,
+        model: Union[str, dict, RestObj, None] = None,
+        pickle_type: str = "pickle",
         missing_values: Optional[bool] = False,
         score_cas: Optional[bool] = True,
+        score_code_path: Union[Path, str, None] = None,
         **kwargs,
     ) -> Union[dict, None]:
         """
@@ -64,13 +65,13 @@ class ScoreCode:
 
         For a binary classification model, where the model is determining if a flower is
         or is not the `setosa` species, the following can be passed:
-            - output_variables = ["Setosa"] or ["Setosa", "Setosa_Proba"],
-            - target_values = ["1"],
+            - score_metrics = ["Setosa"] or ["Setosa", "Setosa_Proba"],
+            - target_values = ["1", "0"],
             - predict_threshold = ["0.4"]
 
         For a multi-classification model, where the model is determining if a flower is
         one of three species, the following can be passed:
-            - output_variables = ["Species"] or ["Species", "Setosa_Proba",
+            - score_metrics = ["Species"] or ["Species", "Setosa_Proba",
               "Versicolor_Proba", "Virginica_Proba"]
             - target_values = ["Setosa", "Versicolor", "Virginica"]
             - predict_threshold = None
@@ -89,32 +90,32 @@ class ScoreCode:
             predictor columns. The write_score_code function currently supports int(64),
             float(64), and string data types for scoring. Providing a list of dict
             objects signals that the model files are being created from an MLFlow model.
-        predict_method : function -> list
-            The Python function used for model predictions. For example, if the model is
-            a Scikit-Learn DecisionTreeClassifier, then pass either of the following:
-            sklearn.tree.DecisionTreeClassifier.predict
-            sklearn.tree.DecisionTreeClassifier.predict_proba
-        output_variables : list of str
-            The scoring output_variables for the model. For classification models, it is
+        predict_method : [function -> list, list]
+            The Python function used for model predictions and the expected output
+            types. The expected output types can be passed as example values or as the
+            value types. For example, if the model is a Scikit-Learn
+            DecisionTreeClassifier, then pass either of the following:
+                * [sklearn.tree.DecisionTreeClassifier.predict, ["A"]]
+                * [sklearn.tree.DecisionTreeClassifier.predict_proba, [0.4, float]]
+        target_variable : str, optional
+            Target variable to be predicted by the model. The default value is None.
+        target_values : list of str, optional
+            A list of target values for the target variable. The default value is None.
+        score_metrics : list of str, optional
+            The scoring metrics for the model. For classification models, it is
             assumed that the first value in the list represents the classification
-            output. This function supports single and multi-class classification models.
-        pickle_type : str, optional
-            Indicator for the package used to serialize the model file to be uploaded to
-            SAS Model Manager. The default value is `pickle`.
-        model : str or RestObj, optional
-            The name or id of the model, or a dictionary representation of
-            the model. The default value is None and is only necessary for models that
-            will be hosted on SAS Viya 3.5.
+            output. This function supports single- and multi- classification models as
+            well as prediction models. The default value is None.
         predict_threshold : float, optional
             The prediction threshold for normalized probability output_variables. Values
             are expected to be between 0 and 1. The default value is None.
-        score_code_path : str or Path, optional
-            Path for output score code file(s) to be generated. If no value is supplied
-            a dict is returned instead. The default value is None.
-        target_values : list of str, optional
-            A list of target values for the target variable. This argument and the
-            output_variables argument dictate the handling of the predicted values from
-            the prediction method. The default value is None.
+        model : str, dict, or RestObj, optional
+            The name or id of the model, or a dictionary representation of
+            the model. The default value is None and is only necessary for models that
+            will be hosted on SAS Viya 3.5.
+        pickle_type : str, optional
+            Indicator for the package used to serialize the model file to be uploaded to
+            SAS Model Manager. The default value is `pickle`.
         missing_values : bool, optional
             Sets whether data handled by the score code will impute for missing values.
             The default value is False.
@@ -123,6 +124,9 @@ class ScoreCode:
             and validated through both CAS and SAS Micro Analytic Service. If set to
             false, then the model will only be able to be scored and validated through
             SAS Micro Analytic Service. The default value is True.
+        score_code_path : str or Path, optional
+            Path for output score code file(s) to be generated. If no value is supplied
+            a dict is returned instead. The default value is None.
         kwargs
             Other keyword arguments are passed to one of the following functions:
             * sasctl.pzmm.ScoreCode._write_imports(pickle_type, mojo_model=None,
@@ -191,11 +195,14 @@ class ScoreCode:
         model_prefix = cls._check_valid_model_prefix(model_prefix)
 
         # Define the score function using the variables found in input_data
-        # Set the output variables in the line below from output_variables
-        cls.score_code += (
-            f"def score{model_prefix}({', '.join(input_var_list)}):\n"
-            f"{'':4}\"Output: {', '.join(output_variables)}\"\n\n"
-        )
+        cls.score_code += f"def score{model_prefix}({', '.join(input_var_list)}):\n"
+
+        if not score_metrics:
+            score_metrics = cls._determine_score_metrics(
+                predict_method[1], target_variable, target_values
+            )
+        # Set the output variables in the line below from score_metrics
+        cls.score_code += f"{'':4}\"Output: {', '.join(score_metrics)}\"\n\n"
 
         # Run a try/except block to catch errors for model loading (skip binary string)
         if model_load:
@@ -210,17 +217,18 @@ class ScoreCode:
         # Create the appropriate style of input array and write out the predict method
         if any(x in ["mojo_model", "binary_h2o_model"] for x in kwargs):
             cls._predict_method(
-                predict_method, input_var_list, dtype_list=input_dtypes_list
+                predict_method[0], input_var_list, dtype_list=input_dtypes_list
             )
             cls._predictions_to_metrics(
-                output_variables,
+                score_metrics,
+                predict_method[1],
                 target_values=target_values,
                 predict_threshold=predict_threshold,
                 h2o_model=True,
             )
         else:
             cls._predict_method(
-                predict_method,
+                predict_method[0],
                 input_var_list,
                 statsmodels_model="statsmodels_model" in kwargs,
             )
@@ -231,7 +239,8 @@ class ScoreCode:
                 f"prediction]\n"
             )
             cls._predictions_to_metrics(
-                output_variables,
+                score_metrics,
+                predict_method[1],
                 target_values=target_values,
                 predict_threshold=predict_threshold,
             )
@@ -264,14 +273,14 @@ class ScoreCode:
 
     @staticmethod
     def upload_and_copy_score_resources(
-        model: Union[str, RestObj], files: List[...]
+        model: Union[str, dict, RestObj], files: List[Any]
     ) -> RestObj:
         """
         Upload score resources to SAS Model Manager and copy them to the Compute server.
 
         Parameters
         ----------
-        model : str or RestObj
+        model : str, dict, or RestObj
             The name or id of the model, or a dictionary representation of the model.
         files : list of file objects
             The list of score resource files to upload.
@@ -286,13 +295,13 @@ class ScoreCode:
         return mr.copy_python_resources(model)
 
     @staticmethod
-    def _get_model_id(model: Union[str, RestObj]) -> str:
+    def _get_model_id(model: Union[str, dict, RestObj]) -> str:
         """
         Get the model uuid from SAS Model Manager.
 
         Parameters
         ----------
-        model : str or RestObj
+        model : str, dict, or RestObj
             The name or id of the model, or a dictionary representation of the model.
 
         Returns
@@ -669,9 +678,171 @@ class ScoreCode:
             )
 
     @classmethod
+    def _determine_score_metrics(
+        cls,
+        predict_returns: List[Any],
+        target_variable: Optional[str] = None,
+        target_values: Optional[List] = None,
+    ) -> List[str]:
+        """
+        Using the types from the prediction method returns in `predict_method`, create
+        output score metrics for the score code.
+
+        If no target_variable is provided and classification outputs are expected, the
+        function will produce a warning and use the generic "I_Classification" score
+        metric.
+
+        Parameters
+        ----------
+        predict_returns : list
+            A list of the return types of the prediction method. These can be direct
+            types or example values.
+        target_variable : str
+            Target variable to be predicted by the model. The default value is None.
+        target_values : list, optional
+            A list of target values for the target variable. The default is None.
+
+        Returns
+        -------
+        list of str
+            A list containing string values for the model's score metrics.
+        """
+        # Create a list mapped to the prediction returns that signifies their type
+        predict_returns = cls._determine_returns_type(predict_returns)
+
+        # No target values signals that the model is a prediction (regression) model
+        if not target_values:
+            if len(predict_returns) > 1:
+                raise ValueError(
+                    "When no target values are provided, a prediction model is assumed."
+                    " Currently, SAS Model Manager only supports prediction models with"
+                    " singular outputs, therefore the score code cannot be written for "
+                    "this model. To continue with generating the score code for this"
+                    "model, please either provide the target values or define the score"
+                    " metrics explicitly."
+                )
+            # Use generic prediction variable if none provided
+            elif not target_variable:
+                warn(
+                    "WARNING: No score metrics or target variables were provided for a "
+                    "prediction model. Therefore the output score metric is defaulted "
+                    'to "I_Prediction"'
+                )
+                return ["I_Prediction"]
+            elif target_variable:
+                return [f"I_{target_variable}"]
+        # A model with only one expected target value will always get the same answer
+        elif len(target_values) == 1 or not isinstance(target_values, list):
+            raise ValueError(
+                "Please provide all possible values for the target variable, including"
+                " a no-event value."
+            )
+        # Binary classification models
+        elif len(target_values) == 2:
+            if predict_returns.count(True) > 1 or predict_returns.count(False) > 2:
+                raise ValueError(
+                    "Binary classification models should not return more than 1 "
+                    "classification value or more than 2 probability values. For "
+                    "example: [I_Class, P_1, P_0] has the maximum number of returns."
+                )
+            else:
+                gen = cls._yield_score_metrics(
+                    predict_returns, target_values, target_variable
+                )
+                return [metric for metric in gen]
+        # Multiclass classification models
+        elif len(target_values) > 2:
+            if predict_returns.count(True) > 1:
+                raise ValueError(
+                    "SAS Model Manager does not currently support models with more than"
+                    " one target variable."
+                )
+            elif predict_returns.count(False) not in [0, len(target_values)]:
+                raise ValueError(
+                    "The number of target values provided does not match the number of"
+                    " returns from the prediction method that are probabilities."
+                )
+            else:
+                gen = cls._yield_score_metrics(
+                    predict_returns, target_values, target_variable
+                )
+                return [metric for metric in gen]
+
+    @staticmethod
+    def _yield_score_metrics(
+        returns: List[bool],
+        values: list,
+        variable: Optional[str] = None,
+    ) -> Generator:
+        """
+        For classification models without provided metrics, yield score metrics as
+        determined by the target values, target variable, and returns from the
+        prediction method.
+
+        Parameters
+        ----------
+        returns : list of bool
+            A list of bools, such that `True` represents classification values and
+            `False` represents probability or prediction values.
+        variable : str
+            Target variable to be predicted by the model.
+        values : list
+            A list of target values for the target variable.
+
+        Yields
+        ------
+        generator
+            A generator containing metrics corresponding to the prediction returns.
+        """
+        proba_count = 0
+        for val in returns:
+            if val:
+                # If True, then classification score metric
+                if not variable:
+                    warn(
+                        "WARNING: No target variable was provided, therefore the "
+                        'classification variable defaults to "I_Classification".'
+                    )
+                yield "I_" + variable if variable else "I_Classification"
+            else:
+                # If False, then prediction or probability score metric
+                yield "P_" + str(values[proba_count])
+                proba_count += 1
+
+    @staticmethod
+    def _determine_returns_type(returns: List[Any]) -> List[bool]:
+        """
+        Determine the return type of the prediction method.
+
+        Returns a list of equal size to input argument, which contains `True` for
+        classification values and `False` for probability or prediction values.
+
+        Parameters
+        ----------
+        returns : list
+            The list of expected outputs from the prediction method.
+
+        Returns
+        -------
+        returns : List of bool
+            A list mapped to the input argument, such that `True` represents
+            classification values and `False` represents probability or prediction
+            values.
+        """
+        for i, val in enumerate(returns):
+            if isinstance(val, str) or val == str:
+                returns[i] = True
+            elif isinstance(val, (float, int)) or val in [float, int]:
+                returns[i] = False
+            else:
+                returns[i] = True
+        return returns
+
+    @classmethod
     def _predictions_to_metrics(
         cls,
         metrics: List[str],
+        predict_returns: List[Any],
         target_values: Optional[List[str]] = None,
         predict_threshold: Optional[float] = None,
         h2o_model: Optional[bool] = False,
@@ -680,17 +851,21 @@ class ScoreCode:
         Using the provided arguments, write in to the score code the method for handling
         the generated predictions.
 
-        Errors are raised for improper combinations of metric and target_value lengths.
+        Errors are raised for improper combinations of metrics, target values, and
+        predict method returns.
 
         Parameters
         ----------
         metrics : list of str
             A list of strings corresponding to the outputs of the model to SAS Model
             Manager.
+        predict_returns : list
+            A list of the return types of the prediction method. These can be direct
+            types or example values.
         target_values : list of str, optional
             A list of target values for the target variable. The default value is None.
         predict_threshold : float, optional
-            The prediction threshold for normalized probability output_variables. Values
+            The prediction threshold for normalized probability score_metrics. Values
              are expected to be between 0 and 1. The default value is None.
         h2o_model : bool, optional
             Flag to indicate that the model is an H2O.ai model. The default value is
@@ -700,26 +875,29 @@ class ScoreCode:
             # Flatten single valued list
             metrics = metrics[0]
 
+        # Prediction model or no-calculation classification model
         if not (target_values or predict_threshold):
-            cls._no_targets_no_thresholds(metrics, h2o_model)
+            cls._no_targets_no_thresholds(metrics, predict_returns, h2o_model)
         elif not target_values and predict_threshold:
             raise ValueError(
                 "A threshold was provided to interpret the prediction results, however "
                 "a target value was not, therefore, a valid output cannot be generated."
             )
-        elif len(target_values) > 1:
-            cls._nonbinary_targets(metrics, target_values, h2o_model)
-        elif len(target_values) == 1 and int(target_values[0]) == 1:
-            cls._binary_target(metrics, predict_threshold, h2o_model)
-        elif len(target_values) == 1 and int(target_values[0]) != 1:
-            raise ValueError(
-                "For non-binary target variables, please provide at least two target "
-                "values."
+        # Binary classification model
+        elif len(target_values) == 2:
+            cls._binary_target(
+                metrics, target_values, predict_returns, predict_threshold, h2o_model
             )
+        # Multiclass classification model
+        elif len(target_values) > 2:
+            cls._nonbinary_targets(metrics, target_values, predict_returns, h2o_model)
 
     @classmethod
     def _no_targets_no_thresholds(
-        cls, metrics: Union[List[str], str], h2o_model: Optional[bool] = None
+        cls,
+        metrics: Union[List[str], str],
+        returns: List[Any],
+        h2o_model: Optional[bool] = False,
     ) -> None:
         """
         Handle prediction outputs where the prediction does not expect handling by the
@@ -730,12 +908,24 @@ class ScoreCode:
         metrics : list of str or str
             A list of strings corresponding to the outputs of the model to SAS Model
             Manager.
+        returns : list
+            The list of expected outputs from the prediction method.
         h2o_model : bool, optional
             Flag to indicate that the model is an H2O.ai model. The default value is
             False.
         """
-        if len(metrics) == 1 or isinstance(metrics, str):
-            # Assume no probability output & predict function returns classification
+        if (
+            (len(returns) != len(metrics) and not isinstance(metrics, str))
+            or (len(returns) != 1 and isinstance(metrics, str))
+        ) and not h2o_model:
+            raise ValueError(
+                "The number of returns from the predict function does not match the "
+                "number of score metrics provided. Either provide target values for the"
+                " score code to use in calculating the classification value or update "
+                "the provided score metrics and prediction returns."
+            )
+        elif isinstance(metrics, str):
+            # Classification (with only classification output) or prediction model
             if h2o_model:
                 cls.score_code += (
                     f"{'':4}{metrics} = prediction[1][0]\n\n{'':4}return {metrics}"
@@ -745,6 +935,7 @@ class ScoreCode:
                     f"{'':4}{metrics} = prediction\n\n{'':4}return {metrics}"
                 )
         else:
+            # Classification model including predictions and classification
             if h2o_model:
                 cls.score_code += f"{'':4}{metrics[0]} = prediction[1][0]\n"
                 for i in range(len(metrics) - 1):
@@ -752,16 +943,16 @@ class ScoreCode:
                         f"{'':4}{metrics[i + 1]} = prediction[1][{i + 1}]\n"
                     )
             else:
-                # Assume predict call returns (classification, probabilities)
-                cls.score_code += f"{'':4}{metrics[0]} = prediction[0]\n"
-                for i in range(len(metrics) - 1):
-                    cls.score_code += f"{'':4}{metrics[i + 1]} = prediction[{i + 1}]\n"
+                for i in range(len(metrics)):
+                    cls.score_code += f"{'':4}{metrics[i]} = prediction[{i}]\n"
             cls.score_code += f"\n{'':4}return {', '.join(metrics)}"
 
     @classmethod
     def _binary_target(
         cls,
         metrics: Union[List[str], str],
+        target_values: List[str],
+        returns: List[Any],
         threshold: Optional[float] = None,
         h2o_model: Optional[bool] = None,
     ) -> None:
@@ -773,55 +964,190 @@ class ScoreCode:
         metrics : list of str or str
             A list of strings corresponding to the outputs of the model to SAS Model
             Manager.
+        target_values : list of str
+            A list of target values for the target variable.
+        returns : list
+            The list of expected outputs from the prediction method.
         threshold : float, optional
-            The prediction threshold for normalized probability output_variables. Values
+            The prediction threshold for normalized probability score_metrics. Values
              are expected to be between 0 and 1. The default value is None.
         h2o_model : bool, optional
             Flag to indicate that the model is an H2O.ai model. The default value is
             False.
         """
-        # If a binary target value is provided, then classify the prediction
         if not threshold:
             # Set default threshold
             threshold = 0.5
-        if len(metrics) == 1 or isinstance(metrics, str):
-            if h2o_model:
-                cls.score_code += (
-                    f"{'':4}if prediction[1][2] > {threshold}:\n"
-                    f"{'':8}{metrics} = 1\n{'':4}else:\n{'':8}"
-                    f"{metrics} = 0\n\nreturn {metrics}"
-                )
-            else:
-                cls.score_code += (
-                    f"{'':4}if prediction > {threshold}:\n"
-                    f"{'':8}{metrics} = 1\n{'':4}else:\n{'':8}"
-                    f"{metrics} = 0\n\nreturn {metrics}"
-                )
-        elif len(metrics) == 2:
-            if h2o_model:
-                cls.score_code += (
-                    f"{'':4}if prediction[1][2] > {threshold}:\n"
-                    f"{'':8}{metrics[0]} = 1\n{'':4}else:\n{'':8}"
-                    f"{metrics[0]} = 0\n\nreturn {metrics[0]}, "
-                    f"prediction[1][2]"
-                )
-            else:
-                cls.score_code += (
-                    f"{'':4}if prediction > {threshold}:\n"
-                    f"{'':8}{metrics[0]} = 1\n{'':4}else:\n{'':8}"
-                    f"{metrics[0]} = 0\n\nreturn {metrics[0]}, prediction"
-                )
-        else:
+
+        returns = cls._determine_returns_type(returns)
+        if len(returns) > 3:
             raise ValueError(
-                "Too many output_variables were provided for a binary model."
+                f"The prediction method has {len(returns)} returns. The score code "
+                f"generation cannot parse that many return values for a binary "
+                f"classification model."
+            )
+        elif sum(returns) >= 2:
+            raise ValueError(
+                "Based on the return types provided, the prediction method returns "
+                "multiple classification values. Multilabel models are not supported."
             )
 
-    # TODO: Lower cognitive complexity
+        if isinstance(metrics, str):
+            # For h2o models with only one metric provided, return the classification
+            if h2o_model:
+                cls.score_code += (
+                    f"{'':4}if prediction[1][2] > {threshold}:\n"
+                    f"{'':8}{metrics} = \"{target_values[0]}\"\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}{metrics} = \"{target_values[1]}\"\n\n"
+                    f"return {metrics}"
+                )
+            # One return that is the classification
+            elif len(returns) == 1 and returns[0]:
+                cls.score_code += f"\n\nreturn prediction"
+            # One return that is a probability
+            elif len(returns) == 1 and not returns[0]:
+                cls.score_code += (
+                    f"{'':4}if prediction > {threshold}:\n"
+                    f"{'':8}{metrics} = \"{target_values[0]}\"\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}{metrics} = \"{target_values[1]}\"\n\n"
+                    f"return {metrics}"
+                )
+            # Two returns from the prediction method
+            elif len(returns) == 2 and sum(returns) == 0:
+                # Only probabilities returned; return classification for larger value
+                cls.score_code += (
+                    f"{'':4}if prediction[0] > prediction[1]:\n"
+                    f"{'':8}{metrics} = \"{target_values[0]}\"\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}{metrics} = \"{target_values[1]}\"\n\n"
+                    f"return {metrics}"
+                )
+            # Classification and probability returned; return classification value
+            elif len(returns) > 1 and sum(returns) == 1:
+                # Determine which return is the classification value
+                class_index = [i for i, x in enumerate(returns) if x][0]
+                cls.score_code += (
+                    f"{'':4}{metrics} = prediction[{class_index}]\n\nreturn {metrics}"
+                )
+            else:
+                cls._invalid_predict_config()
+        elif len(metrics) == 2:
+            # H2O models with two metrics are assumed to be classification + probability
+            if h2o_model:
+                warn(
+                    "For H2O models, it is assumed if two metrics are provided, the "
+                    "score code should output the classification and probability for "
+                    "the target event to occur."
+                )
+                cls.score_code += f"\n\nreturn prediction[1][0], prediction[1][2]"
+            # Calculate the classification; return the classification and probability
+            elif sum(returns) == 0 and len(returns) == 1:
+                warn(
+                    "Due to the ambiguity of differentiating the classification and "
+                    "probability output metrics, it is assumed that the classification "
+                    "metric is returned first."
+                )
+                cls.score_code += (
+                    f"{'':4}if prediction > {threshold}:\n"
+                    f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
+                    f"return {metrics[0]}, prediction"
+                )
+            # Calculate the classification; return the classification and probability
+            elif sum(returns) == 0 and len(returns) == 2:
+                warn(
+                    "Due to the ambiguity of the provided metrics and prediction return"
+                    " types, the score code assumes that a classification and the "
+                    "target event probability should be returned."
+                )
+                cls.score_code += (
+                    f"{'':4}if prediction[0] > prediction[1]:\n"
+                    f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
+                    f"return {metrics[0]}, prediction[0]"
+                )
+            # Return classification and probability value
+            elif sum(returns) == 1 and len(returns) == 2:
+                cls.score_code += f"\n\nreturn prediction[0], prediction[1]"
+            elif sum(returns) == 1 and len(returns) == 3:
+                warn(
+                    "Due to the ambiguity of the provided metrics and prediction return"
+                    " types, the score code assumes that a classification and the "
+                    "target event probability should be returned."
+                )
+                # Determine which return is the classification value
+                class_index = [i for i, x in enumerate(returns) if x][0]
+                if class_index == 0:
+                    cls.score_code += f"\n\nreturn prediction[0], prediction[1]"
+                else:
+                    cls.score_code += (
+                        f"\n\nreturn prediction[{class_index}], prediction[0]"
+                    )
+            else:
+                cls._invalid_predict_config()
+        elif len(metrics) == 3:
+            if h2o_model:
+                cls.score_code += (
+                    f"\n\nreturn prediction[1][0], prediction[1][1], prediction[1][2]"
+                )
+            elif sum(returns) == 0 and len(returns) == 1:
+                warn(
+                    "Due to the ambiguity of the provided metrics and prediction return"
+                    " types, the score code assumes the return order to be: "
+                    "[classification, probability of event, probability of no event]."
+                )
+                cls.score_code += (
+                    f"{'':4}if prediction > {threshold}:\n"
+                    f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
+                    f"return {metrics[0]}, prediction, 1 - prediction"
+                )
+            elif sum(returns) == 0 and len(returns) == 2:
+                warn(
+                    "Due to the ambiguity of the provided metrics and prediction return"
+                    " types, the score code assumes the return order to be: "
+                    "[classification, probability of event, probability of no event]."
+                )
+                cls.score_code += (
+                    f"{'':4}if prediction[0] > prediction[1]:\n"
+                    f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
+                    f"return {metrics[0]}, prediction[0], prediction[1]"
+                )
+            # Find which return is the classification, then return probabilities
+            elif sum(returns) == 1 and len(returns) == 2:
+                # Determine which return is the classification value
+                class_index = [i for i, x in enumerate(returns) if x][0]
+                if class_index == 0:
+                    cls.score_code += (
+                        f"\n\nreturn prediction[0], prediction[1], 1 - prediction[1]"
+                    )
+                else:
+                    cls.score_code += (
+                        f"\n\nreturn prediction[1], prediction[0], 1 - prediction[0]"
+                    )
+            # Return all values from prediction method
+            elif sum(returns) == 1 and len(returns) == 3:
+                cls.score_code += (
+                    f"\n\nreturn prediction[0], prediction[1], prediction[2]"
+                )
+            else:
+                cls._invalid_predict_config()
+        else:
+            raise ValueError("Too many score metrics were provided for a binary model.")
+
     @classmethod
     def _nonbinary_targets(
         cls,
         metrics: Union[List[str], str],
         target_values: List[str],
+        returns: List[Any],
         h2o_model: Optional[bool] = None,
     ) -> None:
         """
@@ -833,13 +1159,23 @@ class ScoreCode:
             A list of strings corresponding to the outputs of the model to SAS Model
             Manager.
         target_values : list of str, optional
-            A list of target values for the target variable. The default value is None.
+            A list of target values for the target variable.
+        returns : list
+            The list of expected outputs from the prediction method.
         h2o_model : bool, optional
             Flag to indicate that the model is an H2O.ai model. The default value is
             False.
         """
+        returns = cls._determine_returns_type(returns)
+        if sum(returns) >= 2:
+            raise ValueError(
+                "Based on the return types provided, the prediction method returns "
+                "multiple classification values. Multilabel models are not supported."
+            )
+
         # Find the target value with the highest probability
-        if len(metrics) == 1 or isinstance(metrics, str):
+        if isinstance(metrics, str):
+            # For h2o models with only one metric provided, return the classification
             if h2o_model:
                 cls.score_code += (
                     f"{'':4}target_values = {target_values}\n{'':4}"
@@ -847,51 +1183,82 @@ class ScoreCode:
                     f"index(max(prediction[1][1:]))]\n{'':4}"
                     f"return {metrics}"
                 )
+            # One return that is the classification
+            elif len(returns) == 1:
+                cls.score_code += f"{'':4}{metrics} = prediction\n\nreturn {metrics}"
+            elif len(returns) == len(target_values):
+                cls.score_code += (
+                    f"{'':4}target_values = {target_values}\n\n"
+                    f"return target_values[prediction.index(max(prediction))]"
+                )
+            elif len(returns) == (len(target_values) + 1):
+                # Determine which return is the classification value
+                class_index = [i for i, x in enumerate(returns) if x][0]
+                cls.score_code += f"\n\nreturn prediction[{class_index}]"
             else:
+                cls._invalid_predict_config()
+        elif len(metrics) == 2:
+            if h2o_model:
                 cls.score_code += (
                     f"{'':4}target_values = {target_values}\n{'':4}"
-                    f"{metrics} = target_values[prediction.index("
-                    f"max(prediction))]\n{'':4}return {metrics}"
+                    f"{metrics} = target_values[prediction[1][1:]."
+                    f"index(max(prediction[1][1:]))]\n{'':4}"
+                    f"return {metrics}, max(prediction[1][1:])"
                 )
-        elif len(metrics) in (len(target_values), len(target_values) + 1):
-            if h2o_model:
-                cls.score_code += f"{'':4}target_values = {target_values}\n"
-                for i in range(len(metrics) - 1):
-                    cls.score_code += (
-                        f"{'':4}{metrics[i + 1]} = prediction[1][{i + 1}]\n"
-                    )
-                if len(metrics) == len(target_values) + 1:
-                    cls.score_code += (
-                        f"{'':4}{metrics[0]} = target_values"
-                        f"[prediction[1][1:].index(max("
-                        f"prediction[1][1:]))]\n"
-                    )
-                    cls.score_code += f"{'':4}return {', '.join(metrics)}"
-                else:
-                    cls.score_code += f"{'':4}return {', '.join(metrics)}"
+            elif len(returns) == len(target_values):
+                cls.score_code += (
+                    f"{'':4}target_values = {target_values}\n\n"
+                    f"return target_values[prediction.index(max(prediction))], "
+                    f"max(prediction)"
+                )
+            elif len(returns) == (len(target_values) + 1):
+                # Determine which return is the classification value
+                class_index = [i for i, x in enumerate(returns) if x][0]
+                cls.score_code += (
+                    f"\n\nreturn prediction[{class_index}], "
+                    f"max(prediction[:{class_index}] + prediction[{class_index + 1}:])"
+                )
             else:
-                cls.score_code += f"{'':4}target_values = {target_values}\n"
-                for i in range(len(metrics) - 1):
-                    cls.score_code += f"{'':4}{metrics[i + 1]} = prediction[{i + 1}]\n"
-                if len(metrics) == len(target_values) + 1:
-                    cls.score_code += (
-                        f"{'':4}{metrics[0]} = target_values"
-                        f"[prediction.index(max(prediction))]\n"
-                    )
-                    cls.score_code += f"{'':4}return {', '.join(metrics)}"
-                else:
-                    cls.score_code += f"{'':4}return {', '.join(metrics)}"
-        else:
-            raise ValueError(
-                "An invalid number of target values were provided with "
-                "respect to the size of the output_variables provided. The "
-                "function is expecting output_variables to be one, the same length"
-                "as the target values list, or one more than the length"
-                "of the target values list."
-            )
+                cls._invalid_predict_config()
+        elif len(metrics) > 2:
+            if h2o_model:
+                if len(metrics) == len(target_values):
+                    h2o_returns = [f"prediction[1][{i+1}]" for i in range(len(metrics))]
+                    cls.score_code += f"\n\nreturn {', '.join(h2o_returns)}"
+                elif len(metrics) == (len(target_values) + 1):
+                    h2o_returns = [f"prediction[1][{i}]" for i in range(len(metrics))]
+                    cls.score_code += f"\n\nreturn {', '.join(h2o_returns)}"
+            elif (
+                len(metrics) == len(target_values) == len(returns) and sum(returns) == 0
+            ) or (
+                len(metrics) == (len(target_values) + 1) == len(returns)
+                and sum(returns) == 1
+            ):
+                proba_returns = [f"prediction[{i}]" for i in range(len(returns))]
+                cls.score_code += f"\n\nreturn {', '.join(proba_returns)}"
+            elif (len(metrics) - 1) == len(returns) == len(target_values) and sum(
+                returns
+            ) == 0:
+                proba_returns = [f"prediction[{i}]" for i in range(len(returns))]
+                cls.score_code += (
+                    f"{'':4}target_values = {target_values}\n\n"
+                    f"return target_values[prediction.index(max(prediction))], "
+                    f"{', '.join(proba_returns)}"
+                )
+            else:
+                cls._invalid_predict_config()
 
     @staticmethod
-    def convert_mas_to_cas(mas_code: str, model: Union[str, RestObj]) -> str:
+    def _invalid_predict_config():
+        raise ValueError(
+            "An invalid combination of score metrics, target values, predict "
+            "returns, and predict return types was provided, such that the "
+            "expected return statement for the score code could not be "
+            "determined."
+        )
+
+    @staticmethod
+    def convert_mas_to_cas(mas_code: str, model: Union[str, dict, RestObj]) -> str:
         """
         Using the generated score.sas code from the Python wrapper API, convert the
         SAS Microanalytic Service based code to CAS compatible.
@@ -900,7 +1267,7 @@ class ScoreCode:
         ----------
         mas_code : str
             String representation of the dmcas_packagescorecode.sas DS2 wrapper
-        model : str or RestObj
+        model : str, dict, or RestObj
             The name or id of the model, or a dictionary representation of the model
 
         Returns
@@ -984,7 +1351,7 @@ class ScoreCode:
         return input_var_list, input_dtypes_list
 
     @classmethod
-    def _check_viya_version(cls, model: Union[str, RestObj]) -> Union[str, None]:
+    def _check_viya_version(cls, model: Union[str, dict, RestObj]) -> Union[str, None]:
         """
         Check that a valid SAS Viya version and model argument are provided.
 
@@ -992,7 +1359,7 @@ class ScoreCode:
 
         Parameters
         ----------
-        model : str or RestObj
+        model : str, dict, or RestObj
             The name or id of the model, or a dictionary representation of
             the model. The default value is None and is only necessary for models that
             will be hosted on SAS Viya 3.5.

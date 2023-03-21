@@ -89,19 +89,20 @@ class TestSKLearnModel:
             mp.generate_hyperparameters(bad_model, self.MODEL_NAME, Path(tmp_dir.name))
 
     def test_update_json(self):
-        from sasctl.pzmm.model_parameters import _update_json
+        from sasctl.pzmm.model_parameters import ModelParameters as mp
 
         # ensure that only relevant rows are added to hyperparameter json
 
         input_json = copy.deepcopy(self.TESTJSON)
         input_kpis = copy.deepcopy(self.KPIS)
         assert (
-            _update_json(self.MODELS[1]["id"], input_json, input_kpis) == self.TESTJSON
+            mp._update_json(self.MODELS[1]["id"], input_json, input_kpis)
+            == self.TESTJSON
         )
 
         input_json = copy.deepcopy(self.TESTJSON)
         input_kpis = copy.deepcopy(self.KPIS)
-        updated_json = _update_json(self.MODELS[0]["id"], input_json, input_kpis)
+        updated_json = mp._update_json(self.MODELS[0]["id"], input_json, input_kpis)
 
         pd.testing.assert_frame_equal(input_kpis, self.KPIS)
         assert "hyperparameters" in updated_json

@@ -179,7 +179,7 @@ def wrap_predict_method(func, variables, **kwargs):
 
     See Also
     --------
-    :meth:`build_wrapper_function`
+    build_wrapper_function
 
     """
     kwargs.setdefault("array_input", True)
@@ -209,7 +209,7 @@ def wrap_predict_proba_method(func, variables, **kwargs):
 
     See Also
     --------
-    :meth:`build_wrapper_function`
+    build_wrapper_function
 
     """
     kwargs.setdefault("array_input", True)

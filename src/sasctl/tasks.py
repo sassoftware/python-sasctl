@@ -444,6 +444,13 @@ def register_model(
                     files={"files": (f"{model.params['name']}.sasast", astore["blob"])},
                     data=params,
                 )
+        if files:
+            # Upload any additional files
+            for file in files:
+                if isinstance(file, dict):
+                    mr.add_model_content(model, **file)
+                else:
+                    mr.add_model_content(model, file)
         return model
 
     # If the model is a scikit-learn model, generate the model dictionary
@@ -601,8 +608,8 @@ def publish_model(
 
     See Also
     --------
-    :meth:`model_management.publish_model <.ModelManagement.publish_model>`
-    :meth:`model_publish.publish_model <.ModelPublish.publish_model>`
+    model_management.publish_model
+    model_publish.publish_model
 
 
     .. versionchanged:: 1.1.0
@@ -720,7 +727,7 @@ def update_model_performance(data, model, label, refresh=True):
 
     See Also
     --------
-     :meth:`model_management.create_performance_definition <.ModelManagement.create_performance_definition>`
+    model_management.create_performance_definition
 
     .. versionadded:: v1.3
 

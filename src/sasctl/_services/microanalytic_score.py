@@ -35,7 +35,7 @@ class MicroAnalyticScore(Service):
 
         Notes
         -----
-        Overrides the :meth:`Service.is_uuid` method since MAS modules do
+        Overrides the `Service.is_uuid` method since MAS modules do
         not currently use IDs that are actually UUIDs.
 
         """

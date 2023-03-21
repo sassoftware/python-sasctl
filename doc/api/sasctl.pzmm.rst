@@ -1,10 +1,7 @@
 sasctl.pzmm package
 ====================
 
-Module contents
----------------
+.. toctree::
+    :glob:
 
-.. automodule:: sasctl.pzmm
-    :members:
-    :undoc-members:
-    :show-inheritance:
+    pzmm/*

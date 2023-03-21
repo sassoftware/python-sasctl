@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.abspath("../src"))
 import sasctl
 
 project = "sasctl"
-copyright = sasctl.__copyright__
+copyright = "".join(sasctl.__copyright__)
 author = sasctl.__author__
 
 # The short X.Y version
@@ -44,7 +44,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
-    "sphinx.ext.napoleon",
+    "numpydoc",  # "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
 ]
@@ -58,6 +58,8 @@ intersphinx_mapping = {
     "tox": ("https://tox.readthedocs.io/en/latest/", None),
     "flake8": ("http://flake8.pycqa.org/en/latest/", None),
 }
+
+autosummary_generate = True
 
 todo_include_todos = True
 
@@ -80,7 +82,7 @@ master_doc = "index"
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -96,22 +98,38 @@ pygments_style = "sphinx"
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "alabaster"
-# html_theme = 'sphinx_rtd_theme'
+html_theme = "pydata_sphinx_theme"  # html_theme = "alabaster"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#
+
 html_theme_options = {
-    "description": "Python package and CLI for user-friendly integration with SAS Viya",
-    "fixed_sidebar": True,
+    "icon_links": [
+        {
+            "name": "sasctl",
+            "url": "https://github.com/sassoftware/python-sasctl",
+            "icon": "_static/sas_logo.svg",
+            "type": "local",
+        }
+    ],
+    "collapse_navigation": True,
+    # "description": "Python package and CLI for user-friendly integration with SAS Viya",
+    # "fixed_sidebar": True,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+html_context = {"default_mode": "dark"}
+html_use_modindex = True
+html_copy_source = False
+html_domain_indices = False
+html_file_suffix = '.html'
+html_last_updated_fmt = '%b %d, %Y'
+html_css_files = ["sasctl.css"]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -121,8 +139,8 @@ html_static_path = ["_static"]
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-# html_sidebars = {}
-html_sidebars = {"**": ["about.html", "searchbox.html", "navigation.html"]}
+html_sidebars = {}
+# html_sidebars = {"**": ["about.html", "searchbox.html", "navigation.html"]}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
@@ -133,20 +151,7 @@ htmlhelp_basename = "sasctldoc"
 
 # -- Options for LaTeX output ------------------------------------------------
 
-latex_elements = {
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    # 'papersize': 'letterpaper',
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    # 'pointsize': '10pt',
-    # Additional stuff for the LaTeX preamble.
-    #
-    # 'preamble': '',
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
-}
+latex_engine = "xelatex"
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
@@ -155,6 +160,54 @@ latex_documents = [
     (master_doc, "sasctl.tex", "sasctl Documentation", "SAS", "manual"),
 ]
 
+latex_elements = {
+}
+
+latex_elements["preamble"] = r"""
+\newfontfamily\FontForChinese{FandolSong-Regular}[Extension=.otf]
+\catcode`琴\active\protected\def琴{{\FontForChinese\string琴}}
+\catcode`春\active\protected\def春{{\FontForChinese\string春}}
+\catcode`鈴\active\protected\def鈴{{\FontForChinese\string鈴}}
+\catcode`猫\active\protected\def猫{{\FontForChinese\string猫}}
+\catcode`傅\active\protected\def傅{{\FontForChinese\string傅}}
+\catcode`立\active\protected\def立{{\FontForChinese\string立}}
+\catcode`业\active\protected\def业{{\FontForChinese\string业}}
+\catcode`（\active\protected\def（{{\FontForChinese\string（}}
+\catcode`）\active\protected\def）{{\FontForChinese\string）}}
+
+\makeatletter
+\@ifpackagelater{sphinxpackagefootnote}{2022/02/12}
+    {}% Sphinx >= 5.0.0, nothing to do
+    {%
+\usepackage{expdlist}
+\let\latexdescription=\description
+\def\description{\latexdescription{}{} \breaklabel}
+% but expdlist old LaTeX package requires fixes:
+% 1) remove extra space
+\usepackage{etoolbox}
+\patchcmd\@item{{\@breaklabel} }{{\@breaklabel}}{}{}
+% 2) fix bug in expdlist's way of breaking the line after long item label
+\def\breaklabel{%
+    \def\@breaklabel{%
+        \leavevmode\par
+        % now a hack because Sphinx inserts \leavevmode after term node
+        \def\leavevmode{\def\leavevmode{\unhbox\voidb@x}}%
+    }%
+}
+    }% Sphinx < 5.0.0 (and assumed >= 4.0.0)
+\makeatother
+
+% Make Examples/etc section headers smaller and more compact
+\makeatletter
+\titleformat{\paragraph}{\normalsize\py@HeaderFamily}%
+            {\py@TitleColor}{0em}{\py@TitleColor}{\py@NormalColor}
+\titlespacing*{\paragraph}{0pt}{1ex}{0pt}
+\makeatother
+
+% Fix footer/header
+\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\thechapter.\ #1}}{}}
+\renewcommand{\sectionmark}[1]{\markright{\MakeUppercase{\thesection.\ #1}}}
+"""
 
 # -- Options for manual page output ------------------------------------------
 
@@ -180,5 +233,4 @@ texinfo_documents = [
     ),
 ]
 
-
-# -- Extension configuration -------------------------------------------------
+# -- Source code links -------------------------------------------------
