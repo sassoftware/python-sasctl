@@ -4,7 +4,7 @@
 from pathlib import Path
 from uuid import UUID
 from warnings import warn
-from typing import Union, Optional, Callable, List, Tuple
+from typing import Union, Optional, Callable, List, Tuple, Any
 
 from pandas import DataFrame
 
@@ -13,8 +13,6 @@ from ..core import current_session, RestObj, PagedList
 from ..utils.misc import check_if_jupyter
 from .write_score_code import ScoreCode as sc
 from .zip_model import ZipModel as zm
-
-# TODO: add converter for any type of dataset (list, dataframe, numpy array)
 
 
 def project_exists(
@@ -138,8 +136,8 @@ class ImportModel:
         model_prefix: str,
         project: Union[str, dict, RestObj],
         input_data: Optional[DataFrame] = None,
-        predict_method: Optional[Callable[..., List]] = None,
-        output_variables: Optional[List[str]] = None,
+        predict_method: [Callable[..., List], List[Any]] = None,
+        score_metrics: Optional[List[str]] = None,
         pickle_type: str = "pickle",
         project_version: str = "latest",
         missing_values: bool = False,
@@ -186,17 +184,19 @@ class ImportModel:
             The `DataFrame` object contains the training data, and includes only the
             predictor columns. The write_score_code function currently supports int(64),
             float(64), and string data types for scoring. The default value is None.
-        predict_method : function -> list, optional
-            The Python function used for model predictions. For example, if the model is
-            a Scikit-Learn DecisionTreeClassifier, then pass either of the following:
-            sklearn.tree.DecisionTreeClassifier.predict
-            sklearn.tree.DecisionTreeClassifier.predict_proba
+        predict_method : [function -> list, list], optional
+            The Python function used for model predictions and the expected output
+            types. The expected output types can be passed as example values or as the
+            value types. For example, if the model is a Scikit-Learn
+            DecisionTreeClassifier, then pass either of the following:
+                * [sklearn.tree.DecisionTreeClassifier.predict, ["A"]]
+                * [sklearn.tree.DecisionTreeClassifier.predict_proba, [0.4, float]]
             The default value is None.
-        output_variables : string list, optional
+        score_metrics : string list, optional
             The scoring score_metrics for the model. For classification models, it is
              assumed that the first value in the list represents the classification
             output. This function supports single and multi-class classification models.
-            The default value is None
+            The default value is None.
         pickle_type : string, optional
             Indicator for the package used to serialize the model file to be uploaded to
             SAS Model Manager. The default value is `pickle`.
@@ -248,7 +248,7 @@ class ImportModel:
             pickle_type = mlflow_details["serialization_format"]
 
         # Import model without generating score code (SAS Viya version invariant)
-        if input_data is None or not predict_method or not output_variables:
+        if input_data is None or not predict_method or not score_metrics:
             warn(
                 "The following arguments are required for the automatic generation of "
                 "score code: input_data, predict_method, score_metrics."
@@ -283,7 +283,7 @@ class ImportModel:
                 model_prefix,
                 input_data,
                 predict_method,
-                output_variables,
+                score_metrics=score_metrics,
                 pickle_type=pickle_type,
                 predict_threshold=predict_threshold,
                 score_code_path=None if isinstance(model_files, dict) else model_files,
@@ -369,7 +369,7 @@ class ImportModel:
                 model_prefix,
                 input_data,
                 predict_method,
-                output_variables,
+                score_metrics=score_metrics,
                 model=model,
                 pickle_type=pickle_type,
                 predict_threshold=predict_threshold,
