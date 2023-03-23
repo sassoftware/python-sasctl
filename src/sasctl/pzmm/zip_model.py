@@ -29,7 +29,7 @@ def _filter_files(file_dir: Union[str, Path], is_viya4: Optional[bool] = False) 
     file_names = []
     file_names.extend(sorted(Path(file_dir).glob("*.json")))
     if is_viya4:
-        file_names.extend(sorted(Path(file_dir).glob("*Score.py")))
+        file_names.extend(sorted(Path(file_dir).glob("score_*.py")))
     file_names.extend(sorted(Path(file_dir).glob("*.pickle")))
     # Include H2O.ai MOJO files
     file_names.extend(sorted(Path(file_dir).glob("*.mojo")))

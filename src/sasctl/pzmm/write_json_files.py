@@ -262,6 +262,7 @@ class JSONFiles:
         json_path: Union[str, Path, None] = None,
         model_desc: Optional[str] = None,
         model_algorithm: Optional[str] = None,
+        model_function: Optional[str] = None,
         modeler: Optional[str] = None,
         train_table: Optional[str] = None,
         properties: Optional[List[dict]] = None,
@@ -295,7 +296,9 @@ class JSONFiles:
         model_desc : str, optional
             User-defined model description. The default value is an empty string.
         model_algorithm : str, optional
-            User-defined model type. The default value is an empty string.
+            User-defined model algorithm name. The default value is an empty string.
+        model_function : str, optional
+            User-defined model function name. The default value is an empty string.
         modeler : str, optional
             User-defined value for the name of the modeler. The default value is an
             empty string.
@@ -372,11 +375,11 @@ class JSONFiles:
         output_json = {
             "name": model_name,
             "description": model_desc if model_desc else "",
-            "function": model_function if model_function else "",
             "scoreCodeType": "python",
             "trainTable": train_table if train_table else "",
             "trainCodeType": "Python",
             "algorithm": model_algorithm if model_algorithm else "",
+            "function": model_function if model_function else "",
             "targetVariable": target_variable if target_variable else "",
             "targetEvent": target_event if target_event else "",
             "targetLevel": target_level if target_level else "",
@@ -471,7 +474,7 @@ class JSONFiles:
         dict_list = [
             {"role": "inputVariables", "name": INPUT},
             {"role": "outputVariables", "name": OUTPUT},
-            {"role": "score", "name": model_prefix + "Score.py"},
+            {"role": "score", "name": f"score_{model_prefix}.py"},
         ]
         if is_h2o_model:
             dict_list.append({"role": "scoreResource", "name": model_prefix + ".mojo"})
@@ -914,8 +917,8 @@ class JSONFiles:
 
     @staticmethod
     def stat_dataset_to_dataframe(
-        data: Union[DataFrame, List[list], Type["numpy.array"]] = None,
-        target_value: Union[str, int, float, None] = None,
+        data: Union[DataFrame, List[list], Type["numpy.array"]],
+        target_value: Union[str, int, float] = None,
     ) -> DataFrame:
         """
         Convert the user supplied statistical dataset from either a pandas DataFrame,

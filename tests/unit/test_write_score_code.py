@@ -422,11 +422,11 @@ def test_binary_target():
     sc.score_code = ""
 
     sc._binary_target(metrics, ["A", "B"], ["A"])
-    assert sc.score_code.endswith("\n\nreturn prediction")
+    assert sc.score_code.endswith("return prediction")
     sc.score_code = ""
 
     sc._binary_target(metrics, ["A", "B"], [1])
-    assert sc.score_code.endswith("\n\nreturn Classification")
+    assert sc.score_code.endswith("return Classification")
     assert 'Classification = "A"' in sc.score_code
     sc.score_code = ""
 
@@ -441,7 +441,7 @@ def test_binary_target():
     metrics = ["Classification", "Probability"]
     with pytest.warns():
         sc._binary_target(metrics, ["A", "B"], [], threshold=0.7, h2o_model=True)
-    assert sc.score_code.endswith("\n\nreturn prediction[1][0], prediction[1][2]")
+    assert sc.score_code.endswith("return prediction[1][0], prediction[1][2]")
     sc.score_code = ""
 
     with pytest.warns():
@@ -478,7 +478,7 @@ def test_binary_target():
     metrics = ["C", "P1", "P2"]
     sc._binary_target(metrics, ["A", "B"], [1, 2, "3"], h2o_model=True)
     assert sc.score_code.endswith(
-        "\n\nreturn prediction[1][0], prediction[1][1], " "prediction[1][2]"
+        "return prediction[1][0], prediction[1][1], " "prediction[1][2]"
     )
     sc.score_code = ""
 
@@ -779,7 +779,7 @@ def test_write_score_code(score_code_mocks):
         [predict_proba, []],
         binary_string=b"Binary model string.",
     )
-    assert "TestModel_score.py" in output_dict
+    assert "score_TestModel.py" in output_dict
     assert "dmcas_packagescorecode.sas" in output_dict
     assert "dmcas_epscorecode.sas" in output_dict
 
@@ -793,4 +793,4 @@ def test_write_score_code(score_code_mocks):
     )
     assert (Path(tmp_dir.name) / "dmcas_packagescorecode.sas").exists()
     assert (Path(tmp_dir.name) / "dmcas_epscorecode.sas").exists()
-    assert (Path(tmp_dir.name) / "TestModel_score.py").exists()
+    assert (Path(tmp_dir.name) / "score_TestModel.py").exists()

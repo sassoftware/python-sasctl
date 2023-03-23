@@ -3,7 +3,7 @@
 
 import re
 from pathlib import Path
-from typing import Union, Optional, Callable, List, Tuple, Any, Generator
+from typing import Union, Optional, Callable, List, Tuple, Any, Generator, Type
 from warnings import warn
 
 import pandas as pd
@@ -14,8 +14,6 @@ from ..core import current_session, RestObj
 
 MAS_CODE_NAME = "dmcas_packagescorecode.sas"
 CAS_CODE_NAME = "dmcas_epscorecode.sas"
-
-# TODO: add converter for any type of dataset (list, dataframe, numpy array)
 
 
 class ScoreCode:
@@ -161,7 +159,7 @@ class ScoreCode:
         else:
             raise ValueError(
                 "Either the binary_string or the model_file_name argument needs to be"
-                "specified in order to generate the score code."
+                " specified in order to generate the score code."
             )
 
         # Add the core imports to the score code with the specified model serializer
@@ -176,16 +174,16 @@ class ScoreCode:
         if model_id and not binary_string:
             model_load = cls._viya35_model_load(
                 model_id,
-                pickle_type,
                 model_file_name,
+                pickle_type=pickle_type,
                 mojo_model="mojo_model" in kwargs,
                 binary_h2o_model="binary_h2o_model" in kwargs,
             )
         # As above, but for SAS Viya 4 models
         elif not binary_string:
             model_load = cls._viya4_model_load(
-                pickle_type,
                 model_file_name,
+                pickle_type=pickle_type,
                 mojo_model="mojo_model" in kwargs,
                 binary_h2o_model="binary_h2o_model" in kwargs,
             )
@@ -195,7 +193,7 @@ class ScoreCode:
         model_prefix = cls._check_valid_model_prefix(model_prefix)
 
         # Define the score function using the variables found in input_data
-        cls.score_code += f"def score{model_prefix}({', '.join(input_var_list)}):\n"
+        cls.score_code += f"def score_{model_prefix}({', '.join(input_var_list)}):\n"
 
         if not score_metrics:
             score_metrics = cls._determine_score_metrics(
@@ -234,9 +232,10 @@ class ScoreCode:
             )
             # Include check for numpy values and a conversion operation as needed
             cls.score_code += (
-                f"{'':4}prediction = [val.item() if type(val)."
-                f"__module__ == np.__name__ else val for val in "
-                f"prediction]\n"
+                f"\n{'':4}# Check for numpy values and convert to a CAS readable "
+                f"representation\n"
+                f"{'':4}if isinstance(prediction, np.ndarray):\n"
+                f"{'':8}prediction = prediction.tolist()[0]\n\n"
             )
             cls._predictions_to_metrics(
                 score_metrics,
@@ -252,7 +251,7 @@ class ScoreCode:
             )
 
         if score_code_path:
-            py_code_path = Path(score_code_path) / (model_prefix + "_score.py")
+            py_code_path = Path(score_code_path) / f"score_{model_prefix}.py"
             with open(py_code_path, "w") as py_file:
                 py_file.write(cls.score_code)
             if model_id and score_cas:
@@ -263,7 +262,7 @@ class ScoreCode:
                     # noinspection PyUnboundLocalVariable
                     sas_file.write(cas_code)
         else:
-            output_dict = {model_prefix + "_score.py": cls.score_code}
+            output_dict = {f"score_{model_prefix}.py": cls.score_code}
             if model_id and score_cas:
                 # noinspection PyUnboundLocalVariable
                 output_dict[MAS_CODE_NAME] = mas_code
@@ -1000,11 +999,11 @@ class ScoreCode:
                     f"{'':8}{metrics} = \"{target_values[0]}\"\n"
                     f"{'':4}else:\n"
                     f"{'':8}{metrics} = \"{target_values[1]}\"\n\n"
-                    f"return {metrics}"
+                    f"{'':4}return {metrics}"
                 )
             # One return that is the classification
             elif len(returns) == 1 and returns[0]:
-                cls.score_code += f"\n\nreturn prediction"
+                cls.score_code += f"{'':4}return prediction"
             # One return that is a probability
             elif len(returns) == 1 and not returns[0]:
                 cls.score_code += (
@@ -1012,7 +1011,7 @@ class ScoreCode:
                     f"{'':8}{metrics} = \"{target_values[0]}\"\n"
                     f"{'':4}else:\n"
                     f"{'':8}{metrics} = \"{target_values[1]}\"\n\n"
-                    f"return {metrics}"
+                    f"{'':4}return {metrics}"
                 )
             # Two returns from the prediction method
             elif len(returns) == 2 and sum(returns) == 0:
@@ -1022,7 +1021,7 @@ class ScoreCode:
                     f"{'':8}{metrics} = \"{target_values[0]}\"\n"
                     f"{'':4}else:\n"
                     f"{'':8}{metrics} = \"{target_values[1]}\"\n\n"
-                    f"return {metrics}"
+                    f"{'':4}return {metrics}"
                 )
             # Classification and probability returned; return classification value
             elif len(returns) > 1 and sum(returns) == 1:
@@ -1041,7 +1040,7 @@ class ScoreCode:
                     "score code should output the classification and probability for "
                     "the target event to occur."
                 )
-                cls.score_code += f"\n\nreturn prediction[1][0], prediction[1][2]"
+                cls.score_code += f"{'':4}return prediction[1][0], prediction[1][2]"
             # Calculate the classification; return the classification and probability
             elif sum(returns) == 0 and len(returns) == 1:
                 warn(
@@ -1054,7 +1053,7 @@ class ScoreCode:
                     f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
                     f"{'':4}else:\n"
                     f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
-                    f"return {metrics[0]}, prediction"
+                    f"{'':4}return {metrics[0]}, prediction"
                 )
             # Calculate the classification; return the classification and probability
             elif sum(returns) == 0 and len(returns) == 2:
@@ -1068,11 +1067,11 @@ class ScoreCode:
                     f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
                     f"{'':4}else:\n"
                     f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
-                    f"return {metrics[0]}, prediction[0]"
+                    f"{'':4}return {metrics[0]}, prediction[0]"
                 )
             # Return classification and probability value
             elif sum(returns) == 1 and len(returns) == 2:
-                cls.score_code += f"\n\nreturn prediction[0], prediction[1]"
+                cls.score_code += f"{'':4}return prediction[0], prediction[1]"
             elif sum(returns) == 1 and len(returns) == 3:
                 warn(
                     "Due to the ambiguity of the provided metrics and prediction return"
@@ -1082,17 +1081,17 @@ class ScoreCode:
                 # Determine which return is the classification value
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 if class_index == 0:
-                    cls.score_code += f"\n\nreturn prediction[0], prediction[1]"
+                    cls.score_code += f"{'':4}return prediction[0], prediction[1]"
                 else:
                     cls.score_code += (
-                        f"\n\nreturn prediction[{class_index}], prediction[0]"
+                        f"{'':4}return prediction[{class_index}], prediction[0]"
                     )
             else:
                 cls._invalid_predict_config()
         elif len(metrics) == 3:
             if h2o_model:
                 cls.score_code += (
-                    f"\n\nreturn prediction[1][0], prediction[1][1], prediction[1][2]"
+                    f"{'':4}return prediction[1][0], prediction[1][1], prediction[1][2]"
                 )
             elif sum(returns) == 0 and len(returns) == 1:
                 warn(
@@ -1105,7 +1104,7 @@ class ScoreCode:
                     f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
                     f"{'':4}else:\n"
                     f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
-                    f"return {metrics[0]}, prediction, 1 - prediction"
+                    f"{'':4}return {metrics[0]}, prediction, 1 - prediction"
                 )
             elif sum(returns) == 0 and len(returns) == 2:
                 warn(
@@ -1118,7 +1117,7 @@ class ScoreCode:
                     f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
                     f"{'':4}else:\n"
                     f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
-                    f"return {metrics[0]}, prediction[0], prediction[1]"
+                    f"{'':4}return {metrics[0]}, prediction[0], prediction[1]"
                 )
             # Find which return is the classification, then return probabilities
             elif sum(returns) == 1 and len(returns) == 2:
@@ -1126,16 +1125,16 @@ class ScoreCode:
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 if class_index == 0:
                     cls.score_code += (
-                        f"\n\nreturn prediction[0], prediction[1], 1 - prediction[1]"
+                        f"{'':4}return prediction[0], prediction[1], 1 - prediction[1]"
                     )
                 else:
                     cls.score_code += (
-                        f"\n\nreturn prediction[1], prediction[0], 1 - prediction[0]"
+                        f"{'':4}return prediction[1], prediction[0], 1 - prediction[0]"
                     )
             # Return all values from prediction method
             elif sum(returns) == 1 and len(returns) == 3:
                 cls.score_code += (
-                    f"\n\nreturn prediction[0], prediction[1], prediction[2]"
+                    f"{'':4}return prediction[0], prediction[1], prediction[2]"
                 )
             else:
                 cls._invalid_predict_config()
@@ -1181,7 +1180,7 @@ class ScoreCode:
                     f"{'':4}target_values = {target_values}\n{'':4}"
                     f"{metrics} = target_values[prediction[1][1:]."
                     f"index(max(prediction[1][1:]))]\n{'':4}"
-                    f"return {metrics}"
+                    f"{'':4}return {metrics}"
                 )
             # One return that is the classification
             elif len(returns) == 1:
@@ -1189,12 +1188,12 @@ class ScoreCode:
             elif len(returns) == len(target_values):
                 cls.score_code += (
                     f"{'':4}target_values = {target_values}\n\n"
-                    f"return target_values[prediction.index(max(prediction))]"
+                    f"{'':4}return target_values[prediction.index(max(prediction))]"
                 )
             elif len(returns) == (len(target_values) + 1):
                 # Determine which return is the classification value
                 class_index = [i for i, x in enumerate(returns) if x][0]
-                cls.score_code += f"\n\nreturn prediction[{class_index}]"
+                cls.score_code += f"{'':4}return prediction[{class_index}]"
             else:
                 cls._invalid_predict_config()
         elif len(metrics) == 2:
@@ -1203,19 +1202,19 @@ class ScoreCode:
                     f"{'':4}target_values = {target_values}\n{'':4}"
                     f"{metrics} = target_values[prediction[1][1:]."
                     f"index(max(prediction[1][1:]))]\n{'':4}"
-                    f"return {metrics}, max(prediction[1][1:])"
+                    f"{'':4}return {metrics}, max(prediction[1][1:])"
                 )
             elif len(returns) == len(target_values):
                 cls.score_code += (
                     f"{'':4}target_values = {target_values}\n\n"
-                    f"return target_values[prediction.index(max(prediction))], "
+                    f"{'':4}return target_values[prediction.index(max(prediction))], "
                     f"max(prediction)"
                 )
             elif len(returns) == (len(target_values) + 1):
                 # Determine which return is the classification value
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 cls.score_code += (
-                    f"\n\nreturn prediction[{class_index}], "
+                    f"{'':4}return prediction[{class_index}], "
                     f"max(prediction[:{class_index}] + prediction[{class_index + 1}:])"
                 )
             else:
@@ -1224,10 +1223,10 @@ class ScoreCode:
             if h2o_model:
                 if len(metrics) == len(target_values):
                     h2o_returns = [f"prediction[1][{i+1}]" for i in range(len(metrics))]
-                    cls.score_code += f"\n\nreturn {', '.join(h2o_returns)}"
+                    cls.score_code += f"{'':4}return {', '.join(h2o_returns)}"
                 elif len(metrics) == (len(target_values) + 1):
                     h2o_returns = [f"prediction[1][{i}]" for i in range(len(metrics))]
-                    cls.score_code += f"\n\nreturn {', '.join(h2o_returns)}"
+                    cls.score_code += f"{'':4}return {', '.join(h2o_returns)}"
             elif (
                 len(metrics) == len(target_values) == len(returns) and sum(returns) == 0
             ) or (
@@ -1235,14 +1234,14 @@ class ScoreCode:
                 and sum(returns) == 1
             ):
                 proba_returns = [f"prediction[{i}]" for i in range(len(returns))]
-                cls.score_code += f"\n\nreturn {', '.join(proba_returns)}"
+                cls.score_code += f"{'':4}return {', '.join(proba_returns)}"
             elif (len(metrics) - 1) == len(returns) == len(target_values) and sum(
                 returns
             ) == 0:
                 proba_returns = [f"prediction[{i}]" for i in range(len(returns))]
                 cls.score_code += (
                     f"{'':4}target_values = {target_values}\n\n"
-                    f"return target_values[prediction.index(max(prediction))], "
+                    f"{'':4}return target_values[prediction.index(max(prediction))], "
                     f"{', '.join(proba_returns)}"
                 )
             else:
@@ -1454,15 +1453,19 @@ class ScoreCode:
         """
         files = [
             {
-                "name": f"{prefix}_score.py",
+                "name": f"score_{prefix}.py",
                 "file": cls.score_code,
                 "role": "score",
             }
         ]
         cls.upload_and_copy_score_resources(model_id, files)
-        mr.convert_python_to_ds2(model_id)
+        # The typeConversion endpoint is only valid for models with Python score code
+        model = mr.get_model(model_id)
+        model["scoreCodeType"] = "Python"
+        model = mr.update_model(model)
+        mr.convert_python_to_ds2(model)
         if score_cas:
-            model_contents = mr.get_model_contents(model_id)
+            model_contents = mr.get_model_contents(model)
             for file in model_contents:
                 if file.name == "score.sas":
                     mas_code = mr.get(
@@ -1478,9 +1481,9 @@ class ScoreCode:
                             }
                         ],
                     )
-                    cas_code = cls.convert_mas_to_cas(mas_code, model_id)
+                    cas_code = cls.convert_mas_to_cas(mas_code, model)
                     cls.upload_and_copy_score_resources(
-                        model_id,
+                        model,
                         [
                             {
                                 "name": CAS_CODE_NAME,
