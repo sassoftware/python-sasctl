@@ -87,8 +87,8 @@ def test_sklearn_binary_classifier(cancer_dataset, model, algorithm):
     assert not info.is_clusterer
     assert info.analytic_function == "classification"
     assert info.algorithm == algorithm
-    assert info.output_column_names == [target]   # target_variable
-    assert info.target_values == ["malignant"]    # target_event
+    assert info.output_column_names == [target]  # target_variable
+    assert info.target_values == ["malignant"]  # target_event
     assert info.predict_function == model.predict
 
     # If output frame contains a column name then it should be retained
@@ -118,6 +118,8 @@ def test_sklearn_binary_classifier(cancer_dataset, model, algorithm):
     
     
     """
+
+
 def test_sklearn_binary_classifier_target_column_name(cancer_dataset):
     """Verify output column name set correctly when target frame has no column name."""
     target = "Type"

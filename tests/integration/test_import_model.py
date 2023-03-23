@@ -61,18 +61,58 @@ def test_import_model(hmeq_dataset):
     model_files = {
         "Test.json": json.dumps({"Test": True, "TestNum": 1}),
         "Other_Test.json": json.dumps({"Other": None, "TestNum": 2}),
-        "inputVar.json": json.dumps([{'name': 'LOAN', 'level': 'interval', 'type': 'decimal', 'length': 8}, {'name': 'MORTDUE', 'level': 'interval', 'type': 'decimal', 'length': 8}, {'name': 'VALUE', 'level': 'interval', 'type': 'decimal', 'length': 8}, {'name': 'YOJ', 'level': 'interval', 'type': 'decimal', 'length': 8}, {'name': 'DEROG', 'level': 'interval', 'type': 'decimal', 'length': 8}, {'name': 'DELINQ', 'level': 'interval', 'type': 'decimal', 'length': 8}, {'name': 'CLAGE', 'level': 'interval', 'type': 'decimal', 'length': 8}, {'name': 'NINQ', 'level': 'interval', 'type': 'decimal', 'length': 8}, {'name': 'CLNO', 'level': 'interval', 'type': 'decimal', 'length': 8}, {'name': 'DEBTINC', 'level': 'interval', 'type': 'decimal', 'length': 8}]),
-        "outputVar.json": json.dumps([{'name': 'Classification', 'level': 'nominal', 'type': 'string', 'length': 1}, {'name': 'Probability', 'level': 'interval', 'type': 'decimal', 'length': 8}])
+        "inputVar.json": json.dumps(
+            [
+                {"name": "LOAN", "level": "interval", "type": "decimal", "length": 8},
+                {
+                    "name": "MORTDUE",
+                    "level": "interval",
+                    "type": "decimal",
+                    "length": 8,
+                },
+                {"name": "VALUE", "level": "interval", "type": "decimal", "length": 8},
+                {"name": "YOJ", "level": "interval", "type": "decimal", "length": 8},
+                {"name": "DEROG", "level": "interval", "type": "decimal", "length": 8},
+                {"name": "DELINQ", "level": "interval", "type": "decimal", "length": 8},
+                {"name": "CLAGE", "level": "interval", "type": "decimal", "length": 8},
+                {"name": "NINQ", "level": "interval", "type": "decimal", "length": 8},
+                {"name": "CLNO", "level": "interval", "type": "decimal", "length": 8},
+                {
+                    "name": "DEBTINC",
+                    "level": "interval",
+                    "type": "decimal",
+                    "length": 8,
+                },
+            ]
+        ),
+        "outputVar.json": json.dumps(
+            [
+                {
+                    "name": "Classification",
+                    "level": "nominal",
+                    "type": "string",
+                    "length": 1,
+                },
+                {
+                    "name": "Probability",
+                    "level": "interval",
+                    "type": "decimal",
+                    "length": 8,
+                },
+            ]
+        ),
     }
     model, model_files = im.import_model(
-        model_files,
-        "No_Score_Model",
-        "Test_Project",
-        overwrite_model=True
+        model_files, "No_Score_Model", "Test_Project", overwrite_model=True
     )
     assert model == mr.get_model(model)
     for file in mr.get_model_contents(model):
-        assert file.name in ["Test.json", "Other_Test.json", "inputVar.json", "outputVar.json"]
+        assert file.name in [
+            "Test.json",
+            "Other_Test.json",
+            "inputVar.json",
+            "outputVar.json",
+        ]
 
     input_data = hmeq_dataset.drop(columns=["BAD", "REASON", "JOB"])
     output_vars = ["Classification", "Probability"]
@@ -85,11 +125,17 @@ def test_import_model(hmeq_dataset):
             predict_method=[fake_predict, [int, int]],
             score_metrics=output_vars,
             binary_string=b"Test Binary String",
-            overwrite_model=True
+            overwrite_model=True,
         )
         assert model == mr.get_model(model)
         for file in mr.get_model_contents(model):
-            assert file.name in ["Test.json", "Other_Test.json", "inputVar.json", "outputVar.json", "score_Test_Model.py"]
+            assert file.name in [
+                "Test.json",
+                "Other_Test.json",
+                "inputVar.json",
+                "outputVar.json",
+                "score_Test_Model.py",
+            ]
     else:
         model, model_files = im.import_model(
             model_files,
@@ -99,7 +145,7 @@ def test_import_model(hmeq_dataset):
             predict_method=[fake_predict, [int, int]],
             score_metrics=output_vars,
             binary_string=b"Test Binary String",
-            overwrite_model=True
+            overwrite_model=True,
         )
         assert model == mr.get_model(model)
         for file in mr.get_model_contents(model):

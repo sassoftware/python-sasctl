@@ -23,10 +23,7 @@ def _create_sample_archive(prefix=None, suffix=None, is_viya_4=False):
             _ = tempfile.NamedTemporaryFile(delete=False, suffix=s, dir=tmp_dir.name)
     if prefix:
         _ = tempfile.NamedTemporaryFile(
-            delete=False,
-            prefix=prefix,
-            suffix=".py",
-            dir=tmp_dir.name
+            delete=False, prefix=prefix, suffix=".py", dir=tmp_dir.name
         )
     bytes_zip = zm.zip_files(tmp_dir.name, "Unit_Test_Model", is_viya4=is_viya_4)
     # Check that for files with a valid extension, the generated zip file contains
