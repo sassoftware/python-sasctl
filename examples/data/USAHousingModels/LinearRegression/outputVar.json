@@ -1,8 +1,8 @@
 [
     {
         "name": "EM_PREDICTION",
-        "length": 8,
+        "level": "interval",
         "type": "decimal",
-        "level": "interval"
+        "length": 8
     }
 ]

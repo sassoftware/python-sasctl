@@ -296,7 +296,7 @@ class ImportModel:
                 model_files.update(score_code_dict)
                 zip_io_file = zm.zip_files(model_files, model_prefix, is_viya4=True)
             else:
-                score_path = Path(model_files) / (model_prefix + "Score.py")
+                score_path = Path(model_files) / f"score_{model_prefix}.py"
                 if cls.notebook_output:
                     print(
                         f"Model score code was written successfully to {score_path} and"
@@ -383,7 +383,7 @@ class ImportModel:
                 model_files.update(score_code_dict)
                 return mr.get_model(model), model_files
             else:
-                score_path = Path(model_files) / (model_prefix + "Score.py")
+                score_path = Path(model_files) / f"score_{model_prefix}.py"
                 if cls.notebook_output:
                     print(
                         f"Model score code was written successfully to {score_path} and"

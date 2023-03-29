@@ -9,7 +9,7 @@
     },
     {
         "role": "score",
-        "name": "LinearRegressionScore.py"
+        "name": "score_LinearRegression.py"
     },
     {
         "role": "scoreResource",
