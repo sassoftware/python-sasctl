@@ -1,13 +1,35 @@
-
 Examples
 ========
+The `/examples` directory includes the examples listed below. Additionally, the `/data`
+directory includes the model file outputs of the examples as well as the data sets
+utilized by the examples.
 
+Older examples are kept in the `/ARCHIVE` directory and sorted by their version of
+python-sasctl.
+
+PZMM Submodule
+==============
+- [Register scikit-learn binary classification models](#register-binary-classification-models)
+- [Register a scikit-learn regression model](#register-a-regression-model)
+- [Register a scikit-learn multiclass classification model](#register-a-multiclassification-model)
+- [Register a MLFlow model](#register-a-mlflow-model)
+- [Register a H2O.ai model](#register-a-h2o-model)
+
+
+- [Generate a requirements.json file](#generate-a-requirements-file)
+- [Create and update custom model KPIs](#create-and-update-custom-model-kpis)
+
+---
+Tasks and Services
+==================
 - [Register a SAS classification model](#register-a-sas-classification-model)
 - [Register a SAS regression model](#register-a-sas-regression-model)
 - [Register a SAS deep learning model](#register-a-sas-deep-learning-model)
 
+
 - [Register a scikit-learn classification model](#register-a-scikit-learn-classification-model)
 - [Register a scikit-learn regression model](#register-a-scikit-learn-regression-model)
+
 
 - [Full model lifecycle](#full-model-lifecycle)
 - [Register a custom model](#register-a-custom-model)
@@ -16,6 +38,67 @@ Examples
 - [Making direct REST API calls](#making-direct-rest-api-calls)
 
 ---
+Register binary classification models
+-------------------------------------
+Filename: [pzmm_binary_classification_model_import.ipynb](pzmm_binary_classification_model_import.ipynb)
+
+Level: Beginner
+
+Registers a trio of classification models in SAS Model Manager that were created from a Python algorithm with [scikit-learn](https://github.com/scikit-learn/scikit-learn).
+
+
+Register a regression model
+---------------------------
+Filename: [pzmm_regression_model_import.ipynb](pzmm_regression_model_import.ipynb)
+
+Level: Beginner
+
+Registers a regression model in SAS Model Manager that was created from a Python algorithm with [scikit-learn](https://github.com/scikit-learn/scikit-learn).
+
+
+Register a multiclassification model
+------------------------------------
+Filename: [pzmm_multi_classification_model_import.ipynb](pzmm_multi_classification_model_import.ipynb)
+
+Level: Beginner
+
+Registers a multiclass classification model in SAS Model Manager that was created from a Python algorithm with [scikit-learn](https://github.com/scikit-learn/scikit-learn).
+
+
+Register a MLFlow model
+-----------------------
+Filename: [pzmm_mlflow_model_import.ipynb](pzmm_mlflow_model_import.ipynb)
+
+Level: Intermediate
+
+Registers a classification model in SAS Model Manager that was created from a Python algorithm with [MLflow](https://github.com/mlflow/mlflow).
+
+
+Register a H2O model
+--------------------
+Filename: [pzmm_h2o_model_import.ipynb](pzmm_h2o_model_import.ipynb)
+
+Level: Intermediate
+
+Registers a classification model in SAS Model Manager that was created from a Python algorithm with [H2O.ai](https://github.com/h2oai/h2o-3).
+
+
+Generate a requirements file
+---------------------------------
+Filename: [pzmm_generate_requirements_json.ipynb](pzmm_generate_requirements_json.ipynb)
+
+Level: Intermediate
+
+Generates a requirements.json file which includes the minimal number of dependencies required to run a Python model
+
+
+Create and update custom model KPIs
+-----------------------------------
+Filename: [pzmm_custom_kpis.ipynb](pzmm_custom_kpis.ipynb)
+
+Level: Intermediate
+
+Create and update custom model parameters and kpis on SAS Model Manager
 
 
 Register a SAS classification model
