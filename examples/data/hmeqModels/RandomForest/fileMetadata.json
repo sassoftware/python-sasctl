@@ -9,7 +9,7 @@
     },
     {
         "role": "score",
-        "name": "RandomForestScore.py"
+        "name": "score_RandomForest.py"
     },
     {
         "role": "scoreResource",

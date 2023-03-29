@@ -9,7 +9,7 @@
     },
     {
         "role": "score",
-        "name": "DecisionTreeClassifierScore.py"
+        "name": "score_DecisionTreeClassifier.py"
     },
     {
         "role": "scoreResource",

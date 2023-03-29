@@ -1,62 +1,62 @@
 [
     {
         "name": "LOAN",
-        "length": 8,
+        "level": "interval",
         "type": "decimal",
-        "level": "interval"
+        "length": 8
     },
     {
         "name": "MORTDUE",
-        "length": 8,
+        "level": "interval",
         "type": "decimal",
-        "level": "interval"
+        "length": 8
     },
     {
         "name": "VALUE",
-        "length": 8,
+        "level": "interval",
         "type": "decimal",
-        "level": "interval"
+        "length": 8
     },
     {
         "name": "YOJ",
-        "length": 8,
+        "level": "interval",
         "type": "decimal",
-        "level": "interval"
+        "length": 8
     },
     {
         "name": "DEROG",
-        "length": 8,
+        "level": "interval",
         "type": "decimal",
-        "level": "interval"
+        "length": 8
     },
     {
         "name": "DELINQ",
-        "length": 8,
+        "level": "interval",
         "type": "decimal",
-        "level": "interval"
+        "length": 8
     },
     {
         "name": "CLAGE",
-        "length": 8,
+        "level": "interval",
         "type": "decimal",
-        "level": "interval"
+        "length": 8
     },
     {
         "name": "NINQ",
-        "length": 8,
+        "level": "interval",
         "type": "decimal",
-        "level": "interval"
+        "length": 8
     },
     {
         "name": "CLNO",
-        "length": 8,
+        "level": "interval",
         "type": "decimal",
-        "level": "interval"
+        "length": 8
     },
     {
         "name": "DEBTINC",
-        "length": 8,
+        "level": "interval",
         "type": "decimal",
-        "level": "interval"
+        "length": 8
     }
 ]

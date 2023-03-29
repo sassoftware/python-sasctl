@@ -1,16 +1,17 @@
 {
     "name": "GradientBoosting",
-    "description": "",
-    "function": "classification",
+    "description": "Description for the GradientBoosting model.",
     "scoreCodeType": "python",
-    "trainTable": " ",
+    "trainTable": "",
     "trainCodeType": "Python",
     "algorithm": "",
+    "function": "Classification",
     "targetVariable": "BAD",
-    "targetEvent": 1,
+    "targetEvent": "1",
     "targetLevel": "BINARY",
-    "eventProbVar": "EM_EVENTPROBABILITY",
+    "eventProbVar": "P_1",
     "modeler": "sasdemo",
     "tool": "Python 3",
-    "toolVersion": "3.8.16"
+    "toolVersion": "3.8.16",
+    "properties": []
 }

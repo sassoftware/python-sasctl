@@ -193,7 +193,7 @@ class ScoreCode:
         model_prefix = cls._check_valid_model_prefix(model_prefix)
 
         # Define the score function using the variables found in input_data
-        cls.score_code += f"def score_{model_prefix}({', '.join(input_var_list)}):\n"
+        cls.score_code += f"def score({', '.join(input_var_list)}):\n"
 
         if not score_metrics:
             score_metrics = cls._determine_score_metrics(
@@ -596,7 +596,7 @@ class ScoreCode:
             cls.score_code += (
                 f"{'':4}try:\n{'':8}if math.isnan({var}):\n"
                 f"{'':12}{var} = {data[var].mean()}\n"
-                f"{'':4}except TypeError\n{'':8}{var} = "
+                f"{'':4}except TypeError:\n{'':8}{var} = "
                 f"{data[var].mean()}\n"
             )
 

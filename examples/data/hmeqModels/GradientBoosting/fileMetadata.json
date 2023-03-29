@@ -9,7 +9,7 @@
     },
     {
         "role": "score",
-        "name": "GradientBoostingScore.py"
+        "name": "score_GradientBoosting.py"
     },
     {
         "role": "scoreResource",

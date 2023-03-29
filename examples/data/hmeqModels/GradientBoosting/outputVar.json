@@ -1,14 +1,14 @@
 [
     {
-        "name": "EM_EVENTPROBABILITY",
-        "length": 8,
-        "type": "decimal",
-        "level": "interval"
+        "name": "EM_CLASSIFICATION",
+        "level": "nominal",
+        "type": "string",
+        "length": 1
     },
     {
-        "name": "EM_CLASSIFICATION",
-        "length": 1,
-        "type": "string",
-        "level": "nominal"
+        "name": "EM_EVENTPROBABILITY",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
     }
 ]
