@@ -9,10 +9,10 @@
     },
     {
         "role": "score",
-        "name": "score_glmfit.py"
+        "name": "score_MLFlowModel.py"
     },
     {
         "role": "scoreResource",
-        "name": "glmfit.pickle"
+        "name": "MLFlowModel.pickle"
     }
 ]

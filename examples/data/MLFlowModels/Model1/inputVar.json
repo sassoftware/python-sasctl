@@ -1,72 +1,66 @@
 [
     {
-        "name": "LOAN",
+        "name": "fixedacidity",
         "level": "interval",
         "type": "decimal",
         "length": 8
     },
     {
-        "name": "MORTDUE",
+        "name": "volatileacidity",
         "level": "interval",
         "type": "decimal",
         "length": 8
     },
     {
-        "name": "VALUE",
+        "name": "citricacid",
         "level": "interval",
         "type": "decimal",
         "length": 8
     },
     {
-        "name": "REASON",
-        "level": "nominal",
-        "type": "string",
-        "length": 7.0
-    },
-    {
-        "name": "JOB",
-        "level": "nominal",
-        "type": "string",
-        "length": 7.0
-    },
-    {
-        "name": "YOJ",
+        "name": "residualsugar",
         "level": "interval",
         "type": "decimal",
         "length": 8
     },
     {
-        "name": "DEROG",
+        "name": "chlorides",
         "level": "interval",
         "type": "decimal",
         "length": 8
     },
     {
-        "name": "DELINQ",
+        "name": "freesulfurdioxide",
         "level": "interval",
         "type": "decimal",
         "length": 8
     },
     {
-        "name": "CLAGE",
+        "name": "totalsulfurdioxide",
         "level": "interval",
         "type": "decimal",
         "length": 8
     },
     {
-        "name": "NINQ",
+        "name": "density",
         "level": "interval",
         "type": "decimal",
         "length": 8
     },
     {
-        "name": "CLNO",
+        "name": "pH",
         "level": "interval",
         "type": "decimal",
         "length": 8
     },
     {
-        "name": "DEBTINC",
+        "name": "sulphates",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    },
+    {
+        "name": "alcohol",
         "level": "interval",
         "type": "decimal",
         "length": 8

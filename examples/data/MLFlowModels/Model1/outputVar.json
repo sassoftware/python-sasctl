@@ -1,0 +1,8 @@
+[
+    {
+        "name": "tensor",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    }
+]

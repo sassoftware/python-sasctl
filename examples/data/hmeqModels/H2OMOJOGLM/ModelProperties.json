@@ -1,6 +1,6 @@
 {
     "name": "glmfit",
-    "description": "Binary H2O model.",
+    "description": "MOJO H2O model.",
     "scoreCodeType": "python",
     "trainTable": "",
     "trainCodeType": "Python",
