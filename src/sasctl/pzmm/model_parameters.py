@@ -146,7 +146,7 @@ class ModelParameters:
            except:
                print(f'No hyperparamter file for current model {kpis.loc[kpis["ModelUUID"]==model, "ModelName"].iloc[0]}. Attempting for next model...')
            else:
-               updated_json = cls._update_json(model, current_params.json(), kpis)
+               updated_json = cls._update_json(model, current_params, kpis)
                mr.add_model_content(model, json.dumps(updated_json, indent=4), file_name)
 
     @staticmethod
@@ -174,7 +174,7 @@ class ModelParameters:
             model = mr.get_model(model)
             id_ = model["id"]
         file_contents, file_name = _find_file(id_, "hyperparameters")
-        return file_contents.json(), file_name
+        return file_contents, file_name
 
     @classmethod
     def add_hyperparameters(cls, model: Union[str, dict, RestObj], **kwargs) -> None:
