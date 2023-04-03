@@ -45,11 +45,8 @@ _PROP_VALUE_MAXLEN = 512
 _PROP_NAME_MAXLEN = 60
 
 
-
-
 def _property(k, v):
     return {"name": str(k)[:_PROP_NAME_MAXLEN], "value": str(v)[:_PROP_VALUE_MAXLEN]}
-
 
 
 def _sklearn_to_dict(model):
@@ -106,7 +103,9 @@ def _sklearn_to_dict(model):
     return result
 
 
-def _register_sklearn_40(model, model_name, project_name, input_data, output_data, overwrite=False):
+def _register_sklearn_40(
+    model, model_name, project_name, input_data, output_data, overwrite=False
+):
     model_info = get_model_info(model, input_data, output_data)
 
     # TODO: allow passing description in register_model()
@@ -121,22 +120,16 @@ def _register_sklearn_40(model, model_name, project_name, input_data, output_dat
     files.update(pzmm.JSONFiles.write_var_json(input_data))
     files.update(pzmm.JSONFiles.write_var_json(output_data, is_input=False))
 
-    if model_info.is_binary_classifier:
-        num_categories = 2
-    elif model_info.is_classifier:
-        num_categories = len(model_info.target_values)
-    else:
-        num_categories = 0
-
-    files.update(pzmm.JSONFiles.write_model_properties_json(model_name,
-                                                                 target_variable=model_info.output_column_names,
-                                                                 target_event=model_info.target_values,
-                                                                 num_target_categories=num_categories,
-                                                                 event_prob_var=None,
-                                                                 model_desc=model_info.description[:_DESC_MAXLEN],
-                                                                 model_function=model_info.analytic_function,
-                                                                 model_type=model_info.algorithm
-                                                                 ))
+    files.update(
+        pzmm.JSONFiles.write_model_properties_json(
+            model_name,
+            target_variable=model_info.output_column_names,
+            target_values=model_info.target_values,
+            model_desc=model_info.description[:_DESC_MAXLEN],
+            model_function=model_info.analytic_function,
+            model_algorithm=model_info.algorithm,
+        )
+    )
     """
             target_variable : string
                 Target variable to be predicted by the model.
@@ -151,15 +144,16 @@ def _register_sklearn_40(model, model_name, project_name, input_data, output_dat
     files.update(pzmm.JSONFiles.write_file_metadata_json(model_name))
 
     # TODO: How to determine if should call .predict() or .predict_proba()?  Base on output data?
-    pzmm.ImportModel.import_model(model_files=files,
-                                  model_prefix=model_name,
-                                  project=project_name,
-                                  predict_method=model.predict,
-                                  input_data=input_data,
-                                  output_variables=[],
-                                  score_cas=True,
-                                  missing_values=False  # assuming Pipeline will be used for imputing.
-                                  )
+    pzmm.ImportModel.import_model(
+        model_files=files,
+        model_prefix=model_name,
+        project=project_name,
+        predict_method=model.predict,
+        input_data=input_data,
+        output_variables=[],
+        score_cas=True,
+        missing_values=False,  # assuming Pipeline will be used for imputing.
+    )
 
 
 def _create_project(project_name, model, repo, input_vars=None, output_vars=None):
@@ -235,7 +229,7 @@ def register_model(
     name,
     project,
     repository=None,
-    input=None,
+    input_data=None,
     version=None,
     files=None,
     force=False,
@@ -246,11 +240,11 @@ def register_model(
     Parameters
     ----------
     model : swat.CASTable or sklearn.BaseEstimator
-        The model to register.  If an instance of ``swat.CASTable`` the table
-        is assumed to hold an ASTORE, which will be downloaded and used to
-        construct the model to register.  If a scikit-learn estimator, the
-        model will be pickled and uploaded to the registry and score code will
-        be generated for publishing the model to MAS.
+        The model to register.  If an instance of ``swat.CASTable`` the table is assumed
+         to hold an ASTORE, which will be downloaded and used to construct the model to
+        register.  If a scikit-learn estimator, the model will be pickled and uploaded
+        to the registry and score code will be generated for publishing the model to
+        CAS or MAS.
     name : str
         Designated name for the model in the repository.
     project : str or dict
@@ -259,14 +253,14 @@ def register_model(
     repository : str or dict, optional
         The name or id of the repository, or a dictionary representation of
         the repository.  If omitted, the default repository will be used.
-    input : DataFrame, type, list of type, or dict of str: type, optional
+    input_data : DataFrame, type, list of type, or dict of str: type, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
         is provided, the columns will be inspected to determine type
         information.  If a single type is provided, all columns will be assumed
         to be that type, otherwise a list of column types or a dictionary of
         column_name: type may be provided.
-    output : array-like
+    output_data : array-like
         A Numpy array or Pandas DataFrame that contains
     version : {'new', 'latest', int}, optional
         Version number of the project in which the model should be created.
@@ -305,7 +299,8 @@ def register_model(
         Added `record_packages` parameter.
 
     .. versionchanged:: v1.7.4
-        Update ASTORE handling for ease of use and removal of SAS Viya 4 score code errors
+        Update ASTORE handling for ease of use and removal of SAS Viya 4 score code
+        errors
 
     """
     # If version not specified, default to creating a new version
@@ -320,7 +315,7 @@ def register_model(
     create_project = bool(p is None and force is True)
 
     if p is None and not create_project:
-        raise ValueError("Project '{}' not found".format(project))
+        raise ValueError(f"Project '{project}' not found")
 
     # Use default repository if not specified
     try:
@@ -331,7 +326,7 @@ def register_model(
     except HTTPError as e:
         if e.code == 403:
             raise AuthorizationError(
-                "Unable to register model.  User account does not have read permissions "
+                "Unable to register model. User account does not have read permissions "
                 "for the /modelRepository/repositories/ URL. Please contact your SAS "
                 "Viya administrator."
             )
@@ -342,9 +337,9 @@ def register_model(
         raise ValueError("Unable to find a default repository")
 
     if repo_obj is None:
-        raise ValueError("Unable to find repository '{}'".format(repository))
+        raise ValueError(f"Unable to find repository '{repository}'")
 
-    # If model is a CASTable then assume it holds an ASTORE model.  Import these via a ZIP file.
+    # If model is a CASTable then assume it holds an ASTORE model; import with zip file
     if "swat.cas.table.CASTable" in str(type(model)):
         if swat is None:
             raise RuntimeError(
@@ -357,7 +352,7 @@ def register_model(
             )
 
         if "DataStepSrc" in model.columns:
-            zip_file = utils.create_package_from_datastep(model, input=input)
+            zip_file = utils.create_package_from_datastep(model, input=input_data)
             if create_project:
                 out_var = []
                 in_var = []
@@ -427,7 +422,7 @@ def register_model(
 
             if current_session().version_info() < 4:
                 # Upload the model as a ZIP file if using Viya 3.
-                zipfile = utils.create_package(model, input=input)
+                zipfile = utils.create_package(model, input=input_data)
                 model = mr.import_model_from_zip(
                     name, project, zipfile, version=version
                 )
@@ -456,10 +451,9 @@ def register_model(
     # If the model is a scikit-learn model, generate the model dictionary
     # from it and pickle the model for storage
     if all(hasattr(model, attr) for attr in ["_estimator_type", "get_params"]):
-
         # Pickle the model so we can store it
         model_pkl = pickle.dumps(model)
-        files.append({"name": "model.pkl", "file": model_pkl, "role": "Python Pickle"})
+        files.append({"name": "model.pkl", "file": model_pkl, "role": "Python pickle"})
 
         target_funcs = [f for f in ("predict", "predict_proba") if hasattr(model, f)]
 
@@ -467,6 +461,7 @@ def register_model(
         model = _sklearn_to_dict(model)
         model["name"] = name
 
+        # TODO: Swap for pzmm.JSONFiles.create_requirements_json()
         # Get package versions in environment
         packages = installed_packages()
         if record_packages and packages is not None:
@@ -485,10 +480,11 @@ def register_model(
             # Generate and upload a requirements.txt file
             files.append({"name": "requirements.txt", "file": "\n".join(packages)})
 
+        # TODO: Swap for pzmm.ScoreCode.write_score_code()
         # Generate PyMAS wrapper
         try:
             mas_module = from_pickle(
-                model_pkl, target_funcs, input_types=input, array_input=True
+                model_pkl, target_funcs, input_types=input_data, array_input=True
             )
 
             # Include score code files from ESP and MAS

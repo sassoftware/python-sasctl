@@ -67,7 +67,7 @@ def test(cas_session, iris_dataset):
     sk_model.fit(X, y)
 
     sas_model = register_model(astore, SAS_MODEL_NAME, PROJECT_NAME, force=True)
-    sk_model = register_model(sk_model, SCIKIT_MODEL_NAME, PROJECT_NAME, input=X)
+    sk_model = register_model(sk_model, SCIKIT_MODEL_NAME, PROJECT_NAME, input_data=X)
 
     # Publish to MAS
     sas_module = publish_model(sas_model, "maslocal", replace=True)

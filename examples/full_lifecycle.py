@@ -35,8 +35,8 @@ lm.fit(X_train, y_train)
 # Register the model in SAS Model Manager
 register_model(lm,
                model_name,
-               input=X_train,       # Use X to determine model inputs
-               project=project,     # Register in "Iris" project
+               input_data=X_train,  # Use X to determine model inputs
+               project=project,  # Register in "Iris" project
                force=True)          # Create project if it doesn't exist
 
 # Update project properties.  Target variable must be set before performance
@@ -60,7 +60,7 @@ dt = DecisionTreeRegressor()
 dt.fit(X_train, y_train)
 
 # Register the second model in Model Manager
-model_dt = register_model(dt, 'Decision Tree', project, input=X)
+model_dt = register_model(dt, 'Decision Tree', project, input_data=X)
 
 # Publish from Model Manager -> MAS
 module_dt = publish_model(model_dt, 'maslocal')

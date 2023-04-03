@@ -66,7 +66,7 @@ def test(cas_session, boston_dataset):
     sk_model.fit(X, y)
 
     sas_model = register_model(astore, SAS_MODEL_NAME, PROJECT_NAME, force=True)
-    sk_model = register_model(sk_model, SCIKIT_MODEL_NAME, PROJECT_NAME, input=X)
+    sk_model = register_model(sk_model, SCIKIT_MODEL_NAME, PROJECT_NAME, input_data=X)
 
     # Test overwriting model content
     mr.add_model_content(sk_model, "Your mother was a hamster!", "insult.txt")

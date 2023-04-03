@@ -87,18 +87,28 @@ def test_register_sklearn_with_pzmm(iris_dataset):
     # Verify that expected files were generated.
     files = kwargs["model_files"]
     assert isinstance(files, dict)
-    assert all(f in files for f in (f"{MODEL_NAME}.pickle", "inputVar.json", "outputVar.json", "ModelProperties.json", "fileMetadata.json"))
+    assert all(
+        f in files
+        for f in (
+            f"{MODEL_NAME}.pickle",
+            "inputVar.json",
+            "outputVar.json",
+            "ModelProperties.json",
+            "fileMetadata.json",
+        )
+    )
 
     assert kwargs["model_prefix"] == MODEL_NAME
     assert kwargs["project"] == PROJECT_NAME
     assert kwargs["predict_method"] == model.predict
     assert kwargs["output_variables"]
-    assert kwargs["score_cas"] == True
-    assert kwargs["missing_values"] == False
+    assert kwargs["score_cas"] is True
+    assert kwargs["missing_values"] is False
 
     pd.testing.assert_frame_equal(kwargs["input_data"], X)
 
     pytest.fail("Verify import_model inputs are correct")
+
 
 """
         metrics : string list
