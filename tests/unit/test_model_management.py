@@ -48,6 +48,7 @@ def test_create_performance_definition():
 
                     with pytest.raises(ValueError):
                         # Project missing all required properties & specified by model
+                        get_model.side_effect = copy.deepcopy(MODELS)
                         get_project.return_value = copy.deepcopy(PROJECT)
                         _ = mm.create_performance_definition(
                             models=["model1", "model2"],
