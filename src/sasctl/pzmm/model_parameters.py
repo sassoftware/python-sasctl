@@ -141,14 +141,13 @@ class ModelParameters:
         models_to_update = kpis["ModelUUID"].unique().tolist()
 
         for model in models_to_update:
-            try:
-                current_params, file_name = _find_file(model, "hyperparameters")
-            except:
-                model_name = {kpis.loc[kpis["ModelUUID"]==model, "ModelName"].iloc[0]}
-                print(f'No hyperparameter file for current model {model_name}. Attempting for next model...')
-            else:
-                updated_json = cls._update_json(model, current_params.json(), kpis)
-                mr.add_model_content(model, json.dumps(updated_json, indent=4), file_name)
+           try:
+               current_params, file_name = _find_file(model, "hyperparameters")
+           except:
+               print(f'No hyperparamter file for current model {kpis.loc[kpis["ModelUUID"]==model, "ModelName"].iloc[0]}. Attempting for next model...')
+           else:
+               updated_json = cls._update_json(model, current_params, kpis)
+               mr.add_model_content(model, json.dumps(updated_json, indent=4), file_name)
 
     @staticmethod
     def get_hyperparameters(model: Union[str, dict, RestObj]) -> Tuple[dict, str]:
@@ -175,7 +174,7 @@ class ModelParameters:
             model = mr.get_model(model)
             id_ = model["id"]
         file_contents, file_name = _find_file(id_, "hyperparameters")
-        return file_contents.hyperparameters, file_name
+        return file_contents, file_name
 
     @classmethod
     def add_hyperparameters(cls, model: Union[str, dict, RestObj], **kwargs) -> None:
@@ -201,7 +200,7 @@ class ModelParameters:
             id_ = model["id"]
         hyperparameters, file_name = cls.get_hyperparameters(id_)
         for key, value in kwargs.items():
-            hyperparameters[key] = value
+            hyperparameters["hyperparameters"][key] = value
         mr.add_model_content(
             model,
             json.dumps(hyperparameters, indent=4),
