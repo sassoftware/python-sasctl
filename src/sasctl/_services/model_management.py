@@ -187,39 +187,35 @@ class ModelManagement(Service):
                 % max_bins
             )
 
-        if not project and not models:
+        # Separate single models from multiple models
+        if not isinstance(models, list):
+            models = [models]
+
+        if not project and not models[0]:
             raise ValueError(
                 "No project or model specified for performance definition creation.\n"
                 "Please specify at least one of the two values."
             )
-
         # If no models were specified, search the supplied project for all models
-        if not models:
+        elif not models[0]:
             project = mr.get_project(project)
             models = mr.list_models(
-                filter="eq(projectName, '{projectName}')".format(
-                    projectName=project.name
-                )
+                filter=f"eq(projectName, '{project.name}')"
             )
-
-        # Separate single models from multiple models
-        if not isinstance(models, list):
-            models = [models]
-        if project:
-            project = mr.get_project(project)
-            project_models = mr.get(f'/projects/{project.id}/models')
-            project_models = [m for m in project_models if m.name in models]
-            models = project_models
-            # Necessary to eventually provide variables to the performance definition
-            models[0] = mr.get_model(project_models[0].id)
         else:
-            # Collect all models into a list. This converts the PagedList response from mr.list_models to a normal list.
             for i, model in enumerate(models):
                 models[i] = mr.get_model(model)
-            project = mr.get_project(models[0].projectId)
+            if project:
+                project = mr.get_project(project)
+            else:
+                project = mr.get_project(models[0].projectId)
             # Ensures that all models are in the same project
             if not all([model.projectId == project.id for model in models]):
-                raise ValueError("Not all models are contained within the same project. Try specifying a project.")
+                raise ValueError(
+                    "Not all models are contained within the same project. Try "
+                    "specifying a project in the arguments and verify that all models"
+                    "are from the same project."
+                )
 
         # Performance data cannot be captured unless certain project properties have been configured.
         for required in ["targetVariable", "targetLevel"]:
