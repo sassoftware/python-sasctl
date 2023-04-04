@@ -8,19 +8,20 @@ from unittest import mock
 
 import pytest
 
-from sasctl.core import RestObj
 from sasctl._services.model_repository import ModelRepository
+from sasctl.core import RestObj
 
 
 def test_sklearn_metadata():
     pytest.importorskip("sklearn")
 
-    from sasctl.tasks import _sklearn_to_dict
-    from sklearn.linear_model import LogisticRegression, LinearRegression
-    from sklearn.ensemble import GradientBoostingClassifier
-    from sklearn.tree import DecisionTreeClassifier
-    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.ensemble import (GradientBoostingClassifier,
+                                  RandomForestClassifier)
+    from sklearn.linear_model import LinearRegression, LogisticRegression
     from sklearn.svm import SVC
+    from sklearn.tree import DecisionTreeClassifier
+
+    from sasctl.tasks import _sklearn_to_dict
 
     info = _sklearn_to_dict(LinearRegression())
     assert info["algorithm"] == "Linear regression"
@@ -137,6 +138,7 @@ def test_register_model_403_error(get_project, list_repositories):
     See: https://github.com/sassoftware/python-sasctl/issues/39
     """
     from urllib.error import HTTPError
+
     from sasctl.exceptions import AuthorizationError
     from sasctl.tasks import register_model
 

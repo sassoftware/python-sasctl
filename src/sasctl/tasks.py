@@ -9,11 +9,12 @@
 import json
 import logging
 import math
-import pickle  # skipcq BAN-B301
 import os
+import pickle  # skipcq BAN-B301
 import re
 import sys
 import warnings
+
 import pandas as pd
 
 try:
@@ -29,9 +30,8 @@ from .exceptions import AuthorizationError
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
-from .utils.pymas import from_pickle
 from .utils.misc import installed_packages
-
+from .utils.pymas import from_pickle
 
 logger = logging.getLogger(__name__)
 
@@ -301,8 +301,8 @@ def register_model(
             if create_project:
                 out_var = []
                 in_var = []
-                import zipfile as zp
                 import copy
+                import zipfile as zp
 
                 zip_file_copy = copy.deepcopy(zip_file)
                 tmp_zip = zp.ZipFile(zip_file_copy)
@@ -765,7 +765,6 @@ def update_model_performance(data, model, label, refresh=True):
 
     # Upload the performance data to CAS
     with sess.as_swat(server=cas_id) as s:
-
         s.setsessopt(messagelevel="warning")
 
         with swat.options(exception_on_severity=2):
@@ -863,8 +862,9 @@ def get_project_kpis(
         A pandas DataFrame representing the MM_STD_KPI table. Note that SAS
         missing values are replaced with pandas valid missing values.
     """
-    from .core import is_uuid
     from distutils.version import StrictVersion
+
+    from .core import is_uuid
 
     # Check the pandas version for where the json_normalize function exists
     if pd.__version__ >= StrictVersion("1.0.3"):

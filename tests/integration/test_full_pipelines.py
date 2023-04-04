@@ -149,7 +149,7 @@ class TestSklearnRegressionModel:
         model.fit(X, y)
 
         model = register_model(
-            model, self.MODEL_NAME, self.PROJECT_NAME, input_data=X, force=True
+            model, self.MODEL_NAME, self.PROJECT_NAME, input=X, force=True
         )
         assert model.name == self.MODEL_NAME
         assert model.projectName == self.PROJECT_NAME
@@ -268,7 +268,7 @@ class TestSklearnClassificationModel:
         model.fit(X, y)
 
         model = register_model(
-            model, self.MODEL_NAME, self.PROJECT_NAME, input_data=X, force=True
+            model, self.MODEL_NAME, self.PROJECT_NAME, input=X, force=True
         )
         assert model.name == self.MODEL_NAME
         assert model.projectName == self.PROJECT_NAME

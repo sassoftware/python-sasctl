@@ -94,7 +94,7 @@ class TestModels:
             sk_model,
             SCIKIT_MODEL_NAME,
             project=PROJECT_NAME,
-            input_data=train_df,
+            input=train_df,
             force=True,
         )
         assert isinstance(model, RestObj)
@@ -195,11 +195,7 @@ class TestSklearnLinearModel:
 
         # Register model and ensure attributes are set correctly
         model = register_model(
-            sk_model,
-            self.MODEL_NAME,
-            project=self.PROJECT_NAME,
-            input_data=X,
-            force=True,
+            sk_model, self.MODEL_NAME, project=self.PROJECT_NAME, input=X, force=True
         )
 
         assert isinstance(model, RestObj)

@@ -126,7 +126,6 @@ class Workflow(Service):
                 headers={"Content-Type": "application/vnd.sas.workflow.variables+json"},
             )
         if isinstance(prompts, dict):
-
             variables = []
 
             # For each prompt defined in the workflow, check if a value was provided.

@@ -9,8 +9,8 @@ from unittest import mock
 
 import pytest
 
-from sasctl.core import RestObj
 from sasctl._services import workflow
+from sasctl.core import RestObj
 
 
 def test_list_workflow_prompt_invalidworkflow():
@@ -154,7 +154,6 @@ def test_run_workflow_definition_with_prompts(get_workflow, post):
     # Check each prompt value that was passed and ensure it was correctly
     # matched to the prompts defined by the workflow.
     for name, value in PROMPTS.items():
-
         # Find the matching variable entry in the POST data
         variable = next(v for v in params["json"]["variables"] if v["name"] == name)
 
