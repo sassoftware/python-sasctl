@@ -199,9 +199,7 @@ class ModelManagement(Service):
         # If no models were specified, search the supplied project for all models
         elif not models[0]:
             project = mr.get_project(project)
-            models = mr.list_models(
-                filter=f"eq(projectName, '{project.name}')"
-            )
+            models = mr.list_models(filter=f"eq(projectName, '{project.name}')")
         else:
             for i, model in enumerate(models):
                 models[i] = mr.get_model(model)

@@ -196,7 +196,11 @@ class TestSklearnLinearModel:
 
         # Register model and ensure attributes are set correctly
         model = register_model(
-            sk_model, self.MODEL_NAME, project=self.PROJECT_NAME, input_data=X, force=True
+            sk_model,
+            self.MODEL_NAME,
+            project=self.PROJECT_NAME,
+            input_data=X,
+            force=True,
         )
 
         assert isinstance(model, RestObj)
