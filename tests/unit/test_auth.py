@@ -172,7 +172,7 @@ def test_get_token_with_client_secret_with_wrong_secret(post):
     e.match("Invalid client id or secret")
 
 
-@mock.patch("sasctl.core.Session.read_cached_token")
+@mock.patch("sasctl.core.Session._read_token_cache")
 @mock.patch("sasctl.core.Session._prompt_for_auth_code")
 @mock.patch("sasctl.core.requests.Session.post")
 def test_get_token_with_auth_code_success(post, prompt, token_cache):
