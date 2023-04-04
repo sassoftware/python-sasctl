@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from pathlib import Path
+from typing import Any, Callable, List, Optional, Tuple, Union
 from uuid import UUID
 from warnings import warn
-from typing import Union, Optional, Callable, List, Tuple, Any
 
 from pandas import DataFrame
 
 from .._services.model_repository import ModelRepository as mr
-from ..core import current_session, RestObj, PagedList
+from ..core import PagedList, RestObj, current_session
 from ..utils.misc import check_if_jupyter
 from .write_score_code import ScoreCode as sc
 from .zip_model import ZipModel as zm

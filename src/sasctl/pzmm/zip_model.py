@@ -3,7 +3,7 @@
 import io
 import zipfile
 from pathlib import Path
-from typing import Union, Optional
+from typing import Optional, Union
 
 
 def _filter_files(file_dir: Union[str, Path], is_viya4: Optional[bool] = False) -> list:

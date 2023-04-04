@@ -3,13 +3,13 @@
 import json
 from distutils.version import StrictVersion
 from pathlib import Path
-from typing import Union, Tuple, Optional, Any
+from typing import Any, Optional, Tuple, Union
 
 import pandas as pd
 from pandas import DataFrame
 
 from .._services.model_repository import ModelRepository as mr
-from ..core import current_session, is_uuid, RestObj
+from ..core import RestObj, current_session, is_uuid
 
 
 # TODO: Maybe just move _find_file altogether?

@@ -12,7 +12,7 @@ import sys
 import warnings
 from collections.abc import Iterable
 from pathlib import Path
-from typing import List, Union, Any, Optional, Generator, Type
+from typing import Any, Generator, List, Optional, Type, Union
 
 # Third Party Imports
 import pandas as pd

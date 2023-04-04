@@ -6,7 +6,7 @@ import gzip
 import pickle
 import shutil
 from pathlib import Path
-from typing import Union, Optional
+from typing import Optional, Union
 
 from ..utils.misc import check_if_jupyter
 

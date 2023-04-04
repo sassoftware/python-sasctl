@@ -3,14 +3,14 @@
 
 import re
 from pathlib import Path
-from typing import Union, Optional, Callable, List, Tuple, Any, Generator, Type
+from typing import Any, Callable, Generator, List, Optional, Tuple, Type, Union
 from warnings import warn
 
 import pandas as pd
 from pandas import DataFrame
 
 from .._services.model_repository import ModelRepository as mr
-from ..core import current_session, RestObj
+from ..core import RestObj, current_session
 
 MAS_CODE_NAME = "dmcas_packagescorecode.sas"
 CAS_CODE_NAME = "dmcas_epscorecode.sas"
