@@ -24,8 +24,19 @@ __copyright__ = (
 import logging
 import warnings
 
-from .core import (HTTPError, RestObj, Session, current_session, delete, get,
-                   get_link, platform_version, post, put, request_link)
+from .core import (
+    HTTPError,
+    RestObj,
+    Session,
+    current_session,
+    delete,
+    get,
+    get_link,
+    platform_version,
+    post,
+    put,
+    request_link,
+)
 from .tasks import publish_model, register_model, update_model_performance
 
 # Ensure deprecation warnings are shown to users.

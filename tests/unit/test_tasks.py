@@ -15,8 +15,7 @@ from sasctl.core import RestObj
 def test_sklearn_metadata():
     pytest.importorskip("sklearn")
 
-    from sklearn.ensemble import (GradientBoostingClassifier,
-                                  RandomForestClassifier)
+    from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
     from sklearn.linear_model import LinearRegression, LogisticRegression
     from sklearn.svm import SVC
     from sklearn.tree import DecisionTreeClassifier

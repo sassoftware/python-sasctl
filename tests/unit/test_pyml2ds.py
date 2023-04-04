@@ -58,8 +58,7 @@ def test_lgb2ds():
     IN_PKL = os.path.join(DATA_PATH, "lgb.pkl")
     EXPECTED_SAS = os.path.join(DATA_PATH, "lgb_datastep")
 
-    from sasctl.utils.pyml2ds.connectors.ensembles.lgb import \
-        LightgbmTreeParser
+    from sasctl.utils.pyml2ds.connectors.ensembles.lgb import LightgbmTreeParser
 
     # Expected output contains integer values instead of floats.
     # Convert to ensure match.

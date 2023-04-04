@@ -6,8 +6,7 @@
 
 import pytest
 
-from sasctl.utils.decorators import (ExperimentalWarning, deprecated,
-                                     experimental)
+from sasctl.utils.decorators import ExperimentalWarning, deprecated, experimental
 
 
 def test_deprecated():
