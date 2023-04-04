@@ -9,11 +9,12 @@
 import json
 import logging
 import math
-import os
 import pickle  # skipcq BAN-B301
+import os
 import re
 import sys
 import warnings
+import pandas as pd
 
 try:
     import swat
@@ -22,17 +23,15 @@ except ImportError:
 
 from urllib.error import HTTPError
 
-import pandas as pd
-
-from . import pzmm, utils
+from . import utils
 from .core import RestObj, current_session, get, get_link, request_link
 from .exceptions import AuthorizationError
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
-from .utils.misc import installed_packages
-from .utils.model_info import get_model_info
 from .utils.pymas import from_pickle
+from .utils.misc import installed_packages
+
 
 logger = logging.getLogger(__name__)
 
@@ -67,7 +66,6 @@ def _sklearn_to_dict(model):
         "regressor": "prediction",
     }
 
-    # If this is a Pipeline extract the final estimator step
     if hasattr(model, "_final_estimator"):
         estimator = model._final_estimator
     else:
@@ -97,64 +95,11 @@ def _sklearn_to_dict(model):
         trainCodeType="Python",
         targetLevel=target_level,
         function=analytic_function,
-        tool=f"Python {sys.version_info.major}.{sys.version_info.minor}",
+        tool="Python %s.%s" % (sys.version_info.major, sys.version_info.minor),
         properties=[_property(k, v) for k, v in model.get_params().items()],
     )
 
     return result
-
-
-def _register_sklearn_40(
-    model, model_name, project_name, input_data, output_data, overwrite=False
-):
-    model_info = get_model_info(model, input_data, output_data)
-
-    # TODO: allow passing description in register_model()
-
-    # Will store filename: file contents as we generate files
-    files = {}
-
-    # Write model to a pickle file
-    files.update(pzmm.PickleModel.pickle_trained_model(model, model_name))
-
-    # Create a JSON file containing model input fields
-    files.update(pzmm.JSONFiles.write_var_json(input_data))
-    files.update(pzmm.JSONFiles.write_var_json(output_data, is_input=False))
-
-    files.update(
-        pzmm.JSONFiles.write_model_properties_json(
-            model_name,
-            target_variable=model_info.output_column_names,
-            target_values=model_info.target_values,
-            model_desc=model_info.description[:_DESC_MAXLEN],
-            model_function=model_info.analytic_function,
-            model_algorithm=model_info.algorithm,
-        )
-    )
-    """
-            target_variable : string
-                Target variable to be predicted by the model.
-            target_event : string
-                Model target event. For example: 1 for a binary event.
-            num_target_categories : int
-                Number of possible target categories. For example: 2 for a binary event.
-            event_prob_var : string, optional
-                User-provided output event probability variable. This value should match the
-                value in outputVar.json. Default is "P_" + target_variable + target_event.
-    """
-    files.update(pzmm.JSONFiles.write_file_metadata_json(model_name))
-
-    # TODO: How to determine if should call .predict() or .predict_proba()?  Base on output data?
-    pzmm.ImportModel.import_model(
-        model_files=files,
-        model_prefix=model_name,
-        project=project_name,
-        predict_method=model.predict,
-        input_data=input_data,
-        output_variables=[],
-        score_cas=True,
-        missing_values=False,  # assuming Pipeline will be used for imputing.
-    )
 
 
 def _create_project(project_name, model, repo, input_vars=None, output_vars=None):
@@ -230,7 +175,7 @@ def register_model(
     name,
     project,
     repository=None,
-    input_data=None,
+    input=None,
     version=None,
     files=None,
     force=False,
@@ -241,11 +186,11 @@ def register_model(
     Parameters
     ----------
     model : swat.CASTable or sklearn.BaseEstimator
-        The model to register.  If an instance of ``swat.CASTable`` the table is assumed
-         to hold an ASTORE, which will be downloaded and used to construct the model to
-        register.  If a scikit-learn estimator, the model will be pickled and uploaded
-        to the registry and score code will be generated for publishing the model to
-        CAS or MAS.
+        The model to register.  If an instance of ``swat.CASTable`` the table
+        is assumed to hold an ASTORE, which will be downloaded and used to
+        construct the model to register.  If a scikit-learn estimator, the
+        model will be pickled and uploaded to the registry and score code will
+        be generated for publishing the model to MAS.
     name : str
         Designated name for the model in the repository.
     project : str or dict
@@ -254,15 +199,13 @@ def register_model(
     repository : str or dict, optional
         The name or id of the repository, or a dictionary representation of
         the repository.  If omitted, the default repository will be used.
-    input_data : DataFrame, type, list of type, or dict of str: type, optional
+    input : DataFrame, type, list of type, or dict of str: type, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
         is provided, the columns will be inspected to determine type
         information.  If a single type is provided, all columns will be assumed
         to be that type, otherwise a list of column types or a dictionary of
         column_name: type may be provided.
-    output_data : array-like
-        A Numpy array or Pandas DataFrame that contains
     version : {'new', 'latest', int}, optional
         Version number of the project in which the model should be created.
         Defaults to 'new'.
@@ -300,10 +243,11 @@ def register_model(
         Added `record_packages` parameter.
 
     .. versionchanged:: v1.7.4
-        Update ASTORE handling for ease of use and removal of SAS Viya 4 score code
-        errors
+        Update ASTORE handling for ease of use and removal of SAS Viya 4 score code errors
 
     """
+    # TODO: Create new version if model already exists
+
     # If version not specified, default to creating a new version
     version = version or "new"
 
@@ -316,7 +260,7 @@ def register_model(
     create_project = bool(p is None and force is True)
 
     if p is None and not create_project:
-        raise ValueError(f"Project '{project}' not found")
+        raise ValueError("Project '{}' not found".format(project))
 
     # Use default repository if not specified
     try:
@@ -327,7 +271,7 @@ def register_model(
     except HTTPError as e:
         if e.code == 403:
             raise AuthorizationError(
-                "Unable to register model. User account does not have read permissions "
+                "Unable to register model.  User account does not have read permissions "
                 "for the /modelRepository/repositories/ URL. Please contact your SAS "
                 "Viya administrator."
             )
@@ -338,9 +282,9 @@ def register_model(
         raise ValueError("Unable to find a default repository")
 
     if repo_obj is None:
-        raise ValueError(f"Unable to find repository '{repository}'")
+        raise ValueError("Unable to find repository '{}'".format(repository))
 
-    # If model is a CASTable then assume it holds an ASTORE model; import with zip file
+    # If model is a CASTable then assume it holds an ASTORE model.  Import these via a ZIP file.
     if "swat.cas.table.CASTable" in str(type(model)):
         if swat is None:
             raise RuntimeError(
@@ -353,12 +297,12 @@ def register_model(
             )
 
         if "DataStepSrc" in model.columns:
-            zip_file = utils.create_package_from_datastep(model, input=input_data)
+            zip_file = utils.create_package_from_datastep(model, input=input)
             if create_project:
                 out_var = []
                 in_var = []
-                import copy
                 import zipfile as zp
+                import copy
 
                 zip_file_copy = copy.deepcopy(zip_file)
                 tmp_zip = zp.ZipFile(zip_file_copy)
@@ -423,7 +367,7 @@ def register_model(
 
             if current_session().version_info() < 4:
                 # Upload the model as a ZIP file if using Viya 3.
-                zipfile = utils.create_package(model, input=input_data)
+                zipfile = utils.create_package(model, input=input)
                 model = mr.import_model_from_zip(
                     name, project, zipfile, version=version
                 )
@@ -440,13 +384,6 @@ def register_model(
                     files={"files": (f"{model.params['name']}.sasast", astore["blob"])},
                     data=params,
                 )
-        if files:
-            # Upload any additional files
-            for file in files:
-                if isinstance(file, dict):
-                    mr.add_model_content(model, **file)
-                else:
-                    mr.add_model_content(model, file)
         return model
 
     # If the model is a scikit-learn model, generate the model dictionary
@@ -454,7 +391,7 @@ def register_model(
     if all(hasattr(model, attr) for attr in ["_estimator_type", "get_params"]):
         # Pickle the model so we can store it
         model_pkl = pickle.dumps(model)
-        files.append({"name": "model.pkl", "file": model_pkl, "role": "Python pickle"})
+        files.append({"name": "model.pkl", "file": model_pkl, "role": "Python Pickle"})
 
         target_funcs = [f for f in ("predict", "predict_proba") if hasattr(model, f)]
 
@@ -462,7 +399,6 @@ def register_model(
         model = _sklearn_to_dict(model)
         model["name"] = name
 
-        # TODO: Swap for pzmm.JSONFiles.create_requirements_json()
         # Get package versions in environment
         packages = installed_packages()
         if record_packages and packages is not None:
@@ -481,11 +417,10 @@ def register_model(
             # Generate and upload a requirements.txt file
             files.append({"name": "requirements.txt", "file": "\n".join(packages)})
 
-        # TODO: Swap for pzmm.ScoreCode.write_score_code()
         # Generate PyMAS wrapper
         try:
             mas_module = from_pickle(
-                model_pkl, target_funcs, input_types=input_data, array_input=True
+                model_pkl, target_funcs, input_types=input, array_input=True
             )
 
             # Include score code files from ESP and MAS
@@ -605,8 +540,8 @@ def publish_model(
 
     See Also
     --------
-    model_management.publish_model
-    model_publish.publish_model
+    :meth:`model_management.publish_model <.ModelManagement.publish_model>`
+    :meth:`model_publish.publish_model <.ModelPublish.publish_model>`
 
 
     .. versionchanged:: 1.1.0
@@ -724,7 +659,7 @@ def update_model_performance(data, model, label, refresh=True):
 
     See Also
     --------
-    model_management.create_performance_definition
+     :meth:`model_management.create_performance_definition <.ModelManagement.create_performance_definition>`
 
     .. versionadded:: v1.3
 
@@ -830,6 +765,7 @@ def update_model_performance(data, model, label, refresh=True):
 
     # Upload the performance data to CAS
     with sess.as_swat(server=cas_id) as s:
+
         s.setsessopt(messagelevel="warning")
 
         with swat.options(exception_on_severity=2):
@@ -889,3 +825,114 @@ def _parse_module_url(msg):
         module_url = match.group(1) if match else None
 
     return module_url
+
+
+def get_project_kpis(
+    project,
+    server="cas-shared-default",
+    caslib="ModelPerformanceData",
+    filterColumn=None,
+    filterValue=None,
+):
+    """Create a call to CAS to return the MM_STD_KPI table (Model Manager Standard KPI)
+    generated when custom KPIs are uploaded or when a performance definition is executed
+    on SAS Model Manager on SAS Viya 4.
+
+    Filtering options are available as additional arguments. The filtering is based on
+    column name and column value. Currently, only exact matches are available when filtering
+    by this method.
+
+    Parameters
+    ----------
+    project : str or dict
+        The name or id of the project, or a dictionary representation of
+        the project.
+    server : str, optional
+        SAS Viya 4 server where the MM_STD_KPI table exists,
+        by default "cas-shared-default"
+    caslib : str, optional
+        SAS Viya 4 caslib where the MM_STD_KPI table exists,
+        by default "ModelPerformanceData"
+    filterColumn : str, optional
+        Column name from the MM_STD_KPI table to be filtered, by default None
+    filterValue : str, optional
+        Column value to be filtered, by default None
+    Returns
+    -------
+    kpiTableDf : DataFrame
+        A pandas DataFrame representing the MM_STD_KPI table. Note that SAS
+        missing values are replaced with pandas valid missing values.
+    """
+    from .core import is_uuid
+    from distutils.version import StrictVersion
+
+    # Check the pandas version for where the json_normalize function exists
+    if pd.__version__ >= StrictVersion("1.0.3"):
+        from pandas import json_normalize
+    else:
+        from pandas.io.json import json_normalize
+
+    # Collect the current session for authentication of API calls
+    sess = current_session()
+
+    # Step through options to determine project UUID
+    if is_uuid(project):
+        projectId = project
+    elif isinstance(project, dict) and "id" in project:
+        projectId = project["id"]
+    else:
+        project = mr.get_project(project)
+        projectId = project["id"]
+
+    # TODO: include case for large MM_STD_KPI tables
+    # Call the casManagement service to collect the column names in the table
+    kpiTableColumns = sess.get(
+        "casManagement/servers/{}/".format(server)
+        + "caslibs/{}/tables/".format(caslib)
+        + "{}.MM_STD_KPI/columns?limit=10000".format(projectId)
+    )
+    if not kpiTableColumns:
+        project = mr.get_project(project)
+        raise SystemError(
+            "No KPI table exists for project {}.".format(project.name)
+            + " Please confirm that the performance definition completed"
+            + " or custom KPIs have been uploaded successfully."
+        )
+    # Parse through the json response to create a pandas DataFrame
+    cols = json_normalize(kpiTableColumns.json(), "items")
+    # Convert the columns to a readable list
+    colNames = cols["name"].to_list()
+
+    # Filter rows returned by column and value provided in arguments
+    whereStatement = ""
+    if filterColumn and filterValue:
+        whereStatement = "&where={}='{}'".format(filterColumn, filterValue)
+
+    # Call the casRowSets service to return row values; optional where statement is included
+    kpiTableRows = sess.get(
+        "casRowSets/servers/{}/".format(server)
+        + "caslibs/{}/tables/".format(caslib)
+        + "{}.MM_STD_KPI/rows?limit=10000".format(projectId)
+        + "{}".format(whereStatement)
+    )
+    # If no "cells" are found in the json response, return an error based on provided arguments
+    try:
+        kpiTableDf = pd.DataFrame(
+            json_normalize(kpiTableRows.json()["items"])["cells"].to_list(),
+            columns=colNames,
+        )
+    except KeyError:
+        if filterColumn and filterValue:
+            raise SystemError(
+                "No KPIs were found when filtering with {}='{}'.".format(
+                    filterColumn, filterValue
+                )
+            )
+        else:
+            projectName = mr.get_project(project)["name"]
+            raise SystemError("No KPIs were found for project {}.".format(projectName))
+
+    # Strip leading spaces from all cells of KPI table and convert missing values to None
+    kpiTableDf = kpiTableDf.apply(lambda x: x.str.strip()).replace([".", ""], None)
+
+    return kpiTableDf
