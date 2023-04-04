@@ -314,15 +314,13 @@ class ModelManagement(Service):
 
         Returns
         -------
-        RestObj
+        list of RestObj
             The list of workflows
 
         """
         from .workflow import Workflow
 
-        wf = Workflow()
-
-        return wf.list_enabled_definitions()
+        return Workflow.list_enabled_definitions()
 
     @classmethod
     @experimental
@@ -342,9 +340,7 @@ class ModelManagement(Service):
         """
         from .workflow import Workflow
 
-        wf = Workflow()
-
-        return wf.list_workflow_prompt(workflowName)
+        return Workflow.list_workflow_prompt(workflowName)
 
     @classmethod
     @experimental
@@ -376,7 +372,9 @@ class ModelManagement(Service):
 
     @classmethod
     @experimental
-    def execute_model_workflow_definition(cls, project_name, workflow_name, input=None):
+    def execute_model_workflow_definition(
+        cls, project_name, workflow_name, prompts=None
+    ):
         """Runs specific Workflow Processes Definitions.
 
         Parameters
@@ -385,29 +383,31 @@ class ModelManagement(Service):
             Name of the Project that will execute workflow
         workflow_name : str
             Name or ID of an enabled workflow to execute
-        input : dict, optional
-            Input values for the workflow for initial workflow prompt
+        prompts : dict, optional
+            Input values to provide for the initial workflow prompts.  Should be
+            specified as name:value pairs.
 
         Returns
         -------
         RestObj
             The executing workflow
 
+        .. versionchanged:: 1.8.2
+            Renamed the `input` parameter to `prompts`.
+
         """
         from .model_repository import ModelRepository
         from .workflow import Workflow
 
         mr = ModelRepository()
-        wf = Workflow()
 
         project = mr.get_project(project_name)
 
-        workflow = wf.run_workflow_definition(workflow_name, input=input)
+        workflow = Workflow.run_workflow_definition(workflow_name, prompts=prompts)
 
-        # Associations running workflow to model project, note workflow has to be running
-        # THINK ABOUT: do we do a check on status of the workflow to determine if it is still running before associating?
-
-        input = {
+        # Associate running workflow to model project.
+        # NOTE: workflow has to be running
+        data = {
             "processName": workflow["name"],
             "processId": workflow["id"],
             "objectType": "MM_Project",
@@ -417,14 +417,15 @@ class ModelManagement(Service):
             "solutionObjectMediaType": "application/vnd.sas.models.project+json",
         }
 
-        # Note, you can get a HTTP Error 404: {"errorCode":74052,"message":"The workflow process for id <> cannot be found.
-        #                                    Associations can only be made to running processes.","details":["correlator:
-        #                                    e62c5562-2b11-45db-bcb7-933200cb0f0a","traceId: 3118c0fb1eb9702d","path:
-        #                                    /modelManagement/workflowAssociations"],"links":[],"version":2,"httpStatusCode":404}
+        # Note: you can get a HTTP Error 404:
+        # {"errorCode":74052,"message":"The workflow process for id <> cannot be found.
+        # Associations can only be made to running processes.","details":["correlator:
+        # e62c5562-2b11-45db-bcb7-933200cb0f0a","traceId: 3118c0fb1eb9702d","path:
+        # /modelManagement/workflowAssociations"],"links":[],"version":2,"httpStatusCode":404}
         # Which is fine and expected like the Visual Experience.
         return cls.post(
             "/workflowAssociations",
-            json=input,
+            json=data,
             headers={
                 "Content-Type": "application/vnd.sas.workflow.object.association+json"
             },

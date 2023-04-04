@@ -47,7 +47,7 @@
 The sasctl package enables easy communication between the SAS Viya 
 platform and a Python runtime. It can be used as a module or as a command line interface.
 ```
-sasctl.folders.list_folders()
+sasctl.services.folders.list_folders()
 ```
 
 ```
@@ -89,6 +89,10 @@ install the latest source code:
 
 ```pip install git+https://github.com/sassoftware/python-sasctl```
 
+Alternatively, if you're using Anaconda you can install with:
+```
+conda install -c sas-institute sasctl
+```
 
 ## Getting Started
 

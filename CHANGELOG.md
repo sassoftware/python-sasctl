@@ -1,6 +1,20 @@
 Unreleased
 ----------
- -
+**Bugfixes**
+ - Fixed an issue where invalid HTTP responses could cause an error when using `Session.version_info()`.
+ 
+v1.8.2 (2023-01-30)
+-------------------
+**Improvements**
+ - `folders.get_folder()` can now handle folder paths and delegates (e.g. @public).
+
+**Bugfixes**
+ - Fixed an issue with `model_management.execute_model_workflow_definition()` where input values for
+   workflow prompts were not correctly submitted.  Note that the `input=` parameter was renamed to
+   `prompts=` to avoid conflicting with the built-in `input()`.
+ - Fixed an issue with `pzmm.importModel.model_exists()` where project versions were incorrectly
+   compared, resulting in improper behavior when the project version already existed.
+   - Better handling for invalid project versions included.
 
 v1.8.1 (2023-01-19)
 ----------

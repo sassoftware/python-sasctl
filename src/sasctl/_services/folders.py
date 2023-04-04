@@ -19,7 +19,7 @@ class Folders(Service):
 
     _SERVICE_ROOT = "/folders"
 
-    list_folders, get_folder, update_folder, delete_folder = Service._crud_funcs(
+    list_folders, _get_folder, update_folder, delete_folder = Service._crud_funcs(
         "/folders", "folder"
     )
 
@@ -62,3 +62,76 @@ class Folders(Service):
             params={"parentFolderUri": parent_uri},
             headers={"Content-Type": "application/vnd.sas.content.folder+json"},
         )
+
+    @classmethod
+    def get_folder(cls, folder, refresh=False):
+        """Return a folder instance.
+
+        Parameters
+        ----------
+        folder : str or dict
+            May be one of:
+             - folder name
+             - folder ID
+             - folder path
+             - folder delegate string
+             - dictionary representation of the folder
+        refresh : bool, optional
+            Obtain an updated copy of the folder.
+
+        Returns
+        -------
+        RestObj or None
+            A dictionary containing the folder attributes or None.
+
+        Notes
+        -------
+        If `folder` is a complete representation of the folder it will be
+        returned unless `refresh` is set.  This prevents unnecessary REST
+        calls when data is already available on the client.
+
+        Examples
+        --------
+        The following four examples are all functionally equivalent.
+
+        >>> get_folder("Public")
+        {"name": "Public", "id": "4a737209-5662"}
+
+        >>> get_folder("/Public")
+        {"name": "Public", "id": "4a737209-5662"}
+
+        >>> get_folder("@public")
+        {"name": "Public", "id": "4a737209-5662"}
+
+        >>> get_folder("@public")
+        {"name": "Public", "id": "4a737209-5662"}
+
+        >>> get_folder("4a737209-5662")
+        {"name": "Public", "id": "4a737209-5662"}
+
+        The full folder path can also be specified.
+
+        >>> get_folder("/Public/Demo")
+        {"name": "Demo", "id": "148081bf-1c86"}
+
+        Special folders can be identified using a delegate string.  Currently supported
+        are: @myFolder, @appDataFolder, @myHistory, @myFavorites, and @public.
+
+        >>> get_folder("@myFolder")
+        {"name": "My Folder", "id": "71687cd2-db4b"}
+
+        """
+        # If a folder path is specified, lookup folder using the full path instead of the name.
+        if isinstance(folder, str) and "/" in folder:
+            # Path must include a leading "/"
+            if not folder.startswith("/"):
+                folder = f"/{folder}"
+
+            return cls.get("/folders/@item", params={"path": folder})
+
+        # Its possible to lookup special folders by using a handle (called a delegate string in docs)
+        # Current values (2022.09) are @myFolder, @appDataFolder, @myHistory, @myFavorites, @public.
+        if isinstance(folder, str) and folder.startswith("@"):
+            return cls.get(f"/folders/{folder}")
+
+        return cls._get_folder(folder, refresh=refresh)
