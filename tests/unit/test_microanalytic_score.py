@@ -4,14 +4,13 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import pytest
 from unittest import mock
 
-from sasctl.services import microanalytic_score as mas
+import pytest
 
 from sasctl import current_session
 from sasctl.core import RestObj
-
+from sasctl.services import microanalytic_score as mas
 
 with mock.patch("sasctl.core.Session._get_authorization_token"):
     current_session("example.com", "username", "password")

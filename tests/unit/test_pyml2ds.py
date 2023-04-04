@@ -12,7 +12,6 @@ import pytest
 
 from sasctl.utils.pyml2ds import pyml2ds
 
-
 dirname = os.path.dirname
 DATA_PATH = os.path.join(dirname(dirname(__file__)), "pyml2ds_data")
 
@@ -59,7 +58,8 @@ def test_lgb2ds():
     IN_PKL = os.path.join(DATA_PATH, "lgb.pkl")
     EXPECTED_SAS = os.path.join(DATA_PATH, "lgb_datastep")
 
-    from sasctl.utils.pyml2ds.connectors.ensembles.lgb import LightgbmTreeParser
+    from sasctl.utils.pyml2ds.connectors.ensembles.lgb import \
+        LightgbmTreeParser
 
     # Expected output contains integer values instead of floats.
     # Convert to ensure match.
@@ -118,6 +118,7 @@ def test_gbm2ds():
 def test_path_input(tmpdir_factory):
     """pyml2ds should accept a file path (str) as input."""
     import pickle
+
     from sasctl.utils.pyml2ds import pyml2ds
 
     # The target "model" to use
@@ -143,6 +144,7 @@ def test_file_input():
     """pyml2ds should accept a file-like obj as input."""
     import io
     import pickle
+
     from sasctl.utils.pyml2ds import pyml2ds
 
     # The target "model" to use
@@ -164,6 +166,7 @@ def test_file_input():
 def test_pickle_input():
     """pyml2ds should accept a binary pickle string as input."""
     import pickle
+
     from sasctl.utils.pyml2ds import pyml2ds
 
     # The target "model" to use

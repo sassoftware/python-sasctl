@@ -8,6 +8,7 @@ import pickle
 from unittest import mock
 
 import pytest
+
 from sasctl import RestObj
 from sasctl.services import files
 

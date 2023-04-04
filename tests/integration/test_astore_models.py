@@ -8,7 +8,6 @@ import pytest
 
 from sasctl.utils.astore import _get_model_properties, create_files_from_astore
 
-
 BOSTON_INPUT_VARS = (
     "CRIM",
     "ZN",

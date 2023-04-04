@@ -7,6 +7,7 @@
 from unittest import mock
 
 import pytest
+
 from sasctl.services import data_sources as ds
 
 pytestmark = pytest.mark.usefixtures("session")

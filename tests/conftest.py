@@ -18,8 +18,8 @@ from betamax.cassette.cassette import Placeholder
 from betamax_serializers import pretty_json
 
 from sasctl import Session, current_session
-from .betamax_utils import BinarySerializer, RedactedPathMatcher
 
+from .betamax_utils import BinarySerializer, RedactedPathMatcher
 
 # All version numbers for which we will attempt to find cassettes when replaying tests.
 ALL_VIYA_VERSIONS = ["3.5", "2022.09"]

@@ -12,7 +12,6 @@ import tempfile
 import uuid
 import zipfile
 
-
 try:
     import swat
 except ImportError:

@@ -1,5 +1,7 @@
-import pytest
 import warnings
+
+import pytest
+
 from sasctl.pzmm.model_parameters import ModelParameters as mp
 
 pytestmark = pytest.mark.usefixtures("session")

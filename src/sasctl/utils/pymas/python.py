@@ -9,9 +9,8 @@ import re
 from collections import OrderedDict
 from inspect import getfullargspec, getsourcelines
 
-from .ds2 import DS2Variable
 from ..decorators import versionchanged
-
+from .ds2 import DS2Variable
 
 logger = logging.getLogger(__name__)
 

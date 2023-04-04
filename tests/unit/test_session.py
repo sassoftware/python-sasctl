@@ -10,6 +10,7 @@ import os
 from unittest import mock
 
 import pytest
+
 from sasctl import Session, current_session
 
 
@@ -242,6 +243,7 @@ def test_log_filtering(caplog):
 
 def test_ssl_context():
     import os
+
     from sasctl.core import SSLContextAdapter
 
     # Cleanup any env vars currently set

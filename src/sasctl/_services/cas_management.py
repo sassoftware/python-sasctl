@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
-from typing import Union, TextIO
+from typing import TextIO, Union
 
 from .service import Service
 

@@ -8,8 +8,7 @@
 
 import re
 import uuid
-from collections import namedtuple, OrderedDict
-
+from collections import OrderedDict, namedtuple
 
 from ..decorators import deprecated, versionadded
 

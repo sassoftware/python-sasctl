@@ -9,8 +9,7 @@ from unittest import mock
 
 def test_build_parser():
     """Verify arguments are correctly parsed."""
-    from sasctl.utils.cli import _build_parser
-    from sasctl.utils.cli import ArgInfo
+    from sasctl.utils.cli import ArgInfo, _build_parser
 
     func = mock.MagicMock()
     func._cli_arguments.return_value = [ArgInfo("name", "str", True, None, "")]
@@ -63,8 +62,7 @@ def test_service_names():
 
 
 def test_decorator():
-    from sasctl.utils.cli import ArgInfo
-    from sasctl.utils.cli import sasctl_command
+    from sasctl.utils.cli import ArgInfo, sasctl_command
 
     @sasctl_command
     def command1(x):

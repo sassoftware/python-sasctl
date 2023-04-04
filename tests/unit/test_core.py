@@ -10,7 +10,7 @@ import pytest
 
 
 def test_request():
-    from sasctl.core import request, RestObj
+    from sasctl.core import RestObj, request
 
     with mock.patch("sasctl.core.Session") as mock_sess:
         mock_sess.request.return_value.status_code = 200
@@ -32,7 +32,7 @@ def test_crud_function_doc():
 
 
 def test_list_items():
-    from sasctl.core import _build_crud_funcs, RestObj
+    from sasctl.core import RestObj, _build_crud_funcs
 
     list_items, _, _, _ = _build_crud_funcs("/items")
 
@@ -92,7 +92,7 @@ def test_get_item_by_id():
 
 
 def test_update_item():
-    from sasctl.core import _build_crud_funcs, RestObj
+    from sasctl.core import RestObj, _build_crud_funcs
 
     _, _, update_item, _ = _build_crud_funcs("/widget")
 
@@ -113,7 +113,7 @@ def test_update_item():
 
 
 def test_put_restobj():
-    from sasctl.core import put, RestObj
+    from sasctl.core import RestObj, put
 
     url = "/jobDefinitions/definitions/717331fa-f650-4e31-b9e2-6e6d49f66bf9"
     obj = RestObj({"_headers": {"etag": 123, "content-type": "spam"}})
@@ -162,8 +162,9 @@ def test_put_restobj():
 
 def test_request_formats():
     from requests import Response
+
     import sasctl
-    from sasctl.core import request, RestObj
+    from sasctl.core import RestObj, request
 
     response = Response()
     response.status_code = 200

@@ -5,8 +5,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-from .service import Service
 from ..core import current_session, uri_as_str
+from .service import Service
 
 
 class SentimentAnalysis(Service):

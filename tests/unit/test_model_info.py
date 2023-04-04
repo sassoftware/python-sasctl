@@ -4,17 +4,14 @@
 # Copyright © 2023, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import pytest
 import pandas as pd
+import pytest
 
 sklearn = pytest.importorskip("sklearn")
+from sklearn.ensemble import (GradientBoostingClassifier,
+                              GradientBoostingRegressor,
+                              RandomForestClassifier, RandomForestRegressor)
 from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.ensemble import (
-    GradientBoostingClassifier,
-    GradientBoostingRegressor,
-    RandomForestClassifier,
-    RandomForestRegressor,
-)
 from sklearn.svm import SVC, SVR
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 

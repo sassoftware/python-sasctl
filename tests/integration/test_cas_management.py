@@ -7,8 +7,8 @@
 from unittest import mock
 
 import pytest
-from sasctl.services import cas_management as cm
 
+from sasctl.services import cas_management as cm
 
 pytestmark = pytest.mark.usefixtures("session")
 

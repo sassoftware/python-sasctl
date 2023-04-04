@@ -1,20 +1,19 @@
 import ast
 import copy
 import json
+import tempfile
+import warnings
+from pathlib import Path
 from unittest import mock
 
-import pytest
-import warnings
 import pandas as pd
-import tempfile
+import pytest
 from requests.models import Response
-from pathlib import Path
-from sklearn.linear_model import LogisticRegression
 from sklearn import datasets
+from sklearn.linear_model import LogisticRegression
 
+from sasctl import RestObj, current_session
 from sasctl.pzmm import ModelParameters as mp
-from sasctl import current_session
-from sasctl import RestObj
 
 
 class BadModel:

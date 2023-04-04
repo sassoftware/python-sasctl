@@ -11,11 +11,10 @@ import lzma
 import os
 import pickle
 import re
-
-from betamax import util, BaseMatcher, BaseSerializer
-from betamax.matchers.path import PathMatcher
 from urllib.parse import urlsplit
 
+from betamax import BaseMatcher, BaseSerializer, util
+from betamax.matchers.path import PathMatcher
 
 log = logging.getLogger("sasctl.betamax")
 

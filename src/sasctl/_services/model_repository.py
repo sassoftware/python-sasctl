@@ -9,8 +9,8 @@
 import datetime
 from warnings import warn
 
+from ..core import HTTPError, current_session, delete, get, sasctl_command
 from .service import Service
-from ..core import current_session, get, delete, sasctl_command, HTTPError
 
 FUNCTIONS = {
     "Analytical",

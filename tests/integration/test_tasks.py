@@ -10,7 +10,6 @@ from unittest import mock
 
 import pytest
 
-
 # Every test function in the module will automatically receive the session fixture
 pytestmark = pytest.mark.usefixtures("session")
 
@@ -67,8 +66,8 @@ def sklearn_linear_model(boston_dataset):
 @pytest.mark.incremental
 class TestModels:
     def test_register_astore(self, iris_astore):
-        from sasctl.tasks import register_model
         from sasctl import RestObj
+        from sasctl.tasks import register_model
 
         # Register model and ensure attributes are set correctly
         model = register_model(
@@ -85,8 +84,8 @@ class TestModels:
         assert "Species" in project.eventProbabilityVariable
 
     def test_register_sklearn(self, sklearn_logistic_model):
-        from sasctl.tasks import register_model
         from sasctl import RestObj
+        from sasctl.tasks import register_model
 
         sk_model, train_df = sklearn_logistic_model
 
@@ -131,8 +130,8 @@ class TestModels:
         assert "dmcas_packagescorecode.sas" in filenames
 
     def test_publish_sklearn(self):
-        from sasctl.tasks import publish_model
         from sasctl.services import model_repository as mr
+        from sasctl.tasks import publish_model
 
         model = mr.get_model(SCIKIT_MODEL_NAME, PROJECT_NAME)
         p = publish_model(model, "maslocal", max_retries=100)
@@ -146,8 +145,8 @@ class TestModels:
         assert callable(p.predict_proba)
 
     def test_publish_sklearn_again(self, cache):
-        from sasctl.tasks import publish_model
         from sasctl.services import model_repository as mr
+        from sasctl.tasks import publish_model
 
         model = mr.get_model(SCIKIT_MODEL_NAME, PROJECT_NAME)
 
@@ -189,8 +188,8 @@ class TestSklearnLinearModel:
     PROJECT_NAME = "sasctl_testing Boston Housing"
 
     def test_register_model(self, sklearn_linear_model):
-        from sasctl.tasks import register_model
         from sasctl import RestObj
+        from sasctl.tasks import register_model
 
         sk_model, X, _ = sklearn_linear_model
 
@@ -237,8 +236,8 @@ class TestSklearnLinearModel:
         assert "dmcas_packagescorecode.sas" in filenames
 
     def test_create_performance_definition(self):
-        from sasctl.services import model_repository as mr
         from sasctl.services import model_management as mm
+        from sasctl.services import model_repository as mr
 
         project = mr.get_project(self.PROJECT_NAME)
         # Update project properties

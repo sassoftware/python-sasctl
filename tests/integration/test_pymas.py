@@ -6,9 +6,9 @@
 
 import pickle
 import warnings
+from unittest import mock
 
 import pytest
-from unittest import mock
 
 
 def dummy_function(x1, x2):
@@ -65,11 +65,11 @@ def sklearn_model(train_data):
 
 @pytest.fixture
 def sklearn_pipeline(train_data):
-    from sklearn.pipeline import Pipeline
-    from sklearn.ensemble import GradientBoostingClassifier
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.impute import SimpleImputer
     from sklearn.compose import ColumnTransformer
+    from sklearn.ensemble import GradientBoostingClassifier
+    from sklearn.impute import SimpleImputer
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import StandardScaler
 
     X, y = train_data
 
@@ -127,7 +127,7 @@ def pickle_stream(sklearn_model):
 
 
 def test_from_inline():
-    from sasctl.utils.pymas import from_inline, PyMAS
+    from sasctl.utils.pymas import PyMAS, from_inline
 
     p = from_inline(dummy_function)
     assert isinstance(p, PyMAS)
@@ -135,6 +135,7 @@ def test_from_inline():
 
 def test_from_pickle(train_data, pickle_file):
     import re
+
     from sasctl.utils.pymas import PyMAS, from_pickle
 
     X, y = train_data
@@ -365,9 +366,11 @@ def test_with_sklearn_pipeline(train_data, sklearn_pipeline):
 @pytest.mark.usefixtures("session")
 def test_publish_and_execute(tmpdir, boston_dataset):
     import pickle
-    from sasctl.utils.pymas import from_pickle
-    from sasctl.services import microanalytic_score as mas
+
     from sklearn.linear_model import LinearRegression
+
+    from sasctl.services import microanalytic_score as mas
+    from sasctl.utils.pymas import from_pickle
 
     X = boston_dataset[boston_dataset.columns[:-1]]
     y = boston_dataset[boston_dataset.columns[-1]]

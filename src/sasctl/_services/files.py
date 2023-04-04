@@ -6,9 +6,10 @@
 
 import os
 
+from sasctl.utils.cli import sasctl_command
+
 from .folders import Folders
 from .service import Service
-from sasctl.utils.cli import sasctl_command
 
 
 class Files(Service):

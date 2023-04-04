@@ -136,8 +136,9 @@ class TestSklearnRegressionModel:
 
     def test_register_model(self, boston_dataset):
         pytest.importorskip("sklearn")
-        from sasctl import register_model
         from sklearn.ensemble import GradientBoostingRegressor
+
+        from sasctl import register_model
 
         TARGET = "Price"
 
@@ -254,8 +255,9 @@ class TestSklearnClassificationModel:
 
     def test_register_model(self, iris_dataset):
         pytest.importorskip("sklearn")
-        from sasctl import register_model
         from sklearn.ensemble import GradientBoostingClassifier
+
+        from sasctl import register_model
 
         TARGET = "Species"
 

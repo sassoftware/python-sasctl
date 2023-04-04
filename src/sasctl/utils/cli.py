@@ -11,10 +11,9 @@ import logging
 import os
 import pkgutil
 import warnings
-from collections import namedtuple, defaultdict
+from collections import defaultdict, namedtuple
 from importlib import import_module
 from pprint import pprint
-
 
 ArgInfo = namedtuple("ArgInfo", ["name", "type", "required", "default", "doc"])
 
@@ -192,7 +191,6 @@ def _build_parser(services):
     from sasctl import __version__
 
     # TODO: Set command docstring
-
     # Create standard, top-level arguments
     parser = argparse.ArgumentParser(
         prog="sasctl", description="sasctl interacts with a SAS Viya environment."

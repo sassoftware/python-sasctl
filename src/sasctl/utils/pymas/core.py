@@ -7,19 +7,19 @@
 """Contains utilities for wrapping Python models in DS2 for publishing."""
 
 from __future__ import print_function
+
 import base64
 import importlib
-import pickle  # skipcq BAN-B301
 import os
+import pickle  # skipcq BAN-B301
 import re
 import sys
 from collections import OrderedDict
 
-
-from .ds2 import DS2Thread, DS2Variable, DS2PyMASPackage
-from .python import ds2_variables
 from ..decorators import versionadded, versionchanged
 from ..misc import random_string
+from .ds2 import DS2PyMASPackage, DS2Thread, DS2Variable
+from .python import ds2_variables
 
 
 @versionchanged(reason="Added `name` parameter.", version="1.5")

@@ -5,12 +5,13 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import json
+
 import pytest
 
 from sasctl import current_session
-from sasctl.pzmm.import_model import ImportModel as im
-from sasctl.pzmm.import_model import project_exists, model_exists
 from sasctl._services.model_repository import ModelRepository as mr
+from sasctl.pzmm.import_model import ImportModel as im
+from sasctl.pzmm.import_model import model_exists, project_exists
 
 pytestmark = pytest.mark.usefixtures("session")
 

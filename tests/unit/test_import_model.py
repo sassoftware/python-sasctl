@@ -6,17 +6,17 @@
 
 import json
 import tempfile
-from uuid import uuid4
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+from uuid import uuid4
 
 import pandas as pd
 import pytest
 
 from sasctl import current_session
-from sasctl.core import VersionInfo, RestObj, PagedList
+from sasctl.core import PagedList, RestObj, VersionInfo
 from sasctl.pzmm.import_model import ImportModel as im
-from sasctl.pzmm.import_model import project_exists, model_exists
+from sasctl.pzmm.import_model import model_exists, project_exists
 
 
 def _fake_predict(fake="ABC"):

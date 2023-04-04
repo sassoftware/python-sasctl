@@ -5,8 +5,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from ..core import PagedItemIterator
-from .service import Service
 from .cas_management import DEFAULT_CASLIB
+from .service import Service
 
 
 class DataSources(Service):

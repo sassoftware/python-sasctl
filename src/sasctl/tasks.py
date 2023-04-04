@@ -9,8 +9,8 @@
 import json
 import logging
 import math
-import pickle  # skipcq BAN-B301
 import os
+import pickle  # skipcq BAN-B301
 import re
 import sys
 import warnings
@@ -20,8 +20,9 @@ try:
 except ImportError:
     swat = None
 
-import pandas as pd
 from urllib.error import HTTPError
+
+import pandas as pd
 
 from . import pzmm, utils
 from .core import RestObj, current_session, get, get_link, request_link
@@ -29,9 +30,9 @@ from .exceptions import AuthorizationError
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
-from .utils.pymas import from_pickle
 from .utils.misc import installed_packages
 from .utils.model_info import get_model_info
+from .utils.pymas import from_pickle
 
 logger = logging.getLogger(__name__)
 
@@ -356,8 +357,8 @@ def register_model(
             if create_project:
                 out_var = []
                 in_var = []
-                import zipfile as zp
                 import copy
+                import zipfile as zp
 
                 zip_file_copy = copy.deepcopy(zip_file)
                 tmp_zip = zp.ZipFile(zip_file_copy)

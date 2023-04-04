@@ -7,7 +7,7 @@
 import pytest
 
 from sasctl import RestObj
-from sasctl.services import reports, report_images
+from sasctl.services import report_images, reports
 
 pytestmark = pytest.mark.usefixtures("session")
 

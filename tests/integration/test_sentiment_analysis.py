@@ -11,7 +11,6 @@ import pytest
 from sasctl.core import current_session, request_link
 from sasctl.services import sentiment_analysis as sa
 
-
 pytestmark = pytest.mark.usefixtures("session")
 
 

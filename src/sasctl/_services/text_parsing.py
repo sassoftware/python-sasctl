@@ -5,8 +5,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-from .service import Service
 from sasctl.core import current_session, uri_as_str
+
+from .service import Service
 
 
 class TextParsing(Service):

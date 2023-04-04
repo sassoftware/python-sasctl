@@ -4,11 +4,11 @@
 # Copyright © 2023, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-from pathlib import Path
-import pytest
 import tempfile
+from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from sasctl.pzmm.write_json_files import JSONFiles as jf
 
@@ -16,8 +16,8 @@ pytestmark = pytest.mark.usefixtures("session")
 
 
 def _classification_model(data, target):
-    from sklearn.tree import DecisionTreeClassifier
     from sklearn.model_selection import train_test_split
+    from sklearn.tree import DecisionTreeClassifier
 
     data = pd.get_dummies(data, drop_first=True).fillna(data.mean())
     x_train, x_test, y_train, y_test = train_test_split(

@@ -7,8 +7,8 @@
 import pytest
 
 from sasctl import current_session
-from sasctl.pzmm.write_score_code import ScoreCode as sc
 from sasctl._services.model_repository import ModelRepository as mr
+from sasctl.pzmm.write_score_code import ScoreCode as sc
 
 pytestmark = pytest.mark.usefixtures("session")
 

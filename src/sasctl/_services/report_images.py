@@ -5,8 +5,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-from .service import Service
 from ..core import RestObj
+from .service import Service
 
 LOW = 0
 MEDIUM = 1

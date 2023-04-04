@@ -8,10 +8,10 @@ import os
 from unittest import mock
 
 import pytest
+
 from sasctl import Session
 from sasctl.core import OAuth2Token
 from sasctl.exceptions import AuthenticationError, AuthorizationError
-
 
 HOSTNAME = "example.sas.com"
 USERNAME = "michael.palin"

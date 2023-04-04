@@ -6,9 +6,8 @@
 
 import pytest
 
-from sasctl import current_session, RestObj
+from sasctl import RestObj, current_session
 from sasctl.services import projects as proj
-
 
 pytestmark = pytest.mark.usefixtures("session")
 

@@ -7,12 +7,14 @@
 from unittest import mock
 
 import pytest
+
 from sasctl import RestObj
 from sasctl.services import model_management as mm
 
 
 def test_create_performance_definition():
     import copy
+
     from sasctl import current_session
 
     PROJECT = RestObj({"name": "Test Project", "id": "98765"})

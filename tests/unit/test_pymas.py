@@ -5,11 +5,11 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from collections import OrderedDict
-
-import pytest
 from unittest import mock
 
-from sasctl.utils.pymas.core import build_wrapper_function, PyMAS
+import pytest
+
+from sasctl.utils.pymas.core import PyMAS, build_wrapper_function
 from sasctl.utils.pymas.ds2 import DS2Variable
 from sasctl.utils.pymas.python import ds2_variables, parse_type_hints
 
@@ -98,6 +98,7 @@ def test_from_pickle_with_func():
     """Create a PyMAS instance from a pickled object."""
 
     import pickle
+
     from sasctl.utils.pymas import from_pickle
 
     data = pickle.dumps(dummy_func)
@@ -123,6 +124,7 @@ def test_from_pickle_with_class():
     """Create a PyMAS instance from a pickled object."""
 
     import pickle
+
     from sasctl.utils.pymas import from_pickle
 
     data = pickle.dumps(DummyClass())
@@ -594,6 +596,7 @@ def test_bugfix_27():
     """
 
     import io
+
     from sasctl.core import RestObj
     from sasctl.services import microanalytic_score as mas
 

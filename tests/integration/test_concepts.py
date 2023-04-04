@@ -11,7 +11,6 @@ import pytest
 from sasctl.core import request_link
 from sasctl.services import concepts as cp
 
-
 pytestmark = pytest.mark.usefixtures("session")
 
 

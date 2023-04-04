@@ -8,7 +8,6 @@ import pytest
 
 from sasctl.utils.cli import main
 
-
 pytestmark = pytest.mark.usefixtures("session")
 
 

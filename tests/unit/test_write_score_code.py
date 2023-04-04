@@ -9,8 +9,8 @@ import os
 import pickle
 import random
 import tempfile
-from unittest.mock import patch, MagicMock, DEFAULT
 from pathlib import Path
+from unittest.mock import DEFAULT, MagicMock, patch
 
 import numpy as np
 import pandas as pd

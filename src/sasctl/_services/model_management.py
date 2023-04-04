@@ -5,8 +5,8 @@
 # SPDX-License-Identifier: Apache-2.0
 import json
 
-from .service import Service
 from ..utils.decorators import experimental
+from .service import Service
 
 
 class ModelManagement(Service):
@@ -51,8 +51,8 @@ class ModelManagement(Service):
         -------
 
         """
-        from .model_repository import ModelRepository
         from .model_publish import ModelPublish
+        from .model_repository import ModelRepository
 
         mr = ModelRepository()
         mp = ModelPublish()

@@ -7,6 +7,7 @@
 from unittest import mock
 
 from sasctl.core import PagedItemIterator, RestObj
+
 from .test_pageiterator import paging
 
 

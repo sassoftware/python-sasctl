@@ -6,9 +6,9 @@
 from unittest import mock
 
 import pytest
-from sasctl import current_session, HTTPError, RestObj
-from sasctl.services import saslogon
 
+from sasctl import HTTPError, RestObj, current_session
+from sasctl.services import saslogon
 
 # Success is RestObj (assuming response is auto-parsed)
 # <class 'sasctl.core.RestObj'>(headers={'Date': 'Sun, 18 Dec 2022 18:49:01 GMT', 'Content-Type': 'application/json', 'Transfer-Encoding': 'chunked',

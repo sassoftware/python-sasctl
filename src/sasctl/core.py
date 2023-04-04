@@ -6,14 +6,16 @@
 
 import concurrent.futures
 import copy
-import logging
 import json
+import logging
 import netrc
 import os
 import re
 import ssl
 import warnings
 from datetime import datetime, timedelta
+from urllib.error import HTTPError
+from urllib.parse import urlsplit, urlunsplit
 from uuid import UUID, uuid4
 
 import requests
@@ -21,8 +23,6 @@ import requests.exceptions
 import yaml
 from packaging import version
 from requests.adapters import HTTPAdapter
-from urllib.parse import urlsplit, urlunsplit
-from urllib.error import HTTPError
 
 try:
     import swat
@@ -37,9 +37,9 @@ except ImportError:
     except ImportError:
         kerberos = None
 
+from . import exceptions
 from .utils.cli import sasctl_command
 from .utils.misc import versionadded
-from . import exceptions
 
 logger = logging.getLogger(__name__)
 

@@ -4,9 +4,10 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import pytest
 import tempfile
 from pathlib import Path
+
+import pytest
 
 
 def test_read_mlflow_model_file():
