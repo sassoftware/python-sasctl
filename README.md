@@ -22,7 +22,15 @@
   </a>
 
   <a href="https://pepy.tech/project/sasctl">
-    <img src="https://static.pepy.tech/personalized-badge/sasctl?period=month&units=international_system&left_color=black&right_color=orange&left_text=Downloads"/>
+    <img src="https://static.pepy.tech/personalized-badge/sasctl?period=month&units=international_system&left_color=grey&right_color=brightgreen&left_text=PyPI downloads per month"/>
+  </a>
+
+  <a href="https://github.com/psf/black">
+    <img src="https://img.shields.io/badge/code%20style-black-000000.svg">
+  </a>
+
+  <a href="https://pycqa.github.io/isort/">
+    <img src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336">
   </a>
     
 </div>
