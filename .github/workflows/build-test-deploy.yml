@@ -104,7 +104,7 @@ jobs:
         run: |
           mv doc docs
           sudo apt-get install build-essential
-          pip install sphinx six pyyaml pandas pydata-sphinx-theme
+          pip install sphinx six pyyaml pandas pydata-sphinx-theme numpydoc
 
       - name: Check documentation
         uses: ammaraskar/sphinx-problem-matcher@master
