@@ -1,0 +1,517 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-theme="dark">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sasctl.pzmm.pickle_model &#8212; sasctl 1.9.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/pickle_model';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="dark">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">sasctl 1.9.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../api/sasctl.html">
+                        sasctl package
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/sassoftware/python-sasctl" title="sasctl" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../_static/sas_logo.svg" class="icon-link-image" alt="sasctl"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../api/sasctl.html">
+                        sasctl package
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/sassoftware/python-sasctl" title="sasctl" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../_static/sas_logo.svg" class="icon-link-image" alt="sasctl"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">sasctl.pzmm.pickle_model</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for sasctl.pzmm.pickle_model</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
+<span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
+<span class="c1"># %%</span>
+<span class="kn">import</span> <span class="nn">codecs</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">..utils.misc</span> <span class="kn">import</span> <span class="n">check_if_jupyter</span>
+
+<span class="n">PICKLE</span> <span class="o">=</span> <span class="s2">&quot;.pickle&quot;</span>
+<span class="c1"># TODO: Break up function to lower CC</span>
+
+
+<div class="viewcode-block" id="PickleModel"><a class="viewcode-back" href="../../../api/pzmm/pickle_model.html#sasctl.pzmm.pickle_model.PickleModel">[docs]</a><span class="k">class</span> <span class="nc">PickleModel</span><span class="p">:</span>
+    <span class="n">notebook_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">check_if_jupyter</span><span class="p">()</span>
+
+<div class="viewcode-block" id="PickleModel.pickle_trained_model"><a class="viewcode-back" href="../../../api/pzmm/pickle_model.html#sasctl.pzmm.pickle_model.PickleModel.pickle_trained_model">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">pickle_trained_model</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">trained_model</span><span class="p">,</span>
+        <span class="n">model_prefix</span><span class="p">,</span>
+        <span class="n">pickle_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">is_h2o_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">is_binary_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">is_binary_string</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">mlflow_details</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write trained model to a binary pickle file, H2O MOJO file, or a binary string</span>
+<span class="sd">        object.</span>
+
+<span class="sd">        The following files are generated by this function:</span>
+<span class="sd">            * &#39;*.pickle&#39;</span>
+<span class="sd">                Binary pickle file containing a trained model.</span>
+<span class="sd">            * &#39;*.mojo&#39;</span>
+<span class="sd">                Archived H2O.ai MOJO file containing a trained model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ---------------</span>
+<span class="sd">        trained_model : model object, str, or Path</span>
+<span class="sd">            For non-H2O models, this argument contains the model variable. Otherwise,</span>
+<span class="sd">            this should be the file path of the MOJO file.</span>
+<span class="sd">        model_prefix : str or Path</span>
+<span class="sd">            Variable name for the model to be displayed in SAS Open Model Manager</span>
+<span class="sd">            (i.e. hmeqClassTree + [Score.py || .pickle]).</span>
+<span class="sd">        pickle_path : str, optional</span>
+<span class="sd">            File location for the output pickle file. The default value is None.</span>
+<span class="sd">        is_h2o_model : bool, optional</span>
+<span class="sd">            Sets whether the model file is an H2O.ai MOJO file. If set as True,</span>
+<span class="sd">            the MOJO file will be gzipped before uploading to SAS Model Manager.</span>
+<span class="sd">            The default value is False.</span>
+<span class="sd">        is_binary_model : bool, optional</span>
+<span class="sd">            Sets whether the H2O model provided is a binary model or a MOJO model. The</span>
+<span class="sd">            default value is False.</span>
+<span class="sd">        is_binary_string : bool, optional</span>
+<span class="sd">            Sets whether the model is to be set as a binary string instead of a pickle</span>
+<span class="sd">            file. The default value is False.</span>
+<span class="sd">        mlflow_details : dict, optional</span>
+<span class="sd">            Model details from an MLFlow model. This dictionary is created by the</span>
+<span class="sd">            readMLModelFile function. The default value is None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        binary_string : binary str</span>
+<span class="sd">            When the is_binary_string flag is set to True, return a binary string</span>
+<span class="sd">            representation of the model instead of a pickle or MOJO file.</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary containing a key-value pair representing the file name and pickle</span>
+<span class="sd">            dump respectively if pickle_path is None. This is not valid for H2O.ai</span>
+<span class="sd">            models.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">is_binary_string</span><span class="p">:</span>
+            <span class="c1"># For models that use a binary string representation</span>
+            <span class="n">binary_string</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">trained_model</span><span class="p">),</span> <span class="s2">&quot;base64&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">binary_string</span>
+        <span class="k">elif</span> <span class="n">mlflow_details</span><span class="p">:</span>
+            <span class="n">ml_pickle_path</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">Path</span><span class="p">(</span><span class="n">mlflow_details</span><span class="p">[</span><span class="s2">&quot;mlflowPath&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">mlflow_details</span><span class="p">[</span><span class="s2">&quot;model_path&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">pickle_path</span><span class="p">:</span>
+                <span class="c1"># For models imported from MLFlow</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">ml_pickle_path</span><span class="p">,</span> <span class="n">pickle_path</span><span class="p">)</span>
+                <span class="n">pzmm_pickle_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">mlflow_details</span><span class="p">[</span><span class="s2">&quot;model_path&quot;</span><span class="p">]</span>
+                <span class="n">pzmm_pickle_path</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">model_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ml_pickle_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pickle_file</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="p">{</span><span class="n">model_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">:</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pickle_file</span><span class="p">)}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># For all other model types</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_h2o_model</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pickle_path</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                        <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">model_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span>
+                    <span class="p">)</span> <span class="k">as</span> <span class="n">pickle_file</span><span class="p">:</span>
+                        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">trained_model</span><span class="p">,</span> <span class="n">pickle_file</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Model </span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2"> was successfully pickled and saved &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;to </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">model_prefix</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">PICKLE</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+                        <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="p">{</span><span class="n">model_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">:</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">trained_model</span><span class="p">)}</span>
+            <span class="c1"># For binary H2O models, rename the binary file as a pickle file</span>
+            <span class="k">elif</span> <span class="n">is_binary_model</span> <span class="ow">and</span> <span class="n">pickle_path</span><span class="p">:</span>
+                <span class="n">binary_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">model_prefix</span>
+                <span class="n">binary_file</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">binary_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="n">PICKLE</span><span class="p">))</span>
+            <span class="c1"># For MOJO H2O models, gzip the model file and adjust the file extension</span>
+            <span class="k">elif</span> <span class="n">is_h2o_model</span> <span class="ow">and</span> <span class="n">pickle_path</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">trained_model</span><span class="p">),</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fileIn</span><span class="p">,</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+                    <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">model_prefix</span> <span class="o">+</span> <span class="s2">&quot;.mojo&quot;</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span>
+                <span class="p">)</span> <span class="k">as</span> <span class="n">fileOut</span><span class="p">:</span>
+                    <span class="n">fileOut</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">fileIn</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;MOJO model </span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2"> was successfully gzipped and saved &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;to </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">model_prefix</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;.mojo&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+                    <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;There is currently no support for file-less H2O.ai model handling.&quot;</span>
+                    <span class="s2">&quot; Please include a value for the pickle_path argument.&quot;</span>
+                <span class="p">)</span></div></div>
+</pre></div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
