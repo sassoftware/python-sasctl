@@ -446,6 +446,7 @@ class JSONFiles:
         model_prefix: str,
         json_path: Union[str, Path, None] = None,
         is_h2o_model: Optional[bool] = False,
+        is_tf_model: Optional[bool] = False
     ) -> Union[dict, None]:
         """
         Writes a file metadata JSON file pointing to all relevant files.
@@ -478,6 +479,8 @@ class JSONFiles:
         ]
         if is_h2o_model:
             dict_list.append({"role": "scoreResource", "name": model_prefix + ".mojo"})
+        elif is_tf_model:
+            dict_list.append({"role": "scoreResource", "name": model_prefix + ".h5"})
         else:
             dict_list.append(
                 {"role": "scoreResource", "name": model_prefix + ".pickle"}
