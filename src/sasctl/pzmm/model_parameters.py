@@ -11,6 +11,13 @@ from pandas import DataFrame
 from .._services.model_repository import ModelRepository as mr
 from ..core import RestObj, current_session, is_uuid
 
+MODEL_PROPERTIES = [
+    ('targetVariable', 'targetVariable'),
+    ('targetLevel', 'targetLevel'),
+    ('targetEventValue', 'targetEvent'),
+    ('eventProbabilityVariable', 'eventProbVar'),
+    ('function', 'function')
+]
 
 # TODO: Maybe just move _find_file altogether?
 def _find_file(model: Union[str, dict, RestObj], file_name: str) -> Tuple[RestObj, str]:
@@ -323,3 +330,15 @@ class ModelParameters:
         )
 
         return kpi_table_df
+
+    def sync_model_properties(project):
+        project = mr.get_project(project)
+        models = mr.get(f'/projects/{project.id}/models')
+        model_ids = [model.id for model in models]
+        for id in model_ids:
+            model = mr.get_model(id)
+            for project_property, model_property in MODEL_PROPERTIES:
+                if project_property in project:
+                    if model_property not in model:
+                        model[model_property] = project[project_property]
+            mr.update_model(model)
