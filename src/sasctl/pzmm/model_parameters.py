@@ -331,14 +331,24 @@ class ModelParameters:
 
         return kpi_table_df
 
-    def sync_model_properties(project):
-        project = mr.get_project(project)
-        models = mr.get(f'/projects/{project.id}/models')
+    def sync_model_properties(project: Union[str, dict, RestObj]):
+         # Step through options to determine project UUID
+        if is_uuid(project):
+            project_id = project
+        elif isinstance(project, dict) and "id" in project:
+            project_id = project["id"]
+        else:
+            project = mr.get_project(project)
+            project_id = project["id"]
+        # Get List of Models that exist in project
+        models = mr.get(f'/projects/{project_id}/models')
         model_ids = [model.id for model in models]
         for id in model_ids:
             model = mr.get_model(id)
             for project_property, model_property in MODEL_PROPERTIES:
+                #Check if property is set in project
                 if project_property in project:
+                    #If property is set in project, check if it's set in model, and update model accordingly
                     if model_property not in model:
                         model[model_property] = project[project_property]
             mr.update_model(model)
