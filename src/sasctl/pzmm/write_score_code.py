@@ -24,7 +24,7 @@ class ScoreCode:
         cls,
         model_prefix: str,
         input_data: Union[DataFrame, List[dict]],
-        predict_method: [Callable[..., List], List[Any]],
+        predict_method: Union[Callable[..., List], List[Any]],
         target_variable: Optional[str] = None,
         target_values: Optional[List] = None,
         score_metrics: Optional[List[str]] = None,
@@ -167,6 +167,7 @@ class ScoreCode:
             pickle_type,
             mojo_model="mojo_model" in kwargs,
             binary_h2o_model="binary_h2o_model" in kwargs,
+            tf_model="tf_keras_model" in kwargs or "tf_core_model" in kwargs,
             binary_string=binary_string,
         )
 
@@ -186,6 +187,8 @@ class ScoreCode:
                 pickle_type=pickle_type,
                 mojo_model="mojo_model" in kwargs,
                 binary_h2o_model="binary_h2o_model" in kwargs,
+                tf_keras_model="tf_keras_model" in kwargs,
+                tf_core_model="tf_core_model" in kwargs
             )
         else:
             model_load = None
@@ -229,6 +232,7 @@ class ScoreCode:
                 predict_method[0],
                 input_var_list,
                 statsmodels_model="statsmodels_model" in kwargs,
+                tf_model="tf_keras_model" in kwargs or "tf_core_model" in kwargs
             )
             # Include check for numpy values and a conversion operation as needed
             cls.score_code += (
@@ -360,6 +364,7 @@ class ScoreCode:
         pickle_type: Optional[str] = None,
         mojo_model: Optional[bool] = False,
         binary_h2o_model: Optional[bool] = False,
+        tf_model: Optional[bool] = False,
         binary_string: Optional[str] = None,
     ) -> None:
         """
@@ -378,6 +383,9 @@ class ScoreCode:
             None.
         binary_h2o_model : bool, optional
             Flag to indicate that the model is a H2O.ai binary model. The default value
+            is None.
+        tf_model : bool, optional
+            Flag to indicate that the model is a tensorflow model. The default value 
             is None.
         binary_string : str, optional
             A binary representation of the Python model object. The default value is
@@ -402,6 +410,10 @@ class ScoreCode:
         if mojo_model or binary_h2o_model:
             cls.score_code += (
                 "import h2o\nimport gzip\nimport shutil\nimport os\n\nh2o.init()\n\n"
+            )
+        elif tf_model:
+            cls.score_code += (
+                "import tensorflow as tf\n"
             )
         elif binary_string:
             cls.score_code += (
@@ -493,6 +505,8 @@ class ScoreCode:
         pickle_type: Optional[str] = None,
         mojo_model: Optional[bool] = False,
         binary_h2o_model: Optional[bool] = False,
+        tf_keras_model: Optional[bool] = False,
+        tf_core_model: Optional[bool] = False
     ) -> str:
         """
         Write the model load section of the score code assuming the model is being
@@ -511,6 +525,12 @@ class ScoreCode:
         binary_h2o_model : boolean, optional
             Flag to indicate that the model is a H2O.ai binary model. The default value
             is None.
+        tf_keras_model : boolean, optional
+            Flag to indicate that the model is a tensorflow keras model. The default value is
+            None.
+        tf_core_model : boolean, optional
+            Flag to indicate that the model is a tensorflow core model. The default value is
+            None.
         """
         pickle_type = pickle_type if pickle_type else "pickle"
 
@@ -535,6 +555,15 @@ class ScoreCode:
         elif binary_h2o_model:
             cls.score_code += "model = h2o.load(Path(settings.pickle_path))\n\n"
             return f"{'':8}model = h2o.load(Path(settings.pickle_path))\n\n"
+        elif tf_keras_model:
+            cls.score_code += (
+                f"model = tf.keras.models.load_model(Path(settings.pickle_path) / "
+                f"\"{str(Path(model_file_name).with_suffix('.h5'))}\", safe_mode=True)\n"
+            )
+            return (
+                f"{'':8}model = tf.keras.models.load_model(Path(settings.pickle_path) / "
+                f"\"{str(Path(model_file_name).with_suffix('.h5'))}\", safe_mode=True)\n"
+            )
         else:
             cls.score_code += (
                 f"with open(Path(settings.pickle_path) / "
@@ -623,6 +652,7 @@ class ScoreCode:
         var_list: List[str],
         dtype_list: Optional[List[str]] = None,
         statsmodels_model: Optional[bool] = False,
+        tf_model: Optional[bool] = False
     ) -> None:
         """
         Write the model prediction section of the score code.
@@ -637,6 +667,9 @@ class ScoreCode:
             List of variable data types. The default value is None.
         statsmodels_model : bool, optional
             Flag to indicate that the model is a statsmodels model. The default value is
+            False.
+        tf_model : bool, optional
+            Flag to indicate that the model is a tensorflow model. The default value is
             False.
         """
         column_names = ", ".join(f'"{col}"' for col in var_list)
@@ -668,12 +701,21 @@ class ScoreCode:
                 f"{'':4}prediction = model.{method.__name__}"
                 f"(input_array)\n"
             )
+        elif tf_model:
+            cls.score_code += (
+                f"{'':4}input_array = np.array("
+                f"[[{', '.join(var_list)}]])\n"
+                f"{'':4}prediction = model.{method.__name__}(input_array)\n"
+                f"{'':4} # Check if model returns logits or probabilities\n"
+                f"{'':4}if(sum(prediction) != 1):\n"
+                f"{'':8}prediction = tf.nn.softmax(prediction)"
+            )
         else:
             cls.score_code += (
                 f"{'':4}input_array = pd.DataFrame("
                 f"[[{', '.join(var_list)}]],\n{'':30}columns=["
                 f"{column_names}],\n{'':30}dtype=float)\n{'':4}"
-                f"prediction = model.{method.__name__}(input_array)\n"
+                f"prediction = model.{method.__name__}(input_array).tolist()\n"
             )
 
     @classmethod
