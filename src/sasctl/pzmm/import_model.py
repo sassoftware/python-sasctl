@@ -136,7 +136,7 @@ class ImportModel:
         model_prefix: str,
         project: Union[str, dict, RestObj],
         input_data: Optional[DataFrame] = None,
-        predict_method: [Callable[..., List], List[Any]] = None,
+        predict_method: Union[Callable[..., List], List[Any]] = None,
         score_metrics: Optional[List[str]] = None,
         pickle_type: str = "pickle",
         project_version: str = "latest",
