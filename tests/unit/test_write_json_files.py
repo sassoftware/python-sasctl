@@ -261,6 +261,11 @@ def test_write_file_metadata_json():
     )
     assert json.loads(meta_dict["fileMetadata.json"])[3]["name"] == "Test_Model.mojo"
 
+    meta_dict = jf.write_file_metadata_json(
+        model_prefix="Test_model", is_tf_keras_model=True
+    )
+    assert json.loads(meta_dict["fileMetadata.json"])[3]["name"] == "Test_Model.h5"
+
 
 def test_add_tuple_to_fitstat():
     """

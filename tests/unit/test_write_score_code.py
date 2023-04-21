@@ -141,6 +141,7 @@ def test_viya4_model_load():
     - non-h2o model
     - mojo model
     - binary h2o model
+    - Tensorflow keras model
     """
     load_text = sc._viya4_model_load("normal")
     assert "pickle.load(pickle_model)" in sc.score_code
@@ -156,6 +157,10 @@ def test_viya4_model_load():
     assert "h2o.load" in sc.score_code
     assert "h2o.load" in binary_text
     sc.score_code = ""
+
+    keras_text = sc._viya4_model_load("tensorflow", tf_keras_model=True)
+    assert "tf.keras.models.load_model" in sc.score_code
+    assert "tf.keras.models.load_model" in keras_text
 
 
 def test_impute_numeric():
