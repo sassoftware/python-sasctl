@@ -112,6 +112,25 @@ class JSONFiles:
             Dictionary containing a key-value pair representing the file name and json
             dump respectively.
         """
+        try:
+            # noinspection PyPackageRequirements
+            import numpy as np
+
+            class NpEncoder(json.JSONEncoder):
+                def default(self, obj):
+                    if isinstance(obj, np.integer):
+                        return int(obj)
+                    if isinstance(obj, np.floating):
+                        return float(obj)
+                    if isinstance(obj, np.ndarray):
+                        return obj.tolist()
+                    return json.JSONEncoder.default(self, obj)
+        except ImportError:
+            np = None
+
+            class NpEncoder(json.JSONEncoder):
+                pass
+
         # MLFlow model handling
         if isinstance(input_data, list):
             dict_list = cls.generate_mlflow_variable_properties(input_data)
@@ -125,7 +144,7 @@ class JSONFiles:
                 file_name = OUTPUT
 
             with open(Path(json_path) / file_name, "w") as json_file:
-                json_file.write(json.dumps(dict_list, indent=4))
+                json_file.write(json.dumps(dict_list, indent=4, cls=NpEncoder))
             if cls.notebook_output:
                 print(
                     f"{file_name} was successfully written and saved to "
@@ -133,9 +152,9 @@ class JSONFiles:
                 )
         else:
             if is_input:
-                return {INPUT: json.dumps(dict_list)}
+                return {INPUT: json.dumps(dict_list, indent=4, cls=NpEncoder)}
             else:
-                return {OUTPUT: json.dumps(dict_list)}
+                return {OUTPUT: json.dumps(dict_list, indent=4, cls=NpEncoder)}
 
     @staticmethod
     def generate_variable_properties(
