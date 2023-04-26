@@ -6,7 +6,7 @@ import gzip
 import pickle
 import shutil
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional, Union, Any
 import h2o
 
 from ..utils.misc import check_if_jupyter
@@ -21,8 +21,8 @@ class PickleModel:
     @classmethod
     def pickle_trained_model(
         cls,
-        trained_model,
-        model_prefix,
+        model_prefix: str,
+        trained_model: Optional[Any] = None,
         pickle_path: Union[str, Path, None] = None,
         is_h2o_model: bool = False,
         is_binary_model: bool = False,
@@ -41,11 +41,11 @@ class PickleModel:
 
         Parameters
         ---------------
-        trained_model : model object, str, or Path
-            The trained model to be exported
         model_prefix : str or Path
             Variable name for the model to be displayed in SAS Open Model Manager
             (i.e. hmeqClassTree + [Score.py || .pickle]).
+        trained_model : model object
+            The trained model to be exported.
         pickle_path : str, optional
             File location for the output pickle file. The default value is None.
         is_h2o_model : bool, optional
@@ -60,7 +60,7 @@ class PickleModel:
             file. The default value is False.
         mlflow_details : dict, optional
             Model details from an MLFlow model. This dictionary is created by the
-            readMLModelFile function. The default value is None
+            readMLModelFile function. The default value is None.
 
         Returns
         -------
