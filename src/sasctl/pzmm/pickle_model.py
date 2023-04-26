@@ -7,7 +7,11 @@ import pickle
 import shutil
 from pathlib import Path
 from typing import Optional, Union, Any
-import h2o
+
+try:
+    import h2o
+except ImportError:
+    h2o = None
 
 from ..utils.misc import check_if_jupyter
 
@@ -107,7 +111,12 @@ class PickleModel:
                 else:
                     return {model_prefix + PICKLE: pickle.dumps(trained_model)}
             # For binary H2O models, save the binary file as a "pickle" file
-            elif is_binary_model and pickle_path:
+            elif is_h2o_model and is_binary_model and pickle_path:
+                if not h2o:
+                    raise RuntimeError(
+                        "The h2o package is required to save the model as a binary h2o"
+                        "model."
+                    )
                 h2o.save_model(
                     model=trained_model,
                     force=True,
@@ -116,6 +125,10 @@ class PickleModel:
                 )
             # For MOJO H2O models, gzip the model file and adjust the file extension
             elif is_h2o_model and pickle_path:
+                if not h2o:
+                    raise RuntimeError(
+                        "The h2o package is required to save the model as a mojo model."
+                    )
                 trained_model.save_mojo(
                     force=True, path=pickle_path, filename=f"{model_prefix}.mojo"
                 )
