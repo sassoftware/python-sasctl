@@ -272,7 +272,9 @@ def test_write_file_metadata_json():
         with patch.object(jf, "notebook_output", True):
             capture_output = io.StringIO()
             sys.stdout = capture_output
-            jf.write_file_metadata_json(model_prefix="Test_Model", json_path=Path(tmp_dir))
+            jf.write_file_metadata_json(
+                model_prefix="Test_Model", json_path=Path(tmp_dir)
+            )
             assert (Path(tmp_dir) / "fileMetadata.json").exists()
             sys.stdout = sys.__stdout__
             assert "was successfully written and saved to " in capture_output.getvalue()

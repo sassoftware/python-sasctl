@@ -73,9 +73,7 @@ def test_pickle_trained_model_h2o():
     x.remove(y)
 
     model = H2OGeneralizedLinearEstimator(
-        family="binomial",
-        model_id="test_model",
-        lambda_search=True
+        family="binomial", model_id="test_model", lambda_search=True
     )
     model.train(x=x, y=y, training_frame=data)
 
