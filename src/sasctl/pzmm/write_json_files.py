@@ -1042,7 +1042,7 @@ class JSONFiles:
             values from the SAS CAS percentile action set added in.
         """
         for row_num in range(len(stat_df)):
-            row_dict = stat_df.iloc[row_num].to_dict()
+            row_dict = stat_df.iloc[row_num].replace(float("nan"), None).to_dict()
             json_dict[row_num + partition * len(stat_df)]["dataMap"].update(row_dict)
         return json_dict
 
