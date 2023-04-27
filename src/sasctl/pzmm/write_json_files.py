@@ -23,6 +23,28 @@ from ..core import current_session
 from ..utils.decorators import deprecated
 from ..utils.misc import check_if_jupyter
 
+try:
+    # noinspection PyPackageRequirements
+    import numpy as np
+
+
+    class NpEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, np.integer):
+                return int(obj)
+            if isinstance(obj, np.floating):
+                return float(obj)
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            return json.JSONEncoder.default(self, obj)
+
+except ImportError:
+    np = None
+
+
+    class NpEncoder(json.JSONEncoder):
+        pass
+
 # TODO: add converter for any type of dataset (list, dataframe, numpy array)
 
 # Constants
@@ -112,26 +134,6 @@ class JSONFiles:
             Dictionary containing a key-value pair representing the file name and json
             dump respectively.
         """
-        try:
-            # noinspection PyPackageRequirements
-            import numpy as np
-
-            class NpEncoder(json.JSONEncoder):
-                def default(self, obj):
-                    if isinstance(obj, np.integer):
-                        return int(obj)
-                    if isinstance(obj, np.floating):
-                        return float(obj)
-                    if isinstance(obj, np.ndarray):
-                        return obj.tolist()
-                    return json.JSONEncoder.default(self, obj)
-
-        except ImportError:
-            np = None
-
-            class NpEncoder(json.JSONEncoder):
-                pass
-
         # MLFlow model handling
         if isinstance(input_data, list):
             dict_list = cls.generate_mlflow_variable_properties(input_data)
@@ -597,14 +599,14 @@ class JSONFiles:
 
         if json_path:
             with open(Path(json_path) / FITSTAT, "w") as json_file:
-                json_file.write(json.dumps(json_dict, indent=4))
+                json_file.write(json.dumps(json_dict, indent=4, cls=NpEncoder))
             if cls.notebook_output:
                 print(
                     f"{FITSTAT} was successfully written and saved to "
                     f"{Path(json_path) / FITSTAT}"
                 )
         else:
-            return {FITSTAT: json.dumps(json_dict, indent=4)}
+            return {FITSTAT: json.dumps(json_dict, indent=4, cls=NpEncoder)}
 
     @classmethod
     def add_tuple_to_fitstat(
@@ -881,7 +883,7 @@ class JSONFiles:
         if json_path:
             for name in [FITSTAT, ROC, LIFT]:
                 with open(Path(json_path) / name, "w") as json_file:
-                    json_file.write(json.dumps(json_dict, indent=4))
+                    json_file.write(json.dumps(json_dict, indent=4, cls=NpEncoder))
                 if cls.notebook_output:
                     print(
                         f"{name} was successfully written and saved to "
@@ -889,9 +891,9 @@ class JSONFiles:
                     )
         else:
             return {
-                FITSTAT: json.dumps(json_dict[0], indent=4),
-                ROC: json.dumps(json_dict[1], indent=4),
-                LIFT: json.dumps(json_dict[2], indent=4),
+                FITSTAT: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
+                ROC: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
+                LIFT: json.dumps(json_dict[2], indent=4, cls=NpEncoder),
             }
 
     @staticmethod
@@ -1044,7 +1046,7 @@ class JSONFiles:
             json_dict[row_num + partition * len(stat_df)]["dataMap"].update(row_dict)
         return json_dict
 
-    # noinspection PyCallingNonCallable,PyNestedDecorators
+    # noinspection PyCallingNonCallable, PyNestedDecorators
     @deprecated(
         "Please use the calculate_model_statistics method instead.",
         version="1.9",
