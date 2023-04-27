@@ -27,7 +27,6 @@ try:
     # noinspection PyPackageRequirements
     import numpy as np
 
-
     class NpEncoder(json.JSONEncoder):
         def default(self, obj):
             if isinstance(obj, np.integer):
@@ -41,9 +40,9 @@ try:
 except ImportError:
     np = None
 
-
     class NpEncoder(json.JSONEncoder):
         pass
+
 
 # TODO: add converter for any type of dataset (list, dataframe, numpy array)
 
