@@ -120,7 +120,7 @@ class PickleModel:
                 h2o.save_model(
                     model=trained_model,
                     force=True,
-                    path=pickle_path,
+                    path=str(pickle_path),
                     filename=f"{model_prefix}.pickle",
                 )
             # For MOJO H2O models, gzip the model file and adjust the file extension
@@ -130,7 +130,7 @@ class PickleModel:
                         "The h2o package is required to save the model as a mojo model."
                     )
                 trained_model.save_mojo(
-                    force=True, path=pickle_path, filename=f"{model_prefix}.mojo"
+                    force=True, path=str(pickle_path), filename=f"{model_prefix}.mojo"
                 )
             elif is_binary_model or is_h2o_model:
                 raise ValueError(
