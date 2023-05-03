@@ -123,7 +123,7 @@ class PickleModel:
                     path=str(pickle_path),
                     filename=f"{model_prefix}.pickle",
                 )
-            # For MOJO H2O models, gzip the model file and adjust the file extension
+            # For MOJO H2O models, save as a mojo file and adjust the extension to .mojo
             elif is_h2o_model and pickle_path:
                 if not h2o:
                     raise RuntimeError(
