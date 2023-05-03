@@ -6,7 +6,7 @@ import gzip
 import pickle
 import shutil
 from pathlib import Path
-from typing import Optional, Union, Any
+from typing import Any, Optional, Union
 
 try:
     import h2o

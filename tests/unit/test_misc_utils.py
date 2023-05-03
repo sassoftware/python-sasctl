@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import re
-from unittest.mock import patch, PropertyMock
+from unittest.mock import PropertyMock, patch
 
 
 def test_list_packages():

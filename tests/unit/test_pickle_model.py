@@ -62,8 +62,9 @@ def test_pickle_trained_model_h2o():
     Side function for h2o models in case h2o is not installed.
     """
     h2o = pytest.importorskip("h2o")
-    from sasctl.pzmm.pickle_model import PickleModel as pm
     from h2o.estimators.glm import H2OGeneralizedLinearEstimator
+
+    from sasctl.pzmm.pickle_model import PickleModel as pm
 
     h2o.init()
     data = h2o.import_file("examples/data/hmeq.csv")
