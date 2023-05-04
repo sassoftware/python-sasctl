@@ -24,7 +24,7 @@ class ScoreCode:
         cls,
         model_prefix: str,
         input_data: Union[DataFrame, List[dict]],
-        predict_method: [Callable[..., List], List[Any]],
+        predict_method: Union[Callable[..., List], List[Any]],
         target_variable: Optional[str] = None,
         target_values: Optional[List] = None,
         score_metrics: Optional[List[str]] = None,
@@ -515,23 +515,8 @@ class ScoreCode:
         pickle_type = pickle_type if pickle_type else "pickle"
 
         if mojo_model:
-            cls.score_code += (
-                f"with gzip.open(Path(settings.pickle_path) / "
-                '"{model_file_name}", "r") as fileIn, '
-                "open(Path(settings.pickle_path) / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\","
-                f" \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn,"
-                " fileOut)\nos.chmod(Path(settings.pickle_path) / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\""
-                ", 0o777)\nmodel = h2o.import_mojo("
-                "Path(settings.pickle_path) / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")"
-                "\n\n"
-            )
-            return (
-                f"{'':8}model = h2o.import_mojo(Path(settings.pickle_path) / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")\n\n"
-            )
+            cls.score_code += "model = h2o.import_mojo(Path(settings.pickle_path))\n\n"
+            return f"{'':8}model = h2o.import_mojo(Path(settings.pickle_path))\n\n"
         elif binary_h2o_model:
             cls.score_code += "model = h2o.load(Path(settings.pickle_path))\n\n"
             return f"{'':8}model = h2o.load(Path(settings.pickle_path))\n\n"

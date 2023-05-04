@@ -13,10 +13,7 @@ import os
 
 h2o.init()
 
-with gzip.open(Path(settings.pickle_path) / "{model_file_name}", "r") as fileIn, open(Path(settings.pickle_path) / "glmfit.zip", "wb") as fileOut:
-    shutil.copyfileobj(fileIn, fileOut)
-os.chmod(Path(settings.pickle_path) / "glmfit.zip", 0o777)
-model = h2o.import_mojo(Path(settings.pickle_path) / "glmfit.zip")
+model = h2o.import_mojo(Path(settings.pickle_path))
 
 def score(LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC):
     "Output: EM_CLASSIFICATION, EM_EVENTPROBABILITY"
@@ -24,7 +21,7 @@ def score(LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CL
     try:
         global model
     except NameError:
-        model = h2o.import_mojo(Path(settings.pickle_path) / "glmfit.zip")
+        model = h2o.import_mojo(Path(settings.pickle_path))
 
     try:
         if math.isnan(LOAN):

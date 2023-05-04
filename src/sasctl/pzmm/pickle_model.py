@@ -6,7 +6,12 @@ import gzip
 import pickle
 import shutil
 from pathlib import Path
-from typing import Optional, Union
+from typing import Any, Optional, Union
+
+try:
+    import h2o
+except ImportError:
+    h2o = None
 
 from ..utils.misc import check_if_jupyter
 
@@ -20,8 +25,8 @@ class PickleModel:
     @classmethod
     def pickle_trained_model(
         cls,
-        trained_model,
-        model_prefix,
+        model_prefix: str,
+        trained_model: Optional[Any] = None,
         pickle_path: Union[str, Path, None] = None,
         is_h2o_model: bool = False,
         is_binary_model: bool = False,
@@ -40,12 +45,11 @@ class PickleModel:
 
         Parameters
         ---------------
-        trained_model : model object, str, or Path
-            For non-H2O models, this argument contains the model variable. Otherwise,
-            this should be the file path of the MOJO file.
         model_prefix : str or Path
             Variable name for the model to be displayed in SAS Open Model Manager
             (i.e. hmeqClassTree + [Score.py || .pickle]).
+        trained_model : model object
+            The trained model to be exported.
         pickle_path : str, optional
             File location for the output pickle file. The default value is None.
         is_h2o_model : bool, optional
@@ -60,7 +64,7 @@ class PickleModel:
             file. The default value is False.
         mlflow_details : dict, optional
             Model details from an MLFlow model. This dictionary is created by the
-            readMLModelFile function. The default value is None
+            readMLModelFile function. The default value is None.
 
         Returns
         -------
@@ -106,22 +110,29 @@ class PickleModel:
                         )
                 else:
                     return {model_prefix + PICKLE: pickle.dumps(trained_model)}
-            # For binary H2O models, rename the binary file as a pickle file
-            elif is_binary_model and pickle_path:
-                binary_file = Path(pickle_path) / model_prefix
-                binary_file.rename(binary_file.with_suffix(PICKLE))
-            # For MOJO H2O models, gzip the model file and adjust the file extension
-            elif is_h2o_model and pickle_path:
-                with open(Path(trained_model), "rb") as fileIn, gzip.open(
-                    Path(pickle_path) / (model_prefix + ".mojo"), "wb"
-                ) as fileOut:
-                    fileOut.writelines(fileIn)
-                if cls.notebook_output:
-                    print(
-                        f"MOJO model {model_prefix} was successfully gzipped and saved "
-                        f"to {Path(pickle_path) / (model_prefix + '.mojo')}."
+            # For binary H2O models, save the binary file as a "pickle" file
+            elif is_h2o_model and is_binary_model and pickle_path:
+                if not h2o:
+                    raise RuntimeError(
+                        "The h2o package is required to save the model as a binary h2o"
+                        "model."
                     )
-            else:
+                h2o.save_model(
+                    model=trained_model,
+                    force=True,
+                    path=str(pickle_path),
+                    filename=f"{model_prefix}.pickle",
+                )
+            # For MOJO H2O models, save as a mojo file and adjust the extension to .mojo
+            elif is_h2o_model and pickle_path:
+                if not h2o:
+                    raise RuntimeError(
+                        "The h2o package is required to save the model as a mojo model."
+                    )
+                trained_model.save_mojo(
+                    force=True, path=str(pickle_path), filename=f"{model_prefix}.mojo"
+                )
+            elif is_binary_model or is_h2o_model:
                 raise ValueError(
                     "There is currently no support for file-less H2O.ai model handling."
                     " Please include a value for the pickle_path argument."

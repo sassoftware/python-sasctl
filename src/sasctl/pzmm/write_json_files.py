@@ -23,6 +23,27 @@ from ..core import current_session
 from ..utils.decorators import deprecated
 from ..utils.misc import check_if_jupyter
 
+try:
+    # noinspection PyPackageRequirements
+    import numpy as np
+
+    class NpEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, np.integer):
+                return int(obj)
+            if isinstance(obj, np.floating):
+                return float(obj)
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            return json.JSONEncoder.default(self, obj)
+
+except ImportError:
+    np = None
+
+    class NpEncoder(json.JSONEncoder):
+        pass
+
+
 # TODO: add converter for any type of dataset (list, dataframe, numpy array)
 
 # Constants
@@ -125,7 +146,7 @@ class JSONFiles:
                 file_name = OUTPUT
 
             with open(Path(json_path) / file_name, "w") as json_file:
-                json_file.write(json.dumps(dict_list, indent=4))
+                json_file.write(json.dumps(dict_list, indent=4, cls=NpEncoder))
             if cls.notebook_output:
                 print(
                     f"{file_name} was successfully written and saved to "
@@ -133,9 +154,9 @@ class JSONFiles:
                 )
         else:
             if is_input:
-                return {INPUT: json.dumps(dict_list)}
+                return {INPUT: json.dumps(dict_list, indent=4, cls=NpEncoder)}
             else:
-                return {OUTPUT: json.dumps(dict_list)}
+                return {OUTPUT: json.dumps(dict_list, indent=4, cls=NpEncoder)}
 
     @staticmethod
     def generate_variable_properties(
@@ -329,17 +350,17 @@ class JSONFiles:
                 )
 
         if not target_values:
-            model_function = "Prediction"
+            model_function = model_function if model_function else "Prediction"
             target_level = "INTERVAL"
             target_event = ""
             event_prob_var = ""
         elif isinstance(target_values, list) and len(target_values) == 2:
-            model_function = "Classification"
+            model_function = model_function if model_function else "Classification"
             target_level = "BINARY"
             target_event = str(target_values[0])
             event_prob_var = f"P_{target_values[0]}"
         elif isinstance(target_values, list) and len(target_values) > 2:
-            model_function = "Classification"
+            model_function = model_function if model_function else "Classification"
             target_level = "NOMINAL"
             target_event = ""
             event_prob_var = ""
@@ -577,14 +598,14 @@ class JSONFiles:
 
         if json_path:
             with open(Path(json_path) / FITSTAT, "w") as json_file:
-                json_file.write(json.dumps(json_dict, indent=4))
+                json_file.write(json.dumps(json_dict, indent=4, cls=NpEncoder))
             if cls.notebook_output:
                 print(
                     f"{FITSTAT} was successfully written and saved to "
                     f"{Path(json_path) / FITSTAT}"
                 )
         else:
-            return {FITSTAT: json.dumps(json_dict, indent=4)}
+            return {FITSTAT: json.dumps(json_dict, indent=4, cls=NpEncoder)}
 
     @classmethod
     def add_tuple_to_fitstat(
@@ -861,7 +882,7 @@ class JSONFiles:
         if json_path:
             for name in [FITSTAT, ROC, LIFT]:
                 with open(Path(json_path) / name, "w") as json_file:
-                    json_file.write(json.dumps(json_dict, indent=4))
+                    json_file.write(json.dumps(json_dict, indent=4, cls=NpEncoder))
                 if cls.notebook_output:
                     print(
                         f"{name} was successfully written and saved to "
@@ -869,9 +890,9 @@ class JSONFiles:
                     )
         else:
             return {
-                FITSTAT: json.dumps(json_dict[0], indent=4),
-                ROC: json.dumps(json_dict[1], indent=4),
-                LIFT: json.dumps(json_dict[2], indent=4),
+                FITSTAT: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
+                ROC: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
+                LIFT: json.dumps(json_dict[2], indent=4, cls=NpEncoder),
             }
 
     @staticmethod
@@ -1020,11 +1041,11 @@ class JSONFiles:
             values from the SAS CAS percentile action set added in.
         """
         for row_num in range(len(stat_df)):
-            row_dict = stat_df.iloc[row_num].to_dict()
+            row_dict = stat_df.iloc[row_num].replace(float("nan"), None).to_dict()
             json_dict[row_num + partition * len(stat_df)]["dataMap"].update(row_dict)
         return json_dict
 
-    # noinspection PyCallingNonCallable,PyNestedDecorators
+    # noinspection PyCallingNonCallable, PyNestedDecorators
     @deprecated(
         "Please use the calculate_model_statistics method instead.",
         version="1.9",
