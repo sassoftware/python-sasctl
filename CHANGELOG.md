@@ -4,6 +4,18 @@ Unreleased
  - Refactor `tasks.py` to utilize `sasctl.pzmm` functions.
  - Add `model_info` class to better capture model information.
 
+v1.9.1 (2023-05-04)
+----------
+**Improvements**
+ - Updated handling of H2O models in `sasctl.pzmm`.
+   - Models are now saved with the appropriate `h2o` functions within the `sasctl.pzmm.PickleModel.pickle_trained_model` function.
+   - Example notebooks have been updated to reflect this change.
+
+**Bugfixes**
+ - Added check for `sasctl.pzmm.JSONFiles.calculate_model_statsistics` function to replace float NaN values invalid for JSON files.
+ - Fixed issue where the `sasctl.pzmm.JSONFiles.write_model_properties` function was replacing the user-defined model_function argument.
+ - Added NpEncoder class to check for numpy values in JSON files. Numpy-types cannot be used in SAS Viya.
+
 v1.9.0 (2023-04-04)
 ----------
 **Improvements**
