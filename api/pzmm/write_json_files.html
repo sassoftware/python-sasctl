@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -9,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.9.0 documentation</title>
+    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.9.1 documentation</title>
   
   
   
@@ -105,7 +104,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.0 documentation</p>
+    <p class="title logo__title">sasctl 1.9.1 documentation</p>
   
 </a></div>
     
@@ -1271,6 +1270,47 @@ dump respectively.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="sasctl.pzmm.write_json_files.NpEncoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.pzmm.write_json_files.</span></span><span class="sig-name descname"><span class="pre">NpEncoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipkeys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_ascii</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_circular</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/pzmm/write_json_files.html#NpEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.write_json_files.NpEncoder" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">JSONEncoder</span></code></p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.NpEncoder.default" title="sasctl.pzmm.write_json_files.NpEncoder.default"><code class="xref py py-obj docutils literal notranslate"><span class="pre">default</span></code></a>(obj)</p></td>
+<td><p>Implement this method in a subclass such that it returns a serializable object for <code class="docutils literal notranslate"><span class="pre">o</span></code>, or calls the base implementation (to raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">encode</span></code>(o)</p></td>
+<td><p>Return a JSON string representation of a Python data structure.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterencode</span></code>(o[, _one_shot])</p></td>
+<td><p>Encode the given object and yield each string representation as available.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="sasctl.pzmm.write_json_files.NpEncoder.default">
+<span class="sig-name descname"><span class="pre">default</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/pzmm/write_json_files.html#NpEncoder.default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.write_json_files.NpEncoder.default" title="Permalink to this definition">#</a></dt>
+<dd><p>Implement this method in a subclass such that it returns
+a serializable object for <code class="docutils literal notranslate"><span class="pre">o</span></code>, or calls the base implementation
+(to raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>).</p>
+<p>For example, to support arbitrary iterators, you could
+implement default like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">iterable</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="c1"># Let the base class default method raise the TypeError</span>
+    <span class="k">return</span> <span class="n">JSONEncoder</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -1353,6 +1393,10 @@ dump respectively.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.write_var_json"><code class="docutils literal notranslate"><span class="pre">JSONFiles.write_var_json()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.NpEncoder"><code class="docutils literal notranslate"><span class="pre">NpEncoder</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.NpEncoder.default"><code class="docutils literal notranslate"><span class="pre">NpEncoder.default()</span></code></a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
@@ -1388,7 +1432,7 @@ dump respectively.</p>
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
     <br/>
   </p>
 </div>

@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.9.0 documentation</title>
+    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.9.1 documentation</title>
   
   
   
@@ -102,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.0 documentation</p>
+    <p class="title logo__title">sasctl 1.9.1 documentation</p>
   
 </a></div>
     
@@ -339,6 +338,27 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..utils.decorators</span> <span class="kn">import</span> <span class="n">deprecated</span>
 <span class="kn">from</span> <span class="nn">..utils.misc</span> <span class="kn">import</span> <span class="n">check_if_jupyter</span>
 
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># noinspection PyPackageRequirements</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+    <span class="k">class</span> <span class="nc">NpEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+<div class="viewcode-block" id="NpEncoder.default"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.NpEncoder.default">[docs]</a>        <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span></div>
+
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="NpEncoder"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.NpEncoder">[docs]</a>    <span class="k">class</span> <span class="nc">NpEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
 <span class="c1"># TODO: add converter for any type of dataset (list, dataframe, numpy array)</span>
 
 <span class="c1"># Constants</span>
@@ -441,7 +461,7 @@ document.write(`
                 <span class="n">file_name</span> <span class="o">=</span> <span class="n">OUTPUT</span>
 
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">file_name</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-                <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dict_list</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+                <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dict_list</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">))</span>
             <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> was successfully written and saved to &quot;</span>
@@ -449,9 +469,9 @@ document.write(`
                 <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">is_input</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">{</span><span class="n">INPUT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dict_list</span><span class="p">)}</span>
+                <span class="k">return</span> <span class="p">{</span><span class="n">INPUT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dict_list</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">)}</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">{</span><span class="n">OUTPUT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dict_list</span><span class="p">)}</span></div>
+                <span class="k">return</span> <span class="p">{</span><span class="n">OUTPUT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dict_list</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">)}</span></div>
 
 <div class="viewcode-block" id="JSONFiles.generate_variable_properties"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_variable_properties">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">generate_variable_properties</span><span class="p">(</span>
@@ -645,17 +665,17 @@ document.write(`
                 <span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">target_values</span><span class="p">:</span>
-            <span class="n">model_function</span> <span class="o">=</span> <span class="s2">&quot;Prediction&quot;</span>
+            <span class="n">model_function</span> <span class="o">=</span> <span class="n">model_function</span> <span class="k">if</span> <span class="n">model_function</span> <span class="k">else</span> <span class="s2">&quot;Prediction&quot;</span>
             <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;INTERVAL&quot;</span>
             <span class="n">target_event</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
             <span class="n">event_prob_var</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_values</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">model_function</span> <span class="o">=</span> <span class="s2">&quot;Classification&quot;</span>
+            <span class="n">model_function</span> <span class="o">=</span> <span class="n">model_function</span> <span class="k">if</span> <span class="n">model_function</span> <span class="k">else</span> <span class="s2">&quot;Classification&quot;</span>
             <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;BINARY&quot;</span>
             <span class="n">target_event</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">target_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">event_prob_var</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;P_</span><span class="si">{</span><span class="n">target_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_values</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">model_function</span> <span class="o">=</span> <span class="s2">&quot;Classification&quot;</span>
+            <span class="n">model_function</span> <span class="o">=</span> <span class="n">model_function</span> <span class="k">if</span> <span class="n">model_function</span> <span class="k">else</span> <span class="s2">&quot;Classification&quot;</span>
             <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;NOMINAL&quot;</span>
             <span class="n">target_event</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
             <span class="n">event_prob_var</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -893,14 +913,14 @@ document.write(`
 
         <span class="k">if</span> <span class="n">json_path</span><span class="p">:</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">FITSTAT</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-                <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+                <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">))</span>
             <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">FITSTAT</span><span class="si">}</span><span class="s2"> was successfully written and saved to &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">FITSTAT</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">{</span><span class="n">FITSTAT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)}</span></div>
+            <span class="k">return</span> <span class="p">{</span><span class="n">FITSTAT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">)}</span></div>
 
 <div class="viewcode-block" id="JSONFiles.add_tuple_to_fitstat"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.add_tuple_to_fitstat">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">add_tuple_to_fitstat</span><span class="p">(</span>
@@ -1177,7 +1197,7 @@ document.write(`
         <span class="k">if</span> <span class="n">json_path</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="n">FITSTAT</span><span class="p">,</span> <span class="n">ROC</span><span class="p">,</span> <span class="n">LIFT</span><span class="p">]:</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-                    <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+                    <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">))</span>
                 <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> was successfully written and saved to &quot;</span>
@@ -1185,9 +1205,9 @@ document.write(`
                     <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{</span>
-                <span class="n">FITSTAT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
-                <span class="n">ROC</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
-                <span class="n">LIFT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+                <span class="n">FITSTAT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
+                <span class="n">ROC</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
+                <span class="n">LIFT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
             <span class="p">}</span></div>
 
 <div class="viewcode-block" id="JSONFiles.check_for_data"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.check_for_data">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -1336,11 +1356,11 @@ document.write(`
 <span class="sd">            values from the SAS CAS percentile action set added in.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">row_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stat_df</span><span class="p">)):</span>
-            <span class="n">row_dict</span> <span class="o">=</span> <span class="n">stat_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row_num</span><span class="p">]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+            <span class="n">row_dict</span> <span class="o">=</span> <span class="n">stat_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row_num</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
             <span class="n">json_dict</span><span class="p">[</span><span class="n">row_num</span> <span class="o">+</span> <span class="n">partition</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">stat_df</span><span class="p">)][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">row_dict</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">json_dict</span></div>
 
-    <span class="c1"># noinspection PyCallingNonCallable,PyNestedDecorators</span>
+    <span class="c1"># noinspection PyCallingNonCallable, PyNestedDecorators</span>
     <span class="nd">@deprecated</span><span class="p">(</span>
         <span class="s2">&quot;Please use the calculate_model_statistics method instead.&quot;</span><span class="p">,</span>
         <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.9&quot;</span><span class="p">,</span>
@@ -2565,7 +2585,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
     <br/>
   </p>
 </div>

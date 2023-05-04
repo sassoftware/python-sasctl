@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.pickle_model &#8212; sasctl 1.9.0 documentation</title>
+    <title>sasctl.pzmm.pickle_model &#8212; sasctl 1.9.1 documentation</title>
   
   
   
@@ -102,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.0 documentation</p>
+    <p class="title logo__title">sasctl 1.9.1 documentation</p>
   
 </a></div>
     
@@ -322,7 +321,12 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">h2o</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">h2o</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="kn">from</span> <span class="nn">..utils.misc</span> <span class="kn">import</span> <span class="n">check_if_jupyter</span>
 
@@ -336,8 +340,8 @@ document.write(`
 <div class="viewcode-block" id="PickleModel.pickle_trained_model"><a class="viewcode-back" href="../../../api/pzmm/pickle_model.html#sasctl.pzmm.pickle_model.PickleModel.pickle_trained_model">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">pickle_trained_model</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
-        <span class="n">trained_model</span><span class="p">,</span>
-        <span class="n">model_prefix</span><span class="p">,</span>
+        <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">trained_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">pickle_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">is_h2o_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">is_binary_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -356,12 +360,11 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ---------------</span>
-<span class="sd">        trained_model : model object, str, or Path</span>
-<span class="sd">            For non-H2O models, this argument contains the model variable. Otherwise,</span>
-<span class="sd">            this should be the file path of the MOJO file.</span>
 <span class="sd">        model_prefix : str or Path</span>
 <span class="sd">            Variable name for the model to be displayed in SAS Open Model Manager</span>
 <span class="sd">            (i.e. hmeqClassTree + [Score.py || .pickle]).</span>
+<span class="sd">        trained_model : model object</span>
+<span class="sd">            The trained model to be exported.</span>
 <span class="sd">        pickle_path : str, optional</span>
 <span class="sd">            File location for the output pickle file. The default value is None.</span>
 <span class="sd">        is_h2o_model : bool, optional</span>
@@ -376,7 +379,7 @@ document.write(`
 <span class="sd">            file. The default value is False.</span>
 <span class="sd">        mlflow_details : dict, optional</span>
 <span class="sd">            Model details from an MLFlow model. This dictionary is created by the</span>
-<span class="sd">            readMLModelFile function. The default value is None</span>
+<span class="sd">            readMLModelFile function. The default value is None.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -422,22 +425,29 @@ document.write(`
                         <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">return</span> <span class="p">{</span><span class="n">model_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">:</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">trained_model</span><span class="p">)}</span>
-            <span class="c1"># For binary H2O models, rename the binary file as a pickle file</span>
-            <span class="k">elif</span> <span class="n">is_binary_model</span> <span class="ow">and</span> <span class="n">pickle_path</span><span class="p">:</span>
-                <span class="n">binary_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">model_prefix</span>
-                <span class="n">binary_file</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">binary_file</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="n">PICKLE</span><span class="p">))</span>
-            <span class="c1"># For MOJO H2O models, gzip the model file and adjust the file extension</span>
-            <span class="k">elif</span> <span class="n">is_h2o_model</span> <span class="ow">and</span> <span class="n">pickle_path</span><span class="p">:</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">trained_model</span><span class="p">),</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fileIn</span><span class="p">,</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
-                    <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">model_prefix</span> <span class="o">+</span> <span class="s2">&quot;.mojo&quot;</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span>
-                <span class="p">)</span> <span class="k">as</span> <span class="n">fileOut</span><span class="p">:</span>
-                    <span class="n">fileOut</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">fileIn</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;MOJO model </span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2"> was successfully gzipped and saved &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;to </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">model_prefix</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;.mojo&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="c1"># For binary H2O models, save the binary file as a &quot;pickle&quot; file</span>
+            <span class="k">elif</span> <span class="n">is_h2o_model</span> <span class="ow">and</span> <span class="n">is_binary_model</span> <span class="ow">and</span> <span class="n">pickle_path</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">h2o</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                        <span class="s2">&quot;The h2o package is required to save the model as a binary h2o&quot;</span>
+                        <span class="s2">&quot;model.&quot;</span>
                     <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
+                <span class="n">h2o</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span>
+                    <span class="n">model</span><span class="o">=</span><span class="n">trained_model</span><span class="p">,</span>
+                    <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">),</span>
+                    <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="c1"># For MOJO H2O models, save as a mojo file and adjust the extension to .mojo</span>
+            <span class="k">elif</span> <span class="n">is_h2o_model</span> <span class="ow">and</span> <span class="n">pickle_path</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">h2o</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                        <span class="s2">&quot;The h2o package is required to save the model as a mojo model.&quot;</span>
+                    <span class="p">)</span>
+                <span class="n">trained_model</span><span class="o">.</span><span class="n">save_mojo</span><span class="p">(</span>
+                    <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">),</span> <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">.mojo&quot;</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">is_binary_model</span> <span class="ow">or</span> <span class="n">is_h2o_model</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;There is currently no support for file-less H2O.ai model handling.&quot;</span>
                     <span class="s2">&quot; Please include a value for the pickle_path argument.&quot;</span>
@@ -494,7 +504,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
     <br/>
   </p>
 </div>
