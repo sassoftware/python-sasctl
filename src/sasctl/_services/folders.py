@@ -6,6 +6,7 @@
 
 from sasctl.utils.cli import sasctl_command
 
+from ..core import HTTPError
 from .service import Service
 
 
@@ -49,7 +50,8 @@ class Folders(Service):
 
             parent_uri = cls.get_link(parent_obj, "self")
             if parent_uri is None:
-                raise ValueError("`parent` folder '%s' does not exist." % parent)
+                raise ValueError(
+                    "`parent` folder '%s' does not exist." % parent)
             parent_uri = parent_uri["uri"]
         else:
             parent_uri = None
@@ -135,3 +137,40 @@ class Folders(Service):
             return cls.get(f"/folders/{folder}")
 
         return cls._get_folder(folder, refresh=refresh)
+
+    @classmethod
+    def create_folder_recursive(cls, folder, description=None):
+        """Create a new folder recursively.
+
+        Parameters
+        ----------
+        folder : str
+            The folder to be created including the path.
+
+        Returns
+        -------
+        RestObj
+            Details of newly-created folder
+
+        """
+        if isinstance(folder, str) and folder.count("/") >= 1:
+            # Path must include a leading "/"
+            if not folder.startswith("/"):
+                folder = f"/{folder}"
+        else:
+            raise ValueError(
+                "Invalid folder parameter. The complete path should be provided!")
+
+        path = folder.split("/")
+        level = 1
+        while level < len(path):
+            level += 1
+            current_path = path[0:level]
+            name = current_path[-1]
+            parent = "/".join(current_path[0:-1])
+            if not cls.get_folder("/".join(current_path)):
+                try:
+                    return cls.create_folder(name, parent=parent, description=description)
+                except HTTPError:
+                    print("Folder '%s' could not be created." %
+                          "/".join([parent, name]))
