@@ -51,7 +51,7 @@ class Folders(Service):
             parent_uri = cls.get_link(parent_obj, "self")
             if parent_uri is None:
                 raise ValueError(
-                    "`parent` folder '%s' does not exist." % parent)
+                    f"`parent` folder {parent} does not exist.")
             parent_uri = parent_uri["uri"]
         else:
             parent_uri = None
@@ -174,4 +174,3 @@ class Folders(Service):
                 except HTTPError:
                     folder_name = "/".join([parent, name])
                     print(f"Folder {folder_name} could not be created.")
-

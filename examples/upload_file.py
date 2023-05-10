@@ -57,3 +57,4 @@ with Session(server_name, user, password):
             file["source_file"],
             file["target_folder"],
             os.path.basename(file["source_file"])
+        )
