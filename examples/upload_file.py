@@ -37,7 +37,7 @@ def build_storage_lists(source_path, target_path):
     for root, _, src_files in os.walk(source_path):
         for src_file in src_files:
             if src_file.endswith(".pdf"):
-                if root not in dir_list:
+                if root not in d_list:
                     dir_info = root.replace(source_path, target_path)
                     d_list.append(dir_info)
                 file_info = {}
