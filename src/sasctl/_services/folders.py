@@ -172,5 +172,6 @@ class Folders(Service):
                 try:
                     return cls.create_folder(name, parent=parent, description=description)
                 except HTTPError:
-                    print("Folder '%s' could not be created." %
-                          "/".join([parent, name]))
+                    folder_name = "/".join([parent, name])
+                    print(f"Folder {folder_name} could not be created.")
+
