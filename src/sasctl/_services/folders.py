@@ -146,6 +146,8 @@ class Folders(Service):
         ----------
         folder : str
             The folder to be created including the path.
+        description: str, optional
+             A description of the folder
 
         Returns
         -------
