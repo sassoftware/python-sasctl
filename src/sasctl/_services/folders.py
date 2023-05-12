@@ -139,7 +139,7 @@ class Folders(Service):
         return cls._get_folder(folder, refresh=refresh)
 
     @classmethod
-    def create_folder_recursive(cls, folder, description=None):
+    def create_path(cls, folder, description=None):
         """Create a new folder recursively.
 
         Parameters
@@ -172,7 +172,11 @@ class Folders(Service):
             parent = "/".join(current_path[0:-1])
             if not cls.get_folder("/".join(current_path)):
                 try:
-                    return cls.create_folder(name, parent=parent, description=description)
+                    new_folder = cls.create_folder(name, parent=parent, description=description)
                 except HTTPError:
                     folder_name = "/".join([parent, name])
                     print(f"Folder {folder_name} could not be created.")
+        try:
+            return new_folder
+        except NameError:
+            return None

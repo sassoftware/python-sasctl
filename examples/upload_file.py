@@ -51,7 +51,7 @@ def build_storage_lists(source_path, target_path):
 with Session(server_name, user, password):
     dir_list, file_list = build_storage_lists(os_path, sas_path)
     for folder in dir_list:
-        folders.create_folder_recursive(folder)
+        folders.create_path(folder)
     for file in file_list:
         files.create_file(
             file["source_file"],
