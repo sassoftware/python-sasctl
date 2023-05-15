@@ -6,7 +6,6 @@
 
 from sasctl.utils.cli import sasctl_command
 
-from ..core import HTTPError
 from .service import Service
 
 
