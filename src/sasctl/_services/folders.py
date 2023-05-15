@@ -154,21 +154,21 @@ class Folders(Service):
             Details of newly-created folder
 
         """
-        if isinstance(folder, str) and folder.count("/") >= 1:
-            # Path must include a leading "/"
-            if not folder.startswith("/"):
-                folder = f"/{folder}"
+        folder = str(folder)
+        # Path must include a leading "/"
+        if not folder.startswith("/"):
+            folder = f"/{folder}"
         else:
             raise ValueError(
                 "Invalid folder parameter. The complete path should be provided!")
 
         path = folder.split("/")
         level = 1
-        while level < len(path):
+        for level in range(2, len(path)+1):
             level += 1
             current_path = path[0:level]
             name = current_path[-1]
-            parent = "/".join(current_path[0:-1])
+            parent = "/".join(current_path[0:-1]) or None
             new_folder = cls.get_folder("/".join(current_path))
             if not new_folder:
                 new_folder = cls.create_folder(name, parent=parent, description=description)
