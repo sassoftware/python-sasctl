@@ -31,28 +31,29 @@ def build_storage_lists(source_path, target_path):
     d_list
         A list of directory information which can be user to map local and SAS folder structure.
     """
-    f_list = []
-    d_list = []
+    files_list = []
+    folders_list = []
 
     for root, _, src_files in os.walk(source_path):
         for src_file in src_files:
             if src_file.endswith(".pdf"):
-                if root not in d_list:
-                    dir_info = root.replace(source_path, target_path)
-                    d_list.append(dir_info)
+                if root not in folders_list:
+                    folder_info = root.replace(source_path, target_path)
+                    if folder_info not in folders_list:
+                        folders_list.append(folder_info)
                 file_info = {}
                 file_info["source_file"] = os.path.join(root, src_file)
                 file_info["target_folder"] = root.replace(
                     source_path, target_path)
-                f_list.append(file_info)
-    return d_list, f_list
+                files_list.append(file_info)
+    return folders_list, files_list
 
 
 with Session(server_name, user, password):
-    dir_list, file_list = build_storage_lists(os_path, sas_path)
-    for folder in dir_list:
+    folders_list, files_list = build_storage_lists(os_path, sas_path)
+    for folder in folders_list:
         folders.create_path(folder)
-    for file in file_list:
+    for file in files_list:
         files.create_file(
             file["source_file"],
             file["target_folder"],

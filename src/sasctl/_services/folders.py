@@ -170,13 +170,7 @@ class Folders(Service):
             current_path = path[0:level]
             name = current_path[-1]
             parent = "/".join(current_path[0:-1])
-            if not cls.get_folder("/".join(current_path)):
-                try:
-                    new_folder = cls.create_folder(name, parent=parent, description=description)
-                except HTTPError:
-                    folder_name = "/".join([parent, name])
-                    print(f"Folder {folder_name} could not be created.")
-        try:
-            return new_folder
-        except NameError:
-            return None
+            new_folder = cls.get_folder("/".join(current_path))
+            if not new_folder:
+                new_folder = cls.create_folder(name, parent=parent, description=description)
+        return new_folder
