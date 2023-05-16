@@ -49,8 +49,7 @@ class Folders(Service):
 
             parent_uri = cls.get_link(parent_obj, "self")
             if parent_uri is None:
-                raise ValueError(
-                    f"`parent` folder {parent} does not exist.")
+                raise ValueError(f"`parent` folder {parent} does not exist.")
             parent_uri = parent_uri["uri"]
         else:
             parent_uri = None
@@ -159,12 +158,14 @@ class Folders(Service):
         if not folder.startswith("/"):
             folder = f"/{folder}"
         path = folder.split("/")
-        for level in range(2, len(path)+1):
+        for level in range(2, len(path) + 1):
 
             current_path = path[0:level]
             name = current_path[-1]
             parent = "/".join(current_path[0:-1]) or None
             new_folder = cls.get_folder("/".join(current_path))
             if not new_folder:
-                new_folder = cls.create_folder(name, parent=parent, description=description)
+                new_folder = cls.create_folder(
+                    name, parent=parent, description=description
+                )
         return new_folder
