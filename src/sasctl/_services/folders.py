@@ -154,12 +154,13 @@ class Folders(Service):
 
         """
         folder = str(folder)
+
         # Path must include a leading "/"
         if not folder.startswith("/"):
             folder = f"/{folder}"
         path = folder.split("/")
-        for level in range(2, len(path) + 1):
 
+        for level in range(2, len(path) + 1):
             current_path = path[0:level]
             name = current_path[-1]
             parent = "/".join(current_path[0:-1]) or None
