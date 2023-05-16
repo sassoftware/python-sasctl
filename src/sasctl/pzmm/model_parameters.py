@@ -372,7 +372,7 @@ class ModelParameters:
 
         return kpi_table_df
 
-    def sync_model_properties(project: Union[str, dict, RestObj]):
+    def sync_model_properties(project: Union[str, dict, RestObj], overrwrite: Optional[bool] = False):
          # Step through options to determine project UUID
         if is_uuid(project):
             project_id = project
@@ -390,6 +390,6 @@ class ModelParameters:
                 #Check if property is set in project
                 if project_property in project:
                     #If property is set in project, check if it's set in model, and update model accordingly
-                    if model_property not in model:
+                    if model_property not in model or overrwrite:
                         model[model_property] = project[project_property]
             mr.update_model(model)
