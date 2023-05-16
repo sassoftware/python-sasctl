@@ -7,16 +7,20 @@ from uuid import UUID
 from warnings import warn
 
 from pandas import DataFrame
+import json
 
 from .._services.model_repository import ModelRepository as mr
 from ..core import PagedList, RestObj, current_session
 from ..utils.misc import check_if_jupyter
 from .write_score_code import ScoreCode as sc
 from .zip_model import ZipModel as zm
-
+from ..tasks import _create_project
 
 def project_exists(
-    project: Union[str, dict, RestObj], response: Union[str, dict, RestObj, None] = None
+    project: Union[str, dict, RestObj], 
+    response: Union[str, dict, RestObj, None] = None, 
+    target_values: Union[list, str, None] = None,
+    path: Union[str, Path, None] = None
 ) -> RestObj:
     """
     Checks if project exists on SAS Viya. If the project does not exist, then a new
@@ -29,7 +33,8 @@ def project_exists(
         project.
     response : str, dict, or RestObj, optional
         JSON response of the get_project() call to model repository service.
-
+    path : Path (Optional)
+        The path to a model that would exist in the project. Used to get project properties.
     Returns
     -------
     response : RestObj
@@ -50,9 +55,24 @@ def project_exists(
                 "created."
             )
         except ValueError:
-            repo = mr.default_repository().get("id")
-            # TODO: implement _create_project() call from tasks.py
-            response = mr.create_project(project, repo)
+            if path is not None:
+                repo = mr.default_repository().get("id")
+                with open(Path(path) / "ModelProperties.json") as f:
+                    model = json.load(f)
+                    if target_values is not None:
+                        target_string = ', '.join(target_values)
+                        model['classTargetValues'] = target_string
+                with open(Path(path) / "inputVar.json") as f:
+                    input_var = json.load(f)
+                    for var in input_var:
+                        var['role'] = 'input'
+                with open(Path(path) / "outputVar.json") as f:
+                    output_var = json.load(f)
+                    for var in output_var:
+                        var['role'] = 'output'
+                response = _create_project(project, model, repo, input_var, output_var)
+            else:
+                response = mr.create_project(project, repo)
             print(f"A new project named {response.name} was created.")
             return response
     else:
@@ -146,6 +166,7 @@ class ImportModel:
         mlflow_details: Optional[dict] = None,
         predict_threshold: Optional[float] = None,
         target_values: Optional[List[str]] = None,
+        target_variable: Optional[str] = None,
         **kwargs,
     ) -> Tuple[RestObj, Union[dict, str, Path]]:
         """
@@ -224,6 +245,9 @@ class ImportModel:
             A list of target values for the target variable. This argument and the
             score_metrics argument dictate the handling of the predicted values from
             the prediction method. The default value is None.
+        target_variable : string, optional
+            The variable we are trying to predict. This argument is used to set the
+            project properties automatically. The default value is None.
         kwargs : dict, optional
             Other keyword arguments are passed to the following function:
                 * sasctl.pzmm.ScoreCode.write_score_code(...,
@@ -231,7 +255,8 @@ class ImportModel:
                     binary_string=None,
                     model_file_name=None,
                     mojo_model=False,
-                    statsmodels_model=False
+                    statsmodels_model=False,
+                    tf_keras_model=False
                 )
 
         Returns
@@ -265,7 +290,7 @@ class ImportModel:
             # Check if project name provided exists and raise an error or create a
             # new project
             project_response = mr.get_project(project)
-            project = project_exists(project, project_response)
+            project = project_exists(project, project_response, target_values, model_files)
 
             # Check if model with same name already exists in project.
             model_exists(
@@ -311,7 +336,7 @@ class ImportModel:
             # Check if project name provided exists and raise an error or create a
             # new project
             project_response = mr.get_project(project)
-            project = project_exists(project, project_response)
+            project = project_exists(project, project_response, target_values, model_files)
 
             # Check if model with same name already exists in project.
             model_exists(
@@ -346,7 +371,7 @@ class ImportModel:
             # Check if project name provided exists and raise an error or create a
             # new project
             project_response = mr.get_project(project)
-            project = project_exists(project, project_response)
+            project = project_exists(project, project_response, target_values, model_files)
 
             # Check if model with same name already exists in project.
             model_exists(

@@ -102,7 +102,11 @@ def _sklearn_to_dict(model):
     return result
 
 
-def _create_project(project_name, model, repo, input_vars=None, output_vars=None):
+def _create_project(project_name, 
+                    model, 
+                    repo, 
+                    input_vars=None, 
+                    output_vars=None):
     """Creates a project based on the model specifications.
 
     Parameters
@@ -123,7 +127,9 @@ def _create_project(project_name, model, repo, input_vars=None, output_vars=None
     RestObj
         The created project
     """
-    properties = {k: model[k] for k in model if k in ("function", "targetLevel")}
+    properties = {k: model[k] for k in model if k in ("function", "targetLevel", "targetVariable", "targetEvent", 'classTargetValues')}
+
+    print(properties)
 
     function = model.get("function", "").lower()
     algorithm = model.get("algorithm", "").lower()
@@ -150,6 +156,10 @@ def _create_project(project_name, model, repo, input_vars=None, output_vars=None
             properties["targetLevel"] = "Interval"
         else:
             properties["targetLevel"] = None
+    
+    if properties.get('targetEvent') is not None:
+        properties['targetEventValue'] = properties['targetEvent']
+        del properties['targetEvent']
 
     project = mr.create_project(
         project_name, repo, variables=input_vars + output_vars, **properties
