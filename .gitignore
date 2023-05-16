@@ -67,3 +67,6 @@ doc/build
 doc/source/generated
 doc/_build
 doc/.doctrees
+
+## VS CODE settings
+.vscode/settings.json
