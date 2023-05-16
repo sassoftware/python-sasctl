@@ -448,29 +448,21 @@ class ScoreCode:
 
         if mojo_model:
             cls.score_code += (
-                f'model_path = Path("/models/resources/viya/{model_id}'
-                f'")\nwith gzip.open(model_path / "{model_file_name}'
-                f'", "r") as fileIn, open(model_path / '
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\","
-                f" \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn,"
-                " fileOut)\nos.chmod(model_path / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\""
-                ", 0o777)\nmodel = h2o.import_mojo(model_path / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")"
-                "\n\n"
+                f"model = h2o.import_mojo(str(Path("
+                f'"/models/resources/viya/{model_id}/{model_file_name}")))\n\n'
             )
             return (
-                f"{'':8}model = h2o.import_mojo(model_path / \""
-                f"{str(Path(model_file_name).with_suffix('.zip'))}\")"
+                f"{'':8}model = h2o.import_mojo(str(Path("
+                f'"/models/resources/viya/{model_id}/{model_file_name}")))'
             )
         elif binary_h2o_model:
             cls.score_code += (
-                'model = h2o.load(Path("/models/resources/viya/'
-                f'{model_id}/{model_file_name}"))\n\n'
+                f'model = h2o.load(str(Path("/models/resources/viya/'
+                f'{model_id}/{model_file_name}")))\n\n'
             )
             return (
-                f'        model = h2o.load(Path("/models/resources/viya/'
-                f'{model_id}/{model_file_name}"))'
+                f"{'':8}model = h2o.load(str(Path(\"/models/resources/viya/"
+                f'{model_id}/{model_file_name}")))'
             )
         else:
             cls.score_code += (
