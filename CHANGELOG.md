@@ -4,6 +4,18 @@ Unreleased
  - Refactor `tasks.py` to utilize `sasctl.pzmm` functions.
  - Add `model_info` class to better capture model information.
 
+v1.9.2 (2023-05-17)
+----------
+**Improvements**
+ - Add recursive folder creation and an example.
+ - Add example for migrating models from SAS Viya 3.5 to SAS Viya 4.
+
+**Bugfixes**
+ - Fixed improper json encoding for `pzmm_h2o_model_import.ipynb` example.
+ - Set urllib3 < 2.0.0 to allow requests to update their dependencies.
+ - Set pandas >= 0.24.0 to include df.to_list alias for df.tolist.
+ - Fix minor errors in h2o score code generation
+
 v1.9.1 (2023-05-04)
 ----------
 **Improvements**
