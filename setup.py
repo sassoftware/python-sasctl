@@ -42,7 +42,7 @@ setup(
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     python_requires=">=3.6",
-    install_requires=["pandas", "requests", "pyyaml", "packaging"],
+    install_requires=["pandas>=0.24.0", "requests", "pyyaml", "packaging"],
     extras_require={
         "swat": ["swat"],
         "GitPython": ["GitPython"],
