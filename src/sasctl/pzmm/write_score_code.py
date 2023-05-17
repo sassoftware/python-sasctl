@@ -917,7 +917,7 @@ class ScoreCode:
                 cls.score_code += f"{'':4}{metrics[0]} = prediction[1][0]\n"
                 for i in range(len(metrics) - 1):
                     cls.score_code += (
-                        f"{'':4}{metrics[i + 1]} = prediction[1][{i + 1}]\n"
+                        f"{'':4}{metrics[i + 1]} = float(prediction[1][{i + 1}])\n"
                     )
             else:
                 for i in range(len(metrics)):
@@ -1018,7 +1018,8 @@ class ScoreCode:
                     "score code should output the classification and probability for "
                     "the target event to occur."
                 )
-                cls.score_code += f"{'':4}return prediction[1][0], prediction[1][2]"
+                cls.score_code += f"{'':4}return prediction[1][0], " \
+                                  f"float(prediction[1][2])"
             # Calculate the classification; return the classification and probability
             elif sum(returns) == 0 and len(returns) == 1:
                 warn(
@@ -1069,7 +1070,8 @@ class ScoreCode:
         elif len(metrics) == 3:
             if h2o_model:
                 cls.score_code += (
-                    f"{'':4}return prediction[1][0], prediction[1][1], prediction[1][2]"
+                    f"{'':4}return prediction[1][0], float(prediction[1][1]), "
+                    f"float(prediction[1][2])"
                 )
             elif sum(returns) == 0 and len(returns) == 1:
                 warn(
