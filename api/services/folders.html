@@ -6,9 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.services.folders &#8212; sasctl 1.9.1 documentation</title>
+    <title>sasctl.services.folders &#8212; sasctl 1.9.2 documentation</title>
   
   
   
@@ -104,7 +104,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.1 documentation</p>
+    <p class="title logo__title">sasctl 1.9.2 documentation</p>
   
 </a></div>
     
@@ -378,46 +378,49 @@ use a URI to point back to those resources.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.folders.Folders.create_folder" title="sasctl._services.folders.Folders.create_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_folder</span></code></a>(name[, parent, description])</p></td>
 <td><p>Create a new folder.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code>(*args, **kwargs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.folders.Folders.create_path" title="sasctl._services.folders.Folders.create_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_path</span></code></a>(folder[, description])</p></td>
+<td><p>Create a new folder recursively.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code>(*args, **kwargs)</p></td>
 <td><p>Send a DELETE request.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.folders.Folders.delete_folder" title="sasctl._services.folders.Folders.delete_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_folder</span></code></a>(item)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.folders.Folders.delete_folder" title="sasctl._services.folders.Folders.delete_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_folder</span></code></a>(item)</p></td>
 <td><p>Delete a folder instance.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code>(*args, **kwargs)</p></td>
 <td><p>Send a GET request.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.folders.Folders.get_folder" title="sasctl._services.folders.Folders.get_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_folder</span></code></a>(folder[, refresh])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.folders.Folders.get_folder" title="sasctl._services.folders.Folders.get_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_folder</span></code></a>(folder[, refresh])</p></td>
 <td><p>Return a folder instance.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link</span></code>(obj, rel)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link</span></code>(obj, rel)</p></td>
 <td><p>Get link information from a resource.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">head</span></code>(*args, **kwargs)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">head</span></code>(*args, **kwargs)</p></td>
 <td><p>Send a HEAD request.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code>()</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code>()</p></td>
 <td><p>Version and build information for the service.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_available</span></code>()</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_available</span></code>()</p></td>
 <td><p>Check if the service is currently available.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.folders.Folders.list_folders" title="sasctl._services.folders.Folders.list_folders"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_folders</span></code></a>([filter, start, limit])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.folders.Folders.list_folders" title="sasctl._services.folders.Folders.list_folders"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_folders</span></code></a>([filter, start, limit])</p></td>
 <td><p>List all folders available in the environment.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code>(*args, **kwargs)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code>(*args, **kwargs)</p></td>
 <td><p>Send a POST request.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">put</span></code>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">put</span></code>(*args, **kwargs)</p></td>
 <td><p>Send a PUT request.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request</span></code>(verb, path[, session, format_])</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request</span></code>(verb, path[, session, format_])</p></td>
 <td><p>Send an HTTP request with a session.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_link</span></code>(obj, rel, **kwargs)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_link</span></code>(obj, rel, **kwargs)</p></td>
 <td><p>Request a link from a resource.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.folders.Folders.update_folder" title="sasctl._services.folders.Folders.update_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_folder</span></code></a>(item)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.folders.Folders.update_folder" title="sasctl._services.folders.Folders.update_folder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_folder</span></code></a>(item)</p></td>
 <td><p>Update a folder instance.</p></td>
 </tr>
 </tbody>
@@ -442,6 +445,28 @@ use a URI to point back to those resources.</p>
 If not specified, new folder will be created under root folder.</p>
 </dd>
 <dt><strong>description</strong><span class="classifier">str, optional</span></dt><dd><p>A description of the folder</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>RestObj</dt><dd><p>Details of newly-created folder</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sasctl._services.folders.Folders.create_path">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/folders.html#Folders.create_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.folders.Folders.create_path" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a new folder recursively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>folder</strong><span class="classifier">str</span></dt><dd><p>The folder to be created including the path.</p>
+</dd>
+<dt><strong>description: str, optional</strong></dt><dd><p>A description of the folder</p>
 </dd>
 </dl>
 </dd>
@@ -636,6 +661,7 @@ are: &#64;myFolder, &#64;appDataFolder, &#64;myHistory, &#64;myFavorites, and &#
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl._services.folders.Folders"><code class="docutils literal notranslate"><span class="pre">Folders</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl._services.folders.Folders.create_folder"><code class="docutils literal notranslate"><span class="pre">Folders.create_folder()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl._services.folders.Folders.create_path"><code class="docutils literal notranslate"><span class="pre">Folders.create_path()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl._services.folders.Folders.delete_folder"><code class="docutils literal notranslate"><span class="pre">Folders.delete_folder()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl._services.folders.Folders.get_folder"><code class="docutils literal notranslate"><span class="pre">Folders.get_folder()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl._services.folders.Folders.list_folders"><code class="docutils literal notranslate"><span class="pre">Folders.list_folders()</span></code></a></li>
@@ -677,7 +703,7 @@ are: &#64;myFolder, &#64;appDataFolder, &#64;myHistory, &#64;myFavorites, and &#
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     <br/>
   </p>
 </div>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.folders &#8212; sasctl 1.9.1 documentation</title>
+    <title>sasctl._services.folders &#8212; sasctl 1.9.2 documentation</title>
   
   
   
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.1 documentation</p>
+    <p class="title logo__title">sasctl 1.9.2 documentation</p>
   
 </a></div>
     
@@ -364,7 +364,7 @@ document.write(`
 
             <span class="n">parent_uri</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">parent_obj</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">parent_uri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;`parent` folder &#39;</span><span class="si">%s</span><span class="s2">&#39; does not exist.&quot;</span> <span class="o">%</span> <span class="n">parent</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;`parent` folder </span><span class="si">{</span><span class="n">parent</span><span class="si">}</span><span class="s2"> does not exist.&quot;</span><span class="p">)</span>
             <span class="n">parent_uri</span> <span class="o">=</span> <span class="n">parent_uri</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">parent_uri</span> <span class="o">=</span> <span class="kc">None</span>
@@ -449,7 +449,42 @@ document.write(`
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">folder</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/folders/</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_folder</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="n">refresh</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_folder</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="n">refresh</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Folders.create_path"><a class="viewcode-back" href="../../../api/services/folders.html#sasctl._services.folders.Folders.create_path">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new folder recursively.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        folder : str</span>
+<span class="sd">            The folder to be created including the path.</span>
+<span class="sd">        description: str, optional</span>
+<span class="sd">             A description of the folder</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+<span class="sd">            Details of newly-created folder</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">folder</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+
+        <span class="c1"># Path must include a leading &quot;/&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+            <span class="n">folder</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">folder</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">current_path</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">level</span><span class="p">]</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">current_path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_path</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="ow">or</span> <span class="kc">None</span>
+            <span class="n">new_folder</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_folder</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_path</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">new_folder</span><span class="p">:</span>
+                <span class="n">new_folder</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">create_folder</span><span class="p">(</span>
+                    <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_folder</span></div></div>
 </pre></div>
 
                 </article>
@@ -502,7 +537,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     <br/>
   </p>
 </div>
