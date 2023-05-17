@@ -206,7 +206,7 @@ class ScoreCode:
         if model_load:
             cls.score_code += (
                 f"{'':4}try:\n{'':8}global model\n{'':4}"
-                f"except NameError:\n{model_load}"
+                f"except NameError:\n{model_load}\n"
             )
 
         if missing_values:
@@ -541,6 +541,7 @@ class ScoreCode:
         dtype_list : list of str
             List of variable data types
         """
+        cls.score_code += "\n"
         for var, dtype in zip(var_list, dtype_list):
             # Split up between numeric and character variables
             if any(t in dtype for t in ["int", "float"]):
