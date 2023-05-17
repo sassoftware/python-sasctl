@@ -1018,8 +1018,9 @@ class ScoreCode:
                     "score code should output the classification and probability for "
                     "the target event to occur."
                 )
-                cls.score_code += f"{'':4}return prediction[1][0], " \
-                                  f"float(prediction[1][2])"
+                cls.score_code += (
+                    f"{'':4}return prediction[1][0], " f"float(prediction[1][2])"
+                )
             # Calculate the classification; return the classification and probability
             elif sum(returns) == 0 and len(returns) == 1:
                 warn(
