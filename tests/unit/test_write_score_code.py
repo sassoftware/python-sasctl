@@ -348,9 +348,9 @@ def test_no_targets_no_thresholds():
     sc._no_targets_no_thresholds(metrics, returns, h2o_model=True)
     assert (
         sc.score_code == f"{'':4}Classification = prediction[1][0]\n"
-        f"{'':4}Proba_A = prediction[1][1]\n"
-        f"{'':4}Proba_B = prediction[1][2]\n"
-        f"{'':4}Proba_C = prediction[1][3]\n\n"
+        f"{'':4}Proba_A = float(prediction[1][1])\n"
+        f"{'':4}Proba_B = float(prediction[1][2])\n"
+        f"{'':4}Proba_C = float(prediction[1][3])\n\n"
         f"{'':4}return Classification, Proba_A, Proba_B, Proba_C"
     )
 
@@ -441,7 +441,7 @@ def test_binary_target():
     metrics = ["Classification", "Probability"]
     with pytest.warns():
         sc._binary_target(metrics, ["A", "B"], [], threshold=0.7, h2o_model=True)
-    assert sc.score_code.endswith("return prediction[1][0], prediction[1][2]")
+    assert sc.score_code.endswith("return prediction[1][0], float(prediction[1][2])")
     sc.score_code = ""
 
     with pytest.warns():
@@ -478,7 +478,7 @@ def test_binary_target():
     metrics = ["C", "P1", "P2"]
     sc._binary_target(metrics, ["A", "B"], [1, 2, "3"], h2o_model=True)
     assert sc.score_code.endswith(
-        "return prediction[1][0], prediction[1][1], " "prediction[1][2]"
+        "return prediction[1][0], float(prediction[1][1]), float(prediction[1][2])"
     )
     sc.score_code = ""
 
