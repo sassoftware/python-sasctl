@@ -880,9 +880,9 @@ class JSONFiles:
                 json_dict[2]["data"][j].update(lift_dict[j])
 
         if json_path:
-            for name in [FITSTAT, ROC, LIFT]:
+            for i, name in enumerate([FITSTAT, ROC, LIFT]):
                 with open(Path(json_path) / name, "w") as json_file:
-                    json_file.write(json.dumps(json_dict, indent=4, cls=NpEncoder))
+                    json_file.write(json.dumps(json_dict[i], indent=4, cls=NpEncoder))
                 if cls.notebook_output:
                     print(
                         f"{name} was successfully written and saved to "
