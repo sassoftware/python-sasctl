@@ -631,7 +631,7 @@ class ScoreCode:
                 f"{'':4}input_array = pd.DataFrame("
                 f"[[{', '.join(var_list)}]],\n{'':31}columns=["
                 f"{column_names}],\n{'':31}dtype=float,\n{'':31}"
-                f"index=[0])\n{'':4}column_types = {{column_types}}\n"
+                f"index=[0])\n{'':4}column_types = {column_types}\n"
                 f"{'':4}h2o_array = h2o.H2OFrame(input_array, "
                 f"column_types=column_types)\n{'':4}prediction = "
                 f"model.{method.__name__}(h2o_array)\n{'':4}prediction"
