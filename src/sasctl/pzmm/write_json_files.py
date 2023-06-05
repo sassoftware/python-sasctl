@@ -755,12 +755,12 @@ class JSONFiles:
 
     @classmethod
     def assess_model_bias(
-            cls,
-            score_table: DataFrame = None,
-            target_value: str = None,
-            pred_value: Union[str, List[str]] = None,
-            sensitive_value: Union[str, List[str]] = None,
-            type: str = None
+        cls,
+        score_table: DataFrame = None,
+        target_value: str = None,
+        pred_value: Union[str, List[str]] = None,
+        sensitive_value: Union[str, List[str]] = None,
+        type: str = "reg",
     ):
         """
         Calculates model bias metrics for sensitive variables.
@@ -782,8 +782,30 @@ class JSONFiles:
                 "Lift charts with the calculate_model_statistics function."
             )
 
-        print("hi")
+        # loading fairaitools action set
+        conn.loadactionset("fairaitools")
 
+        # if score table is properly formatted, upload to CAS
+        conn.upload(score_table, casout=dict(name="score_table"))
+
+        # initialize
+        tables = None
+        levels = None
+
+        if type == "class":
+            levels = list(score_table[target_value].unique())
+
+        tables = conn.fairaitools.assessbias(
+            modelTableType="None",
+            predictedVariables=pred_value,
+            response=target_value,
+            responseLevels=levels,
+            sensitiveVariable=sensitive_value,
+            table="score_table",
+        )
+
+        maxdiff = pd.DataFrame(tables["MaxDifferences"])
+        return maxdiff
 
     @classmethod
     def calculate_model_statistics(
