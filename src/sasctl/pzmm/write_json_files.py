@@ -815,6 +815,7 @@ class JSONFiles:
             outputs.append(maxdiff)
 
         return outputs
+    #minor change
 
     @classmethod
     def calculate_model_statistics(
