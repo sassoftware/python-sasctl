@@ -759,7 +759,7 @@ class JSONFiles:
         score_table: DataFrame = None,
         target_value: str = None,
         pred_value: Union[str, List[str]] = None,
-        sensitive_value: Union[str, List[str]] = None,
+        sensitive_values: List[str] = None,
         type: str = "reg",
     ):
         """
@@ -791,28 +791,30 @@ class JSONFiles:
             if isinstance(pred_value, str):
                 score_table = pd.get_dummies(score_table, columns=[pred_value], dtype=int)
                 # get column names for new pred_value
-                if isinstance(sensitive_value, str):
-                    pred_value = list(score_table.drop([target_value] + [sensitive_value], axis=1).columns)
-                else:
-                    pred_value = list(score_table.drop([target_value] + sensitive_value, axis=1).columns)
+                pred_value = list(score_table.drop([target_value] + sensitive_values, axis=1).columns)
 
         # upload properly formatted score table to CAS
         conn.upload(score_table, casout=dict(name="score_table"))
 
-        # run assessBias
-        conn.loadactionset("fairaitools")
-        tables = conn.fairaitools.assessbias(
-            modelTableType="None",
-            predictedVariables=pred_value,
-            response=target_value,
-            responseLevels=levels,
-            sensitiveVariable=sensitive_value,
-            table="score_table",
-        )
+        outputs = []
 
-        # get maxdiff table
-        maxdiff = pd.DataFrame(tables["MaxDifferences"])
-        return maxdiff
+        for sensitive_value in sensitive_values:
+            # run assessBias
+            conn.loadactionset("fairaitools")
+            tables = conn.fairaitools.assessbias(
+                modelTableType="None",
+                predictedVariables=pred_value,
+                response=target_value,
+                responseLevels=levels,
+                sensitiveVariable=sensitive_value,
+                table="score_table",
+            )
+
+            # get maxdiff table
+            maxdiff = pd.DataFrame(tables["MaxDifferences"])
+            outputs.append(maxdiff)
+
+        return outputs
 
     @classmethod
     def calculate_model_statistics(
