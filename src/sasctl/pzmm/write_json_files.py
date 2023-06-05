@@ -782,19 +782,25 @@ class JSONFiles:
                 "Lift charts with the calculate_model_statistics function."
             )
 
-        # loading fairaitools action set
-        conn.loadactionset("fairaitools")
-
-        # if score table is properly formatted, upload to CAS
-        conn.upload(score_table, casout=dict(name="score_table"))
-
         # initialize
-        tables = None
         levels = None
 
         if type == "class":
             levels = list(score_table[target_value].unique())
+            # if the predicted classes are only in one column
+            if isinstance(pred_value, str):
+                score_table = pd.get_dummies(score_table, columns=[pred_value], dtype=int)
+                # get column names for new pred_value
+                if isinstance(sensitive_value, str):
+                    pred_value = list(score_table.drop([target_value] + [sensitive_value], axis=1).columns)
+                else:
+                    pred_value = list(score_table.drop([target_value] + sensitive_value, axis=1).columns)
 
+        # upload properly formatted score table to CAS
+        conn.upload(score_table, casout=dict(name="score_table"))
+
+        # run assessBias
+        conn.loadactionset("fairaitools")
         tables = conn.fairaitools.assessbias(
             modelTableType="None",
             predictedVariables=pred_value,
@@ -804,6 +810,7 @@ class JSONFiles:
             table="score_table",
         )
 
+        # get maxdiff table
         maxdiff = pd.DataFrame(tables["MaxDifferences"])
         return maxdiff
 
