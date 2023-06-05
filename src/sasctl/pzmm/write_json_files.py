@@ -754,6 +754,38 @@ class JSONFiles:
         return data
 
     @classmethod
+    def assess_model_bias(
+            cls,
+            score_table: DataFrame = None,
+            target_value: str = None,
+            pred_value: Union[str, List[str]] = None,
+            sensitive_value: Union[str, List[str]] = None,
+            type: str = None
+    ):
+        """
+        Calculates model bias metrics for sensitive variables.
+
+        In dev: The method only takes a dataframe with the actual values, predicted values,
+        labels, and problem type.
+
+        For regression problems, pred_value only needs the predicted label. For classification problems,
+        pre_value needs labels for all levels of the target
+
+        Function returns MaxDiff .csv file with nobs, tp, tn, fp, and fns for JSON files
+        """
+        try:
+            sess = current_session()
+            conn = sess.as_swat()
+        except ImportError:
+            raise RuntimeError(
+                "The `swat` package is required to generate fit statistics, ROC, and "
+                "Lift charts with the calculate_model_statistics function."
+            )
+
+        print("hi")
+
+
+    @classmethod
     def calculate_model_statistics(
         cls,
         target_value: Union[str, int, float],
