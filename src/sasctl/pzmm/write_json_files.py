@@ -944,7 +944,7 @@ class JSONFiles:
                 json_dict[1]["data"][j].update(roc_dict[j])
 
             lift_df = pd.DataFrame(conn.CASTable("Lift", caslib="Public").to_frame())
-            lift_dict = cls.apply_dataframe_to_json(json_dict[2]["data"], i, lift_df)
+            lift_dict = cls.apply_dataframe_to_json(json_dict[2]["data"], i, lift_df, 1)
             for j in range(len(lift_dict)):
                 json_dict[2]["data"][j].update(lift_dict[j])
 
@@ -1088,7 +1088,7 @@ class JSONFiles:
 
     @staticmethod
     def apply_dataframe_to_json(
-        json_dict: dict, partition: int, stat_df: DataFrame
+        json_dict: dict, partition: int, stat_df: DataFrame, is_lift: bool = False
     ) -> dict:
         """
         Map the values of the ROC or Lift charts from SAS CAS to the dictionary
@@ -1102,6 +1102,9 @@ class JSONFiles:
             Numerical representation of the data partition. Either 0, 1, or 2.
         stat_df : pandas.DataFrame
             ROC or Lift DataFrame generated from the SAS CAS percentile action set.
+        is_lift : bool
+            Specify whether to use logic for Lift or ROC row counting. Default value is
+            False.
 
         Returns
         -------
@@ -1111,7 +1114,14 @@ class JSONFiles:
         """
         for row_num in range(len(stat_df)):
             row_dict = stat_df.iloc[row_num].replace(float("nan"), None).to_dict()
-            json_dict[row_num + partition * len(stat_df)]["dataMap"].update(row_dict)
+            if is_lift:
+                json_dict[(row_num + partition + 1) + partition * len(stat_df)][
+                    "dataMap"
+                ].update(row_dict)
+            else:
+                json_dict[row_num + (partition * len(stat_df))]["dataMap"].update(
+                    row_dict
+                )
         return json_dict
 
     # noinspection PyCallingNonCallable, PyNestedDecorators
