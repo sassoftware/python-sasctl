@@ -200,7 +200,7 @@ class JSONFiles:
                     {
                         "level": "nominal",
                         "type": "string",
-                        "length": predict.str.len().max(),
+                        "length": int(predict.str.len().max()),
                     }
                 )
             else:
