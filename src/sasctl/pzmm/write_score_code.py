@@ -507,15 +507,23 @@ class ScoreCode:
         pickle_type = pickle_type if pickle_type else "pickle"
 
         if mojo_model:
-            cls.score_code += f"model = h2o.import_mojo(str(Path(settings.pickle_path" \
-                              f") / {model_file_name}))\n\n"
-            return f"{'':8}model = h2o.import_mojo(str(Path(settings.pickle_path) / " \
-                   f"{model_file_name}))\n\n"
+            cls.score_code += (
+                f"model = h2o.import_mojo(str(Path(settings.pickle_path"
+                f") / {model_file_name}))\n\n"
+            )
+            return (
+                f"{'':8}model = h2o.import_mojo(str(Path(settings.pickle_path) / "
+                f"{model_file_name}))\n\n"
+            )
         elif binary_h2o_model:
-            cls.score_code += f"model = h2o.load(str(Path(settings.pickle_path) / " \
-                              f"{model_file_name}))\n\n"
-            return f"{'':8}model = h2o.load(str(Path(settings.pickle_path) / " \
-                   f"{model_file_name}))\n\n"
+            cls.score_code += (
+                f"model = h2o.load(str(Path(settings.pickle_path) / "
+                f"{model_file_name}))\n\n"
+            )
+            return (
+                f"{'':8}model = h2o.load(str(Path(settings.pickle_path) / "
+                f"{model_file_name}))\n\n"
+            )
         else:
             cls.score_code += (
                 f"with open(Path(settings.pickle_path) / "
