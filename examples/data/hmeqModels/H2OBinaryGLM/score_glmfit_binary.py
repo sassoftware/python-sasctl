@@ -13,7 +13,7 @@ import os
 
 h2o.init()
 
-model = h2o.load(Path(settings.pickle_path))
+model = h2o.load(str(Path(settings.pickle_path) / glmfit.pickle))
 
 def score(LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC):
     "Output: EM_CLASSIFICATION, EM_EVENTPROBABILITY"
@@ -21,7 +21,9 @@ def score(LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CL
     try:
         global model
     except NameError:
-        model = h2o.load(Path(settings.pickle_path))
+        model = h2o.load(str(Path(settings.pickle_path) / glmfit.pickle))
+
+
 
     try:
         if math.isnan(LOAN):
@@ -86,11 +88,11 @@ def score(LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CL
                                columns=["LOAN", "MORTDUE", "VALUE", "REASON", "JOB", "YOJ", "DEROG", "DELINQ", "CLAGE", "NINQ", "CLNO", "DEBTINC"],
                                dtype=float,
                                index=[0])
-    column_types = {['"LOAN" : "numeric"', '"MORTDUE" : "numeric"', '"VALUE" : "numeric"', '"REASON" : "string"', '"JOB" : "string"', '"YOJ" : "numeric"', '"DEROG" : "numeric"', '"DELINQ" : "numeric"', '"CLAGE" : "numeric"', '"NINQ" : "numeric"', '"CLNO" : "numeric"', '"DEBTINC" : "numeric"']}
+    column_types = ['"LOAN" : "numeric"', '"MORTDUE" : "numeric"', '"VALUE" : "numeric"', '"REASON" : "string"', '"JOB" : "string"', '"YOJ" : "numeric"', '"DEROG" : "numeric"', '"DELINQ" : "numeric"', '"CLAGE" : "numeric"', '"NINQ" : "numeric"', '"CLNO" : "numeric"', '"DEBTINC" : "numeric"']
     h2o_array = h2o.H2OFrame(input_array, column_types=column_types)
     prediction = model.predict(h2o_array)
     prediction = h2o.as_list(prediction, use_pandas=False)
     EM_CLASSIFICATION = prediction[1][0]
-    EM_EVENTPROBABILITY = prediction[1][1]
+    EM_EVENTPROBABILITY = float(prediction[1][1])
 
     return EM_CLASSIFICATION, EM_EVENTPROBABILITY

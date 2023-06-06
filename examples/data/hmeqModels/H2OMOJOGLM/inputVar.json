@@ -21,13 +21,13 @@
         "name": "REASON",
         "level": "nominal",
         "type": "string",
-        "length": 7.0
+        "length": 7
     },
     {
         "name": "JOB",
         "level": "nominal",
         "type": "string",
-        "length": 7.0
+        "length": 7
     },
     {
         "name": "YOJ",
