@@ -1046,9 +1046,13 @@ class JSONFiles:
         for row_num in range(len(stat_df)):
             row_dict = stat_df.iloc[row_num].replace(float("nan"), None).to_dict()
             if is_lift:
-                json_dict[(row_num + partition + 1) + partition * len(stat_df)]["dataMap"].update(row_dict)
+                json_dict[(row_num + partition + 1) + partition * len(stat_df)][
+                    "dataMap"
+                ].update(row_dict)
             else:
-                json_dict[row_num + (partition * len(stat_df))]["dataMap"].update(row_dict)
+                json_dict[row_num + (partition * len(stat_df))]["dataMap"].update(
+                    row_dict
+                )
         return json_dict
 
     # noinspection PyCallingNonCallable, PyNestedDecorators
