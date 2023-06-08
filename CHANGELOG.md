@@ -4,6 +4,19 @@ Unreleased
  - Refactor `tasks.py` to utilize `sasctl.pzmm` functions.
  - Add `model_info` class to better capture model information.
 
+v1.9.3 (2023-06-08)
+----------
+**Improvements**
+ - Refactored gitIntegration.py to `git_integration.py` and added unit tests for better test coverage.
+
+**Bugfixes**
+ - Fixed issue with ROC and Lift charts not properly being written to disk.
+ - Fixed JSON conversion for Lift charts that caused TRAIN and TEST charts to be incorrect.
+ - Fixed issue with H2O score code and number of curly brackets.
+ - Updated score code logic for H2O to account for incompatibility with Path objects.
+ - Fixed issue where inputVar.json could supply invalid values to SAS Model Manager upon model import.
+ - Fixed issue with `services.model_publish.list_models`, which was using an older API format that is not valid in SAS Viya 3.5 or SAS Viya 4.
+
 v1.9.2 (2023-05-17)
 ----------
 **Improvements**
