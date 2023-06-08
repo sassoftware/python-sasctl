@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_score_code &#8212; sasctl 1.9.2 documentation</title>
+    <title>sasctl.pzmm.write_score_code &#8212; sasctl 1.9.3 documentation</title>
   
   
   
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.2 documentation</p>
+    <p class="title logo__title">sasctl 1.9.3 documentation</p>
   
 </a></div>
     
@@ -822,11 +822,23 @@ document.write(`
         <span class="n">pickle_type</span> <span class="o">=</span> <span class="n">pickle_type</span> <span class="k">if</span> <span class="n">pickle_type</span> <span class="k">else</span> <span class="s2">&quot;pickle&quot;</span>
 
         <span class="k">if</span> <span class="n">mojo_model</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="s2">&quot;model = h2o.import_mojo(Path(settings.pickle_path))</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">model = h2o.import_mojo(Path(settings.pickle_path))</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;model = h2o.import_mojo(str(Path(settings.pickle_path&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;) / </span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s2">))</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">model = h2o.import_mojo(str(Path(settings.pickle_path) / &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s2">))</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
         <span class="k">elif</span> <span class="n">binary_h2o_model</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="s2">&quot;model = h2o.load(Path(settings.pickle_path))</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">model = h2o.load(Path(settings.pickle_path))</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;model = h2o.load(str(Path(settings.pickle_path) / &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s2">))</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">model = h2o.load(str(Path(settings.pickle_path) / &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s2">))</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;with open(Path(settings.pickle_path) / &quot;</span>
@@ -946,7 +958,7 @@ document.write(`
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = pd.DataFrame(&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;[[</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">var_list</span><span class="p">)</span><span class="si">}</span><span class="s2">]],</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">31</span><span class="si">}</span><span class="s2">columns=[&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">column_names</span><span class="si">}</span><span class="s2">],</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">31</span><span class="si">}</span><span class="s2">dtype=float,</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">31</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;index=[0])</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">column_types = </span><span class="se">{{</span><span class="s2">column_types</span><span class="se">}}\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;index=[0])</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">column_types = </span><span class="si">{</span><span class="n">column_types</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">h2o_array = h2o.H2OFrame(input_array, &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;column_types=column_types)</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">prediction = &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;model.</span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(h2o_array)</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">prediction&quot;</span>

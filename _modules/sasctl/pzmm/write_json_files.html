@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.9.2 documentation</title>
+    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.9.3 documentation</title>
   
   
   
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.2 documentation</p>
+    <p class="title logo__title">sasctl 1.9.3 documentation</p>
   
 </a></div>
     
@@ -515,7 +515,7 @@ document.write(`
                     <span class="p">{</span>
                         <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;nominal&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="n">predict</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+                        <span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">predict</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span>
                     <span class="p">}</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -1190,14 +1190,14 @@ document.write(`
                 <span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">roc_dict</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
 
             <span class="n">lift_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">CASTable</span><span class="p">(</span><span class="s2">&quot;Lift&quot;</span><span class="p">,</span> <span class="n">caslib</span><span class="o">=</span><span class="s2">&quot;Public&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">())</span>
-            <span class="n">lift_dict</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">apply_dataframe_to_json</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">lift_df</span><span class="p">)</span>
+            <span class="n">lift_dict</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">apply_dataframe_to_json</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">lift_df</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lift_dict</span><span class="p">)):</span>
                 <span class="n">json_dict</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">lift_dict</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">json_path</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="n">FITSTAT</span><span class="p">,</span> <span class="n">ROC</span><span class="p">,</span> <span class="n">LIFT</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">FITSTAT</span><span class="p">,</span> <span class="n">ROC</span><span class="p">,</span> <span class="n">LIFT</span><span class="p">]):</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-                    <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">))</span>
+                    <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">))</span>
                 <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> was successfully written and saved to &quot;</span>
@@ -1334,7 +1334,7 @@ document.write(`
 
 <div class="viewcode-block" id="JSONFiles.apply_dataframe_to_json"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.apply_dataframe_to_json">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">apply_dataframe_to_json</span><span class="p">(</span>
-        <span class="n">json_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">partition</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stat_df</span><span class="p">:</span> <span class="n">DataFrame</span>
+        <span class="n">json_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">partition</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stat_df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">is_lift</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Map the values of the ROC or Lift charts from SAS CAS to the dictionary</span>
@@ -1348,6 +1348,9 @@ document.write(`
 <span class="sd">            Numerical representation of the data partition. Either 0, 1, or 2.</span>
 <span class="sd">        stat_df : pandas.DataFrame</span>
 <span class="sd">            ROC or Lift DataFrame generated from the SAS CAS percentile action set.</span>
+<span class="sd">        is_lift : bool</span>
+<span class="sd">            Specify whether to use logic for Lift or ROC row counting. Default value is</span>
+<span class="sd">            False.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1357,7 +1360,14 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">row_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stat_df</span><span class="p">)):</span>
             <span class="n">row_dict</span> <span class="o">=</span> <span class="n">stat_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row_num</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-            <span class="n">json_dict</span><span class="p">[</span><span class="n">row_num</span> <span class="o">+</span> <span class="n">partition</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">stat_df</span><span class="p">)][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">row_dict</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">is_lift</span><span class="p">:</span>
+                <span class="n">json_dict</span><span class="p">[(</span><span class="n">row_num</span> <span class="o">+</span> <span class="n">partition</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">partition</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">stat_df</span><span class="p">)][</span>
+                    <span class="s2">&quot;dataMap&quot;</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">row_dict</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">json_dict</span><span class="p">[</span><span class="n">row_num</span> <span class="o">+</span> <span class="p">(</span><span class="n">partition</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">stat_df</span><span class="p">))][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="n">row_dict</span>
+                <span class="p">)</span>
         <span class="k">return</span> <span class="n">json_dict</span></div>
 
     <span class="c1"># noinspection PyCallingNonCallable, PyNestedDecorators</span>
