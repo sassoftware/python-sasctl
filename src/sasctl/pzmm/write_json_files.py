@@ -825,14 +825,14 @@ class JSONFiles:
 
     @classmethod
     def calculate_group_metrics(
-            cls,
-            score_table: DataFrame = None,
-            actual_value: str = None,
-            pred_value: str = None,
-            prob_value: str = None,
-            target_value: Union[int, float, str] = None,
-            sensitive_value: str = None,
-            type: str = "reg"
+        cls,
+        score_table: DataFrame = None,
+        actual_value: str = None,
+        pred_value: str = None,
+        prob_value: str = None,
+        target_value: Union[int, float, str] = None,
+        sensitive_value: str = None,
+        type: str = "reg",
     ):
         """
         Calculates fit statistics for each level of a sensitive variable given the score table
@@ -856,8 +856,10 @@ class JSONFiles:
         event = None
         pEvent = None
         rocOut = None
+        roc = None
+        lift = None
 
-        if type == 'class':
+        if type == "class":
             pVar = "predict_proba"
             event = str(target_value)
             pEvent = str(0.5)
@@ -876,7 +878,10 @@ class JSONFiles:
 
             # if regression problem, disregard predict_proba column
             data = cls.stat_dataset_to_dataframe(data, target_value)
-            conn.upload(data, casout={"name": "assess_dataset", "replace": True, "caslib": "Public"})
+            conn.upload(
+                data,
+                casout={"name": "assess_dataset", "replace": True, "caslib": "Public"},
+            )
 
             conn.percentile.assess(
                 table={"name": "assess_dataset", "caslib": "Public"},
@@ -887,53 +892,87 @@ class JSONFiles:
                 inputs="actual",
                 fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
                 casout={"name": "Lift", "replace": True, "caslib": "Public"},
-                rocOut=rocOut
+                rocOut=rocOut,
             )
 
             # creating dataframes
-            if type == 'class':
-                return 'hi'
+            if type == "class":
+                lift = pd.DataFrame(conn.CASTable("Lift", caslib="Public").to_frame())
+                roc = pd.DataFrame(conn.CASTable("ROC", caslib="Public").to_frame())
 
-            fitstats = pd.DataFrame(conn.CASTable("FitStat", caslib="Public").to_frame())
+            fitstats = pd.DataFrame(
+                conn.CASTable("FitStat", caslib="Public").to_frame()
+            )
+
             metrics = cls.format_group_metrics_dataframe(
-                fitstats=fitstats,
+                fitstat=fitstats,
                 sensitive_value=sensitive_value,
                 level=level,
                 pred_value=pred_value,
-                data=data
+                data=data,
+                lift=lift,
+                roc=roc,
+                type=type,
             )
 
             output = pd.concat([output, metrics])
-            print(output)
+
+        return output
 
     @staticmethod
     def format_group_metrics_dataframe(
-            fitstats: DataFrame,
-            sensitive_value: str,
-            level: str,
-            pred_value: str,
-            data: DataFrame,
-            type: str = 'reg',
-            lift: DataFrame = None,
-            roc: DataFrame = None,
-
+        fitstat: DataFrame,
+        sensitive_value: str,
+        level: str,
+        pred_value: str,
+        data: DataFrame,
+        type: str = "reg",
+        lift: DataFrame = None,
+        roc: DataFrame = None,
     ):
-        if type == 'class':
-            return 'hi'
+        if type == "class":
+            fitstat = fitstat[["_ASE_", "_RASE_", "_MCE_", "_MCLL_", "_NObs_"]]
+            fitstat["_MISCCUTOFF_"] = fitstat["_MCE_"]
+
+            roc = roc.iloc[[-1]].reset_index()
+            roc = roc[
+                [
+                    "_KS_",
+                    "_ACC_",
+                    "_TP_",
+                    "_FP_",
+                    "_TN_",
+                    "_FN_",
+                    "_FPR_",
+                    "_FNR_",
+                    "_FDR_",
+                    "_F1_",
+                    "_GINI_",
+                    "_C_",
+                ]
+            ]
+            roc["_TPR_"] = 1 - roc["_FPR_"]
+            roc["_TNR_"] = 1 - roc["_FNR_"]
+
+            lift = lift.iloc[[-1]].reset_index()
+            lift = lift[["_CumResp_", "_CumLift_", "_Lift_", "_Gain_", "_Resp_"]]
+
+            metrics = pd.concat([fitstat, roc, lift], axis=1)
 
         else:
             # getting main values
-            metrics = fitstats[['_NObs_', '_ASE_', '_RASE_', '_MAE_', '_RMAE_', '_MSLE_', '_RMSLE_']]
+            metrics = fitstat[
+                ["_NObs_", "_ASE_", "_RASE_", "_MAE_", "_RMAE_", "_MSLE_", "_RMSLE_"]
+            ]
             # adding other values
-            metrics['LEVEL'] = level
-            metrics['_VARIABLE_'] = sensitive_value
-            metrics[pred_value] = sum(data['predict']) / len(data['predict'])
-            metrics['VLABEL'] = ""
-            metrics['_DATAROLE_'] = 'TEST'
-            metrics['_avgyhat_'] = metrics[pred_value]
+            metrics["LEVEL"] = level
+            metrics["_VARIABLE_"] = sensitive_value
+            metrics[pred_value] = sum(data["predict"]) / len(data["predict"])
+            metrics["VLABEL"] = ""
+            metrics["_DATAROLE_"] = "TEST"
+            metrics["_avgyhat_"] = metrics[pred_value]
 
-            return metrics
-
+        return metrics
 
     @classmethod
     def calculate_model_statistics(
