@@ -857,6 +857,14 @@ class JSONFiles:
         pEvent = None
         rocOut = None
 
+        if type == 'class':
+            pVar = "predict_proba"
+            event = str(target_value)
+            pEvent = str(0.5)
+            rocOut = {"name": "ROC", "replace": True, "caslib": "Public"}
+
+        output = pd.DataFrame()
+
         for level in levels:
             # only keeping rows with relevant sensitive variable values
             sub_score = score_table[score_table[sensitive_value] == level]
@@ -870,13 +878,6 @@ class JSONFiles:
             data = cls.stat_dataset_to_dataframe(data, target_value)
             conn.upload(data, casout={"name": "assess_dataset", "replace": True, "caslib": "Public"})
 
-            if type == 'class':
-                pVar = "predict_proba"
-                event = str(target_value)
-                pEvent = str(0.5)
-                rocOut = {"name": "ROC", "replace": True, "caslib": "Public"}
-
-            print(data.head())
             conn.percentile.assess(
                 table={"name": "assess_dataset", "caslib": "Public"},
                 response="predict",
@@ -889,9 +890,49 @@ class JSONFiles:
                 rocOut=rocOut
             )
 
+            # creating dataframes
+            if type == 'class':
+                return 'hi'
 
+            fitstats = pd.DataFrame(conn.CASTable("FitStat", caslib="Public").to_frame())
+            metrics = cls.format_group_metrics_dataframe(
+                fitstats=fitstats,
+                sensitive_value=sensitive_value,
+                level=level,
+                pred_value=pred_value,
+                data=data
+            )
 
+            output = pd.concat([output, metrics])
+            print(output)
 
+    @staticmethod
+    def format_group_metrics_dataframe(
+            fitstats: DataFrame,
+            sensitive_value: str,
+            level: str,
+            pred_value: str,
+            data: DataFrame,
+            type: str = 'reg',
+            lift: DataFrame = None,
+            roc: DataFrame = None,
+
+    ):
+        if type == 'class':
+            return 'hi'
+
+        else:
+            # getting main values
+            metrics = fitstats[['_NObs_', '_ASE_', '_RASE_', '_MAE_', '_RMAE_', '_MSLE_', '_RMSLE_']]
+            # adding other values
+            metrics['LEVEL'] = level
+            metrics['_VARIABLE_'] = sensitive_value
+            metrics[pred_value] = sum(data['predict']) / len(data['predict'])
+            metrics['VLABEL'] = ""
+            metrics['_DATAROLE_'] = 'TEST'
+            metrics['_avgyhat_'] = metrics[pred_value]
+
+            return metrics
 
 
     @classmethod
