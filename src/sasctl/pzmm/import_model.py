@@ -166,7 +166,6 @@ class ImportModel:
         mlflow_details: Optional[dict] = None,
         predict_threshold: Optional[float] = None,
         target_values: Optional[List[str]] = None,
-        target_variable: Optional[str] = None,
         **kwargs,
     ) -> Tuple[RestObj, Union[dict, str, Path]]:
         """
@@ -245,9 +244,6 @@ class ImportModel:
             A list of target values for the target variable. This argument and the
             score_metrics argument dictate the handling of the predicted values from
             the prediction method. The default value is None.
-        target_variable : string, optional
-            The variable we are trying to predict. This argument is used to set the
-            project properties automatically. The default value is None.
         kwargs : dict, optional
             Other keyword arguments are passed to the following function:
                 * sasctl.pzmm.ScoreCode.write_score_code(...,
