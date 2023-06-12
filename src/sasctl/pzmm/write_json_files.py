@@ -804,7 +804,7 @@ class JSONFiles:
         outputs = []
 
         for sensitive_value in sensitive_values:
-            # run assessBias
+            # run assessBias, if levels=None then assessBias treats the input like a regression problem
             tables = conn.fairaitools.assessbias(
                 modelTableType="None",
                 predictedVariables=pred_value,
@@ -818,9 +818,71 @@ class JSONFiles:
             maxdiff = pd.DataFrame(tables["MaxDifferences"])
             outputs.append(maxdiff)
 
+        # create max diff json file with max diff table
+        # create group metrics file with calculate_model_stats
+
         return outputs
 
-    # minor change
+    @classmethod
+    def calculate_group_metrics(
+            cls,
+            score_table: DataFrame = None,
+            actual_value: str = None,
+            pred_value: str = None,
+            prob_value: str = None,
+            target_value: Union[int, float, str] = None,
+            sensitive_value: str = None,
+            type: str = "reg"
+    ):
+        """
+        Calculates fit statistics for each level of a sensitive variable given the score table
+        with the predicted values or probabilities, the actual values, and the sensitive variable
+
+        In dev: Returns a dataframe with relevant metrics for each level of the sensitive variable
+        """
+        try:
+            sess = current_session()
+            conn = sess.as_swat()
+        except ImportError:
+            raise RuntimeError(
+                "The `swat` package is required to generate fit statistics, ROC, and "
+                "Lift charts with the calculate_model_statistics function."
+            )
+
+        levels = list(score_table[sensitive_value].unique())
+        conn.loadactionset(actionset="percentile")
+
+        for level in levels:
+            # only keeping rows with relevant sensitive variable values
+            sub_score = score_table[score_table[sensitive_value] == level]
+
+            # formatting table for cas action
+            df = sub_score[[actual_value, pred_value]].astype(int)
+            if prob_value is not None:
+                df[prob_value] = sub_score[prob_value]
+
+            if type == 'class':
+                data = cls.stat_dataset_to_dataframe(df, target_value)
+
+                print(data.head())
+
+                conn.upload(
+                    data,
+                    casout={"name": "assess_dataset", "replace": True, "caslib": "Public"},
+                )
+
+                conn.percentile.assess(
+                    table={"name": "assess_dataset", "caslib": "Public"},
+                    response="predict",
+                    pVar="predict_proba",
+                    event=str(target_value),
+                    pEvent=str(0.5),
+                    inputs="actual",
+                    fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
+                    rocOut={"name": "ROC", "replace": True, "caslib": "Public"},
+                    casout={"name": "Lift", "replace": True, "caslib": "Public"},
+                )
+
 
     @classmethod
     def calculate_model_statistics(
