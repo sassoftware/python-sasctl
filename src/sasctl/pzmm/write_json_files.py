@@ -852,36 +852,46 @@ class JSONFiles:
         levels = list(score_table[sensitive_value].unique())
         conn.loadactionset(actionset="percentile")
 
+        pVar = None
+        event = None
+        pEvent = None
+        rocOut = None
+
         for level in levels:
             # only keeping rows with relevant sensitive variable values
             sub_score = score_table[score_table[sensitive_value] == level]
 
             # formatting table for cas action
-            df = sub_score[[actual_value, pred_value]].astype(int)
+            data = sub_score[[actual_value, pred_value]].astype(int)
             if prob_value is not None:
-                df[prob_value] = sub_score[prob_value]
+                data[prob_value] = sub_score[prob_value]
+
+            # if regression problem, disregard predict_proba column
+            data = cls.stat_dataset_to_dataframe(data, target_value)
+            conn.upload(data, casout={"name": "assess_dataset", "replace": True, "caslib": "Public"})
 
             if type == 'class':
-                data = cls.stat_dataset_to_dataframe(df, target_value)
+                pVar = "predict_proba"
+                event = str(target_value)
+                pEvent = str(0.5)
+                rocOut = {"name": "ROC", "replace": True, "caslib": "Public"}
 
-                print(data.head())
+            print(data.head())
+            conn.percentile.assess(
+                table={"name": "assess_dataset", "caslib": "Public"},
+                response="predict",
+                pVar=pVar,
+                event=event,
+                pEvent=pEvent,
+                inputs="actual",
+                fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
+                casout={"name": "Lift", "replace": True, "caslib": "Public"},
+                rocOut=rocOut
+            )
 
-                conn.upload(
-                    data,
-                    casout={"name": "assess_dataset", "replace": True, "caslib": "Public"},
-                )
 
-                conn.percentile.assess(
-                    table={"name": "assess_dataset", "caslib": "Public"},
-                    response="predict",
-                    pVar="predict_proba",
-                    event=str(target_value),
-                    pEvent=str(0.5),
-                    inputs="actual",
-                    fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
-                    rocOut={"name": "ROC", "replace": True, "caslib": "Public"},
-                    casout={"name": "Lift", "replace": True, "caslib": "Public"},
-                )
+
+
 
 
     @classmethod
