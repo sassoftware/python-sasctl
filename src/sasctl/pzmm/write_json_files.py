@@ -909,10 +909,11 @@ class JSONFiles:
                 sensitive_value=sensitive_value,
                 level=level,
                 pred_value=pred_value,
+                target_value = target_value,
                 data=data,
                 lift=lift,
                 roc=roc,
-                type=type,
+                type=type
             )
 
             output = pd.concat([output, metrics])
@@ -925,10 +926,12 @@ class JSONFiles:
         sensitive_value: str,
         level: str,
         pred_value: str,
-        data: DataFrame,
+        target_value: Union[str, int, float] = None,
+        data: DataFrame = None,
         type: str = "reg",
         lift: DataFrame = None,
         roc: DataFrame = None,
+        datarole: str = "TEST"
     ):
         if type == "class":
             fitstat = fitstat[["_ASE_", "_RASE_", "_MCE_", "_MCLL_", "_NObs_"]]
@@ -958,6 +961,21 @@ class JSONFiles:
             lift = lift[["_CumResp_", "_CumLift_", "_Lift_", "_Gain_", "_Resp_"]]
 
             metrics = pd.concat([fitstat, roc, lift], axis=1)
+            metrics["LEVEL"] = level
+            metrics["_VARIABLE_"] = sensitive_value
+            metrics["VLABEL"] = ""
+            metrics["_DATAROLE_"] = datarole
+            #TODO: need to find a way to get these metrics
+            metrics['_kscut_'] = None
+            metrics['_miscks_'] = None
+
+            for target_level in list(data["predict"].unique()):
+                if target_level == target_value:
+                    metrics[pred_value + str(target_level)] = sum(data["predict_proba"]) / len(data["predict"])
+                    metrics['PREDICTED_EVENT'] = metrics[pred_value + str(target_level)]
+                    metrics['INTO_EVENT'] = len(data[data["predict"] == target_level]) / len(data["predict"])
+                else:
+                    metrics[pred_value + str(target_level)] = 1 - (sum(data["predict_proba"]) / len(data["predict"]))
 
         else:
             # getting main values
@@ -969,7 +987,7 @@ class JSONFiles:
             metrics["_VARIABLE_"] = sensitive_value
             metrics[pred_value] = sum(data["predict"]) / len(data["predict"])
             metrics["VLABEL"] = ""
-            metrics["_DATAROLE_"] = "TEST"
+            metrics["_DATAROLE_"] = datarole
             metrics["_avgyhat_"] = metrics[pred_value]
 
         return metrics
