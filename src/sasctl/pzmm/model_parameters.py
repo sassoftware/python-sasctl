@@ -167,11 +167,11 @@ class ModelParameters:
             sklearn_params()
         elif model.__class__.__module__.startswith('keras.'):
             tf_params()
-        elif model.__class__.startswith('xgboost.'):
+        elif model.__class__.__module__.startswith('xgboost.'):
             xg_params()
         elif model.__class__.__module__.startswith('h2o.'):
             h2o_params()
-        elif model.__class__.startswith('statsmodels.'):
+        elif model.__class__.__module__.startswith('statsmodels.'):
             statsmodels_params()
         
         else:
