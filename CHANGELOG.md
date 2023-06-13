@@ -4,6 +4,43 @@ Unreleased
  - Refactor `tasks.py` to utilize `sasctl.pzmm` functions.
  - Add `model_info` class to better capture model information.
 
+v1.9.3 (2023-06-08)
+----------
+**Improvements**
+ - Refactored gitIntegration.py to `git_integration.py` and added unit tests for better test coverage.
+
+**Bugfixes**
+ - Fixed issue with ROC and Lift charts not properly being written to disk.
+ - Fixed JSON conversion for Lift charts that caused TRAIN and TEST charts to be incorrect.
+ - Fixed issue with H2O score code and number of curly brackets.
+ - Updated score code logic for H2O to account for incompatibility with Path objects.
+ - Fixed issue where inputVar.json could supply invalid values to SAS Model Manager upon model import.
+ - Fixed issue with `services.model_publish.list_models`, which was using an older API format that is not valid in SAS Viya 3.5 or SAS Viya 4.
+
+v1.9.2 (2023-05-17)
+----------
+**Improvements**
+ - Add recursive folder creation and an example.
+ - Add example for migrating models from SAS Viya 3.5 to SAS Viya 4.
+
+**Bugfixes**
+ - Fixed improper json encoding for `pzmm_h2o_model_import.ipynb` example.
+ - Set urllib3 < 2.0.0 to allow requests to update their dependencies.
+ - Set pandas >= 0.24.0 to include df.to_list alias for df.tolist.
+ - Fix minor errors in h2o score code generation
+
+v1.9.1 (2023-05-04)
+----------
+**Improvements**
+ - Updated handling of H2O models in `sasctl.pzmm`.
+   - Models are now saved with the appropriate `h2o` functions within the `sasctl.pzmm.PickleModel.pickle_trained_model` function.
+   - Example notebooks have been updated to reflect this change.
+
+**Bugfixes**
+ - Added check for `sasctl.pzmm.JSONFiles.calculate_model_statsistics` function to replace float NaN values invalid for JSON files.
+ - Fixed issue where the `sasctl.pzmm.JSONFiles.write_model_properties` function was replacing the user-defined model_function argument.
+ - Added NpEncoder class to check for numpy values in JSON files. Numpy-types cannot be used in SAS Viya.
+
 v1.9.0 (2023-04-04)
 ----------
 **Improvements**

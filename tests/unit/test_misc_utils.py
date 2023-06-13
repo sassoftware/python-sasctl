@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import re
+from unittest.mock import PropertyMock, patch
 
 
 def test_list_packages():
@@ -18,3 +19,13 @@ def test_list_packages():
         re.match("sasctl.*", p) for p in packages
     )  # sasctl may be installed from disk so no '=='
     assert any(re.match("pytest==.*", p) for p in packages)
+
+
+def test_check_if_jupyter():
+    """
+    Test Cases:
+    - can't mock get_ipython() attributes; so only test for ImportError or NameError
+    """
+    from sasctl.utils.misc import check_if_jupyter
+
+    assert not check_if_jupyter()

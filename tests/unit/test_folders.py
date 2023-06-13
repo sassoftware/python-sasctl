@@ -78,6 +78,30 @@ def test_create_folder_with_parent():
                 folders.create_folder(FOLDER_NAME, parent="Doesnt Matter")
 
 
+@mock.patch("sasctl._services.folders.Folders.create_folder")
+@mock.patch("sasctl._services.folders.Folders.get_folder")
+def test_create_path(get_folder, create_folder):
+    get_folder.side_effect = lambda x: x in ["/quests", "/quests/grail"]
+
+    folders.create_path("/quests/grail/knights/ni")
+
+    # Should have been called once for each partial path
+    assert get_folder.call_count == 4
+    assert get_folder.call_args_list[0][0][0] == "/quests"
+    assert get_folder.call_args_list[1][0][0] == "/quests/grail"
+    assert get_folder.call_args_list[2][0][0] == "/quests/grail/knights"
+    assert get_folder.call_args_list[3][0][0] == "/quests/grail/knights/ni"
+
+    # /quests/grail already exists, so should have been called twice
+    # to create last two folders.
+    assert create_folder.call_count == 2
+    assert create_folder.call_args_list[0][0][0] == "knights"
+    assert create_folder.call_args_list[0][1]["parent"] == "/quests/grail"
+
+    assert create_folder.call_args_list[1][0][0] == "ni"
+    assert create_folder.call_args_list[1][1]["parent"] == "/quests/grail/knights"
+
+
 @mock.patch("sasctl.core.Session.request")
 def test_get_folder_by_name(request):
     """Verify that looking up a folder by name works."""

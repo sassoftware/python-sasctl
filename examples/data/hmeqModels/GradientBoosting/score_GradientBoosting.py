@@ -18,6 +18,8 @@ def score(LOAN, MORTDUE, VALUE, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC):
         with open(Path(settings.pickle_path) / "GradientBoosting.pickle", "rb") as pickle_model:
                 model = pickle.load(pickle_model)
 
+
+
     try:
         if math.isnan(LOAN):
             LOAN = 18607.96979865772

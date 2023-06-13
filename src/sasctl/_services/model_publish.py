@@ -52,7 +52,7 @@ class ModelPublish(Service):
 
     @classmethod
     def list_models(cls):
-        return cls.get("/models").get("items", [])
+        return cls.get("/models")
 
     list_destinations, get_destination, update_destination, _ = Service._crud_funcs(
         "/destinations", "destination"

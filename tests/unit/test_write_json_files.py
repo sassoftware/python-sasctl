@@ -4,14 +4,17 @@
 # Copyright © 2023, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import io
 import json
 import os
 import pickle
 import random
+import sys
 import tempfile
 import unittest
 import warnings
 from pathlib import Path
+from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
@@ -32,11 +35,7 @@ input_dict = [
     {"name": "NINQ", "type": "double"},
     {"name": "CLNO", "type": "double"},
     {"name": "DEBTINC", "type": "double"},
-    {"name": "JOB_Office", "type": "integer"},
-    {"name": "JOB_Other", "type": "integer"},
-    {"name": "JOB_ProfExe", "type": "integer"},
-    {"name": "JOB_Sales", "type": "integer"},
-    {"name": "JOB_Self", "type": "integer"},
+    {"name": "JOB", "type": "string"},
     {"name": "REASON_HomeImp", "type": "integer"},
 ]
 
@@ -117,7 +116,16 @@ def test_generate_mlflow_variable_properties():
     - Return expected number of variables from mlflow_model.py output
     """
     dict_list = jf.generate_mlflow_variable_properties(input_dict)
-    assert len(dict_list) == 16
+    assert len(dict_list) == 12
+
+    tensor_dict = [
+        {"type": "string"},
+        {"type": "double"},
+        {"type": "tensor", "tensor-spec": {"dtype": "string"}},
+        {"type": "tensor", "tensor-spec": {"dtype": "double"}},
+    ]
+    dict_list = jf.generate_mlflow_variable_properties(tensor_dict)
+    assert len(dict_list) == 4
 
 
 def test_write_var_json(hmeq_dataset):
@@ -133,6 +141,12 @@ def test_write_var_json(hmeq_dataset):
         assert (Path(tmp_dir) / "inputVar.json").exists()
         jf.write_var_json(df, False, Path(tmp_dir))
         assert (Path(tmp_dir) / "outputVar.json").exists()
+        with patch.object(jf, "notebook_output", True):
+            capture_output = io.StringIO()
+            sys.stdout = capture_output
+            _ = jf.write_var_json(df, False, Path(tmp_dir))
+            sys.stdout = sys.__stdout__
+            assert "was successfully written and saved to " in capture_output.getvalue()
 
     var_dict = jf.write_var_json(df, False)
     assert "outputVar.json" in var_dict
@@ -188,13 +202,18 @@ def test_write_model_properties_json():
     - Truncate custom property that is too long
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
-        jf.write_model_properties_json(
-            model_name="Test_Model",
-            target_variable="BAD",
-            target_values=[1, 0],
-            json_path=Path(tmp_dir),
-        )
-        assert (Path(tmp_dir) / "ModelProperties.json").exists()
+        with patch.object(jf, "notebook_output", True):
+            capture_output = io.StringIO()
+            sys.stdout = capture_output
+            jf.write_model_properties_json(
+                model_name="Test_Model",
+                target_variable="BAD",
+                target_values=[1, 0],
+                json_path=Path(tmp_dir),
+            )
+            sys.stdout = sys.__stdout__
+            assert (Path(tmp_dir) / "ModelProperties.json").exists()
+            assert "was successfully written and saved to " in capture_output.getvalue()
 
     prop_dict = jf.write_model_properties_json(
         model_name="Test_Model",
@@ -250,8 +269,15 @@ def test_write_file_metadata_json():
     - Proper score resource name for H2O.ai model
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
-        jf.write_file_metadata_json(model_prefix="Test_Model", json_path=Path(tmp_dir))
-        assert (Path(tmp_dir) / "fileMetadata.json").exists()
+        with patch.object(jf, "notebook_output", True):
+            capture_output = io.StringIO()
+            sys.stdout = capture_output
+            jf.write_file_metadata_json(
+                model_prefix="Test_Model", json_path=Path(tmp_dir)
+            )
+            assert (Path(tmp_dir) / "fileMetadata.json").exists()
+            sys.stdout = sys.__stdout__
+            assert "was successfully written and saved to " in capture_output.getvalue()
 
     meta_dict = jf.write_file_metadata_json(model_prefix="Test_Model")
     assert "fileMetadata.json" in meta_dict
@@ -401,8 +427,13 @@ def test_input_fit_statistics(monkeypatch):
     """
     tuple_list = [("RASE", 10, 1), ("_NObs_", 33, "TEST")]
     with tempfile.TemporaryDirectory() as tmp_dir:
-        jf.input_fit_statistics(tuple_list=tuple_list, json_path=Path(tmp_dir))
-        assert (Path(tmp_dir) / "dmcas_fitstat.json").exists()
+        with patch.object(jf, "notebook_output", True):
+            capture_output = io.StringIO()
+            sys.stdout = capture_output
+            jf.input_fit_statistics(tuple_list=tuple_list, json_path=Path(tmp_dir))
+            assert (Path(tmp_dir) / "dmcas_fitstat.json").exists()
+            sys.stdout = sys.__stdout__
+            assert "was successfully written and saved to " in capture_output.getvalue()
 
     fitstat_dict = jf.input_fit_statistics(tuple_list=tuple_list)
     assert "dmcas_fitstat.json" in fitstat_dict

@@ -88,5 +88,5 @@ def check_if_jupyter() -> bool:
             return False
         else:
             return False
-    except NameError:
+    except (ImportError, NameError):
         return False

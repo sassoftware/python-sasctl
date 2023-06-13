@@ -209,7 +209,7 @@ class ScoreCode:
         if model_load:
             cls.score_code += (
                 f"{'':4}try:\n{'':8}global model\n{'':4}"
-                f"except NameError:\n{model_load}"
+                f"except NameError:\n{model_load}\n"
             )
 
         if missing_values:
@@ -385,7 +385,7 @@ class ScoreCode:
             Flag to indicate that the model is a H2O.ai binary model. The default value
             is None.
         tf_model : bool, optional
-            Flag to indicate that the model is a tensorflow model. The default value 
+            Flag to indicate that the model is a tensorflow model. The default value
             is None.
         binary_string : str, optional
             A binary representation of the Python model object. The default value is
@@ -460,29 +460,21 @@ class ScoreCode:
 
         if mojo_model:
             cls.score_code += (
-                f'model_path = Path("/models/resources/viya/{model_id}'
-                f'")\nwith gzip.open(model_path / "{model_file_name}'
-                f'", "r") as fileIn, open(model_path / '
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\","
-                f" \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn,"
-                " fileOut)\nos.chmod(model_path / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\""
-                ", 0o777)\nmodel = h2o.import_mojo(model_path / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")"
-                "\n\n"
+                f"model = h2o.import_mojo(str(Path("
+                f'"/models/resources/viya/{model_id}/{model_file_name}")))\n\n'
             )
             return (
-                f"{'':8}model = h2o.import_mojo(model_path / \""
-                f"{str(Path(model_file_name).with_suffix('.zip'))}\")"
+                f"{'':8}model = h2o.import_mojo(str(Path("
+                f'"/models/resources/viya/{model_id}/{model_file_name}")))'
             )
         elif binary_h2o_model:
             cls.score_code += (
-                'model = h2o.load(Path("/models/resources/viya/'
-                f'{model_id}/{model_file_name}"))\n\n'
+                f'model = h2o.load(str(Path("/models/resources/viya/'
+                f'{model_id}/{model_file_name}")))\n\n'
             )
             return (
-                f'        model = h2o.load(Path("/models/resources/viya/'
-                f'{model_id}/{model_file_name}"))'
+                f"{'':8}model = h2o.load(str(Path(\"/models/resources/viya/"
+                f'{model_id}/{model_file_name}")))'
             )
         else:
             cls.score_code += (
@@ -536,25 +528,22 @@ class ScoreCode:
 
         if mojo_model:
             cls.score_code += (
-                f"with gzip.open(Path(settings.pickle_path) / "
-                '"{model_file_name}", "r") as fileIn, '
-                "open(Path(settings.pickle_path) / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\","
-                f" \"wb\") as fileOut:\n{'':4}shutil.copyfileobj(fileIn,"
-                " fileOut)\nos.chmod(Path(settings.pickle_path) / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\""
-                ", 0o777)\nmodel = h2o.import_mojo("
-                "Path(settings.pickle_path) / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")"
-                "\n\n"
+                f"model = h2o.import_mojo(str(Path(settings.pickle_path"
+                f") / {model_file_name}))\n\n"
             )
             return (
-                f"{'':8}model = h2o.import_mojo(Path(settings.pickle_path) / "
-                f"\"{str(Path(model_file_name).with_suffix('.zip'))}\")\n\n"
+                f"{'':8}model = h2o.import_mojo(str(Path(settings.pickle_path) / "
+                f"{model_file_name}))\n\n"
             )
         elif binary_h2o_model:
-            cls.score_code += "model = h2o.load(Path(settings.pickle_path))\n\n"
-            return f"{'':8}model = h2o.load(Path(settings.pickle_path))\n\n"
+            cls.score_code += (
+                f"model = h2o.load(str(Path(settings.pickle_path) / "
+                f"{model_file_name}))\n\n"
+            )
+            return (
+                f"{'':8}model = h2o.load(str(Path(settings.pickle_path) / "
+                f"{model_file_name}))\n\n"
+            )
         elif tf_keras_model:
             cls.score_code += (
                 f"model = tf.keras.models.load_model(Path(settings.pickle_path) / "
@@ -593,6 +582,7 @@ class ScoreCode:
         dtype_list : list of str
             List of variable data types
         """
+        cls.score_code += "\n"
         for var, dtype in zip(var_list, dtype_list):
             # Split up between numeric and character variables
             if any(t in dtype for t in ["int", "float"]):
@@ -686,7 +676,7 @@ class ScoreCode:
                 f"{'':4}input_array = pd.DataFrame("
                 f"[[{', '.join(var_list)}]],\n{'':31}columns=["
                 f"{column_names}],\n{'':31}dtype=float,\n{'':31}"
-                f"index=[0])\n{'':4}column_types = {{{column_types}}}\n"
+                f"index=[0])\n{'':4}column_types = {column_types}\n"
                 f"{'':4}h2o_array = h2o.H2OFrame(input_array, "
                 f"column_types=column_types)\n{'':4}prediction = "
                 f"model.{method.__name__}(h2o_array)\n{'':4}prediction"
@@ -981,7 +971,7 @@ class ScoreCode:
                 cls.score_code += f"{'':4}{metrics[0]} = prediction[1][0]\n"
                 for i in range(len(metrics) - 1):
                     cls.score_code += (
-                        f"{'':4}{metrics[i + 1]} = prediction[1][{i + 1}]\n"
+                        f"{'':4}{metrics[i + 1]} = float(prediction[1][{i + 1}])\n"
                     )
             else:
                 for i in range(len(metrics)):
@@ -1082,7 +1072,9 @@ class ScoreCode:
                     "score code should output the classification and probability for "
                     "the target event to occur."
                 )
-                cls.score_code += f"{'':4}return prediction[1][0], prediction[1][2]"
+                cls.score_code += (
+                    f"{'':4}return prediction[1][0], " f"float(prediction[1][2])"
+                )
             # Calculate the classification; return the classification and probability
             elif sum(returns) == 0 and len(returns) == 1:
                 warn(
@@ -1133,7 +1125,8 @@ class ScoreCode:
         elif len(metrics) == 3:
             if h2o_model:
                 cls.score_code += (
-                    f"{'':4}return prediction[1][0], prediction[1][1], prediction[1][2]"
+                    f"{'':4}return prediction[1][0], float(prediction[1][1]), "
+                    f"float(prediction[1][2])"
                 )
             elif sum(returns) == 0 and len(returns) == 1:
                 warn(
