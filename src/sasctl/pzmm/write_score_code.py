@@ -632,13 +632,15 @@ class ScoreCode:
         column_names = ", ".join(f'"{col}"' for col in var_list)
         # H2O models
         if dtype_list:
-            column_types = []
+            column_types = "{"
             for var, dtype in zip(var_list, dtype_list):
                 if any(x in dtype for x in ["int", "float"]):
                     col_type = "numeric"
                 else:
                     col_type = "string"
-                column_types.append(f'"{var}" : "{col_type}"')
+                column_types += f'"{var}" : "{col_type}", '
+            column_types = column_types.rstrip(", ")
+            column_types += "}"
             cls.score_code += (
                 f"{'':4}input_array = pd.DataFrame("
                 f"[[{', '.join(var_list)}]],\n{'':31}columns=["
