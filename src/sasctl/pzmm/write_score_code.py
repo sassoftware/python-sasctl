@@ -401,7 +401,7 @@ class ScoreCode:
 
         if mojo_model or binary_h2o_model:
             cls.score_code += (
-                "import h2o\nimport gzip\nimport shutil\nimport os\n\nh2o.init()\n\n"
+                "import h2o\n\nh2o.init()\n\n"
             )
         elif binary_string:
             cls.score_code += (
@@ -509,11 +509,11 @@ class ScoreCode:
         if mojo_model:
             cls.score_code += (
                 f"model = h2o.import_mojo(str(Path(settings.pickle_path"
-                f") / {model_file_name}))\n\n"
+                f") / \"{model_file_name}\"))\n\n"
             )
             return (
                 f"{'':8}model = h2o.import_mojo(str(Path(settings.pickle_path) / "
-                f"{model_file_name}))\n\n"
+                f"\"{model_file_name}\"))\n\n"
             )
         elif binary_h2o_model:
             cls.score_code += (
@@ -527,8 +527,8 @@ class ScoreCode:
         else:
             cls.score_code += (
                 f"with open(Path(settings.pickle_path) / "
-                f'"{model_file_name}", "rb") as pickle_model:\n    '
-                f"model = {pickle_type}.load(pickle_model)\n\n"
+                f'\"{model_file_name}\", "rb") as pickle_model:\n'
+                f"{'':4}model = {pickle_type}.load(pickle_model)\n\n"
             )
             return (
                 f"{'':8}with open(Path(settings.pickle_path) / "
@@ -644,7 +644,7 @@ class ScoreCode:
             cls.score_code += (
                 f"{'':4}input_array = pd.DataFrame("
                 f"[[{', '.join(var_list)}]],\n{'':31}columns=["
-                f"{column_names}],\n{'':31}dtype=float,\n{'':31}"
+                f"{column_names}],\n{'':31}dtype=object,\n{'':31}"
                 f"index=[0])\n{'':4}column_types = {column_types}\n"
                 f"{'':4}h2o_array = h2o.H2OFrame(input_array, "
                 f"column_types=column_types)\n{'':4}prediction = "
@@ -656,7 +656,7 @@ class ScoreCode:
             cls.score_code += (
                 f"{'':4}inputArray = pd.DataFrame("
                 f"[[1.0, {', '.join(var_list)}]],\n{'':29}columns=["
-                f"\"const\", {column_names}],\n{'':29}dtype=float)\n"
+                f"\"const\", {column_names}],\n{'':29}dtype=object)\n"
                 f"{'':4}prediction = model.{method.__name__}"
                 f"(input_array)\n"
             )
@@ -664,7 +664,7 @@ class ScoreCode:
             cls.score_code += (
                 f"{'':4}input_array = pd.DataFrame("
                 f"[[{', '.join(var_list)}]],\n{'':30}columns=["
-                f"{column_names}],\n{'':30}dtype=float)\n{'':4}"
+                f"{column_names}],\n{'':30}dtype=object)\n{'':4}"
                 f"prediction = model.{method.__name__}(input_array)\n"
             )
 
