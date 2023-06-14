@@ -400,9 +400,7 @@ class ScoreCode:
             )
 
         if mojo_model or binary_h2o_model:
-            cls.score_code += (
-                "import h2o\n\nh2o.init()\n\n"
-            )
+            cls.score_code += "import h2o\n\nh2o.init()\n\n"
         elif binary_string:
             cls.score_code += (
                 f'import codecs\n\nbinary_string = "{binary_string}"'
@@ -509,11 +507,11 @@ class ScoreCode:
         if mojo_model:
             cls.score_code += (
                 f"model = h2o.import_mojo(str(Path(settings.pickle_path"
-                f") / \"{model_file_name}\"))\n\n"
+                f') / "{model_file_name}"))\n\n'
             )
             return (
                 f"{'':8}model = h2o.import_mojo(str(Path(settings.pickle_path) / "
-                f"\"{model_file_name}\"))\n\n"
+                f'"{model_file_name}"))\n\n'
             )
         elif binary_h2o_model:
             cls.score_code += (
@@ -527,7 +525,7 @@ class ScoreCode:
         else:
             cls.score_code += (
                 f"with open(Path(settings.pickle_path) / "
-                f'\"{model_file_name}\", "rb") as pickle_model:\n'
+                f'"{model_file_name}", "rb") as pickle_model:\n'
                 f"{'':4}model = {pickle_type}.load(pickle_model)\n\n"
             )
             return (
