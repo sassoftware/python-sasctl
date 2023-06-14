@@ -11,7 +11,7 @@ method score(double LOAN, double MORTDUE, double VALUE, varchar(100) REASON, var
    resultCode = revision = 0;
    if null(pm) then do;
       pm = _new_ pymas();
-      resultCode = pm.useModule('model_exec_52cca476-5483-411a-9950-7650f22c81f0', 1);
+      resultCode = pm.useModule('model_exec_80f6bc83-bdd0-4a26-a468-077674114e46', 1);
       if resultCode then do;
          resultCode = pm.appendSrcLine('import math');
          resultCode = pm.appendSrcLine('import pickle');
@@ -20,13 +20,10 @@ method score(double LOAN, double MORTDUE, double VALUE, varchar(100) REASON, var
          resultCode = pm.appendSrcLine('from pathlib import Path');
          resultCode = pm.appendSrcLine('');
          resultCode = pm.appendSrcLine('import h2o');
-         resultCode = pm.appendSrcLine('import gzip');
-         resultCode = pm.appendSrcLine('import shutil');
-         resultCode = pm.appendSrcLine('import os');
          resultCode = pm.appendSrcLine('');
          resultCode = pm.appendSrcLine('h2o.init()');
          resultCode = pm.appendSrcLine('');
-         resultCode = pm.appendSrcLine('model = h2o.import_mojo(str(Path("/models/resources/viya/1758598b-cff6-4993-9ac2-8199d4ec6564/glmfit.mojo")))');
+         resultCode = pm.appendSrcLine('model = h2o.import_mojo(str(Path("/models/resources/viya/4c5dd027-d442-4860-9e96-9c26060dc727/glmfit_mojo.mojo")))');
          resultCode = pm.appendSrcLine('');
          resultCode = pm.appendSrcLine('def score(LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC):');
          resultCode = pm.appendSrcLine('    "Output: EM_CLASSIFICATION, EM_EVENTPROBABILITY"');
@@ -34,7 +31,7 @@ method score(double LOAN, double MORTDUE, double VALUE, varchar(100) REASON, var
          resultCode = pm.appendSrcLine('    try:');
          resultCode = pm.appendSrcLine('        global model');
          resultCode = pm.appendSrcLine('    except NameError:');
-         resultCode = pm.appendSrcLine('        model = h2o.import_mojo(str(Path("/models/resources/viya/1758598b-cff6-4993-9ac2-8199d4ec6564/glmfit.mojo")))');
+         resultCode = pm.appendSrcLine('        model = h2o.import_mojo(str(Path("/models/resources/viya/4c5dd027-d442-4860-9e96-9c26060dc727/glmfit_mojo.mojo")))');
          resultCode = pm.appendSrcLine('');
          resultCode = pm.appendSrcLine('    try:');
          resultCode = pm.appendSrcLine('        if math.isnan(LOAN):');
@@ -97,7 +94,7 @@ method score(double LOAN, double MORTDUE, double VALUE, varchar(100) REASON, var
          resultCode = pm.appendSrcLine('');
          resultCode = pm.appendSrcLine('    input_array = pd.DataFrame([[LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC]],');
          resultCode = pm.appendSrcLine('                               columns=["LOAN", "MORTDUE", "VALUE", "REASON", "JOB", "YOJ", "DEROG", "DELINQ", "CLAGE", "NINQ", "CLNO", "DEBTINC"],');
-         resultCode = pm.appendSrcLine('                               dtype=float,');
+         resultCode = pm.appendSrcLine('                               dtype=object,');
          resultCode = pm.appendSrcLine('                               index=[0])');
          resultCode = pm.appendSrcLine('    column_types = {"LOAN" : "numeric", "MORTDUE" : "numeric", "VALUE" : "numeric", "REASON" : "string", "JOB" : "string", "YOJ" : "numeric", "DEROG" : "numeric", "DELINQ" : "numeric", "CLAGE" : "numeric", "NINQ" : "numeric", "CLNO" : "numeric", "DEBTINC" : "numeric"}');
          resultCode = pm.appendSrcLine('    h2o_array = h2o.H2OFrame(input_array, column_types=column_types)');
@@ -107,7 +104,7 @@ method score(double LOAN, double MORTDUE, double VALUE, varchar(100) REASON, var
          resultCode = pm.appendSrcLine('    EM_EVENTPROBABILITY = float(prediction[1][1])');
          resultCode = pm.appendSrcLine('');
          resultCode = pm.appendSrcLine('    return EM_CLASSIFICATION, EM_EVENTPROBABILITY');
-         revision = pm.publish(pm.getSource(), 'model_exec_52cca476-5483-411a-9950-7650f22c81f0');
+         revision = pm.publish(pm.getSource(), 'model_exec_80f6bc83-bdd0-4a26-a468-077674114e46');
 
          if ( revision < 1 ) then do;
             logr.log( 'e', 'py.publish() failed.');

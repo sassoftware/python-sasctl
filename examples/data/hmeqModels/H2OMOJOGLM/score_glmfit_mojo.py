@@ -5,13 +5,10 @@ import numpy as np
 from pathlib import Path
 
 import h2o
-import gzip
-import shutil
-import os
 
 h2o.init()
 
-model = h2o.import_mojo(str(Path("/models/resources/viya/1758598b-cff6-4993-9ac2-8199d4ec6564/glmfit.mojo")))
+model = h2o.import_mojo(str(Path("/models/resources/viya/4c5dd027-d442-4860-9e96-9c26060dc727/glmfit_mojo.mojo")))
 
 def score(LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC):
     "Output: EM_CLASSIFICATION, EM_EVENTPROBABILITY"
@@ -19,7 +16,7 @@ def score(LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CL
     try:
         global model
     except NameError:
-        model = h2o.import_mojo(str(Path("/models/resources/viya/1758598b-cff6-4993-9ac2-8199d4ec6564/glmfit.mojo")))
+        model = h2o.import_mojo(str(Path("/models/resources/viya/4c5dd027-d442-4860-9e96-9c26060dc727/glmfit_mojo.mojo")))
 
     try:
         if math.isnan(LOAN):
@@ -82,7 +79,7 @@ def score(LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CL
 
     input_array = pd.DataFrame([[LOAN, MORTDUE, VALUE, REASON, JOB, YOJ, DEROG, DELINQ, CLAGE, NINQ, CLNO, DEBTINC]],
                                columns=["LOAN", "MORTDUE", "VALUE", "REASON", "JOB", "YOJ", "DEROG", "DELINQ", "CLAGE", "NINQ", "CLNO", "DEBTINC"],
-                               dtype=float,
+                               dtype=object,
                                index=[0])
     column_types = {"LOAN" : "numeric", "MORTDUE" : "numeric", "VALUE" : "numeric", "REASON" : "string", "JOB" : "string", "YOJ" : "numeric", "DEROG" : "numeric", "DELINQ" : "numeric", "CLAGE" : "numeric", "NINQ" : "numeric", "CLNO" : "numeric", "DEBTINC" : "numeric"}
     h2o_array = h2o.H2OFrame(input_array, column_types=column_types)
