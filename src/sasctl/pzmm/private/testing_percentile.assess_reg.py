@@ -4,6 +4,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 import pandas as pd
 
+hostname = 'green.ingress-nginx.rint08-0020.race.sas.com'
+username = 'edmdev'
+password = 'Go4thsas'
+
+sess = Session(hostname, username, password, protocol='http')
+
 df = pd.read_csv('data/titanic.csv')
 
 # transform data for model
@@ -34,37 +40,11 @@ score_data = {'P_Fare': reg.predict(df_mod.drop(target, axis=1)[features]),  # u
 
 scored_df = pd.DataFrame(score_data)
 
-scored_df.to_csv('data/reg_scoredata.csv')
-
-hostname = 'green.ingress-nginx.rint08-0020.race.sas.com'
-username = 'edmdev'
-password = 'Go4thsas'
-
-sess = Session(hostname, username, password, protocol='http')
-
-# Examples #
-
-# only one sensitive variable
-reg_example = JF.assess_model_bias(
-    score_table=scored_df,
-    actual_value='Fare',
-    pred_values='P_Fare',
-    sensitive_value='Sex',
-    target_level = 1,
-    type='reg'
+output = JF.calculate_group_metrics(
+            score_table= scored_df,
+            actual_value= 'Fare',
+            pred_value= 'P_Fare',
+            sensitive_value= 'Sex'
 )
 
-print(reg_example.head())
-
-# two sensitive variables
-# reg_example2 = JF.assess_model_bias(
-#     score_table=scored_df,
-#     target_value='Fare',
-#     pred_value='P_Fare',
-#     sensitive_values=['Sex', 'Pclass'],
-#     type='reg'
-# )
-#
-# print(reg_example2[0])
-# print('\n')
-# print(reg_example2[1])
+print(output.head())

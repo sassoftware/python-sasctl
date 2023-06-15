@@ -3,6 +3,7 @@ from sasctl import Session
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
+import numpy as np
 
 # load data
 df = pd.read_csv('data/titanic.csv')
@@ -28,13 +29,13 @@ clf = RandomForestClassifier(random_state=123)
 clf.fit(X_train, Y_train)
 
 # create score table
-score_data = {'P_Survived': clf.predict(df_mod.drop(target, axis=1)[features]),
+score_data = {'P_Survived0': clf.predict_proba(df_mod.drop(target, axis=1)[features])[:,0],
               'Survived': df[target],
               'Sex': df[senVar],
               'Pclass': df['Pclass']}  # original sensitive variable} # target
 
 scored_df = pd.DataFrame(score_data)
-print(scored_df.head())
+
 
 ## Examples
 hostname = 'green.ingress-nginx.rint08-0020.race.sas.com'
@@ -48,15 +49,16 @@ sess = Session(hostname, username, password, protocol='http')
 # only one variable passed for pred_value, multiple sensitive variables
 clf_example = JF.assess_model_bias(
      score_table=scored_df,
-     target_value='Survived',
-     pred_value='P_Survived',
-     sensitive_values=['Sex', 'Pclass'],
+     actual_value='Survived',
+     pred_values='P_Survived0',
+     sensitive_value=['Sex', 'Pclass'],
+     target_level = 0,
      type='class'
  )
 
-print(clf_example[0].head())
-print('\n')
-print(clf_example[1].head())
+print(clf_example)
+
+
 
 # correct num of pred_value variables are passed, only on sens var
 # need to reformat score code above
