@@ -530,7 +530,7 @@ class ScoreCode:
             )
             return (
                 f"{'':8}with open(Path(settings.pickle_path) / "
-                f'"{model_file_name}", "rb") as pickle_model:\n    '
+                f'"{model_file_name}", "rb") as pickle_model:\n'
                 f"{'':12}model = {pickle_type}.load(pickle_model)\n\n"
             )
 
