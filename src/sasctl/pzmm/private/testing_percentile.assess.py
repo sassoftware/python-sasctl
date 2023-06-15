@@ -49,10 +49,9 @@ scored_df = pd.DataFrame(score_data)
 ouput = JF.calculate_group_metrics(
             score_table= scored_df,
             actual_value= 'Survived',
-            pred_value= 'Probability',
+            prob_value= 'Probability',
             target_level= 1,
             sensitive_value= 'Sex',
-            type= "class"
 )
 
 print(ouput[['INTO_EVENT', 'LEVEL', 'PREDICTED_EVENT', 'P_Survived0', 'P_Survived1']])
