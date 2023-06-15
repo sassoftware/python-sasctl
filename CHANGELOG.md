@@ -3,6 +3,21 @@ Unreleased
 **Improvements**
  - Refactor `tasks.py` to utilize `sasctl.pzmm` functions.
  - Add `model_info` class to better capture model information.
+ - Test `/examples` Jupyter notebooks within normal test suite.
+
+v1.9.4 (2023-06-15)
+----------
+**Improvements**
+ - Created pytest fixture to begin running Jupyter notebooks within the GitHub automated test actions.
+ - Updated examples:
+   - Custom KPI and model parameters example now checks for the performance job's status.
+   - Update H2O example to show model being published and scored using the "maslocal" destination.
+   - Updated models to be more realistic for `pzmm_binary_classification_model_import.ipynb`.
+
+**Bugfixes**
+ - Adjust `pzmm.ScoreCode.write_score_code()` function to be compatible with future versions of pandas.
+ - Reworked H2O section of `pzmm.ScoreCode.write_score_code()` to properly call H2OFrame values.
+ - Fixed call to `pzmm.JSONFiles.calculate_model_statistics()` in `pzmm_binary_classification_model_import.ipynb`.
 
 v1.9.3 (2023-06-08)
 ----------
