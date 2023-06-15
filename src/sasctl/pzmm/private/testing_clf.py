@@ -29,7 +29,7 @@ clf = RandomForestClassifier(random_state=123)
 clf.fit(X_train, Y_train)
 
 # create score table
-score_data = {'P_Survived0': clf.predict_proba(df_mod.drop(target, axis=1)[features])[:,0],
+score_data = {'P_Survived1': clf.predict_proba(df_mod.drop(target, axis=1)[features])[:,1],
               'Survived': df[target],
               'Sex': df[senVar],
               'Pclass': df['Pclass']}  # original sensitive variable} # target
@@ -49,11 +49,10 @@ sess = Session(hostname, username, password, protocol='http')
 # only one variable passed for pred_value, multiple sensitive variables
 clf_example = JF.assess_model_bias(
      score_table=scored_df,
-     actual_value='Survived',
-     pred_values='P_Survived0',
-     sensitive_value=['Sex', 'Pclass'],
-     target_level = 0,
-     type='class'
+     actual_values='Survived',
+     prob_values='P_Survived1',
+     sensitive_values=['Sex', 'Pclass'],
+     target_level = 1
  )
 
 print(clf_example)

@@ -756,12 +756,14 @@ class JSONFiles:
     @classmethod
     def assess_model_bias(
         cls,
-        score_table: DataFrame = None,
-        actual_value: str = None,
-        pred_values: Union[str, List[str]] = None,
+        score_table: DataFrame,
+        sensitive_values: Union[str, List[str]],
+        actual_values: str,
+        pred_values: str = None,
+        prob_values: Union[str, List[str]] = None,
         target_level: Union[int, float, str] = None,
-        sensitive_value: Union[str, List[str]] = None,
-        type: str = "reg",
+        indicator_value: str = None,
+        datarole: str = "TEST",
     ):
         """
         Calculates model bias metrics for sensitive variables.
@@ -783,22 +785,29 @@ class JSONFiles:
                 "Lift charts with the calculate_model_statistics function."
             )
 
+        # TODO: throw error if neither prob_values or pred_values were provided
+
         # initialize
         levels = None
 
         # if it's a classification problem
-        if type == 'class':
-            # TODO: Throw error if only one level is in the data (i think)
-            levels = list(score_table[actual_value].unique())
-            if isinstance(pred_values, str):
-                # if only on variable for probabilities was provided, need to calculate the other
-                non_target_level = [level for level in levels if level != str(target_level)][0]
-                score_table['P_' + actual_value + non_target_level] = 1-score_table[pred_values]
-                # get column names for new prob_values
-                pred_values = list(
-                    score_table.drop([actual_value] + sensitive_value, axis=1).columns
-                )
+        if prob_values is not None:
+            # TODO: throw error if target level was not provided
 
+            # TODO: Throw error if only one level is in the data (i think)
+            levels = list(score_table[actual_values].unique())
+            if isinstance(prob_values, str):
+                # if only on variable for probabilities was provided, need to calculate the other
+                non_target_level = [
+                    level for level in levels if level != str(target_level)
+                ][0]
+                score_table["P_" + actual_values + non_target_level] = (
+                    1 - score_table[prob_values]
+                )
+                # get column names for new prob_values
+                prob_values = list(
+                    score_table.drop([actual_values] + sensitive_values, axis=1).columns
+                )
 
         # upload properly formatted score table to CAS
         conn.upload(score_table, casout=dict(name="score_table"))
@@ -807,15 +816,17 @@ class JSONFiles:
         maxdiff_dfs = []
         groupmetrics_df = pd.DataFrame()
 
-        if isinstance(sensitive_value, str):
-            sensitive_value = [sensitive_value]
+        if isinstance(sensitive_values, str):
+            sensitive_values = [sensitive_values]
 
-        for x in sensitive_value:
+        for x in sensitive_values:
             # run assessBias, if levels=None then assessBias treats the input like a regression problem
             tables = conn.fairaitools.assessbias(
                 modelTableType="None",
-                predictedVariables=pred_values,
-                response=actual_value,
+                predictedVariables=pred_values
+                if pred_values is not None
+                else prob_values,
+                response=actual_values,
                 responseLevels=levels,
                 sensitiveVariable=x,
                 table="score_table",
@@ -826,24 +837,35 @@ class JSONFiles:
             maxdiff_dfs.append(maxdiff)
 
             # get group metrics table
+            group_metrics = cls.calculate_group_metrics(
+                score_table=score_table,
+                actual_values=actual_values,
+                sensitive_values=x,
+                pred_values=pred_values,
+                prob_values=prob_values,
+                target_level=target_level,
+                indicator_value=indicator_value,
+                datarole=datarole,
+            )
 
+            groupmetrics_df = pd.concat([groupmetrics_df, group_metrics])
 
         # create max diff json file with max diff table
         # create group metrics file with calculate_model_stats
 
-        return maxdiff_dfs[0]
+        return (maxdiff_dfs, groupmetrics_df)
 
     @classmethod
     def calculate_group_metrics(
         cls,
         score_table: DataFrame,
-        actual_value: str,
-        sensitive_value: str,
-        pred_value: Union[str, list[str]] = None,
-        prob_value: Union[str, list[str]] = None,
+        actual_values: str,
+        sensitive_values: str,
+        pred_values: str = None,
+        prob_values: Union[str, list[str]] = None,
         target_level: Union[int, float, str] = None,
         indicator_value: str = None,
-        datarole: str = "TEST"
+        datarole: str = "TEST",
     ) -> DataFrame:
         """
         Calculates fit statistics for each level of a sensitive variable given the score table
@@ -860,7 +882,7 @@ class JSONFiles:
                 "Lift charts with the calculate_model_statistics function."
             )
 
-        senvar_levels = list(score_table[sensitive_value].unique())
+        senvar_levels = list(score_table[sensitive_values].unique())
         conn.loadactionset(actionset="percentile")
 
         # initalizing output with final dataframe
@@ -875,37 +897,39 @@ class JSONFiles:
         lift = None
 
         # classification problem
-        if prob_value is not None:
+        if prob_values is not None:
             # if prob values were passed as a list, assume first variable is the probability prediction for the target
-            if isinstance(prob_value, list):
-                prob_value = prob_value[0]
+            if isinstance(prob_values, list):
+                prob_values = prob_values[0]
 
             # add indicator variable if one was not passed
             if indicator_value is None:
-                indicator_value = 'P_' + actual_value
+                indicator_value = "P_" + actual_values
                 # TODO: allow users to change cutoff
-                score_table[indicator_value] = score_table[prob_value].apply(lambda x: 1 if float(x) > 0.5 else 0)
+                score_table[indicator_value] = score_table[prob_values].apply(
+                    lambda x: 1 if float(x) > 0.5 else 0
+                )
 
             # other params needed for clf probs
-            pVar = prob_value
+            pVar = prob_values
             event = str(target_level)
             # TODO: allow users to change cutoff
             pEvent = str(0.5)
             rocOut = {"name": "ROC", "replace": True, "caslib": "Public"}
 
         # response is either predicted values (reg) or indicator values (clf)
-        response = pred_value if pred_value is not None else indicator_value
+        response = pred_values if pred_values is not None else indicator_value
 
         # formatting overall table
-        data = score_table[[actual_value, response]].astype(int)
-        if prob_value is not None:
+        data = score_table[[actual_values, response]].astype(int)
+        if prob_values is not None:
             # add predicted probabilities for clf probs
-            data[prob_value] = score_table[prob_value]
-        data[sensitive_value] = score_table[sensitive_value]
+            data[prob_values] = score_table[prob_values]
+        data[sensitive_values] = score_table[sensitive_values]
 
         for level in senvar_levels:
             # only keeping rows with relevant sensitive variable values
-            sub_data = data[data[sensitive_value] == level]
+            sub_data = data[data[sensitive_values] == level]
 
             conn.upload(
                 sub_data,
@@ -918,14 +942,14 @@ class JSONFiles:
                 pVar=pVar,
                 event=event,
                 pEvent=pEvent,
-                inputs=actual_value,
+                inputs=actual_values,
                 fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
                 casout={"name": "Lift", "replace": True, "caslib": "Public"},
                 rocOut=rocOut,
             )
 
             # creating dataframes
-            if prob_value is not None:
+            if prob_values is not None:
                 lift = pd.DataFrame(conn.CASTable("Lift", caslib="Public").to_frame())
                 roc = pd.DataFrame(conn.CASTable("ROC", caslib="Public").to_frame())
 
@@ -937,14 +961,14 @@ class JSONFiles:
                 fitstat=fitstats,
                 lift=lift,
                 roc=roc,
-                actual_value=actual_value,
-                sensitive_value=sensitive_value,
+                actual_values=actual_values,
+                sensitive_values=sensitive_values,
                 sensitive_value_level=level,
-                prob_value=prob_value,
+                prob_values=prob_values,
                 response=response,
-                target_level = target_level,
+                target_level=target_level,
                 data=sub_data,
-                datarole=datarole
+                datarole=datarole,
             )
 
             output = pd.concat([output, metrics])
@@ -954,20 +978,20 @@ class JSONFiles:
     @staticmethod
     def format_group_metrics_dataframe(
         data: DataFrame,
-        actual_value: str,
+        actual_values: str,
         response: str,
-        sensitive_value: str,
+        sensitive_values: str,
         sensitive_value_level: str,
         target_level: Union[str, int, float],
         fitstat: DataFrame,
-        prob_value: str = None,
+        prob_values: str = None,
         lift: DataFrame = None,
         roc: DataFrame = None,
-        datarole: str = "TEST"
+        datarole: str = "TEST",
     ):
         n = len(data.index)
 
-        if prob_value is not None:
+        if prob_values is not None:
             fitstat = fitstat[["_ASE_", "_RASE_", "_MCE_", "_MCLL_", "_NObs_"]]
             fitstat["_MISCCUTOFF_"] = fitstat["_MCE_"]
 
@@ -998,30 +1022,31 @@ class JSONFiles:
             metrics = pd.concat([fitstat, roc, lift], axis=1)
 
             # TODO: need to find a way to get these metrics
-            metrics['_kscut_'] = None
-            metrics['_miscks_'] = None
+            metrics["_kscut_"] = None
+            metrics["_miscks_"] = None
 
             # making metric columns lowercase to match JSON formatting
             metrics.columns = metrics.columns.str.lower()
 
             # adding other values in JSON file
             metrics["LEVEL"] = sensitive_value_level
-            metrics["_VARIABLE_"] = sensitive_value
+            metrics["_VARIABLE_"] = sensitive_values
             metrics["VLABEL"] = ""
             metrics["_DATAROLE_"] = datarole
 
-            for level in list(data[actual_value].unique()):
+            for level in list(data[actual_values].unique()):
                 if level == target_level:
                     # average prediction probability for target
-                    metrics[response + str(level)] = sum(data[prob_value]) / n
+                    metrics[response + str(level)] = sum(data[prob_values]) / n
                     # same as avg pred proba for target
-                    metrics['PREDICTED_EVENT'] = metrics[response + str(target_level)]
+                    metrics["PREDICTED_EVENT"] = metrics[response + str(target_level)]
                     # proportion of predicted responses that were classified as target
-                    metrics['INTO_EVENT'] = len(data[data[response] == target_level]) / n
+                    metrics["INTO_EVENT"] = (
+                        len(data[data[response] == target_level]) / n
+                    )
                 else:
-                    print('runs')
                     # average prediction probability for non-target
-                    metrics[response + str(level)] = 1 - (sum(data[prob_value]) / n)
+                    metrics[response + str(level)] = 1 - (sum(data[prob_values]) / n)
 
         else:
             # getting main values
@@ -1033,7 +1058,7 @@ class JSONFiles:
             metrics.columns = metrics.columns.str.lower()
             # adding other values
             metrics["LEVEL"] = sensitive_value_level
-            metrics["_VARIABLE_"] = sensitive_value
+            metrics["_VARIABLE_"] = sensitive_values
             metrics[response] = metrics["_avgyhat_"]
             metrics["VLABEL"] = ""
             metrics["_DATAROLE_"] = datarole

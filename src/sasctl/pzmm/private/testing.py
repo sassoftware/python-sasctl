@@ -47,11 +47,9 @@ sess = Session(hostname, username, password, protocol='http')
 # only one sensitive variable
 reg_example = JF.assess_model_bias(
     score_table=scored_df,
-    actual_value='Fare',
+    actual_values='Fare',
     pred_values='P_Fare',
-    sensitive_value='Sex',
-    target_level = 1,
-    type='reg'
+    sensitive_value='Sex'
 )
 
 print(reg_example.head())
