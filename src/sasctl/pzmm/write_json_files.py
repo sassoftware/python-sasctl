@@ -763,18 +763,51 @@ class JSONFiles:
         prob_values: Union[str, List[str]] = None,
         target_level: Union[int, float, str] = None,
         indicator_value: str = None,
-        datarole: str = "TEST",
+        cutoff: float = 0.5,
+        datarole: str = "TEST"
     ):
         """
-        Calculates model bias metrics for sensitive variables.
+        Calculates model bias metrics for sensitive variables and dumps metrics into SAS Viya readable JSON Files.
 
-        In dev: The method only takes a dataframe with the actual values, predicted values,
-        labels, and problem type.
+        Parameters
+        ----------
+        score_table : pandas.DataFrame
+            Data structure containing actual values, predicted or predicted probability values, and sensitive variable
+            values.
+        sensitive_values : string or list of strings
+            Sensitive variable name or names in score_table.
+        actual_values : string
+            Variable name containing the actual values in score_table.
+        pred_values : string, required for regression problems, otherwise optional
+            Variable name containing the predicted values in score_table. Required for regression problems. The default
+            value is None.
+        prob_values : string or list of strings, required for binary classification problems, otherwise optional
+           Variable name containing the predicted probability values in score table. The user can pass a string for the
+           predicted probability of the target class or a list of strings for the predicted probability of both classes
+           in the target. If passing a list, the first element should be the predicted probability of the target class.
+           Required for binary classification problems. Default is None.
+        target_level : int, float, string, required for binary classification problems, otherwise optional
+            Target class value. Required for binary classification problems. Default is None.
+        indicator_value : string, optional
+            Variable name containing predicted class in the score table. If not provided, these values will be
+            calculated using the user's defined cutoff or a default cutoff of 0.5. Only used in binary classification
+            problems. Default is None.
+        cutoff: float, optional
+            # TODO
+        datarole: string, optional
+            The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
 
-        For regression problems, pred_value only needs the predicted label. For classification problems,
-        pre_value needs labels for all levels of the target
+        Returns
+        -------
+        # TODO
 
-        Function returns MaxDiff .csv file with nobs, tp, tn, fp, and fns for JSON files
+        Raises
+        ------
+        RuntimeError
+            If swat is not installed, this function cannot perform the necessary
+            calculations.
+
+
         """
         try:
             sess = current_session()
@@ -872,6 +905,10 @@ class JSONFiles:
         with the predicted values or probabilities, the actual values, and the sensitive variable
 
         In dev: Returns a dataframe with relevant metrics for each level of the sensitive variable
+
+         Parameters
+        ----------
+
         """
         try:
             sess = current_session()
