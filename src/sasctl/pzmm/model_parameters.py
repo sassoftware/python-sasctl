@@ -156,14 +156,14 @@ class ModelParameters:
             hyperparameters = dict()
             hyperparameters['model_type'] = model.__class__.__name__
             hyperparameters['input_variables'] = model.exog_names
-            hyperparameters['weights'] = model.weights
+            hyperparameters['weights'] = model.weights.tolist()
             model_json = {"hyperparameters": hyperparameters}
             with open(
                 Path(pickle_path) / f"{model_prefix}Hyperparameters.json", "w"
             ) as f:
                 f.write(json.dumps(model_json, indent=4))
             
-        if model.__class__.__module__.startswith('sklearn.'):
+        if model.__class__.__module__.__contains__('sklearn'):
             sklearn_params()
         elif model.__class__.__module__.startswith('keras.'):
             tf_params()
