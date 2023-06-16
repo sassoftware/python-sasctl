@@ -767,7 +767,8 @@ class JSONFiles:
         datarole: str = "TEST"
     ):
         """
-        Calculates model bias metrics for sensitive variables and dumps metrics into SAS Viya readable JSON Files.
+        Calculates model bias metrics for sensitive variables and dumps metrics into SAS Viya readable JSON Files. This
+        function works for regression and binary classification problems.
 
         Parameters
         ----------
@@ -785,7 +786,8 @@ class JSONFiles:
            Variable name containing the predicted probability values in score table. The user can pass a string for the
            predicted probability of the target class or a list of strings for the predicted probability of both classes
            in the target. If passing a list, the first element should be the predicted probability of the target class.
-           Required for binary classification problems. Default is None.
+           No more than two elements can be provided if passing a list. Required for binary classification problems.
+           Default is None.
         target_level : int, float, string, required for binary classification problems, otherwise optional
             Target class value. Required for binary classification problems. Default is None.
         indicator_value : string, optional
@@ -818,22 +820,33 @@ class JSONFiles:
                 "Lift charts with the calculate_model_statistics function."
             )
 
-        # TODO: throw error if neither prob_values or pred_values were provided
+        if pred_values is None and prob_values is None:
+            raise ValueError("A value for pred_values (regression) or prob_values (classification) must be passed.")
 
         # initialize
         levels = None
 
         # if it's a classification problem
         if prob_values is not None:
-            # TODO: throw error if target level was not provided
+            if target_level is None:
+                raise ValueError("A target class must be specified for a classification problem.")
 
-            # TODO: Throw error if only one level is in the data (i think)
+            if isinstance(prob_values, list) and len(prob_values) > 2:
+                raise ValueError("No more than two elements can be passed in the prob_value list. This function only "
+                                 "supports binary classification problems.")
+
             levels = list(score_table[actual_values].unique())
-            if isinstance(prob_values, str):
-                # if only on variable for probabilities was provided, need to calculate the other
+
+            # if only on variable for probabilities was provided, need to calculate the other
+            if isinstance(prob_values, str) or len(prob_values) == 1:
+
+                if len(prob_values) == 1:
+                    prob_values = prob_values[0]
+
                 non_target_level = [
                     level for level in levels if level != str(target_level)
                 ][0]
+
                 score_table["P_" + actual_values + non_target_level] = (
                     1 - score_table[prob_values]
                 )
@@ -1059,8 +1072,8 @@ class JSONFiles:
             metrics = pd.concat([fitstat, roc, lift], axis=1)
 
             # TODO: need to find a way to get these metrics
-            metrics["_kscut_"] = None
-            metrics["_miscks_"] = None
+            metrics["_kscut_"] = np.nan
+            metrics["_miscks_"] = np.nan
 
             # making metric columns lowercase to match JSON formatting
             metrics.columns = metrics.columns.str.lower()
