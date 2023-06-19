@@ -45,24 +45,21 @@ sess = Session(hostname, username, password, protocol='http')
 # Examples #
 
 # only one sensitive variable
-reg_example = JF.assess_model_bias(
+# reg_example = JF.assess_model_bias(
+#     score_table=scored_df,
+#     actual_values='Fare',
+#     pred_values='P_Fare',
+#     sensitive_values='Sex'
+# )
+#
+# print(reg_example[1].head())
+
+# two sensitive variables
+reg_example2 = JF.assess_model_bias(
     score_table=scored_df,
     actual_values='Fare',
     pred_values='P_Fare',
-    sensitive_value='Sex'
+    sensitive_values=['Sex', 'Pclass']
 )
 
-print(reg_example.head())
-
-# two sensitive variables
-# reg_example2 = JF.assess_model_bias(
-#     score_table=scored_df,
-#     target_value='Fare',
-#     pred_value='P_Fare',
-#     sensitive_values=['Sex', 'Pclass'],
-#     type='reg'
-# )
-#
-# print(reg_example2[0])
-# print('\n')
-# print(reg_example2[1])
+print(f"group metrics table {reg_example2[1].head()}")

@@ -123,12 +123,12 @@ sess = Session(hostname, username, password, protocol='http')
 # print(f"group metrics table: {clf_example7[1].head()}")
 
 # prob_values and pred_values not passed
-# clf_example7 = JF.assess_model_bias(
-#      score_table=scored_df,
-#      actual_values='Survived',
-#      #prob_values=['P_Survived1'],
-#      sensitive_values=['Sex', 'Pclass'],
-#      target_level = 1
-#  )
+clf_example7 = JF.assess_model_bias(
+     score_table=scored_df,
+     actual_values='Survived',
+     prob_values=['P_Survived1'],
+     sensitive_values=['Sex', 'Pclass'],
+     target_level = 1
+ )
 #
-# print(f"group metrics table: {clf_example7[1].head()}")
+print(f"group metrics table: {clf_example7[1].head()}")

@@ -764,7 +764,7 @@ class JSONFiles:
         target_level: Union[int, float, str] = None,
         indicator_value: str = None,
         cutoff: float = 0.5,
-        datarole: str = "TEST"
+        datarole: str = "TEST",
     ):
         """
         Calculates model bias metrics for sensitive variables and dumps metrics into SAS Viya readable JSON Files. This
@@ -801,7 +801,9 @@ class JSONFiles:
 
         Returns
         -------
-        # TODO
+        In dev: Tuple. First element is a list of the max difference dataframes. Each pandas dataframe in the list
+        corresponds to each sensitive variable passed. The second element is one pandas dataframe for group metrics for
+        each level of each sensitive variable passed.
 
         Raises
         ------
@@ -809,19 +811,26 @@ class JSONFiles:
             If swat is not installed, this function cannot perform the necessary
             calculations.
 
+        ValueError
+            This function requires pred_values OR (regression problem) or prob_values AND target_level
+            (classification problem) to be passed
 
+            You cannot pass a list with more than 2 elements to prob_values. This funciton only supports binary
+            classification problems.
         """
         try:
             sess = current_session()
             conn = sess.as_swat()
         except ImportError:
             raise RuntimeError(
-                "The `swat` package is required to generate fit statistics, ROC, and "
-                "Lift charts with the calculate_model_statistics function."
+                "The `swat` package is required to generate fit statistics, ROC, and Lift charts with the "
+                "calculate_model_statistics function."
             )
 
         if pred_values is None and prob_values is None:
-            raise ValueError("A value for pred_values (regression) or prob_values (classification) must be passed.")
+            raise ValueError(
+                "A value for pred_values (regression) or prob_values (classification) must be passed."
+            )
 
         # initialize
         levels = None
@@ -829,17 +838,20 @@ class JSONFiles:
         # if it's a classification problem
         if prob_values is not None:
             if target_level is None:
-                raise ValueError("A target class must be specified for a classification problem.")
+                raise ValueError(
+                    "A target class must be specified for a classification problem."
+                )
 
             if isinstance(prob_values, list) and len(prob_values) > 2:
-                raise ValueError("No more than two elements can be passed in the prob_value list. This function only "
-                                 "supports binary classification problems.")
+                raise ValueError(
+                    "No more than two elements can be passed in the prob_value list. This function only "
+                    "supports binary classification problems."
+                )
 
             levels = list(score_table[actual_values].unique())
 
             # if only on variable for probabilities was provided, need to calculate the other
             if isinstance(prob_values, str) or len(prob_values) == 1:
-
                 if len(prob_values) == 1:
                     prob_values = prob_values[0]
 
@@ -905,22 +917,56 @@ class JSONFiles:
     def calculate_group_metrics(
         cls,
         score_table: DataFrame,
-        actual_values: str,
         sensitive_values: str,
+        actual_values: str,
         pred_values: str = None,
-        prob_values: Union[str, list[str]] = None,
+        prob_values: Union[str, List[str]] = None,
         target_level: Union[int, float, str] = None,
         indicator_value: str = None,
         datarole: str = "TEST",
+        cutoff: float = 0.5,
     ) -> DataFrame:
         """
-        Calculates fit statistics for each level of a sensitive variable given the score table
-        with the predicted values or probabilities, the actual values, and the sensitive variable
+        Calculates fit statistics for each level of a sensitive variable using the percentile.assess CAS action.
 
-        In dev: Returns a dataframe with relevant metrics for each level of the sensitive variable
-
-         Parameters
+        Parameters
         ----------
+        score_table : pandas.DataFrame
+            Data structure containing actual values, predicted or predicted probability values, and sensitive variable
+            values.
+        sensitive_values : string
+            Sensitive variable name in score_table.
+        actual_values : string
+            Variable name containing the actual values in score_table.
+        pred_values : string, required for regression problems, otherwise optional
+            Variable name containing the predicted values in score_table. Required for regression problems. The default
+            value is None.
+        prob_values : string or list of strings, required for binary classification problems, otherwise optional
+           Variable name containing the predicted probability values in score table. The user can pass a string for the
+           predicted probability of the target class or a list of strings for the predicted probability of both classes
+           in the target. If passing a list, the first element should be the predicted probability of the target class.
+           No more than two elements can be provided if passing a list. Required for binary classification problems.
+           Default is None.
+        target_level : int, float, string, required for binary classification problems, otherwise optional
+            Target class value. Required for binary classification problems. Default is None.
+        indicator_value : string, optional
+            Variable name containing predicted class in the score table. If not provided, these values will be
+            calculated using the user's defined cutoff or a default cutoff of 0.5. Only used in binary classification
+            problems. Default is None.
+        datarole: string, optional
+            The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
+        cutoff: float, optional
+            # TODO
+
+        Returns
+        -------
+        A pandas DataFrame with group metrics for each level of the sensitive variable.
+
+        Raises
+        ------
+        RuntimeError
+            If swat is not installed, this function cannot perform the necessary
+            calculations.
 
         """
         try:
@@ -939,10 +985,10 @@ class JSONFiles:
         output = pd.DataFrame()
 
         # not needed if reg problem
-        pVar = None
+        pvar = None
         event = None
-        pEvent = None
-        rocOut = None
+        pevent = None
+        rocout = None
         roc = None
         lift = None
 
@@ -960,12 +1006,12 @@ class JSONFiles:
                     lambda x: 1 if float(x) > 0.5 else 0
                 )
 
-            # other params needed for clf probs
-            pVar = prob_values
-            event = str(target_level)
-            # TODO: allow users to change cutoff
-            pEvent = str(0.5)
-            rocOut = {"name": "ROC", "replace": True, "caslib": "Public"}
+                # other params needed for clf probs
+                pvar = prob_values
+                event = str(target_level)
+                # TODO: allow users to change cutoff
+                pevent = str(0.5)
+                rocout = {"name": "ROC", "replace": True, "caslib": "Public"}
 
         # response is either predicted values (reg) or indicator values (clf)
         response = pred_values if pred_values is not None else indicator_value
@@ -989,14 +1035,15 @@ class JSONFiles:
             conn.percentile.assess(
                 table={"name": "assess_dataset", "caslib": "Public"},
                 response=response,
-                pVar=pVar,
+                pVar=pvar,
                 event=event,
-                pEvent=pEvent,
+                pEvent=pevent,
                 inputs=actual_values,
                 fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
                 casout={"name": "Lift", "replace": True, "caslib": "Public"},
-                rocOut=rocOut,
+                rocOut=rocout,
             )
+            # userCutoff=, use extra values
 
             # creating dataframes
             if prob_values is not None:
@@ -1017,7 +1064,7 @@ class JSONFiles:
                 prob_values=prob_values,
                 response=response,
                 target_level=target_level,
-                data=sub_data,
+                score_table=sub_data,
                 datarole=datarole,
             )
 
@@ -1027,19 +1074,54 @@ class JSONFiles:
 
     @staticmethod
     def format_group_metrics_dataframe(
-        data: DataFrame,
-        actual_values: str,
-        response: str,
+        score_table: DataFrame,
         sensitive_values: str,
         sensitive_value_level: str,
-        target_level: Union[str, int, float],
+        actual_values: str,
         fitstat: DataFrame,
+        response: str,
         prob_values: str = None,
+        target_level: Union[str, int, float] = None,
         lift: DataFrame = None,
         roc: DataFrame = None,
         datarole: str = "TEST",
-    ):
-        n = len(data.index)
+    ) -> DataFrame:
+        """
+        Calculates fit statistics for each level of a sensitive variable using the percentile.assess CAS action.
+
+        Parameters
+        ----------
+        score_table : pandas.DataFrame
+            Data structure containing actual values, predicted or predicted probability values, and sensitive variable
+            values.
+        sensitive_values : string
+            Sensitive variable name in score_table.
+        sensitive_value_level: string
+            Current sensitive value class (i.e. class 'male' for variable 'Sex')
+        actual_values : string
+            Variable name containing the actual values in score_table.
+        response : string
+            Variable name containing the predicted values (regression) or predicted classes (classification) in
+            score_table.
+        fitstat : pandas.DataFrame
+            Fitstats table produced by percentile.assess() CAS action transformed into a pandas dataframe
+        prob_values : string, required for binary classification problems, otherwise optional
+           Variable names for the predicted probabilities of the target level. Required for classification problems.
+           Default is None.
+        target_level : int, float, or string, required for binary classification problems, otherwise optional
+            Target class value. Required for binary classification problems. Default is None.
+        roc : pandas.DataFrame
+            ROC table produced by percentile.assess() CAS action transformed into a pandas dataframe
+        lift : pandas.DataFrame
+            Lift table produced by percentile.assess() CAS action transformed into a pandas dataframe
+        datarole: string, optional
+            The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
+
+        Returns
+        -------
+        A pandas DataFrame with group metrics for each level of the sensitive variable.
+        """
+        n = len(score_table.index)
 
         if prob_values is not None:
             fitstat = fitstat[["_ASE_", "_RASE_", "_MCE_", "_MCLL_", "_NObs_"]]
@@ -1084,26 +1166,28 @@ class JSONFiles:
             metrics["VLABEL"] = ""
             metrics["_DATAROLE_"] = datarole
 
-            for level in list(data[actual_values].unique()):
+            for level in list(score_table[actual_values].unique()):
                 if level == target_level:
                     # average prediction probability for target
-                    metrics[response + str(level)] = sum(data[prob_values]) / n
+                    metrics[response + str(level)] = sum(score_table[prob_values]) / n
                     # same as avg pred proba for target
                     metrics["PREDICTED_EVENT"] = metrics[response + str(target_level)]
                     # proportion of predicted responses that were classified as target
                     metrics["INTO_EVENT"] = (
-                        len(data[data[response] == target_level]) / n
+                        len(score_table[score_table[response] == target_level]) / n
                     )
                 else:
                     # average prediction probability for non-target
-                    metrics[response + str(level)] = 1 - (sum(data[prob_values]) / n)
+                    metrics[response + str(level)] = 1 - (
+                        sum(score_table[prob_values]) / n
+                    )
 
         else:
             # getting main values
             metrics = fitstat[
                 ["_NObs_", "_ASE_", "_RASE_", "_MAE_", "_RMAE_", "_MSLE_", "_RMSLE_"]
             ]
-            metrics["_avgyhat_"] = sum(data[response]) / n
+            metrics["_avgyhat_"] = sum(score_table[response]) / n
             # making metric columns lowercase to match JSON formatting
             metrics.columns = metrics.columns.str.lower()
             # adding other values
