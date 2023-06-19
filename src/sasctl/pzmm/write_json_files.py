@@ -1001,7 +1001,7 @@ class JSONFiles:
             # add indicator variable if one was not passed
             if indicator_value is None:
                 indicator_value = "P_" + actual_values
-                # TODO: allow users to change cutoff
+                # TODO: allow users to change cutoff -- difference between pEvent and userCutoff?
                 score_table[indicator_value] = score_table[prob_values].apply(
                     lambda x: 1 if float(x) > 0.5 else 0
                 )
@@ -1147,7 +1147,7 @@ class JSONFiles:
             roc["_TPR_"] = 1 - roc["_FPR_"]
             roc["_TNR_"] = 1 - roc["_FNR_"]
 
-            # TODO: Check these values
+            # TODO: Check these values -- _cumlift_ and _cumresp_ are 1 and 100 respectively?
             lift = lift.iloc[[-1]].reset_index()
             lift = lift[["_CumResp_", "_CumLift_", "_Lift_", "_Gain_", "_Resp_"]]
 
