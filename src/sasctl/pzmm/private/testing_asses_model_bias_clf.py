@@ -131,4 +131,4 @@ clf_example7 = JF.assess_model_bias(
      target_level = 1
  )
 #
-print(f"group metrics table: {clf_example7[1][['_cumlift_', '_cumresp_', '_gain_']]}")
+print(f"group metrics table: {clf_example7[1].head()}")

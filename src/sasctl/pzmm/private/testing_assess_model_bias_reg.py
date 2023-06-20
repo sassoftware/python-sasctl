@@ -3,6 +3,8 @@ from sasctl import Session
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 import pandas as pd
+import json
+from pathlib import Path
 
 df = pd.read_csv('data/titanic.csv')
 
@@ -63,3 +65,11 @@ reg_example2 = JF.assess_model_bias(
 )
 
 print(f"group metrics table {reg_example2[1].head()}")
+
+gm_df = reg_example2[1].reset_index()
+gm_dict = gm_df.to_dict()
+print(gm_dict)
+
+
+json_dict = [{}, {}, {}]
+json_dict[0] = JF.read_json_file('template_files/groupmetrics.json')
