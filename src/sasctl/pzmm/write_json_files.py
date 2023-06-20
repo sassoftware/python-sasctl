@@ -872,7 +872,7 @@ class JSONFiles:
 
         conn.loadactionset("fairaitools")
         maxdiff_dfs = []
-        groupmetrics_df = pd.DataFrame()
+        groupmetrics_dfs = []
 
         if isinstance(sensitive_values, str):
             sensitive_values = [sensitive_values]
@@ -892,11 +892,37 @@ class JSONFiles:
 
             # get maxdiff table, append to list
             maxdiff = pd.DataFrame(tables["MaxDifferences"])
+            # adding variable and other values to table
+            maxdiff['_VARIABLE_'] = x
+            maxdiff['_DATAROLE_'] = datarole
+            maxdiff['VLABEL'] = ""
             maxdiff_dfs.append(maxdiff)
 
-            # get group metrics table, concat to existing table
+            # get group metrics table, append to list
             group_metrics = pd.DataFrame(tables["GroupMetrics"])
-            groupmetrics_df = pd.concat([groupmetrics_df, group_metrics])
+            # adding variable to table
+            group_metrics['_VARIABLE_'] = x
+            groupmetrics_dfs.append(group_metrics)
+
+
+        # concating group metrics dataframes and adding values/ formatting
+        groupmetrics_df = pd.concat(groupmetrics_dfs)
+        groupmetrics_df = groupmetrics_df.rename(columns={'Group': 'LEVEL', 'N': 'nobs', 'MISCEVENT': 'misccutoff',
+                                                          'MISCEVENTKS': 'miscks', 'cutoffKS': 'kscut',
+                                                          'PREDICTED': 'avgyhat', 'maxKS': 'ks'})
+        groupmetrics_df['VLABEL'] = ""
+        groupmetrics_df['_DATAROLE_'] = datarole
+
+        for col in groupmetrics_df.columns:
+            if prob_values is not None:
+                upper_cols = ['LEVEL', '_VARIABLE_', '_DATAROLE_', 'VLABEL', 'INTO_EVENT', 'PREDICTED_EVENT'] \
+                        + prob_values
+            else:
+                upper_cols = ['LEVEL', '_VARIABLE_', '_DATAROLE_', 'VLABEL'] + [pred_values]
+            if col not in upper_cols:
+                groupmetrics_df = groupmetrics_df.rename(columns={col: '_' + col.lower() + '_'})
+
+        groupmetrics_df = groupmetrics_df.reindex(sorted(groupmetrics_df.columns), axis=1)
 
         return (maxdiff_dfs, groupmetrics_df)
 

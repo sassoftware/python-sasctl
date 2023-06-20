@@ -64,12 +64,6 @@ reg_example2 = JF.assess_model_bias(
     sensitive_values=['Sex', 'Pclass']
 )
 
-print(f"group metrics table {reg_example2[1].head()}")
-
-gm_df = reg_example2[1].reset_index()
-gm_dict = gm_df.to_dict()
-print(gm_dict)
+print(f"group metrics table {reg_example2[1].columns}")
 
 
-json_dict = [{}, {}, {}]
-json_dict[0] = JF.read_json_file('template_files/groupmetrics.json')

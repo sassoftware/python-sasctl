@@ -131,4 +131,5 @@ clf_example7 = JF.assess_model_bias(
      target_level = 1
  )
 #
-print(f"group metrics table: {clf_example7[1].head()}")
+print(f"{clf_example7[1].columns}")
+clf_example7[1].to_csv('data/gm_example.csv', index=False)
