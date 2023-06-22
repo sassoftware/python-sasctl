@@ -64,6 +64,6 @@ reg_example2 = JF.assess_model_bias(
     sensitive_values=['Sex', 'Pclass']
 )
 
-print(f"group metrics table {reg_example2[1].columns}")
+print(f"group metrics table {reg_example2[0].columns}")
 
 

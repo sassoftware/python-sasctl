@@ -849,6 +849,8 @@ class JSONFiles:
                 )
 
             levels = list(score_table[actual_values].unique())
+            if isinstance(sensitive_values, str):
+                sensitive_values = [sensitive_values]
 
             # if only on variable for probabilities was provided, need to calculate the other
             if isinstance(prob_values, str) or len(prob_values) == 1:
@@ -863,9 +865,9 @@ class JSONFiles:
                     1 - score_table[prob_values]
                 )
                 # get column names for new prob_values
-                prob_values = list(
-                    score_table.drop([actual_values] + sensitive_values, axis=1).columns
-                )
+                if isinstance(prob_values, str):
+                    prob_values = [prob_values]
+                prob_values.append("P_" + actual_values + non_target_level)
 
         # upload properly formatted score table to CAS
         conn.upload(score_table, casout=dict(name="score_table"))
@@ -873,9 +875,6 @@ class JSONFiles:
         conn.loadactionset("fairaitools")
         maxdiff_dfs = []
         groupmetrics_dfs = []
-
-        if isinstance(sensitive_values, str):
-            sensitive_values = [sensitive_values]
 
         for x in sensitive_values:
             # run assessBias, if levels=None then assessBias treats the input like a regression problem
@@ -892,10 +891,8 @@ class JSONFiles:
 
             # get maxdiff table, append to list
             maxdiff = pd.DataFrame(tables["MaxDifferences"])
-            # adding variable and other values to table
+            # adding variable to table
             maxdiff["_VARIABLE_"] = x
-            maxdiff["_DATAROLE_"] = datarole
-            maxdiff["VLABEL"] = ""
             maxdiff_dfs.append(maxdiff)
 
             # get group metrics table, append to list
@@ -904,7 +901,52 @@ class JSONFiles:
             group_metrics["_VARIABLE_"] = x
             groupmetrics_dfs.append(group_metrics)
 
-        # concating group metrics dataframes and adding values/ formatting
+        # formatting
+        group_metrics = cls.format_group_metrics(
+            groupmetrics_dfs=groupmetrics_dfs,
+            prob_values=prob_values,
+            pred_values=pred_values,
+            datarole=datarole
+        )
+
+        max_differences = cls.format_max_differences(
+            maxdiff_dfs=maxdiff_dfs,
+            datarole=datarole
+        )
+
+        return (max_differences, group_metrics)
+
+    @staticmethod
+    def format_max_differences(
+        maxdiff_dfs: List[DataFrame],
+        datarole: str = "TEST"
+    ) -> DataFrame:
+        maxdiff_df = pd.concat(maxdiff_dfs)
+        maxdiff_df = maxdiff_df.rename(
+            columns={
+                "Value": "maxdiff",
+                "Base": "BASE",
+                "Compare": "COMPARE"
+            }
+        )
+
+        maxdiff_df["VLABEL"] = ""
+        maxdiff_df["_DATAROLE_"] = datarole
+
+        maxdiff_df = maxdiff_df.reindex(
+            sorted(maxdiff_df.columns), axis=1
+        )
+
+        return maxdiff_df
+
+    @staticmethod
+    def format_group_metrics(
+        groupmetrics_dfs: List[DataFrame],
+        prob_values: List[str] = None,
+        pred_values: str = None,
+        datarole: str = "TEST"
+    ) -> DataFrame:
+        # adding group metrics dataframes and adding values/ formatting
         groupmetrics_df = pd.concat(groupmetrics_dfs)
         groupmetrics_df = groupmetrics_df.rename(
             columns={
@@ -923,13 +965,13 @@ class JSONFiles:
         for col in groupmetrics_df.columns:
             if prob_values is not None:
                 upper_cols = [
-                    "LEVEL",
-                    "_VARIABLE_",
-                    "_DATAROLE_",
-                    "VLABEL",
-                    "INTO_EVENT",
-                    "PREDICTED_EVENT",
-                ] + prob_values
+                                 "LEVEL",
+                                 "_VARIABLE_",
+                                 "_DATAROLE_",
+                                 "VLABEL",
+                                 "INTO_EVENT",
+                                 "PREDICTED_EVENT",
+                             ] + prob_values
             else:
                 upper_cols = ["LEVEL", "_VARIABLE_", "_DATAROLE_", "VLABEL"] + [
                     pred_values
@@ -942,8 +984,39 @@ class JSONFiles:
         groupmetrics_df = groupmetrics_df.reindex(
             sorted(groupmetrics_df.columns), axis=1
         )
+        return groupmetrics_df
 
-        return (maxdiff_dfs, groupmetrics_df)
+    @classmethod
+    def apply_assessbias_dataframes_to_json(
+        cls,
+        groupmetrics: DataFrame = None,
+        maxdifference: DataFrame = None,
+        actual_values: str = None,
+        prob_values: List[str] = None,
+        pred_values: str = None
+    ):
+        folder = "reg_jsons"
+        if prob_values is not None:
+            folder = "clf_jsons"
+
+        dfs = (groupmetrics, maxdifference)
+        json_dict = [{}, {}]
+
+        for i, name in enumerate(["groupMetrics", "maxDifferences"]):
+            json_template_path = (
+                Path(__file__).resolve().parent / f"template_files/{folder}/{name}.json"
+            )
+            print(json_template_path)
+            json_dict[i] = cls.read_json_file(json_template_path)
+
+        for i, data in enumerate(dfs):
+            # updating data rows
+            for row_num in range(len(data)):
+                row_dict = data.iloc[row_num].replace(float("nan"), None).to_dict()
+                new_data = {'dataMap': row_dict, 'rowNumber': row_num + 1}
+                json_dict[i]['data'].append(new_data)
+
+        return json_dict
 
     @classmethod
     def calculate_model_statistics(
