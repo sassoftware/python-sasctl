@@ -65,5 +65,6 @@ reg_example2 = JF.assess_model_bias(
 )
 
 print(f"group metrics table {reg_example2[0].columns}")
+reg_example2[0].to_csv('data/md_example_reg.csv', index=False)
 
 

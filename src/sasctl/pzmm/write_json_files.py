@@ -1021,14 +1021,23 @@ class JSONFiles:
             if prob_values is not None:
                 for j, prob_label in enumerate(prob_values):
                     json_dict[0]['data'][(i * 26) + j]['dataMap']['MetricLabel'] = f'Average Predicted: {actual_values}={1 - j}'
+            else:
+                json_dict[0]['data'][i * 8]['dataMap']['MetricLabel'] = f'Average Predicted: {actual_values}'
 
         # formatting parameter map for group metrics
         if prob_values is not None:
             for i, prob_label in enumerate(reversed(prob_values)):
+                json_dict[1]['parameterMap'][f'predict_proba{i}']['label'] = prob_label
                 json_dict[1]['parameterMap'][f'predict_proba{i}']['parameter'] = prob_label
                 json_dict[1]['parameterMap'][f'predict_proba{i}']['values'] = [prob_label]
                 json_dict[1]['parameterMap'] = {prob_label if k == f'predict_proba{i}' else k: v for k, v in
                                                 json_dict[1]['parameterMap'].items()}
+        else:
+            json_dict[1]['parameterMap']['predict']['label'] = pred_values
+            json_dict[1]['parameterMap']['predict']['parameter'] = pred_values
+            json_dict[1]['parameterMap']['predict']['values'] = [pred_values]
+            json_dict[1]['parameterMap'] = {pred_values if k == 'predict' else k: v for k, v in
+                                            json_dict[1]['parameterMap'].items()}
 
         return json_dict
 
