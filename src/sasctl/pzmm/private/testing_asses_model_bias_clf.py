@@ -132,4 +132,4 @@ clf_example7 = JF.assess_model_bias(
  )
 #
 print(f"{clf_example7[0].columns}")
-#clf_example7[1].to_csv('data/gm_example.csv', index=False)
+clf_example7[0].to_csv('data/md_example.csv', index=False)

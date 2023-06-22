@@ -991,6 +991,7 @@ class JSONFiles:
         cls,
         groupmetrics: DataFrame = None,
         maxdifference: DataFrame = None,
+        n_sensitivevariables: int = None,
         actual_values: str = None,
         prob_values: List[str] = None,
         pred_values: str = None
@@ -999,14 +1000,13 @@ class JSONFiles:
         if prob_values is not None:
             folder = "clf_jsons"
 
-        dfs = (groupmetrics, maxdifference)
+        dfs = (maxdifference, groupmetrics)
         json_dict = [{}, {}]
 
-        for i, name in enumerate(["groupMetrics", "maxDifferences"]):
+        for i, name in enumerate(["maxDifferences", "groupMetrics"]):
             json_template_path = (
                 Path(__file__).resolve().parent / f"template_files/{folder}/{name}.json"
             )
-            print(json_template_path)
             json_dict[i] = cls.read_json_file(json_template_path)
 
         for i, data in enumerate(dfs):
@@ -1015,6 +1015,20 @@ class JSONFiles:
                 row_dict = data.iloc[row_num].replace(float("nan"), None).to_dict()
                 new_data = {'dataMap': row_dict, 'rowNumber': row_num + 1}
                 json_dict[i]['data'].append(new_data)
+
+        # formatting metric label for max diff
+        for i in range(n_sensitivevariables):
+            if prob_values is not None:
+                for j, prob_label in enumerate(prob_values):
+                    json_dict[0]['data'][(i * 26) + j]['dataMap']['MetricLabel'] = f'Average Predicted: {actual_values}={1 - j}'
+
+        # formatting parameter map for group metrics
+        if prob_values is not None:
+            for i, prob_label in enumerate(reversed(prob_values)):
+                json_dict[1]['parameterMap'][f'predict_proba{i}']['parameter'] = prob_label
+                json_dict[1]['parameterMap'][f'predict_proba{i}']['values'] = [prob_label]
+                json_dict[1]['parameterMap'] = {prob_label if k == f'predict_proba{i}' else k: v for k, v in
+                                                json_dict[1]['parameterMap'].items()}
 
         return json_dict
 
