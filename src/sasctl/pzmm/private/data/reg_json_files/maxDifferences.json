@@ -103,7 +103,7 @@
                 "Metric": "P_Fare",
                 "MetricLabel": "Average Predicted: Fare",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Sex",
                 "maxdiff": 5.50040062495773
             },
@@ -116,7 +116,7 @@
                 "Metric": "ASE",
                 "MetricLabel": "Average Squared Error",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Sex",
                 "maxdiff": 116.143783094665
             },
@@ -129,7 +129,7 @@
                 "Metric": "RASE",
                 "MetricLabel": "Root Average Squared Error",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Sex",
                 "maxdiff": 2.06147035110943
             },
@@ -142,7 +142,7 @@
                 "Metric": "MAE",
                 "MetricLabel": "Mean Absolute Error",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Sex",
                 "maxdiff": 2.10204414610081
             },
@@ -155,7 +155,7 @@
                 "Metric": "RMAE",
                 "MetricLabel": "Root Mean Absolute Error",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Sex",
                 "maxdiff": 0.27261521860858
             },
@@ -168,7 +168,7 @@
                 "Metric": "MSLE",
                 "MetricLabel": "Mean Squared Logarithmic Error",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Sex",
                 "maxdiff": 0.3993612676661
             },
@@ -181,7 +181,7 @@
                 "Metric": "RMSLE",
                 "MetricLabel": "Root Mean Squared Logarithmic Error",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Sex",
                 "maxdiff": 0.26842419316734
             },
@@ -194,7 +194,7 @@
                 "Metric": "PREDICTED",
                 "MetricLabel": "Average Prediction",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Sex",
                 "maxdiff": 5.50040062495773
             },
@@ -207,7 +207,7 @@
                 "Metric": "P_Fare",
                 "MetricLabel": "Average Predicted: Fare",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Pclass",
                 "maxdiff": 71.6925367438858
             },
@@ -220,7 +220,7 @@
                 "Metric": "ASE",
                 "MetricLabel": "Average Squared Error",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Pclass",
                 "maxdiff": 3028.07474361257
             },
@@ -233,7 +233,7 @@
                 "Metric": "RASE",
                 "MetricLabel": "Root Average Squared Error",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Pclass",
                 "maxdiff": 43.2851585902399
             },
@@ -246,7 +246,7 @@
                 "Metric": "MAE",
                 "MetricLabel": "Mean Absolute Error",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Pclass",
                 "maxdiff": 30.102010092422
             },
@@ -259,7 +259,7 @@
                 "Metric": "RMAE",
                 "MetricLabel": "Root Mean Absolute Error",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Pclass",
                 "maxdiff": 3.26743552392739
             },
@@ -272,7 +272,7 @@
                 "Metric": "MSLE",
                 "MetricLabel": "Mean Squared Logarithmic Error",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Pclass",
                 "maxdiff": 0.31410598512007
             },
@@ -285,7 +285,7 @@
                 "Metric": "RMSLE",
                 "MetricLabel": "Root Mean Squared Logarithmic Error",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Pclass",
                 "maxdiff": 0.23114445039865
             },
@@ -298,7 +298,7 @@
                 "Metric": "PREDICTED",
                 "MetricLabel": "Average Prediction",
                 "VLABEL": "",
-                "_DATAROLE_": "TEST",
+                "_DATAROLE_": "TRAIN",
                 "_VARIABLE_": "Pclass",
                 "maxdiff": 71.6925367438858
             },

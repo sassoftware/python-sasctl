@@ -910,6 +910,7 @@ class JSONFiles:
             maxdiff_dfs=maxdiff_dfs, datarole=datarole
         )
 
+        # getting json files
         json_files = cls.bias_dataframes_to_json(
             groupmetrics=group_metrics,
             maxdifference=max_differences,
