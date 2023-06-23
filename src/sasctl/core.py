@@ -357,11 +357,11 @@ class Session(requests.Session):
                 port = address.port
                 auth = hostname._sw_connection._auth.decode("utf-8")
                 # Checks to see if authentication was made via user/pass or auth token
-                if(auth.startswith("Basic")):
+                if auth.startswith("Basic"):
                     # User/pass
                     auth = auth.replace("Basic ", "")
                     username, password = base64.b64decode(auth).decode("utf-8").split(":")
-                elif(auth.startswith("Bearer")):
+                elif auth.startswith("Bearer"):
                     # Auth token
                     token = auth.replace("Bearer ", "")
             else:
