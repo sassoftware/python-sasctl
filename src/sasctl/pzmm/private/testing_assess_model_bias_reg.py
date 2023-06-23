@@ -6,6 +6,7 @@ import pandas as pd
 import json
 from pathlib import Path
 
+
 df = pd.read_csv('data/titanic.csv')
 
 # transform data for model
@@ -61,10 +62,11 @@ reg_example2 = JF.assess_model_bias(
     score_table=scored_df,
     actual_values='Fare',
     pred_values='P_Fare',
-    sensitive_values=['Sex', 'Pclass']
+    sensitive_values=['Sex', 'Pclass'],
+    json_path=r'C:\Users\elmcfa\PycharmProjects\python-sasctl\src\sasctl\pzmm\private\data\reg_json_files'
 )
 
-print(f"group metrics table {reg_example2[0].columns}")
-reg_example2[0].to_csv('data/md_example_reg.csv', index=False)
+# print(f"group metrics table {reg_example2[0].columns}")
+# reg_example2[0].to_csv('data/md_example_reg.csv', index=False)
 
 

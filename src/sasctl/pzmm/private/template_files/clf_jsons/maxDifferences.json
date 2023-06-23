@@ -1,0 +1,103 @@
+{
+  "creationTimeStamp": "0001-01-01T00:00:00Z",
+  "modifiedTimeStamp": "0001-01-01T00:00:00Z",
+  "revision": 0,
+  "name": "maxDifferences",
+  "version": 0,
+  "order": 0,
+  "parameterMap": {
+    "BASE": {
+      "label": "Base Level",
+      "length": 100,
+      "order": 4,
+      "parameter": "BASE",
+      "preformatted": false,
+      "type": "char",
+      "values": [
+        "BASE"
+      ]
+    },
+    "COMPARE": {
+      "label": "Comparison Level",
+      "length": 100,
+      "order": 5,
+      "parameter": "COMPARE",
+      "preformatted": false,
+      "type": "char",
+      "values": [
+        "COMPARE"
+      ]
+    },
+    "Metric": {
+      "label": "Metric",
+      "length": 15,
+      "order": 6,
+      "parameter": "Metric",
+      "preformatted": false,
+      "type": "char",
+      "values": [
+        "Metric"
+      ]
+    },
+    "MetricLabel": {
+      "label": "Metric Label",
+      "length": 42,
+      "order": 7,
+      "parameter": "MetricLabel",
+      "preformatted": false,
+      "type": "char",
+      "values": [
+        "MetricLabel"
+      ]
+    },
+    "VLABEL": {
+      "label": "Variable Label",
+      "length": 256,
+      "order": 2,
+      "parameter": "VLABEL",
+      "preformatted": false,
+      "type": "char",
+      "values": [
+        "VLABEL"
+      ]
+    },
+    "_DATAROLE_": {
+      "label": "Data Role",
+      "length": 8,
+      "order": 3,
+      "parameter": "_DATAROLE_",
+      "preformatted": false,
+      "type": "char",
+      "values": [
+        "_DATAROLE_"
+      ]
+    },
+    "_VARIABLE_": {
+      "label": "Variable",
+      "length": 255,
+      "order": 1,
+      "parameter": "_VARIABLE_",
+      "preformatted": false,
+      "type": "char",
+      "values": [
+        "_VARIABLE_"
+      ]
+    },
+    "maxdiff": {
+      "label": "Maximum Metric Difference",
+      "length": 8,
+      "order": 8,
+      "parameter": "maxdiff",
+      "preformatted": false,
+      "type": "num",
+      "values": [
+        "maxdiff"
+      ]
+    }
+  },
+  "data": [
+
+  ],
+  "xInteger": false,
+  "yInteger": false
+}

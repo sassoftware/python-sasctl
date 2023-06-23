@@ -54,6 +54,8 @@ META = "fileMetadata.json"
 FITSTAT = "dmcas_fitstat.json"
 ROC = "dmcas_roc.json"
 LIFT = "dmcas_lift.json"
+MAXDIFFERENCES = "maxDifferences.json"
+GROUPMETRICS = "groupMetrics.json"
 
 
 def _flatten(nested_list: Iterable) -> Generator[Any, None, None]:
@@ -762,10 +764,10 @@ class JSONFiles:
         pred_values: str = None,
         prob_values: Union[str, List[str]] = None,
         target_level: Union[int, float, str] = None,
-        indicator_value: str = None,
+        json_path: Union[str, Path, None] = None,
         cutoff: float = 0.5,
         datarole: str = "TEST",
-    ):
+    ) -> Union[dict, None]:
         """
         Calculates model bias metrics for sensitive variables and dumps metrics into SAS Viya readable JSON Files. This
         function works for regression and binary classification problems.
@@ -788,22 +790,20 @@ class JSONFiles:
            in the target. If passing a list, the first element should be the predicted probability of the target class.
            No more than two elements can be provided if passing a list. Required for binary classification problems.
            Default is None.
-        target_level : int, float, string, required for binary classification problems, otherwise optional
-            Target class value. Required for binary classification problems. Default is None.
-        indicator_value : string, optional
-            Variable name containing predicted class in the score table. If not provided, these values will be
-            calculated using the user's defined cutoff or a default cutoff of 0.5. Only used in binary classification
-            problems. Default is None.
+        target_level : int, float, string, optional
+            Target class value. Default is None.
         cutoff: float, optional
             # TODO
         datarole: string, optional
             The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
+        json_path : str or Path, optional
+            Location for the output JSON files. The default value is None.
 
         Returns
         -------
-        In dev: Tuple. First element is a list of the max difference dataframes. Each pandas dataframe in the list
-        corresponds to each sensitive variable passed. The second element is one pandas dataframe for group metrics for
-        each level of each sensitive variable passed.
+        dict
+            Dictionary containing a key-value pair representing the files name and json
+            dumps respectively.
 
         Raises
         ------
@@ -812,10 +812,9 @@ class JSONFiles:
             calculations.
 
         ValueError
-            This function requires pred_values OR (regression problem) or prob_values AND target_level
-            (classification problem) to be passed
+            This function requires pred_values OR (regression) or prob_values (classification) to be passed
 
-            You cannot pass a list with more than 2 elements to prob_values. This funciton only supports binary
+            You cannot pass a list with more than 2 elements to prob_values. This function only supports binary
             classification problems.
         """
         try:
@@ -832,16 +831,11 @@ class JSONFiles:
                 "A value for pred_values (regression) or prob_values (classification) must be passed."
             )
 
-        # initialize
+        # initialize levels variable, None for regression
         levels = None
 
         # if it's a classification problem
         if prob_values is not None:
-            if target_level is None:
-                raise ValueError(
-                    "A target class must be specified for a classification problem."
-                )
-
             if isinstance(prob_values, list) and len(prob_values) > 2:
                 raise ValueError(
                     "No more than two elements can be passed in the prob_value list. This function only "
@@ -849,24 +843,24 @@ class JSONFiles:
                 )
 
             levels = list(score_table[actual_values].unique())
-            if isinstance(sensitive_values, str):
-                sensitive_values = [sensitive_values]
 
             # if only on variable for probabilities was provided, need to calculate the other
             if isinstance(prob_values, str) or len(prob_values) == 1:
-                if len(prob_values) == 1:
+                if isinstance(prob_values, list):
                     prob_values = prob_values[0]
 
-                non_target_level = [
-                    level for level in levels if level != str(target_level)
-                ][0]
-
+                non_target_level = "other"
+                # specify value of other level if target level is specified
+                if target_level is not None:
+                    non_target_level = [
+                        level for level in levels if level != str(target_level)
+                    ][0]
                 score_table["P_" + actual_values + non_target_level] = (
                     1 - score_table[prob_values]
                 )
+
                 # get column names for new prob_values
-                if isinstance(prob_values, str):
-                    prob_values = [prob_values]
+                prob_values = [prob_values]
                 prob_values.append("P_" + actual_values + non_target_level)
 
         # upload properly formatted score table to CAS
@@ -875,6 +869,9 @@ class JSONFiles:
         conn.loadactionset("fairaitools")
         maxdiff_dfs = []
         groupmetrics_dfs = []
+
+        if isinstance(sensitive_values, str):
+            sensitive_values = [sensitive_values]
 
         for x in sensitive_values:
             # run assessBias, if levels=None then assessBias treats the input like a regression problem
@@ -901,41 +898,43 @@ class JSONFiles:
             group_metrics["_VARIABLE_"] = x
             groupmetrics_dfs.append(group_metrics)
 
-        # formatting
+        # overall formatting
         group_metrics = cls.format_group_metrics(
             groupmetrics_dfs=groupmetrics_dfs,
             prob_values=prob_values,
             pred_values=pred_values,
-            datarole=datarole
+            datarole=datarole,
         )
 
         max_differences = cls.format_max_differences(
-            maxdiff_dfs=maxdiff_dfs,
-            datarole=datarole
+            maxdiff_dfs=maxdiff_dfs, datarole=datarole
         )
 
-        return (max_differences, group_metrics)
+        json_files = cls.bias_dataframes_to_json(
+            groupmetrics=group_metrics,
+            maxdifference=max_differences,
+            n_sensitivevariables=len(sensitive_values),
+            actual_values=actual_values,
+            prob_values=prob_values,
+            pred_values=pred_values,
+            json_path=json_path,
+        )
+
+        return json_files
 
     @staticmethod
     def format_max_differences(
-        maxdiff_dfs: List[DataFrame],
-        datarole: str = "TEST"
+        maxdiff_dfs: List[DataFrame], datarole: str = "TEST"
     ) -> DataFrame:
         maxdiff_df = pd.concat(maxdiff_dfs)
         maxdiff_df = maxdiff_df.rename(
-            columns={
-                "Value": "maxdiff",
-                "Base": "BASE",
-                "Compare": "COMPARE"
-            }
+            columns={"Value": "maxdiff", "Base": "BASE", "Compare": "COMPARE"}
         )
 
         maxdiff_df["VLABEL"] = ""
         maxdiff_df["_DATAROLE_"] = datarole
 
-        maxdiff_df = maxdiff_df.reindex(
-            sorted(maxdiff_df.columns), axis=1
-        )
+        maxdiff_df = maxdiff_df.reindex(sorted(maxdiff_df.columns), axis=1)
 
         return maxdiff_df
 
@@ -944,7 +943,7 @@ class JSONFiles:
         groupmetrics_dfs: List[DataFrame],
         prob_values: List[str] = None,
         pred_values: str = None,
-        datarole: str = "TEST"
+        datarole: str = "TEST",
     ) -> DataFrame:
         # adding group metrics dataframes and adding values/ formatting
         groupmetrics_df = pd.concat(groupmetrics_dfs)
@@ -965,13 +964,13 @@ class JSONFiles:
         for col in groupmetrics_df.columns:
             if prob_values is not None:
                 upper_cols = [
-                                 "LEVEL",
-                                 "_VARIABLE_",
-                                 "_DATAROLE_",
-                                 "VLABEL",
-                                 "INTO_EVENT",
-                                 "PREDICTED_EVENT",
-                             ] + prob_values
+                    "LEVEL",
+                    "_VARIABLE_",
+                    "_DATAROLE_",
+                    "VLABEL",
+                    "INTO_EVENT",
+                    "PREDICTED_EVENT",
+                ] + prob_values
             else:
                 upper_cols = ["LEVEL", "_VARIABLE_", "_DATAROLE_", "VLABEL"] + [
                     pred_values
@@ -987,59 +986,93 @@ class JSONFiles:
         return groupmetrics_df
 
     @classmethod
-    def apply_assessbias_dataframes_to_json(
+    def bias_dataframes_to_json(
         cls,
         groupmetrics: DataFrame = None,
         maxdifference: DataFrame = None,
         n_sensitivevariables: int = None,
         actual_values: str = None,
         prob_values: List[str] = None,
-        pred_values: str = None
+        pred_values: str = None,
+        json_path: Union[str, Path, None] = None,
     ):
-        folder = "reg_jsons"
-        if prob_values is not None:
-            folder = "clf_jsons"
+        folder = "reg_jsons" if prob_values is None else "clf_jsons"
 
         dfs = (maxdifference, groupmetrics)
         json_dict = [{}, {}]
 
         for i, name in enumerate(["maxDifferences", "groupMetrics"]):
+            # reading template files
             json_template_path = (
                 Path(__file__).resolve().parent / f"template_files/{folder}/{name}.json"
             )
             json_dict[i] = cls.read_json_file(json_template_path)
-
-        for i, data in enumerate(dfs):
             # updating data rows
-            for row_num in range(len(data)):
-                row_dict = data.iloc[row_num].replace(float("nan"), None).to_dict()
-                new_data = {'dataMap': row_dict, 'rowNumber': row_num + 1}
-                json_dict[i]['data'].append(new_data)
+            for row_num in range(len(dfs[i])):
+                row_dict = dfs[i].iloc[row_num].replace(float("nan"), None).to_dict()
+                new_data = {"dataMap": row_dict, "rowNumber": row_num + 1}
+                json_dict[i]["data"].append(new_data)
 
         # formatting metric label for max diff
         for i in range(n_sensitivevariables):
             if prob_values is not None:
                 for j, prob_label in enumerate(prob_values):
-                    json_dict[0]['data'][(i * 26) + j]['dataMap']['MetricLabel'] = f'Average Predicted: {actual_values}={1 - j}'
+                    json_dict[0]["data"][(i * 26) + j]["dataMap"][
+                        "MetricLabel"
+                    ] = f"Average Predicted: {actual_values}={1 - j}"
             else:
-                json_dict[0]['data'][i * 8]['dataMap']['MetricLabel'] = f'Average Predicted: {actual_values}'
+                json_dict[0]["data"][i * 8]["dataMap"][
+                    "MetricLabel"
+                ] = f"Average Predicted: {actual_values}"
 
         # formatting parameter map for group metrics
         if prob_values is not None:
-            for i, prob_label in enumerate(reversed(prob_values)):
-                json_dict[1]['parameterMap'][f'predict_proba{i}']['label'] = prob_label
-                json_dict[1]['parameterMap'][f'predict_proba{i}']['parameter'] = prob_label
-                json_dict[1]['parameterMap'][f'predict_proba{i}']['values'] = [prob_label]
-                json_dict[1]['parameterMap'] = {prob_label if k == f'predict_proba{i}' else k: v for k, v in
-                                                json_dict[1]['parameterMap'].items()}
+            for i, prob_label in enumerate(prob_values):
+                json_dict[1]["parameterMap"][f"predict_proba{i}"]["label"] = prob_label
+                json_dict[1]["parameterMap"][f"predict_proba{i}"][
+                    "parameter"
+                ] = prob_label
+                json_dict[1]["parameterMap"][f"predict_proba{i}"]["values"] = [
+                    prob_label
+                ]
+                json_dict[1]["parameterMap"] = cls.rename_dict_key(
+                    json_dict[1]["parameterMap"], prob_label, f"predict_proba{i}"
+                )
         else:
-            json_dict[1]['parameterMap']['predict']['label'] = pred_values
-            json_dict[1]['parameterMap']['predict']['parameter'] = pred_values
-            json_dict[1]['parameterMap']['predict']['values'] = [pred_values]
-            json_dict[1]['parameterMap'] = {pred_values if k == 'predict' else k: v for k, v in
-                                            json_dict[1]['parameterMap'].items()}
+            json_dict[1]["parameterMap"]["predict"]["label"] = pred_values
+            json_dict[1]["parameterMap"]["predict"]["parameter"] = pred_values
+            json_dict[1]["parameterMap"]["predict"]["values"] = [pred_values]
+            json_dict[1]["parameterMap"] = cls.rename_dict_key(
+                json_dict[1]["parameterMap"], pred_values, "predict"
+            )
 
-        return json_dict
+        if json_path:
+            for i, name in enumerate([MAXDIFFERENCES, GROUPMETRICS]):
+                with open(Path(json_path) / name, "w") as json_file:
+                    json_file.write(json.dumps(json_dict[i], indent=4, cls=NpEncoder))
+                if cls.notebook_output:
+                    print(
+                        f"{name} was successfully written and saved to "
+                        f"{Path(json_path) / name}"
+                    )
+        return {
+            MAXDIFFERENCES: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
+            GROUPMETRICS: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
+        }
+
+    @staticmethod
+    def rename_dict_key(
+        dict: dict,
+        new_key: Union[str, int, float, bool],
+        old_key: Union[str, int, float, bool],
+    ) -> dict:
+        result = {}
+        for k, v in dict.items():
+            if k == old_key:
+                result[new_key] = v
+            else:
+                result.update({k: v})
+        return result
 
     @classmethod
     def calculate_model_statistics(

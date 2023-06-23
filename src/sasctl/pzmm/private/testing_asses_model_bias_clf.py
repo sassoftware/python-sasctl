@@ -127,9 +127,9 @@ clf_example7 = JF.assess_model_bias(
      score_table=scored_df,
      actual_values='Survived',
      prob_values=['P_Survived1'],
-     sensitive_values=['Sex', 'Pclass'],
-     target_level = 1
+     sensitive_values=['Sex'],
+     json_path=r'C:\Users\elmcfa\PycharmProjects\python-sasctl\src\sasctl\pzmm\private\data\clf_json_files'
  )
 #
-print(f"{clf_example7[0].columns}")
-clf_example7[1].to_csv('data/gm_example_clf.csv', index=False)
+#print(f"{clf_example7[0].columns}")
+#clf_example7[1].to_csv('data/gm_example_clf.csv', index=False)

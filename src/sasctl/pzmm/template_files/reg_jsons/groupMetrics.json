@@ -1,0 +1,158 @@
+{
+    "creationTimeStamp": "0001-01-01T00:00:00Z",
+    "modifiedTimeStamp": "0001-01-01T00:00:00Z",
+    "revision": 0,
+    "name": "groupMetrics",
+    "version": 0,
+    "order": 0,
+    "parameterMap": {
+        "LEVEL": {
+            "label": "Variable Level",
+            "length": 100,
+            "order": 4,
+            "parameter": "LEVEL",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "LEVEL"
+            ]
+        },
+        "predict": {
+            "label": "predict",
+            "length": 8,
+            "order": 13,
+            "parameter": "predict",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "predict"
+            ]
+        },
+        "VLABEL": {
+            "label": "Variable Label",
+            "length": 256,
+            "order": 2,
+            "parameter": "VLABEL",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "VLABEL"
+            ]
+        },
+        "_DATAROLE_": {
+            "label": "Data Role",
+            "length": 8,
+            "order": 3,
+            "parameter": "_DATAROLE_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_DATAROLE_"
+            ]
+        },
+        "_VARIABLE_": {
+            "label": "Variable",
+            "length": 255,
+            "order": 1,
+            "parameter": "_VARIABLE_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_VARIABLE_"
+            ]
+        },
+        "_ase_": {
+            "label": "Average Squared Error",
+            "length": 8,
+            "order": 6,
+            "parameter": "_ase_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_ase_"
+            ]
+        },
+        "_avgyhat_": {
+            "label": "Average Prediction for Target Variable",
+            "length": 8,
+            "order": 12,
+            "parameter": "_avgyhat_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_avgyhat_"
+            ]
+        },
+        "_mae_": {
+            "label": "Mean Absolute Error",
+            "length": 8,
+            "order": 8,
+            "parameter": "_mae_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_mae_"
+            ]
+        },
+        "_msle_": {
+            "label": "Mean Squared Logarithmic Error",
+            "length": 8,
+            "order": 10,
+            "parameter": "_msle_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_msle_"
+            ]
+        },
+        "_nobs_": {
+            "label": "Number of Observations",
+            "length": 8,
+            "order": 5,
+            "parameter": "_nobs_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_nobs_"
+            ]
+        },
+        "_rase_": {
+            "label": "Root Average Squared Error",
+            "length": 8,
+            "order": 7,
+            "parameter": "_rase_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_rase_"
+            ]
+        },
+        "_rmae_": {
+            "label": "Root Mean Absolute Error",
+            "length": 8,
+            "order": 9,
+            "parameter": "_rmae_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_rmae_"
+            ]
+        },
+        "_rmsle_": {
+            "label": "Root Mean Squared Logarithmic Error",
+            "length": 8,
+            "order": 11,
+            "parameter": "_rmsle_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_rmsle_"
+            ]
+        }
+    },
+    "data": [
+
+    ],
+    "xInteger": false,
+    "yInteger": false
+}
