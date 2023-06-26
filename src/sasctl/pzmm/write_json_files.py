@@ -792,12 +792,12 @@ class JSONFiles:
            Default is None.
         target_level : int, float, string, optional
             Target class value. Default is None.
-        cutoff: float, optional
-            # TODO
-        datarole: string, optional
-            The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
         json_path : str or Path, optional
             Location for the output JSON files. The default value is None.
+        cutoff : float, optional
+            Cutoff value for confusion matrix. Default is 0.5.
+        datarole: string, optional
+            The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
 
         Returns
         -------
@@ -883,6 +883,7 @@ class JSONFiles:
                 response=actual_values,
                 responseLevels=levels,
                 sensitiveVariable=x,
+                cutoff=cutoff,
                 table="score_table",
             )
 
