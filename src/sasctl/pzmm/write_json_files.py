@@ -848,6 +848,8 @@ class JSONFiles:
                     "supports binary classification problems."
                 )
 
+            score_table[actual_values] = score_table[actual_values].astype(str)
+            print(score_table.dtypes)
             levels = list(score_table[actual_values].unique())
 
             # if only on variable for probabilities was provided, need to calculate the other

@@ -14,7 +14,7 @@ df = pd.read_csv('data/titanic.csv')
 columns = ['Survived', 'Pclass', 'Sex', 'Age',
            'SibSp', 'Parch', 'Fare', 'Embarked']
 df = df.dropna(subset=columns)
-df['Survived'] = df['Survived'].astype(str)
+#df['Survived'] = df['Survived'].astype(str)
 df_mod = pd.get_dummies(df, columns=['Sex', 'Pclass', 'Embarked'])  # modified df for model
 
 # set up model
