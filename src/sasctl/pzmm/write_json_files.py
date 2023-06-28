@@ -873,9 +873,10 @@ class JSONFiles:
         if isinstance(sensitive_values, str):
             sensitive_values = [sensitive_values]
 
-        # checking if variable names match SAS rules
+        # checking if variable names match SAS rules, I could make this simpler by checking each column in the score
+        # table, but it's not necessary for all columns to match SAS conventions if they aren't being used
         if prob_values is None:
-            prob_values = [""]
+            prob_values = [None]
 
         variables = [actual_values, pred_values] + sensitive_values + prob_values
         for name in [name for name in variables if name is not None]:
@@ -884,6 +885,9 @@ class JSONFiles:
                         "All variable names must follow SAS naming conventions. Variables cannot have spaces or begin "
                         "with a number or symbol."
                     )
+
+        if prob_values == [None]:
+            prob_values = None
 
         # upload properly formatted score table to CAS
         conn.upload(score_table, casout=dict(name="score_table"))

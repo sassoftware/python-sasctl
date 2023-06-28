@@ -17,15 +17,15 @@
                 "LEVEL"
             ]
         },
-        "Predicted Composite Score": {
-            "label": "Predicted Composite Score",
+        "Predicted_Composite_Score": {
+            "label": "Predicted_Composite_Score",
             "length": 8,
             "order": 13,
-            "parameter": "Predicted Composite Score",
+            "parameter": "Predicted_Composite_Score",
             "preformatted": false,
             "type": "num",
             "values": [
-                "Predicted Composite Score"
+                "Predicted_Composite_Score"
             ]
         },
         "VLABEL": {
@@ -154,7 +154,7 @@
         {
             "dataMap": {
                 "LEVEL": "group A",
-                "Predicted Composite Score": 166.26275,
+                "Predicted_Composite_Score": 166.26275,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
@@ -172,7 +172,7 @@
         {
             "dataMap": {
                 "LEVEL": "group B",
-                "Predicted Composite Score": 163.178139880952,
+                "Predicted_Composite_Score": 163.178139880952,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
@@ -190,7 +190,7 @@
         {
             "dataMap": {
                 "LEVEL": "group C",
-                "Predicted Composite Score": 175.430055555555,
+                "Predicted_Composite_Score": 175.430055555555,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
@@ -208,7 +208,7 @@
         {
             "dataMap": {
                 "LEVEL": "group D",
-                "Predicted Composite Score": 211.540967532467,
+                "Predicted_Composite_Score": 211.540967532467,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
@@ -226,7 +226,7 @@
         {
             "dataMap": {
                 "LEVEL": "group E",
-                "Predicted Composite Score": 206.537476190476,
+                "Predicted_Composite_Score": 206.537476190476,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
@@ -244,7 +244,7 @@
         {
             "dataMap": {
                 "LEVEL": "female",
-                "Predicted Composite Score": 210.693888888888,
+                "Predicted_Composite_Score": 210.693888888888,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
@@ -262,7 +262,7 @@
         {
             "dataMap": {
                 "LEVEL": "male",
-                "Predicted Composite Score": 182.34470568783,
+                "Predicted_Composite_Score": 182.34470568783,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",

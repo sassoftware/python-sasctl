@@ -36,8 +36,8 @@ race = pd.from_dummies(X_test[['race/ethnicity_group A', 'race/ethnicity_group B
                                'race/ethnicity_group D', 'race/ethnicity_group E']], sep='_')
 gender = pd.from_dummies(X_test[['gender_male', 'gender_female']], sep='_')
 def build_score_table(model):
-    score_data = {'Predicted Composite Score': model.predict(X_test),
-                  'Composite Score': Y_test.to_numpy(),
+    score_data = {'Predicted_Composite_Score': model.predict(X_test),
+                  'Composite_Score': Y_test.to_numpy(),
                   'Race': race.to_numpy()[:,0],
                   'Gender': gender.to_numpy()[:,0]}
     data = pd.DataFrame(score_data)
@@ -57,8 +57,8 @@ sess = Session(hostname, username, password, protocol='http')
 for model in ["LinearRegression", "RandomForest", "GradientBoost"]:
     pzmm.JSONFiles.assess_model_bias(
         score_table=score_tables[model],
-        actual_values='Composite Score',
+        actual_values='Composite_Score',
         sensitive_values=['Race', 'Gender'],
-        pred_values='Predicted Composite Score',
+        pred_values='Predicted_Composite_Score',
         json_path=Path.cwd() / f"data/BiasMetrics/examModels/{model}"
     )

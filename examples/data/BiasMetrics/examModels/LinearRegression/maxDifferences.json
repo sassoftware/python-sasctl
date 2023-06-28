@@ -100,8 +100,8 @@
             "dataMap": {
                 "BASE": "group D",
                 "COMPARE": "group B",
-                "Metric": "Predicted Composite Score",
-                "MetricLabel": "Average Predicted: Composite Score",
+                "Metric": "Predicted_Composite_Score",
+                "MetricLabel": "Average Predicted: Composite_Score",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
@@ -204,8 +204,8 @@
             "dataMap": {
                 "BASE": "female",
                 "COMPARE": "male",
-                "Metric": "Predicted Composite Score",
-                "MetricLabel": "Average Predicted: Composite Score",
+                "Metric": "Predicted_Composite_Score",
+                "MetricLabel": "Average Predicted: Composite_Score",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
