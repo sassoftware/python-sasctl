@@ -68,8 +68,8 @@ for model in ["DecisionTree", "RandomForest", "GradientBoost"]:
     )
 
 # Turn JSON files into dataframes #
-with open(Path.cwd() / r'data/BiasMetrics/titanicModels/DecisionTree/groupMetrics.json') as jsonfile:
-    data = json.load(jsonfile)
-
-print(data['data'])
+# with open(Path.cwd() / r'data/BiasMetrics/titanicModels/DecisionTree/groupMetrics.json') as jsonfile:
+#     data = json.load(jsonfile)
+#
+# print(data['data'])
 

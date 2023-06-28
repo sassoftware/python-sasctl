@@ -778,18 +778,22 @@ class JSONFiles:
             Data structure containing actual values, predicted or predicted probability values, and sensitive variable
             values.
         sensitive_values : string or list of strings
-            Sensitive variable name or names in score_table.
+            Sensitive variable name or names in score_table. The variable name must follow SAS naming conventions (no
+            spaces and the name cannot begin with a number or symbol).
         actual_values : string
-            Variable name containing the actual values in score_table.
+            Variable name containing the actual values in score_table. The variable name must follow SAS naming
+            conventions (no spaces and the name cannot begin with a number or symbol).
         pred_values : string, required for regression problems, otherwise optional
-            Variable name containing the predicted values in score_table. Required for regression problems. The default
-            value is None.
+            Variable name containing the predicted values in score_table. The variable name must follow SAS naming
+            conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.
+            The default value is None.
         prob_values : string or list of strings, required for binary classification problems, otherwise optional
-           Variable name containing the predicted probability values in score table. The user can pass a string for the
-           predicted probability of the target class or a list of strings for the predicted probability of both classes
-           in the target. If passing a list, the first element should be the predicted probability of the target class.
-           No more than two elements can be provided if passing a list. Required for binary classification problems.
-           Default is None.
+           Variable name containing the predicted probability values in score table. The variable name or names must
+           follow SAS naming conventions (no spaces and the name cannot begin with a number or symbol).The user can pass
+           a string for the predicted probability of the target class or a list of strings for the predicted probability
+           of both classes in the target. If passing a list, the first element should be the predicted probability of
+           the target class. No more than two elements can be provided if passing a list. Required for binary
+           classification problems. Default is None.
         target_level : int, float, string, optional
             Target class value. Default is None.
         json_path : str or Path, optional
@@ -816,6 +820,8 @@ class JSONFiles:
 
             You cannot pass a list with more than 2 elements to prob_values. This function only supports binary
             classification problems.
+
+            Variable names must follow SAS naming conventions (no spaces or names that begin with a number or symbol)
         """
         try:
             sess = current_session()
@@ -863,15 +869,28 @@ class JSONFiles:
                 prob_values = [prob_values]
                 prob_values.append("P_" + actual_values + non_target_level)
 
+
+        if isinstance(sensitive_values, str):
+            sensitive_values = [sensitive_values]
+
+        # checking if variable names match SAS rules
+        if prob_values is None:
+            prob_values = [""]
+
+        variables = [actual_values, pred_values] + sensitive_values + prob_values
+        for name in [name for name in variables if name is not None]:
+            if name is not None and (" " in name or not name[0].isalpha()):
+                raise ValueError(
+                        "All variable names must follow SAS naming conventions. Variables cannot have spaces or begin "
+                        "with a number or symbol."
+                    )
+
         # upload properly formatted score table to CAS
         conn.upload(score_table, casout=dict(name="score_table"))
 
         conn.loadactionset("fairaitools")
         maxdiff_dfs = []
         groupmetrics_dfs = []
-
-        if isinstance(sensitive_values, str):
-            sensitive_values = [sensitive_values]
 
         for x in sensitive_values:
             # run assessBias, if levels=None then assessBias treats the input like a regression problem
