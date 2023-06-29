@@ -50,15 +50,15 @@
                 "P_Survived1"
             ]
         },
-        "P_Survivedother": {
-            "label": "P_Survivedother",
+        "P_Survived0": {
+            "label": "P_Survived0",
             "length": 8,
             "order": 34,
-            "parameter": "P_Survivedother",
+            "parameter": "P_Survived0",
             "preformatted": false,
             "type": "num",
             "values": [
-                "P_Survivedother"
+                "P_Survived0"
             ]
         },
         "VLABEL": {
@@ -398,8 +398,8 @@
                 "INTO_EVENT": 0.71739130434782,
                 "LEVEL": "female",
                 "PREDICTED_EVENT": 0.70086956521739,
+                "P_Survived0": 0.2991304347826,
                 "P_Survived1": 0.70086956521739,
-                "P_Survivedother": 0.2991304347826,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
@@ -438,8 +438,8 @@
                 "INTO_EVENT": 0.12658227848101,
                 "LEVEL": "male",
                 "PREDICTED_EVENT": 0.14126582278481,
+                "P_Survived0": 0.85873417721519,
                 "P_Survived1": 0.14126582278481,
-                "P_Survivedother": 0.85873417721518,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",

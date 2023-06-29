@@ -113,7 +113,7 @@
             "dataMap": {
                 "BASE": "male",
                 "COMPARE": "female",
-                "Metric": "P_Survivedother",
+                "Metric": "P_Survived0",
                 "MetricLabel": "Average Predicted: Survived=0",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",

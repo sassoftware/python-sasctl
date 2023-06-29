@@ -14,7 +14,6 @@ df = pd.read_csv('data/titanic.csv')
 columns = ['Survived', 'Pclass', 'Sex', 'Age',
            'SibSp', 'Parch', 'Fare', 'Embarked']
 df = df.dropna(subset=columns)
-#df['Survived'] = df['Survived'].astype(str)
 df_mod = pd.get_dummies(df, columns=['Sex', 'Pclass', 'Embarked'])  # modified df for model
 
 # set up model
@@ -32,13 +31,12 @@ clf.fit(X_train, Y_train)
 
 # create score table
 score_data = {'P_Survived1': clf.predict_proba(df_mod.drop(target, axis=1)[features])[:,1],
-                'P_Survived0': clf.predict_proba(df_mod.drop(target, axis=1)[features])[:,0],
+              'P_Survived0': clf.predict_proba(df_mod.drop(target, axis=1)[features])[:,0],
               'Survived': df[target],
               'Sex': df[senVar],
               'Pclass': df['Pclass']}  # original sensitive variable} # target
 
 scored_df = pd.DataFrame(score_data)
-
 
 ## Examples
 hostname = 'green.ingress-nginx.rint08-0020.race.sas.com'
@@ -126,10 +124,10 @@ sess = Session(hostname, username, password, protocol='http')
 clf_example7 = JF.assess_model_bias(
      score_table=scored_df,
      actual_values='Survived',
-     prob_values=['P_Survived1'],
+     prob_values=['P_Survived1', 'P_Survived0'],
      sensitive_values=['Sex'],
      json_path=r'C:\Users\elmcfa\PycharmProjects\python-sasctl\src\sasctl\pzmm\private\data\clf_json_files'
  )
-#
+
 #print(f"{clf_example7[0].columns}")
 #clf_example7[1].to_csv('data/gm_example_clf.csv', index=False)

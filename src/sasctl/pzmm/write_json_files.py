@@ -767,7 +767,7 @@ class JSONFiles:
         json_path: Union[str, Path, None] = None,
         cutoff: float = 0.5,
         datarole: str = "TEST",
-    ) -> Union[dict, None]:
+    ) -> Union[dict, None] :
         """
         Calculates model bias metrics for sensitive variables and dumps metrics into SAS Viya readable JSON Files. This
         function works for regression and binary classification problems.
@@ -823,6 +823,8 @@ class JSONFiles:
 
             Variable names must follow SAS naming conventions (no spaces or names that begin with a number or symbol)
         """
+        print(f"before formatting: {score_table.dtypes}")
+
         try:
             sess = current_session()
             conn = sess.as_swat()
@@ -848,8 +850,7 @@ class JSONFiles:
                     "supports binary classification problems."
                 )
 
-            score_table[actual_values] = score_table[actual_values].astype(str)
-            print(score_table.dtypes)
+            score_table[actual_values] = score_table[actual_values].astype(object)
             levels = list(score_table[actual_values].unique())
 
             # if only on variable for probabilities was provided, need to calculate the other
@@ -890,6 +891,8 @@ class JSONFiles:
 
         if prob_values == [None]:
             prob_values = None
+
+        print(f"after formatting: {score_table.dtypes}")
 
         # upload properly formatted score table to CAS
         conn.upload(score_table, casout=dict(name="score_table"))
