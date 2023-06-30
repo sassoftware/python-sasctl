@@ -851,24 +851,11 @@ class JSONFiles:
             score_table[actual_values] = score_table[actual_values].astype(object)
             levels = list(score_table[actual_values].unique())
 
-            # if only on variable for probabilities was provided, need to calculate the other
-            if isinstance(prob_values, str) or len(prob_values) == 1:
-                if isinstance(prob_values, list):
-                    prob_values = prob_values[0]
-
-                non_target_level = "other"
-                # specify value of other level if target level is specified
-                if target_level is not None:
-                    non_target_level = [
-                        level for level in levels if level != str(target_level)
-                    ][0]
-                score_table["P_" + actual_values + non_target_level] = (
-                    1 - score_table[prob_values]
-                )
-
-                # get column names for new prob_values
-                prob_values = [prob_values]
-                prob_values.append("P_" + actual_values + non_target_level)
+            prob_values = cls.format_prob_values(score_table=score_table,
+                                                 actual_values=actual_values,
+                                                 prob_values=prob_values,
+                                                 target_level=target_level,
+                                                 levels=levels)
 
 
         if isinstance(sensitive_values, str):
@@ -878,7 +865,6 @@ class JSONFiles:
         # table, but it's not necessary for all columns to match SAS conventions if they aren't being used
         if prob_values is None:
             prob_values = [None]
-
         variables = [actual_values, pred_values] + sensitive_values + prob_values
         for name in [name for name in variables if name is not None]:
             if name is not None and (" " in name or not name[0].isalpha()):
@@ -886,7 +872,6 @@ class JSONFiles:
                         "All variable names must follow SAS naming conventions. Variables cannot have spaces or begin "
                         "with a number or symbol."
                     )
-
         if prob_values == [None]:
             prob_values = None
 
@@ -947,6 +932,36 @@ class JSONFiles:
         )
 
         return json_files
+
+
+    @staticmethod
+    def format_prob_values(
+        score_table,
+        actual_values,
+        prob_values,
+        levels,
+        target_level = None
+    ) -> List[str]:
+        # if only on variable for probabilities was provided, need to calculate the other
+        if isinstance(prob_values, str) or len(prob_values) == 1:
+            if isinstance(prob_values, list):
+                prob_values = prob_values[0]
+
+            non_target_level = "other"
+            # specify value of other level if target level is specified
+            if target_level is not None:
+                non_target_level = [
+                    level for level in levels if level != str(target_level)
+                ][0]
+            score_table["P_" + actual_values + non_target_level] = (
+                    1 - score_table[prob_values]
+            )
+
+            # get column names for new prob_values
+            prob_values = [prob_values]
+            prob_values.append("P_" + actual_values + non_target_level)
+
+        return prob_values
 
     @staticmethod
     def format_max_differences(
