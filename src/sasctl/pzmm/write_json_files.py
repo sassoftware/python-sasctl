@@ -823,8 +823,6 @@ class JSONFiles:
 
             Variable names must follow SAS naming conventions (no spaces or names that begin with a number or symbol)
         """
-        print(f"before formatting: {score_table.dtypes}")
-
         try:
             sess = current_session()
             conn = sess.as_swat()
@@ -891,8 +889,6 @@ class JSONFiles:
 
         if prob_values == [None]:
             prob_values = None
-
-        print(f"after formatting: {score_table.dtypes}")
 
         # upload properly formatted score table to CAS
         conn.upload(score_table, casout=dict(name="score_table"))

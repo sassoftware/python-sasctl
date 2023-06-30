@@ -153,127 +153,127 @@
     "data": [
         {
             "dataMap": {
-                "LEVEL": "group A",
-                "Predicted_Composite_Score": 174.875,
+                "LEVEL": "group_A",
+                "Predicted_Composite_Score": 174.683390355609,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "_ase_": 5255.78125,
-                "_avgyhat_": 174.875,
-                "_mae_": 68.625,
-                "_msle_": 0.13486119666308,
+                "_ase_": 5277.93406198936,
+                "_avgyhat_": 174.683390355609,
+                "_mae_": 68.8166096443903,
+                "_msle_": 0.13546997030694,
                 "_nobs_": 2.0,
-                "_rase_": 72.4967671693021,
-                "_rmae_": 8.28402076289044,
-                "_rmsle_": 0.36723452542358
+                "_rase_": 72.649391339428,
+                "_rmae_": 8.29557771613227,
+                "_rmsle_": 0.36806245435651
             },
             "rowNumber": 1
         },
         {
             "dataMap": {
-                "LEVEL": "group B",
-                "Predicted_Composite_Score": 168.0,
+                "LEVEL": "group_B",
+                "Predicted_Composite_Score": 168.052027045469,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "_ase_": 1069.8359375,
-                "_avgyhat_": 168.0,
-                "_mae_": 28.8125,
-                "_msle_": 0.03162430255324,
+                "_ase_": 1072.33863717772,
+                "_avgyhat_": 168.052027045469,
+                "_mae_": 28.8704613739253,
+                "_msle_": 0.03171237296504,
                 "_nobs_": 4.0,
-                "_rase_": 32.7083466029697,
-                "_rmae_": 5.36772763839597,
-                "_rmsle_": 0.17783223148025
+                "_rase_": 32.746582068633,
+                "_rmae_": 5.37312398646498,
+                "_rmsle_": 0.17807968150535
             },
             "rowNumber": 2
         },
         {
             "dataMap": {
-                "LEVEL": "group C",
-                "Predicted_Composite_Score": 178.666666666666,
+                "LEVEL": "group_C",
+                "Predicted_Composite_Score": 178.730672896089,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "_ase_": 439.458333333333,
-                "_avgyhat_": 178.666666666666,
-                "_mae_": 18.0,
-                "_msle_": 0.01251372861218,
+                "_ase_": 440.14675130518,
+                "_avgyhat_": 178.730672896089,
+                "_mae_": 18.0072880416633,
+                "_msle_": 0.01250764329094,
                 "_nobs_": 6.0,
-                "_rase_": 20.9632615146912,
-                "_rmae_": 4.24264068711928,
-                "_rmsle_": 0.11186477824672
+                "_rase_": 20.9796747187648,
+                "_rmae_": 4.24349950414317,
+                "_rmsle_": 0.11183757548758
             },
             "rowNumber": 3
         },
         {
             "dataMap": {
-                "LEVEL": "group D",
-                "Predicted_Composite_Score": 209.53409090909,
+                "LEVEL": "group_D",
+                "Predicted_Composite_Score": 209.679561775118,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "_ase_": 972.265625,
-                "_avgyhat_": 209.53409090909,
-                "_mae_": 25.875,
-                "_msle_": 0.02284260384644,
+                "_ase_": 972.344739687155,
+                "_avgyhat_": 209.679561775118,
+                "_mae_": 25.9089753827708,
+                "_msle_": 0.02284868372157,
                 "_nobs_": 11.0,
-                "_rase_": 31.181174208166,
-                "_rmae_": 5.08674748734395,
-                "_rmsle_": 0.15113769829675
+                "_rase_": 31.1824428114148,
+                "_rmae_": 5.09008598972265,
+                "_rmsle_": 0.15115781065355
             },
             "rowNumber": 4
         },
         {
             "dataMap": {
-                "LEVEL": "group E",
-                "Predicted_Composite_Score": 208.892857142857,
+                "LEVEL": "group_E",
+                "Predicted_Composite_Score": 208.707000267585,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "_ase_": 777.0625,
-                "_avgyhat_": 208.892857142857,
-                "_mae_": 22.1785714285714,
-                "_msle_": 0.01966197983168,
+                "_ase_": 777.784165763602,
+                "_avgyhat_": 208.707000267585,
+                "_mae_": 22.2126547125903,
+                "_msle_": 0.01965713497937,
                 "_nobs_": 7.0,
-                "_rase_": 27.8758407944944,
-                "_rmae_": 4.70941306625055,
-                "_rmsle_": 0.14022118182246
+                "_rase_": 27.8887820774519,
+                "_rmae_": 4.71303031101969,
+                "_rmsle_": 0.14020390500757
             },
             "rowNumber": 5
         },
         {
             "dataMap": {
                 "LEVEL": "female",
-                "Predicted_Composite_Score": 212.291666666666,
+                "Predicted_Composite_Score": 212.222144385424,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
-                "_ase_": 1088.25,
-                "_avgyhat_": 212.291666666666,
-                "_mae_": 29.1666666666666,
-                "_msle_": 0.02668480520914,
+                "_ase_": 1093.5417617538,
+                "_avgyhat_": 212.222144385424,
+                "_mae_": 29.2299991662033,
+                "_msle_": 0.02677531044547,
                 "_nobs_": 12.0,
-                "_rase_": 32.9886344064133,
-                "_rmae_": 5.40061724867321,
-                "_rmsle_": 0.16335484446181
+                "_rase_": 33.0687429720847,
+                "_rmae_": 5.40647751925441,
+                "_rmsle_": 0.16363163033311
             },
             "rowNumber": 6
         },
         {
             "dataMap": {
                 "LEVEL": "male",
-                "Predicted_Composite_Score": 184.076388888888,
+                "Predicted_Composite_Score": 184.150965280219,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
-                "_ase_": 1139.05642361111,
-                "_avgyhat_": 184.076388888888,
-                "_mae_": 25.0208333333333,
-                "_msle_": 0.02999926743528,
+                "_ase_": 1139.10462979883,
+                "_avgyhat_": 184.150965280219,
+                "_mae_": 25.0492286243685,
+                "_msle_": 0.03002594625927,
                 "_nobs_": 18.0,
-                "_rase_": 33.7499099793038,
-                "_rmae_": 5.0020828994863,
-                "_rmsle_": 0.17320296601181
+                "_rase_": 33.7506241393967,
+                "_rmae_": 5.00492044136253,
+                "_rmsle_": 0.1732799649679
             },
             "rowNumber": 7
         }

@@ -8,7 +8,7 @@ from sklearn.ensemble import RandomForestRegressor
 from pathlib import Path
 
 # load data #
-df_raw = pd.read_csv('data/exams.csv')
+df_raw = pd.read_csv('../../../../examples/data/exams.csv')
 
 # transform data #
 df = df_raw.drop(['math score', 'reading score', 'writing score'], axis=1).dropna()

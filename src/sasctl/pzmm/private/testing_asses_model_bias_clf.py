@@ -39,9 +39,9 @@ score_data = {'P_Survived1': clf.predict_proba(df_mod.drop(target, axis=1)[featu
 scored_df = pd.DataFrame(score_data)
 
 ## Examples
-hostname = 'green.ingress-nginx.rint08-0020.race.sas.com'
-username = 'edmdev'
-password = 'Go4thsas'
+hostname = ''
+username = ''
+password = ''
 
 sess = Session(hostname, username, password, protocol='http')
 

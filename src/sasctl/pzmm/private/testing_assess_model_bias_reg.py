@@ -39,9 +39,9 @@ scored_df = pd.DataFrame(score_data)
 
 scored_df.to_csv('data/reg_scoredata.csv')
 
-hostname = 'green.ingress-nginx.rint08-0020.race.sas.com'
-username = 'edmdev'
-password = 'Go4thsas'
+hostname = ''
+username = ''
+password = ''
 
 sess = Session(hostname, username, password, protocol='http')
 
