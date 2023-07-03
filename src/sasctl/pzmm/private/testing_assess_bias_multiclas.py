@@ -47,10 +47,11 @@ multiclass1 = JF.assess_model_bias(
      actual_values='JOB',
      prob_values=['P_JobMgr', 'P_JobOffice', 'P_JobOther', 'P_JobProfExe', 'P_JobSales', 'P_JobSelf'],
      sensitive_values=['BAD'],
-    levels=['Mgr', 'Office', 'Other', 'ProfExe', 'Sales', 'Self']
+    levels=['Mgr', 'Office', 'Other', 'ProfExe', 'Sales', 'Self'],
+    return_dataframes=True
  )
 #
 # # the first probability class will be the predicted event class
 #
-print(multiclass1['groupMetrics.json'])
+print(multiclass1["maxDifferencesData"])
 

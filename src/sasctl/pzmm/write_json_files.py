@@ -19,7 +19,7 @@ import pandas as pd
 from pandas import DataFrame, Series
 
 # Package Imports
-from write_score_code import ScoreCode as sc
+from sasctl.pzmm.write_score_code import ScoreCode as sc
 from ..core import current_session
 from ..utils.decorators import deprecated
 from ..utils.misc import check_if_jupyter
@@ -769,7 +769,7 @@ class JSONFiles:
         cutoff: float = 0.5,
         datarole: str = "TEST",
         return_dataframes: bool = False,
-    ) -> Union[dict, None] :
+    ) -> Union[dict, None]:
         """
         Calculates model bias metrics for sensitive variables and dumps metrics into SAS Viya readable JSON Files. This
         function works for regression and binary classification problems.
@@ -797,11 +797,20 @@ class JSONFiles:
             List of classes of a nominal target in the order they were passed in prob_values. Levels must be passed as a
             string. Default is None.
         json_path : str or Path, optional
-            Location for the output JSON files. The default value is None.
+            Location for the output JSON files. If a path is passed, the json files will populate in the directory and
+            the function will return None, unless return_dataframes is True. Otherwise, the function will return the json
+             strings in a dictionary (dict["maxDifferences.json"] and dict["groupMetrics.json"]). The default value is
+             None.
         cutoff : float, optional
             Cutoff value for confusion matrix. Default is 0.5.
-        datarole: string, optional
+        datarole : string, optional
             The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
+        return_dataframes : boolean, optional
+            If true, the function returns the pandas data frames used to create the JSON files. If a JSON path is
+            passed, then the function will return a dictionary that only includes the data frames
+            (dict["maxDifferencesData"] and dict["groupMetricData"]). If a JSON path is not passed, the function will
+            return a dictionary with the two tables  and the two JSON strings (dict["maxDifferences.json"] and
+            dict["groupMetrics.json"]). The default value is False.
 
         Returns
         -------
@@ -816,12 +825,9 @@ class JSONFiles:
             calculations.
 
         ValueError
-            This function requires pred_values OR (regression) or prob_values (classification) to be passed
+            This function requires pred_values OR (regression) or prob_values AND levels (classification) to be passed.
 
-            You cannot pass a list with more than 2 elements to prob_values. This function only supports binary
-            classification problems.
-
-            Variable names must follow SAS naming conventions (no spaces or names that begin with a number or symbol)
+            Variable names must follow SAS naming conventions (no spaces or names that begin with a number or symbol).
         """
         try:
             sess = current_session()
@@ -904,13 +910,23 @@ class JSONFiles:
             n_sensitivevariables=len(sensitive_values),
             actual_values=actual_values,
             prob_values=prob_values,
-            levels = levels,
+            levels=levels,
             pred_values=pred_values,
             json_path=json_path,
         )
 
-        return json_files
+        if return_dataframes:
+            df_dict = {
+                "maxDifferencesData": max_differences,
+                "groupMetricsData": group_metrics,
+            }
 
+            if json_files is None:
+                return df_dict
+
+            json_files.update(df_dict)
+
+        return json_files
 
     @staticmethod
     def format_max_differences(
@@ -1006,12 +1022,11 @@ class JSONFiles:
 
         # formatting metric label for max diff
         for i in range(n_sensitivevariables):
-
             if prob_values is not None:
                 for j, prob_label in enumerate(prob_values):
                     json_dict[0]["data"][(i * 26) + j]["dataMap"][
                         "MetricLabel"
-                     ] = f"Average Predicted: {actual_values}={levels[j]}"
+                    ] = f"Average Predicted: {actual_values}={levels[j]}"
 
             else:
                 json_dict[0]["data"][i * 8]["dataMap"][
@@ -1022,19 +1037,21 @@ class JSONFiles:
         if prob_values is not None:
             for i, prob_label in enumerate(prob_values):
                 paramdict = {
-                        "label": prob_label,
-                        "length": 8,
-                        # TODO: figure out order ordering
-                        "order": 34 + i,
-                        "parameter": prob_label,
-                        "preformatted": False,
-                        "type": "num",
-                        "values": [prob_label]
-                 }
-                json_dict[1]["parameterMap"] = cls.add_dict_key(dict=json_dict[1]["parameterMap"],
-                                                                pos=i+3,
-                                                                new_key=prob_label,
-                                                                new_value=paramdict)
+                    "label": prob_label,
+                    "length": 8,
+                    # TODO: figure out order ordering
+                    "order": 34 + i,
+                    "parameter": prob_label,
+                    "preformatted": False,
+                    "type": "num",
+                    "values": [prob_label],
+                }
+                json_dict[1]["parameterMap"] = cls.add_dict_key(
+                    dict=json_dict[1]["parameterMap"],
+                    pos=i + 3,
+                    new_key=prob_label,
+                    new_value=paramdict,
+                )
 
         else:
             json_dict[1]["parameterMap"]["predict"]["label"] = pred_values
@@ -1058,16 +1075,12 @@ class JSONFiles:
             GROUPMETRICS: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
         }
 
-
     @staticmethod
     def add_dict_key(
-            dict: dict,
-            pos: int,
-            new_key: Union[str, int, float, bool],
-            new_value
+        dict: dict, pos: int, new_key: Union[str, int, float, bool], new_value
     ):
         result = {}
-        for (i, k) in enumerate(dict.keys()):
+        for i, k in enumerate(dict.keys()):
             if i == pos:
                 result[new_key] = new_value
                 result[k] = dict[k]
