@@ -848,15 +848,14 @@ class JSONFiles:
                     "supports binary classification problems."
                 )
 
-            score_table[actual_values] = score_table[actual_values].astype(object)
-            levels = list(score_table[actual_values].unique())
-
             prob_values = cls.format_prob_values(score_table=score_table,
                                                  actual_values=actual_values,
                                                  prob_values=prob_values,
                                                  target_level=target_level,
                                                  levels=levels)
 
+            score_table[actual_values] = score_table[actual_values].astype(str)
+            levels = list(score_table[actual_values].unique())
 
         if isinstance(sensitive_values, str):
             sensitive_values = [sensitive_values]
@@ -881,6 +880,9 @@ class JSONFiles:
         conn.loadactionset("fairaitools")
         maxdiff_dfs = []
         groupmetrics_dfs = []
+
+        print(score_table.dtypes)
+        print(levels[0])
 
         for x in sensitive_values:
             # run assessBias, if levels=None then assessBias treats the input like a regression problem
