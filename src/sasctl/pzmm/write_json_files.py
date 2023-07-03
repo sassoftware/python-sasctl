@@ -1070,10 +1070,11 @@ class JSONFiles:
                         f"{name} was successfully written and saved to "
                         f"{Path(json_path) / name}"
                     )
-        return {
-            MAXDIFFERENCES: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
-            GROUPMETRICS: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
-        }
+        else:
+            return {
+                MAXDIFFERENCES: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
+                GROUPMETRICS: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
+            }
 
     @staticmethod
     def add_dict_key(

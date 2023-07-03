@@ -105,7 +105,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.42428571428571
+                "maxdiff": 0.38178571428571
             },
             "rowNumber": 1
         },
@@ -118,7 +118,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.42428571428571
+                "maxdiff": 0.38178571428571
             },
             "rowNumber": 2
         },
@@ -131,7 +131,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.5
+                "maxdiff": 0.66666666666666
             },
             "rowNumber": 3
         },
@@ -144,7 +144,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.25
+                "maxdiff": 0.75
             },
             "rowNumber": 4
         },
@@ -157,7 +157,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.25
+                "maxdiff": 0.75
             },
             "rowNumber": 5
         },
@@ -170,7 +170,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.5
+                "maxdiff": 0.66666666666666
             },
             "rowNumber": 6
         },
@@ -196,7 +196,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.29285714285714
+                "maxdiff": 0.39285714285714
             },
             "rowNumber": 8
         },
@@ -209,7 +209,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.03333333333333
+                "maxdiff": 0.22
             },
             "rowNumber": 9
         },
@@ -222,7 +222,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.6
+                "maxdiff": 0.61538461538461
             },
             "rowNumber": 10
         },
@@ -235,7 +235,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.06666666666666
+                "maxdiff": 0.44
             },
             "rowNumber": 11
         },
@@ -248,20 +248,20 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.29285714285714
+                "maxdiff": 0.39285714285714
             },
             "rowNumber": 12
         },
         {
             "dataMap": {
-                "BASE": "female",
-                "COMPARE": "male",
+                "BASE": "male",
+                "COMPARE": "female",
                 "Metric": "MISCEVENTKS",
                 "MetricLabel": "Event Misclassification Rate at Maximum KS",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.32857142857142
+                "maxdiff": 0.59285714285714
             },
             "rowNumber": 13
         },
@@ -274,7 +274,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.29285714285714
+                "maxdiff": 0.39285714285714
             },
             "rowNumber": 14
         },
@@ -287,7 +287,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.20852571428571
+                "maxdiff": 0.19215357142857
             },
             "rowNumber": 15
         },
@@ -300,59 +300,59 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.23793125850817
+                "maxdiff": 0.2099554374938
             },
             "rowNumber": 16
         },
         {
             "dataMap": {
-                "BASE": "male",
-                "COMPARE": "female",
+                "BASE": "female",
+                "COMPARE": "male",
                 "Metric": "MCLL",
                 "MetricLabel": "Multiclass Log Loss",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.15442511430825
+                "maxdiff": 0.39264585067418
             },
             "rowNumber": 17
         },
         {
             "dataMap": {
-                "BASE": "male",
-                "COMPARE": "female",
+                "BASE": "female",
+                "COMPARE": "male",
                 "Metric": "maxKS",
                 "MetricLabel": "Best Kolmogorov-Smirnov along ROC",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.08333333333333
+                "maxdiff": 0.41666666666666
             },
             "rowNumber": 18
         },
         {
             "dataMap": {
-                "BASE": "female",
-                "COMPARE": "male",
+                "BASE": "male",
+                "COMPARE": "female",
                 "Metric": "cutoffKS",
                 "MetricLabel": "Kolmogorov-Smirnov at Cutoff",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.25
+                "maxdiff": 0.08333333333333
             },
             "rowNumber": 19
         },
         {
             "dataMap": {
-                "BASE": "male",
+                "BASE": "female",
                 "COMPARE": "female",
                 "Metric": "GAIN",
                 "MetricLabel": "Gain",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 3.33333333333333
+                "maxdiff": 0.0
             },
             "rowNumber": 20
         },
@@ -384,27 +384,27 @@
         },
         {
             "dataMap": {
-                "BASE": "male",
+                "BASE": "female",
                 "COMPARE": "female",
                 "Metric": "CUMRESP",
                 "MetricLabel": "Cumulative % Captured Response",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 33.3333333333333
+                "maxdiff": 0.0
             },
             "rowNumber": 23
         },
         {
             "dataMap": {
-                "BASE": "male",
+                "BASE": "female",
                 "COMPARE": "female",
                 "Metric": "CUMLIFT",
                 "MetricLabel": "Cumulative Lift",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 3.33333333333333
+                "maxdiff": 0.0
             },
             "rowNumber": 24
         },
@@ -417,7 +417,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.42428571428571
+                "maxdiff": 0.38178571428571
             },
             "rowNumber": 25
         },
@@ -430,7 +430,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Sex",
-                "maxdiff": 0.4
+                "maxdiff": 0.7
             },
             "rowNumber": 26
         }
