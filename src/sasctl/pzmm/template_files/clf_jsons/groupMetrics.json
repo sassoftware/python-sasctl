@@ -33,24 +33,6 @@
       "type" : "num",
       "values" : [ "PREDICTED_EVENT" ]
     },
-    "predict_proba0" : {
-      "label" : "P_Survived0",
-      "length" : 8,
-      "order" : 35,
-      "parameter" : "P_Survived0",
-      "preformatted" : false,
-      "type" : "num",
-      "values" : [ "P_Survived0" ]
-    },
-    "predict_proba1" : {
-      "label" : "P_Survived1",
-      "length" : 8,
-      "order" : 34,
-      "parameter" : "P_Survived1",
-      "preformatted" : false,
-      "type" : "num",
-      "values" : [ "P_Survived1" ]
-    },
     "VLABEL" : {
       "label" : "Variable Label",
       "length" : 256,

@@ -39,9 +39,9 @@ score_data = {'P_Survived1': clf.predict_proba(df_mod.drop(target, axis=1)[featu
 scored_df = pd.DataFrame(score_data)
 
 ## Examples
-hostname = ''
-username = ''
-password = ''
+hostname = 'green.ingress-nginx.rint08-0020.race.sas.com'
+username = 'edmdev'
+password = 'Go4thsas'
 
 sess = Session(hostname, username, password, protocol='http')
 
@@ -124,7 +124,7 @@ sess = Session(hostname, username, password, protocol='http')
 clf_example7 = JF.assess_model_bias(
      score_table=scored_df,
      actual_values='Survived',
-     prob_values=['P_Survived1', 'P_Survived0'],
+     prob_values=['P_Survived1'],
      sensitive_values=['Sex'],
      json_path=r'C:\Users\elmcfa\PycharmProjects\python-sasctl\src\sasctl\pzmm\private\data\clf_json_files'
  )

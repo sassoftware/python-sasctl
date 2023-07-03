@@ -763,7 +763,7 @@ class JSONFiles:
         actual_values: str,
         pred_values: str = None,
         prob_values: Union[str, List[str]] = None,
-        target_level: Union[int, float, str] = None,
+        levels: List[str] = None,
         json_path: Union[str, Path, None] = None,
         cutoff: float = 0.5,
         datarole: str = "TEST",
@@ -783,19 +783,20 @@ class JSONFiles:
         actual_values : string
             Variable name containing the actual values in score_table. The variable name must follow SAS naming
             conventions (no spaces and the name cannot begin with a number or symbol).
-        pred_values : string, required for regression problems, otherwise optional
+        pred_values : string, required for regression problems, otherwise not used
             Variable name containing the predicted values in score_table. The variable name must follow SAS naming
             conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.
             The default value is None.
-        prob_values : string or list of strings, required for binary classification problems, otherwise optional
+        prob_values : string or list of strings, required for classification problems, otherwise not used
            Variable name containing the predicted probability values in score table. The variable name or names must
            follow SAS naming conventions (no spaces and the name cannot begin with a number or symbol).The user can pass
            a string for the predicted probability of the target class or a list of strings for the predicted probability
            of both classes in the target. If passing a list, the first element should be the predicted probability of
            the target class. No more than two elements can be provided if passing a list. Required for binary
            classification problems. Default is None.
-        target_level : int, float, string, optional
-            Target class value. Default is None.
+        levels: List of strings, integers, booleans, required for classification problems, otherwise not used
+            List of classes of a nominal target in the order they were passed in prob_values. Levels must be passed as a
+            string. Default is None.
         json_path : str or Path, optional
             Location for the output JSON files. The default value is None.
         cutoff : float, optional
@@ -837,25 +838,14 @@ class JSONFiles:
                 "A value for pred_values (regression) or prob_values (classification) must be passed."
             )
 
-        # initialize levels variable, None for regression
-        levels = None
-
         # if it's a classification problem
         if prob_values is not None:
-            # if isinstance(prob_values, list) and len(prob_values) > 2:
-            #     raise ValueError(
-            #         "No more than two elements can be passed in the prob_value list. This function only "
-            #         "supports binary classification problems."
-            #     )
-
-            # prob_values = cls.format_prob_values(score_table=score_table,
-            #                                      actual_values=actual_values,
-            #                                      prob_values=prob_values,
-            #                                      target_level=target_level,
-            #                                      levels=levels)
-
+            if levels is None:
+                raise ValueError(
+                    "Levels of the target variable must be passed for classification problems. The levels should be "
+                    "ordered in the same way that the predicted probability variables are ordered."
+                )
             score_table[actual_values] = score_table[actual_values].astype(str)
-            levels = list(score_table[actual_values].unique())
 
         if isinstance(sensitive_values, str):
             sensitive_values = [sensitive_values]
@@ -873,6 +863,7 @@ class JSONFiles:
         #             )
         # if prob_values == [None]:
         #     prob_values = None
+        # function: _check_for_invalid_variable_names(var_list: List[str]) form write_score_code
 
         # upload properly formatted score table to CAS
         conn.upload(score_table, casout=dict(name="score_table"))
@@ -926,41 +917,13 @@ class JSONFiles:
             n_sensitivevariables=len(sensitive_values),
             actual_values=actual_values,
             prob_values=prob_values,
+            levels = levels,
             pred_values=pred_values,
             json_path=json_path,
         )
 
         return json_files
 
-
-    @staticmethod
-    def format_prob_values(
-        score_table,
-        actual_values,
-        prob_values,
-        levels,
-        target_level = None
-    ) -> List[str]:
-        # if only on variable for probabilities was provided, need to calculate the other
-        if isinstance(prob_values, str) or len(prob_values) == 1:
-            if isinstance(prob_values, list):
-                prob_values = prob_values[0]
-
-            non_target_level = "other"
-            # specify value of other level if target level is specified
-            if target_level is not None:
-                non_target_level = [
-                    level for level in levels if level != str(target_level)
-                ][0]
-            score_table["P_" + actual_values + non_target_level] = (
-                    1 - score_table[prob_values]
-            )
-
-            # get column names for new prob_values
-            prob_values = [prob_values]
-            prob_values.append("P_" + actual_values + non_target_level)
-
-        return prob_values
 
     @staticmethod
     def format_max_differences(
@@ -1033,6 +996,7 @@ class JSONFiles:
         n_sensitivevariables: int = None,
         actual_values: str = None,
         prob_values: List[str] = None,
+        levels: List[str] = None,
         pred_values: str = None,
         json_path: Union[str, Path, None] = None,
     ):
@@ -1055,11 +1019,13 @@ class JSONFiles:
 
         # formatting metric label for max diff
         for i in range(n_sensitivevariables):
+
             if prob_values is not None:
                 for j, prob_label in enumerate(prob_values):
                     json_dict[0]["data"][(i * 26) + j]["dataMap"][
                         "MetricLabel"
-                    ] = f"Average Predicted: {actual_values}={1 - j}"
+                     ] = f"Average Predicted: {actual_values}={levels[j]}"
+
             else:
                 json_dict[0]["data"][i * 8]["dataMap"][
                     "MetricLabel"
@@ -1068,32 +1034,21 @@ class JSONFiles:
         # formatting parameter map for group metrics
         if prob_values is not None:
             for i, prob_label in enumerate(prob_values):
-                if i < 2:
-                    json_dict[1]["parameterMap"][f"predict_proba{i}"]["label"] = prob_label
-                    json_dict[1]["parameterMap"][f"predict_proba{i}"][
-                        "parameter"
-                    ] = prob_label
-                    json_dict[1]["parameterMap"][f"predict_proba{i}"]["values"] = [
-                        prob_label
-                    ]
-                    json_dict[1]["parameterMap"] = cls.rename_dict_key(
-                        json_dict[1]["parameterMap"], prob_label, f"predict_proba{i}"
-                )
-
-                else:
-                    paramdict = {
+                paramdict = {
                         "label": prob_label,
                         "length": 8,
+                        # TODO: figure out order ordering
                         "order": 34 + i,
                         "parameter": prob_label,
                         "preformatted": False,
                         "type": "num",
                         "values": [prob_label]
-                    }
-                    json_dict[1]["parameterMap"] = cls.add_dict_key(dict=json_dict[1]["parameterMap"],
-                                                                    pos=i+3,
-                                                                    new_key=prob_label,
-                                                                    new_value=paramdict)
+                 }
+                json_dict[1]["parameterMap"] = cls.add_dict_key(dict=json_dict[1]["parameterMap"],
+                                                                pos=i+3,
+                                                                new_key=prob_label,
+                                                                new_value=paramdict)
+
         else:
             json_dict[1]["parameterMap"]["predict"]["label"] = pred_values
             json_dict[1]["parameterMap"]["predict"]["parameter"] = pred_values

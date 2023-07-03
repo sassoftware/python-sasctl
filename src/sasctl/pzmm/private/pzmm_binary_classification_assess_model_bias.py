@@ -52,9 +52,9 @@ score_tables = {"DecisionTree": build_score_table(dtc),
                 "GradientBoost": build_score_table(gbc)}
 
 # running assessBias #
-hostname = ''
-username = ''
-password = ''
+hostname = 'green.ingress-nginx.rint08-0020.race.sas.com'
+username = 'edmdev'
+password = 'Go4thsas'
 
 sess = Session(hostname, username, password, protocol='http')
 
