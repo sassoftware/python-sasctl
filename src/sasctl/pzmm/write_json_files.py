@@ -842,17 +842,17 @@ class JSONFiles:
 
         # if it's a classification problem
         if prob_values is not None:
-            if isinstance(prob_values, list) and len(prob_values) > 2:
-                raise ValueError(
-                    "No more than two elements can be passed in the prob_value list. This function only "
-                    "supports binary classification problems."
-                )
+            # if isinstance(prob_values, list) and len(prob_values) > 2:
+            #     raise ValueError(
+            #         "No more than two elements can be passed in the prob_value list. This function only "
+            #         "supports binary classification problems."
+            #     )
 
-            prob_values = cls.format_prob_values(score_table=score_table,
-                                                 actual_values=actual_values,
-                                                 prob_values=prob_values,
-                                                 target_level=target_level,
-                                                 levels=levels)
+            # prob_values = cls.format_prob_values(score_table=score_table,
+            #                                      actual_values=actual_values,
+            #                                      prob_values=prob_values,
+            #                                      target_level=target_level,
+            #                                      levels=levels)
 
             score_table[actual_values] = score_table[actual_values].astype(str)
             levels = list(score_table[actual_values].unique())
@@ -862,17 +862,17 @@ class JSONFiles:
 
         # checking if variable names match SAS rules, I could make this simpler by checking each column in the score
         # table, but it's not necessary for all columns to match SAS conventions if they aren't being used
-        if prob_values is None:
-            prob_values = [None]
-        variables = [actual_values, pred_values] + sensitive_values + prob_values
-        for name in [name for name in variables if name is not None]:
-            if name is not None and (" " in name or not name[0].isalpha()):
-                raise ValueError(
-                        "All variable names must follow SAS naming conventions. Variables cannot have spaces or begin "
-                        "with a number or symbol."
-                    )
-        if prob_values == [None]:
-            prob_values = None
+        # if prob_values is None:
+        #     prob_values = [None]
+        # variables = [actual_values, pred_values] + sensitive_values + prob_values
+        # for name in [name for name in variables if name is not None]:
+        #     if name is not None and (" " in name or not name[0].isalpha()):
+        #         raise ValueError(
+        #                 "All variable names must follow SAS naming conventions. Variables cannot have spaces or begin "
+        #                 "with a number or symbol."
+        #             )
+        # if prob_values == [None]:
+        #     prob_values = None
 
         # upload properly formatted score table to CAS
         conn.upload(score_table, casout=dict(name="score_table"))
@@ -880,9 +880,6 @@ class JSONFiles:
         conn.loadactionset("fairaitools")
         maxdiff_dfs = []
         groupmetrics_dfs = []
-
-        print(score_table.dtypes)
-        print(levels[0])
 
         for x in sensitive_values:
             # run assessBias, if levels=None then assessBias treats the input like a regression problem
@@ -1071,16 +1068,32 @@ class JSONFiles:
         # formatting parameter map for group metrics
         if prob_values is not None:
             for i, prob_label in enumerate(prob_values):
-                json_dict[1]["parameterMap"][f"predict_proba{i}"]["label"] = prob_label
-                json_dict[1]["parameterMap"][f"predict_proba{i}"][
-                    "parameter"
-                ] = prob_label
-                json_dict[1]["parameterMap"][f"predict_proba{i}"]["values"] = [
-                    prob_label
-                ]
-                json_dict[1]["parameterMap"] = cls.rename_dict_key(
-                    json_dict[1]["parameterMap"], prob_label, f"predict_proba{i}"
+                if i < 2:
+                    json_dict[1]["parameterMap"][f"predict_proba{i}"]["label"] = prob_label
+                    json_dict[1]["parameterMap"][f"predict_proba{i}"][
+                        "parameter"
+                    ] = prob_label
+                    json_dict[1]["parameterMap"][f"predict_proba{i}"]["values"] = [
+                        prob_label
+                    ]
+                    json_dict[1]["parameterMap"] = cls.rename_dict_key(
+                        json_dict[1]["parameterMap"], prob_label, f"predict_proba{i}"
                 )
+
+                else:
+                    paramdict = {
+                        "label": prob_label,
+                        "length": 8,
+                        "order": 34 + i,
+                        "parameter": prob_label,
+                        "preformatted": False,
+                        "type": "num",
+                        "values": [prob_label]
+                    }
+                    json_dict[1]["parameterMap"] = cls.add_dict_key(dict=json_dict[1]["parameterMap"],
+                                                                    pos=i+3,
+                                                                    new_key=prob_label,
+                                                                    new_value=paramdict)
         else:
             json_dict[1]["parameterMap"]["predict"]["label"] = pred_values
             json_dict[1]["parameterMap"]["predict"]["parameter"] = pred_values
@@ -1102,6 +1115,23 @@ class JSONFiles:
             MAXDIFFERENCES: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
             GROUPMETRICS: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
         }
+
+
+    @staticmethod
+    def add_dict_key(
+            dict: dict,
+            pos: int,
+            new_key: Union[str, int, float, bool],
+            new_value
+    ):
+        result = {}
+        for (i, k) in enumerate(dict.keys()):
+            if i == pos:
+                result[new_key] = new_value
+                result[k] = dict[k]
+            else:
+                result[k] = dict[k]
+        return result
 
     @staticmethod
     def rename_dict_key(
