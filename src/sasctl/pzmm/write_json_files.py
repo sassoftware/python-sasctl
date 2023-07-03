@@ -19,6 +19,7 @@ import pandas as pd
 from pandas import DataFrame, Series
 
 # Package Imports
+from write_score_code import ScoreCode as sc
 from ..core import current_session
 from ..utils.decorators import deprecated
 from ..utils.misc import check_if_jupyter
@@ -762,11 +763,12 @@ class JSONFiles:
         sensitive_values: Union[str, List[str]],
         actual_values: str,
         pred_values: str = None,
-        prob_values: Union[str, List[str]] = None,
+        prob_values: List[str] = None,
         levels: List[str] = None,
         json_path: Union[str, Path, None] = None,
         cutoff: float = 0.5,
         datarole: str = "TEST",
+        return_dataframes: bool = False,
     ) -> Union[dict, None] :
         """
         Calculates model bias metrics for sensitive variables and dumps metrics into SAS Viya readable JSON Files. This
@@ -776,7 +778,7 @@ class JSONFiles:
         ----------
         score_table : pandas.DataFrame
             Data structure containing actual values, predicted or predicted probability values, and sensitive variable
-            values.
+            values. All columns in the score table must have valid variable names.
         sensitive_values : string or list of strings
             Sensitive variable name or names in score_table. The variable name must follow SAS naming conventions (no
             spaces and the name cannot begin with a number or symbol).
@@ -787,13 +789,10 @@ class JSONFiles:
             Variable name containing the predicted values in score_table. The variable name must follow SAS naming
             conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.
             The default value is None.
-        prob_values : string or list of strings, required for classification problems, otherwise not used
-           Variable name containing the predicted probability values in score table. The variable name or names must
-           follow SAS naming conventions (no spaces and the name cannot begin with a number or symbol).The user can pass
-           a string for the predicted probability of the target class or a list of strings for the predicted probability
-           of both classes in the target. If passing a list, the first element should be the predicted probability of
-           the target class. No more than two elements can be provided if passing a list. Required for binary
-           classification problems. Default is None.
+        prob_values : list of strings, required for classification problems, otherwise not used
+           A list of variable names containing the predicted probability values in the score table. The first element
+           should represent the predicted probability of the target class. Required for classification problems. Default
+           is None.
         levels: List of strings, integers, booleans, required for classification problems, otherwise not used
             List of classes of a nominal target in the order they were passed in prob_values. Levels must be passed as a
             string. Default is None.
@@ -833,6 +832,9 @@ class JSONFiles:
                 "calculate_model_statistics function."
             )
 
+        variables = score_table.columns
+        sc._check_for_invalid_variable_names(variables)
+
         if pred_values is None and prob_values is None:
             raise ValueError(
                 "A value for pred_values (regression) or prob_values (classification) must be passed."
@@ -849,21 +851,6 @@ class JSONFiles:
 
         if isinstance(sensitive_values, str):
             sensitive_values = [sensitive_values]
-
-        # checking if variable names match SAS rules, I could make this simpler by checking each column in the score
-        # table, but it's not necessary for all columns to match SAS conventions if they aren't being used
-        # if prob_values is None:
-        #     prob_values = [None]
-        # variables = [actual_values, pred_values] + sensitive_values + prob_values
-        # for name in [name for name in variables if name is not None]:
-        #     if name is not None and (" " in name or not name[0].isalpha()):
-        #         raise ValueError(
-        #                 "All variable names must follow SAS naming conventions. Variables cannot have spaces or begin "
-        #                 "with a number or symbol."
-        #             )
-        # if prob_values == [None]:
-        #     prob_values = None
-        # function: _check_for_invalid_variable_names(var_list: List[str]) form write_score_code
 
         # upload properly formatted score table to CAS
         conn.upload(score_table, casout=dict(name="score_table"))
