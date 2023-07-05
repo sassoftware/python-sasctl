@@ -161,11 +161,15 @@ def _update_properties(
     project = mr.get_project(project_name)
     formatted_variables = list()
     vars_to_add = list()
-    for variable in project.variables:
-        v = dict()
-        for p in _VARIABLE_PROPERTIES:
-            v[p] = variable.get(p)
-        formatted_variables.append(v)
+    # If the project has no variables, catch error and don't add variables to list
+    try:
+        for variable in project.variables:
+            v = dict()
+            for p in _VARIABLE_PROPERTIES:
+                v[p] = variable.get(p)
+            formatted_variables.append(v)
+    except AttributeError:
+        pass
     for variable in variables:
         if variable not in formatted_variables:
             vars_to_add.append(variable)
