@@ -18,8 +18,8 @@ from ..tasks import _create_project, _update_properties, _compare_properties
 
 
 def get_model_properties(
-    target_values: Union[list, str, None] = None, 
-    model_files: Union[str, Path, None] = None
+    target_values: Union[list, str, None] = None,
+    model_files: Union[str, Path, None] = None,
 ):
     if type(model_files) is dict:
         model = model_files["ModelProperties.json"]
@@ -33,21 +33,21 @@ def get_model_properties(
         with open(Path(model_files) / "outputVar.json") as f:
             output_var = json.load(f)
     if target_values is not None:
-        target_string = ', '.join(target_values)
-        model['classTargetValues'] = target_string
+        target_string = ", ".join(target_values)
+        model["classTargetValues"] = target_string
     for var in output_var:
-        var['role'] = 'output'
+        var["role"] = "output"
     for var in input_var:
-        var['role'] = 'input'
+        var["role"] = "input"
     return model, input_var, output_var
 
 
 def project_exists(
-    project: Union[str, dict, RestObj], 
-    response: Union[str, dict, RestObj, None] = None, 
+    project: Union[str, dict, RestObj],
+    response: Union[str, dict, RestObj, None] = None,
     target_values: Union[list, str, None] = None,
     model_files: Union[str, Path, None] = None,
-    overwrite_project_properties: Optional[bool] = False
+    overwrite_project_properties: Optional[bool] = False,
 ) -> RestObj:
     """
     Checks if project exists on SAS Viya. If the project does not exist, then a new
@@ -93,7 +93,9 @@ def project_exists(
         except ValueError:
             repo = mr.default_repository().get("id")
             if model_files is not None:
-                model, input_var, output_var = get_model_properties(target_values, model_files)
+                model, input_var, output_var = get_model_properties(
+                    target_values, model_files
+                )
                 response = _create_project(project, model, repo, input_var, output_var)
             else:
                 response = mr.create_project(project, repo)
@@ -319,7 +321,13 @@ class ImportModel:
             # Check if project name provided exists and raise an error or create a
             # new project
             project_response = mr.get_project(project)
-            project = project_exists(project, project_response, target_values, model_files, overwrite_project_properties)
+            project = project_exists(
+                project,
+                project_response,
+                target_values,
+                model_files,
+                overwrite_project_properties,
+            )
 
             # Check if model with same name already exists in project.
             model_exists(
@@ -365,7 +373,13 @@ class ImportModel:
             # Check if project name provided exists and raise an error or create a
             # new project
             project_response = mr.get_project(project)
-            project = project_exists(project, project_response, target_values, model_files, overwrite_project_properties)
+            project = project_exists(
+                project,
+                project_response,
+                target_values,
+                model_files,
+                overwrite_project_properties,
+            )
 
             # Check if model with same name already exists in project.
             model_exists(
@@ -400,7 +414,13 @@ class ImportModel:
             # Check if project name provided exists and raise an error or create a
             # new project
             project_response = mr.get_project(project)
-            project = project_exists(project, project_response, target_values, model_files, overwrite_project_properties)
+            project = project_exists(
+                project,
+                project_response,
+                target_values,
+                model_files,
+                overwrite_project_properties,
+            )
 
             # Check if model with same name already exists in project.
             model_exists(

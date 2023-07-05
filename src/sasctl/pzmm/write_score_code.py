@@ -188,7 +188,7 @@ class ScoreCode:
                 mojo_model="mojo_model" in kwargs,
                 binary_h2o_model="binary_h2o_model" in kwargs,
                 tf_keras_model="tf_keras_model" in kwargs,
-                tf_core_model="tf_core_model" in kwargs
+                tf_core_model="tf_core_model" in kwargs,
             )
         else:
             model_load = None
@@ -232,7 +232,7 @@ class ScoreCode:
                 predict_method[0],
                 input_var_list,
                 statsmodels_model="statsmodels_model" in kwargs,
-                tf_model="tf_keras_model" in kwargs or "tf_core_model" in kwargs
+                tf_model="tf_keras_model" in kwargs or "tf_core_model" in kwargs,
             )
             # Include check for numpy values and a conversion operation as needed
             cls.score_code += (
@@ -412,9 +412,7 @@ class ScoreCode:
                 "import h2o\nimport gzip\nimport shutil\nimport os\n\nh2o.init()\n\n"
             )
         elif tf_model:
-            cls.score_code += (
-                "import tensorflow as tf\n"
-            )
+            cls.score_code += "import tensorflow as tf\n"
         elif binary_string:
             cls.score_code += (
                 f'import codecs\n\nbinary_string = "{binary_string}"'
@@ -498,7 +496,7 @@ class ScoreCode:
         mojo_model: Optional[bool] = False,
         binary_h2o_model: Optional[bool] = False,
         tf_keras_model: Optional[bool] = False,
-        tf_core_model: Optional[bool] = False
+        tf_core_model: Optional[bool] = False,
     ) -> str:
         """
         Write the model load section of the score code assuming the model is being
@@ -642,7 +640,7 @@ class ScoreCode:
         var_list: List[str],
         dtype_list: Optional[List[str]] = None,
         statsmodels_model: Optional[bool] = False,
-        tf_model: Optional[bool] = False
+        tf_model: Optional[bool] = False,
     ) -> None:
         """
         Write the model prediction section of the score code.

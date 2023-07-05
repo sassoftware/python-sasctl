@@ -467,7 +467,7 @@ class JSONFiles:
         model_prefix: str,
         json_path: Union[str, Path, None] = None,
         is_h2o_model: Optional[bool] = False,
-        is_tf_keras_model: Optional[bool] = False
+        is_tf_keras_model: Optional[bool] = False,
     ) -> Union[dict, None]:
         """
         Writes a file metadata JSON file pointing to all relevant files.

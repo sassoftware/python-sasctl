@@ -35,7 +35,7 @@ from .utils.pymas import from_pickle
 
 logger = logging.getLogger(__name__)
 
-_VARIABLE_PROPERTIES = ['name', 'role', 'type', 'level', 'length']
+_VARIABLE_PROPERTIES = ["name", "role", "type", "level", "length"]
 # As of Viya 3.4 model registration fails if character fields are longer
 # than 1024 characters
 _DESC_MAXLEN = 1024
@@ -44,7 +44,6 @@ _DESC_MAXLEN = 1024
 # longer than 512 characters.
 _PROP_VALUE_MAXLEN = 512
 _PROP_NAME_MAXLEN = 60
-
 
 
 def _property(k, v):
@@ -83,7 +82,7 @@ def _sklearn_to_dict(model):
     if analytic_function == "classification" and "logistic" in algorithm.lower():
         target_level = "Binary"
     elif analytic_function == "prediction" and (
-            "regressor" in estimator.lower() or "regression" in algorithm.lower()
+        "regressor" in estimator.lower() or "regression" in algorithm.lower()
     ):
         target_level = "Interval"
     else:
@@ -104,11 +103,7 @@ def _sklearn_to_dict(model):
     return result
 
 
-def _create_project(project_name,
-                    model,
-                    repo,
-                    input_vars=None,
-                    output_vars=None):
+def _create_project(project_name, model, repo, input_vars=None, output_vars=None):
     """Creates a project based on the model specifications.
 
     Parameters
@@ -132,9 +127,7 @@ def _create_project(project_name,
 
     properties, variables = _format_properties(model, input_vars, output_vars)
 
-    project = mr.create_project(
-        project_name, repo, variables=variables, **properties
-    )
+    project = mr.create_project(project_name, repo, variables=variables, **properties)
 
     # As of Viya 3.4 the 'predictionVariable' and 'eventProbabilityVariable'
     # parameters are not set during project creation.  Update the project if
@@ -151,12 +144,7 @@ def _create_project(project_name,
     return project
 
 
-def _update_properties(
-        project_name,
-        model,
-        input_vars=None,
-        output_vars=None
-):
+def _update_properties(project_name, model, input_vars=None, output_vars=None):
     properties, variables = _format_properties(model, input_vars, output_vars)
     project = mr.get_project(project_name)
     formatted_variables = list()
@@ -177,19 +165,23 @@ def _update_properties(
         project[p] = properties[p]
     mr.update_project(project)
     if vars_to_add:
-        headers = {
-            'Content-Type': 'application/vnd.sas.collection+json'
-        }
-        mr.post(f'projects/{project.id}/variables', json=vars_to_add, headers=headers)
+        headers = {"Content-Type": "application/vnd.sas.collection+json"}
+        mr.post(f"projects/{project.id}/variables", json=vars_to_add, headers=headers)
 
 
-def _format_properties(
-        model,
-        input_vars=None,
-        output_vars=None
-):
-    properties = {k: model[k] for k in model if
-                  k in ("function", "targetLevel", "targetVariable", "targetEvent", 'classTargetValues')}
+def _format_properties(model, input_vars=None, output_vars=None):
+    properties = {
+        k: model[k]
+        for k in model
+        if k
+        in (
+            "function",
+            "targetLevel",
+            "targetVariable",
+            "targetEvent",
+            "classTargetValues",
+        )
+    }
 
     function = model.get("function", "").lower()
     algorithm = model.get("algorithm", "").lower()
@@ -224,19 +216,14 @@ def _format_properties(
         else:
             properties["targetLevel"] = None
 
-    if properties.get('targetEvent') is not None:
-        properties['targetEventValue'] = properties['targetEvent']
-        del properties['targetEvent']
+    if properties.get("targetEvent") is not None:
+        properties["targetEventValue"] = properties["targetEvent"]
+        del properties["targetEvent"]
 
     return properties, formatted_variables
 
 
-def _compare_properties(
-        project_name,
-        model,
-        input_vars=None,
-        output_vars=None
-):
+def _compare_properties(project_name, model, input_vars=None, output_vars=None):
     properties, variables = _format_properties(model, input_vars, output_vars)
     project = mr.get_project(project_name)
     same_properties = True
@@ -245,21 +232,23 @@ def _compare_properties(
             same_properties = False
             break
     if not same_properties:
-        warn("This model's properties are different from the project's. "
-             + "If you want to run a performance definition with this model, "
-             + "the project's properties may need to be updated.")
+        warn(
+            "This model's properties are different from the project's. "
+            + "If you want to run a performance definition with this model, "
+            + "the project's properties may need to be updated."
+        )
 
 
 def register_model(
-        model,
-        name,
-        project,
-        repository=None,
-        input=None,
-        version=None,
-        files=None,
-        force=False,
-        record_packages=True,
+    model,
+    name,
+    project,
+    repository=None,
+    input=None,
+    version=None,
+    files=None,
+    force=False,
+    record_packages=True,
 ):
     """Register a model in the model repository.
 
@@ -584,7 +573,7 @@ def register_model(
 
 
 def publish_model(
-        model, destination, code=None, name=None, max_retries=60, replace=False, **kwargs
+    model, destination, code=None, name=None, max_retries=60, replace=False, **kwargs
 ):
     """Publish a model to a configured publishing destination.
 
@@ -660,17 +649,17 @@ def publish_model(
 
     # If model was successfully published and it isn't a MAS module, we're done
     if (
-            job.state.lower() == "completed"
-            and job.destination.destinationType != "microAnalyticService"
+        job.state.lower() == "completed"
+        and job.destination.destinationType != "microAnalyticService"
     ):
         return request_link(job, "self")
 
     # If MAS publish failed and replace=True, attempt to delete the module
     # and republish
     if (
-            job.state.lower() == "failed"
-            and replace
-            and job.destination.destinationType == "microAnalyticService"
+        job.state.lower() == "failed"
+        and replace
+        and job.destination.destinationType == "microAnalyticService"
     ):
         from .services import microanalytic_score as mas
 
@@ -778,16 +767,16 @@ def update_model_performance(data, model, label, refresh=True):
         )
 
     if (
-            project.get("predictionVariable", "") == ""
-            and project.get("function", "").lower() == "prediction"
+        project.get("predictionVariable", "") == ""
+        and project.get("function", "").lower() == "prediction"
     ):
         raise ValueError(
             "Project '%s' does not have a prediction variable " "specified." % project
         )
 
     if (
-            project.get("eventProbabilityVariable", "") == ""
-            and project.get("function", "").lower() == "classification"
+        project.get("eventProbabilityVariable", "") == ""
+        and project.get("function", "").lower() == "classification"
     ):
         raise ValueError(
             "Project '%s' does not have an Event Probability variable "
@@ -907,11 +896,11 @@ def _parse_module_url(msg):
 
 
 def get_project_kpis(
-        project,
-        server="cas-shared-default",
-        caslib="ModelPerformanceData",
-        filterColumn=None,
-        filterValue=None,
+    project,
+    server="cas-shared-default",
+    caslib="ModelPerformanceData",
+    filterColumn=None,
+    filterValue=None,
 ):
     """Create a call to CAS to return the MM_STD_KPI table (Model Manager Standard KPI)
     generated when custom KPIs are uploaded or when a performance definition is executed
