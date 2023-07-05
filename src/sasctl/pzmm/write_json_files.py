@@ -806,11 +806,11 @@ class JSONFiles:
         datarole : string, optional
             The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
         return_dataframes : boolean, optional
-            If true, the function returns the pandas data frames used to create the JSON files. If a JSON path is
-            passed, then the function will return a dictionary that only includes the data frames
-            (dict["maxDifferencesData"] and dict["groupMetricData"]). If a JSON path is not passed, the function will
-            return a dictionary with the two tables  and the two JSON strings (dict["maxDifferences.json"] and
-            dict["groupMetrics.json"]). The default value is False.
+            If true, the function returns the pandas data frames used to create the JSON files and a table for bias
+            metrics. If a JSON path is passed, then the function will return a dictionary that only includes the data
+            frames (dict["maxDifferencesData"], dict["groupMetricData"], and dict["biasMetricsData"]). If a JSON path is
+             not passed, the function will return a dictionary with the three tables  and the two JSON strings
+            (dict["maxDifferences.json"] and dict["groupMetrics.json"]). The default value is False.
 
         Returns
         -------
@@ -864,6 +864,7 @@ class JSONFiles:
         conn.loadactionset("fairaitools")
         maxdiff_dfs = []
         groupmetrics_dfs = []
+        biasmetrics_dfs = []
 
         for x in sensitive_values:
             # run assessBias, if levels=None then assessBias treats the input like a regression problem
@@ -887,9 +888,14 @@ class JSONFiles:
 
             # get group metrics table, append to list
             group_metrics = pd.DataFrame(tables["GroupMetrics"])
-            # adding variable to table
             group_metrics["_VARIABLE_"] = x
             groupmetrics_dfs.append(group_metrics)
+
+            # get bis metrics table if they want to return it
+            if return_dataframes:
+                bias_metrics = pd.DataFrame(tables["BiasMetrics"])
+                bias_metrics["_VARIABLE_"] = x
+                biasmetrics_dfs.append(group_metrics)
 
         # overall formatting
         group_metrics = cls.format_group_metrics(
@@ -916,9 +922,11 @@ class JSONFiles:
         )
 
         if return_dataframes:
+            bias_metrics = pd.concat(biasmetrics_dfs)
             df_dict = {
                 "maxDifferencesData": max_differences,
                 "groupMetricsData": group_metrics,
+                "biasMetricsData": bias_metrics
             }
 
             if json_files is None:
