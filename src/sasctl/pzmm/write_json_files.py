@@ -895,7 +895,7 @@ class JSONFiles:
             if return_dataframes:
                 bias_metrics = pd.DataFrame(tables["BiasMetrics"])
                 bias_metrics["_VARIABLE_"] = x
-                biasmetrics_dfs.append(group_metrics)
+                biasmetrics_dfs.append(bias_metrics)
 
         # overall formatting
         group_metrics = cls.format_group_metrics(
