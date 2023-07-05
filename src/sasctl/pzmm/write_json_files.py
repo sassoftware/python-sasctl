@@ -351,17 +351,17 @@ class JSONFiles:
 
         if not target_values:
             model_function = model_function if model_function else "Prediction"
-            target_level = "INTERVAL"
+            target_level = "Interval"
             target_event = ""
             event_prob_var = ""
         elif isinstance(target_values, list) and len(target_values) == 2:
             model_function = model_function if model_function else "Classification"
-            target_level = "BINARY"
+            target_level = "Binary"
             target_event = str(target_values[0])
             event_prob_var = f"P_{target_values[0]}"
         elif isinstance(target_values, list) and len(target_values) > 2:
             model_function = model_function if model_function else "Classification"
-            target_level = "NOMINAL"
+            target_level = "Nominal"
             target_event = ""
             event_prob_var = ""
             targets = [str(x) for x in target_values]
