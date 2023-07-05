@@ -16,6 +16,7 @@ from .write_score_code import ScoreCode as sc
 from .zip_model import ZipModel as zm
 from ..tasks import _create_project, _update_properties, _compare_properties
 
+
 def get_model_properties(
     target_values: Union[list, str, None] = None, 
     model_files: Union[str, Path, None] = None
@@ -40,12 +41,13 @@ def get_model_properties(
         var['role'] = 'input'
     return model, input_var, output_var
 
+
 def project_exists(
     project: Union[str, dict, RestObj], 
     response: Union[str, dict, RestObj, None] = None, 
     target_values: Union[list, str, None] = None,
     model_files: Union[str, Path, None] = None,
-    overwrite_project_properties: Optional[bool] = None
+    overwrite_project_properties: Optional[bool] = False
 ) -> RestObj:
     """
     Checks if project exists on SAS Viya. If the project does not exist, then a new
@@ -172,6 +174,7 @@ def model_exists(
                     f"models with the same name."
                 )
 
+
 class ImportModel:
     notebook_output = check_if_jupyter()
 
@@ -186,13 +189,13 @@ class ImportModel:
         score_metrics: Optional[List[str]] = None,
         pickle_type: str = "pickle",
         project_version: str = "latest",
-        missing_values: bool = False,
-        overwrite_model: bool = False,
-        score_cas: bool = True,
+        missing_values: Optional[bool] = False,
+        overwrite_model: Optional[bool] = False,
+        score_cas: Optional[bool] = True,
         mlflow_details: Optional[dict] = None,
         predict_threshold: Optional[float] = None,
         target_values: Optional[List[str]] = None,
-        overwrite_project_properties: Optional[bool] = None,
+        overwrite_project_properties: Optional[bool] = False,
         **kwargs,
     ) -> Tuple[RestObj, Union[dict, str, Path]]:
         """
