@@ -98,14 +98,14 @@
     "data": [
         {
             "dataMap": {
-                "BASE": "group_D",
-                "COMPARE": "group_B",
-                "Metric": "Predicted_Composite_Score",
-                "MetricLabel": "Average Predicted: Composite_Score",
+                "BASE": "group_E",
+                "COMPARE": "group_C",
+                "Metric": "Predicted_Math_Score",
+                "MetricLabel": "Average Predicted: Math_Score",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "maxdiff": 41.627534729649
+                "maxdiff": 11.2851188873597
             },
             "rowNumber": 1
         },
@@ -118,7 +118,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "maxdiff": 4837.78731068418
+                "maxdiff": 15.7316835271917
             },
             "rowNumber": 2
         },
@@ -131,85 +131,85 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "maxdiff": 51.6697166206632
+                "maxdiff": 1.32435403809091
             },
             "rowNumber": 3
         },
         {
             "dataMap": {
                 "BASE": "group_A",
-                "COMPARE": "group_C",
+                "COMPARE": "group_D",
                 "Metric": "MAE",
                 "MetricLabel": "Mean Absolute Error",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "maxdiff": 50.8093216027269
+                "maxdiff": 1.19036971798063
             },
             "rowNumber": 4
         },
         {
             "dataMap": {
                 "BASE": "group_A",
-                "COMPARE": "group_C",
+                "COMPARE": "group_D",
                 "Metric": "RMAE",
                 "MetricLabel": "Root Mean Absolute Error",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "maxdiff": 4.0520782119891
+                "maxdiff": 0.27091281266682
             },
             "rowNumber": 5
         },
         {
             "dataMap": {
-                "BASE": "group_A",
-                "COMPARE": "group_C",
+                "BASE": "group_B",
+                "COMPARE": "group_E",
                 "Metric": "MSLE",
                 "MetricLabel": "Mean Square Logarithmic Error",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "maxdiff": 0.122962327016
+                "maxdiff": 0.00422480501223
             },
             "rowNumber": 6
         },
         {
             "dataMap": {
-                "BASE": "group_A",
-                "COMPARE": "group_C",
+                "BASE": "group_B",
+                "COMPARE": "group_E",
                 "Metric": "RMSLE",
                 "MetricLabel": "Root Mean Square Logarithmic Error",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "maxdiff": 0.25622487886893
+                "maxdiff": 0.02383524701428
             },
             "rowNumber": 7
         },
         {
             "dataMap": {
-                "BASE": "group_D",
-                "COMPARE": "group_B",
+                "BASE": "group_E",
+                "COMPARE": "group_C",
                 "Metric": "PREDICTED",
                 "MetricLabel": "Average Prediction",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "maxdiff": 41.627534729649
+                "maxdiff": 11.2851188873597
             },
             "rowNumber": 8
         },
         {
             "dataMap": {
-                "BASE": "female",
-                "COMPARE": "male",
-                "Metric": "Predicted_Composite_Score",
-                "MetricLabel": "Average Predicted: Composite_Score",
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "Predicted_Math_Score",
+                "MetricLabel": "Average Predicted: Math_Score",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
-                "maxdiff": 28.071179105205
+                "maxdiff": 3.74867717856203
             },
             "rowNumber": 9
         },
@@ -222,7 +222,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
-                "maxdiff": 45.5628680450299
+                "maxdiff": 3.70057660964048
             },
             "rowNumber": 10
         },
@@ -235,33 +235,33 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
-                "maxdiff": 0.68188116731206
+                "maxdiff": 0.32925733632967
             },
             "rowNumber": 11
         },
         {
             "dataMap": {
-                "BASE": "female",
-                "COMPARE": "male",
+                "BASE": "male",
+                "COMPARE": "female",
                 "Metric": "MAE",
                 "MetricLabel": "Mean Absolute Error",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
-                "maxdiff": 4.18077054183486
+                "maxdiff": 0.17310679574029
             },
             "rowNumber": 12
         },
         {
             "dataMap": {
-                "BASE": "female",
-                "COMPARE": "male",
+                "BASE": "male",
+                "COMPARE": "female",
                 "Metric": "RMAE",
                 "MetricLabel": "Root Mean Absolute Error",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
-                "maxdiff": 0.40155707789188
+                "maxdiff": 0.04057405594958
             },
             "rowNumber": 13
         },
@@ -274,7 +274,7 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
-                "maxdiff": 0.0032506358138
+                "maxdiff": 0.00161397430168
             },
             "rowNumber": 14
         },
@@ -287,20 +287,20 @@
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
-                "maxdiff": 0.00964833463479
+                "maxdiff": 0.00878213083394
             },
             "rowNumber": 15
         },
         {
             "dataMap": {
-                "BASE": "female",
-                "COMPARE": "male",
+                "BASE": "male",
+                "COMPARE": "female",
                 "Metric": "PREDICTED",
                 "MetricLabel": "Average Prediction",
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
-                "maxdiff": 28.071179105205
+                "maxdiff": 3.74867717856203
             },
             "rowNumber": 16
         }

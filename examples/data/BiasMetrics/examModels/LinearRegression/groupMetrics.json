@@ -17,15 +17,15 @@
                 "LEVEL"
             ]
         },
-        "Predicted_Composite_Score": {
-            "label": "Predicted_Composite_Score",
+        "Predicted_Math_Score": {
+            "label": "Predicted_Math_Score",
             "length": 8,
             "order": 13,
-            "parameter": "Predicted_Composite_Score",
+            "parameter": "Predicted_Math_Score",
             "preformatted": false,
             "type": "num",
             "values": [
-                "Predicted_Composite_Score"
+                "Predicted_Math_Score"
             ]
         },
         "VLABEL": {
@@ -154,126 +154,126 @@
         {
             "dataMap": {
                 "LEVEL": "group_A",
-                "Predicted_Composite_Score": 174.683390355609,
+                "Predicted_Math_Score": 65.9395976249791,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "_ase_": 5277.93406198936,
-                "_avgyhat_": 174.683390355609,
-                "_mae_": 68.8166096443903,
-                "_msle_": 0.13546997030694,
-                "_nobs_": 2.0,
-                "_rase_": 72.649391339428,
-                "_rmae_": 8.29557771613227,
-                "_rmsle_": 0.36806245435651
+                "_ase_": 43.5805538478624,
+                "_avgyhat_": 65.9395976249791,
+                "_mae_": 5.44017052966544,
+                "_msle_": 0.00928252156642,
+                "_nobs_": 23.0,
+                "_rase_": 6.60155692604876,
+                "_rmae_": 2.33241731464706,
+                "_rmsle_": 0.09634584353476
             },
             "rowNumber": 1
         },
         {
             "dataMap": {
                 "LEVEL": "group_B",
-                "Predicted_Composite_Score": 168.052027045469,
+                "Predicted_Math_Score": 65.6357441989507,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "_ase_": 1072.33863717772,
-                "_avgyhat_": 168.052027045469,
-                "_mae_": 28.8704613739253,
-                "_msle_": 0.03171237296504,
-                "_nobs_": 4.0,
-                "_rase_": 32.746582068633,
-                "_rmae_": 5.37312398646498,
-                "_rmsle_": 0.17807968150535
+                "_ase_": 38.5986012703782,
+                "_avgyhat_": 65.6357441989507,
+                "_mae_": 5.09732012037102,
+                "_msle_": 0.01010885068967,
+                "_nobs_": 55.0,
+                "_rase_": 6.21277725903465,
+                "_rmae_": 2.25772454483956,
+                "_rmsle_": 0.1005427803956
             },
             "rowNumber": 2
         },
         {
             "dataMap": {
                 "LEVEL": "group_C",
-                "Predicted_Composite_Score": 178.730672896089,
+                "Predicted_Math_Score": 63.8588419991215,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "_ase_": 440.14675130518,
-                "_avgyhat_": 178.730672896089,
-                "_mae_": 18.0072880416633,
-                "_msle_": 0.01250764329094,
-                "_nobs_": 6.0,
-                "_rase_": 20.9796747187648,
-                "_rmae_": 4.24349950414317,
-                "_rmsle_": 0.11183757548758
+                "_ase_": 27.8488703206707,
+                "_avgyhat_": 63.8588419991215,
+                "_mae_": 4.27001568649831,
+                "_msle_": 0.00893853409232,
+                "_nobs_": 111.0,
+                "_rase_": 5.27720288795785,
+                "_rmae_": 2.06640162758799,
+                "_rmsle_": 0.09454382101611
             },
             "rowNumber": 3
         },
         {
             "dataMap": {
                 "LEVEL": "group_D",
-                "Predicted_Composite_Score": 209.679561775118,
+                "Predicted_Math_Score": 68.6841685841392,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "_ase_": 972.344739687155,
-                "_avgyhat_": 209.679561775118,
-                "_mae_": 25.9089753827708,
-                "_msle_": 0.02284868372157,
-                "_nobs_": 11.0,
-                "_rase_": 31.1824428114148,
-                "_rmae_": 5.09008598972265,
-                "_rmsle_": 0.15115781065355
+                "_ase_": 28.5781337846051,
+                "_avgyhat_": 68.6841685841392,
+                "_mae_": 4.2498008116848,
+                "_msle_": 0.00739102171884,
+                "_nobs_": 77.0,
+                "_rase_": 5.34585201671399,
+                "_rmae_": 2.06150450198024,
+                "_rmsle_": 0.08597105163278
             },
             "rowNumber": 4
         },
         {
             "dataMap": {
                 "LEVEL": "group_E",
-                "Predicted_Composite_Score": 208.707000267585,
+                "Predicted_Math_Score": 75.1439608864812,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Race",
-                "_ase_": 777.784165763602,
-                "_avgyhat_": 208.707000267585,
-                "_mae_": 22.2126547125903,
-                "_msle_": 0.01965713497937,
-                "_nobs_": 7.0,
-                "_rase_": 27.8887820774519,
-                "_rmae_": 4.71303031101969,
-                "_rmsle_": 0.14020390500757
+                "_ase_": 30.7799620151994,
+                "_avgyhat_": 75.1439608864812,
+                "_mae_": 4.64010576566181,
+                "_msle_": 0.00588404567744,
+                "_nobs_": 34.0,
+                "_rase_": 5.54796917936639,
+                "_rmae_": 2.15409047295182,
+                "_rmsle_": 0.07670753338131
             },
             "rowNumber": 5
         },
         {
             "dataMap": {
                 "LEVEL": "female",
-                "Predicted_Composite_Score": 212.222144385424,
+                "Predicted_Math_Score": 65.0497519948229,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
-                "_ase_": 1093.5417617538,
-                "_avgyhat_": 212.222144385424,
-                "_mae_": 29.2299991662033,
-                "_msle_": 0.02677531044547,
-                "_nobs_": 12.0,
-                "_rase_": 33.0687429720847,
-                "_rmae_": 5.40647751925441,
-                "_rmsle_": 0.16363163033311
+                "_ase_": 29.7565060516653,
+                "_avgyhat_": 65.0497519948229,
+                "_mae_": 4.46448681051304,
+                "_msle_": 0.00765600673282,
+                "_nobs_": 155.0,
+                "_rase_": 5.45495243349245,
+                "_rmae_": 2.11293322433839,
+                "_rmsle_": 0.08749860989083
             },
             "rowNumber": 6
         },
         {
             "dataMap": {
                 "LEVEL": "male",
-                "Predicted_Composite_Score": 184.150965280219,
+                "Predicted_Math_Score": 68.798429173385,
                 "VLABEL": "",
                 "_DATAROLE_": "TEST",
                 "_VARIABLE_": "Gender",
-                "_ase_": 1139.10462979883,
-                "_avgyhat_": 184.150965280219,
-                "_mae_": 25.0492286243685,
-                "_msle_": 0.03002594625927,
-                "_nobs_": 18.0,
-                "_rase_": 33.7506241393967,
-                "_rmae_": 5.00492044136253,
-                "_rmsle_": 0.1732799649679
+                "_ase_": 33.4570826613057,
+                "_avgyhat_": 68.798429173385,
+                "_mae_": 4.63759360625334,
+                "_msle_": 0.00926998103451,
+                "_nobs_": 145.0,
+                "_rase_": 5.78420976982213,
+                "_rmae_": 2.15350728028798,
+                "_rmsle_": 0.09628074072478
             },
             "rowNumber": 7
         }
