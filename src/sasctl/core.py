@@ -351,17 +351,19 @@ class Session(requests.Session):
                 # REST endpoints
                 httpAddress = hostname.get_action("builtins.httpAddress")
                 address = httpAddress()
-                domain = address.virtualHost
-                # httpAddress action may return virtualHost = ''
-                # if this happens, try the CAS host
-                if not domain:
-                    domain = hostname._sw_connection._current_hostname
+                # Retrieve domain via swat connection object instead of httpAddress
+                domain = hostname._sw_connection._current_hostname
                 protocol = address.protocol
                 port = address.port
-                auth = hostname._sw_connection._auth.decode("utf-8").replace(
-                    "Basic ", ""
-                )
-                username, password = base64.b64decode(auth).decode("utf-8").split(":")
+                auth = hostname._sw_connection._auth.decode("utf-8")
+                # Checks to see if authentication was made via user/pass or auth token
+                if auth.startswith("Basic"):
+                    # User/pass
+                    auth = auth.replace("Basic ", "")
+                    username, password = base64.b64decode(auth).decode("utf-8").split(":")
+                elif auth.startswith("Bearer"):
+                    # Auth token
+                    token = auth.replace("Bearer ", "")
             else:
                 raise ValueError(
                     "A 'swat.CAS' session can only be reused "
