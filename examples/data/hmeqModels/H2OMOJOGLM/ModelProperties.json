@@ -1,5 +1,5 @@
 {
-    "name": "glmfit",
+    "name": "glmfit_mojo",
     "description": "MOJO H2O model.",
     "scoreCodeType": "python",
     "trainTable": "",

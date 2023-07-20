@@ -9,10 +9,10 @@
     },
     {
         "role": "score",
-        "name": "score_glmfit.py"
+        "name": "score_glmfit_binary.py"
     },
     {
         "role": "scoreResource",
-        "name": "glmfit.pickle"
+        "name": "glmfit_binary.pickle"
     }
 ]

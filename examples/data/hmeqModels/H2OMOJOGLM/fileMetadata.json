@@ -9,10 +9,10 @@
     },
     {
         "role": "score",
-        "name": "score_glmfit.py"
+        "name": "score_glmfit_mojo.py"
     },
     {
         "role": "scoreResource",
-        "name": "glmfit.mojo"
+        "name": "glmfit_mojo.mojo"
     }
 ]

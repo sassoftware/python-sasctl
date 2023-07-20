@@ -13,6 +13,8 @@ from urllib.parse import urlsplit
 
 import betamax
 import pytest
+import nbconvert
+import nbformat
 import requests
 from betamax.cassette.cassette import Placeholder
 from betamax_serializers import pretty_json
@@ -532,6 +534,45 @@ def sklearn_classification_model(iris_dataset):
         model = sk.LogisticRegression(multi_class="multinomial", solver="lbfgs")
         model.fit(X, y)
     return model
+
+
+@pytest.fixture(scope="session")
+def notebook_code():
+    def process_multiline(lines):
+        filtered_lines = []
+        current_line = ""
+        open_brackets = 0
+
+        for line in lines:
+            line = line.strip()
+            if line:
+                current_line += line
+                open_brackets += len(re.findall(r"[({\[]", line)) - len(
+                    re.findall(r"[)}\]]", line)
+                )
+                if open_brackets == 0:
+                    filtered_lines.append(current_line)
+                    current_line = ""
+
+        return filtered_lines
+
+    def filter_code(source):
+        source = re.sub(r"(?m)^\s*#.*\n?", "", source)
+        lines = source.strip().split("\n")
+        lines = process_multiline(lines)
+
+        return lines
+
+    def convert_notebook_to_script(notebook_path):
+        with open(notebook_path) as notebook_file:
+            nb = nbformat.reads(notebook_file.read(), nbformat.NO_CONVERT)
+        exporter = nbconvert.PythonExporter()
+        source, _ = exporter.from_notebook_node(nb)
+        lines = filter_code(source)
+
+        return lines
+
+    return convert_notebook_to_script
 
 
 @pytest.fixture

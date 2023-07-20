@@ -1,5 +1,5 @@
 {
-    "name": "glmfit",
+    "name": "glmfit_binary",
     "description": "Binary H2O model.",
     "scoreCodeType": "python",
     "trainTable": "",
