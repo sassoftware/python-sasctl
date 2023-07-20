@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import re
+import textwrap
 from pathlib import Path
 from typing import Any, Callable, Generator, List, Optional, Tuple, Type, Union
 from warnings import warn
@@ -31,7 +32,7 @@ class ScoreCode:
         predict_threshold: Optional[float] = None,
         model: Union[str, dict, RestObj, None] = None,
         pickle_type: str = "pickle",
-        missing_values: Optional[bool] = False,
+        missing_values: Union[bool, list, DataFrame] = False,
         score_cas: Optional[bool] = True,
         score_code_path: Union[Path, str, None] = None,
         **kwargs,
@@ -114,9 +115,12 @@ class ScoreCode:
         pickle_type : str, optional
             Indicator for the package used to serialize the model file to be uploaded to
             SAS Model Manager. The default value is `pickle`.
-        missing_values : bool, optional
+        missing_values : bool, list, or dict, optional
             Sets whether data handled by the score code will impute for missing values.
-            The default value is False.
+            If set to True, then the function determines the imputed values based on the
+            input_data argument. In order to set the imputation values, pass a dict with
+            variable and value key-value pairs or a list of values in the same variable
+            order as the input_data argument. The default value is False.
         score_cas : bool, optional
             Sets whether models registered to SAS Viya 3.5 should be able to be scored
             and validated through both CAS and SAS Micro Analytic Service. If set to
@@ -212,13 +216,13 @@ class ScoreCode:
                 f"except NameError:\n{model_load}\n"
             )
 
-        if missing_values:
-            cls._impute_missing_values(input_data, input_var_list, input_dtypes_list)
-
         # Create the appropriate style of input array and write out the predict method
         if any(x in ["mojo_model", "binary_h2o_model"] for x in kwargs):
             cls._predict_method(
-                predict_method[0], input_var_list, dtype_list=input_dtypes_list
+                predict_method[0],
+                input_var_list,
+                missing_values=missing_values,
+                dtype_list=input_dtypes_list
             )
             cls._predictions_to_metrics(
                 score_metrics,
@@ -231,6 +235,7 @@ class ScoreCode:
             cls._predict_method(
                 predict_method[0],
                 input_var_list,
+                missing_values=missing_values,
                 statsmodels_model="statsmodels_model" in kwargs,
                 tf_model="tf_keras_model" in kwargs or "tf_core_model" in kwargs,
             )
@@ -246,6 +251,12 @@ class ScoreCode:
                 predict_method[1],
                 target_values=target_values,
                 predict_threshold=predict_threshold,
+            )
+
+        if missing_values:
+            cls._impute_missing_values(
+                input_data,
+                missing_values
             )
 
         # SAS Viya 3.5 model
@@ -563,73 +574,79 @@ class ScoreCode:
 
     @classmethod
     def _impute_missing_values(
-        cls, data: DataFrame, var_list: List[str], dtype_list: List[str]
+        cls,
+            data: DataFrame,
+            missing_values: Union[bool, list, dict]
     ) -> None:
         """
-        Write the missing value imputation section of the score code. This section of
-        the score code is optional.
+        Write the missing value imputation function of the score code. This section of
+        the score code is optional and is in a separate function at the bottom of the
+        generated score code.
 
         Parameters
         ----------
         data : pandas.DataFrame
             Input dataset for model training or predictions.
-        var_list : list of str
-            List of variable names
-        dtype_list : list of str
-            List of variable data types
-        """
-        cls.score_code += "\n"
-        for var, dtype in zip(var_list, dtype_list):
-            # Split up between numeric and character variables
-            if any(t in dtype for t in ["int", "float"]):
-                cls._impute_numeric(data, var)
-            else:
-                cls._impute_char(var)
-        cls.score_code += "\n"
+        missing_values : bool, list, or dict
 
-    @classmethod
-    def _impute_numeric(cls, data: DataFrame, var: str) -> None:
         """
-        Write imputation statement for a single numeric variable.
+        cls.score_code += "\n\ndef impute_missing_values(data):\n"
 
-        Parameters
-        ----------
-        data : pandas.DataFrame
-            Input dataset for model training or predictions.
-        var : str
-            Name of the variable to impute values for.
-        """
-        # If binary values, then compute the mode instead of the mean
-        if data[var].isin([0, 1]).all():
-            cls.score_code += (
-                f"{'':4}try:\n{'':8}if math.isnan({var}):\n"
-                f"{'':12}{var} = {data[var].mode()[0]}\n"
-                f"{'':4}except TypeError:\n{'':8}{var} = "
-                f"{data[var].mode()[0]}\n"
-            )
+        if isinstance(missing_values, bool):
+            numeric_columns = [
+                col for col in data.columns if pd.api.types.is_numeric_dtype(data[col])
+            ]
+            character_columns = data.columns.difference(numeric_columns).tolist()
+            binary_columns = []
+            for col in data.columns:
+                unique_values = data[col].dropna().unique()
+                if (
+                        len(unique_values) == 2 and
+                        all(value in [0, 1] for value in unique_values)
+                ):
+                    binary_columns.append(col)
+            numeric_columns = list(set(numeric_columns) - set(binary_columns))
+            character_columns = list(set(character_columns) - set(binary_columns))
+            impute_values = {}
+            for col in data[numeric_columns]:
+                impute_values[col] = data[col].mean()
+            for col in data[character_columns]:
+                impute_values[col] = ""
+            for col in data[binary_columns]:
+                impute_values[col] = data[col].mode().iloc[0]
+        elif isinstance(missing_values, list):
+            impute_values = {}
+            for col, imp_val in zip(data.columns.tolist(), missing_values):
+                impute_values[col] = imp_val
         else:
-            cls.score_code += (
-                f"{'':4}try:\n{'':8}if math.isnan({var}):\n"
-                f"{'':12}{var} = {data[var].mean()}\n"
-                f"{'':4}except TypeError:\n{'':8}{var} = "
-                f"{data[var].mean()}\n"
-            )
+            impute_values = missing_values
 
-    @classmethod
-    def _impute_char(cls, var: str) -> None:
+        cls.score_code += (
+                f"\n{'':4}impute_values = \n" +
+                cls._wrap_indent_string(impute_values, 8)
+        )
+        cls.score_code += "\nreturn data.fillna(impute_values)\n"
+
+    @staticmethod
+    def _wrap_indent_string(text, indent=0):
         """
-        Write imputation statement for a single string variable.
+        Use the textwrap package to wrap and indent strings longer than 88 characters in
+        width. The indent value is subtracted from 88 to determine the correct length.
 
         Parameters
         ----------
-        var : str
-            Name of the variable to impute values for.
+        text : any value accepted by builtins.str()
+            String text to be wrapped and indented.
+        indent : int, optional
+            Indent length for the wrapped text. Default value is 0.
+
+        Returns
+        -------
+        str
+            Wrapped and indented string.
         """
-        # Replace non-string values with blank strings
-        cls.score_code += (
-            f"{'':4}try:\n{'':8}{var} = {var}.strip()\n{'':4}except "
-            f"AttributeError:\n{'':8}{var} = \"\"\n"
-        )
+        wrapped_lines = textwrap.fill(str(text), width=88-indent).split("\n")
+        return "\n".join(f"{'':{indent}}" + line for line in wrapped_lines)
 
     @classmethod
     def _predict_method(
@@ -637,6 +654,7 @@ class ScoreCode:
         method: Callable[..., List],
         var_list: List[str],
         dtype_list: Optional[List[str]] = None,
+        missing_values: Optional[Any] = None,
         statsmodels_model: Optional[bool] = False,
         tf_model: Optional[bool] = False,
     ) -> None:
@@ -651,6 +669,9 @@ class ScoreCode:
             List of variable names.
         dtype_list : list of str, optional
             List of variable data types. The default value is None.
+        missing_values : any, optional
+            Flag for indicating if missing values should be imputed. The default value
+            is None.
         statsmodels_model : bool, optional
             Flag to indicate that the model is a statsmodels model. The default value is
             False.
@@ -674,7 +695,14 @@ class ScoreCode:
                 f"{'':4}input_array = pd.DataFrame("
                 f"[[{', '.join(var_list)}]],\n{'':31}columns=["
                 f"{column_names}],\n{'':31}dtype=object,\n{'':31}"
-                f"index=[0])\n{'':4}column_types = {column_types}\n"
+                f"index=[0])\n"
+            )
+            if missing_values:
+                cls.score_code += (
+                    f"{'':4}input_array = impute_missing_values(input_array)"
+                )
+            cls.score_code += (
+                f"{'':4}column_types = {column_types}\n"
                 f"{'':4}h2o_array = h2o.H2OFrame(input_array, "
                 f"column_types=column_types)\n{'':4}prediction = "
                 f"model.{method.__name__}(h2o_array)\n{'':4}prediction"
@@ -686,6 +714,12 @@ class ScoreCode:
                 f"{'':4}inputArray = pd.DataFrame("
                 f"[[1.0, {', '.join(var_list)}]],\n{'':29}columns=["
                 f"\"const\", {column_names}],\n{'':29}dtype=object)\n"
+            )
+            if missing_values:
+                cls.score_code += (
+                    f"{'':4}input_array = impute_missing_values(input_array)"
+                )
+            cls.score_code += (
                 f"{'':4}prediction = model.{method.__name__}"
                 f"(input_array)\n"
             )
@@ -693,6 +727,12 @@ class ScoreCode:
             cls.score_code += (
                 f"{'':4}input_array = np.array("
                 f"[[{', '.join(var_list)}]])\n"
+            )
+            if missing_values:
+                cls.score_code += (
+                    f"{'':4}input_array = impute_missing_values(input_array)"
+                )
+            cls.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array)\n"
                 f"{'':4} # Check if model returns logits or probabilities\n"
                 f"{'':4}if(sum(prediction) != 1):\n"
@@ -702,8 +742,14 @@ class ScoreCode:
             cls.score_code += (
                 f"{'':4}input_array = pd.DataFrame("
                 f"[[{', '.join(var_list)}]],\n{'':30}columns=["
-                f"{column_names}],\n{'':30}dtype=object)\n{'':4}"
-                f"prediction = model.{method.__name__}(input_array).tolist()\n"
+                f"{column_names}],\n{'':30}dtype=object)\n"
+            )
+            if missing_values:
+                cls.score_code += (
+                    f"{'':4}input_array = impute_missing_values(input_array)"
+                )
+            cls.score_code += (
+                f"{'':4}prediction = model.{method.__name__}(input_array).tolist()\n"
             )
 
     @classmethod
