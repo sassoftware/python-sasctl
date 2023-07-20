@@ -1,0 +1,17 @@
+{
+    "name": "RandomForest",
+    "description": "Description for the RandomForest model.",
+    "scoreCodeType": "python",
+    "trainTable": "",
+    "trainCodeType": "Python",
+    "algorithm": "",
+    "function": "Classification",
+    "targetVariable": "Survived",
+    "targetEvent": "1",
+    "targetLevel": "BINARY",
+    "eventProbVar": "P_1",
+    "modeler": "sasdemo",
+    "tool": "Python 3",
+    "toolVersion": "3.11.3",
+    "properties": []
+}

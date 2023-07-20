@@ -1,0 +1,283 @@
+{
+    "creationTimeStamp": "0001-01-01T00:00:00Z",
+    "modifiedTimeStamp": "0001-01-01T00:00:00Z",
+    "revision": 0,
+    "name": "groupMetrics",
+    "version": 0,
+    "order": 0,
+    "parameterMap": {
+        "LEVEL": {
+            "label": "Variable Level",
+            "length": 100,
+            "order": 4,
+            "parameter": "LEVEL",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "LEVEL"
+            ]
+        },
+        "Predicted_Math_Score": {
+            "label": "Predicted_Math_Score",
+            "length": 8,
+            "order": 13,
+            "parameter": "Predicted_Math_Score",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "Predicted_Math_Score"
+            ]
+        },
+        "VLABEL": {
+            "label": "Variable Label",
+            "length": 256,
+            "order": 2,
+            "parameter": "VLABEL",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "VLABEL"
+            ]
+        },
+        "_DATAROLE_": {
+            "label": "Data Role",
+            "length": 8,
+            "order": 3,
+            "parameter": "_DATAROLE_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_DATAROLE_"
+            ]
+        },
+        "_VARIABLE_": {
+            "label": "Variable",
+            "length": 255,
+            "order": 1,
+            "parameter": "_VARIABLE_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_VARIABLE_"
+            ]
+        },
+        "_ase_": {
+            "label": "Average Squared Error",
+            "length": 8,
+            "order": 6,
+            "parameter": "_ase_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_ase_"
+            ]
+        },
+        "_avgyhat_": {
+            "label": "Average Prediction for Target Variable",
+            "length": 8,
+            "order": 12,
+            "parameter": "_avgyhat_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_avgyhat_"
+            ]
+        },
+        "_mae_": {
+            "label": "Mean Absolute Error",
+            "length": 8,
+            "order": 8,
+            "parameter": "_mae_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_mae_"
+            ]
+        },
+        "_msle_": {
+            "label": "Mean Squared Logarithmic Error",
+            "length": 8,
+            "order": 10,
+            "parameter": "_msle_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_msle_"
+            ]
+        },
+        "_nobs_": {
+            "label": "Number of Observations",
+            "length": 8,
+            "order": 5,
+            "parameter": "_nobs_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_nobs_"
+            ]
+        },
+        "_rase_": {
+            "label": "Root Average Squared Error",
+            "length": 8,
+            "order": 7,
+            "parameter": "_rase_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_rase_"
+            ]
+        },
+        "_rmae_": {
+            "label": "Root Mean Absolute Error",
+            "length": 8,
+            "order": 9,
+            "parameter": "_rmae_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_rmae_"
+            ]
+        },
+        "_rmsle_": {
+            "label": "Root Mean Squared Logarithmic Error",
+            "length": 8,
+            "order": 11,
+            "parameter": "_rmsle_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_rmsle_"
+            ]
+        }
+    },
+    "data": [
+        {
+            "dataMap": {
+                "LEVEL": "group_A",
+                "Predicted_Math_Score": 67.0828115942029,
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "_ase_": 48.4398874202898,
+                "_avgyhat_": 67.0828115942029,
+                "_mae_": 5.72208695652174,
+                "_msle_": 0.01173725740794,
+                "_nobs_": 23.0,
+                "_rase_": 6.959876968761,
+                "_rmae_": 2.39208840901036,
+                "_rmsle_": 0.10833862380494
+            },
+            "rowNumber": 1
+        },
+        {
+            "dataMap": {
+                "LEVEL": "group_B",
+                "Predicted_Math_Score": 66.8053201101928,
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "_ase_": 48.4694313897988,
+                "_avgyhat_": 66.8053201101928,
+                "_mae_": 5.7077652892562,
+                "_msle_": 0.01384659924567,
+                "_nobs_": 55.0,
+                "_rase_": 6.96199909435492,
+                "_rmae_": 2.38909298464002,
+                "_rmsle_": 0.11767157365173
+            },
+            "rowNumber": 2
+        },
+        {
+            "dataMap": {
+                "LEVEL": "group_C",
+                "Predicted_Math_Score": 64.5305765765765,
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "_ase_": 33.0617317207207,
+                "_avgyhat_": 64.5305765765765,
+                "_mae_": 4.82472072072072,
+                "_msle_": 0.01108014471134,
+                "_nobs_": 111.0,
+                "_rase_": 5.74993319271804,
+                "_rmae_": 2.19652469158002,
+                "_rmsle_": 0.10526226632245
+            },
+            "rowNumber": 3
+        },
+        {
+            "dataMap": {
+                "LEVEL": "group_D",
+                "Predicted_Math_Score": 69.6262102659245,
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "_ase_": 39.1418572873929,
+                "_avgyhat_": 69.6262102659245,
+                "_mae_": 5.23212987012987,
+                "_msle_": 0.00941135941738,
+                "_nobs_": 77.0,
+                "_rase_": 6.25634536190201,
+                "_rmae_": 2.28738494139702,
+                "_rmsle_": 0.09701216118292
+            },
+            "rowNumber": 4
+        },
+        {
+            "dataMap": {
+                "LEVEL": "group_E",
+                "Predicted_Math_Score": 71.6904759358288,
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "_ase_": 50.9662816635877,
+                "_avgyhat_": 71.6904759358288,
+                "_mae_": 5.27888235294117,
+                "_msle_": 0.01065312034742,
+                "_nobs_": 34.0,
+                "_rase_": 7.13906728246679,
+                "_rmae_": 2.29758184901891,
+                "_rmsle_": 0.1032139542282
+            },
+            "rowNumber": 5
+        },
+        {
+            "dataMap": {
+                "LEVEL": "female",
+                "Predicted_Math_Score": 65.468056849602,
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Gender",
+                "_ase_": 34.2493037325602,
+                "_avgyhat_": 65.468056849602,
+                "_mae_": 4.84482746823069,
+                "_msle_": 0.00893765860121,
+                "_nobs_": 155.0,
+                "_rase_": 5.85229046891558,
+                "_rmae_": 2.20109687842918,
+                "_rmsle_": 0.09453919082165
+            },
+            "rowNumber": 6
+        },
+        {
+            "dataMap": {
+                "LEVEL": "male",
+                "Predicted_Math_Score": 69.1809436781609,
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Gender",
+                "_ase_": 47.502916325862,
+                "_avgyhat_": 69.1809436781609,
+                "_mae_": 5.60335747126436,
+                "_msle_": 0.01353765259045,
+                "_nobs_": 145.0,
+                "_rase_": 6.89223594531281,
+                "_rmae_": 2.36714120222355,
+                "_rmsle_": 0.11635141851502
+            },
+            "rowNumber": 7
+        }
+    ],
+    "xInteger": false,
+    "yInteger": false
+}
