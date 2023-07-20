@@ -43,7 +43,11 @@ def sklearn_model(train_data):
     X, y = train_data
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        model = LogisticRegression(multi_class="multinomial", solver="lbfgs")
+        model = LogisticRegression(
+            multi_class="multinomial",
+            solver="lbfgs",
+            max_iter=1000
+        )
         model.fit(X, y)
     return model
 

@@ -14,6 +14,7 @@ import pandas as pd
 import pytest
 
 from sasctl import current_session
+from sasctl.pzmm import import_model
 from sasctl.core import PagedList, RestObj, VersionInfo
 from sasctl.pzmm.import_model import ImportModel as im
 from sasctl.pzmm.import_model import model_exists, project_exists
@@ -119,24 +120,73 @@ def test_import_model(mock_import, mock_project, mock_score):
 @patch("sasctl._services.service.Service.get")
 @patch("sasctl._services.model_repository.ModelRepository.create_project")
 @patch("sasctl._services.model_repository.ModelRepository.default_repository")
-def test_project_exists(r, mock_project, mock_get):
+@patch("sasctl.pzmm.import_model.get_model_properties")
+def test_project_exists(
+        mock_model_props,
+        _,
+        mock_project,
+        mock_get
+):
     """
     Test Cases:
-    - Normal response given
-    - Invalid UUID given
-    - New project created
+    - Project not found:
+        - warning
+            - if uuid, raise UUID not found
+            - else
+                - model_files
+                - model_files is None
+    - else:
+        - if overwrite, update_properties called
+        - else, compare_properties called
     """
-    project = {"Name": "Test_Project"}
-    response = project_exists("Test_Project", project)
-    assert response == project
-
-    with pytest.raises(SystemError):
-        project_exists(str(uuid4()))
-
     mock_get.return_value = "abc_repo"
+
+    # UUID provided, but project not found
+    project = str(uuid4())
+    with pytest.warns(
+            UserWarning, match=f"No project with the name or UUID {project} was found."
+    ):
+        with pytest.raises(SystemError):
+            project_exists(project)
+
+    # Non-UUID provided, but project not found
+    project = "Test_Project"
     mock_project.return_value = RestObj(name="Test_Project")
-    response = project_exists("Test_Project")
-    assert RestObj(name="Test_Project") == response
+    with pytest.warns(
+            UserWarning, match=f"No project with the name or UUID {project} was found."
+    ):
+        response = project_exists(project)
+        assert response == RestObj(name="Test_Project")
+        mock_model_props.return_value = ("Test_Project", "Input_Var", "Output_Var")
+        with patch.object(
+                import_model,
+                "_create_project",
+                return_value=RestObj(name="Test_Project")
+        ):
+            response = project_exists(project, None, ["target"], "path/to/model/files")
+            assert response == RestObj(name="Test_Project")
+
+    # Project exists
+    project_response = RestObj(name="Test_Project")
+    with patch.object(
+        import_model,
+        "_compare_properties",
+        return_value=None
+    ):
+        response = project_exists(
+            project, project_response, ["target"], "path/to/model/files"
+        )
+        assert response == RestObj(name="Test_Project")
+
+    with patch.object(
+        import_model,
+        "_update_properties",
+        return_value=RestObj(name="New_Test_Project")
+    ):
+        response = project_exists(
+            project, project_response, ["target"], "path/to/model/files", True
+        )
+        assert response == RestObj(name="New_Test_Project")
 
 
 @patch("sasctl._services.model_repository.ModelRepository.delete_model")

@@ -163,44 +163,29 @@ def test_viya4_model_load():
     assert "tf.keras.models.load_model" in keras_text
 
 
-def test_impute_numeric():
-    """
-    Test Cases:
-    - binary data
-    - non-binary data
-    """
-    test_df = pd.DataFrame(data=[[1, 1], [0, 2], [0, 3]], columns=["first", "second"])
-
-    sc._impute_numeric(test_df, "first")
-    assert "first = 0" in sc.score_code
-    sc.score_code = ""
-
-    sc._impute_numeric(test_df, "second")
-    assert "second = 2" in sc.score_code
-    sc.score_code = ""
-
-
-def test_impute_char():
-    """
-    Test Cases:
-    - character data
-    """
-    sc._impute_char("text")
-    assert "text = text.strip()" in sc.score_code
-
-
 def test_impute_missing_values():
     """
     Test Cases:
     - numeric data
     - character data
     """
-    test_df = pd.DataFrame(data=[[0, "a"], [2, "b"]], columns=["num", "char"])
-    sc._impute_missing_values(test_df, ["num", "char"], ["int", "str"])
-    assert "num = 1" in sc.score_code
-    assert "char = char.strip()" in sc.score_code
+    test_df = pd.DataFrame(
+        data=[[0, "a", 1], [2, "b", 0]], columns=["num", "char", "bin"]
+    )
+    sc._impute_missing_values(test_df, True)
+    assert "'num': 1" in sc.score_code
+    assert "'char': ''" in sc.score_code
+    assert "'bin': 0" in sc.score_code
 
+    sc._impute_missing_values(test_df, [5, "test", 1])
+    assert "'num': 5" in sc.score_code
+    assert "'char': 'test'" in sc.score_code
+    assert "'bin': 1" in sc.score_code
 
+    sc._impute_missing_values(test_df, {"a": 5, "b": "test", "c": 1})
+    assert "'a': 5" in sc.score_code
+    assert "'b': 'test'" in sc.score_code
+    assert "'c': 1" in sc.score_code
 def test_predict_method():
     """
     Test Cases:

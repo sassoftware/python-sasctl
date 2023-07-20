@@ -104,7 +104,7 @@ def project_exists(
     else:
         model, input_var, output_var = get_model_properties(target_values, model_files)
         if overwrite_project_properties:
-            _update_properties(project, model, input_var, output_var)
+            response = _update_properties(project, model, input_var, output_var)
         else:
             _compare_properties(project, model, input_var, output_var)
         return response

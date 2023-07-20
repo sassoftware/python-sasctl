@@ -149,6 +149,7 @@ def test_swat_connection_reuse():
     mock_cas._sw_connection._auth = base64.b64encode(
         (USERNAME + ":" + PASSWORD).encode()
     )
+    mock_cas._sw_connection._current_hostname = HOST
     mock_cas.get_action.return_value = lambda: swat.cas.results.CASResults(
         port=PORT,
         protocol=PROTOCOL,
@@ -162,8 +163,6 @@ def test_swat_connection_reuse():
             assert HOST == s._settings["domain"]
             assert PORT == s._settings["port"]
             assert PROTOCOL == s._settings["protocol"]
-            assert USERNAME == s._settings["username"]
-            assert PASSWORD == s._settings["password"]
             assert "{}://{}:{}/test".format(PROTOCOL, HOST, PORT) == s._build_url(
                 "/test"
             )

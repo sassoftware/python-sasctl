@@ -167,6 +167,7 @@ def _update_properties(project_name, model, input_vars=None, output_vars=None):
     if vars_to_add:
         headers = {"Content-Type": "application/vnd.sas.collection+json"}
         mr.post(f"projects/{project.id}/variables", json=vars_to_add, headers=headers)
+    return mr.get_project(project_name)
 
 
 def _format_properties(model, input_vars=None, output_vars=None):
@@ -526,7 +527,7 @@ def register_model(
             # provided
             logger.exception("Unable to inspect model %s", model)
 
-            warnings.warn(
+            warn(
                 "Unable to determine input/output variables. "
                 " Model variables will not be specified and some "
                 "model functionality may not be available."

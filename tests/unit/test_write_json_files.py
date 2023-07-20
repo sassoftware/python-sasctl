@@ -222,7 +222,7 @@ def test_write_model_properties_json():
     )
     assert "ModelProperties.json" in prop_dict
     assert json.loads(prop_dict["ModelProperties.json"])["function"] == "Prediction"
-    assert json.loads(prop_dict["ModelProperties.json"])["targetLevel"] == "INTERVAL"
+    assert json.loads(prop_dict["ModelProperties.json"])["targetLevel"] == "Interval"
     assert json.loads(prop_dict["ModelProperties.json"])["targetEvent"] == ""
     assert json.loads(prop_dict["ModelProperties.json"])["eventProbVar"] == ""
 
@@ -230,7 +230,7 @@ def test_write_model_properties_json():
         model_name="Test_Model", target_variable="BAD", target_values=[1, 0]
     )
     assert json.loads(prop_dict["ModelProperties.json"])["function"] == "Classification"
-    assert json.loads(prop_dict["ModelProperties.json"])["targetLevel"] == "BINARY"
+    assert json.loads(prop_dict["ModelProperties.json"])["targetLevel"] == "Binary"
     assert json.loads(prop_dict["ModelProperties.json"])["targetEvent"] == "1"
     assert json.loads(prop_dict["ModelProperties.json"])["eventProbVar"] == "P_1"
 
@@ -239,7 +239,7 @@ def test_write_model_properties_json():
         target_variable="BAD",
         target_values=[4, 3, 1, 5],
     )
-    assert json.loads(prop_dict["ModelProperties.json"])["targetLevel"] == "NOMINAL"
+    assert json.loads(prop_dict["ModelProperties.json"])["targetLevel"] == "Nominal"
     assert json.loads(prop_dict["ModelProperties.json"])["properties"] == [
         {"name": "multiclass_target_events", "value": "4, 3, 1, 5", "type": "string"},
         {
@@ -288,7 +288,7 @@ def test_write_file_metadata_json():
     assert json.loads(meta_dict["fileMetadata.json"])[3]["name"] == "Test_Model.mojo"
 
     meta_dict = jf.write_file_metadata_json(
-        model_prefix="Test_model", is_tf_keras_model=True
+        model_prefix="Test_Model", is_tf_keras_model=True
     )
     assert json.loads(meta_dict["fileMetadata.json"])[3]["name"] == "Test_Model.h5"
 

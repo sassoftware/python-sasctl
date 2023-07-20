@@ -615,10 +615,10 @@ class ScoreCode:
         else:
             impute_values = missing_values
 
-        cls.score_code += f"\n{'':4}impute_values = \n" + cls._wrap_indent_string(
+        cls.score_code += f"{'':4}impute_values = \\\n" + cls._wrap_indent_string(
             impute_values, 8
         )
-        cls.score_code += "\nreturn data.fillna(impute_values)\n"
+        cls.score_code += f"\n{'':4}return data.fillna(impute_values)\n"
 
     @staticmethod
     def _wrap_indent_string(text, indent=0):
