@@ -144,6 +144,7 @@ def _create_project(project_name, model, repo, input_vars=None, output_vars=None
     return project
 
 
+# TODO: Add doc_string and unit/integration tests
 def _update_properties(project_name, model, input_vars=None, output_vars=None):
     properties, variables = _format_properties(model, input_vars, output_vars)
     project = mr.get_project(project_name)
@@ -170,6 +171,7 @@ def _update_properties(project_name, model, input_vars=None, output_vars=None):
     return mr.get_project(project_name)
 
 
+# TODO: Add doc_string and unit tests
 def _format_properties(model, input_vars=None, output_vars=None):
     properties = {
         k: model[k]

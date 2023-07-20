@@ -759,6 +759,7 @@ class JSONFiles:
             data[data_role - 1]["dataMap"][param_name] = param_value
         return data
 
+    # TODO: Add unit/integration tests
     @classmethod
     def assess_model_bias(
         cls,
@@ -939,6 +940,7 @@ class JSONFiles:
 
         return json_files
 
+    # TODO: Add doc_string and unit tests
     @staticmethod
     def format_max_differences(
         maxdiff_dfs: List[DataFrame], datarole: str = "TEST"
@@ -955,6 +957,7 @@ class JSONFiles:
 
         return maxdiff_df
 
+    # TODO: Add doc_string and unit tests
     @staticmethod
     def format_group_metrics(
         groupmetrics_dfs: List[DataFrame],
@@ -1002,6 +1005,7 @@ class JSONFiles:
         )
         return groupmetrics_df
 
+    # TODO: Add doc_string and unit tests
     @classmethod
     def bias_dataframes_to_json(
         cls,
@@ -1087,6 +1091,7 @@ class JSONFiles:
                 GROUPMETRICS: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
             }
 
+    # TODO: Add doc_string and unit tests
     @staticmethod
     def add_dict_key(
         dict: dict, pos: int, new_key: Union[str, int, float, bool], new_value
@@ -1100,6 +1105,7 @@ class JSONFiles:
                 result[k] = dict[k]
         return result
 
+    # TODO: Add doc_string and unit tests
     @staticmethod
     def rename_dict_key(
         dict: dict,

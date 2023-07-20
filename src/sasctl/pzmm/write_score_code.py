@@ -620,6 +620,7 @@ class ScoreCode:
         )
         cls.score_code += f"\n{'':4}return data.fillna(impute_values)\n"
 
+    # TODO: Needs unit test
     @staticmethod
     def _wrap_indent_string(text, indent=0):
         """
