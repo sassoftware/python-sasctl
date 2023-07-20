@@ -929,7 +929,7 @@ class JSONFiles:
             df_dict = {
                 "maxDifferencesData": max_differences,
                 "groupMetricsData": group_metrics,
-                "biasMetricsData": bias_metrics
+                "biasMetricsData": bias_metrics,
             }
 
             if json_files is None:

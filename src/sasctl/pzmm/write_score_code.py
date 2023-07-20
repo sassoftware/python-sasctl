@@ -222,7 +222,7 @@ class ScoreCode:
                 predict_method[0],
                 input_var_list,
                 missing_values=missing_values,
-                dtype_list=input_dtypes_list
+                dtype_list=input_dtypes_list,
             )
             cls._predictions_to_metrics(
                 score_metrics,
@@ -254,10 +254,7 @@ class ScoreCode:
             )
 
         if missing_values:
-            cls._impute_missing_values(
-                input_data,
-                missing_values
-            )
+            cls._impute_missing_values(input_data, missing_values)
 
         # SAS Viya 3.5 model
         if model_id:
@@ -574,9 +571,7 @@ class ScoreCode:
 
     @classmethod
     def _impute_missing_values(
-        cls,
-            data: DataFrame,
-            missing_values: Union[bool, list, dict]
+        cls, data: DataFrame, missing_values: Union[bool, list, dict]
     ) -> None:
         """
         Write the missing value imputation function of the score code. This section of
@@ -600,9 +595,8 @@ class ScoreCode:
             binary_columns = []
             for col in data.columns:
                 unique_values = data[col].dropna().unique()
-                if (
-                        len(unique_values) == 2 and
-                        all(value in [0, 1] for value in unique_values)
+                if len(unique_values) == 2 and all(
+                    value in [0, 1] for value in unique_values
                 ):
                     binary_columns.append(col)
             numeric_columns = list(set(numeric_columns) - set(binary_columns))
@@ -621,9 +615,8 @@ class ScoreCode:
         else:
             impute_values = missing_values
 
-        cls.score_code += (
-                f"\n{'':4}impute_values = \n" +
-                cls._wrap_indent_string(impute_values, 8)
+        cls.score_code += f"\n{'':4}impute_values = \n" + cls._wrap_indent_string(
+            impute_values, 8
         )
         cls.score_code += "\nreturn data.fillna(impute_values)\n"
 
@@ -645,7 +638,7 @@ class ScoreCode:
         str
             Wrapped and indented string.
         """
-        wrapped_lines = textwrap.fill(str(text), width=88-indent).split("\n")
+        wrapped_lines = textwrap.fill(str(text), width=88 - indent).split("\n")
         return "\n".join(f"{'':{indent}}" + line for line in wrapped_lines)
 
     @classmethod
@@ -720,13 +713,11 @@ class ScoreCode:
                     f"{'':4}input_array = impute_missing_values(input_array)"
                 )
             cls.score_code += (
-                f"{'':4}prediction = model.{method.__name__}"
-                f"(input_array)\n"
+                f"{'':4}prediction = model.{method.__name__}" f"(input_array)\n"
             )
         elif tf_model:
             cls.score_code += (
-                f"{'':4}input_array = np.array("
-                f"[[{', '.join(var_list)}]])\n"
+                f"{'':4}input_array = np.array(" f"[[{', '.join(var_list)}]])\n"
             )
             if missing_values:
                 cls.score_code += (
