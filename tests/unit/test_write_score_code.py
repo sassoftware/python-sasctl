@@ -186,6 +186,8 @@ def test_impute_missing_values():
     assert "'a': 5" in sc.score_code
     assert "'b': 'test'" in sc.score_code
     assert "'c': 1" in sc.score_code
+
+
 def test_predict_method():
     """
     Test Cases:

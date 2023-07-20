@@ -121,12 +121,7 @@ def test_import_model(mock_import, mock_project, mock_score):
 @patch("sasctl._services.model_repository.ModelRepository.create_project")
 @patch("sasctl._services.model_repository.ModelRepository.default_repository")
 @patch("sasctl.pzmm.import_model.get_model_properties")
-def test_project_exists(
-        mock_model_props,
-        _,
-        mock_project,
-        mock_get
-):
+def test_project_exists(mock_model_props, _, mock_project, mock_get):
     """
     Test Cases:
     - Project not found:
@@ -144,7 +139,7 @@ def test_project_exists(
     # UUID provided, but project not found
     project = str(uuid4())
     with pytest.warns(
-            UserWarning, match=f"No project with the name or UUID {project} was found."
+        UserWarning, match=f"No project with the name or UUID {project} was found."
     ):
         with pytest.raises(SystemError):
             project_exists(project)
@@ -153,26 +148,20 @@ def test_project_exists(
     project = "Test_Project"
     mock_project.return_value = RestObj(name="Test_Project")
     with pytest.warns(
-            UserWarning, match=f"No project with the name or UUID {project} was found."
+        UserWarning, match=f"No project with the name or UUID {project} was found."
     ):
         response = project_exists(project)
         assert response == RestObj(name="Test_Project")
         mock_model_props.return_value = ("Test_Project", "Input_Var", "Output_Var")
         with patch.object(
-                import_model,
-                "_create_project",
-                return_value=RestObj(name="Test_Project")
+            import_model, "_create_project", return_value=RestObj(name="Test_Project")
         ):
             response = project_exists(project, None, ["target"], "path/to/model/files")
             assert response == RestObj(name="Test_Project")
 
     # Project exists
     project_response = RestObj(name="Test_Project")
-    with patch.object(
-        import_model,
-        "_compare_properties",
-        return_value=None
-    ):
+    with patch.object(import_model, "_compare_properties", return_value=None):
         response = project_exists(
             project, project_response, ["target"], "path/to/model/files"
         )
@@ -181,7 +170,7 @@ def test_project_exists(
     with patch.object(
         import_model,
         "_update_properties",
-        return_value=RestObj(name="New_Test_Project")
+        return_value=RestObj(name="New_Test_Project"),
     ):
         response = project_exists(
             project, project_response, ["target"], "path/to/model/files", True

@@ -37,11 +37,8 @@ from .core import (
     put,
     request_link,
 )
-from .tasks import (
-    publish_model,
-    register_model,
-    update_model_performance
-)
+from .tasks import publish_model, register_model, update_model_performance
+
 # Ensure deprecation warnings are shown to users.
 warnings.filterwarnings("always", category=DeprecationWarning, module=r"^sasctl\.")
 
