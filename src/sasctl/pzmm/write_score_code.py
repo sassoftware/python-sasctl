@@ -522,11 +522,11 @@ class ScoreCode:
             Flag to indicate that the model is a H2O.ai binary model. The default value
             is None.
         tf_keras_model : boolean, optional
-            Flag to indicate that the model is a tensorflow keras model. The default value is
-            None.
+            Flag to indicate that the model is a tensorflow keras model. The default
+            value is False.
         tf_core_model : boolean, optional
-            Flag to indicate that the model is a tensorflow core model. The default value is
-            None.
+            Flag to indicate that the model is a tensorflow core model. The default
+            value is False.
         """
         pickle_type = pickle_type if pickle_type else "pickle"
 
@@ -551,11 +551,13 @@ class ScoreCode:
         elif tf_keras_model:
             cls.score_code += (
                 f"model = tf.keras.models.load_model(Path(settings.pickle_path) / "
-                f"\"{str(Path(model_file_name).with_suffix('.h5'))}\", safe_mode=True)\n"
+                f"\"{str(Path(model_file_name).with_suffix('.h5'))}\", "
+                f"safe_mode=True)\n"
             )
             return (
-                f"{'':8}model = tf.keras.models.load_model(Path(settings.pickle_path) / "
-                f"\"{str(Path(model_file_name).with_suffix('.h5'))}\", safe_mode=True)\n"
+                f"{'':8}model = tf.keras.models.load_model(Path(settings.pickle_path) "
+                f"/ \"{str(Path(model_file_name).with_suffix('.h5'))}\", "
+                f"safe_mode=True)\n"
             )
         else:
             cls.score_code += (
@@ -687,10 +689,12 @@ class ScoreCode:
                 column_types += f'"{var}" : "{col_type}", '
             column_types = column_types.rstrip(", ")
             column_types += "}"
-            input_dict = [f"\"{var}\": {var}" for var in var_list]
-            cls.score_code += (f"{'':4}index=None\n"
-                               f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n" + 
-                               f"{'':8}index=[0]\n")
+            input_dict = [f'"{var}": {var}' for var in var_list]
+            cls.score_code += (
+                f"{'':4}index=None\n"
+                f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
+                + f"{'':8}index=[0]\n"
+            )
 
             cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
@@ -710,13 +714,15 @@ class ScoreCode:
         # Statsmodels models
         elif statsmodels_model:
             var_list.insert(0, "const")
-            input_dict = [f"\"{var}\": {var}" for var in var_list]
-            cls.score_code += (f"{'':4}index=None\n"
-                               f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
-                               f"{'':8}index=[0]\n"
-                               f"{'':8}const = 1\n"
-                               f"{'':4}else:\n"
-                               f"{'':8}const = pd.Series([1 for x in len({var_list[0]})])")
+            input_dict = [f'"{var}": {var}' for var in var_list]
+            cls.score_code += (
+                f"{'':4}index=None\n"
+                f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
+                f"{'':8}index=[0]\n"
+                f"{'':8}const = 1\n"
+                f"{'':4}else:\n"
+                f"{'':8}const = pd.Series([1 for x in len({var_list[0]})])"
+            )
 
             cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
@@ -730,10 +736,12 @@ class ScoreCode:
                 f"{'':4}prediction = model.{method.__name__}(input_array)\n"
             )
         elif tf_model:
-            input_dict = [f"\"{var}\": {var}" for var in var_list]
-            cls.score_code += (f"{'':4}index=None\n"
-                               f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
-                               f"{'':8}index=[0]\n")
+            input_dict = [f'"{var}": {var}' for var in var_list]
+            cls.score_code += (
+                f"{'':4}index=None\n"
+                f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
+                f"{'':8}index=[0]\n"
+            )
 
             cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
@@ -747,15 +755,17 @@ class ScoreCode:
                 f"{'':4}prediction = model.{method.__name__}(input_array)\n"
                 f"{'':4} # Check if model returns logits or probabilities\n"
                 f"{'':4}if not math.isclose(sum(predictions[0]), 1, rel_tol=.01):\n"
-                f"{'':8}predictions = [tf.nn.softmax(p).numpy().tolist() for p in predictions]\n"
-                f"{'':4}else:\n"
+                f"{'':8}predictions = [tf.nn.softmax(p).numpy().tolist() for p in "
+                f"predictions]\n{'':4}else:\n"
                 f"{'':8}predictions = [p.tolist() for p in predictions]\n"
             )
         else:
-            input_dict = [f"\"{var}\": {var}" for var in var_list]
-            cls.score_code += (f"{'':4}index=None\n"
-                               f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
-                               f"{'':8}index=[0]\n")
+            input_dict = [f'"{var}": {var}' for var in var_list]
+            cls.score_code += (
+                f"{'':4}index=None\n"
+                f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
+                f"{'':8}index=[0]\n"
+            )
 
             cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
@@ -1134,7 +1144,7 @@ class ScoreCode:
                     "the target event to occur."
                 )
                 cls.score_code += (
-                    f"{'':4}return prediction[1][0], " f"float(prediction[1][2])"
+                    f"{'':4}return prediction[1][0], float(prediction[1][2])"
                 )
             # Calculate the classification; return the classification and probability
             elif sum(returns) == 0 and len(returns) == 1:
