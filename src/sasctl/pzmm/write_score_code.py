@@ -708,10 +708,10 @@ class ScoreCode:
             input_dict = [f"'{var}': {var}" for var in var_list]
             input_dict.append("'const': const")
             cls.score_code += (f"{'':4}index=None\n"
-                               f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n" + 
-                               f"{'':8}index=[0]\n" + 
-                               f"{'':8}const = 1\n" + 
-                               f"{'':4}else:\n" + 
+                               f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
+                               f"{'':8}index=[0]\n"
+                               f"{'':8}const = 1\n"
+                               f"{'':4}else:\n"
                                f"{'':8}const = pd.Series([1 for x in len({var_list[0]})])")
             
             input_frame = f"{'':4}input_array = pd.DataFrame({{{','.join(input_dict)}}}, index=index)\n"
@@ -724,9 +724,12 @@ class ScoreCode:
                 f"{'':4}prediction = model.{method.__name__}" f"(input_array)\n"
             )
         elif tf_model:
-            cls.score_code += (
-                f"{'':4}input_array = np.array(" f"[[{', '.join(var_list)}]])\n"
-            )
+            input_dict = [f"'{var}': {var}" for var in var_list]
+            cls.score_code += (f"{'':4}index=None\n"
+                               f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
+                               f"{'':8}index=[0]\n")
+            
+            input_frame = f"{'':4}input_array = pd.DataFrame({{{','.join(input_dict)}}}, index=index)\n"
             if missing_values:
                 cls.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)"
@@ -734,13 +737,15 @@ class ScoreCode:
             cls.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array)\n"
                 f"{'':4} # Check if model returns logits or probabilities\n"
-                f"{'':4}if(sum(prediction) != 1):\n"
-                f"{'':8}prediction = tf.nn.softmax(prediction)"
+                f"{'':4}if not math.isclose(sum(predictions[0]), 1, rel_tol=.01):\n"
+                f"{'':8}predictions = [tf.nn.softmax(p).numpy().tolist() for p in predictions]\n"
+                f"{'':4}else:\n"
+                f"{'':8}predictions = [p.tolist() for p in predictions]\n"
             )
         else:
             input_dict = [f"'{var}': {var}" for var in var_list]
             cls.score_code += (f"{'':4}index=None\n"
-                               f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n" + 
+                               f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
                                f"{'':8}index=[0]\n")
             
             input_frame = f"{'':4}input_array = pd.DataFrame({{{','.join(input_dict)}}}, index=index)\n"
