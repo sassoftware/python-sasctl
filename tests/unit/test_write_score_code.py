@@ -198,7 +198,7 @@ def test_predict_method():
     var_list = ["first", "second", "third"]
     dtype_list = ["str", "int", "float"]
     sc._predict_method(predict_proba, var_list)
-    assert f"pd.DataFrame([[first, second, third]]," in sc.score_code
+    assert "{\"first\": first, \"second\": second" in sc.score_code
     sc.score_code = ""
 
     sc._predict_method(predict_proba, var_list, dtype_list=dtype_list)
@@ -206,7 +206,7 @@ def test_predict_method():
     sc.score_code = ""
 
     sc._predict_method(predict_proba, var_list, statsmodels_model=True)
-    assert f"pd.DataFrame([[1.0, first, second, third]]," in sc.score_code
+    assert "{\"const\": const, \"first\": first" in sc.score_code
     sc.score_code = ""
 
 

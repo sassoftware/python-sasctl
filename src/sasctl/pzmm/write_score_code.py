@@ -640,7 +640,10 @@ class ScoreCode:
             Wrapped and indented string.
         """
         wrapped_lines = textwrap.fill(str(text), width=88 - indent).split("\n")
-        return "\n".join(f"{'':{indent}}" + line for line in wrapped_lines)
+        if indent > 0:
+            return "\n".join(f"{'':{indent}}" + line for line in wrapped_lines)
+        else:
+            return "\n".join(line for line in wrapped_lines)
 
     @classmethod
     def _predict_method(
@@ -673,7 +676,6 @@ class ScoreCode:
             Flag to indicate that the model is a tensorflow model. The default value is
             False.
         """
-        column_names = ", ".join(f'"{col}"' for col in var_list)
         # H2O models
         if dtype_list:
             column_types = "{"
@@ -685,13 +687,15 @@ class ScoreCode:
                 column_types += f'"{var}" : "{col_type}", '
             column_types = column_types.rstrip(", ")
             column_types += "}"
-            input_dict = [f"'{var}': {var}" for var in var_list]
+            input_dict = [f"\"{var}\": {var}" for var in var_list]
             cls.score_code += (f"{'':4}index=None\n"
                                f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n" + 
                                f"{'':8}index=[0]\n")
-            
-            input_frame = f"{'':4}input_array = pd.DataFrame({{{','.join(input_dict)}}}, index=index)\n"
-            cls.score_code += cls._wrap_indent_string(input_frame)
+
+            cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
+            input_frame = f'{{{", ".join(input_dict)}}}, index=index'
+            cls.score_code += cls._wrap_indent_string(input_frame, 8)
+            cls.score_code += f"\n{'':4})\n"
             if missing_values:
                 cls.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)"
@@ -705,31 +709,36 @@ class ScoreCode:
             )
         # Statsmodels models
         elif statsmodels_model:
-            input_dict = [f"'{var}': {var}" for var in var_list]
-            input_dict.append("'const': const")
+            var_list.insert(0, "const")
+            input_dict = [f"\"{var}\": {var}" for var in var_list]
             cls.score_code += (f"{'':4}index=None\n"
                                f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
                                f"{'':8}index=[0]\n"
                                f"{'':8}const = 1\n"
                                f"{'':4}else:\n"
                                f"{'':8}const = pd.Series([1 for x in len({var_list[0]})])")
-            
-            input_frame = f"{'':4}input_array = pd.DataFrame({{{','.join(input_dict)}}}, index=index)\n"
-            cls.score_code += cls._wrap_indent_string(input_frame)
+
+            cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
+            input_frame = f'{{{", ".join(input_dict)}}}, index=index'
+            cls.score_code += cls._wrap_indent_string(input_frame, 8)
+            cls.score_code += f"\n{'':4})\n"
             if missing_values:
                 cls.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)"
                 )
             cls.score_code += (
-                f"{'':4}prediction = model.{method.__name__}" f"(input_array)\n"
+                f"{'':4}prediction = model.{method.__name__}(input_array)\n"
             )
         elif tf_model:
-            input_dict = [f"'{var}': {var}" for var in var_list]
+            input_dict = [f"\"{var}\": {var}" for var in var_list]
             cls.score_code += (f"{'':4}index=None\n"
                                f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
                                f"{'':8}index=[0]\n")
-            
-            input_frame = f"{'':4}input_array = pd.DataFrame({{{','.join(input_dict)}}}, index=index)\n"
+
+            cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
+            input_frame = f'{{{", ".join(input_dict)}}}, index=index'
+            cls.score_code += cls._wrap_indent_string(input_frame, 8)
+            cls.score_code += f"\n{'':4})\n"
             if missing_values:
                 cls.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)"
@@ -743,13 +752,15 @@ class ScoreCode:
                 f"{'':8}predictions = [p.tolist() for p in predictions]\n"
             )
         else:
-            input_dict = [f"'{var}': {var}" for var in var_list]
+            input_dict = [f"\"{var}\": {var}" for var in var_list]
             cls.score_code += (f"{'':4}index=None\n"
                                f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
                                f"{'':8}index=[0]\n")
-            
-            input_frame = f"{'':4}input_array = pd.DataFrame({{{','.join(input_dict)}}}, index=index)\n"
-            cls.score_code += cls._wrap_indent_string(input_frame)
+
+            cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
+            input_frame = f'{{{", ".join(input_dict)}}}, index=index'
+            cls.score_code += cls._wrap_indent_string(input_frame, 8)
+            cls.score_code += f"\n{'':4})\n"
             if missing_values:
                 cls.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)"
