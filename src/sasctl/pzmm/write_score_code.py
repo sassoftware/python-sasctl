@@ -201,6 +201,10 @@ class ScoreCode:
 
         # Define the score function using the variables found in input_data
         cls.score_code += f"def score({', '.join(input_var_list)}):\n"
+        """
+def score(var1, var2, var3, var4):
+
+        """
 
         if not score_metrics:
             score_metrics = cls._determine_score_metrics(
@@ -208,6 +212,11 @@ class ScoreCode:
             )
         # Set the output variables in the line below from score_metrics
         cls.score_code += f"{'':4}\"Output: {', '.join(score_metrics)}\"\n\n"
+        """
+    "Output: classification_variable, prediction_variable"
+    
+    
+        """
 
         # Run a try/except block to catch errors for model loading (skip binary string)
         if model_load:
@@ -215,6 +224,13 @@ class ScoreCode:
                 f"{'':4}try:\n{'':8}global model\n{'':4}"
                 f"except NameError:\n{model_load}\n"
             )
+            """
+    try:
+        global model
+    except NameError:
+        with open(settings.pickle_path + "model.pickle", "rb") as pickle_file:
+            model = pickle.load(pickle_file)
+            """
 
         # Create the appropriate style of input array and write out the predict method
         if any(x in ["mojo_model", "binary_h2o_model"] for x in kwargs):
@@ -246,6 +262,14 @@ class ScoreCode:
                 f"{'':4}if isinstance(prediction, np.ndarray):\n"
                 f"{'':8}prediction = prediction.tolist()[0]\n\n"
             )
+            """
+    
+    # Check for numpy values and conver to a CAS readable representation
+    if isinstance(prediction, np.ndarray):
+        prediction = prediction.tolist()[0]
+        
+        
+            """
             cls._predictions_to_metrics(
                 score_metrics,
                 predict_method[1],
@@ -404,10 +428,24 @@ class ScoreCode:
             f"import math\nimport {pickle_type}\nimport pandas as pd\n"
             "import numpy as np\nfrom pathlib import Path\n\n"
         )
+        """
+import math
+import pickle
+import pandas as pd
+import numpy as np
+from pathlib import Path
+
+
+        """
 
         try:
             if current_session().version_info() != 3.5:
                 cls.score_code += "import settings\n\n"
+                """
+import settings
+                
+                
+                """
         except AttributeError:
             warn(
                 "No current session connection was found to a SAS Viya server. Score "
@@ -417,14 +455,31 @@ class ScoreCode:
 
         if mojo_model or binary_h2o_model:
             cls.score_code += "import h2o\n\nh2o.init()\n\n"
+            """
+import h2o
+
+h2o.init()
+
+            """
         elif tf_model:
-            cls.score_code += "import tensorflow as tf\n"
+            cls.score_code += "import tensorflow as tf\n\n"
+            """
+import tensorflow as tf
+
+            """
         elif binary_string:
             cls.score_code += (
-                f'import codecs\n\nbinary_string = "{binary_string}"'
+                f"import codecs\n\nbinary_string = \"{binary_string}\""
                 f"\nmodel = {pickle_type}.loads(codecs.decode(binary_string"
-                '.encode(), "base64"))\n\n'
+                ".encode(), \"base64\"))\n\n"
             )
+            """
+import codecs
+
+binary_string = "<binary string>"
+model = pickle.load(codecs.decode(binary_string.encode(), "base64"))
+
+            """
 
     @classmethod
     def _viya35_model_load(
@@ -467,26 +522,40 @@ class ScoreCode:
                 f"model = h2o.import_mojo(str(Path("
                 f'"/models/resources/viya/{model_id}/{model_file_name}")))\n\n'
             )
+            """
+model = h2o.import_mojo(str(Path("/models/resources/viya/<UUID>/model.mojo")))
+
+            """
             return (
                 f"{'':8}model = h2o.import_mojo(str(Path("
                 f'"/models/resources/viya/{model_id}/{model_file_name}")))'
             )
         elif binary_h2o_model:
             cls.score_code += (
-                f'model = h2o.load(str(Path("/models/resources/viya/'
-                f'{model_id}/{model_file_name}")))\n\n'
+                f"model = h2o.load(str(Path(\"/models/resources/viya/"
+                f"{model_id}/{model_file_name}\")))\n\n"
             )
+            """
+model = h2o.load(str(Path("/models/resources/viya/<UUID>/model.h2o")))
+
+            """
             return (
                 f"{'':8}model = h2o.load(str(Path(\"/models/resources/viya/"
                 f'{model_id}/{model_file_name}")))'
             )
         else:
             cls.score_code += (
-                f'model_path = Path("/models/resources/viya/{model_id}'
-                f'")\nwith open(model_path / "{model_file_name}", '
+                f"model_path = Path(\"/models/resources/viya/{model_id}"
+                f"\")\nwith open(model_path / \"{model_file_name}\", "
                 f"\"rb\") as pickle_model:\n{'':4}model = {pickle_type}"
                 ".load(pickle_model)\n\n"
             )
+            """
+model_path = Path("/models/resources/viya/<UUID>")
+with open(model_path / "model.pickle", "rb") as pickle_model:
+    model = pickle.load(pickle_model)
+    
+            """
             return (
                 f"{'':8}model_path = Path(\"/models/resources/viya/{model_id}"
                 f"\")\n{'':8}with open(model_path / \"{model_file_name}\", "
@@ -533,8 +602,12 @@ class ScoreCode:
         if mojo_model:
             cls.score_code += (
                 f"model = h2o.import_mojo(str(Path(settings.pickle_path"
-                f') / "{model_file_name}"))\n\n'
+                f") / \"{model_file_name}\"))\n\n"
             )
+            """
+model = h2o.import_mojo(str(Path(settings.pickle_path) / "model.mojo"))
+
+            """
             return (
                 f"{'':8}model = h2o.import_mojo(str(Path(settings.pickle_path) / "
                 f'"{model_file_name}"))\n\n'
@@ -544,6 +617,10 @@ class ScoreCode:
                 f"model = h2o.load(str(Path(settings.pickle_path) / "
                 f"{model_file_name}))\n\n"
             )
+            """
+model = h2o.load(str(Path(settings.pickle_path) / "model.h2o"))
+
+            """
             return (
                 f"{'':8}model = h2o.load(str(Path(settings.pickle_path) / "
                 f"{model_file_name}))\n\n"
@@ -552,8 +629,12 @@ class ScoreCode:
             cls.score_code += (
                 f"model = tf.keras.models.load_model(Path(settings.pickle_path) / "
                 f"\"{str(Path(model_file_name).with_suffix('.h5'))}\", "
-                f"safe_mode=True)\n"
+                f"safe_mode=True)\n\n"
             )
+            """
+model = tf.keras.models.load_model(Path(settings.pickle_path) / "model.h5", safe_mode=True)
+
+            """
             return (
                 f"{'':8}model = tf.keras.models.load_model(Path(settings.pickle_path) "
                 f"/ \"{str(Path(model_file_name).with_suffix('.h5'))}\", "
@@ -565,6 +646,11 @@ class ScoreCode:
                 f'"{model_file_name}", "rb") as pickle_model:\n'
                 f"{'':4}model = {pickle_type}.load(pickle_model)\n\n"
             )
+            """
+with open(Path(settings.pickle_path) / "model.pickle", "rb") as pickle_model:
+    model = pickleload(pickle_model)
+    
+            """
             return (
                 f"{'':8}with open(Path(settings.pickle_path) / "
                 f'"{model_file_name}", "rb") as pickle_model:\n'
@@ -588,7 +674,11 @@ class ScoreCode:
 
         """
         cls.score_code += "\n\ndef impute_missing_values(data):\n"
+        """
 
+
+def impute_missing_values(data):
+        """
         if isinstance(missing_values, bool):
             numeric_columns = [
                 col for col in data.columns if pd.api.types.is_numeric_dtype(data[col])
@@ -620,7 +710,14 @@ class ScoreCode:
         cls.score_code += f"{'':4}impute_values = \\\n" + cls._wrap_indent_string(
             impute_values, 8
         )
+        """
+    impute_values = \\\n + {"var1": 0, "var2": "", "var3": 125.3}
+        """
         cls.score_code += f"\n{'':4}return data.fillna(impute_values)\n"
+        """
+        
+    return data.fillna(impute_values)
+        """
 
     # TODO: Needs unit test
     @staticmethod
@@ -678,6 +775,17 @@ class ScoreCode:
             Flag to indicate that the model is a tensorflow model. The default value is
             False.
         """
+        cls.score_code += (
+            f"{'':4}index=None\n"
+            f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
+            f"{'':8}index=[0]\n"
+        )
+        """
+index=None
+if not isinstance(var1, pd.Series):
+    index=[0]
+        """
+
         # H2O models
         if dtype_list:
             column_types = "{"
@@ -686,15 +794,10 @@ class ScoreCode:
                     col_type = "numeric"
                 else:
                     col_type = "string"
-                column_types += f'"{var}" : "{col_type}", '
+                column_types += f'"{var}": "{col_type}", '
             column_types = column_types.rstrip(", ")
             column_types += "}"
             input_dict = [f'"{var}": {var}' for var in var_list]
-            cls.score_code += (
-                f"{'':4}index=None\n"
-                f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
-                + f"{'':8}index=[0]\n"
-            )
 
             cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
@@ -711,18 +814,32 @@ class ScoreCode:
                 f"model.{method.__name__}(h2o_array)\n{'':4}prediction"
                 f" = h2o.as_list(prediction, use_pandas=False)\n"
             )
+            """
+    input_array = pd.DataFrame(
+        {"var1": var1, "var2": var2, "var3": var3}
+    )
+    input_array = impute_missing_values(input_array)
+    column_types = {"var1": "string", "var2": "numeric", "var3": "numeric"}
+    h2o_array = h2o.H2OFrame(input_array, column_types=column_types)
+    prediction = model.predict(h2o.array)
+    prediction = h2o.as_list(prediction, use_pandas=False)
+            """
         # Statsmodels models
         elif statsmodels_model:
             var_list.insert(0, "const")
             input_dict = [f'"{var}": {var}' for var in var_list]
             cls.score_code += (
-                f"{'':4}index=None\n"
-                f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
-                f"{'':8}index=[0]\n"
+                f"{'':4}if not isinstance(\"{var_list[0]}\", pd.Series):\n"
                 f"{'':8}const = 1\n"
                 f"{'':4}else:\n"
                 f"{'':8}const = pd.Series([1 for x in len({var_list[0]})])"
             )
+            """
+    if not isinstance("var1", pd.Series):
+        const = 1
+    else:
+        const = pd.Series([1 for x in len(var1)])
+            """
 
             cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
@@ -735,13 +852,15 @@ class ScoreCode:
             cls.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array)\n"
             )
+            """
+    input_array = pd.DataFrame(
+        {"const": const, "var1": var1, "var2": var2, "var3": var3}
+    )
+    input_array = impute_missing_values(input_array)
+    prediction = model.predict(input_array)
+            """
         elif tf_model:
             input_dict = [f'"{var}": {var}' for var in var_list]
-            cls.score_code += (
-                f"{'':4}index=None\n"
-                f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
-                f"{'':8}index=[0]\n"
-            )
 
             cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
@@ -752,20 +871,28 @@ class ScoreCode:
                     f"{'':4}input_array = impute_missing_values(input_array)"
                 )
             cls.score_code += (
-                f"{'':4}prediction = model.{method.__name__}(input_array)\n"
+                f"{'':4}prediction = model.{method.__name__}(input_array)\n\n"
                 f"{'':4} # Check if model returns logits or probabilities\n"
                 f"{'':4}if not math.isclose(sum(predictions[0]), 1, rel_tol=.01):\n"
                 f"{'':8}predictions = [tf.nn.softmax(p).numpy().tolist() for p in "
                 f"predictions]\n{'':4}else:\n"
                 f"{'':8}predictions = [p.tolist() for p in predictions]\n"
             )
+            """
+    input_array = pd.DataFrame(
+        {"var1": var1, "var2": var2, "var3": var3}
+    )
+    input_array = impute_missing_values(input_array)
+    prediction = model.predict(input_array)
+    
+    # Check if model returns logits or probabilities
+    if not math.isclose(sum(predictions[0]), 1, rel_tol=.01):
+        predictions = [tf.nn.softmax(p).numpy().tolist() for p in predictions]
+    else:
+        predictions = [p.tolist() for p in predictions]    
+            """
         else:
             input_dict = [f'"{var}": {var}' for var in var_list]
-            cls.score_code += (
-                f"{'':4}index=None\n"
-                f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
-                f"{'':8}index=[0]\n"
-            )
 
             cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
@@ -778,6 +905,13 @@ class ScoreCode:
             cls.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array).tolist()\n"
             )
+            """
+    input_array = pd.DataFrame(
+        {"var1": var1, "var2": var2, "var3": var3}
+    )
+    input_array = impute_missing_values(input_array)
+    prediction = model.predict(input_array)
+            """
 
     @classmethod
     def _determine_score_metrics(
@@ -1032,10 +1166,18 @@ class ScoreCode:
                 cls.score_code += (
                     f"{'':4}{metrics} = prediction[1][0]\n\n{'':4}return {metrics}"
                 )
+                """
+    output_variable = predictions[1][0]
+    return output_variable
+                """
             else:
                 cls.score_code += (
                     f"{'':4}{metrics} = prediction\n\n{'':4}return {metrics}"
                 )
+                """
+    output_variable = prediction
+    return output_variable
+                """
         else:
             # Classification model including predictions and classification
             if h2o_model:
@@ -1044,10 +1186,20 @@ class ScoreCode:
                     cls.score_code += (
                         f"{'':4}{metrics[i + 1]} = float(prediction[1][{i + 1}])\n"
                     )
+                """
+    classification_variable = prediction[1][0]
+    prediction_variable_1 = float(prediction[1][1])
+    prediction_variable_2 = float(prediction[1][2])
+                """
             else:
                 for i in range(len(metrics)):
                     cls.score_code += f"{'':4}{metrics[i]} = prediction[{i}]\n"
             cls.score_code += f"\n{'':4}return {', '.join(metrics)}"
+            """
+    classification_variable = prediction[0]
+    prediction_variable_1 = prediction[1]
+    prediction_variable_2 = prediction[2])
+            """
 
     @classmethod
     def _binary_target(
@@ -1104,9 +1256,20 @@ class ScoreCode:
                     f"{'':8}{metrics} = \"{target_values[1]}\"\n\n"
                     f"{'':4}return {metrics}"
                 )
+                """
+    if prediction[1][2] > 0.5:
+        classification_variable = 1
+    else:
+        classification_variable = 0
+        
+    return classification_variable
+                """
             # One return that is the classification
             elif len(returns) == 1 and returns[0]:
                 cls.score_code += f"{'':4}return prediction"
+                """
+    return prediction
+                """
             # One return that is a probability
             elif len(returns) == 1 and not returns[0]:
                 cls.score_code += (
@@ -1116,6 +1279,14 @@ class ScoreCode:
                     f"{'':8}{metrics} = \"{target_values[1]}\"\n\n"
                     f"{'':4}return {metrics}"
                 )
+                """
+    if prediction > 0.5:
+        classification_variable = 1
+    else:
+        classification_variable = 0
+
+    return classification_variable
+                """
             # Two returns from the prediction method
             elif len(returns) == 2 and sum(returns) == 0:
                 # Only probabilities returned; return classification for larger value
@@ -1126,6 +1297,14 @@ class ScoreCode:
                     f"{'':8}{metrics} = \"{target_values[1]}\"\n\n"
                     f"{'':4}return {metrics}"
                 )
+                """
+    if prediction[0] > prediction[1]:
+        classification_variable = 1
+    else:
+        classification_variable = 0
+        
+    return classification_variable
+                """
             # Classification and probability returned; return classification value
             elif len(returns) > 1 and sum(returns) == 1:
                 # Determine which return is the classification value
@@ -1133,6 +1312,11 @@ class ScoreCode:
                 cls.score_code += (
                     f"{'':4}{metrics} = prediction[{class_index}]\n\nreturn {metrics}"
                 )
+                """
+    classification_variable = prediction[2]
+    
+    return classification_variable
+                """
             else:
                 cls._invalid_predict_config()
         elif len(metrics) == 2:
@@ -1146,6 +1330,9 @@ class ScoreCode:
                 cls.score_code += (
                     f"{'':4}return prediction[1][0], float(prediction[1][2])"
                 )
+                """
+    return prediction[1][0], float(prediction[1][2])
+                """
             # Calculate the classification; return the classification and probability
             elif sum(returns) == 0 and len(returns) == 1:
                 warn(
@@ -1160,6 +1347,14 @@ class ScoreCode:
                     f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
                     f"{'':4}return {metrics[0]}, prediction"
                 )
+                """
+    if prediction > 0.5:
+        classification_variable = "first_event"
+    else:
+        classification_variable = "second_event"
+        
+    return classification, prediction
+                """
             # Calculate the classification; return the classification and probability
             elif sum(returns) == 0 and len(returns) == 2:
                 warn(
@@ -1174,9 +1369,20 @@ class ScoreCode:
                     f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
                     f"{'':4}return {metrics[0]}, prediction[0]"
                 )
+                """
+                    if prediction > 0.5:
+                        classification_variable = "first_event"
+                    else:
+                        classification_variable = "second_event"
+
+                    return classification, prediction[0]
+                                """
             # Return classification and probability value
             elif sum(returns) == 1 and len(returns) == 2:
                 cls.score_code += f"{'':4}return prediction[0], prediction[1]"
+                """
+    return prediction[0], prediction[1]
+                """
             elif sum(returns) == 1 and len(returns) == 3:
                 warn(
                     "Due to the ambiguity of the provided metrics and prediction return"
@@ -1187,10 +1393,16 @@ class ScoreCode:
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 if class_index == 0:
                     cls.score_code += f"{'':4}return prediction[0], prediction[1]"
+                    """
+    return prediction[0], prediction[1]
+                    """
                 else:
                     cls.score_code += (
                         f"{'':4}return prediction[{class_index}], prediction[0]"
                     )
+                    """
+    return prediction[2], prediction[0]
+                    """
             else:
                 cls._invalid_predict_config()
         elif len(metrics) == 3:
@@ -1199,6 +1411,9 @@ class ScoreCode:
                     f"{'':4}return prediction[1][0], float(prediction[1][1]), "
                     f"float(prediction[1][2])"
                 )
+                """
+    return prediction[1][0], float(prediction[1][1]), float(prediction[1][2])
+                """
             elif sum(returns) == 0 and len(returns) == 1:
                 warn(
                     "Due to the ambiguity of the provided metrics and prediction return"
@@ -1212,6 +1427,14 @@ class ScoreCode:
                     f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
                     f"{'':4}return {metrics[0]}, prediction, 1 - prediction"
                 )
+                """
+    if prediction > 0.5:
+        classification_variable = 1
+    else:
+        classification_variable = 0
+        
+    return classification_variable, prediction, 1 - prediction
+                """
             elif sum(returns) == 0 and len(returns) == 2:
                 warn(
                     "Due to the ambiguity of the provided metrics and prediction return"
@@ -1225,6 +1448,14 @@ class ScoreCode:
                     f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
                     f"{'':4}return {metrics[0]}, prediction[0], prediction[1]"
                 )
+                """
+    if prediction > 0.5:
+        classification_variable = 1
+    else:
+        classification_variable = 0
+        
+    return classification_variable, prediction[0], prediction[1]
+                """
             # Find which return is the classification, then return probabilities
             elif sum(returns) == 1 and len(returns) == 2:
                 # Determine which return is the classification value
@@ -1233,15 +1464,24 @@ class ScoreCode:
                     cls.score_code += (
                         f"{'':4}return prediction[0], prediction[1], 1 - prediction[1]"
                     )
+                    """
+    return prediction[0], prediction[1], 1 - prediction[1]
+                    """
                 else:
                     cls.score_code += (
                         f"{'':4}return prediction[1], prediction[0], 1 - prediction[0]"
                     )
+                    """
+    return prediction[1], prediction[0], 1 - prediction[0]
+                    """
             # Return all values from prediction method
             elif sum(returns) == 1 and len(returns) == 3:
                 cls.score_code += (
                     f"{'':4}return prediction[0], prediction[1], prediction[2]"
                 )
+                """
+    return prediction[0], prediction[1], prediction[2]
+                """
             else:
                 cls._invalid_predict_config()
         else:
@@ -1285,21 +1525,40 @@ class ScoreCode:
                 cls.score_code += (
                     f"{'':4}target_values = {target_values}\n{'':4}"
                     f"{metrics} = target_values[prediction[1][1:]."
-                    f"index(max(prediction[1][1:]))]\n{'':4}"
+                    f"index(max(prediction[1][1:]))]\n\n"
                     f"{'':4}return {metrics}"
                 )
+                """
+    target_values = [1, 2, 3]
+    classification_variable = target_values[prediction[1][1:].index(max(prediction[1][1:]))]
+    
+    return classification_variable
+                """
             # One return that is the classification
             elif len(returns) == 1:
                 cls.score_code += f"{'':4}{metrics} = prediction\n\nreturn {metrics}"
+                """
+    classification_variable = prediction
+    
+    return classification_variable
+                """
             elif len(returns) == len(target_values):
                 cls.score_code += (
                     f"{'':4}target_values = {target_values}\n\n"
                     f"{'':4}return target_values[prediction.index(max(prediction))]"
                 )
+                """
+    target_values = [1, 2, 3]
+    
+    return target_values[prediction.index(max(prediction))]
+                """
             elif len(returns) == (len(target_values) + 1):
                 # Determine which return is the classification value
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 cls.score_code += f"{'':4}return prediction[{class_index}]"
+                """
+    return prediction[1]
+                """
             else:
                 cls._invalid_predict_config()
         elif len(metrics) == 2:
@@ -1307,15 +1566,26 @@ class ScoreCode:
                 cls.score_code += (
                     f"{'':4}target_values = {target_values}\n{'':4}"
                     f"{metrics} = target_values[prediction[1][1:]."
-                    f"index(max(prediction[1][1:]))]\n{'':4}"
+                    f"index(max(prediction[1][1:]))]\n\n"
                     f"{'':4}return {metrics}, max(prediction[1][1:])"
                 )
+                """
+    target_values = [1, 2, 3]
+    classification_variable = target_values[prediction[1][1:].index(max(prediction[1][1:]))]
+    
+    return classification_variable, max(prediction[1][1:])
+                """
             elif len(returns) == len(target_values):
                 cls.score_code += (
                     f"{'':4}target_values = {target_values}\n\n"
                     f"{'':4}return target_values[prediction.index(max(prediction))], "
                     f"max(prediction)"
                 )
+                """
+    target_values = [1, 2, 3]
+    
+    return target_values[prediction.index(max(prediction))], max(prediction)
+                """
             elif len(returns) == (len(target_values) + 1):
                 # Determine which return is the classification value
                 class_index = [i for i, x in enumerate(returns) if x][0]
@@ -1323,6 +1593,9 @@ class ScoreCode:
                     f"{'':4}return prediction[{class_index}], "
                     f"max(prediction[:{class_index}] + prediction[{class_index + 1}:])"
                 )
+                """
+    return prediction[1], max(prediction[:1] + prediction[2:])
+                """
             else:
                 cls._invalid_predict_config()
         elif len(metrics) > 2:
@@ -1330,9 +1603,15 @@ class ScoreCode:
                 if len(metrics) == len(target_values):
                     h2o_returns = [f"prediction[1][{i+1}]" for i in range(len(metrics))]
                     cls.score_code += f"{'':4}return {', '.join(h2o_returns)}"
+                    """
+    return prediction[1][1], prediction[1][2], prediction[1][3]
+                    """
                 elif len(metrics) == (len(target_values) + 1):
                     h2o_returns = [f"prediction[1][{i}]" for i in range(len(metrics))]
                     cls.score_code += f"{'':4}return {', '.join(h2o_returns)}"
+                    """
+    return prediction[1][0], prediction[1][1], prediction[1][2]
+                    """
             elif (
                 len(metrics) == len(target_values) == len(returns) and sum(returns) == 0
             ) or (
@@ -1341,6 +1620,9 @@ class ScoreCode:
             ):
                 proba_returns = [f"prediction[{i}]" for i in range(len(returns))]
                 cls.score_code += f"{'':4}return {', '.join(proba_returns)}"
+                """
+    return prediction[0], prediction[1], prediction[2]
+                """
             elif (len(metrics) - 1) == len(returns) == len(target_values) and sum(
                 returns
             ) == 0:
@@ -1350,6 +1632,11 @@ class ScoreCode:
                     f"{'':4}return target_values[prediction.index(max(prediction))], "
                     f"{', '.join(proba_returns)}"
                 )
+                """
+    target_values = [1, 2, 3]
+    
+    return target_values[prediction.index(max(prediction))], prediction[0], prediction[1], prediction[2]
+                """
             else:
                 cls._invalid_predict_config()
 
