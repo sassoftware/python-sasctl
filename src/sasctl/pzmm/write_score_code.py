@@ -1281,7 +1281,7 @@ if not isinstance(var1, pd.Series):
             # For h2o models with only one metric provided, return the classification
             if h2o_model:
                 cls.score_code += (
-                    f"{'':4}if input_array.shape[0] == 1\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}if prediction[1][2] > {threshold}:\n"
                     f"{'':12}{metrics} = \"{target_values[0]}\"\n"
                     f"{'':8}else:\n"
@@ -1303,7 +1303,7 @@ if not isinstance(var1, pd.Series):
             # One return that is the classification
             elif len(returns) == 1 and returns[0]:
                 cls.score_code += (
-                    f"{'':4}if input_array.shape[0] == 1\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}return prediction\n"
                     f"{'':4}else:\n"
                     f"{'':8}return pd.DataFrame({{'{metrics}': prediction}})")
@@ -1313,7 +1313,7 @@ if not isinstance(var1, pd.Series):
             # One return that is a probability
             elif len(returns) == 1 and not returns[0]:
                 cls.score_code += (
-                    f"{'':4}if input_array.shape[0] == 1\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}if prediction > {threshold}:\n"
                     f"{'':12}{metrics} = \"{target_values[0]}\"\n"
                     f"{'':8}else:\n"
@@ -1334,7 +1334,7 @@ if not isinstance(var1, pd.Series):
             elif len(returns) == 2 and sum(returns) == 0:
                 # Only probabilities returned; return classification for larger value
                 cls.score_code += (
-                    f"{'':4}if input_array.shape[0] == 1\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}if prediction[0] > prediction[1]:\n"
                     f"{'':12}{metrics} = \"{target_values[0]}\"\n"
                     f"{'':8}else:\n"
@@ -1357,7 +1357,7 @@ if not isinstance(var1, pd.Series):
                 # Determine which return is the classification value
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 cls.score_code += (
-                    f"{'':4}if input_array.shape[0] == 1\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}{metrics} = prediction[{class_index}]\n\nreturn {metrics}\n"
                     f"{'':4}else:\n"
                     f"{'':8}output_table = pd.DataFrame({{'{metrics}': [p[{class_index}] for p in prediction]}})\n"
@@ -1379,7 +1379,7 @@ if not isinstance(var1, pd.Series):
                     "the target event to occur."
                 )
                 cls.score_code += (
-                    f"{'':4}if input_array.shape[0] == 1\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}return prediction[1][0], float(prediction[1][2])"
                     f"{'':4}else:\n"
                     f"{'':8}output_table = pd.DataFrame(prediction[1:], columns=[{',drop,'.join(metrics)}])\n"
@@ -1396,7 +1396,7 @@ if not isinstance(var1, pd.Series):
                     "metric is returned first."
                 )
                 cls.score_code += (
-                    f"{'':4}if input_array.shape[0] == 1\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}if prediction > {threshold}:\n"
                     f"{'':12}{metrics[0]} = \"{target_values[0]}\"\n"
                     f"{'':8}else:\n"
@@ -1422,7 +1422,7 @@ if not isinstance(var1, pd.Series):
                     "target event probability should be returned."
                 )
                 cls.score_code += (
-                    f"{'':4}if input_array.shape[0] == 1\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}if prediction[0] > prediction[1]:\n"
                     f"{'':12}{metrics[0]} = \"{target_values[0]}\"\n"
                     f"{'':8}else:\n"
@@ -1443,7 +1443,7 @@ if not isinstance(var1, pd.Series):
             # Return classification and probability value
             elif sum(returns) == 1 and len(returns) == 2:
                 cls.score_code += (
-                    f"{'':4}if input_array.shape[0] == 1\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}return prediction[0], prediction[1]\n"
                     f"{'':4}else:\n"
                     f"{'':8}return pd.DataFrame(prediction, columns=[{','.join(metrics)}])")
@@ -1460,7 +1460,7 @@ if not isinstance(var1, pd.Series):
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 if class_index == 0:
                     cls.score_code += (
-                        f"{'':4}if input_array.shape[0] == 1\n"
+                        f"{'':4}if input_array.shape[0] == 1:\n"
                         f"{'':8}return prediction[0], prediction[1]\n"
                         f"{'':4}else:\n"
                         f"{'':8}output_table = pd.DataFrame(prediction, columns=[{','.join(metrics)},drop])\n"
@@ -1471,7 +1471,7 @@ if not isinstance(var1, pd.Series):
                     """
                 else:
                     cls.score_code += (
-                        f"{'':4}if input_array.shape[0] == 1\n"
+                        f"{'':4}if input_array.shape[0] == 1:\n"
                         f"{'':8}return prediction[{class_index}], prediction[0]\n"
                         f"{'':4}else:\n"
                         f"{'':8}output_table = pd.DataFrame(prediction, columns=[{',drop,'.join(metrics[::-1])}])\n"
@@ -1484,7 +1484,7 @@ if not isinstance(var1, pd.Series):
         elif len(metrics) == 3:
             if h2o_model:
                 cls.score_code += (
-                    f"{'':4}if input_array.shape[0] == 1\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}return prediction[1][0], float(prediction[1][1]), "
                     f"float(prediction[1][2])\n"
                     f"{'':4}else:\n"
@@ -1500,12 +1500,16 @@ if not isinstance(var1, pd.Series):
                     "[classification, probability of event, probability of no event]."
                 )
                 cls.score_code += (
-                    f"{'':4}if prediction > {threshold}:\n"
-                    f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}if prediction > {threshold}:\n"
+                    f"{'':12}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':8}else:\n"
+                    f"{'':12}{metrics[0]} = \"{target_values[1]}\"\n"
+                    f"{'':8}return {metrics[0]}, prediction, 1 - prediction\n"
                     f"{'':4}else:\n"
-                    f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
-                    f"{'':4}return {metrics[0]}, prediction, 1 - prediction"
-
+                    f"{'':8}classifications = ['{target_values[0]}' if p > {threshold} else '{target_values[1]}' for p in prediction]\n"
+                    f"{'':8}complement = [1 - p for p in prediction]\n"
+                    f"{'':8}return pd.DataFrame({{'{metrics[0]}': classifications, '{metrics[1]}': prediction, '{metrics[2]}': complement}})"
                 )
                 """
     if prediction > 0.5:
@@ -1522,14 +1526,20 @@ if not isinstance(var1, pd.Series):
                     "[classification, probability of event, probability of no event]."
                 )
                 cls.score_code += (
-                    f"{'':4}if prediction[0] > prediction[1]:\n"
-                    f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}if prediction[0] > prediction[1]:\n"
+                    f"{'':12}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':8}else:\n"
+                    f"{'':12}{metrics[0]} = \"{target_values[1]}\"\n"
+                    f"{'':8}return {metrics[0]}, prediction[0], prediction[1]\n"
                     f"{'':4}else:\n"
-                    f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
-                    f"{'':4}return {metrics[0]}, prediction[0], prediction[1]"
+                    f"{'':8}classifications = ['{target_values[0]}' if p[0] > p[1] else '{target_values[1]}' for p in prediction]\n"
+                    f"{'':8}output_table = pd.DataFrame(prediction, columns=[{','.join(metrics[1:])}])\n"
+                    f"{'':8}output_table = output_table.insert(loc = 0, column = '{metrics[0]}', value = classifications)\n"
+                    f"{'':8}return output_table"
                 )
                 """
-    if prediction > 0.5:
+    if prediction[0] > prediction[1]:
         classification_variable = 1
     else:
         classification_variable = 0
@@ -1542,14 +1552,26 @@ if not isinstance(var1, pd.Series):
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 if class_index == 0:
                     cls.score_code += (
-                        f"{'':4}return prediction[0], prediction[1], 1 - prediction[1]"
+                        f"{'':4}if input_array.shape[0] == 1:\n"
+                        f"{'':8}return prediction[0], prediction[1], 1 - prediction[1]\n"
+                        f"{'':4}else:\n"
+                        f"{'':8}complement = [1 - p[1] for p in prediction]\n"
+                        f"{'':8}output_table = pd.DataFrame(prediction, columns=[{','.join(metrics[:2])}])\n"
+                        f"{'':8}output_table = output_table.insert(loc = 2, column = '{metrics[2]}', value = complement)\n"
+                        f"{'':8}return output_table"
                     )
                     """
     return prediction[0], prediction[1], 1 - prediction[1]
                     """
                 else:
                     cls.score_code += (
-                        f"{'':4}return prediction[1], prediction[0], 1 - prediction[0]"
+                        f"{'':4}if input_array.shape[0] == 1:\n"
+                        f"{'':8}return prediction[1], prediction[0], 1 - prediction[0]\n"
+                        f"{'':4}else:\n"
+                        f"{'':8}complement = [1 - p[0] for p in prediction]\n"
+                        f"{'':8}output_table = pd.DataFrame(prediction, columns=[{','.join(metrics[1::-1])}])\n"
+                        f"{'':8}output_table = output_table.insert(loc = 2, column = '{metrics[2]}', value = complement)\n"
+                        f"{'':8}return output_table"
                     )
                     """
     return prediction[1], prediction[0], 1 - prediction[0]
@@ -1557,7 +1579,10 @@ if not isinstance(var1, pd.Series):
             # Return all values from prediction method
             elif sum(returns) == 1 and len(returns) == 3:
                 cls.score_code += (
-                    f"{'':4}return prediction[0], prediction[1], prediction[2]"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}return prediction[0], prediction[1], prediction[2]"
+                    f"{'':4}else:\n"
+                    f"{'':8}output_table = pd.DataFrame(prediction, columns=[{','.join(metrics)}])"
                 )
                 """
     return prediction[0], prediction[1], prediction[2]
