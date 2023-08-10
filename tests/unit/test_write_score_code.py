@@ -9,6 +9,7 @@ import os
 import pickle
 import random
 import tempfile
+import unittest
 from pathlib import Path
 from unittest.mock import DEFAULT, MagicMock, patch
 
@@ -20,6 +21,7 @@ import sasctl.pzmm as pzmm
 from sasctl import current_session
 from sasctl.core import RestObj, VersionInfo
 from sasctl.pzmm.write_score_code import ScoreCode as sc
+from sasctl.pzmm.write_score_code import ScoreCode
 
 
 @pytest.fixture()
@@ -301,50 +303,174 @@ def test_determine_score_metrics():
     ) == ["P_A", "P_B", "P_C"]
 
 
-def test_no_targets_no_thresholds():
-    """
-    Test Cases:
-    - len(metrics) == 1
-        - non-h2o
-        - h2o
-    - len(metrics) > 1
-        - non-h2o
-        - h2o
-    - raise error for invalid config (returns - metrics != 0)
-    """
-    metrics = "Classification"
-    returns = [1, "A"]
-    with pytest.raises(ValueError):
-        sc._no_targets_no_thresholds(metrics, returns)
+class TestNoTargetsNoThresholds(unittest.TestCase):
+    def setUp(self):
+        self.sc = ScoreCode
 
-    returns = [1]
-    sc._no_targets_no_thresholds(metrics, returns)
-    assert "Classification = prediction" in sc.score_code
-    sc.score_code = ""
+    def tearDown(self):
+        self.sc.score_code = ""
 
-    sc._no_targets_no_thresholds(metrics, returns, h2o_model=True)
-    assert "Classification = prediction[1][0]"
-    sc.score_code = ""
+    def execute_snippet(self, *args):
+        scope = {}
+        exec(self.sc.score_code, scope)
+        test_snippet = scope["test_snippet"]
+        return test_snippet(*args)
 
-    metrics = ["Classification", "Proba_A", "Proba_B", "Proba_C"]
-    returns = ["I", 1, 2, 3]
-    sc._no_targets_no_thresholds(metrics, returns)
-    assert (
-        sc.score_code == f"{'':4}Classification = prediction[0]\n"
-        f"{'':4}Proba_A = prediction[1]\n"
-        f"{'':4}Proba_B = prediction[2]\n"
-        f"{'':4}Proba_C = prediction[3]\n\n"
-        f"{'':4}return Classification, Proba_A, Proba_B, Proba_C"
-    )
-    sc.score_code = ""
-    sc._no_targets_no_thresholds(metrics, returns, h2o_model=True)
-    assert (
-        sc.score_code == f"{'':4}Classification = prediction[1][0]\n"
-        f"{'':4}Proba_A = float(prediction[1][1])\n"
-        f"{'':4}Proba_B = float(prediction[1][2])\n"
-        f"{'':4}Proba_C = float(prediction[1][3])\n\n"
-        f"{'':4}return Classification, Proba_A, Proba_B, Proba_C"
-    )
+    def test_improper_arguments(self):
+        metrics = "Classification"
+        returns = [1, "A"]
+        with pytest.raises(ValueError):
+            self.sc._no_targets_no_thresholds(metrics, returns)
+
+    def test_single_metric(self):
+        metrics = "Classification"
+        returns = [1]
+        self.sc.score_code += "import pandas as pd\n" \
+                              "def test_snippet(input_array, prediction):\n"
+        self.sc._no_targets_no_thresholds(metrics, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [.5]
+        self.assertEqual(self.execute_snippet(input_array, prediction), .5)
+        # Multi row
+        input_array = pd.DataFrame({"A": [.9, 1, 1.1]})
+        prediction = [.3, .4, .5]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({metrics: prediction})
+        )
+
+    def test_single_metric_h2o(self):
+        metrics = "Classification"
+        returns = [1]
+        self.sc.score_code += "import pandas as pd\n" \
+                              "def test_snippet(input_array, prediction):\n"
+        self.sc._no_targets_no_thresholds(metrics, returns, h2o_model=True)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [[], [.5]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), .5)
+        # Multi row
+        input_array = pd.DataFrame({"A": [.9, 1, 1.1]})
+        prediction = pd.DataFrame({"predict": [0, 1, 1], "p0": [.3, .4, .5]})
+        pd.testing.assert_series_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.Series([0, 1, 1], name="predict")
+        )
+
+    def test_multi_metric(self):
+        metrics = ["Classification", "Proba_A", "Proba_B", "Proba_C"]
+        returns = ["I", 1, 2, 3]
+        self.sc.score_code += "import pandas as pd\n" \
+                              "def test_snippet(input_array, prediction):\n"
+        self.sc._no_targets_no_thresholds(metrics, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = ["i", .3, .4, .5]
+        self.assertEqual(
+            self.execute_snippet(input_array, prediction),
+            ("i", .3, .4, .5)
+        )
+        # Multi row
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = pd.DataFrame({
+            "Classification": ["i", "j", "k"],
+            "Proba_A": [.1, .2, .3],
+            "Proba_B": [.4, .5, .6],
+            "Proba_C": [.7, .8, .9]
+        })
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            prediction
+        )
+
+    def test_multi_metric_h2o(self):
+        metrics = ["Classification", "Proba_A", "Proba_B", "Proba_C"]
+        returns = ["I", 1, 2, 3]
+        self.sc.score_code += "import pandas as pd\n" \
+                              "def test_snippet(input_array, prediction):\n"
+        self.sc._no_targets_no_thresholds(metrics, returns, h2o_model=True)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [[], ["i", .3, .4, .5]]
+        self.assertEqual(
+            self.execute_snippet(input_array, prediction),
+            ("i", .3, .4, .5)
+        )
+        # Multi row
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = pd.DataFrame({
+            "Classification": ["i", "j", "k"],
+            "Proba_A": [.1, .2, .3],
+            "Proba_B": [.4, .5, .6],
+            "Proba_C": [.7, .8, .9]
+        })
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            prediction
+        )
+
+
+class TestBinaryTarget(unittest.TestCase):
+    def setUp(self):
+        self.sc = ScoreCode
+        self.target_values = ["A", "B"]
+
+    def tearDown(self):
+        self.sc.score_code = ""
+
+    def execute_snippet(self, *args):
+        scope = {}
+        exec(self.sc.score_code, scope)
+        test_snippet = scope["test_snippet"]
+        return test_snippet(*args)
+
+    def test_improper_arguments(self):
+        with pytest.raises(ValueError):
+            sc._binary_target([], [], ["A", 1, 2, 3])
+        with pytest.raises(ValueError):
+            sc._binary_target([], [], ["A", "B"])
+        with pytest.raises(ValueError):
+            sc._binary_target(["A", "B", "C", "D"], [], [])
+
+    def test_one_metric_one_return(self):
+        metrics = "Classification"
+        returns = [""]
+        self.sc.score_code += "import pandas as pd\n" \
+                              "def test_snippet(input_array, prediction):\n"
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = .5
+        self.assertEqual(self.execute_snippet(input_array, prediction), .5)
+        # Multi row
+        input_array = pd.DataFrame({"A": [.9, 1, 1.1]})
+        prediction = [.3, .4, .5]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({metrics: prediction})
+        )
+
+    def test_one_metric_two_returns(self):
+        pass
+
+    def test_one_metric_three_returns(self):
+        pass
+
+    def test_two_metrics_one_return(self):
+        pass
+
+    def test_two_metrics_two_returns(self):
+        pass
+
+    def test_two_metrics_three_returns(self):
+        pass
+
+    def test_three_metrics_one_return(self):
+        pass
+
+    def test_three_metrics_three_returns(self):
+        pass
 
 
 def test_binary_target():
@@ -398,14 +524,6 @@ def test_binary_target():
         - sum(returns) >= 2
         - len(metrics) > 3
     """
-    # Initial errors
-    with pytest.raises(ValueError):
-        sc._binary_target([], [], ["A", 1, 2, 3])
-    with pytest.raises(ValueError):
-        sc._binary_target([], [], ["A", "B"])
-    with pytest.raises(ValueError):
-        sc._binary_target(["A", "B", "C", "D"], [], [])
-
     # # metrics == 1
     metrics = "Classification"
     sc._binary_target(metrics, ["A", "B"], [""], h2o_model=True)
@@ -502,6 +620,20 @@ def test_binary_target():
     metrics = ["C", "P1", "P2", "P3"]
     with pytest.raises(ValueError):
         sc._binary_target(metrics, ["A", "B"], ["1", 2, 3])
+
+
+class TestNonbinaryTargets(unittest.TestCase):
+    def setUp(self):
+        self.sc = ScoreCode
+
+    def tearDown(self):
+        self.sc.score_code = ""
+
+    def execute_snippet(self, *args):
+        scope = {}
+        exec(self.sc.score_code, scope)
+        test_snippet = scope["test_snippet"]
+        return test_snippet(*args)
 
 
 def test_nonbinary_targets():

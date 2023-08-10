@@ -812,7 +812,7 @@ if not isinstance(var1, pd.Series):
                 f"{'':4}h2o_array = h2o.H2OFrame(input_array, "
                 f"column_types=column_types)\n{'':4}prediction = "
                 f"model.{method.__name__}(h2o_array)\n{'':4}prediction"
-                f" = h2o.as_list(prediction, use_pandas=False)\n"
+                f" = h2o.as_list(prediction, use_pandas=prediction.shape[0]>1)\n"
             )
             """
     input_array = pd.DataFrame(
@@ -821,7 +821,7 @@ if not isinstance(var1, pd.Series):
     input_array = impute_missing_values(input_array)
     column_types = {"var1": "string", "var2": "numeric", "var3": "numeric"}
     h2o_array = h2o.H2OFrame(input_array, column_types=column_types)
-    prediction = model.predict(h2o.array)
+    prediction = model.predict(h2o_array)
     prediction = h2o.as_list(prediction, use_pandas=False)
             """
         # Statsmodels models
@@ -1167,30 +1167,29 @@ if not isinstance(var1, pd.Series):
                     f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}{metrics} = prediction[1][0]\n{'':8}return {metrics}\n"
                     f"{'':4}else:\n"
-                    f"{'':8}prediction = pd.Dataframe(prediction[1:], columns=prediction[0])\n"
-                    f"{'':8}return pd.DataFrame({{'{metrics}': prediction.iloc[:,0]}})"
+                    f"{'':8}return prediction.iloc[:, 0]\n"
                 )
                 """
     if input_array.shape[0] == 1:
         output_variable = prediction[1][0]
         return output_variable
     else:
-        prediction = pd.Dataframe(prediction[1:], columns=prediction[0])
-        return pd.DataFrame({'output_variable': prediction.iloc[:,0]})
+        return prediction.iloc[:, 0]
                 """
             else:
                 cls.score_code += (
                     f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}{metrics} = prediction[0]\n{'':8}return {metrics}\n"
                     f"{'':4}else:\n"
-                    f"{'':8}output_table = pd.DataFrame('{metrics}': prediction)\n{'':8}return output_table"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics}': prediction}})\n"
+                    f"{'':8}return output_table"
                 )
                 """
     if input_array.shape[0] == 1:
         output_variable = prediction[0]
         return output_variable
     else:
-        output_table = pd.DataFrame('output_variable': prediction)
+        output_table = pd.DataFrame({'output_variable': prediction})
         return output_table
                 """
         else:
@@ -1204,8 +1203,10 @@ if not isinstance(var1, pd.Series):
                         f"{'':8}{metrics[i + 1]} = float(prediction[1][{i + 1}])\n"
                     )
                 cls.score_code += (
+                    f"{'':8}return {', '.join(metrics)}\n"
                     f"{'':4}else:\n"
-                    f"{'':8}output_table = pd.DataFrame(prediction[1:], columns={metrics})\n"
+                    f"{'':8}output_table = prediction\n"
+                    f"{'':8}output_table.columns = {metrics}\n"
                     f"{'':8}return output_table\n"
                 )
                 """
@@ -1213,30 +1214,30 @@ if not isinstance(var1, pd.Series):
         classification_variable = prediction[1][0]
         prediction_variable_1 = float(prediction[1][1])
         prediction_variable_2 = float(prediction[1][2])
+        return classification_variable, prediction_variable_1, prediction_variable_2
     else:
-        output_table = pd.DataFrame(prediction[1:], columns=[classification_variable,variable_1,variable_2])
+        output_table = pd.DataFrame(prediction[1:], columns=[classification_variable, prediction_variable_1, prediction_variable_2])
         return output_table
                 """
             else:
                 cls.score_code += f"{'':4}if input_array.shape[0] == 1:\n"
                 for i in range(len(metrics)):
                     cls.score_code += f"{'':8}{metrics[i]} = prediction[{i}]\n"
+                cls.score_code += f"\n{'':8}return {', '.join(metrics)}\n"
                 cls.score_code += (
                     f"{'':4}else:\n"
-                    f"{'':8}output_table = pd.DataFrame(prediction, columns={metrics})\n"
-                    f"{'':8}return output_table\n"
+                    f"{'':8}output_table = pd.DataFrame(prediction, columns={metrics})"
+                    f"\n{'':8}return output_table\n"
                 )
-            cls.score_code += f"\n{'':4}return {', '.join(metrics)}"
             """
     if input_array.shape[0] == 1:
         classification_variable = prediction[0]
         prediction_variable_1 = prediction[1]
         prediction_variable_2 = prediction[2]
     else:
-        output_table = pd.DataFrame(prediction, columns=["classification_variable","prediction_variable_1","prediction_variable_2"])
+        output_table = pd.DataFrame(prediction, columns=["classification_variable", "prediction_variable_1", "prediction_variable_2"])
         return output_table
             """
-
 
     @classmethod
     def _binary_target(
