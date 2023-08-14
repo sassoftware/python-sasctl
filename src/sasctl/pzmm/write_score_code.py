@@ -1167,7 +1167,9 @@ if not isinstance(var1, pd.Series):
                     f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}{metrics} = prediction[1][0]\n{'':8}return {metrics}\n"
                     f"{'':4}else:\n"
-                    f"{'':8}return prediction.iloc[:, 0]\n"
+                    f"{'':8}output_table = prediction.drop(prediction.columns[1:], axis=1)\n"
+                    f"{'':8}output_table.columns = ['{metrics}']\n"
+                    f"{'':8}return output_table"
                 )
                 """
     if input_array.shape[0] == 1:
@@ -1296,8 +1298,7 @@ if not isinstance(var1, pd.Series):
                     f"{'':8}return {metrics}\n"
                     f"{'':4}else:\n"
                     f"{'':8}target_values = {target_values}\n"
-                    f"{'':8}df = pd.DataFrame(prediction[1:], columns=prediction[0])\n"
-                    f"{'':8}output_table = pd.DataFrame({{'{metrics}' : np.array(target_values)[np.argmax(df.iloc[0:, 1:].values, axis=1)]}})\n"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics}': np.array(target_values)[np.argmax(prediction.iloc[0:, 1:].values, axis=1)]}})\n"
                     f"{'':8}return output_table"
                 )
                 """
@@ -1399,6 +1400,7 @@ if not isinstance(var1, pd.Series):
             else:
                 cls._invalid_predict_config()
         elif len(metrics) == 2:
+            # TODO: change to align with other cases and assign target_values to classification column
             # H2O models with two metrics are assumed to be classification + probability
             if h2o_model:
                 warn(
@@ -1410,8 +1412,9 @@ if not isinstance(var1, pd.Series):
                     f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}return prediction[1][0], float(prediction[1][2])\n"
                     f"{'':4}else:\n"
-                    f"{'':8}output_table = pd.DataFrame(prediction[1:], columns={metrics})\n"
-                    f"{'':8}return output_table.drop('drop', axis=1)"
+                    f"{'':8}output_table = prediction.drop(prediction.columns[1], axis=1)\n"
+                    f"{'':8}output_table.columns = {metrics}\n"
+                    f"{'':8}return output_table"
                 )
                 """
     if input_array.shape[0] == 1:
@@ -1464,9 +1467,9 @@ if not isinstance(var1, pd.Series):
                     f"{'':12}{metrics[0]} = \"{target_values[1]}\"\n"
                     f"{'':8}return {metrics[0]}, prediction[0]\n"
                     f"{'':4}else:\n"
-                    f"{'':8}df = pd.DataFrame(prediction, columns = {target_values})\n"
-                    f"{'':8}proba = df[:, 0]\n"
-                    f"{'':8}classification = np.where(df[:, 0] > df[:, 1], '{target_values[0]}', '{target_values[1]}')\n"
+                    f"{'':8}df = pd.DataFrame(prediction)\n"
+                    f"{'':8}proba = df[0]\n"
+                    f"{'':8}classifications = np.where(df[0] > df[1], '{target_values[0]}', '{target_values[1]}')\n"
                     f"{'':8}return pd.DataFrame({{'{metrics[0]}': classifications, '{metrics[1]}': proba}})"
                 )
                 """
@@ -1526,6 +1529,7 @@ if not isinstance(var1, pd.Series):
                         f"{'':8}return prediction[{class_index}], prediction[0]\n"
                         f"{'':4}else:\n"
                         f"{'':8}output_table = pd.DataFrame(prediction, columns=[{metric_list}])\n"
+                        f"{'':8}output_table = output_table[output_table.columns[::-1]]\n"
                         f"{'':8}return output_table.drop('drop', axis=1)")
                     """
     if input_array.shape[0] == 1:
@@ -1543,7 +1547,8 @@ if not isinstance(var1, pd.Series):
                     f"{'':8}return prediction[1][0], float(prediction[1][1]), "
                     f"float(prediction[1][2])\n"
                     f"{'':4}else:\n"
-                    f"{'':8}return pd.DataFrame(prediction[1:], columns={metrics})"
+                    f"{'':8}prediction.columns = {metrics}\n"
+                    f"{'':8}return prediction"
                 )
                 """
     if input_array.shape[0] == 1:
@@ -1599,7 +1604,7 @@ if not isinstance(var1, pd.Series):
                     f"{'':8}return {metrics[0]}, prediction[0], prediction[1]\n"
                     f"{'':4}else:\n"
                     f"{'':8}output_table = pd.DataFrame(prediction, columns=[{metric_list}])\n"
-                    f"{'':8}output_table = output_table.insert(0, '{metrics[0]}', np.array(target_values)[np.argmax(output_table.iloc[0:, 0:].values, axis=1)])\n"
+                    f"{'':8}output_table.insert(0, '{metrics[0]}', np.array({target_values})[np.argmax(output_table.values, axis=1)])\n"
                     f"{'':8}return output_table"
                 )
                 """
@@ -1643,7 +1648,8 @@ if not isinstance(var1, pd.Series):
                         f"{'':8}return prediction[1], prediction[0], 1 - prediction[0]\n"
                         f"{'':4}else:\n"
                         f"{'':8}output_table = pd.DataFrame(prediction, columns=[{metric_list}])\n"
-                        f"{'':8}output_table['{metrics[2]}'] = 1 - output_table['{metrics[0]}']\n"
+                        f"{'':8}output_table = output_table[output_table.columns[::-1]]\n"
+                        f"{'':8}output_table['{metrics[2]}'] = 1 - output_table['{metrics[1]}']\n"
                         f"{'':8}return output_table"
                     )
                     """
@@ -1660,7 +1666,7 @@ if not isinstance(var1, pd.Series):
                     f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}return prediction[0], prediction[1], prediction[2]\n"
                     f"{'':4}else:\n"
-                    f"{'':8}output_table = pd.DataFrame(prediction, columns={metrics})"
+                    f"{'':8}return pd.DataFrame(prediction, columns={metrics})"
                 )
                 """
     if input_array.shape[0] == 1:
@@ -1715,7 +1721,7 @@ if not isinstance(var1, pd.Series):
                     f"index(max(prediction[1][1:]))]\n"
                     f"{'':8}return {metrics}\n"
                     f"{'':4}else:\n"
-                    f"{'':8}output_table = pd.DataFrame({{'{metrics}': np.array(target_values)[np.argmax(df.iloc[1:, 0:].values, axis=1)]}})\n"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics}': np.array(target_values)[np.argmax(prediction.iloc[:, 1:].values, axis=1)]}})\n"
                     f"{'':8}return output_table"
                 )
                 """
@@ -1724,17 +1730,16 @@ if not isinstance(var1, pd.Series):
         classification_variable = target_values[prediction[1][1:].index(max(prediction[1][1:]))]
         return classification_variable
     else:
-        output_table = pd.DataFrame({'classification_variable': np.array(target_values)[np.argmax(df.iloc[1:, 0:].values, axis=1)]})
+        output_table = pd.DataFrame({'classification_variable': np.array(target_values)[np.argmax(df.iloc[:, 1:].values, axis=1)]})
         return output_table
                 """
             # One return that is the classification
             elif len(returns) == 1:
                 cls.score_code += (
                     f"{'':4}if input_array.shape[0] == 1:\n"
-                    f"{'':8}{metrics} = prediction\n"
-                    f"{'':8}return {metrics}\n"
+                    f"{'':8}return prediction\n"
                     f"{'':4}else:\n"
-                    f"{'':8}return pd.DataFrame('{metrics}': prediction)"
+                    f"{'':8}return pd.DataFrame({{'{metrics}': prediction}})"
                 )
                 """
     if input_array.shape[0] == 1:
@@ -1749,7 +1754,7 @@ if not isinstance(var1, pd.Series):
                     f"{'':8}target_values = {target_values}\n"
                     f"{'':8}return target_values[prediction.index(max(prediction))]\n"
                     f"{'':4}else:\n"
-                    f"{'':8}output_table = pd.DataFrame({{'{metrics}' : np.array(target_values)[np.argmax(prediction, axis=1)]}})\n"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics}' : np.array({target_values})[np.argmax(prediction, axis=1)]}})\n"
                     f"{'':8}return output_table"
                 )
                 """
@@ -1767,7 +1772,7 @@ if not isinstance(var1, pd.Series):
                     f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}return prediction[{class_index}]\n"
                     f"{'':4}else:\n"
-                    f"{'':8}return pd.DataFrame('{metrics}': [p[{class_index}] for p in prediction])"
+                    f"{'':8}return pd.DataFrame({{'{metrics}': [p[{class_index}] for p in prediction]}})"
                     )
                 """
     if input_array.shape[0] == 1:
@@ -1786,9 +1791,8 @@ if not isinstance(var1, pd.Series):
                     f"index(max(prediction[1][1:]))]\n"
                     f"{'':8}return {metrics[0]}, max(prediction[1][1:])\n"
                     f"{'':4}else:\n"
-                    f"{'':8}df = pd.DataFrame(prediction[1:], columns=prediction[0])\n"
-                    f"{'':8}index = np.argmax(df.iloc[0:, 1:].values, axis=1)\n"
-                    f"{'':8}return pd.DataFrame({{'{metrics[0]}': np.array(target_values)[index], '{metrics[1]}': np.max(df.iloc[0:, 1:], axis=1)}})\n"
+                    f"{'':8}index = np.argmax(prediction.iloc[0:, 1:].values, axis=1)\n"
+                    f"{'':8}return pd.DataFrame({{'{metrics[0]}': np.array(target_values)[index], '{metrics[1]}': np.max(prediction.iloc[0:, 1:], axis=1)}})\n"
                 )
                 """
     target_values = [1, 2, 3]
@@ -1808,10 +1812,10 @@ if not isinstance(var1, pd.Series):
                     f"{'':8}return target_values[prediction.index(max(prediction))], "
                     f"max(prediction)\n"
                     f"{'':4}else:\n"
-                    f"{'':8}df = pd.DataFrame(prediction, columns = target_values)\n"
-                    f"{'':8}index = np.argmax(df, axis=1)\n"
-                    f"{'':8}classifications = [np.array(target_values)[index]]\n"
-                    f"{'':8}max_proba = np.max(df, axis=1)\n"
+                    f"{'':8}df = pd.DataFrame(prediction)\n"
+                    f"{'':8}index = np.argmax(df.values, axis=1)\n"
+                    f"{'':8}classifications = np.array(target_values)[index]\n"
+                    f"{'':8}max_proba = np.max(df.values, axis=1)\n"
                     f"{'':8}return pd.DataFrame({{'{metrics[0]}': classifications, '{metrics[1]}': max_proba}})"
                 )
                 """
@@ -1835,7 +1839,7 @@ if not isinstance(var1, pd.Series):
                     f"{'':4}else:\n"
                     f"{'':8}df = pd.DataFrame(prediction)\n"
                     f"{'':8}probas = df.drop({class_index}, axis=1)\n"
-                    f"{'':8}max_proba = np.max(probas, axis=1)\n"
+                    f"{'':8}max_proba = np.max(probas.values, axis=1)\n"
                     f"{'':8}return pd.DataFrame({{'{metrics[0]}': df[{class_index}], '{metrics[1]}': max_proba}})"
                 )
                 """
@@ -1857,8 +1861,8 @@ if not isinstance(var1, pd.Series):
                         f"{'':4}if input_array.shape[0] == 1:\n"
                         f"{'':8}return {', '.join(h2o_returns)}\n"
                         f"{'':4}else:\n"
-                        f"{'':8}output_table = pd.DataFrame(prediction[1:], columns={metrics})\n"
-                        f"{'':8}output_table = output_table.drop('{metrics[0]}', axis=1)]\n"
+                        f"{'':8}output_table = prediction.drop(prediction.columns[0], axis=1)\n"
+                        f"{'':8}output_table.columns = {metrics}\n"
                         f"{'':8}return output_table"
                     )
                     """
@@ -1875,7 +1879,8 @@ if not isinstance(var1, pd.Series):
                         f"{'':4}if input_array.shape[0] == 1:\n"
                         f"{'':8}return {', '.join(h2o_returns)}\n"
                         f"{'':4}else:\n"
-                        f"{'':8}output_table = pd.DataFrame(prediction[1:], columns={metrics})"
+                        f"{'':8}prediction.columns = {metrics}\n"
+                        f"{'':8}return prediction"
                     )
                     """
     if input_array.shape[0] == 1:
@@ -1894,7 +1899,8 @@ if not isinstance(var1, pd.Series):
                     f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}return {', '.join(proba_returns)}\n"
                     f"{'':4}else:\n"
-                    f"{'':8}output_table = pd.DataFrame(prediction, columns={metrics})"
+                    f"{'':8}output_table = pd.DataFrame(prediction, columns={metrics})\n"
+                    f"{'':8}return output_table"
                 )
                 """
     if input_array.shape[0] == 1:
@@ -1912,9 +1918,9 @@ if not isinstance(var1, pd.Series):
                     f"{'':8}return target_values[prediction.index(max(prediction))], "
                     f"{', '.join(proba_returns)}\n"
                     f"{'':4}else:\n"
-                    f"{'':8}classifications = [target_values[np.argmax(p)[0]] for p in prediction]\n"
                     f"{'':8}output_table = pd.DataFrame(prediction, columns={metrics[1:]})\n"
-                    f"{'':8}output_table = output_table.insert(loc=0, column={metrics[0]}, data=np.array(target_values)[np.argmax(df.iloc[0:, 1:].values, axis=1)])\n"
+                    f"{'':8}classifications = np.array(target_values)[np.argmax(output_table.values, axis=1)]\n"
+                    f"{'':8}output_table.insert(0, '{metrics[0]}', classifications)\n"
                     f"{'':8}return output_table"
                 )
                 """
