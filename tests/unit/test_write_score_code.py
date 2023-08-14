@@ -357,10 +357,6 @@ class TestNoTargetsNoThresholds(unittest.TestCase):
             self.execute_snippet(input_array, prediction),
             pd.DataFrame({'Classification': [0, 1, 1]})
         )
-        # pd.testing.assert_series_equal(
-        #     self.execute_snippet(input_array, prediction),
-        #     pd.Series([0, 1, 1], name="predict")
-        # )
 
     def test_multi_metric(self):
         metrics = ["Classification", "Proba_A", "Proba_B", "Proba_C"]
@@ -459,7 +455,6 @@ class TestBinaryTarget(unittest.TestCase):
             'Classification': ['A', 'B']
         })
         pd.testing.assert_frame_equal(self.execute_snippet(input_array, prediction), output_table)
-
 
     def test_one_metric_one_return_classification(self):
         metrics = "Classification"
@@ -651,7 +646,7 @@ class TestBinaryTarget(unittest.TestCase):
         )
 
     def test_three_metrics_h2o(self):
-        metrics = ['Classification', 'P0', 'P1']
+        metrics = ['Classification', 'Proba_0', 'Proba_1']
         returns = ["", int, int]
         self.sc.score_code += "import pandas as pd\n" \
                               "def test_snippet(input_array, prediction):\n"
@@ -669,11 +664,11 @@ class TestBinaryTarget(unittest.TestCase):
         })
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({'Classification': [0, 1], 'P0': [.9, .2], 'P1': [.1, .8]})
+            pd.DataFrame({'Classification': [0, 1], 'Proba_0': [.9, .2], 'Proba_1': [.1, .8]})
         )
 
     def test_three_metrics_one_return(self):
-        metrics = ['c', 'p0', 'p1']
+        metrics = ['Classification', 'Proba_0', 'Proba_1']
         returns = [int]
         self.sc.score_code += "import pandas as pd\n" \
                               "def test_snippet(input_array, prediction):\n"
@@ -691,11 +686,11 @@ class TestBinaryTarget(unittest.TestCase):
         prediction = [.9, .1]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({'c': ['A', 'B'], 'p0': [.9, .1], 'p1': [1-.9, 1-.1]})
+            pd.DataFrame({'Classification': ['A', 'B'], 'Proba_0': [.9, .1], 'Proba_1': [1-.9, 1-.1]})
         )
 
     def test_three_metrics_two_returns_no_class(self):
-        metrics = ['c', 'p0', 'p1']
+        metrics = ['Classification', 'Proba_0', 'Proba_1']
         returns = [int, int]
         self.sc.score_code += "import pandas as pd\n" \
                               "import numpy as np\n" \
@@ -713,11 +708,11 @@ class TestBinaryTarget(unittest.TestCase):
         prediction = [[.9, .1], [.2, .8]]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({'c': ['A', 'B'], 'p0': [.9, .2], 'p1': [.1, .8]})
+            pd.DataFrame({'Classification': ['A', 'B'], 'Proba_0': [.9, .2], 'Proba_1': [.1, .8]})
         )
 
     def test_three_metrics_two_returns_class_first(self):
-        metrics = ['c', 'p0', 'p1']
+        metrics = ['Classification', 'Proba_0', 'Proba_1']
         returns = ['', int]
         self.sc.score_code += "import pandas as pd\n" \
                               "import numpy as np\n" \
@@ -735,11 +730,11 @@ class TestBinaryTarget(unittest.TestCase):
         prediction = [['A', .9], ['B',.2]]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({'c': ['A', 'B'], 'p0': [.9, .2], 'p1': [1-.9, 1-.2]})
+            pd.DataFrame({'Classification': ['A', 'B'], 'Proba_0': [.9, .2], 'Proba_1': [1-.9, 1-.2]})
         )
 
     def test_three_metrics_two_returns_class_last(self):
-        metrics = ['c', 'p0', 'p1']
+        metrics = ['Classification', 'Proba_0', 'Proba_1']
         returns = [int, '']
         self.sc.score_code += "import pandas as pd\n" \
                               "import numpy as np\n" \
@@ -757,11 +752,11 @@ class TestBinaryTarget(unittest.TestCase):
         prediction = [[.9, 'A'], [.2, 'B']]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({'c': ['A', 'B'], 'p0': [.9, .2], 'p1': [1-.9, 1-.2]})
+            pd.DataFrame({'Classification': ['A', 'B'], 'Proba_0': [.9, .2], 'Proba_1': [1-.9, 1-.2]})
         )
 
     def test_three_metrics_three_returns(self):
-        metrics = ['c', 'p0', 'p1']
+        metrics = ['Classification', 'Proba_0', 'Proba_1']
         returns = ['', int, int]
         self.sc.score_code += "import pandas as pd\n" \
                               "import numpy as np\n" \
@@ -779,7 +774,7 @@ class TestBinaryTarget(unittest.TestCase):
         prediction = [['A', .9, .1], ['B', .2, .8]]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({'c': ['A', 'B'], 'p0': [.9, .2], 'p1': [.1, .8]})
+            pd.DataFrame({'Classification': ['A', 'B'], 'Proba_0': [.9, .2], 'Proba_1': [.1, .8]})
         )
 
 
@@ -1093,7 +1088,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         )
 
     def test_probability_metrics_h2o(self):
-        metrics = ['Prob1', 'Prob2', 'Prob3']
+        metrics = ['Proba_1', 'Proba_2', 'Proba_3']
         returns = []
         self.sc._nonbinary_targets(metrics, self.target_values, returns, h2o_model=True)
         # Single row
@@ -1114,9 +1109,9 @@ class TestNonbinaryTargets(unittest.TestCase):
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
             pd.DataFrame({
-                "Prob1": [.8, .2],
-                "Prob2": [.1, .6],
-                "Prob3": [.1, .2]
+                "Proba_1": [.8, .2],
+                "Proba_2": [.1, .6],
+                "Proba_3": [.1, .2]
             })
         )
 
@@ -1148,8 +1143,9 @@ class TestNonbinaryTargets(unittest.TestCase):
                 "Prob3": [.1, .2]
             })
         )
+
     def test_return_all_probabilities(self):
-        metrics = ['p0', 'p1', 'p2']
+        metrics = ['Proba_0', 'Proba_1', 'Proba_2']
         returns = [int, int, int]
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
@@ -1165,14 +1161,14 @@ class TestNonbinaryTargets(unittest.TestCase):
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
             pd.DataFrame({
-                'p0': [.9, .4],
-                'p1': [.8, .5],
-                'p2': [.7, .1]
+                'Proba_0': [.9, .4],
+                'Proba_1': [.8, .5],
+                'Proba_2': [.7, .1]
             })
         )
 
     def test_return_all_probabilities_and_classification(self):
-        metrics = ['c', 'p0', 'p1', 'p2']
+        metrics = ['Classification', 'Proba_0', 'Proba_1', 'Proba_2']
         returns = ['', int, int, int]
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
@@ -1188,15 +1184,15 @@ class TestNonbinaryTargets(unittest.TestCase):
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
             pd.DataFrame({
-                'c': ["D", "C"],
-                'p0': [.9, .4],
-                'p1': [.8, .5],
-                'p2': [.7, .1]
+                'Classification': ["D", "C"],
+                'Proba_0': [.9, .4],
+                'Proba_1': [.8, .5],
+                'Proba_2': [.7, .1]
             })
         )
 
     def test_return_all_probabilities_generate_classification(self):
-        metrics = ['c', 'p0', 'p1', 'p2']
+        metrics = ['Classification', 'Proba_0', 'Proba_1', 'Proba_2']
         returns = [int, int, int]
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
@@ -1212,10 +1208,10 @@ class TestNonbinaryTargets(unittest.TestCase):
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
             pd.DataFrame({
-                'c': ["A", "B"],
-                'p0': [.9, .4],
-                'p1': [.8, .5],
-                'p2': [.7, .1]
+                'Classification': ["A", "B"],
+                'Proba_0': [.9, .4],
+                'Proba_1': [.8, .5],
+                'Proba_2': [.7, .1]
             })
         )
 
