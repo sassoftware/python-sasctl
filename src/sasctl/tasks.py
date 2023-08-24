@@ -192,7 +192,7 @@ def _format_properties(model, input_vars=None, output_vars=None):
     # Get input & output variable lists
     # Note: copying lists to avoid altering original
     input_vars = input_vars or model.get("inputVariables", [])
-    output_vars = output_vars or model.get("outputVariables", [])[:]
+    output_vars = output_vars or model.get("outputVariables", [])
     input_vars = input_vars[:]
     output_vars = output_vars[:]
     unformatted_variables = input_vars + output_vars
@@ -227,7 +227,7 @@ def _format_properties(model, input_vars=None, output_vars=None):
 
 
 def _compare_properties(project_name, model, input_vars=None, output_vars=None):
-    properties, variables = _format_properties(model, input_vars, output_vars)
+    properties, _ = _format_properties(model, input_vars, output_vars)
     project = mr.get_project(project_name)
     same_properties = True
     for p in properties:

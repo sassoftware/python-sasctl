@@ -171,13 +171,13 @@ class ModelParameters:
 
         if model.__class__.__module__.__contains__("sklearn"):
             sklearn_params()
-        elif model.__class__.__module__.startswith("keras."):
+        elif model.__class__.__module__.startswith("keras"):
             tf_params()
-        elif model.__class__.__module__.startswith("xgboost."):
+        elif model.__class__.__module__.startswith("xgboost"):
             xg_params()
-        elif model.__class__.__module__.startswith("h2o."):
+        elif model.__class__.__module__.startswith("h2o"):
             h2o_params()
-        elif model.__class__.__module__.startswith("statsmodels."):
+        elif model.__class__.__module__.startswith("statsmodels"):
             statsmodels_params()
 
         else:
@@ -397,6 +397,7 @@ class ModelParameters:
 
         return kpi_table_df
 
+    @staticmethod
     def sync_model_properties(
         project: Union[str, dict, RestObj], overrwrite: Optional[bool] = False
     ):
