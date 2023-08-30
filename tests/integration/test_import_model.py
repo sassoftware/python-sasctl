@@ -62,6 +62,7 @@ def test_import_model(hmeq_dataset):
     model_files = {
         "Test.json": json.dumps({"Test": True, "TestNum": 1}),
         "Other_Test.json": json.dumps({"Other": None, "TestNum": 2}),
+        "ModelProperties.json": json.dumps({"Model": 'Test'}),
         "inputVar.json": json.dumps(
             [
                 {"name": "LOAN", "level": "interval", "type": "decimal", "length": 8},
