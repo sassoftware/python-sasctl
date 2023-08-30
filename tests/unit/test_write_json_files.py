@@ -9,6 +9,7 @@ import json
 import os
 import pickle
 import random
+import shutil
 import sys
 import tempfile
 import unittest
@@ -19,6 +20,8 @@ from unittest.mock import patch
 import numpy as np
 import pandas as pd
 import pytest
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
 
 import sasctl.pzmm as pzmm
 from sasctl.pzmm.write_json_files import JSONFiles as jf
@@ -628,23 +631,56 @@ def test_create_requirements_json(change_dir):
 
     example_model = (Path.cwd() / "data/hmeqModels/DecisionTreeClassifier").resolve()
     with tempfile.TemporaryDirectory() as tmp_dir:
-        jf.create_requirements_json(example_model, Path(tmp_dir))
+        tmp_dir = Path(tmp_dir)
+        for item in example_model.iterdir():
+            if item.is_file() and item.name != "DecisionTreeClassifier.pickle":
+                shutil.copy(item, tmp_dir / tmp_dir.name)
+        data = pd.read_csv("data/hmeq.csv")
+        predictor_columns = [
+            "LOAN",
+            "MORTDUE",
+            "VALUE",
+            "YOJ",
+            "DEROG",
+            "DELINQ",
+            "CLAGE",
+            "NINQ",
+            "CLNO",
+            "DEBTINC",
+        ]
+        target_column = "BAD"
+        x = data[predictor_columns]
+        y = data[target_column]
+        x_train, x_test, y_train, y_test = train_test_split(
+            x, y, test_size=0.3, random_state=42
+        )
+        x_test.fillna(x_test.mean(), inplace=True)
+        x_train.fillna(x_train.mean(), inplace=True)
+        dtc = DecisionTreeClassifier(
+            max_depth=7, min_samples_split=2, min_samples_leaf=2, max_leaf_nodes=500
+        )
+        dtc = dtc.fit(x_train, y_train)
+        with open(tmp_dir / "DecisionTreeClassifier.pickle", "wb") as pkl_file:
+            pickle.dump(dtc, pkl_file)
+        jf.create_requirements_json(tmp_dir, Path(tmp_dir))
         assert (Path(tmp_dir) / "requirements.json").exists()
 
-    json_dict = jf.create_requirements_json(example_model)
-    assert "requirements.json" in json_dict
-    expected = [
-        {"step": "install pandas", "command": f"pip install pandas=={pd.__version__}"},
-        {"step": "install numpy", "command": f"pip install numpy=={np.__version__}"},
-        {
-            "step": "install sklearn",
-            "command": f"pip install sklearn=={sk.__version__}",
-        },
-    ]
-    unittest.TestCase.maxDiff = None
-    unittest.TestCase().assertCountEqual(
-        json.loads(json_dict["requirements.json"]), expected
-    )
+        json_dict = jf.create_requirements_json(tmp_dir)
+        assert "requirements.json" in json_dict
+        expected = [
+            {
+                "step": "install numpy",
+                "command": f"pip install numpy=={np.__version__}",
+            },
+            {
+                "step": "install sklearn",
+                "command": f"pip install sklearn=={sk.__version__}",
+            },
+        ]
+        unittest.TestCase.maxDiff = None
+        unittest.TestCase().assertCountEqual(
+            json.loads(json_dict["requirements.json"]), expected
+        )
 
 
 class TestAssessBiasHelpers(unittest.TestCase):
