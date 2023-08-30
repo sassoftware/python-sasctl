@@ -646,27 +646,32 @@ def test_create_requirements_json(change_dir):
         json.loads(json_dict["requirements.json"]), expected
     )
 
+
 class TestAssessBiasHelpers(unittest.TestCase):
     md_1 = pd.DataFrame({"Value": [0], "Base": ["A"], "Compare": ["C"]})
     md_2 = pd.DataFrame({"Value": [1], "Base": ["B"], "Compare": ["C"]})
-    gm_1 = pd.DataFrame({
-        "Group": ['A'],
-        "N": [0],
-        "MISCEVENT": ["E"],
-        "MISCEVENTKS": ["F"],
-        "cutoffKS": [.5],
-        "PREDICTED": [1],
-        "maxKS": [100]
-    })
-    gm_2 = pd.DataFrame({
-        "Group": ['B'],
-        "N": [1],
-        "MISCEVENT": ["G"],
-        "MISCEVENTKS": ["H"],
-        "cutoffKS": [.2],
-        "PREDICTED": [0],
-        "maxKS": [500]
-    })
+    gm_1 = pd.DataFrame(
+        {
+            "Group": ["A"],
+            "N": [0],
+            "MISCEVENT": ["E"],
+            "MISCEVENTKS": ["F"],
+            "cutoffKS": [0.5],
+            "PREDICTED": [1],
+            "maxKS": [100],
+        }
+    )
+    gm_2 = pd.DataFrame(
+        {
+            "Group": ["B"],
+            "N": [1],
+            "MISCEVENT": ["G"],
+            "MISCEVENTKS": ["H"],
+            "cutoffKS": [0.2],
+            "PREDICTED": [0],
+            "maxKS": [500],
+        }
+    )
 
     def test_max_differences(self):
         md_2_copy = self.md_2.copy()
@@ -676,57 +681,63 @@ class TestAssessBiasHelpers(unittest.TestCase):
         return_table = jf.format_max_differences(dfs, datarole)
         pd.testing.assert_frame_equal(
             return_table,
-            pd.DataFrame({
-                "BASE": ["A", "B"],
-                "COMPARE": ["C", "C"],
-                "VLABEL": ["", ""],
-                "_DATAROLE_": ["role", "role"],
-                "maxdiff": [0, 1]
-            })
+            pd.DataFrame(
+                {
+                    "BASE": ["A", "B"],
+                    "COMPARE": ["C", "C"],
+                    "VLABEL": ["", ""],
+                    "_DATAROLE_": ["role", "role"],
+                    "maxdiff": [0, 1],
+                }
+            ),
         )
 
         return_table = jf.format_max_differences(dfs)
         pd.testing.assert_frame_equal(
             return_table,
-            pd.DataFrame({
-                "BASE": ["A", "B"],
-                "COMPARE": ["C", "C"],
-                "VLABEL": ["", ""],
-                "_DATAROLE_": ["TEST", "TEST"],
-                "maxdiff": [0, 1]
-            })
+            pd.DataFrame(
+                {
+                    "BASE": ["A", "B"],
+                    "COMPARE": ["C", "C"],
+                    "VLABEL": ["", ""],
+                    "_DATAROLE_": ["TEST", "TEST"],
+                    "maxdiff": [0, 1],
+                }
+            ),
         )
 
     def test_group_metrics(self):
         gm_2_copy = self.gm_2.copy()
         gm_2_copy = gm_2_copy.set_index(pd.Index([1]))
         dfs = [self.gm_1.copy(), gm_2_copy.copy()]
-        prob_values = ['VarA', 'VarB']
+        prob_values = ["VarA", "VarB"]
         for i in range(len(dfs)):
             dfs[i][prob_values[0]] = [i]
-            dfs[i][prob_values[1]] = [i+2]
+            dfs[i][prob_values[1]] = [i + 2]
 
         gm = jf.format_group_metrics(dfs, prob_values)
 
         pd.testing.assert_frame_equal(
             gm,
-            pd.DataFrame({
-                "LEVEL": ['A', 'B'],
-                "VLABEL": ["", ""],
-                "VarA": [0, 1],
-                "VarB": [2, 3],
-                "_DATAROLE_": ["TEST", "TEST"],
-                "_avgyhat_": [1, 0],
-                "_ks_": [100, 500],
-                "_kscut_": [.5, .2],
-                "_misccutoff_": ["E", "G"],
-                "_miscks_": ["F", "H"],
-                "_nobs_": [0, 1]
-            })
+            pd.DataFrame(
+                {
+                    "LEVEL": ["A", "B"],
+                    "VLABEL": ["", ""],
+                    "VarA": [0, 1],
+                    "VarB": [2, 3],
+                    "_DATAROLE_": ["TEST", "TEST"],
+                    "_avgyhat_": [1, 0],
+                    "_ks_": [100, 500],
+                    "_kscut_": [0.5, 0.2],
+                    "_misccutoff_": ["E", "G"],
+                    "_miscks_": ["F", "H"],
+                    "_nobs_": [0, 1],
+                }
+            ),
         )
 
         dfs_1 = [self.gm_1.copy(), gm_2_copy.copy()]
-        prob_values = ['VarA', 'VarB']
+        prob_values = ["VarA", "VarB"]
         for i in range(len(dfs)):
             dfs_1[i][prob_values[0]] = [i]
             dfs_1[i][prob_values[1]] = [i + 2]
@@ -735,19 +746,21 @@ class TestAssessBiasHelpers(unittest.TestCase):
 
         pd.testing.assert_frame_equal(
             gm_1,
-            pd.DataFrame({
-                "LEVEL": ['A', 'B'],
-                "VLABEL": ["", ""],
-                "VarA": [0, 1],
-                "VarB": [2, 3],
-                "_DATAROLE_": ["NEW", "NEW"],
-                "_avgyhat_": [1, 0],
-                "_ks_": [100, 500],
-                "_kscut_": [.5, .2],
-                "_misccutoff_": ["E", "G"],
-                "_miscks_": ["F", "H"],
-                "_nobs_": [0, 1]
-            })
+            pd.DataFrame(
+                {
+                    "LEVEL": ["A", "B"],
+                    "VLABEL": ["", ""],
+                    "VarA": [0, 1],
+                    "VarB": [2, 3],
+                    "_DATAROLE_": ["NEW", "NEW"],
+                    "_avgyhat_": [1, 0],
+                    "_ks_": [100, 500],
+                    "_kscut_": [0.5, 0.2],
+                    "_misccutoff_": ["E", "G"],
+                    "_miscks_": ["F", "H"],
+                    "_nobs_": [0, 1],
+                }
+            ),
         )
 
         dfs_2 = [self.gm_1.copy(), gm_2_copy.copy()]
@@ -759,22 +772,24 @@ class TestAssessBiasHelpers(unittest.TestCase):
 
         pd.testing.assert_frame_equal(
             gm_2,
-            pd.DataFrame({
-                "LEVEL": ['A', 'B'],
-                "Pred": [0,1],
-                "VLABEL": ["", ""],
-                "_DATAROLE_": ["NEW", "NEW"],
-                "_avgyhat_": [1, 0],
-                "_ks_": [100, 500],
-                "_kscut_": [.5, .2],
-                "_misccutoff_": ["E", "G"],
-                "_miscks_": ["F", "H"],
-                "_nobs_": [0, 1]
-            })
+            pd.DataFrame(
+                {
+                    "LEVEL": ["A", "B"],
+                    "Pred": [0, 1],
+                    "VLABEL": ["", ""],
+                    "_DATAROLE_": ["NEW", "NEW"],
+                    "_avgyhat_": [1, 0],
+                    "_ks_": [100, 500],
+                    "_kscut_": [0.5, 0.2],
+                    "_misccutoff_": ["E", "G"],
+                    "_miscks_": ["F", "H"],
+                    "_nobs_": [0, 1],
+                }
+            ),
         )
 
-class TestAssessBias(unittest.TestCase):
 
+class TestAssessBias(unittest.TestCase):
     def test_errors(self):
         with unittest.mock.patch("sasctl.core.Session._get_authorization_token"):
             with unittest.mock.patch("sasctl.core.Session.as_swat") as swat:
@@ -783,12 +798,18 @@ class TestAssessBias(unittest.TestCase):
                     sensitive_values = "s"
                     actual_values = "a"
                     with pytest.raises(SyntaxError):
-                        jf.assess_model_bias(score_table, sensitive_values, actual_values)
+                        jf.assess_model_bias(
+                            score_table, sensitive_values, actual_values
+                        )
 
                     score_table = pd.DataFrame({"valid": ["yes"]})
                     with pytest.raises(ValueError):
-                        jf.assess_model_bias(score_table, sensitive_values, actual_values)
+                        jf.assess_model_bias(
+                            score_table, sensitive_values, actual_values
+                        )
 
-                    swat.side_effect = ImportError('oops')
+                    swat.side_effect = ImportError("oops")
                     with pytest.raises(RuntimeError):
-                        jf.assess_model_bias(score_table, sensitive_values, actual_values)
+                        jf.assess_model_bias(
+                            score_table, sensitive_values, actual_values
+                        )

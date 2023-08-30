@@ -1146,7 +1146,9 @@ class JSONFiles:
             json_dict[1]["parameterMap"]["predict"]["label"] = pred_values
             json_dict[1]["parameterMap"]["predict"]["parameter"] = pred_values
             json_dict[1]["parameterMap"]["predict"]["values"] = [pred_values]
-            json_dict[1]["parameterMap"][pred_values] = json_dict[1]["parameterMap"]["predict"]
+            json_dict[1]["parameterMap"][pred_values] = json_dict[1]["parameterMap"][
+                "predict"
+            ]
             del json_dict[1]["parameterMap"]["predict"]
 
         if json_path:
@@ -1163,8 +1165,6 @@ class JSONFiles:
                 MAXDIFFERENCES: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
                 GROUPMETRICS: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
             }
-
-
 
     @classmethod
     def calculate_model_statistics(

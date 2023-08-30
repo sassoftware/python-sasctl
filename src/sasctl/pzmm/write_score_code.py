@@ -469,9 +469,9 @@ import tensorflow as tf
             """
         elif binary_string:
             cls.score_code += (
-                f"import codecs\n\nbinary_string = \"{binary_string}\""
+                f'import codecs\n\nbinary_string = "{binary_string}"'
                 f"\nmodel = {pickle_type}.loads(codecs.decode(binary_string"
-                ".encode(), \"base64\"))\n\n"
+                '.encode(), "base64"))\n\n'
             )
             """
 import codecs
@@ -532,8 +532,8 @@ model = h2o.import_mojo(str(Path("/models/resources/viya/<UUID>/model.mojo")))
             )
         elif binary_h2o_model:
             cls.score_code += (
-                f"model = h2o.load(str(Path(\"/models/resources/viya/"
-                f"{model_id}/{model_file_name}\")))\n\n"
+                f'model = h2o.load(str(Path("/models/resources/viya/'
+                f'{model_id}/{model_file_name}")))\n\n'
             )
             """
 model = h2o.load(str(Path("/models/resources/viya/<UUID>/model.h2o")))
@@ -545,8 +545,8 @@ model = h2o.load(str(Path("/models/resources/viya/<UUID>/model.h2o")))
             )
         else:
             cls.score_code += (
-                f"model_path = Path(\"/models/resources/viya/{model_id}"
-                f"\")\nwith open(model_path / \"{model_file_name}\", "
+                f'model_path = Path("/models/resources/viya/{model_id}'
+                f'")\nwith open(model_path / "{model_file_name}", '
                 f"\"rb\") as pickle_model:\n{'':4}model = {pickle_type}"
                 ".load(pickle_model)\n\n"
             )
@@ -602,7 +602,7 @@ with open(model_path / "model.pickle", "rb") as pickle_model:
         if mojo_model:
             cls.score_code += (
                 f"model = h2o.import_mojo(str(Path(settings.pickle_path"
-                f") / \"{model_file_name}\"))\n\n"
+                f') / "{model_file_name}"))\n\n'
             )
             """
 model = h2o.import_mojo(str(Path(settings.pickle_path) / "model.mojo"))
@@ -1201,7 +1201,8 @@ if not isinstance(var1, pd.Series):
             if h2o_model:
                 cls.score_code += (
                     f"{'':4}if input_array.shape[0] == 1:\n"
-                    f"{'':8}{metrics[0]} = prediction[1][0]\n")
+                    f"{'':8}{metrics[0]} = prediction[1][0]\n"
+                )
                 for i in range(len(metrics) - 1):
                     cls.score_code += (
                         f"{'':8}{metrics[i + 1]} = float(prediction[1][{i + 1}])\n"
@@ -1326,7 +1327,8 @@ if not isinstance(var1, pd.Series):
                     f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}return prediction\n"
                     f"{'':4}else:\n"
-                    f"{'':8}return pd.DataFrame({{'{metrics}': prediction}})")
+                    f"{'':8}return pd.DataFrame({{'{metrics}': prediction}})"
+                )
                 """
     if input_array.shape[0] == 1:
         return prediction
@@ -1498,7 +1500,8 @@ if not isinstance(var1, pd.Series):
                     f"{'':4}if input_array.shape[0] == 1:\n"
                     f"{'':8}return prediction[0], prediction[1]\n"
                     f"{'':4}else:\n"
-                    f"{'':8}return pd.DataFrame(prediction, columns={metrics})")
+                    f"{'':8}return pd.DataFrame(prediction, columns={metrics})"
+                )
                 """
     if input_array.shape[0] == 1:
         return prediction[0], prediction[1]
@@ -1520,7 +1523,8 @@ if not isinstance(var1, pd.Series):
                         f"{'':8}return prediction[0], prediction[1]\n"
                         f"{'':4}else:\n"
                         f"{'':8}output_table = pd.DataFrame(prediction, columns=[{metric_list}])\n"
-                        f"{'':8}return output_table.drop('drop', axis=1)")
+                        f"{'':8}return output_table.drop('drop', axis=1)"
+                    )
 
                     """
     if input_array.shape[0] == 1:
@@ -1537,7 +1541,8 @@ if not isinstance(var1, pd.Series):
                         f"{'':4}else:\n"
                         f"{'':8}output_table = pd.DataFrame(prediction, columns=[{metric_list}])\n"
                         f"{'':8}output_table = output_table[output_table.columns[::-1]]\n"
-                        f"{'':8}return output_table.drop('drop', axis=1)")
+                        f"{'':8}return output_table.drop('drop', axis=1)"
+                    )
                     """
     if input_array.shape[0] == 1:
         return prediction[2], prediction[0]
@@ -1782,7 +1787,7 @@ if not isinstance(var1, pd.Series):
                     f"{'':8}return prediction[{class_index}]\n"
                     f"{'':4}else:\n"
                     f"{'':8}return pd.DataFrame({{'{metrics}': [p[{class_index}] for p in prediction]}})"
-                    )
+                )
                 """
     if input_array.shape[0] == 1:
         return prediction[0]
