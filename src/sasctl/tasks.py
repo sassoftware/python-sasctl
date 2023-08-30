@@ -217,7 +217,7 @@ def _format_properties(model, input_vars=None, output_vars=None):
         elif function == "prediction" and "regression" in algorithm:
             properties["targetLevel"] = "Interval"
         else:
-            properties["targetLevel"] = None
+            properties["targetLevel"] = ""
 
     if properties.get("targetEvent") is not None:
         properties["targetEventValue"] = properties["targetEvent"]

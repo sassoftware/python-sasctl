@@ -15,7 +15,7 @@ X = df.drop('Species', axis=1)
 y = df.Species.astype('category')
 
 # Fit a sci-kit learn model
-model = LogisticRegression()
+model = LogisticRegression(max_iter=10000)
 model.fit(X, y)
 
 # Establish a session with Viya

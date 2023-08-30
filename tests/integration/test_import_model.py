@@ -108,6 +108,7 @@ def test_import_model(hmeq_dataset):
         assert file.name in [
             "Test.json",
             "Other_Test.json",
+            "ModelProperties.json",
             "inputVar.json",
             "outputVar.json",
         ]
@@ -131,6 +132,7 @@ def test_import_model(hmeq_dataset):
                 "Test.json",
                 "Other_Test.json",
                 "inputVar.json",
+                "ModelProperties.json",
                 "outputVar.json",
                 "score_Test_Model.py",
             ]
@@ -151,6 +153,7 @@ def test_import_model(hmeq_dataset):
                 "Test.json",
                 "Other_Test.json",
                 "score_Test_Model.py",
+                "ModelProperties.json",
                 "inputVar.json",
                 "outputVar.json",
                 "score.sas",
