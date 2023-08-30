@@ -40,9 +40,7 @@ def sklearn_logistic_model():
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         model = LogisticRegression(
-            multi_class="multinomial",
-            solver="lbfgs",
-            max_iter=10000
+            multi_class="multinomial", solver="lbfgs", max_iter=10000
         )
         model.fit(iris.iloc[:, 0:4], iris["Species"])
 
