@@ -75,7 +75,7 @@ class ZipModel:
                 zip_buffer, "a", zipfile.ZIP_DEFLATED, False
             ) as zip_file:
                 for file_name, data in model_files.items():
-                    zip_file.writestr(file_name, data)
+                    zip_file.writestr(file_name, str(data))
                 return io.BytesIO(zip_buffer.getvalue())
         else:
             file_names = _filter_files(model_files, is_viya4)
