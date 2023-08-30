@@ -805,7 +805,7 @@ if not isinstance(var1, pd.Series):
             cls.score_code += f"\n{'':4})\n"
             if missing_values:
                 cls.score_code += (
-                    f"{'':4}input_array = impute_missing_values(input_array)"
+                    f"{'':4}input_array = impute_missing_values(input_array)\n"
                 )
             cls.score_code += (
                 f"{'':4}column_types = {column_types}\n"
@@ -847,7 +847,7 @@ if not isinstance(var1, pd.Series):
             cls.score_code += f"\n{'':4})\n"
             if missing_values:
                 cls.score_code += (
-                    f"{'':4}input_array = impute_missing_values(input_array)"
+                    f"{'':4}input_array = impute_missing_values(input_array)\n"
                 )
             cls.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array)\n"
@@ -868,7 +868,7 @@ if not isinstance(var1, pd.Series):
             cls.score_code += f"\n{'':4})\n"
             if missing_values:
                 cls.score_code += (
-                    f"{'':4}input_array = impute_missing_values(input_array)"
+                    f"{'':4}input_array = impute_missing_values(input_array)\n"
                 )
             cls.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array)\n\n"
@@ -900,7 +900,7 @@ if not isinstance(var1, pd.Series):
             cls.score_code += f"\n{'':4})\n"
             if missing_values:
                 cls.score_code += (
-                    f"{'':4}input_array = impute_missing_values(input_array)"
+                    f"{'':4}input_array = impute_missing_values(input_array)\n"
                 )
             cls.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array).tolist()\n"
