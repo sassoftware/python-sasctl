@@ -224,7 +224,7 @@ class TestFormatProperties(TestCase):
 
         self.model["function"] = "something_else"
         properties, _ = _format_properties(self.model)
-        self.assertEqual(properties["targetLevel"], '')
+        self.assertEqual(properties["targetLevel"], "")
 
     def test_format_properties_input_variables(self):
         _, variables = _format_properties(self.model, self.input_var)
