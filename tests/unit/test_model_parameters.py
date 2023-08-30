@@ -16,10 +16,6 @@ from sasctl import RestObj, current_session
 from sasctl.pzmm import ModelParameters as mp
 import unittest
 import uuid
-import xgboost
-import h2o
-import tensorflow as tf
-import statsmodels.formula.api as smf
 import numpy as np
 
 
@@ -297,6 +293,7 @@ class TestSyncModelProperties(unittest.TestCase):
 
 class TestGenerateHyperparameters(unittest.TestCase):
     def test_xgboost(self):
+        xgboost = pytest.importorskip("xgboost")
         model = unittest.mock.Mock()
         model.__class__ = xgboost.Booster
         attrs = {"save_config.return_value": json.dumps({"test": "passed"})}
@@ -306,6 +303,7 @@ class TestGenerateHyperparameters(unittest.TestCase):
         assert Path(Path(tmp_dir.name) / f"./prefixHyperparameters.json").exists()
 
     def test_xgboost_sklearn(self):
+        xgboost = pytest.importorskip("xgboost")
         model = unittest.mock.Mock()
         model.__class__ = xgboost.XGBModel
         attrs = {"get_params.return_value": json.dumps({"test": "passed"})}
@@ -315,6 +313,7 @@ class TestGenerateHyperparameters(unittest.TestCase):
         assert Path(Path(tmp_dir.name) / f"./prefixHyperparameters.json").exists()
 
     def test_h2o(self):
+        h2o = pytest.importorskip("h2o")
         model = unittest.mock.Mock()
         model.__class__ = h2o.H2OFrame
         attrs = {"get_params.return_value": json.dumps({"test": "passed"})}
@@ -324,6 +323,7 @@ class TestGenerateHyperparameters(unittest.TestCase):
         assert Path(Path(tmp_dir.name) / f"./prefixHyperparameters.json").exists()
 
     def test_tensorflow(self):
+        tf = pytest.importorskip("tensorflow")
         model = unittest.mock.Mock()
         model.__class__ = tf.keras.Sequential
         attrs = {"get_config.return_value": json.dumps({"test": "passed"})}
@@ -333,6 +333,7 @@ class TestGenerateHyperparameters(unittest.TestCase):
         assert Path(Path(tmp_dir.name) / f"./prefixHyperparameters.json").exists()
 
     def test_statsmodels(self):
+        smf = pytest.importorskip("statsmodels.formula.api")
         model = unittest.mock.Mock(
             exog_names=["test", "exog"], weights=np.array([0, 1])
         )
