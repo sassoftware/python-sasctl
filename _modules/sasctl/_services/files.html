@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.files &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl._services.files &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -27,16 +27,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/files';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -327,7 +327,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
 
 
-<div class="viewcode-block" id="Files"><a class="viewcode-back" href="../../../api/services/files.html#sasctl._services.files.Files">[docs]</a><span class="k">class</span> <span class="nc">Files</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
+<div class="viewcode-block" id="Files">
+<a class="viewcode-back" href="../../../api/services/files.html#sasctl._services.files.Files">[docs]</a>
+<span class="k">class</span> <span class="nc">Files</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The Files API provides persistence and retrieval of files, such as</span>
 <span class="sd">    documents, attachments, and reports.</span>
 
@@ -348,7 +350,9 @@ document.write(`
         <span class="s2">&quot;/files&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="Files.create_file"><a class="viewcode-back" href="../../../api/services/files.html#sasctl._services.files.Files.create_file">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Files.create_file">
+<a class="viewcode-back" href="../../../api/services/files.html#sasctl._services.files.Files.create_file">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;files&quot;</span><span class="p">,</span> <span class="s2">&quot;create&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">create_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">expiration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new file on the server by uploading a local file.</span>
@@ -399,7 +403,10 @@ document.write(`
 
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/files#multipartUpload&quot;</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="p">{</span><span class="n">filename</span><span class="p">:</span> <span class="n">file</span><span class="p">},</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Files.get_file_content"><a class="viewcode-back" href="../../../api/services/files.html#sasctl._services.files.Files.get_file_content">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Files.get_file_content">
+<a class="viewcode-back" href="../../../api/services/files.html#sasctl._services.files.Files.get_file_content">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;files&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">get_file_content</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Download the contents of a file.</span>
@@ -427,7 +434,9 @@ document.write(`
         <span class="k">if</span> <span class="s2">&quot;application/octet-stream&quot;</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span>
 
-        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span></div></div>
+        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span></div>
+</div>
+
 </pre></div>
 
                 </article>
@@ -480,7 +489,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

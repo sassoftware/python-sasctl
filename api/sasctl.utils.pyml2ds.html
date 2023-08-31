@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.utils.pyml2ds package &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl.utils.pyml2ds package &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -28,16 +28,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/sasctl.utils.pyml2ds';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -103,7 +103,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -347,16 +347,16 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="sasctl-utils-pyml2ds-package">
-<h1>sasctl.utils.pyml2ds package<a class="headerlink" href="#sasctl-utils-pyml2ds-package" title="Permalink to this heading">#</a></h1>
+<h1>sasctl.utils.pyml2ds package<a class="headerlink" href="#sasctl-utils-pyml2ds-package" title="Link to this heading">#</a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
 </section>
 <section id="module-sasctl.utils.pyml2ds.pyml2ds">
-<span id="sasctl-utils-pyml2ds-pyml2ds-module"></span><h2>sasctl.utils.pyml2ds.pyml2ds module<a class="headerlink" href="#module-sasctl.utils.pyml2ds.pyml2ds" title="Permalink to this heading">#</a></h2>
+<span id="sasctl-utils-pyml2ds-pyml2ds-module"></span><h2>sasctl.utils.pyml2ds.pyml2ds module<a class="headerlink" href="#module-sasctl.utils.pyml2ds.pyml2ds" title="Link to this heading">#</a></h2>
 <p>Translate a gradient boosting model and write SAS scoring code to file.</p>
 <p>Supported models are: xgboost, lightgbm and pmml gradient boosting.</p>
 <section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">#</a></h3>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>in_file<span class="classifier">str or bytes or file-like</span></dt><dd><p>Pickled object to translate.  String is assumed to be a path to a picked
 file, file-like is assumed to be an open file handle to a pickle
@@ -367,14 +367,14 @@ object, and bytes is assumed to be the raw pickled bytes.</p>
 </dl>
 </section>
 <section id="returns">
-<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this heading">#</a></h3>
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
 <dl class="simple">
 <dt>str</dt><dd><p>A SAS Data Step program implementing the model.</p>
 </dd>
 </dl>
 </section>
 <section id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h3>
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
 <p>Generate SAS code from an XGBoost model.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">xgboost.sklearn</span> <span class="kn">import</span> <span class="n">XGBRegressor</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xgb</span> <span class="o">=</span> <span class="n">XGBRegressor</span><span class="p">()</span>
@@ -471,7 +471,7 @@ object, and bytes is assumed to be the raw pickled bytes.</p>
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.core &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl.core &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -28,16 +28,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/sasctl.core';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -104,7 +104,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -341,10 +341,10 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="module-sasctl.core">
-<span id="sasctl-core"></span><h1>sasctl.core<a class="headerlink" href="#module-sasctl.core" title="Permalink to this heading">#</a></h1>
+<span id="sasctl-core"></span><h1>sasctl.core<a class="headerlink" href="#module-sasctl.core" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.OAuth2Token">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">OAuth2Token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expires_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#OAuth2Token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.OAuth2Token" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">OAuth2Token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expires_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#OAuth2Token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.OAuth2Token" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AuthBase</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes<span class="colon">:</span></dt>
@@ -363,14 +363,14 @@ document.write(`
 </table>
 <dl class="py property">
 <dt class="sig sig-object py" id="sasctl.core.OAuth2Token.is_expired">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_expired</span></span><a class="headerlink" href="#sasctl.core.OAuth2Token.is_expired" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_expired</span></span><a class="headerlink" href="#sasctl.core.OAuth2Token.is_expired" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.PageIterator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">PageIterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#PageIterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.PageIterator" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">PageIterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#PageIterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.PageIterator" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Iterates through a collection that must be “paged” from the server.</p>
 <p>Pages contain a batch of items from the overall collection.  Iterates the
@@ -400,7 +400,7 @@ to current_session()</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.PagedItemIterator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">PagedItemIterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#PagedItemIterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.PagedItemIterator" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">PagedItemIterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#PagedItemIterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.PagedItemIterator" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Iterates through a collection that must be “paged” from the server.</p>
 <p>Uses <cite>PageIterator</cite> to transparently download pages of items from the server
@@ -437,7 +437,7 @@ number of items returned may be greater than or less than this number.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.PagedList">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">PagedList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#PagedList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.PagedList" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">PagedList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#PagedList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.PagedList" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
 <p>List that dynamically loads items from the server.</p>
 <dl class="field-list simple">
@@ -505,7 +505,7 @@ length is not known until all items have been pulled from the server.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.PagedListIterator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">PagedListIterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#PagedListIterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.PagedListIterator" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">PagedListIterator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#PagedListIterator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.PagedListIterator" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Iterates over an instance of PagedList</p>
 <dl class="field-list simple">
@@ -519,7 +519,7 @@ length is not known until all items have been pulled from the server.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.RestObj">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">RestObj</span></span><a class="reference internal" href="../_modules/sasctl/core.html#RestObj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.RestObj" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">RestObj</span></span><a class="reference internal" href="../_modules/sasctl/core.html#RestObj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.RestObj" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable table autosummary">
@@ -563,7 +563,7 @@ length is not known until all items have been pulled from the server.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.SSLContextAdapter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">SSLContextAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#SSLContextAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.SSLContextAdapter" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">SSLContextAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#SSLContextAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.SSLContextAdapter" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPAdapter</span></code></p>
 <p>HTTPAdapter that uses the default SSL context on the machine.</p>
 <p class="rubric">Methods</p>
@@ -603,7 +603,7 @@ length is not known until all items have been pulled from the server.</p>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.SSLContextAdapter.init_poolmanager">
-<span class="sig-name descname"><span class="pre">init_poolmanager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#SSLContextAdapter.init_poolmanager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.SSLContextAdapter.init_poolmanager" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">init_poolmanager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#SSLContextAdapter.init_poolmanager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.SSLContextAdapter.init_poolmanager" title="Link to this definition">#</a></dt>
 <dd><p>Initializes a urllib3 PoolManager.</p>
 <p>This method should not be called from user code, and is only
 exposed for use when subclassing the
@@ -624,7 +624,7 @@ exposed for use when subclassing the
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.Session">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hostname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authinfo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify_ssl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_secret</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consul_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hostname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authinfo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protocol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify_ssl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_secret</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consul_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></p>
 <p>Establish a connection to a SAS Viya server.</p>
 <dl class="field-list simple">
@@ -756,12 +756,12 @@ messages, allowing any sensitive information to be removed first.</p>
 </table>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sasctl.core.Session.PROFILE_PATH">
-<span class="sig-name descname"><span class="pre">PROFILE_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'~/.sas/viya-api-profiles.yaml'</span></em><a class="headerlink" href="#sasctl.core.Session.PROFILE_PATH" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">PROFILE_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'~/.sas/viya-api-profiles.yaml'</span></em><a class="headerlink" href="#sasctl.core.Session.PROFILE_PATH" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.add_logger">
-<span class="sig-name descname"><span class="pre">add_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.add_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.add_logger" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">add_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.add_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.add_logger" title="Link to this definition">#</a></dt>
 <dd><p>Log session requests and responses.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -786,7 +786,7 @@ logging level is already set.  Defaults to DEBUG.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.add_stderr_logger">
-<span class="sig-name descname"><span class="pre">add_stderr_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.add_stderr_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.add_stderr_logger" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">add_stderr_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.add_stderr_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.add_stderr_logger" title="Link to this definition">#</a></dt>
 <dd><p>Log session requests and responses to stderr.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -805,7 +805,7 @@ logging level is already set.  Defaults to DEBUG.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.as_swat">
-<span class="sig-name descname"><span class="pre">as_swat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.as_swat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.as_swat" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">as_swat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.as_swat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.as_swat" title="Link to this definition">#</a></dt>
 <dd><p>Create a SWAT connection to a CAS server.</p>
 <p>Uses the authentication information from the session to establish a CAS connection using SWAT.</p>
 <dl class="field-list simple">
@@ -847,7 +847,7 @@ default behavior or customize the CAS session.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.cache_token">
-<span class="sig-name descname"><span class="pre">cache_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.cache_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.cache_token" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">cache_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.cache_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.cache_token" title="Link to this definition">#</a></dt>
 <dd><p>Write an OAuth2 token to the cache.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -868,7 +868,7 @@ default behavior or customize the CAS session.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.delete">
-<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.delete" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.delete" title="Link to this definition">#</a></dt>
 <dd><p>Sends a DELETE request. Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -885,7 +885,7 @@ default behavior or customize the CAS session.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.get" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.get" title="Link to this definition">#</a></dt>
 <dd><p>Sends a GET request. Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -902,7 +902,7 @@ default behavior or customize the CAS session.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.head">
-<span class="sig-name descname"><span class="pre">head</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.head"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.head" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">head</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.head"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.head" title="Link to this definition">#</a></dt>
 <dd><p>Sends a HEAD request. Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -919,12 +919,12 @@ default behavior or customize the CAS session.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sasctl.core.Session.hostname">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hostname</span></span><a class="headerlink" href="#sasctl.core.Session.hostname" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hostname</span></span><a class="headerlink" href="#sasctl.core.Session.hostname" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.post">
-<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.post" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.post" title="Link to this definition">#</a></dt>
 <dd><p>Sends a POST request. Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -944,7 +944,7 @@ object to send in the body of the <code class="xref py py-class docutils literal
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.put">
-<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.put"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.put" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.put"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.put" title="Link to this definition">#</a></dt>
 <dd><p>Sends a PUT request. Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -963,7 +963,7 @@ object to send in the body of the <code class="xref py py-class docutils literal
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.read_cached_token">
-<span class="sig-name descname"><span class="pre">read_cached_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.read_cached_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.read_cached_token" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">read_cached_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.read_cached_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.read_cached_token" title="Link to this definition">#</a></dt>
 <dd><p>Read any cached access tokens from disk</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -982,7 +982,7 @@ object to send in the body of the <code class="xref py py-class docutils literal
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.request">
-<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cookies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_redirects</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hooks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cert</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.request" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cookies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_redirects</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hooks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cert</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.request" title="Link to this definition">#</a></dt>
 <dd><p>Constructs a <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code>, prepares it and sends it.
 Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
 <dl class="field-list simple">
@@ -1032,7 +1032,7 @@ If Tuple, (‘cert’, ‘key’) pair.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.send">
-<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.send"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.send" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.send"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.send" title="Link to this definition">#</a></dt>
 <dd><p>Send a given PreparedRequest.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -1043,12 +1043,12 @@ If Tuple, (‘cert’, ‘key’) pair.</p></li>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sasctl.core.Session.username">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#sasctl.core.Session.username" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#sasctl.core.Session.username" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.version_info">
-<span class="sig-name descname"><span class="pre">version_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.version_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.version_info" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">version_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.version_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.version_info" title="Link to this definition">#</a></dt>
 <dd><p>Get version information from the connected SAS Viya environment</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1067,7 +1067,7 @@ SAS Viya server.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl.core.VersionInfo">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">VersionInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">major</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cadence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#VersionInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.VersionInfo" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">VersionInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">major</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cadence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#VersionInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.VersionInfo" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Stores the version information for a SAS Viya environment.</p>
 <dl class="field-list simple">
@@ -1100,29 +1100,29 @@ SAS Viya server.</p>
 </dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="sasctl.core.VersionInfo.cadence">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cadence</span></span><a class="headerlink" href="#sasctl.core.VersionInfo.cadence" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cadence</span></span><a class="headerlink" href="#sasctl.core.VersionInfo.cadence" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sasctl.core.VersionInfo.major">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">major</span></span><a class="headerlink" href="#sasctl.core.VersionInfo.major" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">major</span></span><a class="headerlink" href="#sasctl.core.VersionInfo.major" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sasctl.core.VersionInfo.minor">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minor</span></span><a class="headerlink" href="#sasctl.core.VersionInfo.minor" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minor</span></span><a class="headerlink" href="#sasctl.core.VersionInfo.minor" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="sasctl.core.VersionInfo.release">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">release</span></span><a class="headerlink" href="#sasctl.core.VersionInfo.release" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">release</span></span><a class="headerlink" href="#sasctl.core.VersionInfo.release" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.core.current_session">
-<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">current_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#current_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.current_session" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">current_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#current_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.current_session" title="Link to this definition">#</a></dt>
 <dd><p>Gets and sets the current session.</p>
 <p>If call with no arguments, the current session instance is returned, or
 None if no session has been created yet.  If called with an existing session
@@ -1161,7 +1161,7 @@ default.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.core.delete">
-<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.delete" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.delete" title="Link to this definition">#</a></dt>
 <dd><p>Send a DELETE request.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1182,7 +1182,7 @@ default.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.core.get">
-<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.get" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.get" title="Link to this definition">#</a></dt>
 <dd><p>Send a GET request.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1204,7 +1204,7 @@ default.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.core.get_link">
-<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">get_link</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#get_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.get_link" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">get_link</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#get_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.get_link" title="Link to this definition">#</a></dt>
 <dd><p>Get link information from a resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1223,7 +1223,7 @@ default.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.core.head">
-<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">head</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#head"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.head" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">head</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#head"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.head" title="Link to this definition">#</a></dt>
 <dd><p>Send a HEAD request.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1244,12 +1244,12 @@ default.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.core.is_uuid">
-<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">is_uuid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#is_uuid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.is_uuid" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">is_uuid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#is_uuid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.is_uuid" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.core.platform_version">
-<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">platform_version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#platform_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.platform_version" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">platform_version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#platform_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.platform_version" title="Link to this definition">#</a></dt>
 <dd><p>Get the version of the SAS Viya platform to which sasctl is connected.</p>
 <dl class="field-list">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1266,7 +1266,7 @@ default.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.core.post">
-<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.post" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#post"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.post" title="Link to this definition">#</a></dt>
 <dd><p>Send a POST request.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1287,7 +1287,7 @@ default.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.core.put">
-<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#put"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.put" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#put"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.put" title="Link to this definition">#</a></dt>
 <dd><p>Send a PUT request.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1311,7 +1311,7 @@ will automatically be specified.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.core.request">
-<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.request" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.request" title="Link to this definition">#</a></dt>
 <dd><p>Send an HTTP request with a session.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1344,7 +1344,7 @@ auto: <cite>RestObj</cite> constructed from JSON if possible, otherwise same as<
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.core.request_link">
-<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">request_link</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#request_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.request_link" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">request_link</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#request_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.request_link" title="Link to this definition">#</a></dt>
 <dd><p>Request a link from a resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1362,7 +1362,7 @@ auto: <cite>RestObj</cite> constructed from JSON if possible, otherwise same as<
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.core.uri_as_str">
-<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">uri_as_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#uri_as_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.uri_as_str" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.core.</span></span><span class="sig-name descname"><span class="pre">uri_as_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#uri_as_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.uri_as_str" title="Link to this definition">#</a></dt>
 <dd><p>Get the URI of a resource in string format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1516,7 +1516,7 @@ objects will be checked for a <cite>self</cite> URI and returned if found.</p>
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

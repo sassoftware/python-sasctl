@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -27,16 +27,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/write_json_files';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -334,8 +334,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">Series</span>
 
 <span class="c1"># Package Imports</span>
+<span class="kn">from</span> <span class="nn">sasctl.pzmm.write_score_code</span> <span class="kn">import</span> <span class="n">ScoreCode</span> <span class="k">as</span> <span class="n">sc</span>
 <span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">current_session</span>
-<span class="kn">from</span> <span class="nn">..utils.decorators</span> <span class="kn">import</span> <span class="n">deprecated</span>
+<span class="kn">from</span> <span class="nn">..utils.decorators</span> <span class="kn">import</span> <span class="n">deprecated</span><span class="p">,</span> <span class="n">experimental</span>
 <span class="kn">from</span> <span class="nn">..utils.misc</span> <span class="kn">import</span> <span class="n">check_if_jupyter</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -343,7 +344,9 @@ document.write(`
     <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
     <span class="k">class</span> <span class="nc">NpEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
-<div class="viewcode-block" id="NpEncoder.default"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.NpEncoder.default">[docs]</a>        <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+<div class="viewcode-block" id="NpEncoder.default">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.NpEncoder.default">[docs]</a>
+        <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
                 <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
@@ -352,11 +355,15 @@ document.write(`
                 <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span></div>
 
+
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">np</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="NpEncoder"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.NpEncoder">[docs]</a>    <span class="k">class</span> <span class="nc">NpEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+<div class="viewcode-block" id="NpEncoder">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.NpEncoder">[docs]</a>
+    <span class="k">class</span> <span class="nc">NpEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
         <span class="k">pass</span></div>
+
 
 
 <span class="c1"># TODO: add converter for any type of dataset (list, dataframe, numpy array)</span>
@@ -369,6 +376,8 @@ document.write(`
 <span class="n">FITSTAT</span> <span class="o">=</span> <span class="s2">&quot;dmcas_fitstat.json&quot;</span>
 <span class="n">ROC</span> <span class="o">=</span> <span class="s2">&quot;dmcas_roc.json&quot;</span>
 <span class="n">LIFT</span> <span class="o">=</span> <span class="s2">&quot;dmcas_lift.json&quot;</span>
+<span class="n">MAXDIFFERENCES</span> <span class="o">=</span> <span class="s2">&quot;maxDifferences.json&quot;</span>
+<span class="n">GROUPMETRICS</span> <span class="o">=</span> <span class="s2">&quot;groupMetrics.json&quot;</span>
 
 
 <span class="k">def</span> <span class="nf">_flatten</span><span class="p">(</span><span class="n">nested_list</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
@@ -395,7 +404,9 @@ document.write(`
             <span class="k">yield</span> <span class="n">item</span>
 
 
-<div class="viewcode-block" id="JSONFiles"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles">[docs]</a><span class="k">class</span> <span class="nc">JSONFiles</span><span class="p">:</span>
+<div class="viewcode-block" id="JSONFiles">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles">[docs]</a>
+<span class="k">class</span> <span class="nc">JSONFiles</span><span class="p">:</span>
     <span class="n">notebook_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">check_if_jupyter</span><span class="p">()</span>
     <span class="n">valid_params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;_RASE_&quot;</span><span class="p">,</span>
@@ -413,7 +424,9 @@ document.write(`
         <span class="s2">&quot;_C_&quot;</span><span class="p">,</span>
     <span class="p">]</span>
 
-<div class="viewcode-block" id="JSONFiles.write_var_json"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.write_var_json">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="JSONFiles.write_var_json">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.write_var_json">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">write_var_json</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">Series</span><span class="p">],</span>
@@ -473,7 +486,10 @@ document.write(`
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">{</span><span class="n">OUTPUT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dict_list</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">)}</span></div>
 
-<div class="viewcode-block" id="JSONFiles.generate_variable_properties"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_variable_properties">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.generate_variable_properties">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_variable_properties">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">generate_variable_properties</span><span class="p">(</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">Series</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
@@ -529,7 +545,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">dict_list</span></div>
 
-<div class="viewcode-block" id="JSONFiles.generate_mlflow_variable_properties"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_mlflow_variable_properties">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.generate_mlflow_variable_properties">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_mlflow_variable_properties">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">generate_mlflow_variable_properties</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">input_data</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a list of dictionaries containing the variable properties found in the</span>
@@ -564,7 +583,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">dict_list</span></div>
 
-<div class="viewcode-block" id="JSONFiles.check_if_string"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.check_if_string">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.check_if_string">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.check_if_string">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">check_if_string</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine if an MLFlow variable in data is a string type.</span>
@@ -589,7 +611,10 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="JSONFiles.write_model_properties_json"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.write_model_properties_json">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.write_model_properties_json">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.write_model_properties_json">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">write_model_properties_json</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -666,17 +691,17 @@ document.write(`
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">target_values</span><span class="p">:</span>
             <span class="n">model_function</span> <span class="o">=</span> <span class="n">model_function</span> <span class="k">if</span> <span class="n">model_function</span> <span class="k">else</span> <span class="s2">&quot;Prediction&quot;</span>
-            <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;INTERVAL&quot;</span>
+            <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;Interval&quot;</span>
             <span class="n">target_event</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
             <span class="n">event_prob_var</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_values</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">model_function</span> <span class="o">=</span> <span class="n">model_function</span> <span class="k">if</span> <span class="n">model_function</span> <span class="k">else</span> <span class="s2">&quot;Classification&quot;</span>
-            <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;BINARY&quot;</span>
+            <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;Binary&quot;</span>
             <span class="n">target_event</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">target_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">event_prob_var</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;P_</span><span class="si">{</span><span class="n">target_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_values</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">model_function</span> <span class="o">=</span> <span class="n">model_function</span> <span class="k">if</span> <span class="n">model_function</span> <span class="k">else</span> <span class="s2">&quot;Classification&quot;</span>
-            <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;NOMINAL&quot;</span>
+            <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;Nominal&quot;</span>
             <span class="n">target_event</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
             <span class="n">event_prob_var</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
             <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">target_values</span><span class="p">]</span>
@@ -737,7 +762,10 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{</span><span class="n">PROP</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">output_json</span><span class="p">)}</span></div>
 
-<div class="viewcode-block" id="JSONFiles.truncate_properties"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.truncate_properties">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.truncate_properties">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.truncate_properties">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">truncate_properties</span><span class="p">(</span><span class="n">prop</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check custom properties for values larger than SAS Model Manager expects.</span>
@@ -776,12 +804,16 @@ document.write(`
 
         <span class="k">return</span> <span class="n">prop</span></div>
 
-<div class="viewcode-block" id="JSONFiles.write_file_metadata_json"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.write_file_metadata_json">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.write_file_metadata_json">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.write_file_metadata_json">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">write_file_metadata_json</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">json_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">is_h2o_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">is_tf_keras_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes a file metadata JSON file pointing to all relevant files.</span>
@@ -814,6 +846,8 @@ document.write(`
         <span class="p">]</span>
         <span class="k">if</span> <span class="n">is_h2o_model</span><span class="p">:</span>
             <span class="n">dict_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;scoreResource&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">model_prefix</span> <span class="o">+</span> <span class="s2">&quot;.mojo&quot;</span><span class="p">})</span>
+        <span class="k">elif</span> <span class="n">is_tf_keras_model</span><span class="p">:</span>
+            <span class="n">dict_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;scoreResource&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">model_prefix</span> <span class="o">+</span> <span class="s2">&quot;.h5&quot;</span><span class="p">})</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">dict_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;scoreResource&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">model_prefix</span> <span class="o">+</span> <span class="s2">&quot;.pickle&quot;</span><span class="p">}</span>
@@ -830,7 +864,10 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{</span><span class="n">META</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dict_list</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)}</span></div>
 
-<div class="viewcode-block" id="JSONFiles.input_fit_statistics"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.input_fit_statistics">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.input_fit_statistics">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.input_fit_statistics">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">input_fit_statistics</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">fitstat_df</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -922,7 +959,10 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{</span><span class="n">FITSTAT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">)}</span></div>
 
-<div class="viewcode-block" id="JSONFiles.add_tuple_to_fitstat"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.add_tuple_to_fitstat">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.add_tuple_to_fitstat">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.add_tuple_to_fitstat">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">add_tuple_to_fitstat</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">tuple</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
@@ -979,7 +1019,10 @@ document.write(`
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">data</span></div>
 
-<div class="viewcode-block" id="JSONFiles.user_input_fitstat"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.user_input_fitstat">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.user_input_fitstat">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.user_input_fitstat">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">user_input_fitstat</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prompt the user to enter parameters for dmcas_fitstat.json.</span>
@@ -1029,7 +1072,10 @@ document.write(`
                 <span class="k">break</span>
         <span class="k">return</span> <span class="n">data</span></div>
 
-<div class="viewcode-block" id="JSONFiles.add_df_to_fitstat"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.add_df_to_fitstat">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.add_df_to_fitstat">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.add_df_to_fitstat">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">add_df_to_fitstat</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add parameters from provided DataFrame to the fitstats dictionary.</span>
@@ -1068,7 +1114,427 @@ document.write(`
             <span class="n">data</span><span class="p">[</span><span class="n">data_role</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">param_value</span>
         <span class="k">return</span> <span class="n">data</span></div>
 
-<div class="viewcode-block" id="JSONFiles.calculate_model_statistics"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.calculate_model_statistics">[docs]</a>    <span class="nd">@classmethod</span>
+
+    <span class="c1"># TODO: Add unit/integration tests</span>
+<div class="viewcode-block" id="JSONFiles.assess_model_bias">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.assess_model_bias">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="nd">@experimental</span>
+    <span class="k">def</span> <span class="nf">assess_model_bias</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">score_table</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">sensitive_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">actual_values</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">pred_values</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">prob_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">levels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">json_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">cutoff</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">datarole</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;TEST&quot;</span><span class="p">,</span>
+        <span class="n">return_dataframes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates model bias metrics for sensitive variables and dumps metrics into SAS Viya readable JSON Files. This</span>
+<span class="sd">        function works for regression and binary classification problems.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        score_table : pandas.DataFrame</span>
+<span class="sd">            Data structure containing actual values, predicted or predicted probability values, and sensitive variable</span>
+<span class="sd">            values. All columns in the score table must have valid variable names.</span>
+<span class="sd">        sensitive_values : string or list of strings</span>
+<span class="sd">            Sensitive variable name or names in score_table. The variable name must follow SAS naming conventions (no</span>
+<span class="sd">            spaces and the name cannot begin with a number or symbol).</span>
+<span class="sd">        actual_values : string</span>
+<span class="sd">            Variable name containing the actual values in score_table. The variable name must follow SAS naming</span>
+<span class="sd">            conventions (no spaces and the name cannot begin with a number or symbol).</span>
+<span class="sd">        pred_values : string, required for regression problems, otherwise not used</span>
+<span class="sd">            Variable name containing the predicted values in score_table. The variable name must follow SAS naming</span>
+<span class="sd">            conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.</span>
+<span class="sd">            The default value is None.</span>
+<span class="sd">        prob_values : list of strings, required for classification problems, otherwise not used</span>
+<span class="sd">           A list of variable names containing the predicted probability values in the score table. The first element</span>
+<span class="sd">           should represent the predicted probability of the target class. Required for classification problems. Default</span>
+<span class="sd">           is None.</span>
+<span class="sd">        levels: List of strings, integers, booleans, required for classification problems, otherwise not used</span>
+<span class="sd">            List of classes of a nominal target in the order they were passed in prob_values. Levels must be passed as a</span>
+<span class="sd">            string. Default is None.</span>
+<span class="sd">        json_path : str or Path, optional</span>
+<span class="sd">            Location for the output JSON files. If a path is passed, the json files will populate in the directory and</span>
+<span class="sd">            the function will return None, unless return_dataframes is True. Otherwise, the function will return the json</span>
+<span class="sd">             strings in a dictionary (dict[&quot;maxDifferences.json&quot;] and dict[&quot;groupMetrics.json&quot;]). The default value is</span>
+<span class="sd">             None.</span>
+<span class="sd">        cutoff : float, optional</span>
+<span class="sd">            Cutoff value for confusion matrix. Default is 0.5.</span>
+<span class="sd">        datarole : string, optional</span>
+<span class="sd">            The data being used to assess bias (i.e. &#39;TEST&#39;, &#39;VALIDATION&#39;, etc.). Default is &#39;TEST.&#39;</span>
+<span class="sd">        return_dataframes : boolean, optional</span>
+<span class="sd">            If true, the function returns the pandas data frames used to create the JSON files and a table for bias</span>
+<span class="sd">            metrics. If a JSON path is passed, then the function will return a dictionary that only includes the data</span>
+<span class="sd">            frames (dict[&quot;maxDifferencesData&quot;], dict[&quot;groupMetricData&quot;], and dict[&quot;biasMetricsData&quot;]). If a JSON path is</span>
+<span class="sd">             not passed, the function will return a dictionary with the three tables  and the two JSON strings</span>
+<span class="sd">            (dict[&quot;maxDifferences.json&quot;] and dict[&quot;groupMetrics.json&quot;]). The default value is False.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary containing a key-value pair representing the files name and json</span>
+<span class="sd">            dumps respectively.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If swat is not installed, this function cannot perform the necessary</span>
+<span class="sd">            calculations.</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            This function requires pred_values OR (regression) or prob_values AND levels (classification) to be passed.</span>
+
+<span class="sd">            Variable names must follow SAS naming conventions (no spaces or names that begin with a number or symbol).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sess</span> <span class="o">=</span> <span class="n">current_session</span><span class="p">()</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">as_swat</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;The `swat` package is required to generate fit statistics, ROC, and Lift charts with the &quot;</span>
+                <span class="s2">&quot;calculate_model_statistics function.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">variables</span> <span class="o">=</span> <span class="n">score_table</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">sc</span><span class="o">.</span><span class="n">_check_for_invalid_variable_names</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pred_values</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">prob_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;A value for pred_values (regression) or prob_values (classification) must be passed.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># if it&#39;s a classification problem</span>
+        <span class="k">if</span> <span class="n">prob_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">levels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Levels of the target variable must be passed for classification problems. The levels should be &quot;</span>
+                    <span class="s2">&quot;ordered in the same way that the predicted probability variables are ordered.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">score_table</span><span class="p">[</span><span class="n">actual_values</span><span class="p">]</span> <span class="o">=</span> <span class="n">score_table</span><span class="p">[</span><span class="n">actual_values</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sensitive_values</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">sensitive_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">sensitive_values</span><span class="p">]</span>
+
+        <span class="c1"># upload properly formatted score table to CAS</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="n">score_table</span><span class="p">,</span> <span class="n">casout</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;score_table&quot;</span><span class="p">))</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">loadactionset</span><span class="p">(</span><span class="s2">&quot;fairaitools&quot;</span><span class="p">)</span>
+        <span class="n">maxdiff_dfs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">groupmetrics_dfs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">biasmetrics_dfs</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">sensitive_values</span><span class="p">:</span>
+            <span class="c1"># run assessBias, if levels=None then assessBias treats the input like a regression problem</span>
+            <span class="n">tables</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">fairaitools</span><span class="o">.</span><span class="n">assessbias</span><span class="p">(</span>
+                <span class="n">modelTableType</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
+                <span class="n">predictedVariables</span><span class="o">=</span><span class="n">pred_values</span>
+                <span class="k">if</span> <span class="n">pred_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="k">else</span> <span class="n">prob_values</span><span class="p">,</span>
+                <span class="n">response</span><span class="o">=</span><span class="n">actual_values</span><span class="p">,</span>
+                <span class="n">responseLevels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span>
+                <span class="n">sensitiveVariable</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                <span class="n">cutoff</span><span class="o">=</span><span class="n">cutoff</span><span class="p">,</span>
+                <span class="n">table</span><span class="o">=</span><span class="s2">&quot;score_table&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="c1"># get maxdiff table, append to list</span>
+            <span class="n">maxdiff</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tables</span><span class="p">[</span><span class="s2">&quot;MaxDifferences&quot;</span><span class="p">])</span>
+            <span class="c1"># adding variable to table</span>
+            <span class="n">maxdiff</span><span class="p">[</span><span class="s2">&quot;_VARIABLE_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">maxdiff_dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">maxdiff</span><span class="p">)</span>
+
+            <span class="c1"># get group metrics table, append to list</span>
+            <span class="n">group_metrics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tables</span><span class="p">[</span><span class="s2">&quot;GroupMetrics&quot;</span><span class="p">])</span>
+            <span class="n">group_metrics</span><span class="p">[</span><span class="s2">&quot;_VARIABLE_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">groupmetrics_dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group_metrics</span><span class="p">)</span>
+
+            <span class="c1"># get bis metrics table if they want to return it</span>
+            <span class="k">if</span> <span class="n">return_dataframes</span><span class="p">:</span>
+                <span class="n">bias_metrics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tables</span><span class="p">[</span><span class="s2">&quot;BiasMetrics&quot;</span><span class="p">])</span>
+                <span class="n">bias_metrics</span><span class="p">[</span><span class="s2">&quot;_VARIABLE_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+                <span class="n">biasmetrics_dfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bias_metrics</span><span class="p">)</span>
+
+        <span class="c1"># overall formatting</span>
+        <span class="n">group_metrics</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">format_group_metrics</span><span class="p">(</span>
+            <span class="n">groupmetrics_dfs</span><span class="o">=</span><span class="n">groupmetrics_dfs</span><span class="p">,</span>
+            <span class="n">prob_values</span><span class="o">=</span><span class="n">prob_values</span><span class="p">,</span>
+            <span class="n">pred_values</span><span class="o">=</span><span class="n">pred_values</span><span class="p">,</span>
+            <span class="n">datarole</span><span class="o">=</span><span class="n">datarole</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">max_differences</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">format_max_differences</span><span class="p">(</span>
+            <span class="n">maxdiff_dfs</span><span class="o">=</span><span class="n">maxdiff_dfs</span><span class="p">,</span> <span class="n">datarole</span><span class="o">=</span><span class="n">datarole</span>
+        <span class="p">)</span>
+
+        <span class="c1"># getting json files</span>
+        <span class="n">json_files</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">bias_dataframes_to_json</span><span class="p">(</span>
+            <span class="n">groupmetrics</span><span class="o">=</span><span class="n">group_metrics</span><span class="p">,</span>
+            <span class="n">maxdifference</span><span class="o">=</span><span class="n">max_differences</span><span class="p">,</span>
+            <span class="n">n_sensitivevariables</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sensitive_values</span><span class="p">),</span>
+            <span class="n">actual_values</span><span class="o">=</span><span class="n">actual_values</span><span class="p">,</span>
+            <span class="n">prob_values</span><span class="o">=</span><span class="n">prob_values</span><span class="p">,</span>
+            <span class="n">levels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span>
+            <span class="n">pred_values</span><span class="o">=</span><span class="n">pred_values</span><span class="p">,</span>
+            <span class="n">json_path</span><span class="o">=</span><span class="n">json_path</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">return_dataframes</span><span class="p">:</span>
+            <span class="n">bias_metrics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">biasmetrics_dfs</span><span class="p">)</span>
+            <span class="n">df_dict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;maxDifferencesData&quot;</span><span class="p">:</span> <span class="n">max_differences</span><span class="p">,</span>
+                <span class="s2">&quot;groupMetricsData&quot;</span><span class="p">:</span> <span class="n">group_metrics</span><span class="p">,</span>
+                <span class="s2">&quot;biasMetricsData&quot;</span><span class="p">:</span> <span class="n">bias_metrics</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="n">json_files</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">df_dict</span>
+
+            <span class="n">json_files</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">df_dict</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">json_files</span></div>
+
+
+<div class="viewcode-block" id="JSONFiles.format_max_differences">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.format_max_differences">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">format_max_differences</span><span class="p">(</span>
+        <span class="n">maxdiff_dfs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">datarole</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;TEST&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts a list of max differences DataFrames into a singular DataFrame</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        maxdiff_dfs: List[DataFrame]</span>
+<span class="sd">            A list of max_differences DataFrames returned by CAS</span>
+<span class="sd">        datarole : string, optional</span>
+<span class="sd">            The data being used to assess bias (i.e. &#39;TEST&#39;, &#39;VALIDATION&#39;, etc.). Default is &#39;TEST.&#39;</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DataFrame</span>
+<span class="sd">            A singluar DataFrame containing all max differences data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">maxdiff_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">maxdiff_dfs</span><span class="p">)</span>
+        <span class="n">maxdiff_df</span> <span class="o">=</span> <span class="n">maxdiff_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="s2">&quot;maxdiff&quot;</span><span class="p">,</span> <span class="s2">&quot;Base&quot;</span><span class="p">:</span> <span class="s2">&quot;BASE&quot;</span><span class="p">,</span> <span class="s2">&quot;Compare&quot;</span><span class="p">:</span> <span class="s2">&quot;COMPARE&quot;</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="n">maxdiff_df</span><span class="p">[</span><span class="s2">&quot;VLABEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">maxdiff_df</span><span class="p">[</span><span class="s2">&quot;_DATAROLE_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datarole</span>
+
+        <span class="n">maxdiff_df</span> <span class="o">=</span> <span class="n">maxdiff_df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">maxdiff_df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">maxdiff_df</span></div>
+
+
+<div class="viewcode-block" id="JSONFiles.format_group_metrics">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.format_group_metrics">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">format_group_metrics</span><span class="p">(</span>
+        <span class="n">groupmetrics_dfs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">],</span>
+        <span class="n">prob_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">pred_values</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">datarole</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;TEST&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts list of group metrics DataFrames to a single DataFrame</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        groupmetrics_dfs: List[DataFrame]</span>
+<span class="sd">            List of group metrics DataFrames generated by CASAction</span>
+<span class="sd">        pred_values : string, required for regression problems, otherwise not used</span>
+<span class="sd">            Variable name containing the predicted values in score_table. The variable name must follow SAS naming</span>
+<span class="sd">            conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.</span>
+<span class="sd">            The default value is None.</span>
+<span class="sd">        prob_values : list of strings, required for classification problems, otherwise not used</span>
+<span class="sd">           A list of variable names containing the predicted probability values in the score table. The first element</span>
+<span class="sd">           should represent the predicted probability of the target class. Required for classification problems. Default</span>
+<span class="sd">           is None.</span>
+<span class="sd">        datarole : string, optional</span>
+<span class="sd">            The data being used to assess bias (i.e. &#39;TEST&#39;, &#39;VALIDATION&#39;, etc.). Default is &#39;TEST.&#39;</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DataFrame</span>
+<span class="sd">            A singular DataFrame containing formatted data for group metrics</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># adding group metrics dataframes and adding values/ formatting</span>
+        <span class="n">groupmetrics_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">groupmetrics_dfs</span><span class="p">)</span>
+        <span class="n">groupmetrics_df</span> <span class="o">=</span> <span class="n">groupmetrics_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;Group&quot;</span><span class="p">:</span> <span class="s2">&quot;LEVEL&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="s2">&quot;nobs&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MISCEVENT&quot;</span><span class="p">:</span> <span class="s2">&quot;misccutoff&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MISCEVENTKS&quot;</span><span class="p">:</span> <span class="s2">&quot;miscks&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;cutoffKS&quot;</span><span class="p">:</span> <span class="s2">&quot;kscut&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PREDICTED&quot;</span><span class="p">:</span> <span class="s2">&quot;avgyhat&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;maxKS&quot;</span><span class="p">:</span> <span class="s2">&quot;ks&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">groupmetrics_df</span><span class="p">[</span><span class="s2">&quot;VLABEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">groupmetrics_df</span><span class="p">[</span><span class="s2">&quot;_DATAROLE_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datarole</span>
+
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">groupmetrics_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">prob_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">upper_cols</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="s2">&quot;LEVEL&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;_VARIABLE_&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;_DATAROLE_&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;VLABEL&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;INTO_EVENT&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;PREDICTED_EVENT&quot;</span><span class="p">,</span>
+                <span class="p">]</span> <span class="o">+</span> <span class="n">prob_values</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">upper_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;LEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;_VARIABLE_&quot;</span><span class="p">,</span> <span class="s2">&quot;_DATAROLE_&quot;</span><span class="p">,</span> <span class="s2">&quot;VLABEL&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
+                    <span class="n">pred_values</span>
+                <span class="p">]</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">upper_cols</span><span class="p">:</span>
+                <span class="n">groupmetrics_df</span> <span class="o">=</span> <span class="n">groupmetrics_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+                    <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">col</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span><span class="p">}</span>
+                <span class="p">)</span>
+
+        <span class="n">groupmetrics_df</span> <span class="o">=</span> <span class="n">groupmetrics_df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span>
+            <span class="nb">sorted</span><span class="p">(</span><span class="n">groupmetrics_df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">groupmetrics_df</span></div>
+
+
+<div class="viewcode-block" id="JSONFiles.bias_dataframes_to_json">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.bias_dataframes_to_json">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="nd">@experimental</span>
+    <span class="k">def</span> <span class="nf">bias_dataframes_to_json</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">groupmetrics</span><span class="p">:</span> <span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">maxdifference</span><span class="p">:</span> <span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">n_sensitivevariables</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">actual_values</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">prob_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">levels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">pred_values</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">json_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Properly formats data from FairAITools CAS Action Set into a JSON readable formats</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        groupmetrics: DataFrame</span>
+<span class="sd">            A DataFrame containing the group metrics data</span>
+<span class="sd">        maxdifference: DataFrame</span>
+<span class="sd">            A DataFrame containing the max difference data</span>
+<span class="sd">        n_sensitivevariables: int</span>
+<span class="sd">            The total number of sensitive values</span>
+<span class="sd">        actual_values : String</span>
+<span class="sd">            Variable name containing the actual values in score_table. The variable name must follow SAS naming</span>
+<span class="sd">            conventions (no spaces and the name cannot begin with a number or symbol).</span>
+<span class="sd">        prob_values : list of strings, required for classification problems, otherwise not used</span>
+<span class="sd">           A list of variable names containing the predicted probability values in the score table. The first element</span>
+<span class="sd">           should represent the predicted probability of the target class. Required for classification problems. Default</span>
+<span class="sd">           is None.</span>
+<span class="sd">        levels: List of strings, required for classification problems, otherwise not used</span>
+<span class="sd">            List of classes of a nominal target in the order they were passed in prob_values. Levels must be passed as a</span>
+<span class="sd">            string. Default is None.</span>
+<span class="sd">        pred_values : string, required for regression problems, otherwise not used</span>
+<span class="sd">            Variable name containing the predicted values in score_table. The variable name must follow SAS naming</span>
+<span class="sd">            conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.</span>
+<span class="sd">            The default value is None.</span>
+<span class="sd">        json_path : str or Path, optional</span>
+<span class="sd">            Location for the output JSON files. If a path is passed, the json files will populate in the directory and</span>
+<span class="sd">            the function will return None, unless return_dataframes is True. Otherwise, the function will return the json</span>
+<span class="sd">             strings in a dictionary (dict[&quot;maxDifferences.json&quot;] and dict[&quot;groupMetrics.json&quot;]). The default value is</span>
+<span class="sd">             None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary containing a key-value pair representing the files name and json</span>
+<span class="sd">            dumps respectively.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">folder</span> <span class="o">=</span> <span class="s2">&quot;reg_jsons&quot;</span> <span class="k">if</span> <span class="n">prob_values</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;clf_jsons&quot;</span>
+
+        <span class="n">dfs</span> <span class="o">=</span> <span class="p">(</span><span class="n">maxdifference</span><span class="p">,</span> <span class="n">groupmetrics</span><span class="p">)</span>
+        <span class="n">json_dict</span> <span class="o">=</span> <span class="p">[{},</span> <span class="p">{}]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s2">&quot;maxDifferences&quot;</span><span class="p">,</span> <span class="s2">&quot;groupMetrics&quot;</span><span class="p">]):</span>
+            <span class="c1"># reading template files</span>
+            <span class="n">json_template_path</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;template_files/</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.json&quot;</span>
+            <span class="p">)</span>
+            <span class="n">json_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">read_json_file</span><span class="p">(</span><span class="n">json_template_path</span><span class="p">)</span>
+            <span class="c1"># updating data rows</span>
+            <span class="k">for</span> <span class="n">row_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dfs</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+                <span class="n">row_dict</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">row_num</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+                <span class="n">new_data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;dataMap&quot;</span><span class="p">:</span> <span class="n">row_dict</span><span class="p">,</span> <span class="s2">&quot;rowNumber&quot;</span><span class="p">:</span> <span class="n">row_num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}</span>
+                <span class="n">json_dict</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
+
+        <span class="c1"># formatting metric label for max diff</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_sensitivevariables</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">prob_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">prob_label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">prob_values</span><span class="p">):</span>
+                    <span class="n">json_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">26</span><span class="p">)</span> <span class="o">+</span> <span class="n">j</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span>
+                        <span class="s2">&quot;MetricLabel&quot;</span>
+                    <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Average Predicted: </span><span class="si">{</span><span class="n">actual_values</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">levels</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">json_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span> <span class="o">*</span> <span class="mi">8</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;MetricLabel&quot;</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Average Predicted: </span><span class="si">{</span><span class="n">actual_values</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># formatting parameter map for group metrics</span>
+        <span class="k">if</span> <span class="n">prob_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">prob_label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">prob_values</span><span class="p">):</span>
+                <span class="n">paramdict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">prob_label</span><span class="p">,</span>
+                    <span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                    <span class="c1"># TODO: figure out order ordering</span>
+                    <span class="s2">&quot;order&quot;</span><span class="p">:</span> <span class="mi">34</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span>
+                    <span class="s2">&quot;parameter&quot;</span><span class="p">:</span> <span class="n">prob_label</span><span class="p">,</span>
+                    <span class="s2">&quot;preformatted&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;num&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">prob_label</span><span class="p">],</span>
+                <span class="p">}</span>
+                <span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;parameterMap&quot;</span><span class="p">][</span><span class="n">prob_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">paramdict</span>
+                <span class="c1"># cls.add_dict_key(</span>
+                <span class="c1">#     dict=json_dict[1][&quot;parameterMap&quot;],</span>
+                <span class="c1">#     pos=i + 3,</span>
+                <span class="c1">#     new_key=prob_label,</span>
+                <span class="c1">#     new_value=paramdict,]</span>
+                <span class="c1"># )</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;parameterMap&quot;</span><span class="p">][</span><span class="s2">&quot;predict&quot;</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_values</span>
+            <span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;parameterMap&quot;</span><span class="p">][</span><span class="s2">&quot;predict&quot;</span><span class="p">][</span><span class="s2">&quot;parameter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred_values</span>
+            <span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;parameterMap&quot;</span><span class="p">][</span><span class="s2">&quot;predict&quot;</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">pred_values</span><span class="p">]</span>
+            <span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;parameterMap&quot;</span><span class="p">][</span><span class="n">pred_values</span><span class="p">]</span> <span class="o">=</span> <span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;parameterMap&quot;</span><span class="p">][</span>
+                <span class="s2">&quot;predict&quot;</span>
+            <span class="p">]</span>
+            <span class="k">del</span> <span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;parameterMap&quot;</span><span class="p">][</span><span class="s2">&quot;predict&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">json_path</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">MAXDIFFERENCES</span><span class="p">,</span> <span class="n">GROUPMETRICS</span><span class="p">]):</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+                    <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> was successfully written and saved to &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="n">MAXDIFFERENCES</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
+                <span class="n">GROUPMETRICS</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
+            <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="JSONFiles.calculate_model_statistics">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.calculate_model_statistics">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">calculate_model_statistics</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">target_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
@@ -1210,7 +1676,10 @@ document.write(`
                 <span class="n">LIFT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
             <span class="p">}</span></div>
 
-<div class="viewcode-block" id="JSONFiles.check_for_data"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.check_for_data">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.check_for_data">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.check_for_data">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">check_for_data</span><span class="p">(</span>
         <span class="n">validate</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">train</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1251,7 +1720,10 @@ document.write(`
             <span class="p">]</span>
         <span class="k">return</span> <span class="n">data_partitions</span></div>
 
-<div class="viewcode-block" id="JSONFiles.stat_dataset_to_dataframe"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.stat_dataset_to_dataframe">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.stat_dataset_to_dataframe">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.stat_dataset_to_dataframe">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">stat_dataset_to_dataframe</span><span class="p">(</span>
         <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]],</span>
         <span class="n">target_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1332,7 +1804,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">data</span></div>
 
-<div class="viewcode-block" id="JSONFiles.apply_dataframe_to_json"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.apply_dataframe_to_json">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.apply_dataframe_to_json">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.apply_dataframe_to_json">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">apply_dataframe_to_json</span><span class="p">(</span>
         <span class="n">json_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">partition</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stat_df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">is_lift</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -1369,6 +1844,7 @@ document.write(`
                     <span class="n">row_dict</span>
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">json_dict</span></div>
+
 
     <span class="c1"># noinspection PyCallingNonCallable, PyNestedDecorators</span>
     <span class="nd">@deprecated</span><span class="p">(</span>
@@ -1811,7 +2287,9 @@ document.write(`
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">LIFT</span><span class="si">}</span><span class="s2"> was successfully written and saved to </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">jPath</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">LIFT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="JSONFiles.read_json_file"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.read_json_file">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="JSONFiles.read_json_file">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.read_json_file">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">read_json_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads a JSON file from a given path.</span>
@@ -1829,7 +2307,10 @@ document.write(`
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">jFile</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">jFile</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="JSONFiles.format_parameter"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.format_parameter">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.format_parameter">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.format_parameter">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">format_parameter</span><span class="p">(</span><span class="n">param_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Formats the parameter name to the JSON standard expected for dmcas_fitstat.json.</span>
@@ -1852,7 +2333,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">param_name</span></div>
 
-<div class="viewcode-block" id="JSONFiles.convert_data_role"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.convert_data_role">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.convert_data_role">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.convert_data_role">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">convert_data_role</span><span class="p">(</span><span class="n">data_role</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts the data role identifier from string to int or int to string.</span>
@@ -1895,7 +2379,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">conversion</span></div>
 
-<div class="viewcode-block" id="JSONFiles.create_requirements_json"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.create_requirements_json">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.create_requirements_json">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.create_requirements_json">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">create_requirements_json</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">model_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span>
@@ -1979,7 +2466,10 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;requirements.json&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dicts</span><span class="p">)}</span></div>
 
-<div class="viewcode-block" id="JSONFiles.get_local_package_version"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_local_package_version">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.get_local_package_version">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_local_package_version">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_local_package_version</span><span class="p">(</span><span class="n">package_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get package_name versions from the local environment.</span>
@@ -2035,7 +2525,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">package_and_version</span></div>
 
-<div class="viewcode-block" id="JSONFiles.get_code_dependencies"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_code_dependencies">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.get_code_dependencies">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_code_dependencies">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_code_dependencies</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">model_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
@@ -2062,7 +2555,10 @@ document.write(`
         <span class="n">import_info</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">_flatten</span><span class="p">(</span><span class="n">import_info</span><span class="p">)))</span>
         <span class="k">return</span> <span class="n">import_info</span></div>
 
-<div class="viewcode-block" id="JSONFiles.find_imports"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.find_imports">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.find_imports">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.find_imports">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">find_imports</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find import calls in provided Python code path.</span>
@@ -2105,7 +2601,10 @@ document.write(`
             <span class="k">pass</span>
         <span class="k">return</span> <span class="n">modules</span></div>
 
-<div class="viewcode-block" id="JSONFiles.get_pickle_file"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_pickle_file">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.get_pickle_file">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_pickle_file">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_pickle_file</span><span class="p">(</span><span class="n">pickle_folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given a file path, retrieve the pickle file(s).</span>
@@ -2125,7 +2624,10 @@ document.write(`
             <span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">pickle_folder</span><span class="p">)</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;.pickle&quot;</span><span class="p">,</span> <span class="s2">&quot;.pkl&quot;</span><span class="p">]</span>
         <span class="p">]</span></div>
 
-<div class="viewcode-block" id="JSONFiles.get_pickle_dependencies"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_pickle_dependencies">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.get_pickle_dependencies">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_pickle_dependencies">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_pickle_dependencies</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pickle_file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads the pickled byte stream from a file object, serializes the pickled byte</span>
@@ -2150,7 +2652,10 @@ document.write(`
         <span class="n">modules</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_package_names</span><span class="p">(</span><span class="n">dumps</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">modules</span></div>
 
-<div class="viewcode-block" id="JSONFiles.get_package_names"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_package_names">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.get_package_names">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_package_names">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_package_names</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates a list of found `package` names from a pickle stream.</span>
@@ -2217,7 +2722,10 @@ document.write(`
         <span class="c1"># Return the package list without any None values</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">packages</span> <span class="k">if</span> <span class="n">x</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="JSONFiles.remove_standard_library_packages"><a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.remove_standard_library_packages">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="JSONFiles.remove_standard_library_packages">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.remove_standard_library_packages">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">remove_standard_library_packages</span><span class="p">(</span><span class="n">package_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove any packages from the required list of installed packages that are</span>
@@ -2542,7 +3050,9 @@ document.write(`
         <span class="n">package_list</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">package</span> <span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="n">package_list</span> <span class="k">if</span> <span class="n">package</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">py10stdlib</span>
         <span class="p">]</span>
-        <span class="k">return</span> <span class="n">package_list</span></div></div>
+        <span class="k">return</span> <span class="n">package_list</span></div>
+</div>
+
 </pre></div>
 
                 </article>
@@ -2595,7 +3105,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

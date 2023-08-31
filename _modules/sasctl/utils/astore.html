@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.utils.astore &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl.utils.astore &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -27,16 +27,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/utils/astore';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -333,7 +333,9 @@ document.write(`
     <span class="n">swat</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<div class="viewcode-block" id="create_package"><a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.create_package">[docs]</a><span class="k">def</span> <span class="nf">create_package</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="create_package">
+<a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.create_package">[docs]</a>
+<span class="k">def</span> <span class="nf">create_package</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an importable model package from a CAS table.</span>
 
 <span class="sd">    Parameters</span>
@@ -373,7 +375,10 @@ document.write(`
     <span class="k">return</span> <span class="n">create_package_from_astore</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="create_package_from_datastep"><a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.create_package_from_datastep">[docs]</a><span class="k">def</span> <span class="nf">create_package_from_datastep</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="create_package_from_datastep">
+<a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.create_package_from_datastep">[docs]</a>
+<span class="k">def</span> <span class="nf">create_package_from_datastep</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an importable model package from a score code table.</span>
 
 <span class="sd">    Parameters</span>
@@ -461,7 +466,10 @@ document.write(`
     <span class="k">return</span> <span class="n">zip_file</span></div>
 
 
-<div class="viewcode-block" id="create_package_from_astore"><a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.create_package_from_astore">[docs]</a><span class="k">def</span> <span class="nf">create_package_from_astore</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
+
+<div class="viewcode-block" id="create_package_from_astore">
+<a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.create_package_from_astore">[docs]</a>
+<span class="k">def</span> <span class="nf">create_package_from_astore</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an importable model package from an ASTORE.</span>
 
 <span class="sd">    Parameters</span>
@@ -484,7 +492,10 @@ document.write(`
     <span class="k">return</span> <span class="n">_build_zip_from_files</span><span class="p">(</span><span class="n">files</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="create_files_from_astore"><a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.create_files_from_astore">[docs]</a><span class="k">def</span> <span class="nf">create_files_from_astore</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
+
+<div class="viewcode-block" id="create_files_from_astore">
+<a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.create_files_from_astore">[docs]</a>
+<span class="k">def</span> <span class="nf">create_files_from_astore</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate files for importing a model from an ASTORE.</span>
 
 <span class="sd">    Parameters</span>
@@ -574,6 +585,7 @@ document.write(`
     <span class="p">}</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">_build_zip_from_files</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a ZIP file containing the provided files.</span>
 
@@ -620,7 +632,9 @@ document.write(`
         <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="get_variable_properties"><a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.get_variable_properties">[docs]</a><span class="k">def</span> <span class="nf">get_variable_properties</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
+<div class="viewcode-block" id="get_variable_properties">
+<a class="viewcode-back" href="../../../api/sasctl.utils.html#sasctl.utils.astore.get_variable_properties">[docs]</a>
+<span class="k">def</span> <span class="nf">get_variable_properties</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
     <span class="n">type_mapping</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="s2">&quot;num&quot;</span><span class="p">:</span> <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
@@ -640,6 +654,7 @@ document.write(`
         <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">Role</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">meta</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">_get_model_properties</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
@@ -864,7 +879,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.core &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl.core &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -27,16 +27,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/core';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -422,7 +422,9 @@ document.write(`
 <span class="n">DEFAULT_FILTERS</span> <span class="o">=</span> <span class="p">[</span><span class="n">_filter_password</span><span class="p">,</span> <span class="n">_filter_token</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="current_session"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.current_session">[docs]</a><span class="k">def</span> <span class="nf">current_session</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="current_session">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.current_session">[docs]</a>
+<span class="k">def</span> <span class="nf">current_session</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets and sets the current session.</span>
 
 <span class="sd">    If call with no arguments, the current session instance is returned, or</span>
@@ -471,7 +473,10 @@ document.write(`
     <span class="k">return</span> <span class="n">_session</span></div>
 
 
-<div class="viewcode-block" id="OAuth2Token"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.OAuth2Token">[docs]</a><span class="k">class</span> <span class="nc">OAuth2Token</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">AuthBase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="OAuth2Token">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.OAuth2Token">[docs]</a>
+<span class="k">class</span> <span class="nc">OAuth2Token</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">AuthBase</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">access_token</span><span class="p">,</span>
@@ -499,7 +504,10 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expiration</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="RestObj"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.RestObj">[docs]</a><span class="k">class</span> <span class="nc">RestObj</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+
+<div class="viewcode-block" id="RestObj">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.RestObj">[docs]</a>
+<span class="k">class</span> <span class="nc">RestObj</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="c1"># Only called when __getattribute__ failed to find the attribute</span>
         <span class="c1"># Return the item from underlying dictionary if possible.</span>
@@ -532,22 +540,31 @@ document.write(`
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="SSLContextAdapter"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.SSLContextAdapter">[docs]</a><span class="k">class</span> <span class="nc">SSLContextAdapter</span><span class="p">(</span><span class="n">HTTPAdapter</span><span class="p">):</span>
+
+<div class="viewcode-block" id="SSLContextAdapter">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.SSLContextAdapter">[docs]</a>
+<span class="k">class</span> <span class="nc">SSLContextAdapter</span><span class="p">(</span><span class="n">HTTPAdapter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;HTTPAdapter that uses the default SSL context on the machine.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assert_hostname</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;assert_hostname&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">requests</span><span class="o">.</span><span class="n">adapters</span><span class="o">.</span><span class="n">HTTPAdapter</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SSLContextAdapter.init_poolmanager"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.SSLContextAdapter.init_poolmanager">[docs]</a>    <span class="k">def</span> <span class="nf">init_poolmanager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="SSLContextAdapter.init_poolmanager">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.SSLContextAdapter.init_poolmanager">[docs]</a>
+    <span class="k">def</span> <span class="nf">init_poolmanager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">create_default_context</span><span class="p">()</span>
         <span class="n">context</span><span class="o">.</span><span class="n">check_hostname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assert_hostname</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;ssl_context&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">context</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;assert_hostname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assert_hostname</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">SSLContextAdapter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">init_poolmanager</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">SSLContextAdapter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">init_poolmanager</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Session"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session">[docs]</a><span class="k">class</span> <span class="nc">Session</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Session">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session">[docs]</a>
+<span class="k">class</span> <span class="nc">Session</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Establish a connection to a SAS Viya server.</span>
 
 <span class="sd">    Parameters</span>
@@ -666,17 +683,21 @@ document.write(`
                 <span class="c1"># REST endpoints</span>
                 <span class="n">httpAddress</span> <span class="o">=</span> <span class="n">hostname</span><span class="o">.</span><span class="n">get_action</span><span class="p">(</span><span class="s2">&quot;builtins.httpAddress&quot;</span><span class="p">)</span>
                 <span class="n">address</span> <span class="o">=</span> <span class="n">httpAddress</span><span class="p">()</span>
-                <span class="n">domain</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="n">virtualHost</span>
-                <span class="c1"># httpAddress action may return virtualHost = &#39;&#39;</span>
-                <span class="c1"># if this happens, try the CAS host</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">domain</span><span class="p">:</span>
-                    <span class="n">domain</span> <span class="o">=</span> <span class="n">hostname</span><span class="o">.</span><span class="n">_sw_connection</span><span class="o">.</span><span class="n">_current_hostname</span>
+                <span class="c1"># Retrieve domain via swat connection object instead of httpAddress</span>
+                <span class="n">domain</span> <span class="o">=</span> <span class="n">hostname</span><span class="o">.</span><span class="n">_sw_connection</span><span class="o">.</span><span class="n">_current_hostname</span>
                 <span class="n">protocol</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="n">protocol</span>
                 <span class="n">port</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="n">port</span>
-                <span class="n">auth</span> <span class="o">=</span> <span class="n">hostname</span><span class="o">.</span><span class="n">_sw_connection</span><span class="o">.</span><span class="n">_auth</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                    <span class="s2">&quot;Basic &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
-                <span class="p">)</span>
-                <span class="n">username</span><span class="p">,</span> <span class="n">password</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                <span class="n">auth</span> <span class="o">=</span> <span class="n">hostname</span><span class="o">.</span><span class="n">_sw_connection</span><span class="o">.</span><span class="n">_auth</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+                <span class="c1"># Checks to see if authentication was made via user/pass or auth token</span>
+                <span class="k">if</span> <span class="n">auth</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Basic&quot;</span><span class="p">):</span>
+                    <span class="c1"># User/pass</span>
+                    <span class="n">auth</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Basic &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="n">username</span><span class="p">,</span> <span class="n">password</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">auth</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Bearer&quot;</span><span class="p">):</span>
+                    <span class="c1"># Auth token</span>
+                    <span class="n">token</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Bearer &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;A &#39;swat.CAS&#39; session can only be reused &quot;</span>
@@ -752,7 +773,9 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_old_session</span> <span class="o">=</span> <span class="n">current_session</span><span class="p">()</span>
         <span class="n">current_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Session.add_logger"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.add_logger">[docs]</a>    <span class="k">def</span> <span class="nf">add_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Session.add_logger">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.add_logger">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Log session requests and responses.</span>
 
 <span class="sd">        Parameters</span>
@@ -783,7 +806,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">handler</span></div>
 
-<div class="viewcode-block" id="Session.add_stderr_logger"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.add_stderr_logger">[docs]</a>    <span class="k">def</span> <span class="nf">add_stderr_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Session.add_stderr_logger">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.add_stderr_logger">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_stderr_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Log session requests and responses to stderr.</span>
 
 <span class="sd">        Parameters</span>
@@ -798,7 +824,10 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_logger</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(),</span> <span class="n">level</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Session.as_swat"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.as_swat">[docs]</a>    <span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5.4&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Session.as_swat">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.as_swat">[docs]</a>
+    <span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5.4&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">as_swat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a SWAT connection to a CAS server.</span>
 
@@ -873,6 +902,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">cas</span></div>
 
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">username</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">)</span>
@@ -881,7 +911,9 @@ document.write(`
     <span class="k">def</span> <span class="nf">hostname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;domain&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Session.send"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Session.send">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.send">[docs]</a>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_log</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
             <span class="k">for</span> <span class="nb">filter</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">:</span>
@@ -922,7 +954,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">response</span></div>
 
-<div class="viewcode-block" id="Session.request"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.request">[docs]</a>    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span>
+
+<div class="viewcode-block" id="Session.request">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.request">[docs]</a>
+    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">method</span><span class="p">,</span>
         <span class="n">url</span><span class="p">,</span>
@@ -1007,22 +1042,40 @@ document.write(`
                 <span class="p">)</span>
             <span class="k">raise</span> <span class="n">e</span></div>
 
-<div class="viewcode-block" id="Session.get"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Session.get">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Session.post"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.post">[docs]</a>    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Session.post">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.post">[docs]</a>
+    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Session.put"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.put">[docs]</a>    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Session.put">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.put">[docs]</a>
+    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Session.head"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.head">[docs]</a>    <span class="k">def</span> <span class="nf">head</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Session.head">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.head">[docs]</a>
+    <span class="k">def</span> <span class="nf">head</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;HEAD&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Session.delete"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Session.delete">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.delete">[docs]</a>
+    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Session.cache_token"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.cache_token">[docs]</a>    <span class="k">def</span> <span class="nf">cache_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Session.cache_token">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.cache_token">[docs]</a>
+    <span class="k">def</span> <span class="nf">cache_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write an OAuth2 token to the cache.</span>
 
 <span class="sd">        Parameters</span>
@@ -1069,7 +1122,10 @@ document.write(`
 
         <span class="n">Session</span><span class="o">.</span><span class="n">_write_token_cache</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Session.read_cached_token"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.read_cached_token">[docs]</a>    <span class="k">def</span> <span class="nf">read_cached_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Session.read_cached_token">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.read_cached_token">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_cached_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read any cached access tokens from disk</span>
 
 <span class="sd">        Parameters</span>
@@ -1124,7 +1180,10 @@ document.write(`
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="o">.</span><span class="n">is_expired</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">token</span></div>
 
-<div class="viewcode-block" id="Session.version_info"><a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.version_info">[docs]</a>    <span class="k">def</span> <span class="nf">version_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Session.version_info">
+<a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.version_info">[docs]</a>
+    <span class="k">def</span> <span class="nf">version_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get version information from the connected SAS Viya environment</span>
 
 <span class="sd">        Returns</span>
@@ -1174,6 +1233,7 @@ document.write(`
             <span class="k">pass</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version_info</span></div>
+
 
     <span class="k">def</span> <span class="nf">_build_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a complete URL from a path by substituting in session parameters.&quot;&quot;&quot;</span>
@@ -1773,7 +1833,10 @@ document.write(`
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="PageIterator"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PageIterator">[docs]</a><span class="k">class</span> <span class="nc">PageIterator</span><span class="p">:</span>
+
+<div class="viewcode-block" id="PageIterator">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PageIterator">[docs]</a>
+<span class="k">class</span> <span class="nc">PageIterator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterates through a collection that must be &quot;paged&quot; from the server.</span>
 
 <span class="sd">    Pages contain a batch of items from the overall collection.  Iterates the</span>
@@ -1887,7 +1950,10 @@ document.write(`
         <span class="k">return</span> <span class="p">[</span><span class="n">RestObj</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]]</span></div>
 
 
-<div class="viewcode-block" id="PagedItemIterator"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PagedItemIterator">[docs]</a><span class="k">class</span> <span class="nc">PagedItemIterator</span><span class="p">:</span>
+
+<div class="viewcode-block" id="PagedItemIterator">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PagedItemIterator">[docs]</a>
+<span class="k">class</span> <span class="nc">PagedItemIterator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterates through a collection that must be &quot;paged&quot; from the server.</span>
 
 <span class="sd">    Uses `PageIterator` to transparently download pages of items from the server</span>
@@ -1954,7 +2020,10 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
-<div class="viewcode-block" id="PagedListIterator"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PagedListIterator">[docs]</a><span class="k">class</span> <span class="nc">PagedListIterator</span><span class="p">:</span>
+
+<div class="viewcode-block" id="PagedListIterator">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PagedListIterator">[docs]</a>
+<span class="k">class</span> <span class="nc">PagedListIterator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterates over an instance of PagedList</span>
 
 <span class="sd">    Parameters</span>
@@ -1984,7 +2053,10 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
-<div class="viewcode-block" id="PagedList"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PagedList">[docs]</a><span class="k">class</span> <span class="nc">PagedList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PagedList">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PagedList">[docs]</a>
+<span class="k">class</span> <span class="nc">PagedList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;List that dynamically loads items from the server.</span>
 
 <span class="sd">    Parameters</span>
@@ -2074,7 +2146,10 @@ document.write(`
         <span class="k">return</span> <span class="n">string</span></div>
 
 
-<div class="viewcode-block" id="VersionInfo"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.VersionInfo">[docs]</a><span class="k">class</span> <span class="nc">VersionInfo</span><span class="p">:</span>
+
+<div class="viewcode-block" id="VersionInfo">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.VersionInfo">[docs]</a>
+<span class="k">class</span> <span class="nc">VersionInfo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Stores the version information for a SAS Viya environment.</span>
 
 <span class="sd">    Parameters</span>
@@ -2193,7 +2268,10 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_release</span></div>
 
 
-<div class="viewcode-block" id="is_uuid"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.is_uuid">[docs]</a><span class="k">def</span> <span class="nf">is_uuid</span><span class="p">(</span><span class="n">id_</span><span class="p">):</span>
+
+<div class="viewcode-block" id="is_uuid">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.is_uuid">[docs]</a>
+<span class="k">def</span> <span class="nf">is_uuid</span><span class="p">(</span><span class="n">id_</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">UUID</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">id_</span><span class="p">))</span>
         <span class="k">return</span> <span class="kc">True</span>
@@ -2201,7 +2279,10 @@ document.write(`
         <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="get"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.get">[docs]</a>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a GET request.</span>
 
 <span class="sd">    Parameters</span>
@@ -2225,7 +2306,10 @@ document.write(`
         <span class="k">raise</span> <span class="n">e</span></div>
 
 
-<div class="viewcode-block" id="head"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.head">[docs]</a><span class="k">def</span> <span class="nf">head</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="head">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.head">[docs]</a>
+<span class="k">def</span> <span class="nf">head</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a HEAD request.</span>
 
 <span class="sd">    Parameters</span>
@@ -2243,7 +2327,10 @@ document.write(`
     <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="post"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.post">[docs]</a><span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="post">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.post">[docs]</a>
+<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a POST request.</span>
 
 <span class="sd">    Parameters</span>
@@ -2261,7 +2348,10 @@ document.write(`
     <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="put"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.put">[docs]</a><span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="put">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.put">[docs]</a>
+<span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a PUT request.</span>
 
 <span class="sd">    Parameters</span>
@@ -2293,7 +2383,10 @@ document.write(`
     <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;put&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="delete"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.delete">[docs]</a><span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="delete">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.delete">[docs]</a>
+<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a DELETE request.</span>
 
 <span class="sd">    Parameters</span>
@@ -2311,7 +2404,10 @@ document.write(`
     <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="request"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.request">[docs]</a><span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="n">verb</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="request">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.request">[docs]</a>
+<span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="n">verb</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send an HTTP request with a session.</span>
 
 <span class="sd">    Parameters</span>
@@ -2378,7 +2474,10 @@ document.write(`
         <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span></div>
 
 
-<div class="viewcode-block" id="get_link"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.get_link">[docs]</a><span class="k">def</span> <span class="nf">get_link</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">rel</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_link">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.get_link">[docs]</a>
+<span class="k">def</span> <span class="nf">get_link</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">rel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get link information from a resource.</span>
 
 <span class="sd">    Parameters</span>
@@ -2407,7 +2506,10 @@ document.write(`
         <span class="k">return</span> <span class="n">obj</span></div>
 
 
-<div class="viewcode-block" id="request_link"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.request_link">[docs]</a><span class="k">def</span> <span class="nf">request_link</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="request_link">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.request_link">[docs]</a>
+<span class="k">def</span> <span class="nf">request_link</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Request a link from a resource.</span>
 
 <span class="sd">    Parameters</span>
@@ -2429,7 +2531,10 @@ document.write(`
     <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="n">link</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">],</span> <span class="n">link</span><span class="p">[</span><span class="s2">&quot;href&quot;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="uri_as_str"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.uri_as_str">[docs]</a><span class="k">def</span> <span class="nf">uri_as_str</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+
+<div class="viewcode-block" id="uri_as_str">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.uri_as_str">[docs]</a>
+<span class="k">def</span> <span class="nf">uri_as_str</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the URI of a resource in string format.</span>
 
 <span class="sd">    Parameters</span>
@@ -2450,6 +2555,7 @@ document.write(`
             <span class="k">return</span> <span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;uri&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">obj</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">_unwrap</span><span class="p">(</span><span class="n">json</span><span class="p">):</span>
@@ -2661,7 +2767,9 @@ document.write(`
     <span class="k">return</span> <span class="n">is_available</span>
 
 
-<div class="viewcode-block" id="platform_version"><a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.platform_version">[docs]</a><span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5.6&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="platform_version">
+<a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.platform_version">[docs]</a>
+<span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5.6&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">platform_version</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the version of the SAS Viya platform to which sasctl is connected.</span>
 
@@ -2689,6 +2797,7 @@ document.write(`
             <span class="k">return</span> <span class="s2">&quot;4.0&quot;</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="k">pass</span>  <span class="c1"># Version could not be found.  Return None instead.</span></div>
+
 </pre></div>
 
                 </article>
@@ -2741,7 +2850,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

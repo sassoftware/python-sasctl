@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.data_sources &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl._services.data_sources &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -27,16 +27,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/data_sources';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -324,7 +324,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
 
 
-<div class="viewcode-block" id="DataSources"><a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources">[docs]</a><span class="k">class</span> <span class="nc">DataSources</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
+<div class="viewcode-block" id="DataSources">
+<a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources">[docs]</a>
+<span class="k">class</span> <span class="nc">DataSources</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enables retrieval of data source metadata.</span>
 
 <span class="sd">    The Data Sources API works in concert with the Data Tables and Row Sets</span>
@@ -338,7 +340,9 @@ document.write(`
 
     <span class="n">list_providers</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span><span class="s2">&quot;/providers&quot;</span><span class="p">,</span> <span class="s2">&quot;provider&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DataSources.get_provider"><a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.get_provider">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="DataSources.get_provider">
+<a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.get_provider">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_provider</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">provider</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a provider instance.</span>
 
@@ -369,7 +373,10 @@ document.write(`
 
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/providers/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">provider</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="DataSources.list_sources"><a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.list_sources">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="DataSources.list_sources">
+<a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.list_sources">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">list_sources</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">provider</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List all data sources available for a provider.</span>
 
@@ -392,7 +399,10 @@ document.write(`
             <span class="k">return</span> <span class="n">sources</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">sources</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="DataSources.get_source"><a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.get_source">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="DataSources.get_source">
+<a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.get_source">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_source</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">provider</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a data source belonging to a given provider.</span>
 
@@ -419,7 +429,10 @@ document.write(`
                 <span class="k">return</span> <span class="n">s</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="DataSources.list_caslibs"><a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.list_caslibs">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="DataSources.list_caslibs">
+<a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.list_caslibs">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">list_caslibs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all caslibs registered with the given CAS server.</span>
 
@@ -448,7 +461,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">result</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">PagedItemIterator</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">result</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="DataSources.get_caslib"><a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.get_caslib">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="DataSources.get_caslib">
+<a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.get_caslib">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_caslib</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a caslib by name.</span>
 
@@ -471,7 +487,10 @@ document.write(`
             <span class="k">return</span> <span class="n">caslibs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="DataSources.list_tables"><a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.list_tables">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="DataSources.list_tables">
+<a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.list_tables">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">list_tables</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">caslib</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List tables available in a caslib.</span>
 
@@ -512,7 +531,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">result</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">PagedItemIterator</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">result</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="DataSources.get_table"><a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.get_table">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="DataSources.get_table">
+<a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.get_table">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">caslib</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get metadata for a CAS table.</span>
 
@@ -536,7 +558,10 @@ document.write(`
             <span class="k">return</span> <span class="n">tables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="DataSources.table_uri"><a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.table_uri">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="DataSources.table_uri">
+<a class="viewcode-back" href="../../../api/services/data_sources.html#sasctl._services.data_sources.DataSources.table_uri">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">table_uri</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the URI identifying a table.</span>
 
@@ -589,7 +614,9 @@ document.write(`
         <span class="c1"># Responses from upload operations often don&#39;t include a links section.</span>
         <span class="c1"># Fall back to tableReference section if present</span>
         <span class="n">table_ref</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tableReference&quot;</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="k">return</span> <span class="n">table_ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tableUri&quot;</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">table_ref</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tableUri&quot;</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
                 </article>
@@ -642,7 +669,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

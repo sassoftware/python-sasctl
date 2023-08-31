@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.saslogon &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl._services.saslogon &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -27,16 +27,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/saslogon';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -325,7 +325,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
 
 
-<div class="viewcode-block" id="SASLogon"><a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon">[docs]</a><span class="k">class</span> <span class="nc">SASLogon</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
+<div class="viewcode-block" id="SASLogon">
+<a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon">[docs]</a>
+<span class="k">class</span> <span class="nc">SASLogon</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The SAS Logon service client management related endpoints.</span>
 
 <span class="sd">    Provides functionality for managing client IDs and secrets  This class</span>
@@ -342,7 +344,9 @@ document.write(`
 
     <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;/SASLogon&quot;</span>
 
-<div class="viewcode-block" id="SASLogon.create_client"><a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.create_client">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="SASLogon.create_client">
+<a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.create_client">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">create_client</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">client_id</span><span class="p">,</span>
@@ -422,7 +426,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">response</span></div>
 
-<div class="viewcode-block" id="SASLogon.delete_client"><a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.delete_client">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="SASLogon.delete_client">
+<a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.delete_client">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">delete_client</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">client</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove and existing client.</span>
 
@@ -451,7 +458,10 @@ document.write(`
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Client with ID &#39;</span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s2">&#39; not found.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
             <span class="k">raise</span></div>
 
-<div class="viewcode-block" id="SASLogon.get_client"><a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.get_client">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="SASLogon.get_client">
+<a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.get_client">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_client</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">client_id</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve information about a specific client</span>
 
@@ -467,7 +477,10 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/oauth/clients/</span><span class="si">{</span><span class="n">client_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SASLogon.list_clients"><a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.list_clients">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="SASLogon.list_clients">
+<a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.list_clients">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">list_clients</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">start_index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a details of multiple clients.</span>
 
@@ -505,7 +518,10 @@ document.write(`
         <span class="c1"># Instead, just return the raw list.</span>
         <span class="k">return</span> <span class="n">results</span><span class="p">[</span><span class="s2">&quot;resources&quot;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="SASLogon.update_client_secret"><a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.update_client_secret">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="SASLogon.update_client_secret">
+<a class="viewcode-back" href="../../../api/services/saslogon.html#sasctl._services.saslogon.SASLogon.update_client_secret">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">update_client_secret</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">secret</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
@@ -536,7 +552,9 @@ document.write(`
         <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Client with ID &#39;</span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s2">&#39; not found.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
-            <span class="k">raise</span></div></div>
+            <span class="k">raise</span></div>
+</div>
+
 </pre></div>
 
                 </article>
@@ -589,7 +607,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

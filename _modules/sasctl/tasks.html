@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.tasks &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl.tasks &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -27,16 +27,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/tasks';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -328,7 +328,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pickle</span>  <span class="c1"># skipcq BAN-B301</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
@@ -350,6 +350,7 @@ document.write(`
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
+<span class="n">_VARIABLE_PROPERTIES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;role&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;level&quot;</span><span class="p">,</span> <span class="s2">&quot;length&quot;</span><span class="p">]</span>
 <span class="c1"># As of Viya 3.4 model registration fails if character fields are longer</span>
 <span class="c1"># than 1024 characters</span>
 <span class="n">_DESC_MAXLEN</span> <span class="o">=</span> <span class="mi">1024</span>
@@ -438,37 +439,10 @@ document.write(`
 <span class="sd">    RestObj</span>
 <span class="sd">        The created project</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">model</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">model</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;targetLevel&quot;</span><span class="p">)}</span>
 
-    <span class="n">function</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;algorithm&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">properties</span><span class="p">,</span> <span class="n">variables</span> <span class="o">=</span> <span class="n">_format_properties</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="p">,</span> <span class="n">output_vars</span><span class="p">)</span>
 
-    <span class="c1"># Get input &amp; output variable lists</span>
-    <span class="c1"># Note: copying lists to avoid altering original</span>
-    <span class="n">input_vars</span> <span class="o">=</span> <span class="n">input_vars</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;inputVariables&quot;</span><span class="p">,</span> <span class="p">[])</span>
-    <span class="n">output_vars</span> <span class="o">=</span> <span class="n">output_vars</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;outputVariables&quot;</span><span class="p">,</span> <span class="p">[])[:]</span>
-    <span class="n">input_vars</span> <span class="o">=</span> <span class="n">input_vars</span><span class="p">[:]</span>
-    <span class="n">output_vars</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[:]</span>
-
-    <span class="c1"># Set prediction or eventProbabilityVariable</span>
-    <span class="k">if</span> <span class="n">output_vars</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">function</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;predictionVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;eventProbabilityVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-
-    <span class="c1"># Set targetLevel</span>
-    <span class="k">if</span> <span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">function</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span> <span class="ow">and</span> <span class="s2">&quot;logistic&quot;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Binary&quot;</span>
-        <span class="k">elif</span> <span class="n">function</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span> <span class="ow">and</span> <span class="s2">&quot;regression&quot;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Interval&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">create_project</span><span class="p">(</span>
-        <span class="n">project_name</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">input_vars</span> <span class="o">+</span> <span class="n">output_vars</span><span class="p">,</span> <span class="o">**</span><span class="n">properties</span>
-    <span class="p">)</span>
+    <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">create_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">properties</span><span class="p">)</span>
 
     <span class="c1"># As of Viya 3.4 the &#39;predictionVariable&#39; and &#39;eventProbabilityVariable&#39;</span>
     <span class="c1"># parameters are not set during project creation.  Update the project if</span>
@@ -485,7 +459,107 @@ document.write(`
     <span class="k">return</span> <span class="n">project</span>
 
 
-<div class="viewcode-block" id="register_model"><a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.register_model">[docs]</a><span class="k">def</span> <span class="nf">register_model</span><span class="p">(</span>
+<span class="c1"># TODO: Add doc_string and unit/integration tests</span>
+<span class="k">def</span> <span class="nf">_update_properties</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">properties</span><span class="p">,</span> <span class="n">variables</span> <span class="o">=</span> <span class="n">_format_properties</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="p">,</span> <span class="n">output_vars</span><span class="p">)</span>
+    <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">)</span>
+    <span class="n">formatted_variables</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">vars_to_add</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="c1"># If the project has no variables, catch error and don&#39;t add variables to list</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">project</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_VARIABLE_PROPERTIES</span><span class="p">:</span>
+                <span class="n">v</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">variable</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            <span class="n">formatted_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">variable</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">formatted_variables</span><span class="p">:</span>
+            <span class="n">vars_to_add</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
+        <span class="n">project</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">properties</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+    <span class="n">mr</span><span class="o">.</span><span class="n">update_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">vars_to_add</span><span class="p">:</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.collection+json&quot;</span><span class="p">}</span>
+        <span class="n">mr</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;projects/</span><span class="si">{</span><span class="n">project</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/variables&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">vars_to_add</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">)</span>
+
+
+<span class="c1"># TODO: Add doc_string and unit tests</span>
+<span class="k">def</span> <span class="nf">_format_properties</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">k</span><span class="p">:</span> <span class="n">model</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">model</span>
+        <span class="k">if</span> <span class="n">k</span>
+        <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">&quot;function&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;targetLevel&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;targetVariable&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;targetEvent&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;classTargetValues&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">function</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;algorithm&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="c1"># Get input &amp; output variable lists</span>
+    <span class="c1"># Note: copying lists to avoid altering original</span>
+    <span class="n">input_vars</span> <span class="o">=</span> <span class="n">input_vars</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;inputVariables&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">output_vars</span> <span class="o">=</span> <span class="n">output_vars</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;outputVariables&quot;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">input_vars</span> <span class="o">=</span> <span class="n">input_vars</span><span class="p">[:]</span>
+    <span class="n">output_vars</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[:]</span>
+    <span class="n">unformatted_variables</span> <span class="o">=</span> <span class="n">input_vars</span> <span class="o">+</span> <span class="n">output_vars</span>
+    <span class="n">formatted_variables</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">unformatted_variables</span><span class="p">:</span>
+        <span class="n">formatted_variable</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_VARIABLE_PROPERTIES</span><span class="p">:</span>
+            <span class="n">formatted_variable</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">variable</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">formatted_variables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">formatted_variable</span><span class="p">)</span>
+
+    <span class="c1"># Set prediction or eventProbabilityVariable</span>
+    <span class="k">if</span> <span class="n">output_vars</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">function</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;predictionVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;eventProbabilityVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_vars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Set targetLevel</span>
+    <span class="k">if</span> <span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">function</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span> <span class="ow">and</span> <span class="s2">&quot;logistic&quot;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Binary&quot;</span>
+        <span class="k">elif</span> <span class="n">function</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span> <span class="ow">and</span> <span class="s2">&quot;regression&quot;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Interval&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;targetEvent&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetEventValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetEvent&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetEvent&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">properties</span><span class="p">,</span> <span class="n">formatted_variables</span>
+
+
+<span class="k">def</span> <span class="nf">_compare_properties</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">properties</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_format_properties</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="p">,</span> <span class="n">output_vars</span><span class="p">)</span>
+    <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">)</span>
+    <span class="n">same_properties</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">project</span> <span class="ow">or</span> <span class="n">project</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="n">properties</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="n">same_properties</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">same_properties</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;This model&#39;s properties are different from the project&#39;s. &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;If you want to run a performance definition with this model, &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;the project&#39;s properties may need to be updated.&quot;</span>
+        <span class="p">)</span>
+
+
+<div class="viewcode-block" id="register_model">
+<a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.register_model">[docs]</a>
+<span class="k">def</span> <span class="nf">register_model</span><span class="p">(</span>
     <span class="n">model</span><span class="p">,</span>
     <span class="n">name</span><span class="p">,</span>
     <span class="n">project</span><span class="p">,</span>
@@ -772,7 +846,7 @@ document.write(`
             <span class="c1"># provided</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Unable to inspect model </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
 
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;Unable to determine input/output variables. &quot;</span>
                 <span class="s2">&quot; Model variables will not be specified and some &quot;</span>
                 <span class="s2">&quot;model functionality may not be available.&quot;</span>
@@ -816,6 +890,7 @@ document.write(`
             <span class="n">mr</span><span class="o">.</span><span class="n">add_model_content</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">model</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">publish_model</span><span class="p">(</span>
@@ -1141,7 +1216,9 @@ document.write(`
     <span class="k">return</span> <span class="n">module_url</span>
 
 
-<div class="viewcode-block" id="get_project_kpis"><a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.get_project_kpis">[docs]</a><span class="k">def</span> <span class="nf">get_project_kpis</span><span class="p">(</span>
+<div class="viewcode-block" id="get_project_kpis">
+<a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.get_project_kpis">[docs]</a>
+<span class="k">def</span> <span class="nf">get_project_kpis</span><span class="p">(</span>
     <span class="n">project</span><span class="p">,</span>
     <span class="n">server</span><span class="o">=</span><span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span>
     <span class="n">caslib</span><span class="o">=</span><span class="s2">&quot;ModelPerformanceData&quot;</span><span class="p">,</span>
@@ -1251,6 +1328,7 @@ document.write(`
     <span class="n">kpiTableDf</span> <span class="o">=</span> <span class="n">kpiTableDf</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">kpiTableDf</span></div>
+
 </pre></div>
 
                 </article>
@@ -1303,7 +1381,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

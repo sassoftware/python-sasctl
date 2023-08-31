@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.import_model &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl.pzmm.import_model &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -27,16 +27,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/import_model';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -322,16 +322,52 @@ document.write(`
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
 <span class="kn">from</span> <span class="nn">.._services.model_repository</span> <span class="kn">import</span> <span class="n">ModelRepository</span> <span class="k">as</span> <span class="n">mr</span>
 <span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">PagedList</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">,</span> <span class="n">current_session</span>
 <span class="kn">from</span> <span class="nn">..utils.misc</span> <span class="kn">import</span> <span class="n">check_if_jupyter</span>
 <span class="kn">from</span> <span class="nn">.write_score_code</span> <span class="kn">import</span> <span class="n">ScoreCode</span> <span class="k">as</span> <span class="n">sc</span>
 <span class="kn">from</span> <span class="nn">.zip_model</span> <span class="kn">import</span> <span class="n">ZipModel</span> <span class="k">as</span> <span class="n">zm</span>
+<span class="kn">from</span> <span class="nn">..tasks</span> <span class="kn">import</span> <span class="n">_create_project</span><span class="p">,</span> <span class="n">_update_properties</span><span class="p">,</span> <span class="n">_compare_properties</span>
 
 
-<div class="viewcode-block" id="project_exists"><a class="viewcode-back" href="../../../api/pzmm/import_model.html#sasctl.pzmm.import_model.project_exists">[docs]</a><span class="k">def</span> <span class="nf">project_exists</span><span class="p">(</span>
-    <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span> <span class="n">response</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<div class="viewcode-block" id="get_model_properties">
+<a class="viewcode-back" href="../../../api/pzmm/import_model.html#sasctl.pzmm.import_model.get_model_properties">[docs]</a>
+<span class="k">def</span> <span class="nf">get_model_properties</span><span class="p">(</span>
+    <span class="n">target_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">model_files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">model_files</span><span class="p">[</span><span class="s2">&quot;ModelProperties.json&quot;</span><span class="p">]</span>
+        <span class="n">input_var</span> <span class="o">=</span> <span class="n">model_files</span><span class="p">[</span><span class="s2">&quot;inputVar.json&quot;</span><span class="p">]</span>
+        <span class="n">output_var</span> <span class="o">=</span> <span class="n">model_files</span><span class="p">[</span><span class="s2">&quot;outputVar.json&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;ModelProperties.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;inputVar.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">input_var</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;outputVar.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">output_var</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">target_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">target_string</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_values</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;classTargetValues&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_string</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">output_var</span><span class="p">:</span>
+        <span class="n">var</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;output&quot;</span>
+    <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">input_var</span><span class="p">:</span>
+        <span class="n">var</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;input&quot;</span>
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">input_var</span><span class="p">,</span> <span class="n">output_var</span></div>
+
+
+
+<div class="viewcode-block" id="project_exists">
+<a class="viewcode-back" href="../../../api/pzmm/import_model.html#sasctl.pzmm.import_model.project_exists">[docs]</a>
+<span class="k">def</span> <span class="nf">project_exists</span><span class="p">(</span>
+    <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span>
+    <span class="n">response</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">target_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">model_files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">overwrite_project_properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RestObj</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Checks if project exists on SAS Viya. If the project does not exist, then a new</span>
@@ -344,6 +380,16 @@ document.write(`
 <span class="sd">        project.</span>
 <span class="sd">    response : str, dict, or RestObj, optional</span>
 <span class="sd">        JSON response of the get_project() call to model repository service.</span>
+<span class="sd">    target_values : list of strings, optional</span>
+<span class="sd">        A list of target values for the target variable. This argument and the</span>
+<span class="sd">        score_metrics argument dictate the handling of the predicted values from</span>
+<span class="sd">        the prediction method. The default value is None.</span>
+<span class="sd">    model_files : string, Path, or dict</span>
+<span class="sd">        Either the directory location of the model files (string or Path object), or</span>
+<span class="sd">        a dictionary containing the contents of all the model files.</span>
+<span class="sd">    overwrite_project_properties : bool, optional</span>
+<span class="sd">        Set whether the project properties should be overwritten when attempting to</span>
+<span class="sd">        import the model. The default value is False.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -366,15 +412,28 @@ document.write(`
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
             <span class="n">repo</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">default_repository</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
-            <span class="c1"># TODO: implement _create_project() call from tasks.py</span>
-            <span class="n">response</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">create_project</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">model_files</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">model</span><span class="p">,</span> <span class="n">input_var</span><span class="p">,</span> <span class="n">output_var</span> <span class="o">=</span> <span class="n">get_model_properties</span><span class="p">(</span>
+                    <span class="n">target_values</span><span class="p">,</span> <span class="n">model_files</span>
+                <span class="p">)</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">_create_project</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">input_var</span><span class="p">,</span> <span class="n">output_var</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">create_project</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;A new project named </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> was created.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">response</span>
     <span class="k">else</span><span class="p">:</span>
+        <span class="n">model</span><span class="p">,</span> <span class="n">input_var</span><span class="p">,</span> <span class="n">output_var</span> <span class="o">=</span> <span class="n">get_model_properties</span><span class="p">(</span><span class="n">target_values</span><span class="p">,</span> <span class="n">model_files</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">overwrite_project_properties</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">_update_properties</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">input_var</span><span class="p">,</span> <span class="n">output_var</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_compare_properties</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">input_var</span><span class="p">,</span> <span class="n">output_var</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">response</span></div>
 
 
-<div class="viewcode-block" id="model_exists"><a class="viewcode-back" href="../../../api/pzmm/import_model.html#sasctl.pzmm.import_model.model_exists">[docs]</a><span class="k">def</span> <span class="nf">model_exists</span><span class="p">(</span>
+
+<div class="viewcode-block" id="model_exists">
+<a class="viewcode-back" href="../../../api/pzmm/import_model.html#sasctl.pzmm.import_model.model_exists">[docs]</a>
+<span class="k">def</span> <span class="nf">model_exists</span><span class="p">(</span>
     <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="s2">&quot;False&quot;</span><span class="p">,</span>
@@ -441,10 +500,15 @@ document.write(`
                 <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ImportModel"><a class="viewcode-back" href="../../../api/pzmm/import_model.html#sasctl.pzmm.import_model.ImportModel">[docs]</a><span class="k">class</span> <span class="nc">ImportModel</span><span class="p">:</span>
+
+<div class="viewcode-block" id="ImportModel">
+<a class="viewcode-back" href="../../../api/pzmm/import_model.html#sasctl.pzmm.import_model.ImportModel">[docs]</a>
+<span class="k">class</span> <span class="nc">ImportModel</span><span class="p">:</span>
     <span class="n">notebook_output</span> <span class="o">=</span> <span class="n">check_if_jupyter</span><span class="p">()</span>
 
-<div class="viewcode-block" id="ImportModel.import_model"><a class="viewcode-back" href="../../../api/pzmm/import_model.html#sasctl.pzmm.import_model.ImportModel.import_model">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ImportModel.import_model">
+<a class="viewcode-back" href="../../../api/pzmm/import_model.html#sasctl.pzmm.import_model.ImportModel.import_model">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">import_model</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">model_files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
@@ -455,12 +519,13 @@ document.write(`
         <span class="n">score_metrics</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">pickle_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pickle&quot;</span><span class="p">,</span>
         <span class="n">project_version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;latest&quot;</span><span class="p">,</span>
-        <span class="n">missing_values</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">overwrite_model</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">score_cas</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">missing_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">overwrite_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">score_cas</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">mlflow_details</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">predict_threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">target_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">overwrite_project_properties</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">RestObj</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -539,6 +604,9 @@ document.write(`
 <span class="sd">            A list of target values for the target variable. This argument and the</span>
 <span class="sd">            score_metrics argument dictate the handling of the predicted values from</span>
 <span class="sd">            the prediction method. The default value is None.</span>
+<span class="sd">        overwrite_project_properties : bool, optional</span>
+<span class="sd">            Set whether the project properties should be overwritten when attempting to</span>
+<span class="sd">            import the model. The default value is False.</span>
 <span class="sd">        kwargs : dict, optional</span>
 <span class="sd">            Other keyword arguments are passed to the following function:</span>
 <span class="sd">                * sasctl.pzmm.ScoreCode.write_score_code(...,</span>
@@ -546,7 +614,8 @@ document.write(`
 <span class="sd">                    binary_string=None,</span>
 <span class="sd">                    model_file_name=None,</span>
 <span class="sd">                    mojo_model=False,</span>
-<span class="sd">                    statsmodels_model=False</span>
+<span class="sd">                    statsmodels_model=False,</span>
+<span class="sd">                    tf_keras_model=False</span>
 <span class="sd">                )</span>
 
 <span class="sd">        Returns</span>
@@ -580,7 +649,13 @@ document.write(`
             <span class="c1"># Check if project name provided exists and raise an error or create a</span>
             <span class="c1"># new project</span>
             <span class="n">project_response</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
-            <span class="n">project</span> <span class="o">=</span> <span class="n">project_exists</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">project_response</span><span class="p">)</span>
+            <span class="n">project</span> <span class="o">=</span> <span class="n">project_exists</span><span class="p">(</span>
+                <span class="n">project</span><span class="p">,</span>
+                <span class="n">project_response</span><span class="p">,</span>
+                <span class="n">target_values</span><span class="p">,</span>
+                <span class="n">model_files</span><span class="p">,</span>
+                <span class="n">overwrite_project_properties</span><span class="p">,</span>
+            <span class="p">)</span>
 
             <span class="c1"># Check if model with same name already exists in project.</span>
             <span class="n">model_exists</span><span class="p">(</span>
@@ -626,7 +701,13 @@ document.write(`
             <span class="c1"># Check if project name provided exists and raise an error or create a</span>
             <span class="c1"># new project</span>
             <span class="n">project_response</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
-            <span class="n">project</span> <span class="o">=</span> <span class="n">project_exists</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">project_response</span><span class="p">)</span>
+            <span class="n">project</span> <span class="o">=</span> <span class="n">project_exists</span><span class="p">(</span>
+                <span class="n">project</span><span class="p">,</span>
+                <span class="n">project_response</span><span class="p">,</span>
+                <span class="n">target_values</span><span class="p">,</span>
+                <span class="n">model_files</span><span class="p">,</span>
+                <span class="n">overwrite_project_properties</span><span class="p">,</span>
+            <span class="p">)</span>
 
             <span class="c1"># Check if model with same name already exists in project.</span>
             <span class="n">model_exists</span><span class="p">(</span>
@@ -661,7 +742,13 @@ document.write(`
             <span class="c1"># Check if project name provided exists and raise an error or create a</span>
             <span class="c1"># new project</span>
             <span class="n">project_response</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
-            <span class="n">project</span> <span class="o">=</span> <span class="n">project_exists</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">project_response</span><span class="p">)</span>
+            <span class="n">project</span> <span class="o">=</span> <span class="n">project_exists</span><span class="p">(</span>
+                <span class="n">project</span><span class="p">,</span>
+                <span class="n">project_response</span><span class="p">,</span>
+                <span class="n">target_values</span><span class="p">,</span>
+                <span class="n">model_files</span><span class="p">,</span>
+                <span class="n">overwrite_project_properties</span><span class="p">,</span>
+            <span class="p">)</span>
 
             <span class="c1"># Check if model with same name already exists in project.</span>
             <span class="n">model_exists</span><span class="p">(</span>
@@ -704,7 +791,9 @@ document.write(`
                         <span class="sa">f</span><span class="s2">&quot;Model score code was written successfully to </span><span class="si">{</span><span class="n">score_path</span><span class="si">}</span><span class="s2"> and&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot; uploaded to SAS Model Manager.&quot;</span>
                     <span class="p">)</span>
-                <span class="k">return</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">),</span> <span class="n">model_files</span></div></div>
+                <span class="k">return</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">),</span> <span class="n">model_files</span></div>
+</div>
+
 </pre></div>
 
                 </article>
@@ -757,7 +846,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

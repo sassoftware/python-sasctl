@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.services.saslogon &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl.services.saslogon &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -28,16 +28,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/saslogon';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -104,7 +104,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -363,11 +363,11 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="module-sasctl._services.saslogon">
-<span id="sasctl-services-saslogon"></span><h1>sasctl.services.saslogon<a class="headerlink" href="#module-sasctl._services.saslogon" title="Permalink to this heading">#</a></h1>
+<span id="sasctl-services-saslogon"></span><h1>sasctl.services.saslogon<a class="headerlink" href="#module-sasctl._services.saslogon" title="Link to this heading">#</a></h1>
 <p>The SAS Logon service provides standard OAuth endpoints for client management.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sasctl._services.saslogon.SASLogon">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl._services.saslogon.</span></span><span class="sig-name descname"><span class="pre">SASLogon</span></span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl._services.saslogon.</span></span><span class="sig-name descname"><span class="pre">SASLogon</span></span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></p>
 <p>The SAS Logon service client management related endpoints.</p>
 <p>Provides functionality for managing client IDs and secrets  This class
@@ -441,7 +441,7 @@ with administrator permissions.</p>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.saslogon.SASLogon.create_client">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redirect_uri</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_client_secret</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_auth_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon.create_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon.create_client" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redirect_uri</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_client_secret</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_auth_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon.create_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon.create_client" title="Link to this definition">#</a></dt>
 <dd><p>Register a new client with the SAS Viya environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -483,7 +483,7 @@ Defaults to false.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.saslogon.SASLogon.delete_client">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon.delete_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon.delete_client" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon.delete_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon.delete_client" title="Link to this definition">#</a></dt>
 <dd><p>Remove and existing client.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -509,7 +509,7 @@ Defaults to false.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.saslogon.SASLogon.get_client">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon.get_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon.get_client" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon.get_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon.get_client" title="Link to this definition">#</a></dt>
 <dd><p>Retrieve information about a specific client</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -528,7 +528,7 @@ Defaults to false.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.saslogon.SASLogon.list_clients">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list_clients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon.list_clients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon.list_clients" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list_clients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon.list_clients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon.list_clients" title="Link to this definition">#</a></dt>
 <dd><p>Retrieve a details of multiple clients.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -553,7 +553,7 @@ clients were found and empty list is returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.saslogon.SASLogon.update_client_secret">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_client_secret</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon.update_client_secret"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon.update_client_secret" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_client_secret</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon.update_client_secret"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon.update_client_secret" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -671,7 +671,7 @@ clients were found and empty list is returned.</p>
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

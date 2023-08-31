@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.cas_management &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl._services.cas_management &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -27,16 +27,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/cas_management';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -329,7 +329,9 @@ document.write(`
 <span class="n">DEFAULT_CASLIB</span> <span class="o">=</span> <span class="s2">&quot;Public&quot;</span>
 
 
-<div class="viewcode-block" id="check_keys"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.check_keys">[docs]</a><span class="k">def</span> <span class="nf">check_keys</span><span class="p">(</span><span class="n">valid_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">input_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="check_keys">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.check_keys">[docs]</a>
+<span class="k">def</span> <span class="nf">check_keys</span><span class="p">(</span><span class="n">valid_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">input_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compares the input_keys against the valid_keys</span>
 <span class="sd">    to see if they are allowed to be passed</span>
 <span class="sd">    as parameters in the request.</span>
@@ -354,7 +356,10 @@ document.write(`
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="check_required_key"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.check_required_key">[docs]</a><span class="k">def</span> <span class="nf">check_required_key</span><span class="p">(</span>
+
+<div class="viewcode-block" id="check_required_key">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.check_required_key">[docs]</a>
+<span class="k">def</span> <span class="nf">check_required_key</span><span class="p">(</span>
     <span class="n">required_key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">input_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check whether the required parameters</span>
@@ -393,7 +398,10 @@ document.write(`
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="CASManagement"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement">[docs]</a><span class="k">class</span> <span class="nc">CASManagement</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
+
+<div class="viewcode-block" id="CASManagement">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement">[docs]</a>
+<span class="k">class</span> <span class="nc">CASManagement</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The CAS Management service provides the ability to manage and perform</span>
 <span class="sd">    actions on common resources as they relate to Cloud Analytic Services (CAS).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -402,7 +410,9 @@ document.write(`
 
     <span class="n">list_servers</span><span class="p">,</span> <span class="n">get_server</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span><span class="s2">&quot;/servers&quot;</span><span class="p">,</span> <span class="s2">&quot;server&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="CASManagement.list_sessions"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.list_sessions">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="CASManagement.list_sessions">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.list_sessions">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">list_sessions</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">query_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a collection of sessions available on the CAS server.</span>
@@ -439,7 +449,10 @@ document.write(`
         <span class="n">sess_list</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/servers/</span><span class="si">%s</span><span class="s2">/sessions&quot;</span> <span class="o">%</span> <span class="n">server</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">query_params</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">sess_list</span></div>
 
-<div class="viewcode-block" id="CASManagement.create_session"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.create_session">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="CASManagement.create_session">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.create_session">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">create_session</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">properties</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new session on the CAS server.</span>
 
@@ -472,7 +485,10 @@ document.write(`
         <span class="n">sess</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/servers/</span><span class="si">%s</span><span class="s2">/sessions&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server</span><span class="p">),</span> <span class="n">json</span><span class="o">=</span><span class="n">properties</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">sess</span></div>
 
-<div class="viewcode-block" id="CASManagement.delete_session"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.delete_session">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="CASManagement.delete_session">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.delete_session">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">delete_session</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">sess_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">query_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
@@ -505,7 +521,10 @@ document.write(`
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">sess</span></div>
 
-<div class="viewcode-block" id="CASManagement.list_caslibs"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.list_caslibs">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="CASManagement.list_caslibs">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.list_caslibs">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">list_caslibs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">filter_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List caslibs available on a server.</span>
 
@@ -527,7 +546,10 @@ document.write(`
             <span class="bp">cls</span><span class="o">.</span><span class="n">_get_rel</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="s2">&quot;caslibs&quot;</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">get_server</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="n">filter_</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="CASManagement.get_caslib"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.get_caslib">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="CASManagement.get_caslib">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.get_caslib">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_caslib</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a caslib by name.</span>
 
@@ -550,7 +572,10 @@ document.write(`
             <span class="k">return</span> <span class="n">caslibs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="CASManagement.list_tables"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.list_tables">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="CASManagement.list_tables">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.list_tables">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">list_tables</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">caslib</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">filter_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
@@ -577,7 +602,10 @@ document.write(`
             <span class="ow">or</span> <span class="p">[]</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="CASManagement.get_table"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.get_table">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="CASManagement.get_table">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.get_table">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">caslib</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a table by name.</span>
 
@@ -605,7 +633,10 @@ document.write(`
             <span class="k">return</span> <span class="n">tables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="CASManagement.upload_file"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.upload_file">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="CASManagement.upload_file">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.upload_file">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">upload_file</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TextIO</span><span class="p">],</span>
@@ -752,7 +783,10 @@ document.write(`
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">tbl</span></div>
 
-<div class="viewcode-block" id="CASManagement.update_state_table"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.update_state_table">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="CASManagement.update_state_table">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.update_state_table">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">update_state_table</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -833,7 +867,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">tbl</span></div>
 
-<div class="viewcode-block" id="CASManagement.promote_table"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.promote_table">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="CASManagement.promote_table">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.promote_table">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">promote_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sess_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Changes the scope of a loaded CAS table from session to global scope.</span>
 <span class="sd">        Operation valid only on a session table.</span>
@@ -867,7 +904,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">tbl</span></div>
 
-<div class="viewcode-block" id="CASManagement.save_table"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.save_table">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="CASManagement.save_table">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.save_table">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">save_table</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -922,7 +962,10 @@ document.write(`
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">sess</span></div>
 
-<div class="viewcode-block" id="CASManagement.del_table"><a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.del_table">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="CASManagement.del_table">
+<a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.del_table">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">del_table</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -972,7 +1015,9 @@ document.write(`
             <span class="s2">&quot;servers/</span><span class="si">%s</span><span class="s2">/caslibs/</span><span class="si">%s</span><span class="s2">/tables/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">caslib</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span>
             <span class="n">params</span><span class="o">=</span><span class="n">query_params</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">tbl</span></div></div>
+        <span class="k">return</span> <span class="n">tbl</span></div>
+</div>
+
 </pre></div>
 
                 </article>
@@ -1025,7 +1070,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

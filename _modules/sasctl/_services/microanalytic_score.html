@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.microanalytic_score &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl._services.microanalytic_score &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -27,16 +27,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/microanalytic_score';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -328,12 +328,16 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
 
 
-<div class="viewcode-block" id="MicroAnalyticScore"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore">[docs]</a><span class="k">class</span> <span class="nc">MicroAnalyticScore</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
+<div class="viewcode-block" id="MicroAnalyticScore">
+<a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore">[docs]</a>
+<span class="k">class</span> <span class="nc">MicroAnalyticScore</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Micro Analytic Service (MAS) client.&quot;&quot;&quot;</span>
 
     <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;/microanalyticScore&quot;</span>
 
-<div class="viewcode-block" id="MicroAnalyticScore.is_uuid"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.is_uuid">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MicroAnalyticScore.is_uuid">
+<a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.is_uuid">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">is_uuid</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">id_</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the ID appears to be a valid MAS id.</span>
 
@@ -359,11 +363,14 @@ document.write(`
         <span class="c1"># MAS id.</span>
         <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^[_a-z][_a-z0-9]+$&quot;</span><span class="p">,</span> <span class="n">id_</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
 
+
     <span class="n">list_modules</span><span class="p">,</span> <span class="n">get_module</span><span class="p">,</span> <span class="n">update_module</span><span class="p">,</span> <span class="n">delete_module</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span>
         <span class="s2">&quot;/modules&quot;</span><span class="p">,</span> <span class="s2">&quot;module&quot;</span>
     <span class="p">)</span>
 
-<div class="viewcode-block" id="MicroAnalyticScore.get_module_step"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.get_module_step">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MicroAnalyticScore.get_module_step">
+<a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.get_module_step">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_module_step</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Details of a single step in a given module.</span>
 
@@ -384,7 +391,10 @@ document.write(`
         <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/modules/</span><span class="si">{}</span><span class="s2">/steps/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">r</span></div>
 
-<div class="viewcode-block" id="MicroAnalyticScore.list_module_steps"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.list_module_steps">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="MicroAnalyticScore.list_module_steps">
+<a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.list_module_steps">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">list_module_steps</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List all steps defined for a module.</span>
 
@@ -404,7 +414,10 @@ document.write(`
         <span class="n">steps</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/modules/</span><span class="si">{}</span><span class="s2">/steps&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">steps</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">steps</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="MicroAnalyticScore.execute_module_step"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.execute_module_step">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="MicroAnalyticScore.execute_module_step">
+<a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.execute_module_step">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">execute_module_step</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">return_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Call a module step with the given parameters.</span>
 
@@ -479,7 +492,10 @@ document.write(`
             <span class="k">return</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">outputs</span></div>
 
-<div class="viewcode-block" id="MicroAnalyticScore.create_module"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.create_module">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="MicroAnalyticScore.create_module">
+<a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.create_module">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">create_module</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -525,7 +541,10 @@ document.write(`
         <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/modules&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">r</span></div>
 
-<div class="viewcode-block" id="MicroAnalyticScore.define_steps"><a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.define_steps">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="MicroAnalyticScore.define_steps">
+<a class="viewcode-back" href="../../../api/services/microanalytic_score.html#sasctl._services.microanalytic_score.MicroAnalyticScore.define_steps">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">define_steps</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">module</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Map MAS steps to Python methods.</span>
 
@@ -668,7 +687,9 @@ document.write(`
 
             <span class="nb">setattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">step</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">module</span></div></div>
+        <span class="k">return</span> <span class="n">module</span></div>
+</div>
+
 </pre></div>
 
                 </article>
@@ -721,7 +742,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

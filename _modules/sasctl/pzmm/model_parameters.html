@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.model_parameters &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl.pzmm.model_parameters &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -27,16 +27,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/model_parameters';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -326,6 +326,19 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.._services.model_repository</span> <span class="kn">import</span> <span class="n">ModelRepository</span> <span class="k">as</span> <span class="n">mr</span>
 <span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">RestObj</span><span class="p">,</span> <span class="n">current_session</span><span class="p">,</span> <span class="n">is_uuid</span>
 
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">xgboost</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">xgboost</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">MODEL_PROPERTIES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">,</span> <span class="s2">&quot;targetVariable&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;targetLevel&quot;</span><span class="p">,</span> <span class="s2">&quot;targetLevel&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;targetEventValue&quot;</span><span class="p">,</span> <span class="s2">&quot;targetEvent&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;eventProbabilityVariable&quot;</span><span class="p">,</span> <span class="s2">&quot;eventProbVar&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">,</span> <span class="s2">&quot;function&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+
 
 <span class="c1"># TODO: Maybe just move _find_file altogether?</span>
 <span class="k">def</span> <span class="nf">_find_file</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span> <span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">RestObj</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
@@ -355,7 +368,9 @@ document.write(`
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No file containing &quot;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s1">&quot; exists within model files.&#39;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ModelParameters"><a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters">[docs]</a><span class="k">class</span> <span class="nc">ModelParameters</span><span class="p">:</span>
+<div class="viewcode-block" id="ModelParameters">
+<a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters">[docs]</a>
+<span class="k">class</span> <span class="nc">ModelParameters</span><span class="p">:</span>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_update_json</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">kpis</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -386,7 +401,9 @@ document.write(`
             <span class="n">model_json</span><span class="p">[</span><span class="s2">&quot;kpis&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parsed_json</span>
         <span class="k">return</span> <span class="n">model_json</span>
 
-<div class="viewcode-block" id="ModelParameters.generate_hyperparameters"><a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.generate_hyperparameters">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ModelParameters.generate_hyperparameters">
+<a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.generate_hyperparameters">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">generate_hyperparameters</span><span class="p">(</span>
         <span class="n">model</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pickle_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -420,15 +437,78 @@ document.write(`
             <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;_estimator_type&quot;</span><span class="p">,</span> <span class="s2">&quot;get_params&quot;</span><span class="p">]):</span>
+        <span class="k">def</span> <span class="nf">tf_params</span><span class="p">():</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Generates hyperparameters for the models generated by tensorflow.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">hyperparameters</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">xg_params</span><span class="p">():</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Generates hyperparameters for the models generated by xgboost.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">xgboost</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;XGBoost is required to generate xgboost hyperparameters.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">hyperparameters</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">save_config</span><span class="p">())</span>
+            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">h2o_params</span><span class="p">():</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Generates hyperparameters for the models generated by h2o.ai.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">hyperparameters</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span>
+            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">statsmodels_params</span><span class="p">():</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Generates hyperparameters for the models generated by statsmodels.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">hyperparameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">&quot;model_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">&quot;input_variables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">exog_names</span>
+            <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">&quot;weights&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="n">model_json</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="n">hyperparameters</span><span class="p">}</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">Hyperparameters.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="fm">__contains__</span><span class="p">(</span><span class="s2">&quot;sklearn&quot;</span><span class="p">):</span>
             <span class="n">sklearn_params</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;keras&quot;</span><span class="p">):</span>
+            <span class="n">tf_params</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;xgboost&quot;</span><span class="p">):</span>
+            <span class="n">xg_params</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;h2o&quot;</span><span class="p">):</span>
+            <span class="n">h2o_params</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;statsmodels&quot;</span><span class="p">):</span>
+            <span class="n">statsmodels_params</span><span class="p">()</span>
+
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;This model type is not currently supported for hyperparameter &quot;</span>
                 <span class="s2">&quot;generation.&quot;</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ModelParameters.update_kpis"><a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.update_kpis">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="ModelParameters.update_kpis">
+<a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.update_kpis">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">update_kpis</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span>
@@ -468,7 +548,10 @@ document.write(`
                     <span class="n">model</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">updated_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span> <span class="n">file_name</span>
                 <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ModelParameters.get_hyperparameters"><a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.get_hyperparameters">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="ModelParameters.get_hyperparameters">
+<a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.get_hyperparameters">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_hyperparameters</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieves the hyperparameter json file from specified model on SAS Model</span>
@@ -495,7 +578,10 @@ document.write(`
         <span class="n">file_contents</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">_find_file</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="s2">&quot;hyperparameters&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">file_contents</span><span class="p">,</span> <span class="n">file_name</span></div>
 
-<div class="viewcode-block" id="ModelParameters.add_hyperparameters"><a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.add_hyperparameters">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="ModelParameters.add_hyperparameters">
+<a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.add_hyperparameters">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">add_hyperparameters</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds custom hyperparameters to the hyperparameter file contained within the</span>
@@ -526,7 +612,10 @@ document.write(`
             <span class="n">file_name</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ModelParameters.get_project_kpis"><a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.get_project_kpis">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="ModelParameters.get_project_kpis">
+<a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.get_project_kpis">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_project_kpis</span><span class="p">(</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span>
         <span class="n">server</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span>
@@ -637,7 +726,37 @@ document.write(`
             <span class="p">{</span><span class="s2">&quot;.&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">kpi_table_df</span></div></div>
+        <span class="k">return</span> <span class="n">kpi_table_df</span></div>
+
+
+<div class="viewcode-block" id="ModelParameters.sync_model_properties">
+<a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.sync_model_properties">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">sync_model_properties</span><span class="p">(</span>
+        <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span> <span class="n">overrwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">):</span>
+        <span class="c1"># Step through options to determine project UUID</span>
+        <span class="k">if</span> <span class="n">is_uuid</span><span class="p">(</span><span class="n">project</span><span class="p">):</span>
+            <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">project</span><span class="p">:</span>
+            <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+            <span class="n">project_id</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="c1"># Get List of Models that exist in project</span>
+        <span class="n">models</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/models&quot;</span><span class="p">)</span>
+        <span class="n">model_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">]</span>
+        <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">model_ids</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">project_property</span><span class="p">,</span> <span class="n">model_property</span> <span class="ow">in</span> <span class="n">MODEL_PROPERTIES</span><span class="p">:</span>
+                <span class="c1"># Check if property is set in project</span>
+                <span class="k">if</span> <span class="n">project_property</span> <span class="ow">in</span> <span class="n">project</span><span class="p">:</span>
+                    <span class="c1"># If property is set in project, check if it&#39;s set in model, and update model accordingly</span>
+                    <span class="k">if</span> <span class="n">model_property</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model</span> <span class="ow">or</span> <span class="n">overrwrite</span><span class="p">:</span>
+                        <span class="n">model</span><span class="p">[</span><span class="n">model_property</span><span class="p">]</span> <span class="o">=</span> <span class="n">project</span><span class="p">[</span><span class="n">project_property</span><span class="p">]</span>
+            <span class="n">mr</span><span class="o">.</span><span class="n">update_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
                 </article>
@@ -690,7 +809,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

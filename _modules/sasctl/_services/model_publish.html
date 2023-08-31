@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.model_publish &#8212; sasctl 1.9.4 documentation</title>
+    <title>sasctl._services.model_publish &#8212; sasctl 1.10.0 documentation</title>
   
   
   
@@ -27,16 +27,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/model_publish';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -101,7 +101,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.9.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.0 documentation</p>
   
 </a></div>
     
@@ -327,7 +327,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
 
 
-<div class="viewcode-block" id="ModelPublish"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish">[docs]</a><span class="k">class</span> <span class="nc">ModelPublish</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
+<div class="viewcode-block" id="ModelPublish">
+<a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish">[docs]</a>
+<span class="k">class</span> <span class="nc">ModelPublish</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enables publishing objects such as models to various destinations.</span>
 
 <span class="sd">    The service provides methods for managing publish destinations like CAS,</span>
@@ -365,16 +367,21 @@ document.write(`
 
         <span class="k">return</span> <span class="n">name</span>
 
-<div class="viewcode-block" id="ModelPublish.list_models"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.list_models">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ModelPublish.list_models">
+<a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.list_models">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">list_models</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/models&quot;</span><span class="p">)</span></div>
+
 
     <span class="n">list_destinations</span><span class="p">,</span> <span class="n">get_destination</span><span class="p">,</span> <span class="n">update_destination</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span>
         <span class="s2">&quot;/destinations&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span>
     <span class="p">)</span>
 
     <span class="c1"># @sasctl_command(&#39;delete&#39;)</span>
-<div class="viewcode-block" id="ModelPublish.delete_destination"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.delete_destination">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ModelPublish.delete_destination">
+<a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.delete_destination">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">delete_destination</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete a destination instance.</span>
 
@@ -405,7 +412,10 @@ document.write(`
 
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/destinations/</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">item</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="ModelPublish.publish_model"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.publish_model">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="ModelPublish.publish_model">
+<a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.publish_model">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">publish_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">notes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Publish a model to an existing publishing destination.</span>
 
@@ -427,10 +437,12 @@ document.write(`
 <span class="sd">        -------</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">code_types</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ds2package&quot;</span><span class="p">:</span> <span class="s2">&quot;ds2&quot;</span><span class="p">,</span> <span class="s2">&quot;datastep&quot;</span><span class="p">:</span> <span class="s2">&quot;datastep&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+        <span class="n">code_types</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ds2package&quot;</span><span class="p">:</span> <span class="s2">&quot;ds2&quot;</span><span class="p">,</span> <span class="s2">&quot;datastep&quot;</span><span class="p">:</span> <span class="s2">&quot;datastep&quot;</span><span class="p">,</span> <span class="s2">&quot;python&quot;</span><span class="p">:</span> <span class="s2">&quot;python&quot;</span><span class="p">}</span>
 
         <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model_repository</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-        <span class="n">model_uri</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model_repository</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;cls&quot;</span><span class="p">)</span>
+        <span class="n">model_uri</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model_repository</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">model_uri</span><span class="p">:</span>
+            <span class="n">model_uri</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model_repository</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;cls&quot;</span><span class="p">)</span>
 
         <span class="c1"># Get score code from registry if no code specified</span>
         <span class="k">if</span> <span class="n">code</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -463,7 +475,10 @@ document.write(`
             <span class="p">},</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ModelPublish.create_cas_destination"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.create_cas_destination">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="ModelPublish.create_cas_destination">
+<a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.create_cas_destination">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">create_cas_destination</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">library</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
@@ -498,7 +513,10 @@ document.write(`
             <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ModelPublish.create_mas_destination"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.create_mas_destination">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="ModelPublish.create_mas_destination">
+<a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.create_mas_destination">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">create_mas_destination</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Define a new Micro Analytic Server (MAS) publishing destination.</span>
 
@@ -522,7 +540,10 @@ document.write(`
             <span class="n">name</span><span class="p">,</span> <span class="n">mas_uri</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="s2">&quot;mas&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ModelPublish.create_destination"><a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.create_destination">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="ModelPublish.create_destination">
+<a class="viewcode-back" href="../../../api/services/model_publish.html#sasctl._services.model_publish.ModelPublish.create_destination">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">create_destination</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">name</span><span class="p">,</span>
@@ -638,7 +659,9 @@ document.write(`
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
                 <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.models.publishing.destination+json&quot;</span>
             <span class="p">},</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+</div>
+
 </pre></div>
 
                 </article>
@@ -691,7 +714,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>
