@@ -112,10 +112,12 @@ class ModelPublish(Service):
         -------
 
         """
-        code_types = {"ds2package": "ds2", "datastep": "datastep", "": ""}
+        code_types = {"ds2package": "ds2", "datastep": "datastep", "python": "python"}
 
         model = cls._model_repository.get_model(model)
-        model_uri = cls._model_repository.get_model_link(model, "cls")
+        model_uri = cls._model_repository.get_model_link(model, "self", True)
+        if not model_uri:
+            model_uri = cls._model_repository.get_model_link(model, "cls")
 
         # Get score code from registry if no code specified
         if code is None:

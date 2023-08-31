@@ -360,7 +360,9 @@ class Session(requests.Session):
                 if auth.startswith("Basic"):
                     # User/pass
                     auth = auth.replace("Basic ", "")
-                    username, password = base64.b64decode(auth).decode("utf-8").split(":")
+                    username, password = (
+                        base64.b64decode(auth).decode("utf-8").split(":")
+                    )
                 elif auth.startswith("Bearer"):
                     # Auth token
                     token = auth.replace("Bearer ", "")

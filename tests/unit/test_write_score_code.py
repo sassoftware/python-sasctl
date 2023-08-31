@@ -9,6 +9,7 @@ import os
 import pickle
 import random
 import tempfile
+import unittest
 from pathlib import Path
 from unittest.mock import DEFAULT, MagicMock, patch
 
@@ -20,6 +21,7 @@ import sasctl.pzmm as pzmm
 from sasctl import current_session
 from sasctl.core import RestObj, VersionInfo
 from sasctl.pzmm.write_score_code import ScoreCode as sc
+from sasctl.pzmm.write_score_code import ScoreCode
 
 
 @pytest.fixture()
@@ -141,6 +143,7 @@ def test_viya4_model_load():
     - non-h2o model
     - mojo model
     - binary h2o model
+    - Tensorflow keras model
     """
     load_text = sc._viya4_model_load("normal")
     assert "pickle.load(pickle_model)" in sc.score_code
@@ -157,31 +160,9 @@ def test_viya4_model_load():
     assert "h2o.load" in binary_text
     sc.score_code = ""
 
-
-def test_impute_numeric():
-    """
-    Test Cases:
-    - binary data
-    - non-binary data
-    """
-    test_df = pd.DataFrame(data=[[1, 1], [0, 2], [0, 3]], columns=["first", "second"])
-
-    sc._impute_numeric(test_df, "first")
-    assert "first = 0" in sc.score_code
-    sc.score_code = ""
-
-    sc._impute_numeric(test_df, "second")
-    assert "second = 2" in sc.score_code
-    sc.score_code = ""
-
-
-def test_impute_char():
-    """
-    Test Cases:
-    - character data
-    """
-    sc._impute_char("text")
-    assert "text = text.strip()" in sc.score_code
+    keras_text = sc._viya4_model_load("tensorflow", tf_keras_model=True)
+    assert "tf.keras.models.load_model" in sc.score_code
+    assert "tf.keras.models.load_model" in keras_text
 
 
 def test_impute_missing_values():
@@ -190,10 +171,23 @@ def test_impute_missing_values():
     - numeric data
     - character data
     """
-    test_df = pd.DataFrame(data=[[0, "a"], [2, "b"]], columns=["num", "char"])
-    sc._impute_missing_values(test_df, ["num", "char"], ["int", "str"])
-    assert "num = 1" in sc.score_code
-    assert "char = char.strip()" in sc.score_code
+    test_df = pd.DataFrame(
+        data=[[0, "a", 1], [2, "b", 0]], columns=["num", "char", "bin"]
+    )
+    sc._impute_missing_values(test_df, True)
+    assert "'num': 1" in sc.score_code
+    assert "'char': ''" in sc.score_code
+    assert "'bin': 0" in sc.score_code
+
+    sc._impute_missing_values(test_df, [5, "test", 1])
+    assert "'num': 5" in sc.score_code
+    assert "'char': 'test'" in sc.score_code
+    assert "'bin': 1" in sc.score_code
+
+    sc._impute_missing_values(test_df, {"a": 5, "b": "test", "c": 1})
+    assert "'a': 5" in sc.score_code
+    assert "'b': 'test'" in sc.score_code
+    assert "'c': 1" in sc.score_code
 
 
 def test_predict_method():
@@ -206,7 +200,7 @@ def test_predict_method():
     var_list = ["first", "second", "third"]
     dtype_list = ["str", "int", "float"]
     sc._predict_method(predict_proba, var_list)
-    assert f"pd.DataFrame([[first, second, third]]," in sc.score_code
+    assert '{"first": first, "second": second' in sc.score_code
     sc.score_code = ""
 
     sc._predict_method(predict_proba, var_list, dtype_list=dtype_list)
@@ -214,7 +208,7 @@ def test_predict_method():
     sc.score_code = ""
 
     sc._predict_method(predict_proba, var_list, statsmodels_model=True)
-    assert f"pd.DataFrame([[1.0, first, second, third]]," in sc.score_code
+    assert '{"const": const, "first": first' in sc.score_code
     sc.score_code = ""
 
 
@@ -309,316 +303,778 @@ def test_determine_score_metrics():
     ) == ["P_A", "P_B", "P_C"]
 
 
-def test_no_targets_no_thresholds():
-    """
-    Test Cases:
-    - len(metrics) == 1
-        - non-h2o
-        - h2o
-    - len(metrics) > 1
-        - non-h2o
-        - h2o
-    - raise error for invalid config (returns - metrics != 0)
-    """
-    metrics = "Classification"
-    returns = [1, "A"]
-    with pytest.raises(ValueError):
-        sc._no_targets_no_thresholds(metrics, returns)
+class TestNoTargetsNoThresholds(unittest.TestCase):
+    def setUp(self):
+        self.sc = ScoreCode
 
-    returns = [1]
-    sc._no_targets_no_thresholds(metrics, returns)
-    assert "Classification = prediction" in sc.score_code
-    sc.score_code = ""
+    def tearDown(self):
+        self.sc.score_code = ""
 
-    sc._no_targets_no_thresholds(metrics, returns, h2o_model=True)
-    assert "Classification = prediction[1][0]"
-    sc.score_code = ""
+    def execute_snippet(self, *args):
+        scope = {}
+        exec(self.sc.score_code, scope)
+        test_snippet = scope["test_snippet"]
+        return test_snippet(*args)
 
-    metrics = ["Classification", "Proba_A", "Proba_B", "Proba_C"]
-    returns = ["I", 1, 2, 3]
-    sc._no_targets_no_thresholds(metrics, returns)
-    assert (
-        sc.score_code == f"{'':4}Classification = prediction[0]\n"
-        f"{'':4}Proba_A = prediction[1]\n"
-        f"{'':4}Proba_B = prediction[2]\n"
-        f"{'':4}Proba_C = prediction[3]\n\n"
-        f"{'':4}return Classification, Proba_A, Proba_B, Proba_C"
-    )
-    sc.score_code = ""
-    sc._no_targets_no_thresholds(metrics, returns, h2o_model=True)
-    assert (
-        sc.score_code == f"{'':4}Classification = prediction[1][0]\n"
-        f"{'':4}Proba_A = float(prediction[1][1])\n"
-        f"{'':4}Proba_B = float(prediction[1][2])\n"
-        f"{'':4}Proba_C = float(prediction[1][3])\n\n"
-        f"{'':4}return Classification, Proba_A, Proba_B, Proba_C"
-    )
+    def test_improper_arguments(self):
+        metrics = "Classification"
+        returns = [1, "A"]
+        with pytest.raises(ValueError):
+            self.sc._no_targets_no_thresholds(metrics, returns)
 
+    def test_single_metric(self):
+        metrics = "Classification"
+        returns = [1]
+        self.sc.score_code += (
+            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._no_targets_no_thresholds(metrics, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [0.5]
+        self.assertEqual(self.execute_snippet(input_array, prediction), 0.5)
+        # Multi row
+        input_array = pd.DataFrame({"A": [0.9, 1, 1.1]})
+        prediction = [0.3, 0.4, 0.5]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({metrics: prediction}),
+        )
 
-def test_binary_target():
-    """
-    Test Cases:
-    - No threshold
-    - score_metrics == 1
-        - h2o
-        - len(returns) == 1
-            - calc proba
-        - len(returns) == 2
-            - class true
-            - class false
-        - len(returns) == 3
-        - error
-    - score_metrics == 2
-        - h2o
-        - len(returns) == 1 and class false
-            - warning
-        - len(returns) == 2
-            - class false
-                - warning
-            - class true
-    - score_metrics == 2
-        - h2o
-        - len(returns) == 1 and class false
-            - warning
-        - len(returns) == 2
-            - class false
-                - warning
-            - class true
-                - class first
-                - class last
-        - len(returns) == 3
-            - warning
-        - error
-    - score_metrics == 3
-        - h2o
-        - len(returns) = 1 and class false
-            - warning
-        - len(returns) == 2
-            - class false
-                - warning
-            - class true
-                - class first
-                - class last
-        - len(returns) == 3
-        - error
-    - error cases:
-        - len(returns) > 3
-        - sum(returns) >= 2
-        - len(metrics) > 3
-    """
-    # Initial errors
-    with pytest.raises(ValueError):
-        sc._binary_target([], [], ["A", 1, 2, 3])
-    with pytest.raises(ValueError):
-        sc._binary_target([], [], ["A", "B"])
-    with pytest.raises(ValueError):
-        sc._binary_target(["A", "B", "C", "D"], [], [])
+    def test_single_metric_h2o(self):
+        metrics = "Classification"
+        returns = [1]
+        self.sc.score_code += (
+            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._no_targets_no_thresholds(metrics, returns, h2o_model=True)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [[], [0.5]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), 0.5)
+        # Multi row
+        input_array = pd.DataFrame({"A": [0.9, 1, 1.1]})
+        prediction = pd.DataFrame({"predict": [0, 1, 1], "p0": [0.3, 0.4, 0.5]})
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": [0, 1, 1]}),
+        )
 
-    # # metrics == 1
-    metrics = "Classification"
-    sc._binary_target(metrics, ["A", "B"], [""], h2o_model=True)
-    assert sc.score_code.endswith("return Classification")
-    assert "prediction[1][2] > " in sc.score_code
-    sc.score_code = ""
+    def test_multi_metric(self):
+        metrics = ["Classification", "Proba_A", "Proba_B", "Proba_C"]
+        returns = ["I", 1, 2, 3]
+        self.sc.score_code += (
+            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._no_targets_no_thresholds(metrics, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = ["i", 0.3, 0.4, 0.5]
+        self.assertEqual(
+            self.execute_snippet(input_array, prediction), ("i", 0.3, 0.4, 0.5)
+        )
+        # Multi row
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = pd.DataFrame(
+            {
+                "Classification": ["i", "j", "k"],
+                "Proba_A": [0.1, 0.2, 0.3],
+                "Proba_B": [0.4, 0.5, 0.6],
+                "Proba_C": [0.7, 0.8, 0.9],
+            }
+        )
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction), prediction
+        )
 
-    sc._binary_target(metrics, ["A", "B"], ["A"])
-    assert sc.score_code.endswith("return prediction")
-    sc.score_code = ""
-
-    sc._binary_target(metrics, ["A", "B"], [1])
-    assert sc.score_code.endswith("return Classification")
-    assert 'Classification = "A"' in sc.score_code
-    sc.score_code = ""
-
-    sc._binary_target(metrics, ["A", "B"], [1, "A"])
-    assert sc.score_code.endswith("return Classification")
-    sc.score_code = ""
-
-    with pytest.raises(ValueError):
-        sc._binary_target(metrics, ["A", "B"], [1, 2, 3])
-
-    # # metrics == 2
-    metrics = ["Classification", "Probability"]
-    with pytest.warns():
-        sc._binary_target(metrics, ["A", "B"], [], threshold=0.7, h2o_model=True)
-    assert sc.score_code.endswith("return prediction[1][0], float(prediction[1][2])")
-    sc.score_code = ""
-
-    with pytest.warns():
-        sc._binary_target(metrics, ["A", "B"], [1], threshold=0.7)
-    assert sc.score_code.endswith("return Classification, prediction")
-    assert "prediction > 0.7" in sc.score_code
-    sc.score_code = ""
-
-    with pytest.warns():
-        sc._binary_target(metrics, ["A", "B"], [1, 2])
-    assert sc.score_code.endswith("return Classification, prediction[0]")
-    assert "prediction[0] > prediction[1]" in sc.score_code
-    sc.score_code = ""
-
-    sc._binary_target(metrics, ["A", "B"], [1, "2"])
-    assert sc.score_code.endswith("return prediction[0], prediction[1]")
-    sc.score_code = ""
-
-    with pytest.warns():
-        sc._binary_target(metrics, ["A", "B"], [1, 2, "3"])
-    assert sc.score_code.endswith("return prediction[2], prediction[0]")
-    sc.score_code = ""
-
-    with pytest.warns():
-        sc._binary_target(metrics, ["A", "B"], ["1", 2, 3])
-    assert sc.score_code.endswith("return prediction[0], prediction[1]")
-    sc.score_code = ""
-
-    with pytest.raises(ValueError):
-        sc._binary_target(metrics, ["A", "B"], [1, 2, 3])
-    sc.score_code = ""
-
-    # # metrics == 3
-    metrics = ["C", "P1", "P2"]
-    sc._binary_target(metrics, ["A", "B"], [1, 2, "3"], h2o_model=True)
-    assert sc.score_code.endswith(
-        "return prediction[1][0], float(prediction[1][1]), float(prediction[1][2])"
-    )
-    sc.score_code = ""
-
-    with pytest.warns():
-        sc._binary_target(metrics, ["A", "B"], [1])
-    assert sc.score_code.endswith("prediction, 1 - prediction")
-    assert "prediction > 0.5" in sc.score_code
-    sc.score_code = ""
-
-    with pytest.warns():
-        sc._binary_target(metrics, ["A", "B"], [1, 2])
-    assert sc.score_code.endswith("prediction[0], prediction[1]")
-    assert "prediction[0] > prediction[1]" in sc.score_code
-    sc.score_code = ""
-
-    sc._binary_target(metrics, ["A", "B"], ["1", 2])
-    assert sc.score_code.endswith("prediction[0], prediction[1], 1 - prediction[1]")
-    sc.score_code = ""
-
-    sc._binary_target(metrics, ["A", "B"], [1, "2"])
-    assert sc.score_code.endswith("prediction[1], prediction[0], 1 - prediction[0]")
-    sc.score_code = ""
-
-    sc._binary_target(metrics, ["A", "B"], ["1", 2, 3])
-    assert sc.score_code.endswith("prediction[0], prediction[1], prediction[2]")
-    sc.score_code = ""
-
-    # # metrics > 3
-    metrics = ["C", "P1", "P2", "P3"]
-    with pytest.raises(ValueError):
-        sc._binary_target(metrics, ["A", "B"], ["1", 2, 3])
+    def test_multi_metric_h2o(self):
+        metrics = ["Classification", "Proba_A", "Proba_B", "Proba_C"]
+        returns = ["I", 1, 2, 3]
+        self.sc.score_code += (
+            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._no_targets_no_thresholds(metrics, returns, h2o_model=True)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [[], ["i", 0.3, 0.4, 0.5]]
+        self.assertEqual(
+            self.execute_snippet(input_array, prediction), ("i", 0.3, 0.4, 0.5)
+        )
+        # Multi row
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = pd.DataFrame(
+            {
+                "Classification": ["i", "j", "k"],
+                "Proba_A": [0.1, 0.2, 0.3],
+                "Proba_B": [0.4, 0.5, 0.6],
+                "Proba_C": [0.7, 0.8, 0.9],
+            }
+        )
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction), prediction
+        )
 
 
-def test_nonbinary_targets():
-    """
-    Test Cases:
-    - too many class returns error
-    - score_metrics == 1
-        - h2o
-        - len(returns) == 1
-        - len(returns) == len(tv)
-        - len(returns) == len(tv) + 1
-        - error
-    - score_metrics == 2
-        - h2o
-        - len(returns) == len(tv)
-        - len(returns) == len(tv) + 1
-        - error
-    - score_metrics > 2
-        - h2o
-            - len(returns) == len(tv)
-            - len(returns) == len(tv) + 1
-        - class == false, metrics == tv == returns
-        - class == true, metrics == tv + 1 == returns
-        - class == false, metrics == tv + 1 == returns + 1
-        - error
-    """
-    metrics = "Classification"
-    target_values = ["A", "B", "C"]
-    returns = ["1", "2", 3]
+class TestBinaryTarget(unittest.TestCase):
+    def setUp(self):
+        self.sc = ScoreCode
+        self.target_values = ["A", "B"]
 
-    # Too many classification returns
-    with pytest.raises(ValueError):
-        sc._nonbinary_targets(metrics, target_values, returns)
-    sc.score_code = ""
+    def tearDown(self):
+        self.sc.score_code = ""
 
-    # # metrics == 1
-    sc._nonbinary_targets(metrics, target_values, [1, 2, 3], h2o_model=True)
-    assert sc.score_code.endswith("return Classification")
-    assert (
-        "target_values[prediction[1][1:].index(max(prediction[1][1:]))]"
-        in sc.score_code
-    )
-    sc.score_code = ""
+    def execute_snippet(self, *args):
+        scope = {}
+        exec(self.sc.score_code, scope)
+        test_snippet = scope["test_snippet"]
+        return test_snippet(*args)
 
-    sc._nonbinary_targets(metrics, target_values, ["1"])
-    assert sc.score_code.endswith("return Classification")
-    sc.score_code = ""
+    def test_improper_arguments(self):
+        with pytest.raises(ValueError):
+            sc._binary_target([], [], ["A", 1, 2, 3])
+        with pytest.raises(ValueError):
+            sc._binary_target([], [], ["A", "B"])
+        with pytest.raises(ValueError):
+            sc._binary_target(["A", "B", "C", "D"], [], [])
 
-    sc._nonbinary_targets(metrics, target_values, [1, 2, 3])
-    assert sc.score_code.endswith("target_values[prediction.index(max(prediction))]")
-    sc.score_code = ""
+    def test_one_metric_h2o(self):
+        metrics = "Classification"
+        returns = [1, 0, 0]
+        self.sc.score_code += (
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns, h2o_model=True)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [[], [1, 2, 3]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), "A")
+        # Multi row
+        input_array = pd.DataFrame({"A": [0, 1]})
+        prediction = pd.DataFrame(
+            {"predict": [0, 1], "p0": [0.9, 0.2], "p1": [0.1, 0.8]}
+        )
+        output_table = pd.DataFrame({"Classification": ["A", "B"]})
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction), output_table
+        )
 
-    sc._nonbinary_targets(metrics, target_values, ["A", 1, 2, 3])
-    assert sc.score_code.endswith("return prediction[0]")
-    sc.score_code = ""
+    def test_one_metric_one_return_classification(self):
+        metrics = "Classification"
+        returns = [""]
+        self.sc.score_code += (
+            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = 0.5
+        self.assertEqual(self.execute_snippet(input_array, prediction), 0.5)
+        # Multi row
+        input_array = pd.DataFrame({"A": [0.9, 1, 1.1]})
+        prediction = [0.3, 0.4, 0.5]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({metrics: prediction}),
+        )
 
-    with pytest.raises(ValueError):
-        sc._nonbinary_targets(metrics, target_values, [1, 2, 3, 4, 5])
-    sc.score_code = ""
+    def test_one_metric_one_return_probability(self):
+        metrics = "Classification"
+        returns = [int]
+        self.sc.score_code += (
+            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = 1
+        self.assertEqual(self.execute_snippet(input_array, prediction), "A")
+        # Multi row
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [0, 1, 0]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({metrics: ["B", "A", "B"]}),
+        )
 
-    # # metrics == # 2
-    metrics = ["C", "P"]
-    sc._nonbinary_targets(metrics, target_values, returns, h2o_model=True)
-    assert sc.score_code.endswith("max(prediction[1][1:])")
-    sc.score_code = ""
+    def test_one_metric_two_returns(self):
+        metrics = "Classification"
+        returns = [int, int]
+        self.sc.score_code += (
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [1, 0]
+        self.assertEqual(self.execute_snippet(input_array, prediction), "A")
+        # Multi row
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [[0, 1], [1, 0]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({metrics: ["B", "A"]}),
+        )
 
-    sc._nonbinary_targets(metrics, target_values, [1, 2, 3])
-    assert sc.score_code.endswith(", max(prediction)")
-    sc.score_code = ""
+    def test_one_metric_three_returns(self):
+        metrics = "Classification"
+        returns = [int, "", int]
+        self.sc.score_code += (
+            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [0, "Y", "z"]
+        self.assertEqual(self.execute_snippet(input_array, prediction), "Y")
+        # Multi row
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [[0, "A", "b"], ["1", "B", 0.4]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({metrics: ["A", "B"]}),
+        )
 
-    sc._nonbinary_targets(metrics, target_values, ["A", 1, 2, 3])
-    assert sc.score_code.endswith("max(prediction[:0] + prediction[1:])")
-    sc.score_code = ""
+    def test_two_metrics_h2o(self):
+        metrics = ["Classification", "Probability"]
+        returns = ["", int, int]
+        self.sc.score_code += (
+            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns, h2o_model=True)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [[], ["a", -1, 1]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("a", 1))
+        # Multi row
+        input_array = pd.DataFrame({"A": [0, 1]})
+        prediction = pd.DataFrame(
+            {"predict": [0, 1], "p0": [0.9, 0.2], "p1": [0.1, 0.8]}
+        )
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": [0, 1], "Probability": [0.1, 0.8]}),
+        )
 
-    with pytest.raises(ValueError):
-        sc._nonbinary_targets(metrics, target_values, [1, 2, 3, 4, 5])
-    sc.score_code = ""
+    def test_two_metrics_one_return(self):
+        metrics = ["Classification", "Probability"]
+        returns = [int]
+        self.sc.score_code += (
+            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = 0.2
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        # Multi row
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [1, -1]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [1, -1]}),
+        )
 
-    # # metrics > 2
-    metrics = ["P1", "P2", "P3"]
-    sc._nonbinary_targets(metrics, target_values, [1, 2, 3], h2o_model=True)
-    assert sc.score_code.endswith(
-        "prediction[1][1], prediction[1][2], prediction[1][3]"
-    )
-    sc.score_code = ""
+    def test_two_metrics_two_returns_no_classification(self):
+        metrics = ["Classification", "Probability"]
+        returns = [int, int]
+        self.sc.score_code += (
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [0.2, 0.8]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        # Multi row
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [[0.9, 0.1], [0.4, 0.6]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.9, 0.4]}),
+        )
 
-    sc._nonbinary_targets(["C"] + metrics, target_values, [1, 2, 3], h2o_model=True)
-    assert sc.score_code.endswith(
-        "prediction[1][0], prediction[1][1], prediction[1][2], prediction[1][3]"
-    )
-    sc.score_code = ""
+    def test_two_metrics_two_returns_classification(self):
+        metrics = ["Classification", "Probability"]
+        returns = ["", int]
+        self.sc.score_code += (
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = ["B", 0.2]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        # Multi row
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [["A", 0.9], ["B", 0.4]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.9, 0.4]}),
+        )
 
-    sc._nonbinary_targets(metrics, target_values, [1, 2, 3])
-    assert sc.score_code.endswith("return prediction[0], prediction[1], prediction[2]")
-    sc.score_code = ""
+    def test_two_metrics_three_returns_class_first(self):
+        metrics = ["Classification", "Probability"]
+        returns = ["", int, int]
+        self.sc.score_code += (
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = ["B", 0.2, 0.8]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        # Multi row
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [["A", 0.9, 0.1], ["B", 0.4, 0.6]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.9, 0.4]}),
+        )
 
-    sc._nonbinary_targets(["C"] + metrics, target_values, [1, 2, 3, "A"])
-    assert sc.score_code.endswith(
-        "return prediction[0], prediction[1], prediction[2], prediction[3]"
-    )
-    sc.score_code = ""
+    def test_two_metrics_three_returns_class_last(self):
+        metrics = ["Classification", "Probability"]
+        returns = [int, int, ""]
+        self.sc.score_code += (
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [0.2, 0.8, "B"]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        # Multi row
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [[0.9, 0.1, "A"], [0.4, 0.6, "B"]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.9, 0.4]}),
+        )
 
-    sc._nonbinary_targets(metrics + ["C"], target_values, [1, 2, 3])
-    assert "target_values = " in sc.score_code
-    sc.score_code = ""
+    def test_three_metrics_h2o(self):
+        metrics = ["Classification", "Proba_0", "Proba_1"]
+        returns = ["", int, int]
+        self.sc.score_code += (
+            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns, h2o_model=True)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [[], ["a", -1, 1]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("a", -1, 1))
+        # Multi row
+        input_array = pd.DataFrame({"A": [0, 1]})
+        prediction = pd.DataFrame(
+            {"predict": [0, 1], "p0": [0.9, 0.2], "p1": [0.1, 0.8]}
+        )
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame(
+                {"Classification": [0, 1], "Proba_0": [0.9, 0.2], "Proba_1": [0.1, 0.8]}
+            ),
+        )
 
-    with pytest.raises(ValueError):
-        sc._nonbinary_targets(metrics + ["C"], target_values, [1, 2, 3, "A", 4, 5])
-    sc.score_code = ""
+    def test_three_metrics_one_return(self):
+        metrics = ["Classification", "Proba_0", "Proba_1"]
+        returns = [int]
+        self.sc.score_code += (
+            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        print(self.sc.score_code)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = 0.9
+        self.assertEqual(
+            self.execute_snippet(input_array, prediction), ("A", 0.9, 1 - 0.9)
+        )
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [0.9, 0.1]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame(
+                {
+                    "Classification": ["A", "B"],
+                    "Proba_0": [0.9, 0.1],
+                    "Proba_1": [1 - 0.9, 1 - 0.1],
+                }
+            ),
+        )
+
+    def test_three_metrics_two_returns_no_class(self):
+        metrics = ["Classification", "Proba_0", "Proba_1"]
+        returns = [int, int]
+        self.sc.score_code += (
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [0.9, 0.1]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("A", 0.9, 0.1))
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [[0.9, 0.1], [0.2, 0.8]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame(
+                {
+                    "Classification": ["A", "B"],
+                    "Proba_0": [0.9, 0.2],
+                    "Proba_1": [0.1, 0.8],
+                }
+            ),
+        )
+
+    def test_three_metrics_two_returns_class_first(self):
+        metrics = ["Classification", "Proba_0", "Proba_1"]
+        returns = ["", int]
+        self.sc.score_code += (
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = ["A", 0.9]
+        self.assertEqual(
+            self.execute_snippet(input_array, prediction), ("A", 0.9, 1 - 0.9)
+        )
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [["A", 0.9], ["B", 0.2]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame(
+                {
+                    "Classification": ["A", "B"],
+                    "Proba_0": [0.9, 0.2],
+                    "Proba_1": [1 - 0.9, 1 - 0.2],
+                }
+            ),
+        )
+
+    def test_three_metrics_two_returns_class_last(self):
+        metrics = ["Classification", "Proba_0", "Proba_1"]
+        returns = [int, ""]
+        self.sc.score_code += (
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [0.9, "A"]
+        self.assertEqual(
+            self.execute_snippet(input_array, prediction), ("A", 0.9, 1 - 0.9)
+        )
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [[0.9, "A"], [0.2, "B"]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame(
+                {
+                    "Classification": ["A", "B"],
+                    "Proba_0": [0.9, 0.2],
+                    "Proba_1": [1 - 0.9, 1 - 0.2],
+                }
+            ),
+        )
+
+    def test_three_metrics_three_returns(self):
+        metrics = ["Classification", "Proba_0", "Proba_1"]
+        returns = ["", int, int]
+        self.sc.score_code += (
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
+        )
+        self.sc._binary_target(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = ["A", 0.9, 0.1]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("A", 0.9, 0.1))
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [["A", 0.9, 0.1], ["B", 0.2, 0.8]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame(
+                {
+                    "Classification": ["A", "B"],
+                    "Proba_0": [0.9, 0.2],
+                    "Proba_1": [0.1, 0.8],
+                }
+            ),
+        )
+
+
+class TestNonbinaryTargets(unittest.TestCase):
+    def setUp(self):
+        self.sc = ScoreCode
+        self.sc.score_code = (
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
+        )
+        self.target_values = ["A", "B", "C"]
+
+    def tearDown(self):
+        self.sc.score_code = ""
+
+    def execute_snippet(self, *args):
+        scope = {}
+        exec(self.sc.score_code, scope)
+        test_snippet = scope["test_snippet"]
+        return test_snippet(*args)
+
+    def test_one_metric_h2o(self):
+        metrics = "Classification"
+        returns = ["", int, int]
+        self.sc._nonbinary_targets(metrics, self.target_values, returns, h2o_model=True)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [[], ["", 0.1, 0.2, 0.7]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), "C")
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = pd.DataFrame(
+            {"predict": [0, 1], "p0": [0.8, 0.2], "p1": [0.1, 0.6], "p2": [0.1, 0.2]}
+        )
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": ["A", "B"]}),
+        )
+
+    def test_one_metric_one_return(self):
+        metrics = "Classification"
+        returns = [""]
+        self.sc._nonbinary_targets(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = "C"
+        self.assertEqual(self.execute_snippet(input_array, prediction), "C")
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = ["D", "J"]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": ["D", "J"]}),
+        )
+
+    def test_one_metric_probability_returns(self):
+        metrics = "Classification"
+        returns = [int, int, int]
+        self.sc._nonbinary_targets(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [0.1, 0.2, 0.3]
+        self.assertEqual(self.execute_snippet(input_array, prediction), "C")
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [[0.9, 0.8, 0.7], [0.4, 0.5, 0.1]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": ["A", "B"]}),
+        )
+
+    def test_one_metric_classification_and_probability_returns(self):
+        metrics = "Classification"
+        returns = ["", int, int, int]
+        self.sc._nonbinary_targets(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = ["C", 0.1, 0.2, 0.3]
+        self.assertEqual(self.execute_snippet(input_array, prediction), "C")
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [["A", 0.9, 0.8, 0.7], ["C", 0.4, 0.5, 0.1]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": ["A", "C"]}),
+        )
+
+    def test_two_metrics_h2o(self):
+        metrics = ["Classification", "Probability"]
+        returns = ["", int, int]
+        self.sc._nonbinary_targets(metrics, self.target_values, returns, h2o_model=True)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [[], ["", 0.1, 0.2, 0.7]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("C", 0.7))
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = pd.DataFrame(
+            {"predict": [0, 1], "p0": [0.8, 0.2], "p1": [0.1, 0.6], "p2": [0.1, 0.2]}
+        )
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.8, 0.6]}),
+        )
+
+    def test_two_metrics_return_probabilities(self):
+        metrics = ["Classification", "Probability"]
+        returns = [int, int, int]
+        self.sc._nonbinary_targets(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [0.1, 0.2, 0.3]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("C", 0.3))
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [[0.9, 0.8, 0.7], [0.4, 0.5, 0.1]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.9, 0.5]}),
+        )
+
+    def test_two_metrics_return_classification_and_probability(self):
+        metrics = ["Classification", "Probability"]
+        returns = ["", int, int, int]
+        self.sc._nonbinary_targets(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = ["C", 0.1, 0.2, 0.3]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("C", 0.3))
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [["A", 0.9, 0.8, 0.7], ["C", 0.4, 0.5, 0.1]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame({"Classification": ["A", "C"], "Probability": [0.9, 0.5]}),
+        )
+
+    def test_probability_metrics_h2o(self):
+        metrics = ["Proba_1", "Proba_2", "Proba_3"]
+        returns = []
+        self.sc._nonbinary_targets(metrics, self.target_values, returns, h2o_model=True)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [[], ["", 0.1, 0.2, 0.7]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), (0.1, 0.2, 0.7))
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = pd.DataFrame(
+            {"predict": [0, 1], "p0": [0.8, 0.2], "p1": [0.1, 0.6], "p2": [0.1, 0.2]}
+        )
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame(
+                {"Proba_1": [0.8, 0.2], "Proba_2": [0.1, 0.6], "Proba_3": [0.1, 0.2]}
+            ),
+        )
+
+    def test_classification_probability_metrics_h2o(self):
+        metrics = ["Classification", "Prob1", "Prob2", "Prob3"]
+        returns = []
+        self.sc._nonbinary_targets(metrics, self.target_values, returns, h2o_model=True)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [[], ["L", 0.1, 0.2, 0.7]]
+        self.assertEqual(
+            self.execute_snippet(input_array, prediction), ("L", 0.1, 0.2, 0.7)
+        )
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = pd.DataFrame(
+            {"predict": [0, 1], "p0": [0.8, 0.2], "p1": [0.1, 0.6], "p2": [0.1, 0.2]}
+        )
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame(
+                {
+                    "Classification": [0, 1],
+                    "Prob1": [0.8, 0.2],
+                    "Prob2": [0.1, 0.6],
+                    "Prob3": [0.1, 0.2],
+                }
+            ),
+        )
+
+    def test_return_all_probabilities(self):
+        metrics = ["Proba_0", "Proba_1", "Proba_2"]
+        returns = [int, int, int]
+        self.sc._nonbinary_targets(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [0.1, 0.2, 0.3]
+        self.assertEqual(self.execute_snippet(input_array, prediction), (0.1, 0.2, 0.3))
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [[0.9, 0.8, 0.7], [0.4, 0.5, 0.1]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame(
+                {"Proba_0": [0.9, 0.4], "Proba_1": [0.8, 0.5], "Proba_2": [0.7, 0.1]}
+            ),
+        )
+
+    def test_return_all_probabilities_and_classification(self):
+        metrics = ["Classification", "Proba_0", "Proba_1", "Proba_2"]
+        returns = ["", int, int, int]
+        self.sc._nonbinary_targets(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = ["P", 0.1, 0.2, 0.3]
+        self.assertEqual(
+            self.execute_snippet(input_array, prediction), ("P", 0.1, 0.2, 0.3)
+        )
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [["D", 0.9, 0.8, 0.7], ["C", 0.4, 0.5, 0.1]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame(
+                {
+                    "Classification": ["D", "C"],
+                    "Proba_0": [0.9, 0.4],
+                    "Proba_1": [0.8, 0.5],
+                    "Proba_2": [0.7, 0.1],
+                }
+            ),
+        )
+
+    def test_return_all_probabilities_generate_classification(self):
+        metrics = ["Classification", "Proba_0", "Proba_1", "Proba_2"]
+        returns = [int, int, int]
+        self.sc._nonbinary_targets(metrics, self.target_values, returns)
+        # Single row
+        input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
+        prediction = [0.1, 0.2, 0.3]
+        self.assertEqual(
+            self.execute_snippet(input_array, prediction), ("C", 0.1, 0.2, 0.3)
+        )
+        # Multiple rows
+        input_array = pd.DataFrame({"A": [1, 0, 1]})
+        prediction = [[0.9, 0.8, 0.7], [0.4, 0.5, 0.1]]
+        pd.testing.assert_frame_equal(
+            self.execute_snippet(input_array, prediction),
+            pd.DataFrame(
+                {
+                    "Classification": ["A", "B"],
+                    "Proba_0": [0.9, 0.4],
+                    "Proba_1": [0.8, 0.5],
+                    "Proba_2": [0.7, 0.1],
+                }
+            ),
+        )
 
 
 def test_predictions_to_metrics():
