@@ -13,7 +13,7 @@ import os
 import pickle  # skipcq BAN-B301
 import re
 import sys
-import warnings
+from warnings import warn
 
 import pandas as pd
 
@@ -35,6 +35,7 @@ from .utils.pymas import from_pickle
 
 logger = logging.getLogger(__name__)
 
+_VARIABLE_PROPERTIES = ["name", "role", "type", "level", "length"]
 # As of Viya 3.4 model registration fails if character fields are longer
 # than 1024 characters
 _DESC_MAXLEN = 1024
@@ -123,7 +124,67 @@ def _create_project(project_name, model, repo, input_vars=None, output_vars=None
     RestObj
         The created project
     """
-    properties = {k: model[k] for k in model if k in ("function", "targetLevel")}
+
+    properties, variables = _format_properties(model, input_vars, output_vars)
+
+    project = mr.create_project(project_name, repo, variables=variables, **properties)
+
+    # As of Viya 3.4 the 'predictionVariable' and 'eventProbabilityVariable'
+    # parameters are not set during project creation.  Update the project if
+    # necessary.
+    needs_update = False
+    for p in ("predictionVariable", "eventProbabilityVariable"):
+        if project.get(p) != properties.get(p):
+            project[p] = properties.get(p)
+            needs_update = True
+
+    if needs_update:
+        project = mr.update_project(project)
+
+    return project
+
+
+# TODO: Add doc_string and unit/integration tests
+def _update_properties(project_name, model, input_vars=None, output_vars=None):
+    properties, variables = _format_properties(model, input_vars, output_vars)
+    project = mr.get_project(project_name)
+    formatted_variables = list()
+    vars_to_add = list()
+    # If the project has no variables, catch error and don't add variables to list
+    try:
+        for variable in project.variables:
+            v = dict()
+            for p in _VARIABLE_PROPERTIES:
+                v[p] = variable.get(p)
+            formatted_variables.append(v)
+    except AttributeError:
+        pass
+    for variable in variables:
+        if variable not in formatted_variables:
+            vars_to_add.append(variable)
+    for p in properties:
+        project[p] = properties[p]
+    mr.update_project(project)
+    if vars_to_add:
+        headers = {"Content-Type": "application/vnd.sas.collection+json"}
+        mr.post(f"projects/{project.id}/variables", json=vars_to_add, headers=headers)
+    return mr.get_project(project_name)
+
+
+# TODO: Add doc_string and unit tests
+def _format_properties(model, input_vars=None, output_vars=None):
+    properties = {
+        k: model[k]
+        for k in model
+        if k
+        in (
+            "function",
+            "targetLevel",
+            "targetVariable",
+            "targetEvent",
+            "classTargetValues",
+        )
+    }
 
     function = model.get("function", "").lower()
     algorithm = model.get("algorithm", "").lower()
@@ -131,9 +192,16 @@ def _create_project(project_name, model, repo, input_vars=None, output_vars=None
     # Get input & output variable lists
     # Note: copying lists to avoid altering original
     input_vars = input_vars or model.get("inputVariables", [])
-    output_vars = output_vars or model.get("outputVariables", [])[:]
+    output_vars = output_vars or model.get("outputVariables", [])
     input_vars = input_vars[:]
     output_vars = output_vars[:]
+    unformatted_variables = input_vars + output_vars
+    formatted_variables = list()
+    for variable in unformatted_variables:
+        formatted_variable = dict()
+        for p in _VARIABLE_PROPERTIES:
+            formatted_variable[p] = variable.get(p)
+        formatted_variables.append(formatted_variable)
 
     # Set prediction or eventProbabilityVariable
     if output_vars:
@@ -149,25 +217,29 @@ def _create_project(project_name, model, repo, input_vars=None, output_vars=None
         elif function == "prediction" and "regression" in algorithm:
             properties["targetLevel"] = "Interval"
         else:
-            properties["targetLevel"] = None
+            properties["targetLevel"] = ""
 
-    project = mr.create_project(
-        project_name, repo, variables=input_vars + output_vars, **properties
-    )
+    if properties.get("targetEvent") is not None:
+        properties["targetEventValue"] = properties["targetEvent"]
+        del properties["targetEvent"]
 
-    # As of Viya 3.4 the 'predictionVariable' and 'eventProbabilityVariable'
-    # parameters are not set during project creation.  Update the project if
-    # necessary.
-    needs_update = False
-    for p in ("predictionVariable", "eventProbabilityVariable"):
-        if project.get(p) != properties.get(p):
-            project[p] = properties.get(p)
-            needs_update = True
+    return properties, formatted_variables
 
-    if needs_update:
-        project = mr.update_project(project)
 
-    return project
+def _compare_properties(project_name, model, input_vars=None, output_vars=None):
+    properties, _ = _format_properties(model, input_vars, output_vars)
+    project = mr.get_project(project_name)
+    same_properties = True
+    for p in properties:
+        if p not in project or project[p].lower() != properties[p].lower():
+            same_properties = False
+            break
+    if not same_properties:
+        warn(
+            "This model's properties are different from the project's. "
+            + "If you want to run a performance definition with this model, "
+            + "the project's properties may need to be updated."
+        )
 
 
 def register_model(
@@ -457,7 +529,7 @@ def register_model(
             # provided
             logger.exception("Unable to inspect model %s", model)
 
-            warnings.warn(
+            warn(
                 "Unable to determine input/output variables. "
                 " Model variables will not be specified and some "
                 "model functionality may not be available."

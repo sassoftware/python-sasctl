@@ -19,8 +19,9 @@ import pandas as pd
 from pandas import DataFrame, Series
 
 # Package Imports
+from sasctl.pzmm.write_score_code import ScoreCode as sc
 from ..core import current_session
-from ..utils.decorators import deprecated
+from ..utils.decorators import deprecated, experimental
 from ..utils.misc import check_if_jupyter
 
 try:
@@ -54,6 +55,8 @@ META = "fileMetadata.json"
 FITSTAT = "dmcas_fitstat.json"
 ROC = "dmcas_roc.json"
 LIFT = "dmcas_lift.json"
+MAXDIFFERENCES = "maxDifferences.json"
+GROUPMETRICS = "groupMetrics.json"
 
 
 def _flatten(nested_list: Iterable) -> Generator[Any, None, None]:
@@ -351,17 +354,17 @@ class JSONFiles:
 
         if not target_values:
             model_function = model_function if model_function else "Prediction"
-            target_level = "INTERVAL"
+            target_level = "Interval"
             target_event = ""
             event_prob_var = ""
         elif isinstance(target_values, list) and len(target_values) == 2:
             model_function = model_function if model_function else "Classification"
-            target_level = "BINARY"
+            target_level = "Binary"
             target_event = str(target_values[0])
             event_prob_var = f"P_{target_values[0]}"
         elif isinstance(target_values, list) and len(target_values) > 2:
             model_function = model_function if model_function else "Classification"
-            target_level = "NOMINAL"
+            target_level = "Nominal"
             target_event = ""
             event_prob_var = ""
             targets = [str(x) for x in target_values]
@@ -467,6 +470,7 @@ class JSONFiles:
         model_prefix: str,
         json_path: Union[str, Path, None] = None,
         is_h2o_model: Optional[bool] = False,
+        is_tf_keras_model: Optional[bool] = False,
     ) -> Union[dict, None]:
         """
         Writes a file metadata JSON file pointing to all relevant files.
@@ -499,6 +503,8 @@ class JSONFiles:
         ]
         if is_h2o_model:
             dict_list.append({"role": "scoreResource", "name": model_prefix + ".mojo"})
+        elif is_tf_keras_model:
+            dict_list.append({"role": "scoreResource", "name": model_prefix + ".h5"})
         else:
             dict_list.append(
                 {"role": "scoreResource", "name": model_prefix + ".pickle"}
@@ -752,6 +758,413 @@ class JSONFiles:
                 continue
             data[data_role - 1]["dataMap"][param_name] = param_value
         return data
+
+    # TODO: Add unit/integration tests
+    @classmethod
+    def assess_model_bias(
+        cls,
+        score_table: DataFrame,
+        sensitive_values: Union[str, List[str]],
+        actual_values: str,
+        pred_values: str = None,
+        prob_values: List[str] = None,
+        levels: List[str] = None,
+        json_path: Union[str, Path, None] = None,
+        cutoff: float = 0.5,
+        datarole: str = "TEST",
+        return_dataframes: bool = False,
+    ) -> Union[dict, None]:
+        """
+        Calculates model bias metrics for sensitive variables and dumps metrics into SAS Viya readable JSON Files. This
+        function works for regression and binary classification problems.
+
+        Parameters
+        ----------
+        score_table : pandas.DataFrame
+            Data structure containing actual values, predicted or predicted probability values, and sensitive variable
+            values. All columns in the score table must have valid variable names.
+        sensitive_values : string or list of strings
+            Sensitive variable name or names in score_table. The variable name must follow SAS naming conventions (no
+            spaces and the name cannot begin with a number or symbol).
+        actual_values : string
+            Variable name containing the actual values in score_table. The variable name must follow SAS naming
+            conventions (no spaces and the name cannot begin with a number or symbol).
+        pred_values : string, required for regression problems, otherwise not used
+            Variable name containing the predicted values in score_table. The variable name must follow SAS naming
+            conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.
+            The default value is None.
+        prob_values : list of strings, required for classification problems, otherwise not used
+           A list of variable names containing the predicted probability values in the score table. The first element
+           should represent the predicted probability of the target class. Required for classification problems. Default
+           is None.
+        levels: List of strings, integers, booleans, required for classification problems, otherwise not used
+            List of classes of a nominal target in the order they were passed in prob_values. Levels must be passed as a
+            string. Default is None.
+        json_path : str or Path, optional
+            Location for the output JSON files. If a path is passed, the json files will populate in the directory and
+            the function will return None, unless return_dataframes is True. Otherwise, the function will return the json
+             strings in a dictionary (dict["maxDifferences.json"] and dict["groupMetrics.json"]). The default value is
+             None.
+        cutoff : float, optional
+            Cutoff value for confusion matrix. Default is 0.5.
+        datarole : string, optional
+            The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
+        return_dataframes : boolean, optional
+            If true, the function returns the pandas data frames used to create the JSON files and a table for bias
+            metrics. If a JSON path is passed, then the function will return a dictionary that only includes the data
+            frames (dict["maxDifferencesData"], dict["groupMetricData"], and dict["biasMetricsData"]). If a JSON path is
+             not passed, the function will return a dictionary with the three tables  and the two JSON strings
+            (dict["maxDifferences.json"] and dict["groupMetrics.json"]). The default value is False.
+
+        Returns
+        -------
+        dict
+            Dictionary containing a key-value pair representing the files name and json
+            dumps respectively.
+
+        Raises
+        ------
+        RuntimeError
+            If swat is not installed, this function cannot perform the necessary
+            calculations.
+
+        ValueError
+            This function requires pred_values OR (regression) or prob_values AND levels (classification) to be passed.
+
+            Variable names must follow SAS naming conventions (no spaces or names that begin with a number or symbol).
+        """
+        try:
+            sess = current_session()
+            conn = sess.as_swat()
+        except ImportError:
+            raise RuntimeError(
+                "The `swat` package is required to generate fit statistics, ROC, and Lift charts with the "
+                "calculate_model_statistics function."
+            )
+
+        variables = score_table.columns
+        sc._check_for_invalid_variable_names(variables)
+
+        if pred_values is None and prob_values is None:
+            raise ValueError(
+                "A value for pred_values (regression) or prob_values (classification) must be passed."
+            )
+
+        # if it's a classification problem
+        if prob_values is not None:
+            if levels is None:
+                raise ValueError(
+                    "Levels of the target variable must be passed for classification problems. The levels should be "
+                    "ordered in the same way that the predicted probability variables are ordered."
+                )
+            score_table[actual_values] = score_table[actual_values].astype(str)
+
+        if isinstance(sensitive_values, str):
+            sensitive_values = [sensitive_values]
+
+        # upload properly formatted score table to CAS
+        conn.upload(score_table, casout=dict(name="score_table"))
+
+        conn.loadactionset("fairaitools")
+        maxdiff_dfs = []
+        groupmetrics_dfs = []
+        biasmetrics_dfs = []
+
+        for x in sensitive_values:
+            # run assessBias, if levels=None then assessBias treats the input like a regression problem
+            tables = conn.fairaitools.assessbias(
+                modelTableType="None",
+                predictedVariables=pred_values
+                if pred_values is not None
+                else prob_values,
+                response=actual_values,
+                responseLevels=levels,
+                sensitiveVariable=x,
+                cutoff=cutoff,
+                table="score_table",
+            )
+
+            # get maxdiff table, append to list
+            maxdiff = pd.DataFrame(tables["MaxDifferences"])
+            # adding variable to table
+            maxdiff["_VARIABLE_"] = x
+            maxdiff_dfs.append(maxdiff)
+
+            # get group metrics table, append to list
+            group_metrics = pd.DataFrame(tables["GroupMetrics"])
+            group_metrics["_VARIABLE_"] = x
+            groupmetrics_dfs.append(group_metrics)
+
+            # get bis metrics table if they want to return it
+            if return_dataframes:
+                bias_metrics = pd.DataFrame(tables["BiasMetrics"])
+                bias_metrics["_VARIABLE_"] = x
+                biasmetrics_dfs.append(bias_metrics)
+
+        # overall formatting
+        group_metrics = cls.format_group_metrics(
+            groupmetrics_dfs=groupmetrics_dfs,
+            prob_values=prob_values,
+            pred_values=pred_values,
+            datarole=datarole,
+        )
+
+        max_differences = cls.format_max_differences(
+            maxdiff_dfs=maxdiff_dfs, datarole=datarole
+        )
+
+        # getting json files
+        json_files = cls.bias_dataframes_to_json(
+            groupmetrics=group_metrics,
+            maxdifference=max_differences,
+            n_sensitivevariables=len(sensitive_values),
+            actual_values=actual_values,
+            prob_values=prob_values,
+            levels=levels,
+            pred_values=pred_values,
+            json_path=json_path,
+        )
+
+        if return_dataframes:
+            bias_metrics = pd.concat(biasmetrics_dfs)
+            df_dict = {
+                "maxDifferencesData": max_differences,
+                "groupMetricsData": group_metrics,
+                "biasMetricsData": bias_metrics,
+            }
+
+            if json_files is None:
+                return df_dict
+
+            json_files.update(df_dict)
+
+        return json_files
+
+    # TODO: Add doc_string and unit tests
+    @staticmethod
+    def format_max_differences(
+        maxdiff_dfs: List[DataFrame], datarole: str = "TEST"
+    ) -> DataFrame:
+        """
+        Converts a list of max differences DataFrames into a singular DataFrame
+        Parameters
+        ----------
+        maxdiff_dfs: List[DataFrame]
+            A list of max_differences DataFrames returned by CAS
+        datarole : string, optional
+            The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
+
+        Returns
+        -------
+        DataFrame
+            A singluar DataFrame containing all max differences data
+        """
+        maxdiff_df = pd.concat(maxdiff_dfs)
+        maxdiff_df = maxdiff_df.rename(
+            columns={"Value": "maxdiff", "Base": "BASE", "Compare": "COMPARE"}
+        )
+
+        maxdiff_df["VLABEL"] = ""
+        maxdiff_df["_DATAROLE_"] = datarole
+
+        maxdiff_df = maxdiff_df.reindex(sorted(maxdiff_df.columns), axis=1)
+
+        return maxdiff_df
+
+    # TODO: Add doc_string and unit tests
+    @staticmethod
+    def format_group_metrics(
+        groupmetrics_dfs: List[DataFrame],
+        prob_values: List[str] = None,
+        pred_values: str = None,
+        datarole: str = "TEST",
+    ) -> DataFrame:
+        """
+        Converts list of group metrics DataFrames to a single DataFrame
+        Parameters
+        ----------
+        groupmetrics_dfs: List[DataFrame]
+            List of group metrics DataFrames generated by CASAction
+        pred_values : string, required for regression problems, otherwise not used
+            Variable name containing the predicted values in score_table. The variable name must follow SAS naming
+            conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.
+            The default value is None.
+        prob_values : list of strings, required for classification problems, otherwise not used
+           A list of variable names containing the predicted probability values in the score table. The first element
+           should represent the predicted probability of the target class. Required for classification problems. Default
+           is None.
+        datarole : string, optional
+            The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
+
+        Returns
+        -------
+        DataFrame
+            A singular DataFrame containing formatted data for group metrics
+        """
+        # adding group metrics dataframes and adding values/ formatting
+        groupmetrics_df = pd.concat(groupmetrics_dfs)
+        groupmetrics_df = groupmetrics_df.rename(
+            columns={
+                "Group": "LEVEL",
+                "N": "nobs",
+                "MISCEVENT": "misccutoff",
+                "MISCEVENTKS": "miscks",
+                "cutoffKS": "kscut",
+                "PREDICTED": "avgyhat",
+                "maxKS": "ks",
+            }
+        )
+        groupmetrics_df["VLABEL"] = ""
+        groupmetrics_df["_DATAROLE_"] = datarole
+
+        for col in groupmetrics_df.columns:
+            if prob_values is not None:
+                upper_cols = [
+                    "LEVEL",
+                    "_VARIABLE_",
+                    "_DATAROLE_",
+                    "VLABEL",
+                    "INTO_EVENT",
+                    "PREDICTED_EVENT",
+                ] + prob_values
+            else:
+                upper_cols = ["LEVEL", "_VARIABLE_", "_DATAROLE_", "VLABEL"] + [
+                    pred_values
+                ]
+            if col not in upper_cols:
+                groupmetrics_df = groupmetrics_df.rename(
+                    columns={col: "_" + col.lower() + "_"}
+                )
+
+        groupmetrics_df = groupmetrics_df.reindex(
+            sorted(groupmetrics_df.columns), axis=1
+        )
+        return groupmetrics_df
+
+    # TODO: Add doc_string and unit tests
+    @experimental
+    @classmethod
+    def bias_dataframes_to_json(
+        cls,
+        groupmetrics: DataFrame = None,
+        maxdifference: DataFrame = None,
+        n_sensitivevariables: int = None,
+        actual_values: str = None,
+        prob_values: List[str] = None,
+        levels: List[str] = None,
+        pred_values: str = None,
+        json_path: Union[str, Path, None] = None,
+    ):
+        """
+        Properly formats data from FairAITools CAS Action Set into a JSON readable formats
+        Parameters
+        ----------
+        groupmetrics: DataFrame
+            A DataFrame containing the group metrics data
+        maxdifference: DataFrame
+            A DataFrame containing the max difference data
+        n_sensitivevariables: int
+            The total number of sensitive values
+        actual_values : String
+            Variable name containing the actual values in score_table. The variable name must follow SAS naming
+            conventions (no spaces and the name cannot begin with a number or symbol).
+        prob_values : list of strings, required for classification problems, otherwise not used
+           A list of variable names containing the predicted probability values in the score table. The first element
+           should represent the predicted probability of the target class. Required for classification problems. Default
+           is None.
+        levels: List of strings, required for classification problems, otherwise not used
+            List of classes of a nominal target in the order they were passed in prob_values. Levels must be passed as a
+            string. Default is None.
+        pred_values : string, required for regression problems, otherwise not used
+            Variable name containing the predicted values in score_table. The variable name must follow SAS naming
+            conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.
+            The default value is None.
+        json_path : str or Path, optional
+            Location for the output JSON files. If a path is passed, the json files will populate in the directory and
+            the function will return None, unless return_dataframes is True. Otherwise, the function will return the json
+             strings in a dictionary (dict["maxDifferences.json"] and dict["groupMetrics.json"]). The default value is
+             None.
+
+        Returns
+        -------
+        dict
+            Dictionary containing a key-value pair representing the files name and json
+            dumps respectively.
+        """
+        folder = "reg_jsons" if prob_values is None else "clf_jsons"
+
+        dfs = (maxdifference, groupmetrics)
+        json_dict = [{}, {}]
+
+        for i, name in enumerate(["maxDifferences", "groupMetrics"]):
+            # reading template files
+            json_template_path = (
+                Path(__file__).resolve().parent / f"template_files/{folder}/{name}.json"
+            )
+            json_dict[i] = cls.read_json_file(json_template_path)
+            # updating data rows
+            for row_num in range(len(dfs[i])):
+                row_dict = dfs[i].iloc[row_num].replace(float("nan"), None).to_dict()
+                new_data = {"dataMap": row_dict, "rowNumber": row_num + 1}
+                json_dict[i]["data"].append(new_data)
+
+        # formatting metric label for max diff
+        for i in range(n_sensitivevariables):
+            if prob_values is not None:
+                for j, prob_label in enumerate(prob_values):
+                    json_dict[0]["data"][(i * 26) + j]["dataMap"][
+                        "MetricLabel"
+                    ] = f"Average Predicted: {actual_values}={levels[j]}"
+
+            else:
+                json_dict[0]["data"][i * 8]["dataMap"][
+                    "MetricLabel"
+                ] = f"Average Predicted: {actual_values}"
+
+        # formatting parameter map for group metrics
+        if prob_values is not None:
+            for i, prob_label in enumerate(prob_values):
+                paramdict = {
+                    "label": prob_label,
+                    "length": 8,
+                    # TODO: figure out order ordering
+                    "order": 34 + i,
+                    "parameter": prob_label,
+                    "preformatted": False,
+                    "type": "num",
+                    "values": [prob_label],
+                }
+                json_dict[1]["parameterMap"][prob_label] = paramdict
+                # cls.add_dict_key(
+                #     dict=json_dict[1]["parameterMap"],
+                #     pos=i + 3,
+                #     new_key=prob_label,
+                #     new_value=paramdict,]
+                # )
+
+        else:
+            json_dict[1]["parameterMap"]["predict"]["label"] = pred_values
+            json_dict[1]["parameterMap"]["predict"]["parameter"] = pred_values
+            json_dict[1]["parameterMap"]["predict"]["values"] = [pred_values]
+            json_dict[1]["parameterMap"][pred_values] = json_dict[1]["parameterMap"][
+                "predict"
+            ]
+            del json_dict[1]["parameterMap"]["predict"]
+
+        if json_path:
+            for i, name in enumerate([MAXDIFFERENCES, GROUPMETRICS]):
+                with open(Path(json_path) / name, "w") as json_file:
+                    json_file.write(json.dumps(json_dict[i], indent=4, cls=NpEncoder))
+                if cls.notebook_output:
+                    print(
+                        f"{name} was successfully written and saved to "
+                        f"{Path(json_path) / name}"
+                    )
+        else:
+            return {
+                MAXDIFFERENCES: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
+                GROUPMETRICS: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
+            }
 
     @classmethod
     def calculate_model_statistics(

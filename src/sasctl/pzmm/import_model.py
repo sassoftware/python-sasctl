@@ -7,16 +7,47 @@ from uuid import UUID
 from warnings import warn
 
 from pandas import DataFrame
+import json
 
 from .._services.model_repository import ModelRepository as mr
 from ..core import PagedList, RestObj, current_session
 from ..utils.misc import check_if_jupyter
 from .write_score_code import ScoreCode as sc
 from .zip_model import ZipModel as zm
+from ..tasks import _create_project, _update_properties, _compare_properties
+
+
+def get_model_properties(
+    target_values: Union[list, str, None] = None,
+    model_files: Union[str, Path, None] = None,
+):
+    if type(model_files) is dict:
+        model = model_files["ModelProperties.json"]
+        input_var = model_files["inputVar.json"]
+        output_var = model_files["outputVar.json"]
+    else:
+        with open(Path(model_files) / "ModelProperties.json") as f:
+            model = json.load(f)
+        with open(Path(model_files) / "inputVar.json") as f:
+            input_var = json.load(f)
+        with open(Path(model_files) / "outputVar.json") as f:
+            output_var = json.load(f)
+    if target_values is not None:
+        target_string = ", ".join(target_values)
+        model["classTargetValues"] = target_string
+    for var in output_var:
+        var["role"] = "output"
+    for var in input_var:
+        var["role"] = "input"
+    return model, input_var, output_var
 
 
 def project_exists(
-    project: Union[str, dict, RestObj], response: Union[str, dict, RestObj, None] = None
+    project: Union[str, dict, RestObj],
+    response: Union[str, dict, RestObj, None] = None,
+    target_values: Union[list, str, None] = None,
+    model_files: Union[str, Path, None] = None,
+    overwrite_project_properties: Optional[bool] = False,
 ) -> RestObj:
     """
     Checks if project exists on SAS Viya. If the project does not exist, then a new
@@ -29,6 +60,16 @@ def project_exists(
         project.
     response : str, dict, or RestObj, optional
         JSON response of the get_project() call to model repository service.
+    target_values : list of strings, optional
+        A list of target values for the target variable. This argument and the
+        score_metrics argument dictate the handling of the predicted values from
+        the prediction method. The default value is None.
+    model_files : string, Path, or dict
+        Either the directory location of the model files (string or Path object), or
+        a dictionary containing the contents of all the model files.
+    overwrite_project_properties : bool, optional
+        Set whether the project properties should be overwritten when attempting to
+        import the model. The default value is False.
 
     Returns
     -------
@@ -51,11 +92,21 @@ def project_exists(
             )
         except ValueError:
             repo = mr.default_repository().get("id")
-            # TODO: implement _create_project() call from tasks.py
-            response = mr.create_project(project, repo)
+            if model_files is not None:
+                model, input_var, output_var = get_model_properties(
+                    target_values, model_files
+                )
+                response = _create_project(project, model, repo, input_var, output_var)
+            else:
+                response = mr.create_project(project, repo)
             print(f"A new project named {response.name} was created.")
             return response
     else:
+        model, input_var, output_var = get_model_properties(target_values, model_files)
+        if overwrite_project_properties:
+            response = _update_properties(project, model, input_var, output_var)
+        else:
+            _compare_properties(project, model, input_var, output_var)
         return response
 
 
@@ -140,12 +191,13 @@ class ImportModel:
         score_metrics: Optional[List[str]] = None,
         pickle_type: str = "pickle",
         project_version: str = "latest",
-        missing_values: bool = False,
-        overwrite_model: bool = False,
-        score_cas: bool = True,
+        missing_values: Optional[bool] = False,
+        overwrite_model: Optional[bool] = False,
+        score_cas: Optional[bool] = True,
         mlflow_details: Optional[dict] = None,
         predict_threshold: Optional[float] = None,
         target_values: Optional[List[str]] = None,
+        overwrite_project_properties: Optional[bool] = False,
         **kwargs,
     ) -> Tuple[RestObj, Union[dict, str, Path]]:
         """
@@ -224,6 +276,9 @@ class ImportModel:
             A list of target values for the target variable. This argument and the
             score_metrics argument dictate the handling of the predicted values from
             the prediction method. The default value is None.
+        overwrite_project_properties : bool, optional
+            Set whether the project properties should be overwritten when attempting to
+            import the model. The default value is False.
         kwargs : dict, optional
             Other keyword arguments are passed to the following function:
                 * sasctl.pzmm.ScoreCode.write_score_code(...,
@@ -231,7 +286,8 @@ class ImportModel:
                     binary_string=None,
                     model_file_name=None,
                     mojo_model=False,
-                    statsmodels_model=False
+                    statsmodels_model=False,
+                    tf_keras_model=False
                 )
 
         Returns
@@ -265,7 +321,13 @@ class ImportModel:
             # Check if project name provided exists and raise an error or create a
             # new project
             project_response = mr.get_project(project)
-            project = project_exists(project, project_response)
+            project = project_exists(
+                project,
+                project_response,
+                target_values,
+                model_files,
+                overwrite_project_properties,
+            )
 
             # Check if model with same name already exists in project.
             model_exists(
@@ -311,7 +373,13 @@ class ImportModel:
             # Check if project name provided exists and raise an error or create a
             # new project
             project_response = mr.get_project(project)
-            project = project_exists(project, project_response)
+            project = project_exists(
+                project,
+                project_response,
+                target_values,
+                model_files,
+                overwrite_project_properties,
+            )
 
             # Check if model with same name already exists in project.
             model_exists(
@@ -346,7 +414,13 @@ class ImportModel:
             # Check if project name provided exists and raise an error or create a
             # new project
             project_response = mr.get_project(project)
-            project = project_exists(project, project_response)
+            project = project_exists(
+                project,
+                project_response,
+                target_values,
+                model_files,
+                overwrite_project_properties,
+            )
 
             # Check if model with same name already exists in project.
             model_exists(

@@ -1,0 +1,492 @@
+{
+    "creationTimeStamp": "0001-01-01T00:00:00Z",
+    "modifiedTimeStamp": "0001-01-01T00:00:00Z",
+    "revision": 0,
+    "name": "groupMetrics",
+    "version": 0,
+    "order": 0,
+    "parameterMap": {
+        "INTO_EVENT": {
+            "label": "Proportion Into Event Level",
+            "length": 8,
+            "order": 32,
+            "parameter": "INTO_EVENT",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "INTO_EVENT"
+            ]
+        },
+        "LEVEL": {
+            "label": "Variable Level",
+            "length": 100,
+            "order": 4,
+            "parameter": "LEVEL",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "LEVEL"
+            ]
+        },
+        "PREDICTED_EVENT": {
+            "label": "Average Prediction for Event",
+            "length": 8,
+            "order": 33,
+            "parameter": "PREDICTED_EVENT",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "PREDICTED_EVENT"
+            ]
+        },
+        "P_Pclass1": {
+            "label": "P_Pclass1",
+            "length": 8,
+            "order": 34,
+            "parameter": "P_Pclass1",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "P_Pclass1"
+            ]
+        },
+        "P_Pclass2": {
+            "label": "P_Pclass2",
+            "length": 8,
+            "order": 35,
+            "parameter": "P_Pclass2",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "P_Pclass2"
+            ]
+        },
+        "P_Pclass3": {
+            "label": "P_Pclass3",
+            "length": 8,
+            "order": 36,
+            "parameter": "P_Pclass3",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "P_Pclass3"
+            ]
+        },
+        "VLABEL": {
+            "label": "Variable Label",
+            "length": 256,
+            "order": 2,
+            "parameter": "VLABEL",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "VLABEL"
+            ]
+        },
+        "_DATAROLE_": {
+            "label": "Data Role",
+            "length": 8,
+            "order": 3,
+            "parameter": "_DATAROLE_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_DATAROLE_"
+            ]
+        },
+        "_VARIABLE_": {
+            "label": "Variable",
+            "length": 255,
+            "order": 1,
+            "parameter": "_VARIABLE_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_VARIABLE_"
+            ]
+        },
+        "_acc_": {
+            "label": "Accuracy",
+            "length": 8,
+            "order": 15,
+            "parameter": "_acc_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_acc_"
+            ]
+        },
+        "_ase_": {
+            "label": "Average Squared Error",
+            "length": 8,
+            "order": 22,
+            "parameter": "_ase_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_ase_"
+            ]
+        },
+        "_c_": {
+            "label": "Area Under ROC",
+            "length": 8,
+            "order": 16,
+            "parameter": "_c_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_c_"
+            ]
+        },
+        "_cumlift_": {
+            "label": "Cumulative Lift",
+            "length": 8,
+            "order": 31,
+            "parameter": "_cumlift_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_cumlift_"
+            ]
+        },
+        "_cumresp_": {
+            "label": "Cumulative Captured Response Percentage",
+            "length": 8,
+            "order": 30,
+            "parameter": "_cumresp_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_cumresp_"
+            ]
+        },
+        "_f1_": {
+            "label": "F1 Score",
+            "length": 8,
+            "order": 17,
+            "parameter": "_f1_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_f1_"
+            ]
+        },
+        "_fdr_": {
+            "label": "False Discovery Rate",
+            "length": 8,
+            "order": 14,
+            "parameter": "_fdr_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_fdr_"
+            ]
+        },
+        "_fn_": {
+            "label": "False Negative",
+            "length": 8,
+            "order": 9,
+            "parameter": "_fn_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_fn_"
+            ]
+        },
+        "_fnr_": {
+            "label": "False Negative Rate",
+            "length": 8,
+            "order": 13,
+            "parameter": "_fnr_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_fnr_"
+            ]
+        },
+        "_fp_": {
+            "label": "False Positive",
+            "length": 8,
+            "order": 7,
+            "parameter": "_fp_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_fp_"
+            ]
+        },
+        "_fpr_": {
+            "label": "False Positive Rate",
+            "length": 8,
+            "order": 11,
+            "parameter": "_fpr_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_fpr_"
+            ]
+        },
+        "_gain_": {
+            "label": "Gain",
+            "length": 8,
+            "order": 27,
+            "parameter": "_gain_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_gain_"
+            ]
+        },
+        "_gini_": {
+            "label": "Gini Coefficient",
+            "length": 8,
+            "order": 18,
+            "parameter": "_gini_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_gini_"
+            ]
+        },
+        "_ks_": {
+            "label": "KS (Youden)",
+            "length": 8,
+            "order": 25,
+            "parameter": "_ks_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_ks_"
+            ]
+        },
+        "_kscut_": {
+            "label": "KS Cutoff",
+            "length": 8,
+            "order": 26,
+            "parameter": "_kscut_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_kscut_"
+            ]
+        },
+        "_lift_": {
+            "label": "Lift",
+            "length": 8,
+            "order": 28,
+            "parameter": "_lift_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_lift_"
+            ]
+        },
+        "_mce_": {
+            "label": "Misclassification Rate",
+            "length": 8,
+            "order": 21,
+            "parameter": "_mce_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_mce_"
+            ]
+        },
+        "_mcll_": {
+            "label": "Multi-Class Log Loss",
+            "length": 8,
+            "order": 24,
+            "parameter": "_mcll_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_mcll_"
+            ]
+        },
+        "_misccutoff_": {
+            "label": "Misclassification at Cutoff",
+            "length": 8,
+            "order": 19,
+            "parameter": "_misccutoff_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_misccutoff_"
+            ]
+        },
+        "_miscks_": {
+            "label": "Misclassification Rate at KS Cutoff (Event)",
+            "length": 8,
+            "order": 20,
+            "parameter": "_miscks_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_miscks_"
+            ]
+        },
+        "_nobs_": {
+            "label": "Number of Observations",
+            "length": 8,
+            "order": 5,
+            "parameter": "_nobs_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_nobs_"
+            ]
+        },
+        "_rase_": {
+            "label": "Root Average Squared Error",
+            "length": 8,
+            "order": 23,
+            "parameter": "_rase_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_rase_"
+            ]
+        },
+        "_resp_": {
+            "label": "Captured Response Percentage",
+            "length": 8,
+            "order": 29,
+            "parameter": "_resp_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_resp_"
+            ]
+        },
+        "_tn_": {
+            "label": "True Negative",
+            "length": 8,
+            "order": 8,
+            "parameter": "_tn_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_tn_"
+            ]
+        },
+        "_tnr_": {
+            "label": "True Negative Rate",
+            "length": 8,
+            "order": 12,
+            "parameter": "_tnr_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_tnr_"
+            ]
+        },
+        "_tp_": {
+            "label": "True Positive",
+            "length": 8,
+            "order": 6,
+            "parameter": "_tp_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_tp_"
+            ]
+        },
+        "_tpr_": {
+            "label": "True Positive Rate",
+            "length": 8,
+            "order": 10,
+            "parameter": "_tpr_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_tpr_"
+            ]
+        }
+    },
+    "data": [
+        {
+            "dataMap": {
+                "INTO_EVENT": 0.06666666666666,
+                "LEVEL": "female",
+                "PREDICTED_EVENT": 0.14933333333333,
+                "P_Pclass1": 0.14933333333333,
+                "P_Pclass2": 0.34,
+                "P_Pclass3": 0.51066666666666,
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "_acc_": 0.93333333333333,
+                "_ase_": 0.13217777777777,
+                "_c_": 0.92307692307692,
+                "_cumlift_": 7.5,
+                "_cumresp_": 50.0,
+                "_f1_": 0.66666666666666,
+                "_fdr_": 0.0,
+                "_fn_": 1.0,
+                "_fnr_": 0.5,
+                "_fp_": 0.0,
+                "_fpr_": 0.0,
+                "_gain_": 6.5,
+                "_gini_": 0.84615384615384,
+                "_ks_": 0.76923076923076,
+                "_kscut_": 0.5,
+                "_lift_": 7.5,
+                "_mce_": 0.4,
+                "_mcll_": 0.64337910862963,
+                "_misccutoff_": 0.06666666666666,
+                "_miscks_": 0.2,
+                "_nobs_": 15.0,
+                "_rase_": 0.36356261878495,
+                "_resp_": 50.0,
+                "_tn_": 13.0,
+                "_tnr_": 1.0,
+                "_tp_": 1.0,
+                "_tpr_": 0.5
+            },
+            "rowNumber": 1
+        },
+        {
+            "dataMap": {
+                "INTO_EVENT": 0.17142857142857,
+                "LEVEL": "male",
+                "PREDICTED_EVENT": 0.22571428571428,
+                "P_Pclass1": 0.22571428571428,
+                "P_Pclass2": 0.27228571428571,
+                "P_Pclass3": 0.502,
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "_acc_": 0.88571428571428,
+                "_ase_": 0.10126666666666,
+                "_c_": 0.95833333333333,
+                "_cumlift_": 3.75,
+                "_cumresp_": 37.5,
+                "_f1_": 0.71428571428571,
+                "_fdr_": 0.16666666666666,
+                "_fn_": 3.0,
+                "_fnr_": 0.375,
+                "_fp_": 1.0,
+                "_fpr_": 0.03703703703703,
+                "_gain_": 2.75,
+                "_gini_": 0.91666666666666,
+                "_ks_": 0.81481481481481,
+                "_kscut_": 0.58796296296296,
+                "_lift_": 2.5,
+                "_mce_": 0.25714285714285,
+                "_mcll_": 0.52767806241564,
+                "_misccutoff_": 0.11428571428571,
+                "_miscks_": 0.14285714285714,
+                "_nobs_": 35.0,
+                "_rase_": 0.31822423959633,
+                "_resp_": 12.5,
+                "_tn_": 26.0,
+                "_tnr_": 0.96296296296296,
+                "_tp_": 5.0,
+                "_tpr_": 0.625
+            },
+            "rowNumber": 2
+        }
+    ],
+    "xInteger": false,
+    "yInteger": false
+}

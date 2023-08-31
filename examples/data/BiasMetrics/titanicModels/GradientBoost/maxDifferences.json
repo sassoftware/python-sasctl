@@ -1,0 +1,440 @@
+{
+    "creationTimeStamp": "0001-01-01T00:00:00Z",
+    "modifiedTimeStamp": "0001-01-01T00:00:00Z",
+    "revision": 0,
+    "name": "maxDifferences",
+    "version": 0,
+    "order": 0,
+    "parameterMap": {
+        "BASE": {
+            "label": "Base Level",
+            "length": 100,
+            "order": 4,
+            "parameter": "BASE",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "BASE"
+            ]
+        },
+        "COMPARE": {
+            "label": "Comparison Level",
+            "length": 100,
+            "order": 5,
+            "parameter": "COMPARE",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "COMPARE"
+            ]
+        },
+        "Metric": {
+            "label": "Metric",
+            "length": 15,
+            "order": 6,
+            "parameter": "Metric",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "Metric"
+            ]
+        },
+        "MetricLabel": {
+            "label": "Metric Label",
+            "length": 42,
+            "order": 7,
+            "parameter": "MetricLabel",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "MetricLabel"
+            ]
+        },
+        "VLABEL": {
+            "label": "Variable Label",
+            "length": 256,
+            "order": 2,
+            "parameter": "VLABEL",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "VLABEL"
+            ]
+        },
+        "_DATAROLE_": {
+            "label": "Data Role",
+            "length": 8,
+            "order": 3,
+            "parameter": "_DATAROLE_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_DATAROLE_"
+            ]
+        },
+        "_VARIABLE_": {
+            "label": "Variable",
+            "length": 255,
+            "order": 1,
+            "parameter": "_VARIABLE_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_VARIABLE_"
+            ]
+        },
+        "maxdiff": {
+            "label": "Maximum Metric Difference",
+            "length": 8,
+            "order": 8,
+            "parameter": "maxdiff",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "maxdiff"
+            ]
+        }
+    },
+    "data": [
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "P_Survived1",
+                "MetricLabel": "Average Predicted: Survived=1",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.41816023964728
+            },
+            "rowNumber": 1
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "P_Survived0",
+                "MetricLabel": "Average Predicted: Survived=0",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.41816023964728
+            },
+            "rowNumber": 2
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "TPR",
+                "MetricLabel": "True Positive Rate",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.4
+            },
+            "rowNumber": 3
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "FPR",
+                "MetricLabel": "False Positive Rate",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.56875
+            },
+            "rowNumber": 4
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "TNR",
+                "MetricLabel": "True Negative Rate",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.56875
+            },
+            "rowNumber": 5
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "FNR",
+                "MetricLabel": "False Negative Rate",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.4
+            },
+            "rowNumber": 6
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "FDR",
+                "MetricLabel": "False Discovery Rate",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.57142857142857
+            },
+            "rowNumber": 7
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "ACC",
+                "MetricLabel": "Accuracy",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.48571428571428
+            },
+            "rowNumber": 8
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "C",
+                "MetricLabel": "Area under ROC",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.05208333333333
+            },
+            "rowNumber": 9
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "F1",
+                "MetricLabel": "F1 Score",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.47058823529411
+            },
+            "rowNumber": 10
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "GINI",
+                "MetricLabel": "Gini Coefficient",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.10416666666666
+            },
+            "rowNumber": 11
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "MISCEVENT",
+                "MetricLabel": "Event Misclassification Rate at Cutoff",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.48571428571428
+            },
+            "rowNumber": 12
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "MISCEVENTKS",
+                "MetricLabel": "Event Misclassification Rate at Maximum KS",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.38095238095238
+            },
+            "rowNumber": 13
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "MCE",
+                "MetricLabel": "Misclassification Rate",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.48571428571428
+            },
+            "rowNumber": 14
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "ASE",
+                "MetricLabel": "Average Square Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.30656172414202
+            },
+            "rowNumber": 15
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "RASE",
+                "MetricLabel": "Root Average Square Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.3032446563639
+            },
+            "rowNumber": 16
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "MCLL",
+                "MetricLabel": "Multiclass Log Loss",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.88977316600896
+            },
+            "rowNumber": 17
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "maxKS",
+                "MetricLabel": "Best Kolmogorov-Smirnov along ROC",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.2
+            },
+            "rowNumber": 18
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "cutoffKS",
+                "MetricLabel": "Kolmogorov-Smirnov at Cutoff",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.16874999999999
+            },
+            "rowNumber": 19
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "GAIN",
+                "MetricLabel": "Gain",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 1.5
+            },
+            "rowNumber": 20
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "LIFT",
+                "MetricLabel": "Lift",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 1.5
+            },
+            "rowNumber": 21
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "RESP",
+                "MetricLabel": "% Captured Response",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 10.0
+            },
+            "rowNumber": 22
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "CUMRESP",
+                "MetricLabel": "Cumulative % Captured Response",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 10.0
+            },
+            "rowNumber": 23
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "CUMLIFT",
+                "MetricLabel": "Cumulative Lift",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 1.5
+            },
+            "rowNumber": 24
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "PREDICTED_EVENT",
+                "MetricLabel": "Average Prediction for Event",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.41816023964728
+            },
+            "rowNumber": 25
+        },
+        {
+            "dataMap": {
+                "BASE": "female",
+                "COMPARE": "male",
+                "Metric": "INTO_EVENT",
+                "MetricLabel": "Proportion into Event Level",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Sex",
+                "maxdiff": 0.43809523809523
+            },
+            "rowNumber": 26
+        }
+    ],
+    "xInteger": false,
+    "yInteger": false
+}

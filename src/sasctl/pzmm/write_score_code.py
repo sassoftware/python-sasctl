@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import re
+import textwrap
 from pathlib import Path
 from typing import Any, Callable, Generator, List, Optional, Tuple, Type, Union
 from warnings import warn
@@ -31,7 +32,7 @@ class ScoreCode:
         predict_threshold: Optional[float] = None,
         model: Union[str, dict, RestObj, None] = None,
         pickle_type: str = "pickle",
-        missing_values: Optional[bool] = False,
+        missing_values: Union[bool, list, DataFrame] = False,
         score_cas: Optional[bool] = True,
         score_code_path: Union[Path, str, None] = None,
         **kwargs,
@@ -114,9 +115,12 @@ class ScoreCode:
         pickle_type : str, optional
             Indicator for the package used to serialize the model file to be uploaded to
             SAS Model Manager. The default value is `pickle`.
-        missing_values : bool, optional
+        missing_values : bool, list, or dict, optional
             Sets whether data handled by the score code will impute for missing values.
-            The default value is False.
+            If set to True, then the function determines the imputed values based on the
+            input_data argument. In order to set the imputation values, pass a dict with
+            variable and value key-value pairs or a list of values in the same variable
+            order as the input_data argument. The default value is False.
         score_cas : bool, optional
             Sets whether models registered to SAS Viya 3.5 should be able to be scored
             and validated through both CAS and SAS Micro Analytic Service. If set to
@@ -167,6 +171,7 @@ class ScoreCode:
             pickle_type,
             mojo_model="mojo_model" in kwargs,
             binary_h2o_model="binary_h2o_model" in kwargs,
+            tf_model="tf_keras_model" in kwargs or "tf_core_model" in kwargs,
             binary_string=binary_string,
         )
 
@@ -186,6 +191,8 @@ class ScoreCode:
                 pickle_type=pickle_type,
                 mojo_model="mojo_model" in kwargs,
                 binary_h2o_model="binary_h2o_model" in kwargs,
+                tf_keras_model="tf_keras_model" in kwargs,
+                tf_core_model="tf_core_model" in kwargs,
             )
         else:
             model_load = None
@@ -194,6 +201,10 @@ class ScoreCode:
 
         # Define the score function using the variables found in input_data
         cls.score_code += f"def score({', '.join(input_var_list)}):\n"
+        """
+def score(var1, var2, var3, var4):
+
+        """
 
         if not score_metrics:
             score_metrics = cls._determine_score_metrics(
@@ -201,6 +212,11 @@ class ScoreCode:
             )
         # Set the output variables in the line below from score_metrics
         cls.score_code += f"{'':4}\"Output: {', '.join(score_metrics)}\"\n\n"
+        """
+    "Output: classification_variable, prediction_variable"
+    
+    
+        """
 
         # Run a try/except block to catch errors for model loading (skip binary string)
         if model_load:
@@ -208,14 +224,21 @@ class ScoreCode:
                 f"{'':4}try:\n{'':8}global model\n{'':4}"
                 f"except NameError:\n{model_load}\n"
             )
-
-        if missing_values:
-            cls._impute_missing_values(input_data, input_var_list, input_dtypes_list)
+            """
+    try:
+        global model
+    except NameError:
+        with open(settings.pickle_path + "model.pickle", "rb") as pickle_file:
+            model = pickle.load(pickle_file)
+            """
 
         # Create the appropriate style of input array and write out the predict method
         if any(x in ["mojo_model", "binary_h2o_model"] for x in kwargs):
             cls._predict_method(
-                predict_method[0], input_var_list, dtype_list=input_dtypes_list
+                predict_method[0],
+                input_var_list,
+                missing_values=missing_values,
+                dtype_list=input_dtypes_list,
             )
             cls._predictions_to_metrics(
                 score_metrics,
@@ -228,21 +251,34 @@ class ScoreCode:
             cls._predict_method(
                 predict_method[0],
                 input_var_list,
+                missing_values=missing_values,
                 statsmodels_model="statsmodels_model" in kwargs,
+                tf_model="tf_keras_model" in kwargs or "tf_core_model" in kwargs,
             )
             # Include check for numpy values and a conversion operation as needed
             cls.score_code += (
                 f"\n{'':4}# Check for numpy values and convert to a CAS readable "
                 f"representation\n"
                 f"{'':4}if isinstance(prediction, np.ndarray):\n"
-                f"{'':8}prediction = prediction.tolist()[0]\n\n"
+                f"{'':8}prediction = prediction.tolist()\n\n"
             )
+            """
+    
+    # Check for numpy values and conver to a CAS readable representation
+    if isinstance(prediction, np.ndarray):
+        prediction = prediction.tolist()
+        
+        
+            """
             cls._predictions_to_metrics(
                 score_metrics,
                 predict_method[1],
                 target_values=target_values,
                 predict_threshold=predict_threshold,
             )
+
+        if missing_values:
+            cls._impute_missing_values(input_data, missing_values)
 
         # SAS Viya 3.5 model
         if model_id:
@@ -360,6 +396,7 @@ class ScoreCode:
         pickle_type: Optional[str] = None,
         mojo_model: Optional[bool] = False,
         binary_h2o_model: Optional[bool] = False,
+        tf_model: Optional[bool] = False,
         binary_string: Optional[str] = None,
     ) -> None:
         """
@@ -379,6 +416,9 @@ class ScoreCode:
         binary_h2o_model : bool, optional
             Flag to indicate that the model is a H2O.ai binary model. The default value
             is None.
+        tf_model : bool, optional
+            Flag to indicate that the model is a tensorflow model. The default value
+            is None.
         binary_string : str, optional
             A binary representation of the Python model object. The default value is
             None.
@@ -388,10 +428,24 @@ class ScoreCode:
             f"import math\nimport {pickle_type}\nimport pandas as pd\n"
             "import numpy as np\nfrom pathlib import Path\n\n"
         )
+        """
+import math
+import pickle
+import pandas as pd
+import numpy as np
+from pathlib import Path
+
+
+        """
 
         try:
             if current_session().version_info() != 3.5:
                 cls.score_code += "import settings\n\n"
+                """
+import settings
+                
+                
+                """
         except AttributeError:
             warn(
                 "No current session connection was found to a SAS Viya server. Score "
@@ -401,12 +455,31 @@ class ScoreCode:
 
         if mojo_model or binary_h2o_model:
             cls.score_code += "import h2o\n\nh2o.init()\n\n"
+            """
+import h2o
+
+h2o.init()
+
+            """
+        elif tf_model:
+            cls.score_code += "import tensorflow as tf\n\n"
+            """
+import tensorflow as tf
+
+            """
         elif binary_string:
             cls.score_code += (
                 f'import codecs\n\nbinary_string = "{binary_string}"'
                 f"\nmodel = {pickle_type}.loads(codecs.decode(binary_string"
                 '.encode(), "base64"))\n\n'
             )
+            """
+import codecs
+
+binary_string = "<binary string>"
+model = pickle.load(codecs.decode(binary_string.encode(), "base64"))
+
+            """
 
     @classmethod
     def _viya35_model_load(
@@ -449,6 +522,10 @@ class ScoreCode:
                 f"model = h2o.import_mojo(str(Path("
                 f'"/models/resources/viya/{model_id}/{model_file_name}")))\n\n'
             )
+            """
+model = h2o.import_mojo(str(Path("/models/resources/viya/<UUID>/model.mojo")))
+
+            """
             return (
                 f"{'':8}model = h2o.import_mojo(str(Path("
                 f'"/models/resources/viya/{model_id}/{model_file_name}")))'
@@ -458,6 +535,10 @@ class ScoreCode:
                 f'model = h2o.load(str(Path("/models/resources/viya/'
                 f'{model_id}/{model_file_name}")))\n\n'
             )
+            """
+model = h2o.load(str(Path("/models/resources/viya/<UUID>/model.h2o")))
+
+            """
             return (
                 f"{'':8}model = h2o.load(str(Path(\"/models/resources/viya/"
                 f'{model_id}/{model_file_name}")))'
@@ -469,6 +550,12 @@ class ScoreCode:
                 f"\"rb\") as pickle_model:\n{'':4}model = {pickle_type}"
                 ".load(pickle_model)\n\n"
             )
+            """
+model_path = Path("/models/resources/viya/<UUID>")
+with open(model_path / "model.pickle", "rb") as pickle_model:
+    model = pickle.load(pickle_model)
+    
+            """
             return (
                 f"{'':8}model_path = Path(\"/models/resources/viya/{model_id}"
                 f"\")\n{'':8}with open(model_path / \"{model_file_name}\", "
@@ -483,6 +570,8 @@ class ScoreCode:
         pickle_type: Optional[str] = None,
         mojo_model: Optional[bool] = False,
         binary_h2o_model: Optional[bool] = False,
+        tf_keras_model: Optional[bool] = False,
+        tf_core_model: Optional[bool] = False,
     ) -> str:
         """
         Write the model load section of the score code assuming the model is being
@@ -501,6 +590,12 @@ class ScoreCode:
         binary_h2o_model : boolean, optional
             Flag to indicate that the model is a H2O.ai binary model. The default value
             is None.
+        tf_keras_model : boolean, optional
+            Flag to indicate that the model is a tensorflow keras model. The default
+            value is False.
+        tf_core_model : boolean, optional
+            Flag to indicate that the model is a tensorflow core model. The default
+            value is False.
         """
         pickle_type = pickle_type if pickle_type else "pickle"
 
@@ -509,6 +604,10 @@ class ScoreCode:
                 f"model = h2o.import_mojo(str(Path(settings.pickle_path"
                 f') / "{model_file_name}"))\n\n'
             )
+            """
+model = h2o.import_mojo(str(Path(settings.pickle_path) / "model.mojo"))
+
+            """
             return (
                 f"{'':8}model = h2o.import_mojo(str(Path(settings.pickle_path) / "
                 f'"{model_file_name}"))\n\n'
@@ -518,9 +617,28 @@ class ScoreCode:
                 f"model = h2o.load(str(Path(settings.pickle_path) / "
                 f"{model_file_name}))\n\n"
             )
+            """
+model = h2o.load(str(Path(settings.pickle_path) / "model.h2o"))
+
+            """
             return (
                 f"{'':8}model = h2o.load(str(Path(settings.pickle_path) / "
                 f"{model_file_name}))\n\n"
+            )
+        elif tf_keras_model:
+            cls.score_code += (
+                f"model = tf.keras.models.load_model(Path(settings.pickle_path) / "
+                f"\"{str(Path(model_file_name).with_suffix('.h5'))}\", "
+                f"safe_mode=True)\n\n"
+            )
+            """
+model = tf.keras.models.load_model(Path(settings.pickle_path) / "model.h5", safe_mode=True)
+
+            """
+            return (
+                f"{'':8}model = tf.keras.models.load_model(Path(settings.pickle_path) "
+                f"/ \"{str(Path(model_file_name).with_suffix('.h5'))}\", "
+                f"safe_mode=True)\n"
             )
         else:
             cls.score_code += (
@@ -528,6 +646,11 @@ class ScoreCode:
                 f'"{model_file_name}", "rb") as pickle_model:\n'
                 f"{'':4}model = {pickle_type}.load(pickle_model)\n\n"
             )
+            """
+with open(Path(settings.pickle_path) / "model.pickle", "rb") as pickle_model:
+    model = pickleload(pickle_model)
+    
+            """
             return (
                 f"{'':8}with open(Path(settings.pickle_path) / "
                 f'"{model_file_name}", "rb") as pickle_model:\n'
@@ -536,73 +659,90 @@ class ScoreCode:
 
     @classmethod
     def _impute_missing_values(
-        cls, data: DataFrame, var_list: List[str], dtype_list: List[str]
+        cls, data: DataFrame, missing_values: Union[bool, list, dict]
     ) -> None:
         """
-        Write the missing value imputation section of the score code. This section of
-        the score code is optional.
+        Write the missing value imputation function of the score code. This section of
+        the score code is optional and is in a separate function at the bottom of the
+        generated score code.
 
         Parameters
         ----------
         data : pandas.DataFrame
             Input dataset for model training or predictions.
-        var_list : list of str
-            List of variable names
-        dtype_list : list of str
-            List of variable data types
-        """
-        cls.score_code += "\n"
-        for var, dtype in zip(var_list, dtype_list):
-            # Split up between numeric and character variables
-            if any(t in dtype for t in ["int", "float"]):
-                cls._impute_numeric(data, var)
-            else:
-                cls._impute_char(var)
-        cls.score_code += "\n"
+        missing_values : bool, list, or dict
 
-    @classmethod
-    def _impute_numeric(cls, data: DataFrame, var: str) -> None:
         """
-        Write imputation statement for a single numeric variable.
+        cls.score_code += "\n\ndef impute_missing_values(data):\n"
+        """
 
-        Parameters
-        ----------
-        data : pandas.DataFrame
-            Input dataset for model training or predictions.
-        var : str
-            Name of the variable to impute values for.
+
+def impute_missing_values(data):
         """
-        # If binary values, then compute the mode instead of the mean
-        if data[var].isin([0, 1]).all():
-            cls.score_code += (
-                f"{'':4}try:\n{'':8}if math.isnan({var}):\n"
-                f"{'':12}{var} = {data[var].mode()[0]}\n"
-                f"{'':4}except TypeError:\n{'':8}{var} = "
-                f"{data[var].mode()[0]}\n"
-            )
+        if isinstance(missing_values, bool):
+            numeric_columns = [
+                col for col in data.columns if pd.api.types.is_numeric_dtype(data[col])
+            ]
+            character_columns = data.columns.difference(numeric_columns).tolist()
+            binary_columns = []
+            for col in data.columns:
+                unique_values = data[col].dropna().unique()
+                if len(unique_values) == 2 and all(
+                    value in [0, 1] for value in unique_values
+                ):
+                    binary_columns.append(col)
+            numeric_columns = list(set(numeric_columns) - set(binary_columns))
+            character_columns = list(set(character_columns) - set(binary_columns))
+            impute_values = {}
+            for col in data[numeric_columns]:
+                impute_values[col] = data[col].mean()
+            for col in data[character_columns]:
+                impute_values[col] = ""
+            for col in data[binary_columns]:
+                impute_values[col] = data[col].mode().iloc[0]
+        elif isinstance(missing_values, list):
+            impute_values = {}
+            for col, imp_val in zip(data.columns.tolist(), missing_values):
+                impute_values[col] = imp_val
         else:
-            cls.score_code += (
-                f"{'':4}try:\n{'':8}if math.isnan({var}):\n"
-                f"{'':12}{var} = {data[var].mean()}\n"
-                f"{'':4}except TypeError:\n{'':8}{var} = "
-                f"{data[var].mean()}\n"
-            )
+            impute_values = missing_values
 
-    @classmethod
-    def _impute_char(cls, var: str) -> None:
+        cls.score_code += f"{'':4}impute_values = \\\n" + cls._wrap_indent_string(
+            impute_values, 8
+        )
         """
-        Write imputation statement for a single string variable.
+    impute_values = \\\n + {"var1": 0, "var2": "", "var3": 125.3}
+        """
+        cls.score_code += f"\n{'':4}return data.fillna(impute_values)\n"
+        """
+        
+    return data.fillna(impute_values)
+        """
+
+    # TODO: Needs unit test
+    @staticmethod
+    def _wrap_indent_string(text, indent=0):
+        """
+        Use the textwrap package to wrap and indent strings longer than 88 characters in
+        width. The indent value is subtracted from 88 to determine the correct length.
 
         Parameters
         ----------
-        var : str
-            Name of the variable to impute values for.
+        text : any value accepted by builtins.str()
+            String text to be wrapped and indented.
+        indent : int, optional
+            Indent length for the wrapped text. Default value is 0.
+
+        Returns
+        -------
+        str
+            Wrapped and indented string.
         """
-        # Replace non-string values with blank strings
-        cls.score_code += (
-            f"{'':4}try:\n{'':8}{var} = {var}.strip()\n{'':4}except "
-            f"AttributeError:\n{'':8}{var} = \"\"\n"
-        )
+        wrapped_lines = textwrap.fill(str(text), width=88 - indent).split("\n")
+        if indent > 0:
+            return "\n".join(f"{'':{indent}}" + line for line in wrapped_lines)
+        else:
+            return "\n".join(line for line in wrapped_lines)
 
     @classmethod
     def _predict_method(
@@ -610,7 +750,9 @@ class ScoreCode:
         method: Callable[..., List],
         var_list: List[str],
         dtype_list: Optional[List[str]] = None,
+        missing_values: Optional[Any] = None,
         statsmodels_model: Optional[bool] = False,
+        tf_model: Optional[bool] = False,
     ) -> None:
         """
         Write the model prediction section of the score code.
@@ -623,11 +765,27 @@ class ScoreCode:
             List of variable names.
         dtype_list : list of str, optional
             List of variable data types. The default value is None.
+        missing_values : any, optional
+            Flag for indicating if missing values should be imputed. The default value
+            is None.
         statsmodels_model : bool, optional
             Flag to indicate that the model is a statsmodels model. The default value is
             False.
+        tf_model : bool, optional
+            Flag to indicate that the model is a tensorflow model. The default value is
+            False.
         """
-        column_names = ", ".join(f'"{col}"' for col in var_list)
+        cls.score_code += (
+            f"{'':4}index=None\n"
+            f"{'':4}if not isinstance({var_list[0]}, pd.Series):\n"
+            f"{'':8}index=[0]\n"
+        )
+        """
+index=None
+if not isinstance(var1, pd.Series):
+    index=[0]
+        """
+
         # H2O models
         if dtype_list:
             column_types = "{"
@@ -636,35 +794,124 @@ class ScoreCode:
                     col_type = "numeric"
                 else:
                     col_type = "string"
-                column_types += f'"{var}" : "{col_type}", '
+                column_types += f'"{var}": "{col_type}", '
             column_types = column_types.rstrip(", ")
             column_types += "}"
+            input_dict = [f'"{var}": {var}' for var in var_list]
+
+            cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
+            input_frame = f'{{{", ".join(input_dict)}}}, index=index'
+            cls.score_code += cls._wrap_indent_string(input_frame, 8)
+            cls.score_code += f"\n{'':4})\n"
+            if missing_values:
+                cls.score_code += (
+                    f"{'':4}input_array = impute_missing_values(input_array)\n"
+                )
             cls.score_code += (
-                f"{'':4}input_array = pd.DataFrame("
-                f"[[{', '.join(var_list)}]],\n{'':31}columns=["
-                f"{column_names}],\n{'':31}dtype=object,\n{'':31}"
-                f"index=[0])\n{'':4}column_types = {column_types}\n"
+                f"{'':4}column_types = {column_types}\n"
                 f"{'':4}h2o_array = h2o.H2OFrame(input_array, "
                 f"column_types=column_types)\n{'':4}prediction = "
                 f"model.{method.__name__}(h2o_array)\n{'':4}prediction"
-                f" = h2o.as_list(prediction, use_pandas=False)\n"
+                f" = h2o.as_list(prediction, use_pandas=prediction.shape[0]>1)\n"
             )
+            """
+    input_array = pd.DataFrame(
+        {"var1": var1, "var2": var2, "var3": var3}
+    )
+    input_array = impute_missing_values(input_array)
+    column_types = {"var1": "string", "var2": "numeric", "var3": "numeric"}
+    h2o_array = h2o.H2OFrame(input_array, column_types=column_types)
+    prediction = model.predict(h2o_array)
+    prediction = h2o.as_list(prediction, use_pandas=False)
+            """
         # Statsmodels models
         elif statsmodels_model:
+            var_list.insert(0, "const")
+            input_dict = [f'"{var}": {var}' for var in var_list]
             cls.score_code += (
-                f"{'':4}inputArray = pd.DataFrame("
-                f"[[1.0, {', '.join(var_list)}]],\n{'':29}columns=["
-                f"\"const\", {column_names}],\n{'':29}dtype=object)\n"
-                f"{'':4}prediction = model.{method.__name__}"
-                f"(input_array)\n"
+                f"{'':4}if not isinstance(\"{var_list[0]}\", pd.Series):\n"
+                f"{'':8}const = 1\n"
+                f"{'':4}else:\n"
+                f"{'':8}const = pd.Series([1 for x in len({var_list[0]})])"
             )
+            """
+    if not isinstance("var1", pd.Series):
+        const = 1
+    else:
+        const = pd.Series([1 for x in len(var1)])
+            """
+
+            cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
+            input_frame = f'{{{", ".join(input_dict)}}}, index=index'
+            cls.score_code += cls._wrap_indent_string(input_frame, 8)
+            cls.score_code += f"\n{'':4})\n"
+            if missing_values:
+                cls.score_code += (
+                    f"{'':4}input_array = impute_missing_values(input_array)\n"
+                )
+            cls.score_code += (
+                f"{'':4}prediction = model.{method.__name__}(input_array)\n"
+            )
+            """
+    input_array = pd.DataFrame(
+        {"const": const, "var1": var1, "var2": var2, "var3": var3}
+    )
+    input_array = impute_missing_values(input_array)
+    prediction = model.predict(input_array)
+            """
+        elif tf_model:
+            input_dict = [f'"{var}": {var}' for var in var_list]
+
+            cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
+            input_frame = f'{{{", ".join(input_dict)}}}, index=index'
+            cls.score_code += cls._wrap_indent_string(input_frame, 8)
+            cls.score_code += f"\n{'':4})\n"
+            if missing_values:
+                cls.score_code += (
+                    f"{'':4}input_array = impute_missing_values(input_array)\n"
+                )
+            cls.score_code += (
+                f"{'':4}prediction = model.{method.__name__}(input_array)\n\n"
+                f"{'':4} # Check if model returns logits or probabilities\n"
+                f"{'':4}if not math.isclose(sum(predictions[0]), 1, rel_tol=.01):\n"
+                f"{'':8}predictions = [tf.nn.softmax(p).numpy().tolist() for p in "
+                f"predictions]\n{'':4}else:\n"
+                f"{'':8}predictions = [p.tolist() for p in predictions]\n"
+            )
+            """
+    input_array = pd.DataFrame(
+        {"var1": var1, "var2": var2, "var3": var3}
+    )
+    input_array = impute_missing_values(input_array)
+    prediction = model.predict(input_array)
+    
+    # Check if model returns logits or probabilities
+    if not math.isclose(sum(predictions[0]), 1, rel_tol=.01):
+        predictions = [tf.nn.softmax(p).numpy().tolist() for p in predictions]
+    else:
+        predictions = [p.tolist() for p in predictions]    
+            """
         else:
+            input_dict = [f'"{var}": {var}' for var in var_list]
+
+            cls.score_code += f"{'':4}input_array = pd.DataFrame(\n"
+            input_frame = f'{{{", ".join(input_dict)}}}, index=index'
+            cls.score_code += cls._wrap_indent_string(input_frame, 8)
+            cls.score_code += f"\n{'':4})\n"
+            if missing_values:
+                cls.score_code += (
+                    f"{'':4}input_array = impute_missing_values(input_array)\n"
+                )
             cls.score_code += (
-                f"{'':4}input_array = pd.DataFrame("
-                f"[[{', '.join(var_list)}]],\n{'':30}columns=["
-                f"{column_names}],\n{'':30}dtype=object)\n{'':4}"
-                f"prediction = model.{method.__name__}(input_array)\n"
+                f"{'':4}prediction = model.{method.__name__}(input_array).tolist()\n"
             )
+            """
+    input_array = pd.DataFrame(
+        {"var1": var1, "var2": var2, "var3": var3}
+    )
+    input_array = impute_missing_values(input_array)
+    prediction = model.predict(input_array)
+            """
 
     @classmethod
     def _determine_score_metrics(
@@ -917,24 +1164,90 @@ class ScoreCode:
             # Classification (with only classification output) or prediction model
             if h2o_model:
                 cls.score_code += (
-                    f"{'':4}{metrics} = prediction[1][0]\n\n{'':4}return {metrics}"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}{metrics} = prediction[1][0]\n{'':8}return {metrics}\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}output_table = prediction.drop(prediction.columns[1:], axis=1)\n"
+                    f"{'':8}output_table.columns = ['{metrics}']\n"
+                    f"{'':8}return output_table"
                 )
+                """
+    if input_array.shape[0] == 1:
+        Classification = prediction[0]
+        return Classification
+    else:
+        output_table = pd.DataFrame({'Classification': prediction})
+        return output_table
+                """
             else:
                 cls.score_code += (
-                    f"{'':4}{metrics} = prediction\n\n{'':4}return {metrics}"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}{metrics} = prediction[0]\n{'':8}return {metrics}\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics}': prediction}})\n"
+                    f"{'':8}return output_table"
                 )
+                """
+    if input_array.shape[0] == 1:
+        Classification = prediction[1][0]
+        return Classification
+    else:
+        output_table = prediction.drop(prediction.columns[1:], axis=1)
+        output_table.columns = ['Classification']
+        return output_table
+                """
         else:
             # Classification model including predictions and classification
             if h2o_model:
-                cls.score_code += f"{'':4}{metrics[0]} = prediction[1][0]\n"
+                cls.score_code += (
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}{metrics[0]} = prediction[1][0]\n"
+                )
                 for i in range(len(metrics) - 1):
                     cls.score_code += (
-                        f"{'':4}{metrics[i + 1]} = float(prediction[1][{i + 1}])\n"
+                        f"{'':8}{metrics[i + 1]} = float(prediction[1][{i + 1}])\n"
                     )
+                cls.score_code += (
+                    f"{'':8}return {', '.join(metrics)}\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}prediction.columns = {metrics}\n"
+                    f"{'':8}return prediction\n"
+                )
+                """
+    if input_array.shape[0] == 1:
+        Classification = prediction[1][0]
+        Proba_A = float(prediction[1][1])
+        Proba_B = float(prediction[1][2])
+        Proba_C = float(prediction[1][3])
+        return Classification, Proba_A, Proba_B, Proba_C
+    else:
+        prediction.columns = ['Classification', 'Proba_A', 'Proba_B', 'Proba_C']
+        return prediction
+
+                """
             else:
+                cls.score_code += f"{'':4}if input_array.shape[0] == 1:\n"
                 for i in range(len(metrics)):
-                    cls.score_code += f"{'':4}{metrics[i]} = prediction[{i}]\n"
-            cls.score_code += f"\n{'':4}return {', '.join(metrics)}"
+                    cls.score_code += f"{'':8}{metrics[i]} = prediction[{i}]\n"
+                cls.score_code += f"\n{'':8}return {', '.join(metrics)}\n"
+                cls.score_code += (
+                    f"{'':4}else:\n"
+                    f"{'':8}output_table = pd.DataFrame(prediction, columns={metrics})"
+                    f"\n{'':8}return output_table\n"
+                )
+            """
+    if input_array.shape[0] == 1:
+        Classification = prediction[0]
+        Proba_A = prediction[1]
+        Proba_B = prediction[2]
+        Proba_C = prediction[3]
+
+        return Classification, Proba_A, Proba_B, Proba_C
+    else:
+        output_table = pd.DataFrame(prediction, columns=['Classification', 'Proba_A', 'Proba_B', 'Proba_C'])
+        return output_table
+
+            """
 
     @classmethod
     def _binary_target(
@@ -985,44 +1298,116 @@ class ScoreCode:
             # For h2o models with only one metric provided, return the classification
             if h2o_model:
                 cls.score_code += (
-                    f"{'':4}if prediction[1][2] > {threshold}:\n"
-                    f"{'':8}{metrics} = \"{target_values[0]}\"\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}if prediction[1][2] > {threshold}:\n"
+                    f"{'':12}{metrics} = \"{target_values[0]}\"\n"
+                    f"{'':8}else:\n"
+                    f"{'':12}{metrics} = \"{target_values[1]}\"\n"
+                    f"{'':8}return {metrics}\n"
                     f"{'':4}else:\n"
-                    f"{'':8}{metrics} = \"{target_values[1]}\"\n\n"
-                    f"{'':4}return {metrics}"
+                    f"{'':8}target_values = {target_values}\n"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics}': np.array(target_values)[np.argmax(prediction.iloc[0:, 1:].values, axis=1)]}})\n"
+                    f"{'':8}return output_table"
                 )
+                """
+    if input_array.shape[0] == 1:
+        if prediction[1][2] > 0.5:
+            Classification = "A"
+        else:
+            Classification = "B"
+        return Classification
+    else:
+        target_values = ['A', 'B']
+        output_table = pd.DataFrame({'Classification': np.array(target_values)[np.argmax(prediction.iloc[0:, 1:].values, axis=1)]})
+        return output_table
+                """
             # One return that is the classification
             elif len(returns) == 1 and returns[0]:
-                cls.score_code += f"{'':4}return prediction"
+                cls.score_code += (
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}return prediction\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}return pd.DataFrame({{'{metrics}': prediction}})"
+                )
+                """
+    if input_array.shape[0] == 1:
+        return prediction
+    else:
+        return pd.DataFrame({'Classification': prediction})
+                """
             # One return that is a probability
             elif len(returns) == 1 and not returns[0]:
                 cls.score_code += (
-                    f"{'':4}if prediction > {threshold}:\n"
-                    f"{'':8}{metrics} = \"{target_values[0]}\"\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}if prediction > {threshold}:\n"
+                    f"{'':12}{metrics} = \"{target_values[0]}\"\n"
+                    f"{'':8}else:\n"
+                    f"{'':12}{metrics} = \"{target_values[1]}\"\n"
+                    f"{'':8}return {metrics}\n"
                     f"{'':4}else:\n"
-                    f"{'':8}{metrics} = \"{target_values[1]}\"\n\n"
-                    f"{'':4}return {metrics}"
+                    f"{'':8}return pd.DataFrame({{'{metrics}': ['{target_values[0]}' if p > {threshold} else '{target_values[1]}' for p in prediction]}})\n"
                 )
+                """
+    if input_array.shape[0] == 1:
+        if prediction > 0.5:
+            Classification = "A"
+        else:
+            Classification = "B"
+        return Classification
+    else:
+        return pd.DataFrame({'Classification': ['A' if p > 0.5 else 'B' for p in prediction]})
+                """
             # Two returns from the prediction method
             elif len(returns) == 2 and sum(returns) == 0:
                 # Only probabilities returned; return classification for larger value
                 cls.score_code += (
-                    f"{'':4}if prediction[0] > prediction[1]:\n"
-                    f"{'':8}{metrics} = \"{target_values[0]}\"\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}if prediction[0] > prediction[1]:\n"
+                    f"{'':12}{metrics} = \"{target_values[0]}\"\n"
+                    f"{'':8}else:\n"
+                    f"{'':12}{metrics} = \"{target_values[1]}\"\n\n"
+                    f"{'':8}return {metrics}\n"
                     f"{'':4}else:\n"
-                    f"{'':8}{metrics} = \"{target_values[1]}\"\n\n"
-                    f"{'':4}return {metrics}"
+                    f"{'':8}target_values = {target_values}\n"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics}' : np.array(target_values)[np.argmax(prediction, axis=1)]}})\n"
+                    f"{'':8}return output_table"
                 )
+                """
+    if input_array.shape[0] == 1:
+        if prediction[0] > prediction[1]:
+            Classification = "A"
+        else:
+            Classification = "B"
+
+        return Classification
+    else:
+        target_values = ['A', 'B']
+        output_table = pd.DataFrame({'Classification' : np.array(target_values)[np.argmax(prediction, axis=1)]})
+        return output_table
+                """
             # Classification and probability returned; return classification value
             elif len(returns) > 1 and sum(returns) == 1:
                 # Determine which return is the classification value
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 cls.score_code += (
-                    f"{'':4}{metrics} = prediction[{class_index}]\n\nreturn {metrics}"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}{metrics} = prediction[{class_index}]\n{'':8}return {metrics}\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics}': [p[{class_index}] for p in prediction]}})\n"
+                    f"{'':8}return output_table"
                 )
+                """
+    if input_array.shape[0] == 1:
+        Classification = prediction[1]
+        return Classification
+    else:
+        output_table = pd.DataFrame({'Classification': [p[1] for p in prediction]})
+        return output_table
+                """
             else:
                 cls._invalid_predict_config()
         elif len(metrics) == 2:
+            # TODO: change to align with other cases and assign target_values to classification column
             # H2O models with two metrics are assumed to be classification + probability
             if h2o_model:
                 warn(
@@ -1031,8 +1416,21 @@ class ScoreCode:
                     "the target event to occur."
                 )
                 cls.score_code += (
-                    f"{'':4}return prediction[1][0], " f"float(prediction[1][2])"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}return prediction[1][0], float(prediction[1][2])\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}output_table = prediction.drop(prediction.columns[1], axis=1)\n"
+                    f"{'':8}output_table.columns = {metrics}\n"
+                    f"{'':8}return output_table"
                 )
+                """
+    if input_array.shape[0] == 1:
+        return prediction[1][0], float(prediction[1][2])
+    else:
+        output_table = prediction.drop(prediction.columns[1], axis=1)
+        output_table.columns = ['Classification', 'Probability']
+        return output_table
+                """
             # Calculate the classification; return the classification and probability
             elif sum(returns) == 0 and len(returns) == 1:
                 warn(
@@ -1041,12 +1439,28 @@ class ScoreCode:
                     "metric is returned first."
                 )
                 cls.score_code += (
-                    f"{'':4}if prediction > {threshold}:\n"
-                    f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}if prediction > {threshold}:\n"
+                    f"{'':12}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':8}else:\n"
+                    f"{'':12}{metrics[0]} = \"{target_values[1]}\"\n\n"
+                    f"{'':8}return {metrics[0]}, prediction\n"
                     f"{'':4}else:\n"
-                    f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
-                    f"{'':4}return {metrics[0]}, prediction"
+                    f"{'':8}classifications = ['{target_values[0]}' if p > {threshold} else '{target_values[1]}' for p in prediction]\n"
+                    f"{'':8}return pd.DataFrame({{'{metrics[0]}': classifications, '{metrics[1]}': prediction}})"
                 )
+                """
+    if input_array.shape[0] == 1:
+        if prediction > 0.5:
+            Classification = "A"
+        else:
+            Classification = "B"
+
+        return Classification, prediction
+    else:
+        classifications = ['A' if p > 0.5 else 'B' for p in prediction]
+        return pd.DataFrame({'Classification': classifications, 'Probability': prediction})
+                """
             # Calculate the classification; return the classification and probability
             elif sum(returns) == 0 and len(returns) == 2:
                 warn(
@@ -1055,15 +1469,45 @@ class ScoreCode:
                     "target event probability should be returned."
                 )
                 cls.score_code += (
-                    f"{'':4}if prediction[0] > prediction[1]:\n"
-                    f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}if prediction[0] > prediction[1]:\n"
+                    f"{'':12}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':8}else:\n"
+                    f"{'':12}{metrics[0]} = \"{target_values[1]}\"\n"
+                    f"{'':8}return {metrics[0]}, prediction[0]\n"
                     f"{'':4}else:\n"
-                    f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
-                    f"{'':4}return {metrics[0]}, prediction[0]"
+                    f"{'':8}df = pd.DataFrame(prediction)\n"
+                    f"{'':8}proba = df[0]\n"
+                    f"{'':8}classifications = np.where(df[0] > df[1], '{target_values[0]}', '{target_values[1]}')\n"
+                    f"{'':8}return pd.DataFrame({{'{metrics[0]}': classifications, '{metrics[1]}': proba}})"
                 )
+                """
+    if input_array.shape[0] == 1:
+        if prediction[0] > prediction[1]:
+            Classification = "A"
+        else:
+            Classification = "B"
+        return Classification, prediction[0]
+    else:
+        df = pd.DataFrame(prediction)
+        proba = df[0]
+        classifications = np.where(df[0] > df[1], 'A', 'B')
+        return pd.DataFrame({'Classification': classifications, 'Probability': proba})
+                                """
             # Return classification and probability value
             elif sum(returns) == 1 and len(returns) == 2:
-                cls.score_code += f"{'':4}return prediction[0], prediction[1]"
+                cls.score_code += (
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}return prediction[0], prediction[1]\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}return pd.DataFrame(prediction, columns={metrics})"
+                )
+                """
+    if input_array.shape[0] == 1:
+        return prediction[0], prediction[1]
+    else:
+        return pd.DataFrame(prediction, columns=['Classification', 'Probability'])
+                """
             elif sum(returns) == 1 and len(returns) == 3:
                 warn(
                     "Due to the ambiguity of the provided metrics and prediction return"
@@ -1073,19 +1517,59 @@ class ScoreCode:
                 # Determine which return is the classification value
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 if class_index == 0:
-                    cls.score_code += f"{'':4}return prediction[0], prediction[1]"
-                else:
+                    metric_list = '"' + '","'.join(metrics) + '","drop"'
                     cls.score_code += (
-                        f"{'':4}return prediction[{class_index}], prediction[0]"
+                        f"{'':4}if input_array.shape[0] == 1:\n"
+                        f"{'':8}return prediction[0], prediction[1]\n"
+                        f"{'':4}else:\n"
+                        f"{'':8}output_table = pd.DataFrame(prediction, columns=[{metric_list}])\n"
+                        f"{'':8}return output_table.drop('drop', axis=1)"
                     )
+
+                    """
+    if input_array.shape[0] == 1:
+        return prediction[0], prediction[1]
+    else:
+        output_table = pd.DataFrame(prediction, columns=["Classification","Probability","drop"])
+        return output_table.drop('drop', axis=1)
+                    """
+                else:
+                    metric_list = '"' + '","drop","'.join(metrics[::-1]) + '"'
+                    cls.score_code += (
+                        f"{'':4}if input_array.shape[0] == 1:\n"
+                        f"{'':8}return prediction[{class_index}], prediction[0]\n"
+                        f"{'':4}else:\n"
+                        f"{'':8}output_table = pd.DataFrame(prediction, columns=[{metric_list}])\n"
+                        f"{'':8}output_table = output_table[output_table.columns[::-1]]\n"
+                        f"{'':8}return output_table.drop('drop', axis=1)"
+                    )
+                    """
+    if input_array.shape[0] == 1:
+        return prediction[2], prediction[0]
+    else:
+        output_table = pd.DataFrame(prediction, columns=["Probability","drop","Classification"])
+        output_table = output_table[output_table.columns[::-1]]
+        return output_table.drop('drop', axis=1)
+                    """
             else:
                 cls._invalid_predict_config()
         elif len(metrics) == 3:
             if h2o_model:
                 cls.score_code += (
-                    f"{'':4}return prediction[1][0], float(prediction[1][1]), "
-                    f"float(prediction[1][2])"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}return prediction[1][0], float(prediction[1][1]), "
+                    f"float(prediction[1][2])\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}prediction.columns = {metrics}\n"
+                    f"{'':8}return prediction"
                 )
+                """
+    if input_array.shape[0] == 1:
+        return prediction[1][0], float(prediction[1][1]), float(prediction[1][2])
+    else:
+        prediction.columns = ['Classification', 'Proba_0', 'Proba_1']
+        return prediction
+                """
             elif sum(returns) == 0 and len(returns) == 1:
                 warn(
                     "Due to the ambiguity of the provided metrics and prediction return"
@@ -1093,42 +1577,118 @@ class ScoreCode:
                     "[classification, probability of event, probability of no event]."
                 )
                 cls.score_code += (
-                    f"{'':4}if prediction > {threshold}:\n"
-                    f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}if prediction > {threshold}:\n"
+                    f"{'':12}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':8}else:\n"
+                    f"{'':12}{metrics[0]} = \"{target_values[1]}\"\n"
+                    f"{'':8}return {metrics[0]}, prediction, 1 - prediction\n"
                     f"{'':4}else:\n"
-                    f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
-                    f"{'':4}return {metrics[0]}, prediction, 1 - prediction"
+                    f"{'':8}classifications = ['{target_values[0]}' if p > {threshold} else '{target_values[1]}' for p in prediction]\n"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics[0]}': classifications, '{metrics[1]}': prediction}})\n"
+                    f"{'':8}output_table['{metrics[2]}'] = 1 - output_table['{metrics[1]}']\n"
+                    f"{'':8}return output_table"
                 )
+                """
+    if input_array.shape[0] == 1:
+        if prediction > 0.5:
+            Classification = "A"
+        else:
+            Classification = "B"
+        return Classification, prediction, 1 - prediction
+    else:
+        classifications = ['A' if p > 0.5 else 'B' for p in prediction]
+        output_table = pd.DataFrame({'Classification': classifications, 'Proba_0': prediction})
+        output_table['Proba_1'] = 1 - output_table['Proba_0']
+        return output_table
+                """
             elif sum(returns) == 0 and len(returns) == 2:
                 warn(
                     "Due to the ambiguity of the provided metrics and prediction return"
                     " types, the score code assumes the return order to be: "
                     "[classification, probability of event, probability of no event]."
                 )
+                metric_list = '"' + '","'.join(metrics[1:]) + '"'
                 cls.score_code += (
-                    f"{'':4}if prediction[0] > prediction[1]:\n"
-                    f"{'':8}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}if prediction[0] > prediction[1]:\n"
+                    f"{'':12}{metrics[0]} = \"{target_values[0]}\"\n"
+                    f"{'':8}else:\n"
+                    f"{'':12}{metrics[0]} = \"{target_values[1]}\"\n"
+                    f"{'':8}return {metrics[0]}, prediction[0], prediction[1]\n"
                     f"{'':4}else:\n"
-                    f"{'':8}{metrics[0]} = \"{target_values[1]}\"\n\n"
-                    f"{'':4}return {metrics[0]}, prediction[0], prediction[1]"
+                    f"{'':8}output_table = pd.DataFrame(prediction, columns=[{metric_list}])\n"
+                    f"{'':8}output_table.insert(0, '{metrics[0]}', np.array({target_values})[np.argmax(output_table.values, axis=1)])\n"
+                    f"{'':8}return output_table"
                 )
+                """
+    if input_array.shape[0] == 1:
+        if prediction[0] > prediction[1]:
+            Classification = "A"
+        else:
+            Classification = "B"
+        return Classification, prediction[0], prediction[1]
+    else:
+        output_table = pd.DataFrame(prediction, columns=["Proba_0","Proba_1"])
+        output_table.insert(0, 'Classification', np.array(['A', 'B'])[np.argmax(output_table.values, axis=1)])
+        return output_table
+                """
             # Find which return is the classification, then return probabilities
             elif sum(returns) == 1 and len(returns) == 2:
                 # Determine which return is the classification value
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 if class_index == 0:
+                    metric_list = '"' + '","'.join(metrics[:2]) + '"'
                     cls.score_code += (
-                        f"{'':4}return prediction[0], prediction[1], 1 - prediction[1]"
+                        f"{'':4}if input_array.shape[0] == 1:\n"
+                        f"{'':8}return prediction[0], prediction[1], 1 - prediction[1]\n"
+                        f"{'':4}else:\n"
+                        f"{'':8}output_table = pd.DataFrame(prediction, columns=[{metric_list}])\n"
+                        f"{'':8}output_table['{metrics[2]}'] = 1 - output_table['{metrics[1]}']\n"
+                        f"{'':8}return output_table"
                     )
+                    """
+    if input_array.shape[0] == 1:
+        return prediction[0], prediction[1], 1 - prediction[1]
+    else:
+        output_table = pd.DataFrame(prediction, columns=["Classification","Proba_0"])
+        output_table['Proba_1'] = 1 - output_table['Proba_0']
+        return output_table
+                    """
                 else:
+                    metric_list = '"' + '","'.join(metrics[1::-1]) + '"'
                     cls.score_code += (
-                        f"{'':4}return prediction[1], prediction[0], 1 - prediction[0]"
+                        f"{'':4}if input_array.shape[0] == 1:\n"
+                        f"{'':8}return prediction[1], prediction[0], 1 - prediction[0]\n"
+                        f"{'':4}else:\n"
+                        f"{'':8}output_table = pd.DataFrame(prediction, columns=[{metric_list}])\n"
+                        f"{'':8}output_table = output_table[output_table.columns[::-1]]\n"
+                        f"{'':8}output_table['{metrics[2]}'] = 1 - output_table['{metrics[1]}']\n"
+                        f"{'':8}return output_table"
                     )
+                    """
+    if input_array.shape[0] == 1:
+        return prediction[1], prediction[0], 1 - prediction[0]
+    else:
+        output_table = pd.DataFrame(prediction, columns=["Proba_0","Classification"])
+        output_table = output_table[output_table.columns[::-1]]
+        output_table['Proba_1'] = 1 - output_table['Proba_0']
+        return output_table
+                    """
             # Return all values from prediction method
             elif sum(returns) == 1 and len(returns) == 3:
                 cls.score_code += (
-                    f"{'':4}return prediction[0], prediction[1], prediction[2]"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}return prediction[0], prediction[1], prediction[2]\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}return pd.DataFrame(prediction, columns={metrics})"
                 )
+                """
+    if input_array.shape[0] == 1:
+        return prediction[0], prediction[1], prediction[2]
+    else:
+        return pd.DataFrame(prediction, columns=['Classification', 'Proba_0', 'Proba_1'])
+                """
             else:
                 cls._invalid_predict_config()
         else:
@@ -1170,56 +1730,177 @@ class ScoreCode:
             # For h2o models with only one metric provided, return the classification
             if h2o_model:
                 cls.score_code += (
-                    f"{'':4}target_values = {target_values}\n{'':4}"
-                    f"{metrics} = target_values[prediction[1][1:]."
-                    f"index(max(prediction[1][1:]))]\n{'':4}"
-                    f"{'':4}return {metrics}"
+                    f"{'':4}target_values = {target_values}\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}{metrics} = target_values[prediction[1][1:]."
+                    f"index(max(prediction[1][1:]))]\n"
+                    f"{'':8}return {metrics}\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics}': np.array(target_values)[np.argmax(prediction.iloc[:, 1:].values, axis=1)]}})\n"
+                    f"{'':8}return output_table"
                 )
+                """
+    target_values = ['A', 'B', 'C']
+    if input_array.shape[0] == 1:
+        Classification = target_values[prediction[1][1:].index(max(prediction[1][1:]))]
+        return Classification
+    else:
+        output_table = pd.DataFrame({'Classification': np.array(target_values)[np.argmax(prediction.iloc[:, 1:].values, axis=1)]})
+        return output_table
+                """
             # One return that is the classification
             elif len(returns) == 1:
-                cls.score_code += f"{'':4}{metrics} = prediction\n\nreturn {metrics}"
+                cls.score_code += (
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}return prediction\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}return pd.DataFrame({{'{metrics}': prediction}})"
+                )
+                """
+    if input_array.shape[0] == 1:
+        return prediction
+    else:
+        return pd.DataFrame({'Classification': prediction})
+                """
             elif len(returns) == len(target_values):
                 cls.score_code += (
-                    f"{'':4}target_values = {target_values}\n\n"
-                    f"{'':4}return target_values[prediction.index(max(prediction))]"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}target_values = {target_values}\n"
+                    f"{'':8}return target_values[prediction.index(max(prediction))]\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics}' : np.array({target_values})[np.argmax(prediction, axis=1)]}})\n"
+                    f"{'':8}return output_table"
                 )
+                """
+    if input_array.shape[0] == 1:
+        target_values = ['A', 'B', 'C']
+        return target_values[prediction.index(max(prediction))]
+    else:
+        output_table = pd.DataFrame({'Classification' : np.array(['A', 'B', 'C'])[np.argmax(prediction, axis=1)]})
+        return output_table
+                """
             elif len(returns) == (len(target_values) + 1):
                 # Determine which return is the classification value
                 class_index = [i for i, x in enumerate(returns) if x][0]
-                cls.score_code += f"{'':4}return prediction[{class_index}]"
+                cls.score_code += (
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}return prediction[{class_index}]\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}return pd.DataFrame({{'{metrics}': [p[{class_index}] for p in prediction]}})"
+                )
+                """
+    if input_array.shape[0] == 1:
+        return prediction[0]
+    else:
+        return pd.DataFrame({'Classification': [p[0] for p in prediction]})
+                """
             else:
                 cls._invalid_predict_config()
         elif len(metrics) == 2:
             if h2o_model:
                 cls.score_code += (
-                    f"{'':4}target_values = {target_values}\n{'':4}"
-                    f"{metrics} = target_values[prediction[1][1:]."
-                    f"index(max(prediction[1][1:]))]\n{'':4}"
-                    f"{'':4}return {metrics}, max(prediction[1][1:])"
+                    f"{'':4}target_values = {target_values}\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}{metrics[0]} = target_values[prediction[1][1:]."
+                    f"index(max(prediction[1][1:]))]\n"
+                    f"{'':8}return {metrics[0]}, max(prediction[1][1:])\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}index = np.argmax(prediction.iloc[0:, 1:].values, axis=1)\n"
+                    f"{'':8}return pd.DataFrame({{'{metrics[0]}': np.array(target_values)[index], '{metrics[1]}': np.max(prediction.iloc[0:, 1:], axis=1)}})\n"
                 )
+                """
+    target_values = ['A', 'B', 'C']
+    if input_array.shape[0] == 1:
+        Classification = target_values[prediction[1][1:].index(max(prediction[1][1:]))]
+        return Classification, max(prediction[1][1:])
+    else:
+        index = np.argmax(prediction.iloc[0:, 1:].values, axis=1)
+        return pd.DataFrame({'Classification': np.array(target_values)[index], 'Probability': np.max(prediction.iloc[0:, 1:], axis=1)})
+                """
             elif len(returns) == len(target_values):
                 cls.score_code += (
-                    f"{'':4}target_values = {target_values}\n\n"
-                    f"{'':4}return target_values[prediction.index(max(prediction))], "
-                    f"max(prediction)"
+                    f"{'':4}target_values = {target_values}\n"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}return target_values[prediction.index(max(prediction))], "
+                    f"max(prediction)\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}df = pd.DataFrame(prediction)\n"
+                    f"{'':8}index = np.argmax(df.values, axis=1)\n"
+                    f"{'':8}classifications = np.array(target_values)[index]\n"
+                    f"{'':8}max_proba = np.max(df.values, axis=1)\n"
+                    f"{'':8}return pd.DataFrame({{'{metrics[0]}': classifications, '{metrics[1]}': max_proba}})"
                 )
+                """
+    target_values = ['A', 'B', 'C']
+    if input_array.shape[0] == 1:
+        return target_values[prediction.index(max(prediction))], max(prediction)
+    else:
+        df = pd.DataFrame(prediction)
+        index = np.argmax(df.values, axis=1)
+        classifications = np.array(target_values)[index]
+        max_proba = np.max(df.values, axis=1)
+        return pd.DataFrame({'Classification': classifications, 'Probability': max_proba})
+                """
             elif len(returns) == (len(target_values) + 1):
                 # Determine which return is the classification value
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 cls.score_code += (
-                    f"{'':4}return prediction[{class_index}], "
-                    f"max(prediction[:{class_index}] + prediction[{class_index + 1}:])"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}return prediction[{class_index}], "
+                    f"max(prediction[:{class_index}] + prediction[{class_index + 1}:])\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}df = pd.DataFrame(prediction)\n"
+                    f"{'':8}probas = df.drop({class_index}, axis=1)\n"
+                    f"{'':8}max_proba = np.max(probas.values, axis=1)\n"
+                    f"{'':8}return pd.DataFrame({{'{metrics[0]}': df[{class_index}], '{metrics[1]}': max_proba}})"
                 )
+                """
+    if input_array.shape[0] == 1:
+        return prediction[0], max(prediction[:0] + prediction[1:])
+    else:
+        df = pd.DataFrame(prediction)
+        probas = df.drop(0, axis=1)
+        max_proba = np.max(probas.values, axis=1)
+        return pd.DataFrame({'Classification': df[0], 'Probability': max_proba})
+                """
             else:
                 cls._invalid_predict_config()
         elif len(metrics) > 2:
             if h2o_model:
                 if len(metrics) == len(target_values):
                     h2o_returns = [f"prediction[1][{i+1}]" for i in range(len(metrics))]
-                    cls.score_code += f"{'':4}return {', '.join(h2o_returns)}"
+                    cls.score_code += (
+                        f"{'':4}if input_array.shape[0] == 1:\n"
+                        f"{'':8}return {', '.join(h2o_returns)}\n"
+                        f"{'':4}else:\n"
+                        f"{'':8}output_table = prediction.drop(prediction.columns[0], axis=1)\n"
+                        f"{'':8}output_table.columns = {metrics}\n"
+                        f"{'':8}return output_table"
+                    )
+                    """
+    if input_array.shape[0] == 1:
+        return prediction[1][1], prediction[1][2], prediction[1][3]
+    else:
+        output_table = prediction.drop(prediction.columns[0], axis=1)
+        output_table.columns = ['Proba_0', 'Proba_1', 'Proba_2']
+        return output_table
+                    """
                 elif len(metrics) == (len(target_values) + 1):
                     h2o_returns = [f"prediction[1][{i}]" for i in range(len(metrics))]
-                    cls.score_code += f"{'':4}return {', '.join(h2o_returns)}"
+                    cls.score_code += (
+                        f"{'':4}if input_array.shape[0] == 1:\n"
+                        f"{'':8}return {', '.join(h2o_returns)}\n"
+                        f"{'':4}else:\n"
+                        f"{'':8}prediction.columns = {metrics}\n"
+                        f"{'':8}return prediction"
+                    )
+                    """
+    if input_array.shape[0] == 1:
+        return prediction[1][0], prediction[1][1], prediction[1][2], prediction[1][3]
+    else:
+        prediction.columns = ['Classification', 'Proba_0', 'Proba_1', 'Proba_2']
+        return prediction
+                    """
             elif (
                 len(metrics) == len(target_values) == len(returns) and sum(returns) == 0
             ) or (
@@ -1227,16 +1908,46 @@ class ScoreCode:
                 and sum(returns) == 1
             ):
                 proba_returns = [f"prediction[{i}]" for i in range(len(returns))]
-                cls.score_code += f"{'':4}return {', '.join(proba_returns)}"
+                cls.score_code += (
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}return {', '.join(proba_returns)}\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}output_table = pd.DataFrame(prediction, columns={metrics})\n"
+                    f"{'':8}return output_table"
+                )
+                """
+    if input_array.shape[0] == 1:
+        return prediction[0], prediction[1], prediction[2]
+    else:
+        output_table = pd.DataFrame(prediction, columns=['Proba_0', 'Proba_1', 'Proba_2'])
+        return output_table
+                """
             elif (len(metrics) - 1) == len(returns) == len(target_values) and sum(
                 returns
             ) == 0:
                 proba_returns = [f"prediction[{i}]" for i in range(len(returns))]
                 cls.score_code += (
                     f"{'':4}target_values = {target_values}\n\n"
-                    f"{'':4}return target_values[prediction.index(max(prediction))], "
-                    f"{', '.join(proba_returns)}"
+                    f"{'':4}if input_array.shape[0] == 1:\n"
+                    f"{'':8}return target_values[prediction.index(max(prediction))], "
+                    f"{', '.join(proba_returns)}\n"
+                    f"{'':4}else:\n"
+                    f"{'':8}output_table = pd.DataFrame(prediction, columns={metrics[1:]})\n"
+                    f"{'':8}classifications = np.array(target_values)[np.argmax(output_table.values, axis=1)]\n"
+                    f"{'':8}output_table.insert(0, '{metrics[0]}', classifications)\n"
+                    f"{'':8}return output_table"
                 )
+                """
+    target_values = ['A', 'B', 'C']
+
+    if input_array.shape[0] == 1:
+        return target_values[prediction.index(max(prediction))], prediction[0], prediction[1], prediction[2]
+    else:
+        output_table = pd.DataFrame(prediction, columns=['Proba_0', 'Proba_1', 'Proba_2'])
+        classifications = np.array(target_values)[np.argmax(output_table.values, axis=1)]
+        output_table.insert(0, 'Classification', classifications)
+        return output_table
+                """
             else:
                 cls._invalid_predict_config()
 

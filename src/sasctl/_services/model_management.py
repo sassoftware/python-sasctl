@@ -479,9 +479,9 @@ class ModelManagement(Service):
             modelId = model["id"]
         else:
             model = mr.list_models(
-                filter="eq('projectId','{}')&eq('name','{}')".format(projectId, model)
+                filter=f"and(eq('projectId','{projectId}'), eq('name','{model}'))"
             )
-            modelId = model["id"]
+            modelId = model[0]["id"]
 
         model = mr.get_model(modelId)
 

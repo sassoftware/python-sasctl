@@ -60,48 +60,45 @@ def test_import_model(hmeq_dataset):
     - Viya 3.5
     """
     model_files = {
-        "Test.json": json.dumps({"Test": True, "TestNum": 1}),
-        "Other_Test.json": json.dumps({"Other": None, "TestNum": 2}),
-        "inputVar.json": json.dumps(
-            [
-                {"name": "LOAN", "level": "interval", "type": "decimal", "length": 8},
-                {
-                    "name": "MORTDUE",
-                    "level": "interval",
-                    "type": "decimal",
-                    "length": 8,
-                },
-                {"name": "VALUE", "level": "interval", "type": "decimal", "length": 8},
-                {"name": "YOJ", "level": "interval", "type": "decimal", "length": 8},
-                {"name": "DEROG", "level": "interval", "type": "decimal", "length": 8},
-                {"name": "DELINQ", "level": "interval", "type": "decimal", "length": 8},
-                {"name": "CLAGE", "level": "interval", "type": "decimal", "length": 8},
-                {"name": "NINQ", "level": "interval", "type": "decimal", "length": 8},
-                {"name": "CLNO", "level": "interval", "type": "decimal", "length": 8},
-                {
-                    "name": "DEBTINC",
-                    "level": "interval",
-                    "type": "decimal",
-                    "length": 8,
-                },
-            ]
-        ),
-        "outputVar.json": json.dumps(
-            [
-                {
-                    "name": "Classification",
-                    "level": "nominal",
-                    "type": "string",
-                    "length": 1,
-                },
-                {
-                    "name": "Probability",
-                    "level": "interval",
-                    "type": "decimal",
-                    "length": 8,
-                },
-            ]
-        ),
+        "Test.json": {"Test": True, "TestNum": 1},
+        "Other_Test.json": {"Other": None, "TestNum": 2},
+        "ModelProperties.json": {"Model": "Test"},
+        "inputVar.json": [
+            {"name": "LOAN", "level": "interval", "type": "decimal", "length": 8},
+            {
+                "name": "MORTDUE",
+                "level": "interval",
+                "type": "decimal",
+                "length": 8,
+            },
+            {"name": "VALUE", "level": "interval", "type": "decimal", "length": 8},
+            {"name": "YOJ", "level": "interval", "type": "decimal", "length": 8},
+            {"name": "DEROG", "level": "interval", "type": "decimal", "length": 8},
+            {"name": "DELINQ", "level": "interval", "type": "decimal", "length": 8},
+            {"name": "CLAGE", "level": "interval", "type": "decimal", "length": 8},
+            {"name": "NINQ", "level": "interval", "type": "decimal", "length": 8},
+            {"name": "CLNO", "level": "interval", "type": "decimal", "length": 8},
+            {
+                "name": "DEBTINC",
+                "level": "interval",
+                "type": "decimal",
+                "length": 8,
+            },
+        ],
+        "outputVar.json": [
+            {
+                "name": "Classification",
+                "level": "nominal",
+                "type": "string",
+                "length": 1,
+            },
+            {
+                "name": "Probability",
+                "level": "interval",
+                "type": "decimal",
+                "length": 8,
+            },
+        ],
     }
     model, model_files = im.import_model(
         model_files, "No_Score_Model", "Test_Project", overwrite_model=True
@@ -111,6 +108,7 @@ def test_import_model(hmeq_dataset):
         assert file.name in [
             "Test.json",
             "Other_Test.json",
+            "ModelProperties.json",
             "inputVar.json",
             "outputVar.json",
         ]
@@ -134,6 +132,7 @@ def test_import_model(hmeq_dataset):
                 "Test.json",
                 "Other_Test.json",
                 "inputVar.json",
+                "ModelProperties.json",
                 "outputVar.json",
                 "score_Test_Model.py",
             ]
@@ -154,6 +153,7 @@ def test_import_model(hmeq_dataset):
                 "Test.json",
                 "Other_Test.json",
                 "score_Test_Model.py",
+                "ModelProperties.json",
                 "inputVar.json",
                 "outputVar.json",
                 "score.sas",

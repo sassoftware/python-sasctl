@@ -1,0 +1,310 @@
+{
+    "creationTimeStamp": "0001-01-01T00:00:00Z",
+    "modifiedTimeStamp": "0001-01-01T00:00:00Z",
+    "revision": 0,
+    "name": "maxDifferences",
+    "version": 0,
+    "order": 0,
+    "parameterMap": {
+        "BASE": {
+            "label": "Base Level",
+            "length": 100,
+            "order": 4,
+            "parameter": "BASE",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "BASE"
+            ]
+        },
+        "COMPARE": {
+            "label": "Comparison Level",
+            "length": 100,
+            "order": 5,
+            "parameter": "COMPARE",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "COMPARE"
+            ]
+        },
+        "Metric": {
+            "label": "Metric",
+            "length": 9,
+            "order": 6,
+            "parameter": "Metric",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "Metric"
+            ]
+        },
+        "MetricLabel": {
+            "label": "Metric Label",
+            "length": 35,
+            "order": 7,
+            "parameter": "MetricLabel",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "MetricLabel"
+            ]
+        },
+        "VLABEL": {
+            "label": "Variable Label",
+            "length": 256,
+            "order": 2,
+            "parameter": "VLABEL",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "VLABEL"
+            ]
+        },
+        "_DATAROLE_": {
+            "label": "Data Role",
+            "length": 8,
+            "order": 3,
+            "parameter": "_DATAROLE_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_DATAROLE_"
+            ]
+        },
+        "_VARIABLE_": {
+            "label": "Variable",
+            "length": 255,
+            "order": 1,
+            "parameter": "_VARIABLE_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_VARIABLE_"
+            ]
+        },
+        "maxdiff": {
+            "label": "Maximum Metric Difference",
+            "length": 8,
+            "order": 8,
+            "parameter": "maxdiff",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "maxdiff"
+            ]
+        }
+    },
+    "data": [
+        {
+            "dataMap": {
+                "BASE": "group_E",
+                "COMPARE": "group_C",
+                "Metric": "Predicted_Math_Score",
+                "MetricLabel": "Average Predicted: Math_Score",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "maxdiff": 7.1598993592523
+            },
+            "rowNumber": 1
+        },
+        {
+            "dataMap": {
+                "BASE": "group_E",
+                "COMPARE": "group_C",
+                "Metric": "ASE",
+                "MetricLabel": "Average Square Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "maxdiff": 17.904549942867
+            },
+            "rowNumber": 2
+        },
+        {
+            "dataMap": {
+                "BASE": "group_E",
+                "COMPARE": "group_C",
+                "Metric": "RASE",
+                "MetricLabel": "Root Average Square Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "maxdiff": 1.38913408974874
+            },
+            "rowNumber": 3
+        },
+        {
+            "dataMap": {
+                "BASE": "group_A",
+                "COMPARE": "group_C",
+                "Metric": "MAE",
+                "MetricLabel": "Mean Absolute Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "maxdiff": 0.89736623580101
+            },
+            "rowNumber": 4
+        },
+        {
+            "dataMap": {
+                "BASE": "group_A",
+                "COMPARE": "group_C",
+                "Metric": "RMAE",
+                "MetricLabel": "Root Mean Absolute Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "maxdiff": 0.19556371743034
+            },
+            "rowNumber": 5
+        },
+        {
+            "dataMap": {
+                "BASE": "group_B",
+                "COMPARE": "group_D",
+                "Metric": "MSLE",
+                "MetricLabel": "Mean Square Logarithmic Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "maxdiff": 0.00443523982829
+            },
+            "rowNumber": 6
+        },
+        {
+            "dataMap": {
+                "BASE": "group_B",
+                "COMPARE": "group_D",
+                "Metric": "RMSLE",
+                "MetricLabel": "Root Mean Square Logarithmic Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "maxdiff": 0.0206594124688
+            },
+            "rowNumber": 7
+        },
+        {
+            "dataMap": {
+                "BASE": "group_E",
+                "COMPARE": "group_C",
+                "Metric": "PREDICTED",
+                "MetricLabel": "Average Prediction",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Race",
+                "maxdiff": 7.1598993592523
+            },
+            "rowNumber": 8
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "Predicted_Math_Score",
+                "MetricLabel": "Average Predicted: Math_Score",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Gender",
+                "maxdiff": 3.71288682855889
+            },
+            "rowNumber": 9
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "ASE",
+                "MetricLabel": "Average Square Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Gender",
+                "maxdiff": 13.2536125933018
+            },
+            "rowNumber": 10
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "RASE",
+                "MetricLabel": "Root Average Square Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Gender",
+                "maxdiff": 1.03994547639722
+            },
+            "rowNumber": 11
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "MAE",
+                "MetricLabel": "Mean Absolute Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Gender",
+                "maxdiff": 0.75853000303367
+            },
+            "rowNumber": 12
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "RMAE",
+                "MetricLabel": "Root Mean Absolute Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Gender",
+                "maxdiff": 0.16604432379436
+            },
+            "rowNumber": 13
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "MSLE",
+                "MetricLabel": "Mean Square Logarithmic Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Gender",
+                "maxdiff": 0.00459999398924
+            },
+            "rowNumber": 14
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "RMSLE",
+                "MetricLabel": "Root Mean Square Logarithmic Error",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Gender",
+                "maxdiff": 0.02181222769336
+            },
+            "rowNumber": 15
+        },
+        {
+            "dataMap": {
+                "BASE": "male",
+                "COMPARE": "female",
+                "Metric": "PREDICTED",
+                "MetricLabel": "Average Prediction",
+                "VLABEL": "",
+                "_DATAROLE_": "TEST",
+                "_VARIABLE_": "Gender",
+                "maxdiff": 3.71288682855889
+            },
+            "rowNumber": 16
+        }
+    ],
+    "xInteger": false,
+    "yInteger": false
+}

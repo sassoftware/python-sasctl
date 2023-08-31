@@ -14,6 +14,9 @@ from sklearn.linear_model import LogisticRegression
 
 from sasctl import RestObj, current_session
 from sasctl.pzmm import ModelParameters as mp
+import unittest
+import uuid
+import numpy as np
 
 
 class BadModel:
@@ -43,7 +46,9 @@ def sklearn_model(train_data):
     X, y = train_data
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        model = LogisticRegression(multi_class="multinomial", solver="lbfgs")
+        model = LogisticRegression(
+            multi_class="multinomial", solver="lbfgs", max_iter=1000
+        )
         model.fit(X, y)
     return model
 
@@ -211,3 +216,128 @@ class TestSKLearnModel:
                 assert len(kpi_table.columns) == 1
 
                 assert not kpi_table.loc[1]["testName"]
+
+
+class TestSyncModelProperties(unittest.TestCase):
+    MODEL_PROPERTIES = [
+        ("targetVariable", "targetVariable"),
+        ("targetLevel", "targetLevel"),
+        ("targetEventValue", "targetEvent"),
+        ("eventProbabilityVariable", "eventProbVar"),
+        ("function", "function"),
+    ]
+
+    def test_project_id(self):
+        with mock.patch(
+            "sasctl._services.model_repository.ModelRepository.get_project"
+        ) as get_project:
+            with mock.patch(
+                "sasctl._services.model_repository.ModelRepository.get"
+            ) as get:
+                with mock.patch(
+                    "sasctl._services.model_repository.ModelRepository.get_model"
+                ) as get_model:
+                    with mock.patch(
+                        "sasctl._services.model_repository.ModelRepository.update_model"
+                    ) as update:
+                        pUUID = uuid.uuid4()
+                        mp.sync_model_properties(pUUID, False)
+                        get.assert_called_with(f"/projects/{pUUID}/models")
+
+                        project_dict = {"id": "projectID"}
+                        mp.sync_model_properties(project_dict, False)
+                        get.assert_called_with("/projects/projectID/models")
+
+                        project_name = "project"
+                        get_project.return_value = {"id": "pid"}
+                        mp.sync_model_properties(project_name, False)
+                        get.assert_called_with("/projects/pid/models")
+
+    def test_overwrite(self):
+        with mock.patch(
+            "sasctl._services.model_repository.ModelRepository.get_project"
+        ) as get_project:
+            with mock.patch(
+                "sasctl._services.model_repository.ModelRepository.get"
+            ) as get:
+                with mock.patch(
+                    "sasctl._services.model_repository.ModelRepository.get_model"
+                ) as get_model:
+                    with mock.patch(
+                        "sasctl._services.model_repository.ModelRepository.update_model"
+                    ) as update:
+                        project_dict = {
+                            "id": "projectID",
+                            "function": "project_function",
+                            "targetLevel": "1",
+                        }
+                        get.return_value = [RestObj({"id": "modelID"})]
+                        get_model.return_value = {"function": "classification"}
+                        mp.sync_model_properties(project_dict)
+                        update.assert_called_with(
+                            {"function": "classification", "targetLevel": "1"}
+                        )
+
+                        project_dict = {
+                            "id": "projectID",
+                            "function": "project_function",
+                            "targetLevel": "1",
+                        }
+                        get.return_value = [RestObj({"id": "modelID"})]
+                        get_model.return_value = {"function": "classification"}
+                        mp.sync_model_properties(project_dict, True)
+                        update.assert_called_with(
+                            {"function": "project_function", "targetLevel": "1"}
+                        )
+
+
+class TestGenerateHyperparameters(unittest.TestCase):
+    def test_xgboost(self):
+        xgboost = pytest.importorskip("xgboost")
+        model = unittest.mock.Mock()
+        model.__class__ = xgboost.Booster
+        attrs = {"save_config.return_value": json.dumps({"test": "passed"})}
+        model.configure_mock(**attrs)
+        tmp_dir = tempfile.TemporaryDirectory()
+        mp.generate_hyperparameters(model, "prefix", Path(tmp_dir.name))
+        assert Path(Path(tmp_dir.name) / f"./prefixHyperparameters.json").exists()
+
+    def test_xgboost_sklearn(self):
+        xgboost = pytest.importorskip("xgboost")
+        model = unittest.mock.Mock()
+        model.__class__ = xgboost.XGBModel
+        attrs = {"get_params.return_value": json.dumps({"test": "passed"})}
+        model.configure_mock(**attrs)
+        tmp_dir = tempfile.TemporaryDirectory()
+        mp.generate_hyperparameters(model, "prefix", Path(tmp_dir.name))
+        assert Path(Path(tmp_dir.name) / f"./prefixHyperparameters.json").exists()
+
+    def test_h2o(self):
+        h2o = pytest.importorskip("h2o")
+        model = unittest.mock.Mock()
+        model.__class__ = h2o.H2OFrame
+        attrs = {"get_params.return_value": json.dumps({"test": "passed"})}
+        model.configure_mock(**attrs)
+        tmp_dir = tempfile.TemporaryDirectory()
+        mp.generate_hyperparameters(model, "prefix", Path(tmp_dir.name))
+        assert Path(Path(tmp_dir.name) / f"./prefixHyperparameters.json").exists()
+
+    def test_tensorflow(self):
+        tf = pytest.importorskip("tensorflow")
+        model = unittest.mock.Mock()
+        model.__class__ = tf.keras.Sequential
+        attrs = {"get_config.return_value": json.dumps({"test": "passed"})}
+        model.configure_mock(**attrs)
+        tmp_dir = tempfile.TemporaryDirectory()
+        mp.generate_hyperparameters(model, "prefix", Path(tmp_dir.name))
+        assert Path(Path(tmp_dir.name) / f"./prefixHyperparameters.json").exists()
+
+    def test_statsmodels(self):
+        smf = pytest.importorskip("statsmodels.formula.api")
+        model = unittest.mock.Mock(
+            exog_names=["test", "exog"], weights=np.array([0, 1])
+        )
+        model.__class__ = smf.ols
+        tmp_dir = tempfile.TemporaryDirectory()
+        mp.generate_hyperparameters(model, "prefix", Path(tmp_dir.name))
+        assert Path(Path(tmp_dir.name) / f"./prefixHyperparameters.json").exists()

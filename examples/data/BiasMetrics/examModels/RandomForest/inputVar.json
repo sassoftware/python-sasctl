@@ -1,0 +1,74 @@
+[
+    {
+        "name": "gender_male",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    },
+    {
+        "name": "raceethnicity_group_A",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    },
+    {
+        "name": "raceethnicity_group_B",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    },
+    {
+        "name": "raceethnicity_group_C",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    },
+    {
+        "name": "raceethnicity_group_D",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    },
+    {
+        "name": "parental_level_of_education_associates_degree",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    },
+    {
+        "name": "parental_level_of_education_bachelors_degree",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    },
+    {
+        "name": "parental_level_of_education_high_school",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    },
+    {
+        "name": "parental_level_of_education_some_college",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    },
+    {
+        "name": "parental_level_of_education_some_high_school",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    },
+    {
+        "name": "lunch_freereduced",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    },
+    {
+        "name": "test_preparation_course_none",
+        "level": "interval",
+        "type": "decimal",
+        "length": 8
+    }
+]

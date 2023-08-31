@@ -1,0 +1,17 @@
+{
+    "name": "RandomForest",
+    "description": "Description for the RandomForest model.",
+    "scoreCodeType": "python",
+    "trainTable": "",
+    "trainCodeType": "Python",
+    "algorithm": "",
+    "function": "Prediction",
+    "targetVariable": "composite_score",
+    "targetEvent": "",
+    "targetLevel": "INTERVAL",
+    "eventProbVar": "",
+    "modeler": "sasdemo",
+    "tool": "Python 3",
+    "toolVersion": "3.11.3",
+    "properties": []
+}
