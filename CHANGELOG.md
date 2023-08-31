@@ -5,7 +5,7 @@ Unreleased
  - Add `model_info` class to better capture model information.
  - Test `/examples` Jupyter notebooks within normal test suite.
 
-v1.10 
+v1.10 (2023-08-31)
 ----------
 **Improvements**
  - `write_score_code.py` refactored to include ability to run batch scoring.

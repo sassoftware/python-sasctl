@@ -14,6 +14,7 @@ __credits__ = [
     "Chris Toth",
     "Jon Walker",
     "Scott Lindauer",
+    "DJ Moore",
 ]
 __license__ = "Apache 2.0"
 __copyright__ = (

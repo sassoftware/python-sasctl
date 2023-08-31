@@ -760,6 +760,7 @@ class JSONFiles:
         return data
 
     # TODO: Add unit/integration tests
+    @experimental
     @classmethod
     def assess_model_bias(
         cls,
@@ -940,7 +941,6 @@ class JSONFiles:
 
         return json_files
 
-    # TODO: Add doc_string and unit tests
     @staticmethod
     def format_max_differences(
         maxdiff_dfs: List[DataFrame], datarole: str = "TEST"
@@ -971,7 +971,6 @@ class JSONFiles:
 
         return maxdiff_df
 
-    # TODO: Add doc_string and unit tests
     @staticmethod
     def format_group_metrics(
         groupmetrics_dfs: List[DataFrame],
@@ -1041,7 +1040,6 @@ class JSONFiles:
         )
         return groupmetrics_df
 
-    # TODO: Add doc_string and unit tests
     @experimental
     @classmethod
     def bias_dataframes_to_json(
