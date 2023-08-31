@@ -760,8 +760,8 @@ class JSONFiles:
         return data
 
     # TODO: Add unit/integration tests
-    @experimental
     @classmethod
+    @experimental
     def assess_model_bias(
         cls,
         score_table: DataFrame,
@@ -1040,8 +1040,8 @@ class JSONFiles:
         )
         return groupmetrics_df
 
-    @experimental
     @classmethod
+    @experimental
     def bias_dataframes_to_json(
         cls,
         groupmetrics: DataFrame = None,
