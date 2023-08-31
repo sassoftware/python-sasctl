@@ -5,6 +5,19 @@ Unreleased
  - Add `model_info` class to better capture model information.
  - Test `/examples` Jupyter notebooks within normal test suite.
 
+v1.10 
+----------
+**Improvements**
+ - `write_score_code.py` refactored to include ability to run batch scoring.
+ - Added handling for TensorFlow Keras models.
+ - Updated project creation to automatically set project properties based on contained models.
+ - Included capability to assess biases of a model using CAS FairAITools using `pzmm.write_json_files.assess_model_bias()`.
+ - Added custom KPI support for H2O, statsmodels, TensorFlow, and xgboost.
+ - Updated examples:
+   - Added example walking through the creation process of a simple TensorFlow Keras model.
+   - Added example detailing the usage of `pzmm.write_json_files.assess_model_bias()` for a simple regression model
+   - Updated `pzmm_custom_kpi_model_parameters` notebook to have correct parameter casing.
+
 v1.9.4 (2023-06-15)
 ----------
 **Improvements**
