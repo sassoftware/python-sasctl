@@ -4,7 +4,8 @@ include CHANGELOG.md
 include CONTRIBUTING.md
 include ContributorAgreement.txt
 include SUPPORT.md
+include MANIFEST.in
 
-include src/sasctl/pzmm/template_files/dmcas_fitstat.json
-include src/sasctl/pzmm/template_files/dmcas_roc.json
-include src/sasctl/pzmm/template_files/dmcas_lift.json
+include src/sasctl/pzmm/template_files/*.json
+include src/sasctl/pzmm/template_files/clf_jsons/*.json
+include src/sasctl/pzmm/template_files/reg_jsons/*.json
