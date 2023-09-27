@@ -1,7 +1,7 @@
 # Copyright (c) 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import json
+import yaml
 from pathlib import Path
 
 
@@ -31,32 +31,28 @@ class MLFlowModel:
             Model output variables
         """
         with open(Path(m_path) / "MLmodel", "r") as m_file:
-            m_lines = m_file.readlines()
+            m_yml = yaml.safe_load(m_file)
 
         # Read in metadata and properties from the MLFlow model
-        var_list = ["python_version", "serialization_format", "run_id", "model_path"]
-        for i, var_string in enumerate(var_list):
-            index = [i for i, s in enumerate(m_lines) if var_string in s]
-            if not index:
-                raise ValueError("This MLFlow model type is not currently supported.")
-            var_list[i] = {var_list[i]: m_lines[index[0]].strip().split(" ")[1]}
-
-        var_dict = {k: v for d in var_list for k, v in d.items()}
-        var_dict["mlflowPath"] = m_path
+        try:
+            var_dict = {
+                "python_version": m_yml["flavors"]["python_function"]["python_version"],
+                "model_path": m_yml["flavors"]["python_function"]["model_path"],
+                "serialization_format": m_yml["flavors"]["sklearn"]["serialization_format"],
+                "run_id": m_yml["run_id"],
+                "mlflowPath": m_path
+            }
+        except KeyError:
+            raise ValueError("This MLFlow model type is not currently supported.") from None
 
         # Read in the input and output variables
-        ind_in = [i for i, s in enumerate(m_lines) if "inputs:" in s]
-        ind_out = [i for i, s in enumerate(m_lines) if "outputs:" in s]
-
-        if ind_in and ind_out:
-            inputs = m_lines[ind_in[0] : ind_out[0]]
-            outputs = m_lines[ind_out[0] : -1]
-
-            inputs_dict = json.loads("".join([s.strip() for s in inputs])[9:-1])
-            outputs_dict = json.loads("".join([s.strip() for s in outputs])[10:-1])
-        else:
+        try:
+            inputs_dict = m_yml["signature"]["inputs"]
+            outputs_dict = m_yml["signature"]["outputs"]
+        except KeyError:
             raise ValueError(
                 "Improper or unset signature values for model. No input or output "
                 "dicts could be generated. "
-            )
+            ) from None
+        
         return var_dict, inputs_dict, outputs_dict
