@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import yaml
+import json
 from pathlib import Path
 
 
@@ -44,11 +45,13 @@ class MLFlowModel:
             }
         except KeyError:
             raise ValueError("This MLFlow model type is not currently supported.") from None
+        except TypeError:
+            raise ValueError("This MLFlow model type is not currently supported.") from None
 
         # Read in the input and output variables
         try:
-            inputs_dict = m_yml["signature"]["inputs"]
-            outputs_dict = m_yml["signature"]["outputs"]
+            inputs_dict = json.loads(m_yml["signature"]["inputs"])
+            outputs_dict = json.loads(m_yml["signature"]["outputs"])
         except KeyError:
             raise ValueError(
                 "Improper or unset signature values for model. No input or output "
