@@ -282,7 +282,7 @@ def score(var1, var2, var3, var4):
                 predict_method[1],
                 target_values=target_values,
                 predict_threshold=predict_threshold,
-                target_index=target_index
+                target_index=target_index,
             )
 
         if missing_values:
@@ -1090,7 +1090,7 @@ if not isinstance(var1, pd.Series):
         target_values: Optional[List[str]] = None,
         predict_threshold: Optional[float] = None,
         h2o_model: Optional[bool] = False,
-        target_index: Optional[int] = 1
+        target_index: Optional[int] = 1,
     ) -> None:
         """
         Using the provided arguments, write in to the score code the method for handling
@@ -1136,7 +1136,12 @@ if not isinstance(var1, pd.Series):
         # Binary classification model
         elif len(target_values) == 2:
             cls._binary_target(
-                metrics, target_values, predict_returns, predict_threshold, target_index, h2o_model
+                metrics,
+                target_values,
+                predict_returns,
+                predict_threshold,
+                target_index,
+                h2o_model,
             )
         # Multiclass classification model
         elif len(target_values) > 2:
@@ -1187,10 +1192,11 @@ if not isinstance(var1, pd.Series):
                 )
                 """
     if input_array.shape[0] == 1:
-        Classification = prediction[0]
+        Classification = prediction[1][0]
         return Classification
     else:
-        output_table = pd.DataFrame({'Classification': prediction})
+        output_table = prediction.drop(prediction.columns[1:], axis=1)
+        output_table.columns = ['Classification']
         return output_table
                 """
             else:
@@ -1203,11 +1209,10 @@ if not isinstance(var1, pd.Series):
                 )
                 """
     if input_array.shape[0] == 1:
-        Classification = prediction[1][0]
+        Classification = prediction[0][0]
         return Classification
     else:
-        output_table = prediction.drop(prediction.columns[1:], axis=1)
-        output_table.columns = ['Classification']
+        output_table = pd.DataFrame({'Classification': prediction})
         return output_table
                 """
         else:
@@ -1271,7 +1276,7 @@ if not isinstance(var1, pd.Series):
         returns: List[Any],
         threshold: Optional[float] = None,
         h2o_model: Optional[bool] = None,
-        target_index: Optional[int] = 1
+        target_index: Optional[int] = 1,
     ) -> None:
         """
         Handle binary model prediction outputs.
@@ -1317,13 +1322,13 @@ if not isinstance(var1, pd.Series):
             if h2o_model:
                 cls.score_code += (
                     f"{'':4}if input_array.shape[0] == 1:\n"
-                    f"{'':8}if prediction[1][{target_index} + 1] > {threshold}:\n"
+                    f"{'':8}if prediction[1][{target_index+1}] > {threshold}:\n"
                     f"{'':12}{metrics} = \"{target_values[target_index]}\"\n"
                     f"{'':8}else:\n"
                     f"{'':12}{metrics} = \"{target_values[abs(target_index-1)]}\"\n"
                     f"{'':8}return {metrics}\n"
                     f"{'':4}else:\n"
-                    f"{'':8}output_table = pd.DataFrame({{'{metrics}': np.where(prediction[prediction.columns[{target_index+1}]] > {threshold}, '{target_values[target_index]}', '{target_values[abs(target_index-1)]}')}})"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics}': np.where(prediction[prediction.columns[{target_index+1}]] > {threshold}, '{target_values[target_index]}', '{target_values[abs(target_index-1)]}')}})\n"
                     f"{'':8}return output_table"
                 )
                 """
@@ -1385,8 +1390,8 @@ if not isinstance(var1, pd.Series):
                     f"{'':8}return {metrics}\n"
                     f"{'':4}else:\n"
                     f"{'':8}target_values = {target_values}\n"
-                    f"{'':8}prediction = pd.DataFrame(prediction)"
-                    f"{'':8}output_table = pd.DataFrame({{'{metrics}': np.where(prediction[prediction.columns[{target_index}]] > {threshold}, '{target_values[target_index]}', '{target_values[abs(target_index-1)]}')}})"
+                    f"{'':8}prediction = pd.DataFrame(prediction)\n"
+                    f"{'':8}output_table = pd.DataFrame({{'{metrics}': np.where(prediction[prediction.columns[{target_index}]] > {threshold}, '{target_values[target_index]}', '{target_values[abs(target_index-1)]}')}})\n"
                     f"{'':8}return output_table"
                 )
                 """
@@ -1404,6 +1409,7 @@ if not isinstance(var1, pd.Series):
                 """
             # Classification and probability returned; return classification value
             elif len(returns) > 1 and sum(returns) == 1:
+                # TODO: Either figure out how to handle threshold or add warning
                 # Determine which return is the classification value
                 class_index = [i for i, x in enumerate(returns) if x][0]
                 cls.score_code += (
@@ -1424,7 +1430,6 @@ if not isinstance(var1, pd.Series):
             else:
                 cls._invalid_predict_config()
         elif len(metrics) == 2:
-            # TODO: change to align with other cases and assign target_values to classification column
             # H2O models with two metrics are assumed to be classification + probability
             if h2o_model:
                 warn(
@@ -1434,10 +1439,16 @@ if not isinstance(var1, pd.Series):
                 )
                 cls.score_code += (
                     f"{'':4}if input_array.shape[0] == 1:\n"
-                    f"{'':8}return prediction[1][0], float(prediction[1][2])\n"
+                    f"{'':8}if prediction[1][{target_index+1}] > {threshold}:\n"
+                    f"{'':12}{metrics[0]} = '{target_values[target_index]}'\n"
+                    f"{'':8}else:\n"
+                    f"{'':12}{metrics[0]} = '{target_values[abs(target_index-1)]}'\n"
+                    f"{'':8}return {metrics[0]}, float(prediction[1][{target_index+1}])\n"
                     f"{'':4}else:\n"
                     f"{'':8}output_table = prediction.drop(prediction.columns[{abs(target_index-1)+1}], axis=1)\n"
+                    f"{'':8}classifications = np.where(prediction[prediction.columns[{target_index+1}]] > {threshold}, '{target_values[target_index]}', '{target_values[abs(target_index-1)]}')\n"
                     f"{'':8}output_table.columns = {metrics}\n"
+                    f"{'':8}output_table['{metrics[0]}'] = classifications\n"
                     f"{'':8}return output_table"
                 )
                 """
@@ -1494,7 +1505,7 @@ if not isinstance(var1, pd.Series):
                     f"{'':8}return {metrics[0]}, prediction[0][{target_index}]\n"
                     f"{'':4}else:\n"
                     f"{'':8}df = pd.DataFrame(prediction)\n"
-                    f"{'':8}proba = df[0]\n"
+                    f"{'':8}proba = df[{target_index}]\n"
                     f"{'':8}classifications = np.where(df[{target_index}] > {threshold}, '{target_values[target_index]}', '{target_values[abs(target_index-1)]}')\n"
                     f"{'':8}return pd.DataFrame({{'{metrics[0]}': classifications, '{metrics[1]}': proba}})"
                 )
@@ -1511,6 +1522,7 @@ if not isinstance(var1, pd.Series):
         classifications = np.where(df[1] > .5, 'B', 'A')
         return pd.DataFrame({'Classification': classifications, 'Probability': proba})
                                 """
+            # TODO: Potentially add threshold
             # Return classification and probability value
             elif sum(returns) == 1 and len(returns) == 2:
                 cls.score_code += (
@@ -1536,10 +1548,11 @@ if not isinstance(var1, pd.Series):
                 if class_index == 0:
                     cls.score_code += (
                         f"{'':4}if input_array.shape[0] == 1:\n"
-                        f"{'':8}return prediction[0][0], prediction[0][{target_index} + 1]\n"
+                        f"{'':8}return prediction[0][0], prediction[0][{target_index+1}]\n"
                         f"{'':4}else:\n"
+                        f"{'':8}prediction = pd.DataFrame(prediction)\n"
                         f"{'':8}output_table = prediction.drop(prediction.columns[{abs(target_index-1)+1}], axis=1)\n"
-                        f"{'':8}output_table.columns = {metrics}"
+                        f"{'':8}output_table.columns = {metrics}\n"
                         f"{'':8}return output_table"
                     )
 
@@ -1556,9 +1569,10 @@ if not isinstance(var1, pd.Series):
                         f"{'':4}if input_array.shape[0] == 1:\n"
                         f"{'':8}return prediction[0][{class_index}], prediction[0][{target_index}]\n"
                         f"{'':4}else:\n"
+                        f"{'':8}prediction = pd.DataFrame(prediction)\n"
                         f"{'':8}output_table = prediction.drop(prediction.columns[{abs(target_index-1)}], axis=1)\n"
                         f"{'':8}output_table = output_table[output_table.columns[::-1]]\n"
-                        f"{'':8}output_table.columns = {metrics}"
+                        f"{'':8}output_table.columns = {metrics}\n"
                         f"{'':8}return output_table"
                     )
                     """
@@ -1622,6 +1636,7 @@ if not isinstance(var1, pd.Series):
         return output_table
                 """
             elif sum(returns) == 0 and len(returns) == 2:
+                # TODO: Make decision on whether ordering should follow given pattern or reflect input ordering
                 warn(
                     "Due to the ambiguity of the provided metrics and prediction return"
                     " types, the score code assumes the return order to be: "
@@ -1638,8 +1653,8 @@ if not isinstance(var1, pd.Series):
                     f"{'':8}return {metrics[0]}, prediction[0][{target_index}], prediction[0][{abs(target_index-1)}]\n"
                     f"{'':4}else:\n"
                     f"{'':8}output_table = pd.DataFrame(prediction, columns={metrics[1:]})\n"
-                    f"{'':8}classifications = np.where(prediction[prediction.columns[{target_index}]] > {threshold}, '{target_values[target_index]}', '{target_values[abs(target_index-1)]}')"
-                    f"{'':8}output_table.insert(loc=0, column='{metrics[0]}', value=classifications)"
+                    f"{'':8}classifications = np.where(output_table[output_table.columns[{target_index}]] > {threshold}, '{target_values[target_index]}', '{target_values[abs(target_index-1)]}')\n"
+                    f"{'':8}output_table.insert(loc=0, column='{metrics[0]}', value=classifications)\n"
                     f"{'':8}return output_table"
                 )
                 """
