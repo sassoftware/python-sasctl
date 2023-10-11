@@ -44,7 +44,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
-    "numpydoc",  # "sphinx.ext.napoleon",
+    "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
 ]
@@ -54,7 +54,7 @@ intersphinx_mapping = {
     "swat": ("https://sassoftware.github.io/python-swat/", None),
     "pytest": ("https://docs.pytest.org/en/latest/", None),
     "betamax": ("https://betamax.readthedocs.io/en/latest/", None),
-    "requests": ("https://2.python-requests.org/en/master/", None),
+    "requests": ("https://requests.readthedocs.io/en/latest/", None),
     "tox": ("https://tox.readthedocs.io/en/latest/", None),
     "flake8": ("http://flake8.pycqa.org/en/latest/", None),
 }
