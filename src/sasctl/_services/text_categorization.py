@@ -60,8 +60,8 @@ class TextCategorization(Service):
 
         See Also
         --------
-        cas_management.get_caslib
-        cas_management.get_table
+        .cas_management.CASManagement.get_caslib
+        .cas_management.CASManagement.get_table
 
         """
         if current_session().version_info() >= 4:

@@ -50,16 +50,25 @@ extensions = [
 ]
 
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3", None),
+    "python": ("https://docs.python.org/3/", None),
+    "pandas": ("https://pandas.pydata.org/docs/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
     "swat": ("https://sassoftware.github.io/python-swat/", None),
     "pytest": ("https://docs.pytest.org/en/latest/", None),
     "betamax": ("https://betamax.readthedocs.io/en/latest/", None),
     "requests": ("https://requests.readthedocs.io/en/latest/", None),
-    "tox": ("https://tox.readthedocs.io/en/latest/", None),
-    "flake8": ("http://flake8.pycqa.org/en/latest/", None),
+    "tox": ("https://tox.wiki/en/latest/", None),
+    "flake8": ("https://flake8.pycqa.org/en/latest/", None),
 }
 
 autosummary_generate = True
+
+# Napoleon settings
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_use_ivar = True
+napoleon_use_param = False
+napoleon_use_rtype = False
 
 todo_include_todos = True
 
@@ -92,6 +101,9 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
 
+# Suppress warnings 'py:class reference target not found: <type>'
+nitpicky = True
+nitpick_ignore = [('py:class','Response'),('py:class','Request'),('py:class','sasctl._services.service.Service')]
 
 # -- Options for HTML output -------------------------------------------------
 

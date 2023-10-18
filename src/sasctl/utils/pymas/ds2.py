@@ -617,8 +617,9 @@ class DS2Variable(namedtuple("Ds2Variable", ["name", "type", "out"])):
         python_var_name : str
             Python variable name.
 
-        Returns
-        -------
+        Raises
+        ------
+        ValueError
 
         """
 

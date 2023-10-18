@@ -23,9 +23,9 @@ def create_package(table, input=None):
 
     Parameters
     ----------
-    table : swat.CASTable
+    table : swat.cas.table.CASTable
         The CAS table containing an ASTORE or score code.
-    input : DataFrame, type, list of type, or dict of str: type, optional
+    input : pandas.DataFrame, type, list of type, or dict of str: type, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
         is provided, the columns will be inspected to determine type information.
@@ -40,7 +40,7 @@ def create_package(table, input=None):
 
     See Also
     --------
-    model_repository.import_model_from_zip
+    ~.model_repository.ModelRepository.import_model_from_zip
 
     """
     if swat is None:
@@ -80,7 +80,7 @@ def create_package_from_datastep(table, input=None):
 
     See Also
     --------
-    model_repository.import_model_from_zip
+    ~.model_repository.ModelRepository.import_model_from_zip
 
     """
     dscode = table.to_frame().loc[0, "DataStepSrc"]
@@ -161,7 +161,7 @@ def create_package_from_astore(table):
 
     See Also
     --------
-    model_repository.import_model_from_zip
+    ~.model_repository.ModelRepository.import_model_from_zip
 
     """
     files = create_files_from_astore(table)

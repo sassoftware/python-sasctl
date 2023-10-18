@@ -456,8 +456,8 @@ class ModelManagement(Service):
             Name of the custom KPI.
         kpiValue : int or float or list
             Value of the custom KPI.
-        timeSK : int or list, by default None
-            Indicator for the MM_STD_KPI table to denote performance task order.
+        timeSK : int or list
+            Default is None. Indicator for the MM_STD_KPI table to denote performance task order.
         """
         from .model_repository import ModelRepository
 

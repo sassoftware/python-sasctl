@@ -813,10 +813,10 @@ class ModelRepository(Service):
         list of dicts
             List of dicts representing different project versions. Dict key/value
             pairs are as follows.
-                name : str
-                id : str
-                number : str
-                modified : datetime
+            - name : str
+            - id : str
+            - number : str
+            - modified : datetime
 
         """
         project_info = cls.get_project(project)

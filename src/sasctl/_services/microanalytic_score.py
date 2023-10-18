@@ -102,7 +102,7 @@ class MicroAnalyticScore(Service):
         return_dict : bool, optional
             Whether the results should be returned as a dictionary instead
             of a tuple
-        kwargs : any
+        **kwargs
             Passed as arguments to the module step
 
         Returns
@@ -180,8 +180,8 @@ class MicroAnalyticScore(Service):
         name : str
         description : str
         source : str
-        language : str { 'python', 'ds2' }
-        scope : str { 'public', 'private' }
+        language : {'python','ds2'}
+        scope : {'public','private'}
 
         Returns
         -------

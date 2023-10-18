@@ -37,7 +37,7 @@ class Concepts(Service):
 
         Parameters
         ----------
-        documents : str or dict or list_like:
+        documents : str or dict or list_like
             Documents to analyze.  May be either the URI to a CAS table where the
             documents are currently stored, or an iterable of strings containing
             the documents' text.
@@ -71,8 +71,8 @@ class Concepts(Service):
 
         See Also
         --------
-        cas_management.get_caslib
-        cas_management.get_table
+        .cas_management.CASManagement.get_caslib
+        .cas_management.CASManagement.get_table
 
         """
         if documents is None:

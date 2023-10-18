@@ -58,7 +58,7 @@ class ZipModel:
 
         Parameters
         ----------
-        model_files : str, Path, or dict
+        model_files : str, pathlib.Path, or dict
             Either the directory location of the model files (string or Path object), or
             a dictionary containing the contents of all the model files.
         model_prefix : str

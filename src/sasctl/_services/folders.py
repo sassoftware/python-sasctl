@@ -71,11 +71,12 @@ class Folders(Service):
         ----------
         folder : str or dict
             May be one of:
-             - folder name
-             - folder ID
-             - folder path
-             - folder delegate string
-             - dictionary representation of the folder
+            
+            - folder name
+            - folder ID
+            - folder path
+            - folder delegate string
+            - dictionary representation of the folder
         refresh : bool, optional
             Obtain an updated copy of the folder.
 

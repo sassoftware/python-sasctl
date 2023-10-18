@@ -43,7 +43,7 @@ class Files(Service):
         file : str or file_like
             Path to the file to upload or a file-like object.
         folder : str or dict, optional
-            Name, or, or folder information as returned by :func:`.get_folder`.
+            Name or folder information as returned by :meth:`.get_folder`.
         filename : str, optional
             Name to assign to the uploaded file.  Defaults to the filename if `file` is a path, otherwise required.
         expiration : datetime, optional
@@ -96,7 +96,8 @@ class Files(Service):
 
         Returns
         -------
-        content
+        str
+            content
 
         """
         file = cls.get_file(file)

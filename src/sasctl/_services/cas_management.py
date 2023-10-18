@@ -58,8 +58,10 @@ def check_required_key(
 
     Raises
     ------
-    ValueError if required_key is not present.
-    TypeError if required_key is neither a list or a string.
+    ValueError
+        if required_key is not present.
+    TypeError
+        if required_key is neither a list or a string.
     """
     if isinstance(required_key, str):
         if required_key not in input_keys:
@@ -310,7 +312,7 @@ class CASManagement(Service):
 
         Parameters
         ----------
-        file : str or file-like object
+        file : str or typing.TextIO
             File containing data to upload or path to the file.
         name : str
             Name of the table to create

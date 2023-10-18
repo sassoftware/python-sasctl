@@ -257,10 +257,10 @@ def register_model(
 
     Parameters
     ----------
-    model : swat.CASTable or sklearn.BaseEstimator
-        The model to register.  If an instance of ``swat.CASTable`` the table
-        is assumed to hold an ASTORE, which will be downloaded and used to
-        construct the model to register.  If a scikit-learn estimator, the
+    model : swat.cas.table.CASTable or sklearn.base.BaseEstimator
+        The model to register.  If an instance of :class:`swat.cas.table.CASTable`
+        the table is assumed to hold an ASTORE, which will be downloaded and used
+        to construct the model to register.  If a scikit-learn estimator, the
         model will be pickled and uploaded to the registry and score code will
         be generated for publishing the model to MAS.
     name : str
@@ -271,7 +271,7 @@ def register_model(
     repository : str or dict, optional
         The name or id of the repository, or a dictionary representation of
         the repository.  If omitted, the default repository will be used.
-    input : DataFrame, type, list of type, or dict of str: type, optional
+    input : pandas.DataFrame, type, list of type, or dict of str: type, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
         is provided, the columns will be inspected to determine type
@@ -296,7 +296,7 @@ def register_model(
     Returns
     -------
     model : RestObj
-        The newly registered model as an instance of ``RestObj``
+        The newly registered model as an instance of :class:`.core.RestObj`
 
     Notes
     -----
@@ -593,7 +593,7 @@ def publish_model(
     replace : bool, optional
         Whether to overwrite the model if it already exists in
         the `destination`
-    kwargs : optional
+    **kwargs
         additional arguments will be passed to the underlying publish
         functions.
 

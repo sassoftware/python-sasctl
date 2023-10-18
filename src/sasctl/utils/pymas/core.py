@@ -43,7 +43,7 @@ def build_wrapper_function(
         passing to `func`
     name : str, optional
         Name of the generated wrapper function.  Defaults to 'wrapper'.
-    setup : iterable
+    setup : Iterable
         Python source code lines to be executed during package setup
     return_msg : bool, optional
         Deprecated.
@@ -53,7 +53,7 @@ def build_wrapper_function(
     Returns
     -------
     str
-        the Python definition for the wrapper function.
+        The Python definition for the wrapper function.
 
     Notes
     -----
@@ -169,7 +169,7 @@ def wrap_predict_method(func, variables, **kwargs):
         to behave as `.predict()` methods.
     variables : list of DS2Variable
         Input and output variables for the function
-    kwargs : any
+    **kwargs
         Will be passed to `build_wrapper_function`.
 
     Returns
@@ -199,7 +199,7 @@ def wrap_predict_proba_method(func, variables, **kwargs):
         to behave as `.predict_proba()` methods.
     variables : list of DS2Variable
         Input and output variables for the function
-    kwargs : any
+    **kwargs
         Will be passed to `build_wrapper_function`.
 
     Returns
@@ -522,7 +522,7 @@ class PyMAS:
     return_msg : bool
         Deprecated.
         Whether the DS2-generated return message should be included.
-    kwargs : any
+    **kwargs
         Passed to :func:`build_wrapper_function`.
 
     """
