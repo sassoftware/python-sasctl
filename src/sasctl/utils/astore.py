@@ -25,7 +25,7 @@ def create_package(table, input=None):
     ----------
     table : swat.cas.table.CASTable
         The CAS table containing an ASTORE or score code.
-    input : pandas.DataFrame, type, list of type, or dict of str: type, optional
+    input : pandas.DataFrame, type, list of type, or dict of str, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
         is provided, the columns will be inspected to determine type information.
@@ -63,9 +63,9 @@ def create_package_from_datastep(table, input=None):
 
     Parameters
     ----------
-    table : swat.CASTable
+    table : swat.cas.table.CASTable
         The CAS table containing the score code.
-    input : DataFrame, type, list of type, or dict of str: type, optional
+    input : pandas.DataFrame, type, list of type, or dict of str, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
         is provided, the columns will be inspected to determine type information.
@@ -151,7 +151,7 @@ def create_package_from_astore(table):
 
     Parameters
     ----------
-    table : swat.CASTable
+    table : swat.cas.table.CASTable
         The CAS table containing the ASTORE.
 
     Returns
@@ -174,7 +174,7 @@ def create_files_from_astore(table):
 
     Parameters
     ----------
-    table : swat.CASTable
+    table : swat.cas.table.CASTable
         The CAS table containing the ASTORE.
 
     Returns

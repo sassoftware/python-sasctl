@@ -37,7 +37,7 @@ class SentimentAnalysis(Service):
 
         Parameters
         ----------
-        documents : str or dict or Iterable:
+        documents : str or dict or Iterable
             Documents to analyze.  May be either the URI to a CAS table where the
             documents are currently stored, or an iterable of strings containing
             the documents' text.

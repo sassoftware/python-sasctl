@@ -5,7 +5,7 @@
 import ast
 import importlib
 import json
-import math
+# import math #not used 
 import pickle
 import pickletools
 import sys
@@ -1080,7 +1080,7 @@ class JSONFiles:
             A list of variable names containing the predicted probability values in the score table. The first element
             should represent the predicted probability of the target class. Required for classification problems. Default
             is None.
-        levels: list of str.
+        levels: list of str
             Required for classification problems, otherwise not used
             List of classes of a nominal target in the order they were passed in `prob_values`. Levels must be passed as a
             string. Default is None.

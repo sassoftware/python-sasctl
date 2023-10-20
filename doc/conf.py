@@ -52,6 +52,7 @@ extensions = [
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "pandas": ("https://pandas.pydata.org/docs/", None),
+    "sklearn": ("https://scikit-learn.org/stable/", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "swat": ("https://sassoftware.github.io/python-swat/", None),
     "pytest": ("https://docs.pytest.org/en/latest/", None),
@@ -67,7 +68,6 @@ autosummary_generate = True
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_use_ivar = True
-napoleon_use_param = False
 napoleon_use_rtype = False
 
 todo_include_todos = True
@@ -103,7 +103,13 @@ pygments_style = "sphinx"
 
 # Suppress warnings 'py:class reference target not found: <type>'
 nitpicky = True
-nitpick_ignore = [('py:class','Response'),('py:class','Request'),('py:class','sasctl._services.service.Service')]
+nitpick_ignore = [
+    ('py:class','optional'),
+    ('py:class','json.encoder.JSONEncoder'), # I don't understand why it can't find it
+    ('py:class','Response'),
+    ('py:class','Request'),
+    ('py:class','sasctl._services.service.Service') # should the Service class be documented?
+]
 
 # -- Options for HTML output -------------------------------------------------
 

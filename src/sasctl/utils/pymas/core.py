@@ -35,7 +35,7 @@ def build_wrapper_function(
 
     Parameters
     ----------
-    func : function or str
+    func : Callable or str
         Function name or an instance of Function which will be wrapped
     variables : list of DS2Variable
     array_input : bool
@@ -164,13 +164,13 @@ def wrap_predict_method(func, variables, **kwargs):
 
     Parameters
     ----------
-    func : function or str
+    func : Callable or str
         Function name or an instance of Function which will be wrapped.  Assumed
         to behave as `.predict()` methods.
     variables : list of DS2Variable
         Input and output variables for the function
     **kwargs
-        Will be passed to `build_wrapper_function`.
+        Will be passed to :meth:`build_wrapper_function`.
 
     Returns
     -------
@@ -194,7 +194,7 @@ def wrap_predict_proba_method(func, variables, **kwargs):
 
     Parameters
     ----------
-    func : function or str
+    func : Callable or str
         Function name or an instance of Function which will be wrapped.  Assumed
         to behave as `.predict_proba()` methods.
     variables : list of DS2Variable
@@ -232,7 +232,7 @@ def from_inline(
 
     Parameters
     ----------
-    func : function
+    func : Callable
         A Python function object to be used
     input_types : list of type, optional
         The expected type for each input value of `func`.  Can be ommitted if
@@ -346,13 +346,13 @@ def from_pickle(
 
     Parameters
     ----------
-    file : str or bytes or file_like
+    file : str or bytes or io.BytesIO
         Pickled object to use.  String is assumed to be a path to a picked
         file, file_like is assumed to be an open file handle to a pickle
         object, and bytes is assumed to be the raw pickled bytes.
     func_name : str
         Name of the target function to call
-    input_types : DataFrame, type, list of type, or dict of str: type, optional
+    input_types : pandas.DataFrame, type, list of type, or dict of str, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
         is provided, the columns will be inspected to determine type information.
@@ -628,7 +628,8 @@ class PyMAS:
             The name of the table where execution results will be written
         columns : list of str
             Names of the columns from `table` that will be passed to `func`
-        dest : str {'MAS', 'EP', 'CAS', 'Python'}
+        dest : str
+            Choose from ``{'MAS', 'EP', 'CAS', 'Python'}``.
             Specifies the publishing destination for the score code to ensure
             that compatible code is generated.
 

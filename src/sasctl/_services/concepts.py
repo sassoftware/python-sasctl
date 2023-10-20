@@ -37,7 +37,7 @@ class Concepts(Service):
 
         Parameters
         ----------
-        documents : str or dict or list_like
+        documents : str or dict or list
             Documents to analyze.  May be either the URI to a CAS table where the
             documents are currently stored, or an iterable of strings containing
             the documents' text.
@@ -55,8 +55,9 @@ class Concepts(Service):
         model
         output_postfix : str, optional
             Text to be added to the end of all output table names.
-        match_type : {'all', 'longest', 'best'}, optional
-            Type of matches to return.  Defaults to 'all'.
+        match_type : str, optional
+            Choose from ``{'all', 'longest', 'best'}``. 
+            Type of matches to return. Defaults to 'all'.
         enable_facts : bool, optional
             Whether to enable facts in the results.  Defaults to False.
         language : str, optional

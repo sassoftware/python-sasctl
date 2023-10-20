@@ -18,8 +18,8 @@ class MLFlowModel:
         Parameters
         ----------
         m_path : str or pathlib.Path, optional
-        Directory path of the MLFlow model files. Default is the current working
-        directory.
+            Directory path of the MLFlow model files. Default is the current working
+            directory.
 
         Returns
         -------

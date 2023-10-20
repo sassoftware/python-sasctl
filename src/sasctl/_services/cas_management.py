@@ -324,7 +324,8 @@ class CASManagement(Service):
         header : bool, optional
             Whether the first row of data contains column headers.  Defaults to
             True.
-        format_ : {"csv", "xls", "xlsx", "sas7bdat", "sashdat"}, optional
+        format_ : str, optional
+            Choose from {"csv", "xls", "xlsx", "sas7bdat", "sashdat"}.
             File of input `file`.  Not required if format can be discerned from
             the file path.
         detail : dict, optional

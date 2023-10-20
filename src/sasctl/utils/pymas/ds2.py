@@ -157,7 +157,7 @@ class DS2PyMASPackage(DS2BasePackage):
             Name of the DS2 method to create.
         target : str
             Name of the Python method to call
-        variables : list of :class:`DS2Variable`
+        variables : list of DS2Variable
             List of input and output variables for the method.
 
         Returns

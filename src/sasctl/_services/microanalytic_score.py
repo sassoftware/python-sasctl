@@ -107,7 +107,7 @@ class MicroAnalyticScore(Service):
 
         Returns
         -------
-        any
+        Any
             Results of the step execution.  Returned as a dictionary if
             `return_dict` is True, otherwise returned as a tuple if more
             than one value is returned, otherwise the single value.
@@ -180,8 +180,10 @@ class MicroAnalyticScore(Service):
         name : str
         description : str
         source : str
-        language : {'python','ds2'}
-        scope : {'public','private'}
+        language : str
+            Choose from ``{'python','ds2'}``
+        scope : str
+            Choose from ``{'public','private'}``
 
         Returns
         -------

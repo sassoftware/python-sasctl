@@ -91,7 +91,7 @@ class ScoreCode:
             predictor columns. The write_score_code function currently supports int(64),
             float(64), and string data types for scoring. Providing a list of dict
             objects signals that the model files are being created from an MLFlow model.
-        predict_method : [function -> list, list]
+        predict_method : Callable or list of Any
             The Python function used for model predictions and the expected output
             types. The expected output types can be passed as example values or as the
             value types. For example, if the model is a Scikit-Learn
@@ -317,7 +317,7 @@ def score(var1, var2, var3, var4):
         ----------
         model : str, dict, or RestObj
             The name or id of the model, or a dictionary representation of the model.
-        files : list of file objects
+        files : list of Any
             The list of score resource files to upload.
 
         Returns
@@ -1102,7 +1102,7 @@ if not isinstance(var1, pd.Series):
             A list of target values for the target variable. The default value is None.
         predict_threshold : float, optional
             The prediction threshold for normalized probability score_metrics. Values
-             are expected to be between 0 and 1. The default value is None.
+            are expected to be between 0 and 1. The default value is None.
         h2o_model : bool, optional
             Flag to indicate that the model is an H2O.ai model. The default value is
             False.

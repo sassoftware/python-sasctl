@@ -249,7 +249,8 @@ class Session(requests.Session):
     authinfo : str, optional
         Path to a .authinfo or .netrc file from which credentials should be
         pulled.
-    protocol : {'http', 'https'}
+    protocol : str
+        Choose from ``{'http', 'https'}``.
         Whether to use HTTP or HTTPS connections.  Defaults to `https`.
     port : int, optional
         Port number for the connection if a non-standard port is used.

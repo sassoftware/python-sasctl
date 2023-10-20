@@ -31,7 +31,7 @@ class TextCategorization(Service):
 
         Parameters
         ----------
-        documents : str or dict or list_like:
+        documents : str or dict or Iterable
             Documents to parse.  May be either the URI to a CAS table where the
             documents are currently stored, or an iterable of strings
             containing the documents' text.

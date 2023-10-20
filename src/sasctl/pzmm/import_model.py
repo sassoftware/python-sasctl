@@ -237,7 +237,7 @@ class ImportModel:
             The `DataFrame` object contains the training data, and includes only the
             predictor columns. The write_score_code function currently supports int(64),
             float(64), and string data types for scoring. The default value is None.
-        predict_method : [function -> list, list], optional
+        predict_method : Callable or list, optional
             The Python function used for model predictions and the expected output
             types. The expected output types can be passed as example values or as the
             value types. For example, if the model is a Scikit-Learn

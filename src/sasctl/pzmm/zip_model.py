@@ -1,6 +1,6 @@
 # Copyright (c) 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
-import io
+from io import BytesIO
 import zipfile
 from pathlib import Path
 from typing import Optional, Union
@@ -15,7 +15,7 @@ def _filter_files(file_dir: Union[str, Path], is_viya4: Optional[bool] = False) 
     Parameters
     ----------
     file_dir : str or Path
-        Location of *.json, *.pickle, *.mojo, and *Score.py files.
+        Location of \*.json, \*.pickle, \*.mojo, and \*Score.py files.
     is_viya4 : bool, optional
         Boolean to indicate difference in logic between SAS Viya 3.5 and SAS Viya 4. For
         Viya 3.5 models, ignore score code that is already in place in the file
@@ -47,7 +47,7 @@ class ZipModel:
         model_files: Union[dict, str, Path],
         model_prefix: str,
         is_viya4: Optional[bool] = False,
-    ) -> io.BytesIO:
+    ) -> BytesIO:
         """
         Combines all JSON files with the model pickle file and associated score code
         file into a single archive ZIP file.
@@ -70,13 +70,13 @@ class ZipModel:
             directory provided. Default value is False.
         """
         if isinstance(model_files, dict):
-            zip_buffer = io.BytesIO()
+            zip_buffer = BytesIO()
             with zipfile.ZipFile(
                 zip_buffer, "a", zipfile.ZIP_DEFLATED, False
             ) as zip_file:
                 for file_name, data in model_files.items():
                     zip_file.writestr(file_name, str(data))
-                return io.BytesIO(zip_buffer.getvalue())
+                return BytesIO(zip_buffer.getvalue())
         else:
             file_names = _filter_files(model_files, is_viya4)
             with zipfile.ZipFile(
@@ -88,4 +88,4 @@ class ZipModel:
             with open(
                 str(Path(model_files) / (model_prefix + ".zip")), "rb"
             ) as zip_file:
-                return io.BytesIO(zip_file.read())
+                return BytesIO(zip_file.read())

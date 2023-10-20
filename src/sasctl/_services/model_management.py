@@ -448,8 +448,8 @@ class ModelManagement(Service):
         model : str or dict
             The name or id of the model, or a dictionary representation of the model.
         project : str or dict
-        The name or id of the project, or a dictionary representation of
-        the project.
+            The name or id of the project, or a dictionary representation of
+            the project.
         timeLabel : str or list
             Label associated with the dataset used within the performance definition.
         kpiName : str or list
