@@ -108,6 +108,8 @@ nitpick_ignore = [
     ('py:class','json.encoder.JSONEncoder'), # I don't understand why it can't find it
     ('py:class','Response'),
     ('py:class','Request'),
+    ('py:class','_io.BytesIO'),
+    ('py:class','sasctl.utils.pymas.ds2.Ds2Variable'), # not sure what is wrong 
     ('py:class','sasctl._services.service.Service') # should the Service class be documented?
 ]
 
