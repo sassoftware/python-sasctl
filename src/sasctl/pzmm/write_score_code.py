@@ -1275,8 +1275,8 @@ if not isinstance(var1, pd.Series):
         target_values: List[str],
         returns: List[Any],
         threshold: Optional[float] = None,
-        h2o_model: Optional[bool] = None,
         target_index: Optional[int] = 1,
+        h2o_model: Optional[bool] = None,
     ) -> None:
         """
         Handle binary model prediction outputs.
