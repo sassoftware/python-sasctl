@@ -1453,11 +1453,16 @@ if not isinstance(var1, pd.Series):
                 )
                 """
     if input_array.shape[0] == 1:
-        return prediction[1][0], float(prediction[1][2])
+        if prediction[1][1] > 0.5:
+            Classification = '1'
+        else:
+            Classification = '0'
+        return EM_CLASSIFICATION, float(prediction[1][1])
     else:
-        output_table = prediction.drop(prediction.columns[1], axis=1)
-        output_table.columns = ['Classification', 'Probability']
-        return output_table
+        output_table = prediction.drop(prediction.columns[2], axis=1)
+        classifications = np.where(prediction[prediction.columns[1]] > 0.5, '0', '1')
+        output_table.columns = ['EM_CLASSIFICATION', 'EM_EVENTPROBABILITY']
+        output_table['EM_CLASSIFICATION'] = classifications
                 """
             # Calculate the classification; return the classification and probability
             elif sum(returns) == 0 and len(returns) == 1:
@@ -1787,7 +1792,7 @@ if not isinstance(var1, pd.Series):
             elif len(returns) == 1:
                 cls.score_code += (
                     f"{'':4}if input_array.shape[0] == 1:\n"
-                    f"{'':8}return prediction[0]\n"
+                    f"{'':8}return prediction[0][0]\n"
                     f"{'':4}else:\n"
                     f"{'':8}return pd.DataFrame({{'{metrics}': prediction}})"
                 )

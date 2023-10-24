@@ -5,6 +5,15 @@ Unreleased
  - Add `model_info` class to better capture model information.
  - Test `/examples` Jupyter notebooks within normal test suite.
 
+v1.10.1 (2023-08-24)
+----------
+**Improvements**
+- Introduced ability to specify the target index of a binary model when creating score code.
+  - index can be specified in `pzmm.import_model.ImportModel.import_model()`
+  
+**Bugfixes**
+- Reworked `write_score_code.py` to allow for proper execution of single line scoring.
+
 v1.10 (2023-08-31)
 ----------
 **Improvements**
