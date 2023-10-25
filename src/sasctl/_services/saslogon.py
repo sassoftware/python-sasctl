@@ -46,7 +46,7 @@ class SASLogon(Service):
             The ID to be assigned to the client.
         client_secret : str
             The client secret used for authentication.
-        scopes : list of string, optional
+        scopes : list of str, optional
             Specifies the levels of access that the client will be able to
             obtain on behalf of users when not using client credential
             authentication.  If `allow_password` or `allow_auth_code` are
@@ -160,7 +160,7 @@ class SASLogon(Service):
         ----------
         start_index : int, optional
             Index of first client to return.  Defaults to 1.
-        count : int, optiona;
+        count : int, optional
             Number of clients to retrieve.  Defaults to 100.
         descending : bool, optional
             Whether to clients should be returned in descending order.

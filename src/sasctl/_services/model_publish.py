@@ -230,7 +230,8 @@ class ModelPublish(Service):
         ----------
         name : str
             Name of the publishing destination.
-        type_ : {'cas', 'mas', 'hadoop', 'teradata'}
+        type_ : str
+            Choose from ``{'cas', 'mas', 'hadoop', 'teradata'}``
             Type of publishing definition being created
         cas_server : str, optional
             Name of the CAS server.  Defaults to 'cas-shared-default'.

@@ -21,7 +21,7 @@ def ds2_variables(input, output_vars=False, names=None):
 
     Parameters
     ----------
-    input : function or OrderedDict<string, tuple> or Pandas DataFrame or Numpy or OrderedDict<string, type>
+    input : Callable or OrderedDict[str, tuple] or OrderedDict[str, type] or pandas.DataFrame
         a function or mapping parameter names to (type, is_output)
 
     output_vars : bool
@@ -34,7 +34,7 @@ def ds2_variables(input, output_vars=False, names=None):
 
     Returns
     -------
-    list<DS2Variable>
+    list of DS2Variable
 
     Examples
     --------
@@ -104,7 +104,7 @@ def parse_type_hints(func, skip_var="self"):
 
     Parameters
     ----------
-    func : function
+    func : Callable
         the object to inspect for parameters
 
     skip_var : str

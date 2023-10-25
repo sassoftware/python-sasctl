@@ -51,20 +51,20 @@ def get_zipped_model(
 
     Parameters
     ----------
-    model : string or RestObj
+    model : str or RestObj
         Model name, UUID, or RestObj which identifies the model. If only the model name
         is provided, the project name must also be supplied.
-    git_path : string or Path
+    git_path : str or pathlib.Path
         Base directory of the git repository.
-    project : string or RestObj, optional
+    project : str or RestObj, optional
         Project identifier, which is required when only the model name is supplied.
         Default is None.
 
     Returns
     -------
-    model_name : string
+    model_name : str
         Name of the model retrieved from SAS Model Manager.
-    project_name : string
+    project_name : str
         Name of the project the model was retrieved from in SAS Model Manager.
     """
     # Find the specified model and pull down the contents in a zip format
@@ -162,7 +162,7 @@ def model_exists(project, name, force):
 
     Parameters
     ----------
-    project : string or dict
+    project : str or dict
         The name or id of the model project, or a dictionary representation of the project.
     name : str or dict
         The name of the model.
@@ -225,11 +225,11 @@ class GitIntegrate:
 
         Parameters
         ----------
-        model : string or RestObj
+        model : str or RestObj
             A string or JSON response representing the model to be pulled down
-        git_path : string or Path
+        git_path : str or pathlib.Path
             Base directory of the git repository.
-        project : string or RestObj, optional
+        project : str or RestObj, optional
             A string or JSON response representing the project the model exists in, default is None.
         """
         # Try to pull down the model assuming a UUID or RestObj is provided
@@ -289,12 +289,12 @@ class GitIntegrate:
 
         Parameters
         ----------
-        git_path : string or Path
+        git_path : str or pathlib.Path
             Base directory of the git repository or path which includes project and
             model directories.
-        model_name : string, optional
+        model_name : str, optional
             Name of model to be imported, by default None
-        project_name : string, optional
+        project_name : str, optional
             Name of project the model is imported from, by default None
         project_version : str, optional
             Name of project version to import model in to. Default
@@ -336,13 +336,13 @@ class GitIntegrate:
 
         Parameters
         ----------
-        git_path : string or Path
+        git_path : str or pathlib.Path
             Base directory of the git repository.
-        commit_message : string
+        commit_message : str
             Commit message for the new commit
         remote : str, optional
             Remote name for the remote repository, by default 'origin'
-        branch : string
+        branch : str
             Branch name for the target pull branch from remote, by default 'main'
         """
         check_git_status()
@@ -359,11 +359,11 @@ class GitIntegrate:
 
         Parameters
         ----------
-        git_path : string or Path
+        git_path : str or pathlib.Path
             Base directory of the git repository.
-        remote : string
+        remote : str
             Remote name for the remote repository, by default 'origin'
-        branch : string
+        branch : str
             Branch name for the target pull branch from remote, by default 'main'
         """
         check_git_status()
@@ -380,9 +380,9 @@ class GitIntegrate:
 
         Parameters
         ----------
-        git_path : string or Path
+        git_path : str or pathlib.Path
             Base directory of the git repository or the project directory.
-        project : string or RestObj
+        project : str or RestObj
             Project name, UUID, or JSON response from SAS Model Manager.
         """
         # Check to see if provided project argument is a valid project on SAS Model
@@ -419,9 +419,9 @@ class GitIntegrate:
 
         Parameters
         ----------
-        git_path : string or Path
+        git_path : str or pathlib.Path
             Base directory of the git repository.
-        project : string or RestObj
+        project : str or RestObj
             The name or id of the model project, or a RestObj representation of the
             project.
         """

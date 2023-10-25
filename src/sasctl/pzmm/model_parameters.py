@@ -98,12 +98,12 @@ class ModelParameters:
 
         Parameters
         ----------
-        model : Python object
+        model : Any
             Python object representing the model.
         model_prefix : str
             Name used to create model files. (e.g. (model_prefix) +
             "Hyperparameters.json")
-        pickle_path : str, Path
+        pickle_path : str, pathlib.Path
             Directory location of model files.
         """
 
@@ -263,7 +263,7 @@ class ModelParameters:
         ----------
         model : str, dict, or RestObj
             The name or id of the model, or a dictionary representation of the model.
-        kwargs
+        **kwargs
             Named variables pairs representing hyperparameters to be added to the
             hyperparameter file.
         """
@@ -320,7 +320,7 @@ class ModelParameters:
 
         Returns
         -------
-        kpi_table_df : pandas DataFrame
+        kpi_table_df : pandas.DataFrame
             A pandas DataFrame representing the MM_STD_KPI table. Note that SAS
             missing values are replaced with pandas-valid missing values.
         """

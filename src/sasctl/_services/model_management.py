@@ -448,16 +448,16 @@ class ModelManagement(Service):
         model : str or dict
             The name or id of the model, or a dictionary representation of the model.
         project : str or dict
-        The name or id of the project, or a dictionary representation of
-        the project.
+            The name or id of the project, or a dictionary representation of
+            the project.
         timeLabel : str or list
             Label associated with the dataset used within the performance definition.
         kpiName : str or list
             Name of the custom KPI.
         kpiValue : int or float or list
             Value of the custom KPI.
-        timeSK : int or list, by default None
-            Indicator for the MM_STD_KPI table to denote performance task order.
+        timeSK : int or list
+            Default is None. Indicator for the MM_STD_KPI table to denote performance task order.
         """
         from .model_repository import ModelRepository
 
