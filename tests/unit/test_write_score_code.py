@@ -331,7 +331,7 @@ class TestNoTargetsNoThresholds(unittest.TestCase):
         self.sc._no_targets_no_thresholds(metrics, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.5]
+        prediction = [[0.5]]
         self.assertEqual(self.execute_snippet(input_array, prediction), 0.5)
         # Multi row
         input_array = pd.DataFrame({"A": [0.9, 1, 1.1]})
@@ -369,7 +369,7 @@ class TestNoTargetsNoThresholds(unittest.TestCase):
         self.sc._no_targets_no_thresholds(metrics, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["i", 0.3, 0.4, 0.5]
+        prediction = [["i", 0.3, 0.4, 0.5]]
         self.assertEqual(
             self.execute_snippet(input_array, prediction), ("i", 0.3, 0.4, 0.5)
         )
@@ -449,7 +449,7 @@ class TestBinaryTarget(unittest.TestCase):
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
         prediction = [[], [1, 2, 3]]
-        self.assertEqual(self.execute_snippet(input_array, prediction), "A")
+        self.assertEqual(self.execute_snippet(input_array, prediction), "B")
         # Multi row
         input_array = pd.DataFrame({"A": [0, 1]})
         prediction = pd.DataFrame(
@@ -469,7 +469,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = 0.5
+        prediction = [0.5]
         self.assertEqual(self.execute_snippet(input_array, prediction), 0.5)
         # Multi row
         input_array = pd.DataFrame({"A": [0.9, 1, 1.1]})
@@ -488,14 +488,14 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = 1
-        self.assertEqual(self.execute_snippet(input_array, prediction), "A")
+        prediction = [1]
+        self.assertEqual(self.execute_snippet(input_array, prediction), "B")
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
         prediction = [0, 1, 0]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({metrics: ["B", "A", "B"]}),
+            pd.DataFrame({metrics: ["A", "B", "A"]}),
         )
 
     def test_one_metric_two_returns(self):
@@ -509,7 +509,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [1, 0]
+        prediction = [[1, 0]]
         self.assertEqual(self.execute_snippet(input_array, prediction), "A")
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -528,7 +528,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0, "Y", "z"]
+        prediction = [[0, "Y", "z"]]
         self.assertEqual(self.execute_snippet(input_array, prediction), "Y")
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -542,13 +542,15 @@ class TestBinaryTarget(unittest.TestCase):
         metrics = ["Classification", "Probability"]
         returns = ["", int, int]
         self.sc.score_code += (
-            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
         )
         self.sc._binary_target(metrics, self.target_values, returns, h2o_model=True)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
         prediction = [[], ["a", -1, 1]]
-        self.assertEqual(self.execute_snippet(input_array, prediction), ("a", 1))
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 1.0))
         # Multi row
         input_array = pd.DataFrame({"A": [0, 1]})
         prediction = pd.DataFrame(
@@ -556,7 +558,7 @@ class TestBinaryTarget(unittest.TestCase):
         )
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({"Classification": [0, 1], "Probability": [0.1, 0.8]}),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.1, 0.8]}),
         )
 
     def test_two_metrics_one_return(self):
@@ -568,14 +570,14 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = 0.2
-        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        prediction = [0.2]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("A", 0.2))
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
         prediction = [1, -1]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({"Classification": ["A", "B"], "Probability": [1, -1]}),
+            pd.DataFrame({"Classification": ["B", "A"], "Probability": [1, -1]}),
         )
 
     def test_two_metrics_two_returns_no_classification(self):
@@ -589,14 +591,14 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.2, 0.8]
-        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        prediction = [[0.2, 0.8]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.8))
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
         prediction = [[0.9, 0.1], [0.4, 0.6]]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.9, 0.4]}),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.1, 0.6]}),
         )
 
     def test_two_metrics_two_returns_classification(self):
@@ -610,7 +612,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["B", 0.2]
+        prediction = [["B", 0.2]]
         self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -631,14 +633,14 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["B", 0.2, 0.8]
-        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        prediction = [["B", 0.2, 0.8]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.8))
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
         prediction = [["A", 0.9, 0.1], ["B", 0.4, 0.6]]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.9, 0.4]}),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.1, 0.6]}),
         )
 
     def test_two_metrics_three_returns_class_last(self):
@@ -652,14 +654,14 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.2, 0.8, "B"]
-        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        prediction = [[0.2, 0.8, "B"]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.8))
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
         prediction = [[0.9, 0.1, "A"], [0.4, 0.6, "B"]]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.9, 0.4]}),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.1, 0.6]}),
         )
 
     def test_three_metrics_h2o(self):
@@ -695,9 +697,9 @@ class TestBinaryTarget(unittest.TestCase):
         print(self.sc.score_code)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = 0.9
+        prediction = [0.9]
         self.assertEqual(
-            self.execute_snippet(input_array, prediction), ("A", 0.9, 1 - 0.9)
+            self.execute_snippet(input_array, prediction), ("B", 0.9, 1 - 0.9)
         )
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -706,7 +708,7 @@ class TestBinaryTarget(unittest.TestCase):
             self.execute_snippet(input_array, prediction),
             pd.DataFrame(
                 {
-                    "Classification": ["A", "B"],
+                    "Classification": ["B", "A"],
                     "Proba_0": [0.9, 0.1],
                     "Proba_1": [1 - 0.9, 1 - 0.1],
                 }
@@ -724,8 +726,8 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.9, 0.1]
-        self.assertEqual(self.execute_snippet(input_array, prediction), ("A", 0.9, 0.1))
+        prediction = [[0.9, 0.1]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("A", 0.1, 0.9))
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
         prediction = [[0.9, 0.1], [0.2, 0.8]]
@@ -751,7 +753,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["A", 0.9]
+        prediction = [["A", 0.9]]
         self.assertEqual(
             self.execute_snippet(input_array, prediction), ("A", 0.9, 1 - 0.9)
         )
@@ -780,7 +782,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.9, "A"]
+        prediction = [[0.9, "A"]]
         self.assertEqual(
             self.execute_snippet(input_array, prediction), ("A", 0.9, 1 - 0.9)
         )
@@ -809,7 +811,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["A", 0.9, 0.1]
+        prediction = [["A", 0.9, 0.1]]
         self.assertEqual(self.execute_snippet(input_array, prediction), ("A", 0.9, 0.1))
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -869,7 +871,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = "C"
+        prediction = ["C"]
         self.assertEqual(self.execute_snippet(input_array, prediction), "C")
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -885,7 +887,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.1, 0.2, 0.3]
+        prediction = [[0.1, 0.2, 0.3]]
         self.assertEqual(self.execute_snippet(input_array, prediction), "C")
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -901,7 +903,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["C", 0.1, 0.2, 0.3]
+        prediction = [["C", 0.1, 0.2, 0.3]]
         self.assertEqual(self.execute_snippet(input_array, prediction), "C")
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -935,7 +937,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.1, 0.2, 0.3]
+        prediction = [[0.1, 0.2, 0.3]]
         self.assertEqual(self.execute_snippet(input_array, prediction), ("C", 0.3))
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -951,7 +953,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["C", 0.1, 0.2, 0.3]
+        prediction = [["C", 0.1, 0.2, 0.3]]
         self.assertEqual(self.execute_snippet(input_array, prediction), ("C", 0.3))
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -1014,7 +1016,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.1, 0.2, 0.3]
+        prediction = [[0.1, 0.2, 0.3]]
         self.assertEqual(self.execute_snippet(input_array, prediction), (0.1, 0.2, 0.3))
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -1032,7 +1034,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["P", 0.1, 0.2, 0.3]
+        prediction = [["P", 0.1, 0.2, 0.3]]
         self.assertEqual(
             self.execute_snippet(input_array, prediction), ("P", 0.1, 0.2, 0.3)
         )
@@ -1057,7 +1059,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.1, 0.2, 0.3]
+        prediction = [[0.1, 0.2, 0.3]]
         self.assertEqual(
             self.execute_snippet(input_array, prediction), ("C", 0.1, 0.2, 0.3)
         )
@@ -1103,7 +1105,7 @@ def test_predictions_to_metrics():
         metrics = ["Classification", "Probability"]
         target_values = ["1", "0"]
         sc._predictions_to_metrics(metrics, returns, target_values)
-        func.assert_called_once_with(metrics, ["1", "0"], returns, None, False)
+        func.assert_called_once_with(metrics, ["1", "0"], returns, None, 1, False)
 
     with pytest.raises(
         ValueError,

@@ -198,6 +198,7 @@ class ImportModel:
         predict_threshold: Optional[float] = None,
         target_values: Optional[List[str]] = None,
         overwrite_project_properties: Optional[bool] = False,
+        target_index: Optional[int] = None,
         **kwargs,
     ) -> Tuple[RestObj, Union[dict, str, Path]]:
         """
@@ -275,10 +276,16 @@ class ImportModel:
         target_values : list of strings, optional
             A list of target values for the target variable. This argument and the
             score_metrics argument dictate the handling of the predicted values from
-            the prediction method. The default value is None.
+            the prediction method. The order of the target values should reflect the
+            order of the related probabilities in the model. The default value is None.
         overwrite_project_properties : bool, optional
             Set whether the project properties should be overwritten when attempting to
             import the model. The default value is False.
+        target_index : int, optional
+            Sets the index of success for a binary model. If target_values are given, this
+            index should match the index of the target outcome in target_values. If target_values
+            are not given, this index should indicate whether the the target probability variable
+            is the first or second variable returned by the model. The default value is 1.
         kwargs : dict, optional
             Other keyword arguments are passed to the following function:
                 * sasctl.pzmm.ScoreCode.write_score_code(...,
@@ -352,6 +359,7 @@ class ImportModel:
                 target_values=target_values,
                 missing_values=missing_values,
                 score_cas=score_cas,
+                target_index=target_index,
                 **kwargs,
             )
             if score_code_dict:
@@ -451,6 +459,7 @@ class ImportModel:
                 target_values=target_values,
                 missing_values=missing_values,
                 score_cas=score_cas,
+                target_index=target_index,
                 **kwargs,
             )
             if score_code_dict:
