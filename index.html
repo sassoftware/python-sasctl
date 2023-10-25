@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl &#8212; sasctl 1.10.0 documentation</title>
+    <title>sasctl &#8212; sasctl 1.10.1 documentation</title>
   
   
   
@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -32,10 +32,11 @@
     <link rel="stylesheet" type="text/css" href="_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
 
-    <script src="_static/documentation_options.js?v=7f518379"></script>
+    <script src="_static/documentation_options.js?v=127c451b"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
@@ -44,6 +45,7 @@
     <link rel="next" title="sasctl package" href="api/sasctl.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Oct 25, 2023"/>
   </head>
   
   
@@ -52,6 +54,15 @@
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -92,7 +103,8 @@
     <span class="fa-solid fa-bars"></span>
   </label>
   
-  <div class="navbar-header-items__start">
+  
+  <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
   
@@ -103,12 +115,12 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.0 documentation</p>
+  
+    <p class="title logo__title">sasctl 1.10.1 documentation</p>
   
 </a></div>
     
   </div>
-  
   
   <div class="col-lg-9 navbar-header-items">
     
@@ -139,23 +151,25 @@
       
         <div class="navbar-item navbar-persistent--container">
           
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
         </div>
       
       
         <div class="navbar-item">
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script></div>
@@ -181,18 +195,20 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
     </div>
   
 
   
-    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
       <span class="fa-solid fa-outdent"></span>
     </label>
   
@@ -239,10 +255,10 @@ document.write(`
           <div class="navbar-item">
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script></div>
@@ -291,7 +307,7 @@ document.write(`
                   
   <section id="sasctl">
 <h1>sasctl<a class="headerlink" href="#sasctl" title="Link to this heading">#</a></h1>
-<p>Version 1.10.0</p>
+<p>Version 1.10.1</p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p><strong>sasctl</strong> enables easy integration with the SAS Viya platform.</p>
@@ -510,8 +526,8 @@ is to just provide the information directly:</p>
 </pre></div>
 </div>
 <p>Although this is often the easiest method when getting started, it is not the most secure.  If your program will be used
-interactively, consider using the builtin <a class="reference external" href="https://docs.python.org/3/library/getpass.html#module-getpass" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">getpass</span></code></a> module to avoid hard-coded user names and passwords.</p>
-<p>Because <strong>sasctl</strong> augments analytic modeling tasks, it may frequently be used in conjuction with the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.13.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a>
+interactively, consider using the builtin <a class="reference external" href="https://docs.python.org/3/library/getpass.html#module-getpass" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">getpass</span></code></a> module to avoid hard-coded user names and passwords.</p>
+<p>Because <strong>sasctl</strong> augments analytic modeling tasks, it may frequently be used in conjuction with the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.13.3)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a>
 module.  When this is the case, another easy way to create a <a class="reference internal" href="api/sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> is to simply reuse the existing CAS
 connection from swat:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cas_session</span> <span class="o">=</span> <span class="n">swat</span><span class="o">.</span><span class="n">CAS</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
@@ -520,7 +536,7 @@ connection from swat:</p>
 </pre></div>
 </div>
 <p>Note: this method will only work when the SWAT connection to CAS is using REST.</p>
-<p>A related option is to piggy-back on the <cite>.authinfo</cite> file used by <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.13.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> or a <cite>.netrc</cite> file:</p>
+<p>A related option is to piggy-back on the <cite>.authinfo</cite> file used by <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.13.3)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> or a <cite>.netrc</cite> file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">authinfo</span><span class="o">=</span><span class="n">file_path</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -567,7 +583,7 @@ When instantiating a <a class="reference internal" href="api/sasctl.session.html
 </section>
 <section id="logging">
 <h3>Logging<a class="headerlink" href="#logging" title="Link to this heading">#</a></h3>
-<p>All logging is handled through the built-in <a class="reference external" href="https://docs.python.org/3/library/logging.html#module-logging" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a> module with standard module-level loggers.  The one exception
+<p>All logging is handled through the built-in <a class="reference external" href="https://docs.python.org/3/library/logging.html#module-logging" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a> module with standard module-level loggers.  The one exception
 to this is <a class="reference internal" href="api/sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> request/response logging.  Sessions contain a <code class="xref py py-attr docutils literal notranslate"><span class="pre">message_log</span></code> which is exclusively used
 to record requests and responses made through the session.  Message recording can be configured on a per-session basis
 by updating this logger, or the <code class="docutils literal notranslate"><span class="pre">sasctl.core.session</span></code> logger can be configured to control all message recording by all sessions.</p>
@@ -621,14 +637,14 @@ links related to that object are accessible via the [‘links’] key.  Each lin
 <span class="sig-name descname"><span class="pre">CAS_CLIENT_SSL_CA_LIST</span></span><a class="headerlink" href="#envvar-CAS_CLIENT_SSL_CA_LIST" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.13.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> module.  This
+<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.13.3)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> module.  This
 will take precedence over <span class="target" id="index-8"></span><a class="reference internal" href="#envvar-SSLCALISTLOC"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">SSLCALISTLOC</span></code></a> and <span class="target" id="index-9"></span><a class="reference internal" href="#envvar-REQUESTS_CA_BUNDLE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">REQUESTS_CA_BUNDLE</span></code></a>.</p>
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-SSLCALISTLOC">
 <span class="sig-name descname"><span class="pre">SSLCALISTLOC</span></span><a class="headerlink" href="#envvar-SSLCALISTLOC" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.13.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> module.  This
+<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.13.3)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> module.  This
 will take precedence over <span class="target" id="index-10"></span><a class="reference internal" href="#envvar-REQUESTS_CA_BUNDLE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">REQUESTS_CA_BUNDLE</span></code></a>.</p>
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-REQUESTS_CA_BUNDLE">
@@ -736,11 +752,11 @@ part of the project.</p>
 platforms.  To accomplish this, the <code class="file docutils literal notranslate"><span class="pre">tests/</span></code> folder contains a collection of unit tests and integration tests where
 “unit” tests are generally target a single function and “integration” tests target a series of functions or classes
 working together.</p>
-<p>Test execution is handled by the  <a class="reference external" href="https://docs.pytest.org/en/latest/index.html" title="(in pytest v0.1.dev194+gafb8d66)"><span class="xref std std-doc">py.test</span></a> module which supports tests written using the builtin <a class="reference external" href="https://docs.python.org/3/library/unittest.html#module-unittest" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest</span></code></a>
+<p>Test execution is handled by the  <a class="reference external" href="https://docs.pytest.org/en/latest/index.html" title="(in pytest v0.1.dev95+gc172894)"><span class="xref std std-doc">py.test</span></a> module which supports tests written using the builtin <a class="reference external" href="https://docs.python.org/3/library/unittest.html#module-unittest" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest</span></code></a>
 framework, but also adds some powerful features like test fixtures.  It is recommended that you review
 <code class="file docutils literal notranslate"><span class="pre">tests/conftest.py</span></code> and the existing test cases to understand what features are currently available for testing.</p>
 <p>To isolate individual methods for testing, the unit test cases make extensive use of mocking via the
-builtin <a class="reference external" href="https://docs.python.org/3/library/unittest.mock.html#module-unittest.mock" title="(in Python v3.11)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest.mock</span></code></a> module.</p>
+builtin <a class="reference external" href="https://docs.python.org/3/library/unittest.mock.html#module-unittest.mock" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest.mock</span></code></a> module.</p>
 <p>Most of the integration tests execute end-to-end functionality that would normally depend on a running SAS Viya
 environment.  However, it can be difficult to reliably test against dynamic environments and not all developers may have
 access to an environment that is suitable for development.  Therefore, most of the integration tests rely on the
@@ -758,7 +774,7 @@ found on the system and then install the required packages necessary to perform 
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tox
 </pre></div>
 </div>
-<p>This will run the <code class="xref py py-mod docutils literal notranslate"><span class="pre">flake8</span></code> linter followed by <a class="reference external" href="https://docs.pytest.org/en/latest/index.html#module-pytest" title="(in pytest v0.1.dev194+gafb8d66)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pytest</span></code></a> to test the code against all Python runtimes
+<p>This will run the <code class="xref py py-mod docutils literal notranslate"><span class="pre">flake8</span></code> linter followed by <a class="reference external" href="https://docs.pytest.org/en/latest/index.html#module-pytest" title="(in pytest v0.1.dev95+gc172894)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pytest</span></code></a> to test the code against all Python runtimes
 found on the machine.  One of the great features of Tox is the ability to run specific tasks by specifying the environment to run.
 A few useful environments are listed below, where <strong>XX</strong> indicates a Python version present in your development environment,
 such as ‘27’ or ‘36’.</p>
@@ -799,11 +815,10 @@ such as ‘27’ or ‘36’.</p>
               
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="right-next"
        href="api/sasctl.html"
@@ -814,10 +829,7 @@ such as ‘27’ or ‘36’.</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -881,8 +893,8 @@ such as ‘27’ or ‘36’.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -900,7 +912,7 @@ such as ‘27’ or ‘36’.</p>
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>
@@ -908,10 +920,11 @@ such as ‘27’ or ‘36’.</p>
     </div>
   
   
+  
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.2.
 </p></div>
       
     </div>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.10.0 documentation</title>
+    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.10.1 documentation</title>
   
   
   
@@ -17,12 +17,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -31,10 +31,11 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
 
-    <script src="../../../_static/documentation_options.js?v=7f518379"></script>
+    <script src="../../../_static/documentation_options.js?v=127c451b"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/write_json_files';</script>
@@ -42,6 +43,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Oct 25, 2023"/>
   </head>
   
   
@@ -50,6 +52,15 @@
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -90,7 +101,8 @@
     <span class="fa-solid fa-bars"></span>
   </label>
   
-  <div class="navbar-header-items__start">
+  
+  <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
   
@@ -101,12 +113,12 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.0 documentation</p>
+  
+    <p class="title logo__title">sasctl 1.10.1 documentation</p>
   
 </a></div>
     
   </div>
-  
   
   <div class="col-lg-9 navbar-header-items">
     
@@ -137,23 +149,25 @@
       
         <div class="navbar-item navbar-persistent--container">
           
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
         </div>
       
       
         <div class="navbar-item">
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script></div>
@@ -179,13 +193,15 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
     </div>
   
 
@@ -233,10 +249,10 @@ document.write(`
           <div class="navbar-item">
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script></div>
@@ -284,8 +300,8 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumbs">
-  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../../../index.html" class="nav-link" aria-label="Home">
@@ -295,7 +311,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">sasctl.pzmm.write_json_files</li>
+    <li class="breadcrumb-item active" aria-current="page">sasctl.pzmm....</li>
   </ul>
 </nav>
 </div>
@@ -1846,447 +1862,6 @@ document.write(`
         <span class="k">return</span> <span class="n">json_dict</span></div>
 
 
-    <span class="c1"># noinspection PyCallingNonCallable, PyNestedDecorators</span>
-    <span class="nd">@deprecated</span><span class="p">(</span>
-        <span class="s2">&quot;Please use the calculate_model_statistics method instead.&quot;</span><span class="p">,</span>
-        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.9&quot;</span><span class="p">,</span>
-        <span class="n">removed_in</span><span class="o">=</span><span class="s2">&quot;1.10&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">calculateFitStat</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span> <span class="n">validateData</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trainData</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">testData</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">jPath</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculates fit statistics from user data and predictions and then writes to a</span>
-<span class="sd">        JSON file for importing into the common model repository.</span>
-
-<span class="sd">        Note that if no data set is provided (validate, train, or test),</span>
-<span class="sd">        this function raises an error and does not create a JSON file.</span>
-
-<span class="sd">        Datasets can be provided in the following forms:</span>
-<span class="sd">        * pandas dataframe; the actual and predicted values are their own columns</span>
-<span class="sd">        * numpy array; the actual and predicted values are their own columns or rows and</span>
-<span class="sd">        ordered such that the actual values come first and the predicted second</span>
-<span class="sd">        * list; the actual and predicted values are their own indexed entry</span>
-
-<span class="sd">        This function outputs a JSON file named &quot;dmcas_fitstat.json&quot;.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        validateData : pandas dataframe, numpy array, or list, optional</span>
-<span class="sd">            Dataframe, array, or list of the validation data set, including both</span>
-<span class="sd">            the actual and predicted values. The default value is None.</span>
-<span class="sd">        trainData : pandas dataframe, numpy array, or list, optional</span>
-<span class="sd">            Dataframe, array, or list of the train data set, including both</span>
-<span class="sd">            the actual and predicted values. The default value is None.</span>
-<span class="sd">        testData : pandas dataframe, numpy array, or list, optional</span>
-<span class="sd">            Dataframe, array, or list of the test data set, including both</span>
-<span class="sd">            the actual and predicted values. The default value is None.</span>
-<span class="sd">        jPath : string, optional</span>
-<span class="sd">            Location for the output JSON file. The default value is the current</span>
-<span class="sd">            working directory.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># If numpy inputs are supplied, then assume numpy is installed</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="n">np</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="s2">&quot;The &#39;scikit-learn&#39; package is required to use the calculateFitStat &quot;</span>
-                <span class="s2">&quot;function. &quot;</span>
-            <span class="p">)</span>
-
-        <span class="n">nullJSONPath</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;template_files/dmcas_fitstat.json&quot;</span>
-        <span class="p">)</span>
-        <span class="n">nullJSONDict</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">read_json_file</span><span class="p">(</span><span class="n">nullJSONPath</span><span class="p">)</span>
-
-        <span class="n">dataSets</span> <span class="o">=</span> <span class="p">[[[</span><span class="kc">None</span><span class="p">],</span> <span class="p">[</span><span class="kc">None</span><span class="p">]],</span> <span class="p">[[</span><span class="kc">None</span><span class="p">],</span> <span class="p">[</span><span class="kc">None</span><span class="p">]],</span> <span class="p">[[</span><span class="kc">None</span><span class="p">],</span> <span class="p">[</span><span class="kc">None</span><span class="p">]]]</span>
-
-        <span class="n">dataPartitionExists</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">validateData</span><span class="p">,</span> <span class="n">trainData</span><span class="p">,</span> <span class="n">testData</span><span class="p">]):</span>
-            <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">dataPartitionExists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-                    <span class="n">dataSets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
-                    <span class="n">dataSets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
-                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-                    <span class="n">dataSets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataPartitionExists</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;No data was provided. Please provide the actual and predicted values &quot;</span>
-                <span class="s2">&quot;for at least one of the partitions (VALIDATE, TRAIN, or TEST).&quot;</span>
-            <span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">dataPartitionExists</span><span class="p">:</span>
-            <span class="n">fitStats</span> <span class="o">=</span> <span class="n">nullJSONDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">]</span>
-
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_PartInd_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span>
-
-            <span class="c1"># If the data provided is Predicted | Actual instead of Actual |</span>
-            <span class="c1"># Predicted, catch the error and flip the columns</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">roc_curve</span><span class="p">(</span><span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                <span class="n">tempSet</span> <span class="o">=</span> <span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-                <span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempSet</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempSet</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">roc_curve</span><span class="p">(</span><span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-
-            <span class="n">RASE</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]))</span>
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_RASE_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RASE</span>
-
-            <span class="n">NObs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_NObs_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">NObs</span>
-
-            <span class="n">auc</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">GINI</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">auc</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_GINI_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GINI</span>
-
-            <span class="k">try</span><span class="p">:</span>
-                <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">gamma</span>
-
-                <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-                <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_GAMMA_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">scale</span>
-            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="s2">&quot;scipy was not installed, so the gamma calculation could&quot;</span>
-                    <span class="s2">&quot;not be computed.&quot;</span>
-                <span class="p">)</span>
-                <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_GAMMA_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
-            <span class="n">intPredict</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
-            <span class="n">MCE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">metrics</span><span class="o">.</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">intPredict</span><span class="p">)</span>
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_MCE_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MCE</span>
-
-            <span class="n">ASE</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_ASE_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ASE</span>
-
-            <span class="n">MCLL</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">log_loss</span><span class="p">(</span><span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_MCLL_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MCLL</span>
-
-            <span class="n">KS</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fpr</span> <span class="o">-</span> <span class="n">tpr</span><span class="p">))</span>
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_KS_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">KS</span>
-
-            <span class="n">KSPostCutoff</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_KSPostCutoff_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">KSPostCutoff</span>
-
-            <span class="n">DIV</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_DIV_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DIV</span>
-
-            <span class="n">TAU</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span>
-                <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dataSets</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kendall&quot;</span>
-            <span class="p">)</span>
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_TAU_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TAU</span>
-
-            <span class="n">KSCut</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_KSCut_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">KSCut</span>
-
-            <span class="n">C</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">auc</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span>
-            <span class="n">fitStats</span><span class="p">[</span><span class="s2">&quot;_C_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span>
-
-            <span class="n">nullJSONDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fitStats</span>
-
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">jPath</span><span class="p">)</span> <span class="o">/</span> <span class="n">FITSTAT</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">jFile</span><span class="p">:</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">nullJSONDict</span><span class="p">,</span> <span class="n">jFile</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">FITSTAT</span><span class="si">}</span><span class="s2"> was successfully written and saved to &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">jPath</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">FITSTAT</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-
-    <span class="c1"># noinspection PyCallingNonCallable,PyNestedDecorators</span>
-    <span class="nd">@deprecated</span><span class="p">(</span>
-        <span class="s2">&quot;Please use the calculate_model_statistics method instead.&quot;</span><span class="p">,</span>
-        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.9&quot;</span><span class="p">,</span>
-        <span class="n">removed_in</span><span class="o">=</span><span class="s2">&quot;1.10&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">generateROCLiftStat</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span>
-        <span class="n">targetName</span><span class="p">,</span>
-        <span class="n">targetValue</span><span class="p">,</span>
-        <span class="n">swatConn</span><span class="p">,</span>
-        <span class="n">validateData</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">trainData</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">testData</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">jPath</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculates the ROC and Lift curves from user data and model predictions and</span>
-<span class="sd">        the writes it to JSON files for importing in to the common model repository.</span>
-
-<span class="sd">        ROC and Lift calculations are completed by CAS through a SWAT call. Note that</span>
-<span class="sd">        if no data set is provided (validate, train, or test), this function raises</span>
-<span class="sd">        an error and does not create any JSON files.</span>
-
-<span class="sd">        This function outputs a pair of JSON files named &quot;dmcas_lift.json&quot; and</span>
-<span class="sd">        &quot;dmcas_roc.json&quot;.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ---------------</span>
-<span class="sd">        targetName: str</span>
-<span class="sd">            Target variable name to be predicted.</span>
-<span class="sd">        targetValue: int or float</span>
-<span class="sd">            Value of target variable that indicates an event.</span>
-<span class="sd">        swatConn: SWAT connection to CAS</span>
-<span class="sd">            Connection object to CAS service in SAS Model Manager through SWAT</span>
-<span class="sd">            authentication.</span>
-<span class="sd">        validateData : pandas dataframe, numpy array, or list, optional</span>
-<span class="sd">            Dataframe, array, or list of the validation data set, including both the</span>
-<span class="sd">            actual values and the calculated probabilities. The default value is None.</span>
-<span class="sd">        trainData : pandas dataframe, numpy array, or list, optional</span>
-<span class="sd">            Dataframe, array, or list of the train data set, including both the actual</span>
-<span class="sd">            values and the calculated probabilities. The default value is None.</span>
-<span class="sd">        testData : pandas dataframe, numpy array, or list, optional</span>
-<span class="sd">            Dataframe, array, or list of the test data set, including both the actual</span>
-<span class="sd">            values and the calculated probabilities. The default value is None.</span>
-<span class="sd">        jPath : string, optional</span>
-<span class="sd">            Location for the output JSON file. The default value is the current working</span>
-<span class="sd">            directory.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># If numpy inputs are supplied, then assume numpy is installed</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># noinspection PyPackageRequirements</span>
-            <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="n">np</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">swat</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="s2">&quot;The &#39;swat&#39; package is required to generate ROC and Lift charts with &quot;</span>
-                <span class="s2">&quot;this function. &quot;</span>
-            <span class="p">)</span>
-
-        <span class="n">nullJSONROCPath</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;template_files/dmcas_roc.json&quot;</span>
-        <span class="p">)</span>
-        <span class="n">nullJSONROCDict</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">read_json_file</span><span class="p">(</span><span class="n">nullJSONROCPath</span><span class="p">)</span>
-
-        <span class="n">nullJSONLiftPath</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;template_files/dmcas_lift.json&quot;</span>
-        <span class="p">)</span>
-        <span class="n">nullJSONLiftDict</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">read_json_file</span><span class="p">(</span><span class="n">nullJSONLiftPath</span><span class="p">)</span>
-
-        <span class="n">dataSets</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(),</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(),</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()]</span>
-        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;actual&quot;</span><span class="p">,</span> <span class="s2">&quot;predict&quot;</span><span class="p">]</span>
-
-        <span class="n">dataPartitionExists</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># Check if a data partition exists, then convert to a pandas dataframe</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">validateData</span><span class="p">,</span> <span class="n">trainData</span><span class="p">,</span> <span class="n">testData</span><span class="p">]):</span>
-            <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">dataPartitionExists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
-                    <span class="n">dataSets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">columns</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">))</span>
-                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">is</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">dataSets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-                        <span class="n">dataSets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
-                        <span class="n">dataSets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
-                            <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
-                        <span class="p">)</span>
-                        <span class="n">dataSets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-                <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">dataSets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">columns</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
-                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                        <span class="n">dataSets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">columns</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataPartitionExists</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;No data was provided. Please provide the actual and predicted values &quot;</span>
-                <span class="s2">&quot;for at least one of the partitions (VALIDATE, TRAIN, or TEST)&quot;</span>
-            <span class="p">)</span>
-
-        <span class="n">nullLiftRow</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">64</span><span class="p">))</span>
-        <span class="n">nullROCRow</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">301</span><span class="p">))</span>
-
-        <span class="n">swatConn</span><span class="o">.</span><span class="n">loadactionset</span><span class="p">(</span><span class="s2">&quot;percentile&quot;</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">dataPartitionExists</span><span class="p">:</span>
-            <span class="n">swatConn</span><span class="o">.</span><span class="n">read_frame</span><span class="p">(</span>
-                <span class="n">dataSets</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">columns</span><span class="p">],</span> <span class="n">casout</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;SCOREDVALUES&quot;</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="p">)</span>
-            <span class="n">swatConn</span><span class="o">.</span><span class="n">percentile</span><span class="o">.</span><span class="n">assess</span><span class="p">(</span>
-                <span class="n">table</span><span class="o">=</span><span class="s2">&quot;SCOREDVALUES&quot;</span><span class="p">,</span>
-                <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
-                <span class="n">casout</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;SCOREASSESS&quot;</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-                <span class="n">response</span><span class="o">=</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                <span class="n">event</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">targetValue</span><span class="p">),</span>
-            <span class="p">)</span>
-            <span class="n">assessROC</span> <span class="o">=</span> <span class="n">swatConn</span><span class="o">.</span><span class="n">CASTable</span><span class="p">(</span><span class="s2">&quot;SCOREASSESS_ROC&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
-            <span class="n">assessLift</span> <span class="o">=</span> <span class="n">swatConn</span><span class="o">.</span><span class="n">CASTable</span><span class="p">(</span><span class="s2">&quot;SCOREASSESS&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
-
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
-                <span class="n">rowNumber</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span> <span class="o">+</span> <span class="n">j</span>
-                <span class="n">nullROCRow</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">rowNumber</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_Event_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">targetValue</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span>
-                    <span class="s2">&quot;_TargetName_&quot;</span>
-                <span class="p">]</span> <span class="o">=</span> <span class="n">targetName</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_Cutoff_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_Cutoff_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_TP_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_TP_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_FP_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_FP_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_FN_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_FN_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_TN_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_TN_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_Sensitivity_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_Sensitivity_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_Specificity_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_Specificity_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_KS_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_KS_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_KS2_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_KS2_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_FHALF_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_FHALF_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_FPR_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_FPR_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_ACC_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_ACC_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_FDR_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_FDR_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_F1_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_F1_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_C_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_C_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_GINI_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_GINI_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_GAMMA_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_GAMMA_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_TAU_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_TAU_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_MiscEvent_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_MiscEvent_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span>
-                    <span class="s2">&quot;_OneMinusSpecificity_&quot;</span>
-                <span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">assessROC</span><span class="p">[</span><span class="s2">&quot;_Specificity_&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
-
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">21</span><span class="p">):</span>
-                <span class="n">rowNumber</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">21</span><span class="p">)</span> <span class="o">+</span> <span class="n">j</span>
-                <span class="n">nullLiftRow</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">rowNumber</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_Event_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                    <span class="n">targetValue</span>
-                <span class="p">)</span>
-                <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span>
-                    <span class="s2">&quot;_TargetName_&quot;</span>
-                <span class="p">]</span> <span class="o">=</span> <span class="n">targetName</span>
-                <span class="k">if</span> <span class="n">j</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_Depth_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_Depth_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_Value_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_Value_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_NObs_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_NObs_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_NEvents_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_NEvents_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span>
-                        <span class="s2">&quot;_NEventsBest_&quot;</span>
-                    <span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_NEventsBest_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_Resp_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_Resp_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_RespBest_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_RespBest_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_Lift_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_Lift_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_LiftBest_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_LiftBest_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_CumResp_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_CumResp_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span>
-                        <span class="s2">&quot;_CumRespBest_&quot;</span>
-                    <span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_CumRespBest_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_CumLift_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_CumLift_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span>
-                        <span class="s2">&quot;_CumLiftBest_&quot;</span>
-                    <span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_CumLiftBest_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_PctResp_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_PctResp_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span>
-                        <span class="s2">&quot;_PctRespBest_&quot;</span>
-                    <span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_PctRespBest_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span>
-                        <span class="s2">&quot;_CumPctResp_&quot;</span>
-                    <span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_CumPctResp_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span>
-                        <span class="s2">&quot;_CumPctRespBest_&quot;</span>
-                    <span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_CumPctRespBest_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_Gain_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_Gain_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rowNumber</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_GainBest_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                        <span class="n">assessLift</span><span class="p">[</span><span class="s2">&quot;_GainBest_&quot;</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-                    <span class="p">)</span>
-
-        <span class="c1"># If not all partitions are present, clean up the dicts for compliant formatting</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataPartitionExists</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="c1"># Remove missing partitions from ROC and Lift dicts</span>
-            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]))):</span>
-                <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rowNumber&quot;</span><span class="p">])</span> <span class="ow">in</span> <span class="n">nullLiftRow</span><span class="p">:</span>
-                    <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]))):</span>
-                <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;rowNumber&quot;</span><span class="p">])</span> <span class="ow">in</span> <span class="n">nullROCRow</span><span class="p">:</span>
-                    <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-
-            <span class="c1"># Reassign the row number values to match what is left in each dict</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]):</span>
-                <span class="n">nullJSONLiftDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;rowNumber&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]):</span>
-                <span class="n">nullJSONROCDict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;rowNumber&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
-
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">jPath</span><span class="p">)</span> <span class="o">/</span> <span class="n">ROC</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">jFile</span><span class="p">:</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">nullJSONROCDict</span><span class="p">,</span> <span class="n">jFile</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ROC</span><span class="si">}</span><span class="s2"> was successfully written and saved to </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">jPath</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">ROC</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">jPath</span><span class="p">)</span> <span class="o">/</span> <span class="n">LIFT</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">jFile</span><span class="p">:</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">nullJSONLiftDict</span><span class="p">,</span> <span class="n">jFile</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">LIFT</span><span class="si">}</span><span class="s2"> was successfully written and saved to </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">jPath</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">LIFT</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
 <div class="viewcode-block" id="JSONFiles.read_json_file">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.read_json_file">[docs]</a>
     <span class="nd">@staticmethod</span>
@@ -3059,16 +2634,12 @@ document.write(`
               
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -3086,8 +2657,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -3105,7 +2676,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>
@@ -3113,10 +2684,11 @@ document.write(`
     </div>
   
   
+  
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.2.
 </p></div>
       
     </div>
