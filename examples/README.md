@@ -125,9 +125,10 @@ Register a SAS deep learning model
 ----------------------------------
 Filename: [register_sas_dlpy_model.py](register_sas_dlpy_model.py)
 
+
 Level: Beginner
 
-Creates a SAS deep learning model using [dlpy](https://github.com/sassoftware/python-dlpy) and registers the model in SAS Model Manager.
+Creates a SAS deep learning model using [dlpy](https://github.com/sassoftware/python-dlpy) and registers the model in SAS Model Manager. (WARNING: Does not work with Python 3.10 and later)
 
 
 
