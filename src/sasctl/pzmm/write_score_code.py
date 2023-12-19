@@ -721,10 +721,10 @@ def impute_missing_values(data):
         """
     impute_values = \\\n + {"var1": 0, "var2": "", "var3": 125.3}
         """
-        cls.score_code += f"\n{'':4}return data.fillna(impute_values)\n"
+        cls.score_code += f"\n{'':4}return data.replace('           .', np.nan).fillna(impute_values).apply(pd.to_numeric, errors='ignore')\n"
         """
         
-    return data.fillna(impute_values)
+    return data.replace('           .', np.nan).fillna(impute_values).apply(pd.to_numeric, errors='ignore')
         """
 
     # TODO: Needs unit test
