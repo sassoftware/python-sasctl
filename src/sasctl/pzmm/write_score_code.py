@@ -1121,6 +1121,8 @@ if not isinstance(var1, pd.Series):
             are not given, this index should indicate whether the the target probability variable
             is the first or second variable returned by the model. The default value is 1.
         """
+        if not target_index:
+            target_index = 1
         if len(metrics) == 1 and isinstance(metrics, list):
             # Flatten single valued list
             metrics = metrics[0]
