@@ -1632,7 +1632,7 @@ class JSONFiles:
             ) as file:
                 file.write(json.dumps(json_dicts, indent=4))
         else:
-            return {"requirements.json": json.dumps(json_dicts)}
+            return json_dicts
 
     @staticmethod
     def get_local_package_version(package_list: List[str]) -> List[List[str]]:
