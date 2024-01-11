@@ -449,17 +449,21 @@ from pathlib import Path
         try:
             if current_session().version_info() != 3.5:
                 cls.score_code += "import settings\n\n"
+                
                 """
 import settings
                 
                 
                 """
+                
         except AttributeError:
             warn(
                 "No current session connection was found to a SAS Viya server. Score "
                 "code will be written under the assumption that the target server is "
                 "SAS Viya 4."
             )
+            cls.score_code += "import settings\n\n"
+			
 
         if mojo_model or binary_h2o_model:
             cls.score_code += "import h2o\n\nh2o.init()\n\n"
