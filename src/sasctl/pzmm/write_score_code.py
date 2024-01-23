@@ -721,10 +721,10 @@ def impute_missing_values(data):
         """
     impute_values = \\\n + {"var1": 0, "var2": "", "var3": 125.3}
         """
-        cls.score_code += f"\n{'':4}return data.fillna(impute_values)\n"
+        cls.score_code += f"\n{'':4}return data.replace('           .', np.nan).fillna(impute_values).apply(pd.to_numeric, errors='ignore')\n"
         """
         
-    return data.fillna(impute_values)
+    return data.replace('           .', np.nan).fillna(impute_values).apply(pd.to_numeric, errors='ignore')
         """
 
     # TODO: Needs unit test
@@ -1121,6 +1121,8 @@ if not isinstance(var1, pd.Series):
             are not given, this index should indicate whether the the target probability variable
             is the first or second variable returned by the model. The default value is 1.
         """
+        if not target_index:
+            target_index = 1
         if len(metrics) == 1 and isinstance(metrics, list):
             # Flatten single valued list
             metrics = metrics[0]
