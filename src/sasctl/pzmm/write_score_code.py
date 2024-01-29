@@ -405,6 +405,7 @@ def score(var1, var2, var3, var4):
         mojo_model: Optional[bool] = False,
         binary_h2o_model: Optional[bool] = False,
         tf_model: Optional[bool] = False,
+        pytorch_model: Optional[bool] = False,
         binary_string: Optional[str] = None,
     ) -> None:
         """
@@ -426,6 +427,9 @@ def score(var1, var2, var3, var4):
             is None.
         tf_model : bool, optional
             Flag to indicate that the model is a tensorflow model. The default value
+            is None.
+        pytorch_model : bool, optional
+            Flag to indicate that the model is a pytorch model. The default value
             is None.
         binary_string : str, optional
             A binary representation of the Python model object. The default value is
@@ -475,6 +479,8 @@ h2o.init()
 import tensorflow as tf
 
             """
+        elif pytorch_model:
+            cls.score_code += "import math\nimport torch\nimport pandas as pd\nimport numpy as np\nfrom pathlib import Path\n\n"
         elif binary_string:
             cls.score_code += (
                 f'import codecs\n\nbinary_string = "{binary_string}"'
@@ -578,6 +584,7 @@ with open(model_path / "model.pickle", "rb") as pickle_model:
         pickle_type: Optional[str] = None,
         mojo_model: Optional[bool] = False,
         binary_h2o_model: Optional[bool] = False,
+        pytorch_model: Optional[bool] = False,
         tf_keras_model: Optional[bool] = False,
         tf_core_model: Optional[bool] = False,
     ) -> str:
@@ -597,6 +604,9 @@ with open(model_path / "model.pickle", "rb") as pickle_model:
             None.
         binary_h2o_model : boolean, optional
             Flag to indicate that the model is a H2O.ai binary model. The default value
+            is None.
+        pytorch_model : boolean, optional
+            Flag to indicate that the model is a pytorch model. The default value
             is None.
         tf_keras_model : boolean, optional
             Flag to indicate that the model is a tensorflow keras model. The default
@@ -633,6 +643,8 @@ model = h2o.load(str(Path(settings.pickle_path) / "model.h2o"))
                 f"{'':8}model = h2o.load(str(Path(settings.pickle_path) / "
                 f"{model_file_name}))\n\n"
             )
+        elif pytorch_model:
+            cls.score_code += ( "model = torch.load(path) ")
         elif tf_keras_model:
             cls.score_code += (
                 f"model = tf.keras.models.load_model(Path(settings.pickle_path) / "
