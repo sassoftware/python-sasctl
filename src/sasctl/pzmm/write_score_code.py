@@ -177,6 +177,7 @@ class ScoreCode:
             pickle_type,
             mojo_model="mojo_model" in kwargs,
             binary_h2o_model="binary_h2o_model" in kwargs,
+            pytorch_model="pytorch_model" in kwargs,
             tf_model="tf_keras_model" in kwargs or "tf_core_model" in kwargs,
             binary_string=binary_string,
         )
@@ -188,6 +189,7 @@ class ScoreCode:
                 model_file_name,
                 pickle_type=pickle_type,
                 mojo_model="mojo_model" in kwargs,
+                pytorch_model="pytorch_model" in kwargs,
                 binary_h2o_model="binary_h2o_model" in kwargs,
             )
         # As above, but for SAS Viya 4 models
@@ -197,6 +199,7 @@ class ScoreCode:
                 pickle_type=pickle_type,
                 mojo_model="mojo_model" in kwargs,
                 binary_h2o_model="binary_h2o_model" in kwargs,
+                pytorch_model="pytorch_model" in kwargs,
                 tf_keras_model="tf_keras_model" in kwargs,
                 tf_core_model="tf_core_model" in kwargs,
             )
@@ -501,6 +504,7 @@ model = pickle.load(codecs.decode(binary_string.encode(), "base64"))
         model_id: str,
         model_file_name: str,
         pickle_type: Optional[str] = None,
+        pytorch_model: Optional[str] = None,
         mojo_model: Optional[bool] = False,
         binary_h2o_model: Optional[bool] = False,
     ) -> str:
@@ -556,6 +560,13 @@ model = h2o.load(str(Path("/models/resources/viya/<UUID>/model.h2o")))
             return (
                 f"{'':8}model = h2o.load(str(Path(\"/models/resources/viya/"
                 f'{model_id}/{model_file_name}")))'
+            )
+        elif pytorch_model:
+            cls.score_code += ("model = torch.load(path) ")
+            return (
+                f"{'':8}model_path = Path(\"/models/resources/viya/{model_id}\")\n"
+                f"{'':8}with open(model_path / \"model.pth\", \"rb\") as torch_model:\n"
+                f"{'':12}model = torch.load(torch_model)"
             )
         else:
             cls.score_code += (
@@ -644,7 +655,12 @@ model = h2o.load(str(Path(settings.pickle_path) / "model.h2o"))
                 f"{model_file_name}))\n\n"
             )
         elif pytorch_model:
-            cls.score_code += ( "model = torch.load(path) ")
+            cls.score_code += ("model = torch.load(path) ")
+            return (
+                f"{'':8}model_path = Path(\"/models/resources/viya/{model_id}\")\n"
+                f"{'':8}with open(model_path / \"model.pth\", \"rb\") as torch_model:\n"
+                f"{'':12}model = torch.load(torch_model)"
+            )
         elif tf_keras_model:
             cls.score_code += (
                 f"model = tf.keras.models.load_model(Path(settings.pickle_path) / "
