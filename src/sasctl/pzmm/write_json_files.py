@@ -883,9 +883,9 @@ class JSONFiles:
             # run assessBias, if levels=None then assessBias treats the input like a regression problem
             tables = conn.fairaitools.assessbias(
                 modelTableType="None",
-                predictedVariables=pred_values
-                if pred_values is not None
-                else prob_values,
+                predictedVariables=(
+                    pred_values if pred_values is not None else prob_values
+                ),
                 response=actual_values,
                 responseLevels=levels,
                 sensitiveVariable=x,
