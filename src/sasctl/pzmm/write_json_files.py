@@ -510,7 +510,7 @@ class JSONFiles:
             dict_list.append({"role": "scoreResource", "name": model_prefix + ".mojo"})
         elif is_tf_keras_model:
             dict_list.append({"role": "scoreResource", "name": model_prefix + ".h5"})
-        #conditions added for pytorch.
+        # conditions added for pytorch.
         elif is_pytorch_model:
             dict_list.append(({"role": "scoreResource", "name": model_prefix + ".pth"}))
         else:

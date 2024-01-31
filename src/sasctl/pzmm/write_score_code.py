@@ -563,7 +563,7 @@ model = h2o.load(str(Path("/models/resources/viya/<UUID>/model.h2o")))
             )
         elif pytorch_model:
             cls.score_code += (
-                f"model = torch.load(\"/models/resources/viya/{model_id}/\" + "
+                f'model = torch.load("/models/resources/viya/{model_id}/" + '
                 f"{model_file_name})\n\n"
             )
             return (

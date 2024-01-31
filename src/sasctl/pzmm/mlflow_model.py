@@ -39,14 +39,20 @@ class MLFlowModel:
             var_dict = {
                 "python_version": m_yml["flavors"]["python_function"]["python_version"],
                 "model_path": m_yml["flavors"]["python_function"]["model_path"],
-                "serialization_format": m_yml["flavors"]["sklearn"]["serialization_format"],
+                "serialization_format": m_yml["flavors"]["sklearn"][
+                    "serialization_format"
+                ],
                 "run_id": m_yml["run_id"],
-                "mlflowPath": m_path
+                "mlflowPath": m_path,
             }
         except KeyError:
-            raise ValueError("This MLFlow model type is not currently supported.") from None
+            raise ValueError(
+                "This MLFlow model type is not currently supported."
+            ) from None
         except TypeError:
-            raise ValueError("This MLFlow model type is not currently supported.") from None
+            raise ValueError(
+                "This MLFlow model type is not currently supported."
+            ) from None
 
         # Read in the input and output variables
         try:
@@ -57,5 +63,5 @@ class MLFlowModel:
                 "Improper or unset signature values for model. No input or output "
                 "dicts could be generated. "
             ) from None
-        
+
         return var_dict, inputs_dict, outputs_dict
