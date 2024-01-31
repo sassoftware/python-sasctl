@@ -562,11 +562,13 @@ model = h2o.load(str(Path("/models/resources/viya/<UUID>/model.h2o")))
                 f'{model_id}/{model_file_name}")))'
             )
         elif pytorch_model:
-            cls.score_code += ("model = torch.load(path) ")
+            cls.score_code += (
+                f"model = torch.load(\"/models/resources/viya/{model_id}/\" + "
+                f"{model_file_name})\n\n"
+            )
             return (
-                f"{'':8}model_path = Path(\"/models/resources/viya/{model_id}\")\n"
-                f"{'':8}with open(model_path / \"model.pth\", \"rb\") as torch_model:\n"
-                f"{'':12}model = torch.load(torch_model)"
+                f"{'':8}model = torch.load(\"/models/resources/viya/{model_id}/\" + "
+                f"{model_file_name})\n\n"
             )
         else:
             cls.score_code += (
@@ -655,11 +657,13 @@ model = h2o.load(str(Path(settings.pickle_path) / "model.h2o"))
                 f"{model_file_name}))\n\n"
             )
         elif pytorch_model:
-            cls.score_code += ("model = torch.load(path) ")
+            cls.score_code += (
+                f"model = torch.load(Path(settings.pickle_path) / "
+                f"{model_file_name})\n\n"
+            )
             return (
-                f"{'':8}model_path = Path(\"/models/resources/viya/{model_id}\")\n"
-                f"{'':8}with open(model_path / \"model.pth\", \"rb\") as torch_model:\n"
-                f"{'':12}model = torch.load(torch_model)"
+                f"{'':8}model = torch.load(Path(settings.pickle_path) / "
+                f"{model_file_name})\n\n"
             )
         elif tf_keras_model:
             cls.score_code += (
