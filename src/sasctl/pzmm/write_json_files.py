@@ -2481,7 +2481,10 @@ class JSONFiles:
                     "can be generated."
                     )
             for key in update_dict:
-                model_files[PROP][key] = update_dict[key]
+                if not isinstance(update_dict[key], str):
+                    model_files[PROP][key] = str(round(update_dict[key], 14))
+                else:
+                    model_files[PROP][key] = update_dict[key]
         else:
             if not Path.exists(Path(model_files) / PROP):
                 raise RuntimeError(
@@ -2490,8 +2493,10 @@ class JSONFiles:
                 )
             with open(Path(model_files) / PROP, 'r+') as properties_json:
                 model_properties = json.load(properties_json)
-                for key in update_dict:
-                    model_properties[key] = update_dict[key]
+                if not isinstance(update_dict[key], str):
+                    model_files[PROP][key] = str(round(update_dict[key], 14))
+                else:
+                    model_files[PROP][key] = update_dict[key]
                 properties_json.seek(0)
                 properties_json.write(json.dumps(model_properties, indent=4, cls=NpEncoder))
                 properties_json.truncate()
