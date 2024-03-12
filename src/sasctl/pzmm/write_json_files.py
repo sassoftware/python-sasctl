@@ -2374,7 +2374,7 @@ class JSONFiles:
     ):
         """
         Generates the outcome average of the training data. For Interval targets, the event average
-        is generated. For Classification targets, the event average is returned.
+        is generated. For Classification targets, the event percentage is returned.
 
         Parameters
         ----------
@@ -2395,17 +2395,23 @@ class JSONFiles:
         dict
         Returns a dictionary with a key value pair that represents the outcome average.
         """
+        import numbers
         output_var = train_data.drop(input_variables, axis=1)
         if target_type == "classification":
             value_counts = output_var[output_var.columns[0]].value_counts()
             return {'eventPercentage': value_counts[target_value]/sum(value_counts)}
         elif target_type == "interval":
-            return {'eventAverage': sum(value_counts[value_counts.columns[0]]) / len(value_counts)}
+            if not isinstance(output_var[output_var.columns[0]].iloc[0], numbers.Number):
+                raise ValueError("Detected output column is not numeric. Please ensure that " +
+                                 "the correct output column is being passed, and that no extra columns " +
+                                 "are in front of the output column. This function assumes that the first " +
+                                 "non-input column is the output column.jf")
+            return {'eventAverage': sum(output_var[output_var.columns[0]]) / len(output_var)}
 
     @staticmethod
     def get_selection_statistic_value(
-        model_files,
-        selection_statistic
+        model_files: Union[str, Path, dict],
+        selection_statistic: str = "_GINI_"
     ):
         """
         Finds the value of the chosen selection statistic in dmcas_fitstat.json, which should have been
@@ -2493,10 +2499,11 @@ class JSONFiles:
                 )
             with open(Path(model_files) / PROP, 'r+') as properties_json:
                 model_properties = json.load(properties_json)
-                if not isinstance(update_dict[key], str):
-                    model_files[PROP][key] = str(round(update_dict[key], 14))
-                else:
-                    model_files[PROP][key] = update_dict[key]
+                for key in update_dict:
+                    if not isinstance(update_dict[key], str):
+                        model_properties[key] = str(round(update_dict[key], 14))
+                    else:
+                        model_properties[key] = update_dict[key]
                 properties_json.seek(0)
                 properties_json.write(json.dumps(model_properties, indent=4, cls=NpEncoder))
                 properties_json.truncate()
@@ -2537,14 +2544,6 @@ class JSONFiles:
         caslib: str, optional
             The caslib the training data will be stored on. The default value is "Public"
         """
-        try:
-            sess = current_session()
-            conn = sess.as_swat()
-        except ImportError:
-            raise RuntimeError(
-                "The `swat` package is required to generate fit statistics, ROC, and "
-                "Lift charts with the calculate_model_statistics function."
-            )
         # Remove target variable from training data by selecting only input variable columns
         x_train_data = train_data[interval_vars + class_vars]
         # Upload scored training data to run variable importance on
@@ -2573,12 +2572,12 @@ class JSONFiles:
                 "name": 'BIN',
                 "inputs": [{"name": var} for var in interval_vars],
                 "targets": [{"name": "Prediction"}],
-                "discretize":{
-                    "method":method, 
-                    "arguments":{
-                        "minNBins":1,
-                        "maxNBins":8, 
-                        "treeCrit":treeCrit,
+                "discretize": {
+                    "method": method,
+                    "arguments": {
+                        "minNBins": 1,
+                        "maxNBins": 8,
+                        "treeCrit": treeCrit,
                         "contingencyTblOpts":{"inputsMethod": 'BUCKET', "inputsNLevels": 100}, 
                         "overrides": {"minNObsInBin": 5, "binMissing": True, "noDataLowerUpperBound": True}
                     }
@@ -2589,12 +2588,12 @@ class JSONFiles:
                 "name": 'BIN_NOM',
                 "inputs": [{"name": var} for var in class_vars],
                 "targets": [{"name": "Prediction"}],
-                "catTrans":{
-                    "method":method, 
-                    "arguments":{
-                        "minNBins":1,
-                        "maxNBins":8, 
-                        "treeCrit":treeCrit,
+                "catTrans": {
+                    "method": method,
+                    "arguments": {
+                        "minNBins": 1,
+                        "maxNBins": 8,
+                        "treeCrit": treeCrit,
                         "overrides": {"minNObsInBin": 5, "binMissing": True}
                     }
                 }
