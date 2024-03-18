@@ -1174,6 +1174,7 @@ class JSONFiles:
         train_data: Union[DataFrame, List[list], Type["numpy.array"]] = None,
         test_data: Union[DataFrame, List[list], Type["numpy.array"]] = None,
         json_path: Union[str, Path, None] = None,
+        target_type: str = "classification"
     ) -> Union[dict, None]:
         """
         Calculates fit statistics (including ROC and Lift curves) from datasets and then
@@ -1214,6 +1215,9 @@ class JSONFiles:
             Dataset pertaining to the test data. The default value is None.
         json_path : str or Path, optional
             Location for the output JSON files. The default value is None.
+        target_type: str, optional
+            Type of target the model is trying to find. Currently supports "classification"
+            and "prediction" types. The default value is "classification".
 
         Returns
         -------
@@ -1260,18 +1264,26 @@ class JSONFiles:
                 data,
                 casout={"name": "assess_dataset", "replace": True, "caslib": "Public"},
             )
-
-            conn.percentile.assess(
-                table={"name": "assess_dataset", "caslib": "Public"},
-                response="predict",
-                pVar="predict_proba",
-                event=str(target_value),
-                pEvent=str(prob_value) if prob_value else str(0.5),
-                inputs="actual",
-                fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
-                rocOut={"name": "ROC", "replace": True, "caslib": "Public"},
-                casout={"name": "Lift", "replace": True, "caslib": "Public"},
-            )
+            if target_type == 'classification':
+                conn.percentile.assess(
+                    table={"name": "assess_dataset", "caslib": "Public"},
+                    response="predict",
+                    pVar="predict_proba",
+                    event=str(target_value),
+                    pEvent=str(prob_value) if prob_value else str(0.5),
+                    inputs="actual",
+                    fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
+                    rocOut={"name": "ROC", "replace": True, "caslib": "Public"},
+                    casout={"name": "Lift", "replace": True, "caslib": "Public"},
+                )
+            else:
+                conn.percentile.assess(
+                    table={"name": "assess_dataset", "caslib": "Public"},
+                    response="predict",
+                    inputs="actual",
+                    fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
+                    casout={"name": "Lift", "replace": True, "caslib": "Public"}
+                )
 
             fitstat_dict = (
                 pd.DataFrame(conn.CASTable("FitStat", caslib="Public").to_frame())
@@ -1280,11 +1292,11 @@ class JSONFiles:
                 .to_dict()
             )
             json_dict[0]["data"][i]["dataMap"].update(fitstat_dict)
-
-            roc_df = pd.DataFrame(conn.CASTable("ROC", caslib="Public").to_frame())
-            roc_dict = cls.apply_dataframe_to_json(json_dict[1]["data"], i, roc_df)
-            for j in range(len(roc_dict)):
-                json_dict[1]["data"][j].update(roc_dict[j])
+            if target_type == 'classification':
+                roc_df = pd.DataFrame(conn.CASTable("ROC", caslib="Public").to_frame())
+                roc_dict = cls.apply_dataframe_to_json(json_dict[1]["data"], i, roc_df)
+                for j in range(len(roc_dict)):
+                    json_dict[1]["data"][j].update(roc_dict[j])
 
             lift_df = pd.DataFrame(conn.CASTable("Lift", caslib="Public").to_frame())
             lift_dict = cls.apply_dataframe_to_json(json_dict[2]["data"], i, lift_df, 1)
@@ -1293,19 +1305,26 @@ class JSONFiles:
 
         if json_path:
             for i, name in enumerate([FITSTAT, ROC, LIFT]):
-                with open(Path(json_path) / name, "w") as json_file:
-                    json_file.write(json.dumps(json_dict[i], indent=4, cls=NpEncoder))
-                if cls.notebook_output:
-                    print(
-                        f"{name} was successfully written and saved to "
-                        f"{Path(json_path) / name}"
-                    )
+                if not (name == ROC and target_type == "prediction"):
+                    with open(Path(json_path) / name, "w") as json_file:
+                        json_file.write(json.dumps(json_dict[i], indent=4, cls=NpEncoder))
+                    if cls.notebook_output:
+                        print(
+                            f"{name} was successfully written and saved to "
+                            f"{Path(json_path) / name}"
+                        )
         else:
-            return {
-                FITSTAT: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
-                ROC: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
-                LIFT: json.dumps(json_dict[2], indent=4, cls=NpEncoder),
-            }
+            if target_type == 'classification':
+                return {
+                    FITSTAT: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
+                    ROC: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
+                    LIFT: json.dumps(json_dict[2], indent=4, cls=NpEncoder),
+                }
+            else:
+                return {
+                    FITSTAT: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
+                    LIFT: json.dumps(json_dict[2], indent=4, cls=NpEncoder),
+                }
 
     @staticmethod
     def check_for_data(
@@ -2208,11 +2227,11 @@ class JSONFiles:
         algorithm: str,
         train_data: pd.DataFrame,
         train_predictions: Union[pd.Series, list],
-        target_type: str = "interval",
+        target_type: str = "classificaiton",
         target_value: Union[str, int, float, None] = None,
         interval_vars: Optional[list] = [],
         class_vars: Optional[list] = [],
-        selection_statistic: str = "_GINI_",
+        selection_statistic: str = None,
         server: str = "cas-shared-default",
         caslib: str = "Public",
     ):
@@ -2237,19 +2256,22 @@ class JSONFiles:
         train_predictions : pandas.Series, list
             List of predictions made by the model on the training data.
         target_type : string
-            Type the model is targeting. Currently supports "classification" and "interval" types. 
-            The default value is "Interval".
+            Type of target the model is trying to find. Currently supports "classification" and "prediction" types.
+            The default value is "classification".
         target_value : string, int, float, optional
             Value the model is targeting for classification models. This argument is not needed for
-            Interval models. The default value is None.
+            prediction models. The default value is None.
         interval_vars : list, optional
             A list of interval variables. The default value is an empty list.
         class_vars : list, optional
             A list of classification variables. The default value is an empty list.
         selection_statistic: str, optional
-            The selection statistic chosen to score the model against other models. Can be any of the 
-            following values: "_RASE_", "_NObs_", "_GINI_", "_GAMMA_", "_MCE_", "_ASE_", "_MCLL_",
-            "_KS_", "_KSPostCutoff_", "_DIV_", "_TAU_", "_KSCut_", or "_C_". The default value is "_GINI_".
+            The selection statistic chosen to score the model against other models. Classification
+            models can take any of the following values: "_RASE_", "_GINI_", "_GAMMA_", "_MCE_", 
+            "_ASE_", "_MCLL_", "_KS_", "_KSPostCutoff_", "_DIV_", "_TAU_", "_KSCut_", or "_C_". 
+            Prediction models can take any of the following values: "_ASE_", "_DIV_", "_RASE_", "_MAE_", 
+            "_RMAE_", "_MSLE_", "_RMSLE_" The default value is "_KS_" for classification models and 
+            "_ASE_" for prediction models.
         server: str, optional
             The CAS server the training data will be stored on. The default value is "cas-shared-default"
         caslib: str, optional
@@ -2260,10 +2282,15 @@ class JSONFiles:
                 "For the model card data to be properly generated on a classification "
                 "model, a target value is required."
             )
-        if target_type not in ["classification", "interval"]:
+        if target_type not in ["classification", "prediction"]:
             raise RuntimeError(
-                "Only classification and interval target types are currently accepted."
+                "Only classification and prediction target types are currently accepted."
             )
+        if selection_statistic is None:
+            if target_type is 'classification':
+                selection_statistic = '_KS_'
+            elif target_type is 'prediction':
+                selection_statistic = "_ASE_"
         if selection_statistic not in cls.valid_params:
             raise RuntimeError(
                 "The selection statistic must be a value generated in dmcas_fitstat.json. See "
@@ -2292,7 +2319,7 @@ class JSONFiles:
         )
 
         # Generates the event percentage for Classification targets, and the event average
-        # for Interval targets
+        # for prediction targets
         update_dict = cls.generate_outcome_average(
             train_data=train_data,
             input_variables=interval_vars + class_vars,
@@ -2373,7 +2400,7 @@ class JSONFiles:
         target_value: Union[str, int, float] = None
     ):
         """
-        Generates the outcome average of the training data. For Interval targets, the event average
+        Generates the outcome average of the training data. For prediction targets, the event average
         is generated. For Classification targets, the event percentage is returned.
 
         Parameters
@@ -2385,10 +2412,10 @@ class JSONFiles:
         input_variables: list
             A list of all input variables used by the model. Used to isolate the output variable.
         target_type : string
-            Type the model is targeting. Currently supports "Classification" and "Interval" types.
+            Type the model is targeting. Currently supports "classification" and "prediction" types.
         target_value : string, int, float, optional
             Value the model is targeting for Classification models. This argument is not needed for
-            Interval models. The default value is None.
+            prediction models. The default value is None.
 
         Returns
         -------
@@ -2400,7 +2427,7 @@ class JSONFiles:
         if target_type == "classification":
             value_counts = output_var[output_var.columns[0]].value_counts()
             return {'eventPercentage': value_counts[target_value]/sum(value_counts)}
-        elif target_type == "interval":
+        elif target_type == "prediction":
             if not isinstance(output_var[output_var.columns[0]].iloc[0], numbers.Number):
                 raise ValueError("Detected output column is not numeric. Please ensure that " +
                                  "the correct output column is being passed, and that no extra columns " +
@@ -2515,7 +2542,7 @@ class JSONFiles:
         model_files: Union[str, Path, dict],
         train_data: pd.DataFrame,
         train_predictions: Union[pd.Series, list],
-        target_type: str = "interval",
+        target_type: str = "classification",
         interval_vars: Optional[list] = [],
         class_vars: Optional[list] = [],
         caslib: str = "Public",
@@ -2535,8 +2562,8 @@ class JSONFiles:
         train_predictions : pandas.Series, list
             List of predictions made by the model on the training data.
         target_type : string, optional
-            Type the model is targeting. Currently supports "Classification" and "Interval" types.
-            The default value is "Interval".
+            Type the model is targeting. Currently supports "classification" and "prediction" types.
+            The default value is "classification".
         interval_vars : list, optional
             A list of interval variables. The default value is an empty list.
         class_vars : list, optional
@@ -2564,7 +2591,7 @@ class JSONFiles:
             treeCrit = 'RSS'
         else:
             raise RuntimeError(
-                "The selected model type is unsupported. Currently, only models that have interval or classification target types are supported."
+                "The selected model type is unsupported. Currently, only models that have prediction or classification target types are supported."
             )
         request_packages = list()
         if interval_vars:
