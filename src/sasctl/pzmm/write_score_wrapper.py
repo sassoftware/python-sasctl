@@ -28,7 +28,7 @@ class ScoreWrapper:
                             function_definition: str,
                             model_scoring_code: str,
                             is_function: bool,
-                            is_file: bool) -> None:
+                            is_file: bool) -> str:
         """
         Method to generate scoring code and add it to cls.score_wrapper.
 
@@ -39,10 +39,7 @@ class ScoreWrapper:
         function_definition (str): Function definition code.
         model_scoring_code (str): Model scoring code. how the function is called.
 
-
-
-        Returns:
- QUESTION FOR SCOTT AND DJ WHAT HAPPENS NEXT? WHERE AM I ADDING THIS TO? HOW DOES IT POPULATE THE FILE? def write_wrapper_to_file?
+        Returns: cls.score_wrapper (str): Score wrapper code.
         """
         # Adding imports to score_wrapper
         for module in imports:
@@ -74,6 +71,8 @@ class ScoreWrapper:
         cls.score_wrapper += "except Exception as e:\n"
         cls.score_wrapper += "    print(f'Error: {e}')\n"
 
+        return cls.score_wrapper
+
     def write_wrapper_to_file(cls,
                               path: str,
                               model_prefix: str,
@@ -85,7 +84,7 @@ class ScoreWrapper:
         Returns:
         None
         """
-        score_wrapper_path = Path(score_wrapper_path) / f"score_{model_prefix}.py"
+        score_wrapper_path = Path(path) / f"score_{model_prefix}.py"
         with open(score_wrapper_path, "w") as score_wrapper_file:
             score_wrapper_file.write(cls.score_wrapper)
 
