@@ -3,39 +3,50 @@
 from typing import List
 from pathlib import Path
 import re
+import importlib.util
+import inspect
+import importlib
+import inspect
+import sys
+import os
+import textwrap
+
 
 class ScoreWrapper:
     score_wrapper: str = ""
 
     @classmethod
-    def write_score_wrapper_function_input(cls, 
-                                           imports: List[str], 
-                                           function_definition: str, 
-                                           function_body: str, 
-                                           model_load: str, 
+    def write_score_wrapper_function_input(cls,
+                                           imports: List[str],
+                                           function_definition: str,
+                                           function_body: str,
+                                           model_load: str,
                                            model_name_with_file_extension: str):
         """
         Method to generate scoring code from a function and add it to cls.score_wrapper.
 
         Parameters:
         imports (List[str]): List of modules to import.
-        function_definition (str): Function definition code.
-        function_body (str): Function body code.
+        function_definition (str): Function definition.
+        function_body (str): Function body.
         model_load (str): Name of the model to load.
         model_name_with_file_extension (str): Name of the model file with extension.
 
         Returns:
         cls.score_wrapper (str): The scoring code.
         """
+        # Import Modules
         for module in imports:
             cls.score_wrapper += f"import {module}\n"
-        
+        # Import pathlib and settings
         cls.score_wrapper += "from pathlib import Path\n"
         cls.score_wrapper += "import settings\n\n\n"
 
+        # Load the model
         cls.score_wrapper += f"model_path = Path(settings.pickle_path) / '{model_name_with_file_extension}'\n\n"
         cls.score_wrapper += f"with open(Path(settings.pickle_path) / '{model_name_with_file_extension}', 'rb') as f:\n\tmodel = {model_load}\n\n"
 
+        # Define the score function and add the function body specified
         cls.score_wrapper += f"{function_definition}:\n"
         cls.score_wrapper += "\tglobal model\n"
         cls.score_wrapper += "\ttry:\n"
@@ -45,41 +56,51 @@ class ScoreWrapper:
         return cls.score_wrapper
 
     @classmethod
-    def write_score_wrapper_file_input(cls, 
-                                       imports: List[str], 
-                                       file_path: str, 
-                                       model_load: str, 
-                                       model_scoring_code: str, 
-                                       model_name_with_file_extension: str):
+    def write_score_wrapper_file_input(cls,
+                                       imports: List[str],
+                                       file_path: str,
+                                       model_load: str,
+                                       model_name_with_file_extension: str,
+                                       score_function_body: str,
+                                       ):
         """
         Method to generate scoring code from a file and add it to cls.score_wrapper.
 
         Parameters:
         imports (List[str]): List of modules to import.
-        file_path (str): Path to the file containing the scoring code.
+        file_path (str): Path to the file containing the additional classes and functions necessary for scoring.
         model_load (str): Name of the model to load.
-        model_scoring_code (str): Model scoring code. How the function is called.
         model_name_with_file_extension (str): Name of the model file with extension.
+        score_function_body (str): The code needed to evaluate the model.
 
         Returns:
         cls.score_wrapper (str): The scoring code.
         """
+        # write imports to file
         for module in imports:
             cls.score_wrapper += f"import {module}\n"
-        
         cls.score_wrapper += "from pathlib import Path\n"
         cls.score_wrapper += "import settings\n\n\n"
 
-        cls.score_wrapper += f"model_path = Path(settings.pickle_path) / '{model_name_with_file_extension}'\n\n"
-        cls.score_wrapper += f"with open(Path(settings.pickle_path) / '{model_name_with_file_extension}', 'rb') as f:\n\tmodel = {model_load}\n\n"
+        # open a file and read all of the class definitions and functions, and write them to cls.score_wrapper maintain spacing of the code being written
+        with open(file_path, "r") as file:
+            code = file.read()
+            cls.score_wrapper += code
 
-        with open(file_path, 'r') as f:
-            file_content = f.read()
-        function_defs = re.findall(r"(def .+?:.*?)(?=def |\Z)", file_content, re.DOTALL)
-        for function in function_defs:
-            cls.score_wrapper += f"{function}\n"
-        
+        # load model
+        cls.score_wrapper += f"\n\nmodel_path = Path(settings.pickle_path) / '{model_name_with_file_extension}'\n"
+        cls.score_wrapper += f"{model_load}\n\n"
+
+        # define the generic score function, and append the score_function_body to evaluate the model.
+        cls.score_wrapper += f"def score(input_data):\n"
+        cls.score_wrapper += "\tglobal model\n"
+        cls.score_wrapper += "\ttry:"
+        cls.score_wrapper += f"\n{score_function_body}\n"
+        cls.score_wrapper += "\n\texcept Exception as e:\n"
+        cls.score_wrapper += "\t\tprint(f'Error: {e}')\n"
+
         return cls.score_wrapper
+
     @classmethod
     def write_wrapper_to_file(cls,
                               path: str,
