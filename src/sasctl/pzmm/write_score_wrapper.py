@@ -10,6 +10,7 @@ import inspect
 import sys
 import os
 import textwrap
+import ast
 
 
 class ScoreWrapper:
@@ -53,6 +54,10 @@ class ScoreWrapper:
         cls.score_wrapper += f"\t\t{function_body}\n"
         cls.score_wrapper += "\texcept Exception as e:\n"
         cls.score_wrapper += "\t\tprint(f'Error: {e}')\n"
+        # Validate syntax before returning
+        if not cls.validate_score_wrapper_syntax(cls.score_wrapper):
+            raise SyntaxError("Syntax error in generated code.")
+
         return cls.score_wrapper
 
     @classmethod
@@ -99,6 +104,10 @@ class ScoreWrapper:
         cls.score_wrapper += "\n\texcept Exception as e:\n"
         cls.score_wrapper += "\t\tprint(f'Error: {e}')\n"
 
+        # Validate Syntax before returning
+        if not cls.validate_score_wrapper_syntax(cls.score_wrapper):
+            raise SyntaxError("Syntax error in generated code.")
+
         return cls.score_wrapper
 
     @classmethod
@@ -118,5 +127,24 @@ class ScoreWrapper:
         score_wrapper_path = Path(path) / f"score_{model_prefix}.py"
         with open(score_wrapper_path, "w") as score_wrapper_file:
             score_wrapper_file.write(cls.score_wrapper)
+
+    @classmethod
+    def validate_score_wrapper_syntax(cls, code: str) -> bool:
+        """
+        Method to perform a syntax check on the provided code.
+
+        Parameters:
+        code (str): Code to be checked for syntax.
+
+        Returns:
+        bool: True if syntax is correct, False otherwise.
+        """
+        try:
+            ast.parse(code)
+            return True
+        except SyntaxError:
+            return False
+
+
 
 
