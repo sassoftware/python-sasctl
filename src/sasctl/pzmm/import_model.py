@@ -199,6 +199,7 @@ class ImportModel:
         target_values: Optional[List[str]] = None,
         overwrite_project_properties: Optional[bool] = False,
         target_index: Optional[int] = None,
+        score_wrapper: Optional[bool] = False,
         **kwargs,
     ) -> Tuple[RestObj, Union[dict, str, Path]]:
         """
@@ -311,7 +312,7 @@ class ImportModel:
             pickle_type = mlflow_details["serialization_format"]
 
         # Import model without generating score code (SAS Viya version invariant)
-        if input_data is None or not predict_method or not score_metrics:
+        if input_data is None or not predict_method or not score_metrics or score_wrapper:
             warn(
                 "The following arguments are required for the automatic generation of "
                 "score code: input_data, predict_method, score_metrics."
