@@ -33,9 +33,6 @@ def _filter_files(file_dir: Union[str, Path], is_viya4: Optional[bool] = False) 
     file_names.extend(sorted(Path(file_dir).glob("*.pickle")))
     # Include H2O.ai MOJO files
     file_names.extend(sorted(Path(file_dir).glob("*.mojo")))
-    # Include Pytorch.ai files
-    file_names.extend(sorted(Path(file_dir).glob("*.pth")))
-    file_names.extend(sorted(Path(file_dir).glob("*.pt")))
     if file_names:
         return file_names
     else:

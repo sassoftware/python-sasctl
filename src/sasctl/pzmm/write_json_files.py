@@ -470,7 +470,6 @@ class JSONFiles:
         model_prefix: str,
         json_path: Union[str, Path, None] = None,
         is_h2o_model: Optional[bool] = False,
-        is_pytorch_model: Optional[bool] = False,
         is_tf_keras_model: Optional[bool] = False,
     ) -> Union[dict, None]:
         """
@@ -490,10 +489,6 @@ class JSONFiles:
             Sets whether the model metadata is associated with an H2O.ai model. If set
             as True, the MOJO model file will be set as a score resource. The default
             value is False.
-        is_pytorch_model : bool, optional
-            Sets whether the model metadata is associated with an H2O.ai model. If set
-            as True, the .pth file will be set as a score resource. The default
-            value is False.
 
         Returns
         -------
@@ -510,9 +505,6 @@ class JSONFiles:
             dict_list.append({"role": "scoreResource", "name": model_prefix + ".mojo"})
         elif is_tf_keras_model:
             dict_list.append({"role": "scoreResource", "name": model_prefix + ".h5"})
-        # conditions added for pytorch.
-        elif is_pytorch_model:
-            dict_list.append(({"role": "scoreResource", "name": model_prefix + ".pth"}))
         else:
             dict_list.append(
                 {"role": "scoreResource", "name": model_prefix + ".pickle"}
