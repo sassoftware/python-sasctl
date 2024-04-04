@@ -287,6 +287,9 @@ class ImportModel:
             index should match the index of the target outcome in target_values. If target_values
             are not given, this index should indicate whether the the target probability variable
             is the first or second variable returned by the model. The default value is 1.
+        score_wrapper : bool, optional
+            if the score wrapper method is being used, it shouldn't write the score code as the score wrapper function will handle
+            the formulation of the score code.
         kwargs : dict, optional
             Other keyword arguments are passed to the following function:
                 * sasctl.pzmm.ScoreCode.write_score_code(...,
@@ -306,6 +309,7 @@ class ImportModel:
         model_files : dict, str, or Path
             Dictionary representation of all files or the path the model files were
             generated from.
+            :param score_wrapper:
         """
         # For mlflow models, overwrite the provided or default pickle_type
         if mlflow_details:
