@@ -14,6 +14,7 @@ import ast
 
 
 class ScoreWrapper:
+    #score_wrapper string to hold score code
     score_wrapper: str = ""
 
     @classmethod
