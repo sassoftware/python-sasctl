@@ -75,6 +75,7 @@ class ScoreWrapper:
                                        model_load: str,
                                        model_name_with_file_extension: str,
                                        score_function_body: str,
+                                       score_function_input_parameters: str,
                                        output_variables: List[str],
                                        ):
         """
@@ -107,7 +108,7 @@ class ScoreWrapper:
         cls.score_wrapper += f"{model_load}\n\n"
 
         # define the generic score function, and append the score_function_body to evaluate the model.
-        cls.score_wrapper += f"def score(input_data):\n"
+        cls.score_wrapper += f"def score({score_function_input_parameters}):\n"
         cls.score_wrapper += '\t"'
         cls.score_wrapper += "Output Variables: " + ", ".join(output_variables)  # Join output variables with comma
         cls.score_wrapper += '"\n'
@@ -161,6 +162,5 @@ class ScoreWrapper:
             return True
         except SyntaxError:
             return False
-
 
 
