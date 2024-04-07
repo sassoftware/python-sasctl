@@ -53,7 +53,7 @@ class ScoreWrapper:
         # Define the score function and add the function body specified
         cls.score_wrapper += f"{function_definition}:\n"
         cls.score_wrapper += '\t"'
-        cls.score_wrapper += "Output Variables: " + ", ".join(output_variables)  # Join output variables with comma
+        cls.score_wrapper += "Output: " + ", ".join(output_variables)  # Join output variables with comma
         cls.score_wrapper += '"\n'
         cls.score_wrapper += "\tglobal model\n"
         cls.score_wrapper += "\ttry:\n"
@@ -110,7 +110,7 @@ class ScoreWrapper:
         # define the generic score function, and append the score_function_body to evaluate the model.
         cls.score_wrapper += f"def score({score_function_input_parameters}):\n"
         cls.score_wrapper += '\t"'
-        cls.score_wrapper += "Output Variables: " + ", ".join(output_variables)  # Join output variables with comma
+        cls.score_wrapper += "Output: " + ", ".join(output_variables)  # Join output variables with comma
         cls.score_wrapper += '"\n'
 
         cls.score_wrapper += "\tglobal model\n"
