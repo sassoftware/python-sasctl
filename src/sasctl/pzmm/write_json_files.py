@@ -58,6 +58,7 @@ LIFT = "dmcas_lift.json"
 MAXDIFFERENCES = "maxDifferences.json"
 GROUPMETRICS = "groupMetrics.json"
 VARIMPORTANCES = 'dmcas_relativeimportance.json'
+MISC = 'dmcas_misc.json'
 
 
 def _flatten(nested_list: Iterable) -> Generator[Any, None, None]:
@@ -1174,7 +1175,8 @@ class JSONFiles:
         train_data: Union[DataFrame, List[list], Type["numpy.array"]] = None,
         test_data: Union[DataFrame, List[list], Type["numpy.array"]] = None,
         json_path: Union[str, Path, None] = None,
-        target_type: str = "classification"
+        target_type: str = "classification", 
+        cutoff: Optional[float] = None
     ) -> Union[dict, None]:
         """
         Calculates fit statistics (including ROC and Lift curves) from datasets and then
@@ -2345,6 +2347,12 @@ class JSONFiles:
             class_vars,
             caslib
         )
+
+        # Generates dmcas_misc.json file
+        cls.generate_misc(
+            conn,
+            model_files
+        )
         
     @staticmethod
     def upload_training_data(
@@ -2675,4 +2683,75 @@ class JSONFiles:
                 print(
                     f"{VARIMPORTANCES} was successfully written and saved to "
                     f"{Path(model_files) / VARIMPORTANCES}"
+                )
+    
+    @classmethod
+    def generate_misc(
+            cls,
+            model_files: Union[str, Path, dict]
+    ):
+        """
+        Generates the dmcas_relativeimportance.json file, which is used to determine variable importance
+
+        Parameters
+        ----------
+        conn
+            A SWAT connection used to connect to the user's CAS server
+        model_files : string, Path, or dict
+            Either the directory location of the model files (string or Path object), or
+            a dictionary containing the contents of all the model files.
+        """
+        if isinstance(model_files, dict):
+            if ROC not in model_files:
+                raise RuntimeError(
+                    "The ModelProperties.json file must be generated before the model card data "
+                    "can be generated."
+                    )
+            roc_table = model_files[ROC]
+        else:
+            if not Path.exists(Path(model_files) / ROC):
+                raise RuntimeError(
+                    "The ModelProperties.json file must be generated before the model card data "
+                    "can be generated."
+                )
+            with open(Path(model_files) / ROC, 'r') as roc_file:
+                roc_table = json.load(roc_file)
+        correct_text = ["CORRECT", "INCORRECT", "CORRECT", "INCORRECT"]
+        outcome_values = ['1', '0', '0', '1']
+        misc_data = list()
+        # Iterates through ROC table to get TRAIN, TEST, and VALIDATE data with a cutoff of .5
+        for i in range(50, 300, 100):
+            roc_data = roc_table['data'][i]['dataMap']
+            correctness_values = [roc_data['_TP_'], roc_data['_FP_'], roc_data['_TN_'], roc_data['_FN_']]
+            for (c_text, c_val, o_val) in zip(correct_text, correctness_values, outcome_values):
+                misc_data.append({
+                    "CorrectText": c_text,
+                    "Outcome": o_val,
+                    "_Count_": c_val,
+                    "_DataRole_": roc_data['_DataRole_'],
+                    "_cutoffSource_": "Default",
+                    "_cutoff_": "0.5"
+                })
+        
+        json_template_path = (
+            Path(__file__).resolve().parent / f"template_files/{MISC}"
+        )
+        with open(json_template_path, 'r') as f:
+            misc_json = json.load(f)
+        misc_json['data'] = misc_data
+
+        if isinstance(model_files, dict):
+            model_files[MISC] = json.dumps(misc_json, indent=4, cls=NpEncoder)
+            if cls.notebook_output:
+                print(
+                    f"{MISC} was successfully written and saved to "
+                    f"model files dictionary."
+                )
+        else:
+            with open(Path(model_files) / MISC, 'w') as json_file:
+                json_file.write(json.dumps(misc_json, indent=4, cls=NpEncoder))
+            if cls.notebook_output:
+                print(
+                    f"{MISC} was successfully written and saved to "
+                    f"{Path(model_files) / MISC}"
                 )
