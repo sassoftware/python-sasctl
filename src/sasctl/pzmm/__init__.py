@@ -8,4 +8,5 @@ from .model_parameters import ModelParameters
 from .pickle_model import PickleModel
 from .write_json_files import JSONFiles
 from .write_score_code import ScoreCode
+from .write_score_wrapper import ScoreWrapper
 from .zip_model import ZipModel
