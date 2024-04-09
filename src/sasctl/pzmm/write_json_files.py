@@ -2724,14 +2724,18 @@ class JSONFiles:
             roc_data = roc_table['data'][i]['dataMap']
             correctness_values = [roc_data['_TP_'], roc_data['_FP_'], roc_data['_TN_'], roc_data['_FN_']]
             for (c_text, c_val, o_val) in zip(correct_text, correctness_values, outcome_values):
-                misc_data.append({
-                    "CorrectText": c_text,
-                    "Outcome": o_val,
-                    "_Count_": c_val,
-                    "_DataRole_": roc_data['_DataRole_'],
-                    "_cutoffSource_": "Default",
-                    "_cutoff_": "0.5"
-                })
+                misc_data.append(
+                    {
+                        "dataMap": {
+                            "CorrectText": c_text,
+                            "Outcome": o_val,
+                            "_Count_": c_val,
+                            "_DataRole_": roc_data['_DataRole_'],
+                            "_cutoffSource_": "Default",
+                            "_cutoff_": "0.5"
+                        },
+                        "rowNumber": len(misc_data) + 1
+                    })
         
         json_template_path = (
             Path(__file__).resolve().parent / f"template_files/{MISC}"
