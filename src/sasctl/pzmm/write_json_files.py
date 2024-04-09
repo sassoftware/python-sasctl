@@ -877,9 +877,9 @@ class JSONFiles:
             # run assessBias, if levels=None then assessBias treats the input like a regression problem
             tables = conn.fairaitools.assessbias(
                 modelTableType="None",
-                predictedVariables=pred_values
-                if pred_values is not None
-                else prob_values,
+                predictedVariables=(
+                    pred_values if pred_values is not None else prob_values
+                ),
                 response=actual_values,
                 responseLevels=levels,
                 sensitiveVariable=x,
@@ -1294,6 +1294,7 @@ class JSONFiles:
                 .to_dict()
             )
             json_dict[0]["data"][i]["dataMap"].update(fitstat_dict)
+
             if target_type == 'classification':
                 roc_df = pd.DataFrame(conn.CASTable("ROC", caslib="Public").to_frame())
                 roc_dict = cls.apply_dataframe_to_json(json_dict[1]["data"], i, roc_df)
@@ -1308,6 +1309,7 @@ class JSONFiles:
                             "_Gamma_": roc_dict[j]["dataMap"]["_Gamma_"],
                             "_Tau_": roc_dict[j]["dataMap"]["_Tau_"]
                         }
+                    
                     json_dict[0]["data"][i]["dataMap"].update(fitstat_data)
 
             lift_df = pd.DataFrame(conn.CASTable("Lift", caslib="Public").to_frame())
