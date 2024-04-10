@@ -475,6 +475,18 @@ h2o.init()
 import tensorflow as tf
 
             """
+        elif binary_string:
+            cls.score_code += (
+                f'import codecs\n\nbinary_string = "{binary_string}"'
+                f"\nmodel = {pickle_type}.loads(codecs.decode(binary_string"
+                '.encode(), "base64"))\n\n'
+            )
+            """
+import codecs
+
+binary_string = "<binary string>"
+model = pickle.load(codecs.decode(binary_string.encode(), "base64"))
+            """
 
 
     @classmethod

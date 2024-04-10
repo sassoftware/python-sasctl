@@ -700,7 +700,6 @@ def test_create_requirements_json(change_dir):
         assert (Path(tmp_dir) / "requirements.json").exists()
 
         json_dict = jf.create_requirements_json(tmp_dir)
-        assert "requirements.json" in json_dict
         expected = [
             {
                 "step": "install numpy",
@@ -713,7 +712,7 @@ def test_create_requirements_json(change_dir):
         ]
         unittest.TestCase.maxDiff = None
         unittest.TestCase().assertCountEqual(
-            json.loads(json_dict["requirements.json"]), expected
+            json_dict, expected
         )
 
 
@@ -889,7 +888,7 @@ class TestModelCardGeneration(unittest.TestCase):
     def test_generate_outcome_average_interval(self):
         df = pd.DataFrame({"input": [3, 2, 1], "output": [1, 2, 3]})
         assert (
-            jf.generate_outcome_average(df, ["input"], "interval") ==
+            jf.generate_outcome_average(df, ["input"], "prediction") ==
             {'eventAverage': 2.0}
         )
 
@@ -901,7 +900,7 @@ class TestModelCardGeneration(unittest.TestCase):
     def test_generate_outcome_average_interval_non_numeric_output(self):
         df = pd.DataFrame({"input": [3, 2, 1], "output": ["one", "two", "three"]})
         with pytest.raises(ValueError):
-            jf.generate_outcome_average(df, ["input"], "interval")
+            jf.generate_outcome_average(df, ["input"], "prediction")
 
 
 class TestGetSelectionStatisticValue(unittest.TestCase):
