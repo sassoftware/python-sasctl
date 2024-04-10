@@ -1300,17 +1300,15 @@ class JSONFiles:
                 roc_dict = cls.apply_dataframe_to_json(json_dict[1]["data"], i, roc_df)
                 for j in range(len(roc_dict)):
                     json_dict[1]["data"][j].update(roc_dict[j])
-                    if(roc_dict[j]["dataMap"]["_KS_"] == 1):
-                        fitstat_data = {
-                            "_KS_": roc_dict[j]["dataMap"]["_KS_"],
-                            "_KS2_": roc_dict[j]["dataMap"]["_KS2_"],
-                            "_C_": roc_dict[j]["dataMap"]["_C_"],
-                            "_Gini_": roc_dict[j]["dataMap"]["_Gini_"],
-                            "_Gamma_": roc_dict[j]["dataMap"]["_Gamma_"],
-                            "_Tau_": roc_dict[j]["dataMap"]["_Tau_"]
-                        }
-                    
-                    json_dict[0]["data"][i]["dataMap"].update(fitstat_data)
+                    fitstat_data = None
+                    if roc_dict[j]["dataMap"]["_KS_"] == 1:
+                        fitstat_data = dict()
+                        missing_stats = "_KS_", "_KS2_", "_C_", "_Gini_", "_Gamma_", "_Tau_"
+                        for stat in missing_stats:
+                            if stat in roc_dict[j]["dataMap"]:
+                                fitstat_data[stat] = roc_dict[j]["dataMap"][stat]
+                    if fitstat_data:
+                        json_dict[0]["data"][i]["dataMap"].update(fitstat_data)
 
             lift_df = pd.DataFrame(conn.CASTable("Lift", caslib="Public").to_frame())
             lift_dict = cls.apply_dataframe_to_json(json_dict[2]["data"], i, lift_df, 1)
