@@ -2,12 +2,12 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="dark">
+<html lang="en" data-content_root="../../../" data-theme="dark">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.10.1 documentation</title>
+    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.10.2 documentation</title>
   
   
   
@@ -17,25 +17,25 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../../_static/documentation_options.js?v=127c451b"></script>
+    <script src="../../../_static/documentation_options.js?v=bf2c35d7"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/write_json_files';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Oct 25, 2023"/>
+    <meta name="docbuild:last-update" content="Apr 10, 2024"/>
   </head>
   
   
@@ -51,10 +51,9 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -95,7 +94,7 @@
 </form></div>
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
 <div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
@@ -105,6 +104,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.1 documentation</p>
+    <p class="title logo__title">sasctl 1.10.2 documentation</p>
   
 </a></div>
     
@@ -124,13 +124,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
@@ -149,6 +144,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -162,6 +158,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -193,6 +190,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -208,10 +206,15 @@ document.write(`
   
 </div>
 
-    </nav>
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
       
       <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
@@ -222,13 +225,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
@@ -247,6 +245,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -326,7 +325,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <h1>Source code for sasctl.pzmm.write_json_files</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Copyright (c) 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
@@ -394,6 +393,8 @@ document.write(`
 <span class="n">LIFT</span> <span class="o">=</span> <span class="s2">&quot;dmcas_lift.json&quot;</span>
 <span class="n">MAXDIFFERENCES</span> <span class="o">=</span> <span class="s2">&quot;maxDifferences.json&quot;</span>
 <span class="n">GROUPMETRICS</span> <span class="o">=</span> <span class="s2">&quot;groupMetrics.json&quot;</span>
+<span class="n">VARIMPORTANCES</span> <span class="o">=</span> <span class="s2">&quot;dmcas_relativeimportance.json&quot;</span>
+<span class="n">MISC</span> <span class="o">=</span> <span class="s2">&quot;dmcas_misc.json&quot;</span>
 
 
 <span class="k">def</span> <span class="nf">_flatten</span><span class="p">(</span><span class="n">nested_list</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
@@ -1249,9 +1250,9 @@ document.write(`
             <span class="c1"># run assessBias, if levels=None then assessBias treats the input like a regression problem</span>
             <span class="n">tables</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">fairaitools</span><span class="o">.</span><span class="n">assessbias</span><span class="p">(</span>
                 <span class="n">modelTableType</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
-                <span class="n">predictedVariables</span><span class="o">=</span><span class="n">pred_values</span>
-                <span class="k">if</span> <span class="n">pred_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-                <span class="k">else</span> <span class="n">prob_values</span><span class="p">,</span>
+                <span class="n">predictedVariables</span><span class="o">=</span><span class="p">(</span>
+                    <span class="n">pred_values</span> <span class="k">if</span> <span class="n">pred_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">prob_values</span>
+                <span class="p">),</span>
                 <span class="n">response</span><span class="o">=</span><span class="n">actual_values</span><span class="p">,</span>
                 <span class="n">responseLevels</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span>
                 <span class="n">sensitiveVariable</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
@@ -1559,6 +1560,8 @@ document.write(`
         <span class="n">train_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">test_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">json_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">target_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
+        <span class="n">cutoff</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates fit statistics (including ROC and Lift curves) from datasets and then</span>
@@ -1599,6 +1602,9 @@ document.write(`
 <span class="sd">            Dataset pertaining to the test data. The default value is None.</span>
 <span class="sd">        json_path : str or Path, optional</span>
 <span class="sd">            Location for the output JSON files. The default value is None.</span>
+<span class="sd">        target_type: str, optional</span>
+<span class="sd">            Type of target the model is trying to find. Currently supports &quot;classification&quot;</span>
+<span class="sd">            and &quot;prediction&quot; types. The default value is &quot;classification&quot;.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1645,18 +1651,26 @@ document.write(`
                 <span class="n">data</span><span class="p">,</span>
                 <span class="n">casout</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;assess_dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
             <span class="p">)</span>
-
-            <span class="n">conn</span><span class="o">.</span><span class="n">percentile</span><span class="o">.</span><span class="n">assess</span><span class="p">(</span>
-                <span class="n">table</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;assess_dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
-                <span class="n">response</span><span class="o">=</span><span class="s2">&quot;predict&quot;</span><span class="p">,</span>
-                <span class="n">pVar</span><span class="o">=</span><span class="s2">&quot;predict_proba&quot;</span><span class="p">,</span>
-                <span class="n">event</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">target_value</span><span class="p">),</span>
-                <span class="n">pEvent</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">prob_value</span><span class="p">)</span> <span class="k">if</span> <span class="n">prob_value</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span>
-                <span class="n">inputs</span><span class="o">=</span><span class="s2">&quot;actual&quot;</span><span class="p">,</span>
-                <span class="n">fitStatOut</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;FitStat&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
-                <span class="n">rocOut</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ROC&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
-                <span class="n">casout</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lift&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
-            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">percentile</span><span class="o">.</span><span class="n">assess</span><span class="p">(</span>
+                    <span class="n">table</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;assess_dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
+                    <span class="n">response</span><span class="o">=</span><span class="s2">&quot;predict&quot;</span><span class="p">,</span>
+                    <span class="n">pVar</span><span class="o">=</span><span class="s2">&quot;predict_proba&quot;</span><span class="p">,</span>
+                    <span class="n">event</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">target_value</span><span class="p">),</span>
+                    <span class="n">pEvent</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">prob_value</span><span class="p">)</span> <span class="k">if</span> <span class="n">prob_value</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span>
+                    <span class="n">inputs</span><span class="o">=</span><span class="s2">&quot;actual&quot;</span><span class="p">,</span>
+                    <span class="n">fitStatOut</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;FitStat&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
+                    <span class="n">rocOut</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;ROC&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
+                    <span class="n">casout</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lift&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">percentile</span><span class="o">.</span><span class="n">assess</span><span class="p">(</span>
+                    <span class="n">table</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;assess_dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
+                    <span class="n">response</span><span class="o">=</span><span class="s2">&quot;predict&quot;</span><span class="p">,</span>
+                    <span class="n">inputs</span><span class="o">=</span><span class="s2">&quot;actual&quot;</span><span class="p">,</span>
+                    <span class="n">fitStatOut</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;FitStat&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
+                    <span class="n">casout</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lift&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="s2">&quot;Public&quot;</span><span class="p">},</span>
+                <span class="p">)</span>
 
             <span class="n">fitstat_dict</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">CASTable</span><span class="p">(</span><span class="s2">&quot;FitStat&quot;</span><span class="p">,</span> <span class="n">caslib</span><span class="o">=</span><span class="s2">&quot;Public&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">())</span>
@@ -1666,10 +1680,27 @@ document.write(`
             <span class="p">)</span>
             <span class="n">json_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">fitstat_dict</span><span class="p">)</span>
 
-            <span class="n">roc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">CASTable</span><span class="p">(</span><span class="s2">&quot;ROC&quot;</span><span class="p">,</span> <span class="n">caslib</span><span class="o">=</span><span class="s2">&quot;Public&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">())</span>
-            <span class="n">roc_dict</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">apply_dataframe_to_json</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">roc_df</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">roc_dict</span><span class="p">)):</span>
-                <span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">roc_dict</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+                <span class="n">roc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">CASTable</span><span class="p">(</span><span class="s2">&quot;ROC&quot;</span><span class="p">,</span> <span class="n">caslib</span><span class="o">=</span><span class="s2">&quot;Public&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">())</span>
+                <span class="n">roc_dict</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">apply_dataframe_to_json</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">roc_df</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">roc_dict</span><span class="p">)):</span>
+                    <span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">roc_dict</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                    <span class="n">fitstat_data</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">if</span> <span class="n">roc_dict</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_KS_&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">fitstat_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                        <span class="n">missing_stats</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="s2">&quot;_KS_&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;_KS2_&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;_C_&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;_Gini_&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;_Gamma_&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;_Tau_&quot;</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">missing_stats</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">roc_dict</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">]:</span>
+                                <span class="n">fitstat_data</span><span class="p">[</span><span class="n">stat</span><span class="p">]</span> <span class="o">=</span> <span class="n">roc_dict</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="n">stat</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">fitstat_data</span><span class="p">:</span>
+                        <span class="n">json_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">fitstat_data</span><span class="p">)</span>
 
             <span class="n">lift_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">CASTable</span><span class="p">(</span><span class="s2">&quot;Lift&quot;</span><span class="p">,</span> <span class="n">caslib</span><span class="o">=</span><span class="s2">&quot;Public&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">())</span>
             <span class="n">lift_dict</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">apply_dataframe_to_json</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">lift_df</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -1678,19 +1709,28 @@ document.write(`
 
         <span class="k">if</span> <span class="n">json_path</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">FITSTAT</span><span class="p">,</span> <span class="n">ROC</span><span class="p">,</span> <span class="n">LIFT</span><span class="p">]):</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-                    <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">))</span>
-                <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> was successfully written and saved to &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="n">ROC</span> <span class="ow">and</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span><span class="p">):</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+                        <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                            <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> was successfully written and saved to &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">{</span>
-                <span class="n">FITSTAT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
-                <span class="n">ROC</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
-                <span class="n">LIFT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
-            <span class="p">}</span></div>
+            <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">{</span>
+                    <span class="n">FITSTAT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
+                    <span class="n">ROC</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
+                    <span class="n">LIFT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
+                <span class="p">}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">{</span>
+                    <span class="n">FITSTAT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
+                    <span class="n">LIFT</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dict</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">),</span>
+                <span class="p">}</span></div>
 
 
 <div class="viewcode-block" id="JSONFiles.check_for_data">
@@ -2039,7 +2079,7 @@ document.write(`
             <span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
                 <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dicts</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;requirements.json&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_dicts</span><span class="p">)}</span></div>
+            <span class="k">return</span> <span class="n">json_dicts</span></div>
 
 
 <div class="viewcode-block" id="JSONFiles.get_local_package_version">
@@ -2626,6 +2666,592 @@ document.write(`
             <span class="n">package</span> <span class="k">for</span> <span class="n">package</span> <span class="ow">in</span> <span class="n">package_list</span> <span class="k">if</span> <span class="n">package</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">py10stdlib</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="n">package_list</span></div>
+
+
+<div class="viewcode-block" id="JSONFiles.generate_model_card">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_model_card">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">generate_model_card</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">model_files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+        <span class="n">algorithm</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">train_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">train_predictions</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span>
+        <span class="n">target_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;classificaiton&quot;</span><span class="p">,</span>
+        <span class="n">target_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">interval_vars</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">class_vars</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">selection_statistic</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span>
+        <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Public&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates everything required for the model card feature within SAS Model Manager.</span>
+
+<span class="sd">        This includes uploading the training data to CAS, updating ModelProperties.json to have</span>
+<span class="sd">        some extra properties, and generating dmcas_relativeimportance.json.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model_prefix : string</span>
+<span class="sd">            The prefix used to name files relating to the model. This is used to provide a unique</span>
+<span class="sd">            name to the training data table when it is uploaded to CAS.</span>
+<span class="sd">        model_files : string, Path, or dict</span>
+<span class="sd">            Either the directory location of the model files (string or Path object), or</span>
+<span class="sd">            a dictionary containing the contents of all the model files.</span>
+<span class="sd">        algorithm : str</span>
+<span class="sd">            The name of the algorithm used to generate the model.</span>
+<span class="sd">        train_data: pandas.DataFrame</span>
+<span class="sd">            Training data that contains all input variables as well as the target variable.</span>
+<span class="sd">        train_predictions : pandas.Series, list</span>
+<span class="sd">            List of predictions made by the model on the training data.</span>
+<span class="sd">        target_type : string</span>
+<span class="sd">            Type of target the model is trying to find. Currently supports &quot;classification&quot; and &quot;prediction&quot; types.</span>
+<span class="sd">            The default value is &quot;classification&quot;.</span>
+<span class="sd">        target_value : string, int, float, optional</span>
+<span class="sd">            Value the model is targeting for classification models. This argument is not needed for</span>
+<span class="sd">            prediction models. The default value is None.</span>
+<span class="sd">        interval_vars : list, optional</span>
+<span class="sd">            A list of interval variables. The default value is an empty list.</span>
+<span class="sd">        class_vars : list, optional</span>
+<span class="sd">            A list of classification variables. The default value is an empty list.</span>
+<span class="sd">        selection_statistic: str, optional</span>
+<span class="sd">            The selection statistic chosen to score the model against other models. Classification</span>
+<span class="sd">            models can take any of the following values: &quot;_RASE_&quot;, &quot;_GINI_&quot;, &quot;_GAMMA_&quot;, &quot;_MCE_&quot;,</span>
+<span class="sd">            &quot;_ASE_&quot;, &quot;_MCLL_&quot;, &quot;_KS_&quot;, &quot;_KSPostCutoff_&quot;, &quot;_DIV_&quot;, &quot;_TAU_&quot;, &quot;_KSCut_&quot;, or &quot;_C_&quot;.</span>
+<span class="sd">            Prediction models can take any of the following values: &quot;_ASE_&quot;, &quot;_DIV_&quot;, &quot;_RASE_&quot;, &quot;_MAE_&quot;,</span>
+<span class="sd">            &quot;_RMAE_&quot;, &quot;_MSLE_&quot;, &quot;_RMSLE_&quot; The default value is &quot;_KS_&quot; for classification models and</span>
+<span class="sd">            &quot;_ASE_&quot; for prediction models.</span>
+<span class="sd">        server: str, optional</span>
+<span class="sd">            The CAS server the training data will be stored on. The default value is &quot;cas-shared-default&quot;</span>
+<span class="sd">        caslib: str, optional</span>
+<span class="sd">            The caslib the training data will be stored on. The default value is &quot;Public&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">target_value</span> <span class="ow">and</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;For the model card data to be properly generated on a classification &quot;</span>
+                <span class="s2">&quot;model, a target value is required.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">target_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span> <span class="s2">&quot;prediction&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;Only classification and prediction target types are currently accepted.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">selection_statistic</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">target_type</span> <span class="ow">is</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+                <span class="n">selection_statistic</span> <span class="o">=</span> <span class="s2">&quot;_KS_&quot;</span>
+            <span class="k">elif</span> <span class="n">target_type</span> <span class="ow">is</span> <span class="s2">&quot;prediction&quot;</span><span class="p">:</span>
+                <span class="n">selection_statistic</span> <span class="o">=</span> <span class="s2">&quot;_ASE_&quot;</span>
+        <span class="k">if</span> <span class="n">selection_statistic</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">valid_params</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;The selection statistic must be a value generated in dmcas_fitstat.json. See &quot;</span>
+                <span class="s2">&quot;the documentation for a list of valid selection statistic values.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">algorithm</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;Either a given algorithm or a model is required for the model card.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sess</span> <span class="o">=</span> <span class="n">current_session</span><span class="p">()</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">as_swat</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;The `swat` package is required to generate fit statistics, ROC, and &quot;</span>
+                <span class="s2">&quot;Lift charts with the calculate_model_statistics function.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Upload training table to CAS. The location of the training table is returned.</span>
+        <span class="n">training_table</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">upload_training_data</span><span class="p">(</span>
+            <span class="n">conn</span><span class="p">,</span> <span class="n">model_prefix</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">caslib</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Generates the event percentage for Classification targets, and the event average</span>
+        <span class="c1"># for prediction targets</span>
+        <span class="n">update_dict</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">generate_outcome_average</span><span class="p">(</span>
+            <span class="n">train_data</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span>
+            <span class="n">input_variables</span><span class="o">=</span><span class="n">interval_vars</span> <span class="o">+</span> <span class="n">class_vars</span><span class="p">,</span>
+            <span class="n">target_type</span><span class="o">=</span><span class="n">target_type</span><span class="p">,</span>
+            <span class="n">target_value</span><span class="o">=</span><span class="n">target_value</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Formats all new ModelProperties information into one dictionary that can be used to update the json file</span>
+        <span class="n">update_dict</span><span class="p">[</span><span class="s2">&quot;trainTable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">training_table</span>
+        <span class="n">update_dict</span><span class="p">[</span><span class="s2">&quot;selectionStatistic&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">selection_statistic</span>
+        <span class="n">update_dict</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">algorithm</span>
+        <span class="n">update_dict</span><span class="p">[</span><span class="s2">&quot;selectionStatisticValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_selection_statistic_value</span><span class="p">(</span>
+            <span class="n">model_files</span><span class="p">,</span> <span class="n">selection_statistic</span>
+        <span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">update_model_properties</span><span class="p">(</span><span class="n">model_files</span><span class="p">,</span> <span class="n">update_dict</span><span class="p">)</span>
+
+        <span class="c1"># Generates dmcas_relativeimportance.json file</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">generate_variable_importance</span><span class="p">(</span>
+            <span class="n">conn</span><span class="p">,</span>
+            <span class="n">model_files</span><span class="p">,</span>
+            <span class="n">train_data</span><span class="p">,</span>
+            <span class="n">train_predictions</span><span class="p">,</span>
+            <span class="n">target_type</span><span class="p">,</span>
+            <span class="n">interval_vars</span><span class="p">,</span>
+            <span class="n">class_vars</span><span class="p">,</span>
+            <span class="n">caslib</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Generates dmcas_misc.json file</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">generate_misc</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">model_files</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="JSONFiles.upload_training_data">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.upload_training_data">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">upload_training_data</span><span class="p">(</span>
+        <span class="n">conn</span><span class="p">,</span>
+        <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">train_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span>
+        <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Public&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Uploads training data to CAS server.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn</span>
+<span class="sd">            SWAT connection. Used to connect to CAS server.</span>
+<span class="sd">        model_prefix : string</span>
+<span class="sd">            The prefix used to name files relating to the model. This is used to provide a unique</span>
+<span class="sd">            name to the training data table when it is uploaded to CAS.</span>
+<span class="sd">        train_data: pandas.DataFrame</span>
+<span class="sd">            Training data that contains all input variables as well as the target variable.</span>
+<span class="sd">        server: str, optional</span>
+<span class="sd">            The CAS server the training data will be stored on. The default value is &quot;cas-shared-default&quot;</span>
+<span class="sd">        caslib: str, optional</span>
+<span class="sd">            The caslib the training data will be stored on. The default value is &quot;Public&quot;</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        string</span>
+<span class="sd">        Returns a string that represents the location of the training table within CAS.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Upload raw training data to caslib so that data can be analyzed</span>
+        <span class="n">train_data_name</span> <span class="o">=</span> <span class="n">model_prefix</span> <span class="o">+</span> <span class="s2">&quot;_train_data&quot;</span>
+        <span class="n">upload_train_data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span>
+            <span class="n">train_data</span><span class="p">,</span> <span class="n">casout</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">train_data_name</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="n">caslib</span><span class="p">},</span> <span class="n">promote</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">upload_train_data</span><span class="o">.</span><span class="n">status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;A table with the name </span><span class="si">{</span><span class="n">train_data_name</span><span class="si">}</span><span class="s2"> already exists in the specified caslib. Please &quot;</span>
+                <span class="s2">&quot;either delete/rename the old table or give a new name to the current table.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">server</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">caslib</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">train_data_name</span></div>
+
+
+<div class="viewcode-block" id="JSONFiles.generate_outcome_average">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_outcome_average">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">generate_outcome_average</span><span class="p">(</span>
+        <span class="n">train_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">input_variables</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">target_type</span><span class="p">,</span>
+        <span class="n">target_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates the outcome average of the training data. For prediction targets, the event average</span>
+<span class="sd">        is generated. For Classification targets, the event percentage is returned.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        train_data: pandas.DataFrame</span>
+<span class="sd">            Training data that contains all input variables as well as the target variable. If multiple</span>
+<span class="sd">            non-input variables are included, the function will assume that the first non-input variable row</span>
+<span class="sd">            is the output.</span>
+<span class="sd">        input_variables: list</span>
+<span class="sd">            A list of all input variables used by the model. Used to isolate the output variable.</span>
+<span class="sd">        target_type : string</span>
+<span class="sd">            Type the model is targeting. Currently supports &quot;classification&quot; and &quot;prediction&quot; types.</span>
+<span class="sd">        target_value : string, int, float, optional</span>
+<span class="sd">            Value the model is targeting for Classification models. This argument is not needed for</span>
+<span class="sd">            prediction models. The default value is None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">        Returns a dictionary with a key value pair that represents the outcome average.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">numbers</span>
+
+        <span class="n">output_var</span> <span class="o">=</span> <span class="n">train_data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">input_variables</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+            <span class="n">value_counts</span> <span class="o">=</span> <span class="n">output_var</span><span class="p">[</span><span class="n">output_var</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;eventPercentage&quot;</span><span class="p">:</span> <span class="n">value_counts</span><span class="p">[</span><span class="n">target_value</span><span class="p">]</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">value_counts</span><span class="p">)}</span>
+        <span class="k">elif</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+                <span class="n">output_var</span><span class="p">[</span><span class="n">output_var</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span>
+            <span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Detected output column is not numeric. Please ensure that &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;the correct output column is being passed, and that no extra columns &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;are in front of the output column. This function assumes that the first &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;non-input column is the output column.jf&quot;</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s2">&quot;eventAverage&quot;</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">output_var</span><span class="p">[</span><span class="n">output_var</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_var</span><span class="p">)</span>
+            <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="JSONFiles.get_selection_statistic_value">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_selection_statistic_value">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_selection_statistic_value</span><span class="p">(</span>
+        <span class="n">model_files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">selection_statistic</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_GINI_&quot;</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finds the value of the chosen selection statistic in dmcas_fitstat.json, which should have been</span>
+<span class="sd">        generated before this function has been called.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model_files : string, Path, or dict</span>
+<span class="sd">            Either the directory location of the model files (string or Path object), or</span>
+<span class="sd">            a dictionary containing the contents of all the model files.</span>
+<span class="sd">        selection_statistic: str, optional</span>
+<span class="sd">            The selection statistic chosen to score the model against other models. Can be any of the</span>
+<span class="sd">            following values: &quot;_RASE_&quot;, &quot;_NObs_&quot;, &quot;_GINI_&quot;, &quot;_GAMMA_&quot;, &quot;_MCE_&quot;, &quot;_ASE_&quot;, &quot;_MCLL_&quot;,</span>
+<span class="sd">            &quot;_KS_&quot;, &quot;_KSPostCutoff_&quot;, &quot;_DIV_&quot;, &quot;_TAU_&quot;, &quot;_KSCut_&quot;, or &quot;_C_&quot;. The default value is &quot;_GINI_&quot;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">        Returns the numerical value assoicated with the chosen selection statistic.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_files</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">FITSTAT</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_files</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;The dmcas_fitstat.json file must be generated before the model card data &quot;</span>
+                    <span class="s2">&quot;can be generated.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">fitstat</span> <span class="ow">in</span> <span class="n">model_files</span><span class="p">[</span><span class="n">FITSTAT</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">fitstat</span><span class="p">[</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_DataRole_&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;TRAIN&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">selection_statistic</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fitstat</span><span class="p">[</span><span class="s2">&quot;dataMap&quot;</span><span class="p">]</span>
+                        <span class="ow">or</span> <span class="n">fitstat</span><span class="p">[</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="n">selection_statistic</span><span class="p">]</span> <span class="o">==</span> <span class="kc">None</span>
+                    <span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                            <span class="s2">&quot;The chosen selection statistic was not generated properly. Please ensure the value has been &quot;</span>
+                            <span class="s2">&quot;properly created then try again.&quot;</span>
+                        <span class="p">)</span>
+                    <span class="k">return</span> <span class="n">fitstat</span><span class="p">[</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="n">selection_statistic</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="n">FITSTAT</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;The dmcas_fitstat.json file must be generated before the model card data &quot;</span>
+                    <span class="s2">&quot;can be generated.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="n">FITSTAT</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fitstat_json</span><span class="p">:</span>
+                <span class="n">fitstat_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fitstat_json</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">fitstat</span> <span class="ow">in</span> <span class="n">fitstat_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">fitstat</span><span class="p">[</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="s2">&quot;_DataRole_&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;TRAIN&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="n">selection_statistic</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fitstat</span><span class="p">[</span><span class="s2">&quot;dataMap&quot;</span><span class="p">]</span>
+                            <span class="ow">or</span> <span class="n">fitstat</span><span class="p">[</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="n">selection_statistic</span><span class="p">]</span> <span class="o">==</span> <span class="kc">None</span>
+                        <span class="p">):</span>
+                            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                                <span class="s2">&quot;The chosen selection statistic was not generated properly. Please ensure the value has been &quot;</span>
+                                <span class="s2">&quot;properly created then try again.&quot;</span>
+                            <span class="p">)</span>
+                        <span class="k">return</span> <span class="n">fitstat</span><span class="p">[</span><span class="s2">&quot;dataMap&quot;</span><span class="p">][</span><span class="n">selection_statistic</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="JSONFiles.update_model_properties">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.update_model_properties">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">update_model_properties</span><span class="p">(</span><span class="n">model_files</span><span class="p">,</span> <span class="n">update_dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the ModelProperties.json file to include properties listed in the update_dict dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model_files : string, Path, or dict</span>
+<span class="sd">            Either the directory location of the model files (string or Path object), or</span>
+<span class="sd">            a dictionary containing the contents of all the model files.</span>
+<span class="sd">        update_dict : dictionary</span>
+<span class="sd">            A dictionary containing the key-value pairs that represent properties to be added</span>
+<span class="sd">            to the ModelProperties.json file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_files</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">PROP</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_files</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;The ModelProperties.json file must be generated before the model card data &quot;</span>
+                    <span class="s2">&quot;can be generated.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">update_dict</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">update_dict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="n">model_files</span><span class="p">[</span><span class="n">PROP</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">update_dict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="mi">14</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">model_files</span><span class="p">[</span><span class="n">PROP</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">update_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="n">PROP</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;The ModelProperties.json file must be generated before the model card data &quot;</span>
+                    <span class="s2">&quot;can be generated.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="n">PROP</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">properties_json</span><span class="p">:</span>
+                <span class="n">model_properties</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">properties_json</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">update_dict</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">update_dict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                        <span class="n">model_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">update_dict</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="mi">14</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">model_properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">update_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="n">properties_json</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">properties_json</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                    <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_properties</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">properties_json</span><span class="o">.</span><span class="n">truncate</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="JSONFiles.generate_variable_importance">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_variable_importance">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">generate_variable_importance</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">conn</span><span class="p">,</span>
+        <span class="n">model_files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+        <span class="n">train_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">train_predictions</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span>
+        <span class="n">target_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
+        <span class="n">interval_vars</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">class_vars</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Public&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates the dmcas_relativeimportance.json file, which is used to determine variable importance</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn</span>
+<span class="sd">            A SWAT connection used to connect to the user&#39;s CAS server</span>
+<span class="sd">        model_files : string, Path, or dict</span>
+<span class="sd">            Either the directory location of the model files (string or Path object), or</span>
+<span class="sd">            a dictionary containing the contents of all the model files.</span>
+<span class="sd">        train_data: pandas.DataFrame</span>
+<span class="sd">            Training data that contains all input variables as well as the target variable.</span>
+<span class="sd">        train_predictions : pandas.Series, list</span>
+<span class="sd">            List of predictions made by the model on the training data.</span>
+<span class="sd">        target_type : string, optional</span>
+<span class="sd">            Type the model is targeting. Currently supports &quot;classification&quot; and &quot;prediction&quot; types.</span>
+<span class="sd">            The default value is &quot;classification&quot;.</span>
+<span class="sd">        interval_vars : list, optional</span>
+<span class="sd">            A list of interval variables. The default value is an empty list.</span>
+<span class="sd">        class_vars : list, optional</span>
+<span class="sd">            A list of classification variables. The default value is an empty list.</span>
+<span class="sd">        caslib: str, optional</span>
+<span class="sd">            The caslib the training data will be stored on. The default value is &quot;Public&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Remove target variable from training data by selecting only input variable columns</span>
+        <span class="n">x_train_data</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">[</span><span class="n">interval_vars</span> <span class="o">+</span> <span class="n">class_vars</span><span class="p">]</span>
+        <span class="c1"># Upload scored training data to run variable importance on</span>
+        <span class="n">x_train_data</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Prediction&quot;</span><span class="p">,</span> <span class="n">train_predictions</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span>
+            <span class="n">x_train_data</span><span class="p">,</span>
+            <span class="n">casout</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;train_data&quot;</span><span class="p">,</span> <span class="s2">&quot;replace&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="n">caslib</span><span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Load actionset necessary to generate variable importance</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">loadactionset</span><span class="p">(</span><span class="s2">&quot;dataPreprocess&quot;</span><span class="p">)</span>
+        <span class="n">request_packages</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;DTREE&quot;</span>
+            <span class="n">treeCrit</span> <span class="o">=</span> <span class="s2">&quot;Entropy&quot;</span>
+        <span class="k">elif</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;RTREE&quot;</span>
+            <span class="n">treeCrit</span> <span class="o">=</span> <span class="s2">&quot;RSS&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;The selected model type is unsupported. Currently, only models that have prediction or classification target types are supported.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">request_packages</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">interval_vars</span><span class="p">:</span>
+            <span class="n">request_packages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;BIN&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">var</span><span class="p">}</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">interval_vars</span><span class="p">],</span>
+                    <span class="s2">&quot;targets&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Prediction&quot;</span><span class="p">}],</span>
+                    <span class="s2">&quot;discretize&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span>
+                        <span class="s2">&quot;arguments&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;minNBins&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;maxNBins&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                            <span class="s2">&quot;treeCrit&quot;</span><span class="p">:</span> <span class="n">treeCrit</span><span class="p">,</span>
+                            <span class="s2">&quot;contingencyTblOpts&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;inputsMethod&quot;</span><span class="p">:</span> <span class="s2">&quot;BUCKET&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;inputsNLevels&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;overrides&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;minNObsInBin&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                                <span class="s2">&quot;binMissing&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                                <span class="s2">&quot;noDataLowerUpperBound&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                            <span class="p">},</span>
+                        <span class="p">},</span>
+                    <span class="p">},</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">class_vars</span><span class="p">:</span>
+            <span class="n">request_packages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;BIN_NOM&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">var</span><span class="p">}</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">class_vars</span><span class="p">],</span>
+                    <span class="s2">&quot;targets&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Prediction&quot;</span><span class="p">}],</span>
+                    <span class="s2">&quot;catTrans&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span>
+                        <span class="s2">&quot;arguments&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;minNBins&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                            <span class="s2">&quot;maxNBins&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                            <span class="s2">&quot;treeCrit&quot;</span><span class="p">:</span> <span class="n">treeCrit</span><span class="p">,</span>
+                            <span class="s2">&quot;overrides&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;minNObsInBin&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;binMissing&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+                        <span class="p">},</span>
+                    <span class="p">},</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="n">var_data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">dataPreprocess</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
+            <span class="n">table</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;train_data&quot;</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="n">caslib</span><span class="p">},</span>
+            <span class="n">requestPackages</span><span class="o">=</span><span class="n">request_packages</span><span class="p">,</span>
+            <span class="n">evaluationStats</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">percentileMaxIterations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">percentileTolerance</span><span class="o">=</span><span class="mf">0.00001</span><span class="p">,</span>
+            <span class="n">distinctCountLimit</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
+            <span class="n">sasVarNameLength</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">outputTableOptions</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;inputVarPrintOrder&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="n">sasProcClient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">var_importances</span> <span class="o">=</span> <span class="n">var_data</span><span class="p">[</span><span class="s2">&quot;VarTransInfo&quot;</span><span class="p">][[</span><span class="s2">&quot;Variable&quot;</span><span class="p">,</span> <span class="s2">&quot;RelVarImportance&quot;</span><span class="p">]]</span>
+        <span class="n">var_importances</span> <span class="o">=</span> <span class="n">var_importances</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+            <span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;RelVarImportance&quot;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">relative_importances</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">var_importances</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Variable&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">interval_vars</span><span class="p">:</span>
+                <span class="n">level</span> <span class="o">=</span> <span class="s2">&quot;INTERVAL&quot;</span>
+            <span class="k">elif</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Variable&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">class_vars</span><span class="p">:</span>
+                <span class="n">level</span> <span class="o">=</span> <span class="s2">&quot;NOMINAL&quot;</span>
+            <span class="n">relative_importances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;dataMap&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;LABEL&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;LEVEL&quot;</span><span class="p">:</span> <span class="n">level</span><span class="p">,</span>
+                        <span class="s2">&quot;ROLE&quot;</span><span class="p">:</span> <span class="s2">&quot;INPUT&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;RelativeImportance&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;RelVarImportance&quot;</span><span class="p">]),</span>
+                        <span class="s2">&quot;Variable&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;Variable&quot;</span><span class="p">],</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;rowNumber&quot;</span><span class="p">:</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="n">json_template_path</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;template_files/</span><span class="si">{</span><span class="n">VARIMPORTANCES</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_template_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">relative_importance_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">relative_importance_json</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">relative_importances</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_files</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">model_files</span><span class="p">[</span><span class="n">VARIMPORTANCES</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+                <span class="n">relative_importance_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">VARIMPORTANCES</span><span class="si">}</span><span class="s2"> was successfully written and saved to &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;model files dictionary.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="n">VARIMPORTANCES</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+                <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                    <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">relative_importance_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">VARIMPORTANCES</span><span class="si">}</span><span class="s2"> was successfully written and saved to &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">VARIMPORTANCES</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="JSONFiles.generate_misc">
+<a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_misc">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">generate_misc</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model_files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates the dmcas_relativeimportance.json file, which is used to determine variable importance</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn</span>
+<span class="sd">            A SWAT connection used to connect to the user&#39;s CAS server</span>
+<span class="sd">        model_files : string, Path, or dict</span>
+<span class="sd">            Either the directory location of the model files (string or Path object), or</span>
+<span class="sd">            a dictionary containing the contents of all the model files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_files</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">ROC</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_files</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;The ModelProperties.json file must be generated before the model card data &quot;</span>
+                    <span class="s2">&quot;can be generated.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">roc_table</span> <span class="o">=</span> <span class="n">model_files</span><span class="p">[</span><span class="n">ROC</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="n">ROC</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;The ModelProperties.json file must be generated before the model card data &quot;</span>
+                    <span class="s2">&quot;can be generated.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="n">ROC</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">roc_file</span><span class="p">:</span>
+                <span class="n">roc_table</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">roc_file</span><span class="p">)</span>
+        <span class="n">correct_text</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CORRECT&quot;</span><span class="p">,</span> <span class="s2">&quot;INCORRECT&quot;</span><span class="p">,</span> <span class="s2">&quot;CORRECT&quot;</span><span class="p">,</span> <span class="s2">&quot;INCORRECT&quot;</span><span class="p">]</span>
+        <span class="n">outcome_values</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">]</span>
+        <span class="n">misc_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="c1"># Iterates through ROC table to get TRAIN, TEST, and VALIDATE data with a cutoff of .5</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
+            <span class="n">roc_data</span> <span class="o">=</span> <span class="n">roc_table</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;dataMap&quot;</span><span class="p">]</span>
+            <span class="n">correctness_values</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">roc_data</span><span class="p">[</span><span class="s2">&quot;_TP_&quot;</span><span class="p">],</span>
+                <span class="n">roc_data</span><span class="p">[</span><span class="s2">&quot;_FP_&quot;</span><span class="p">],</span>
+                <span class="n">roc_data</span><span class="p">[</span><span class="s2">&quot;_TN_&quot;</span><span class="p">],</span>
+                <span class="n">roc_data</span><span class="p">[</span><span class="s2">&quot;_FN_&quot;</span><span class="p">],</span>
+            <span class="p">]</span>
+            <span class="k">for</span> <span class="n">c_text</span><span class="p">,</span> <span class="n">c_val</span><span class="p">,</span> <span class="n">o_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="n">correct_text</span><span class="p">,</span> <span class="n">correctness_values</span><span class="p">,</span> <span class="n">outcome_values</span>
+            <span class="p">):</span>
+                <span class="n">misc_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;dataMap&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;CorrectText&quot;</span><span class="p">:</span> <span class="n">c_text</span><span class="p">,</span>
+                            <span class="s2">&quot;Outcome&quot;</span><span class="p">:</span> <span class="n">o_val</span><span class="p">,</span>
+                            <span class="s2">&quot;_Count_&quot;</span><span class="p">:</span> <span class="n">c_val</span><span class="p">,</span>
+                            <span class="s2">&quot;_DataRole_&quot;</span><span class="p">:</span> <span class="n">roc_data</span><span class="p">[</span><span class="s2">&quot;_DataRole_&quot;</span><span class="p">],</span>
+                            <span class="s2">&quot;_cutoffSource_&quot;</span><span class="p">:</span> <span class="s2">&quot;Default&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;_cutoff_&quot;</span><span class="p">:</span> <span class="s2">&quot;0.5&quot;</span><span class="p">,</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;rowNumber&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">misc_data</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+
+        <span class="n">json_template_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;template_files/</span><span class="si">{</span><span class="n">MISC</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_template_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">misc_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">misc_json</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">misc_data</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_files</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">model_files</span><span class="p">[</span><span class="n">MISC</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">misc_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MISC</span><span class="si">}</span><span class="s2"> was successfully written and saved to &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;model files dictionary.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="n">MISC</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+                <span class="n">json_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">misc_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NpEncoder</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">MISC</span><span class="si">}</span><span class="s2"> was successfully written and saved to &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">MISC</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span></div>
 </div>
 
 </pre></div>
@@ -2637,7 +3263,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -2645,6 +3271,8 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>
@@ -2657,8 +3285,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2666,6 +3294,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="copyright">
     
       © Copyright Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
@@ -2675,6 +3304,7 @@ document.write(`
 </div>
       
         <div class="footer-item">
+
   <p class="sphinx-version">
     Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
@@ -2687,8 +3317,9 @@ document.write(`
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.2.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
 </p></div>
       
     </div>

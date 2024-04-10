@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="dark">
+<html lang="en" data-content_root="../../" data-theme="dark">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.10.1 documentation</title>
+    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.10.2 documentation</title>
   
   
   
@@ -18,25 +18,25 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/sasctl.css?v=6840086e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=127c451b"></script>
+    <script src="../../_static/documentation_options.js?v=bf2c35d7"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/pzmm/write_json_files';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.pzmm.pickle_model" href="pickle_model.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Oct 25, 2023"/>
+    <meta name="docbuild:last-update" content="Apr 10, 2024"/>
   </head>
   
   
@@ -54,10 +54,9 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -98,7 +97,7 @@
 </form></div>
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
 <div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
@@ -108,6 +107,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../index.html">
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.1 documentation</p>
+    <p class="title logo__title">sasctl 1.10.2 documentation</p>
   
 </a></div>
     
@@ -127,13 +127,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item current active">
@@ -152,6 +147,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -165,6 +161,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -196,6 +193,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -215,10 +213,13 @@ document.write(`
   
 </div>
 
-    </nav>
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -229,13 +230,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item current active">
@@ -254,6 +250,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -284,7 +281,8 @@ document.write(`
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
@@ -366,7 +364,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section id="module-sasctl.pzmm.write_json_files">
 <span id="sasctl-pzmm-write-json-files"></span><h1>sasctl.pzmm.write_json_files<a class="headerlink" href="#module-sasctl.pzmm.write_json_files" title="Link to this heading">#</a></h1>
@@ -419,8 +417,20 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.format_parameter" title="sasctl.pzmm.write_json_files.JSONFiles.format_parameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_parameter</span></code></a>(param_name)</p></td>
 <td><p>Formats the parameter name to the JSON standard expected for dmcas_fitstat.json.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_mlflow_variable_properties" title="sasctl.pzmm.write_json_files.JSONFiles.generate_mlflow_variable_properties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_mlflow_variable_properties</span></code></a>(input_data)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_misc" title="sasctl.pzmm.write_json_files.JSONFiles.generate_misc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_misc</span></code></a>(model_files)</p></td>
+<td><p>Generates the dmcas_relativeimportance.json file, which is used to determine variable importance</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_mlflow_variable_properties" title="sasctl.pzmm.write_json_files.JSONFiles.generate_mlflow_variable_properties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_mlflow_variable_properties</span></code></a>(input_data)</p></td>
 <td><p>Create a list of dictionaries containing the variable properties found in the MLModel file for MLFlow model runs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_model_card" title="sasctl.pzmm.write_json_files.JSONFiles.generate_model_card"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_model_card</span></code></a>(model_prefix, ...[, ...])</p></td>
+<td><p>Generates everything required for the model card feature within SAS Model Manager.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_outcome_average" title="sasctl.pzmm.write_json_files.JSONFiles.generate_outcome_average"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_outcome_average</span></code></a>(train_data, ...[, ...])</p></td>
+<td><p>Generates the outcome average of the training data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_variable_importance" title="sasctl.pzmm.write_json_files.JSONFiles.generate_variable_importance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_variable_importance</span></code></a>(conn, ...[, ...])</p></td>
+<td><p>Generates the dmcas_relativeimportance.json file, which is used to determine variable importance</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_variable_properties" title="sasctl.pzmm.write_json_files.JSONFiles.generate_variable_properties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_variable_properties</span></code></a>(input_data)</p></td>
 <td><p>Generate a list of dictionaries of variable properties given an input dataframe.</p></td>
@@ -440,31 +450,40 @@ document.write(`
 <tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.get_pickle_file" title="sasctl.pzmm.write_json_files.JSONFiles.get_pickle_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_pickle_file</span></code></a>([pickle_folder])</p></td>
 <td><p>Given a file path, retrieve the pickle file(s).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.input_fit_statistics" title="sasctl.pzmm.write_json_files.JSONFiles.input_fit_statistics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">input_fit_statistics</span></code></a>([fitstat_df, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.get_selection_statistic_value" title="sasctl.pzmm.write_json_files.JSONFiles.get_selection_statistic_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_selection_statistic_value</span></code></a>(model_files[, ...])</p></td>
+<td><p>Finds the value of the chosen selection statistic in dmcas_fitstat.json, which should have been generated before this function has been called.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.input_fit_statistics" title="sasctl.pzmm.write_json_files.JSONFiles.input_fit_statistics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">input_fit_statistics</span></code></a>([fitstat_df, ...])</p></td>
 <td><p>Writes a JSON file to display fit statistics for the model in SAS Model Manager.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.read_json_file" title="sasctl.pzmm.write_json_files.JSONFiles.read_json_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_json_file</span></code></a>(path)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.read_json_file" title="sasctl.pzmm.write_json_files.JSONFiles.read_json_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_json_file</span></code></a>(path)</p></td>
 <td><p>Reads a JSON file from a given path.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.remove_standard_library_packages" title="sasctl.pzmm.write_json_files.JSONFiles.remove_standard_library_packages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_standard_library_packages</span></code></a>(package_list)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.remove_standard_library_packages" title="sasctl.pzmm.write_json_files.JSONFiles.remove_standard_library_packages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_standard_library_packages</span></code></a>(package_list)</p></td>
 <td><p>Remove any packages from the required list of installed packages that are part of the Python Standard Library.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.stat_dataset_to_dataframe" title="sasctl.pzmm.write_json_files.JSONFiles.stat_dataset_to_dataframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stat_dataset_to_dataframe</span></code></a>(data[, target_value])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.stat_dataset_to_dataframe" title="sasctl.pzmm.write_json_files.JSONFiles.stat_dataset_to_dataframe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stat_dataset_to_dataframe</span></code></a>(data[, target_value])</p></td>
 <td><p>Convert the user supplied statistical dataset from either a pandas DataFrame, list of lists, or numpy array to a DataFrame formatted for SAS CAS upload.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.truncate_properties" title="sasctl.pzmm.write_json_files.JSONFiles.truncate_properties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">truncate_properties</span></code></a>(prop)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.truncate_properties" title="sasctl.pzmm.write_json_files.JSONFiles.truncate_properties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">truncate_properties</span></code></a>(prop)</p></td>
 <td><p>Check custom properties for values larger than SAS Model Manager expects.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.user_input_fitstat" title="sasctl.pzmm.write_json_files.JSONFiles.user_input_fitstat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">user_input_fitstat</span></code></a>(data)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.update_model_properties" title="sasctl.pzmm.write_json_files.JSONFiles.update_model_properties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_model_properties</span></code></a>(model_files, update_dict)</p></td>
+<td><p>Updates the ModelProperties.json file to include properties listed in the update_dict dictionary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.upload_training_data" title="sasctl.pzmm.write_json_files.JSONFiles.upload_training_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upload_training_data</span></code></a>(conn, model_prefix, ...)</p></td>
+<td><p>Uploads training data to CAS server.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.user_input_fitstat" title="sasctl.pzmm.write_json_files.JSONFiles.user_input_fitstat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">user_input_fitstat</span></code></a>(data)</p></td>
 <td><p>Prompt the user to enter parameters for dmcas_fitstat.json.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.write_file_metadata_json" title="sasctl.pzmm.write_json_files.JSONFiles.write_file_metadata_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_file_metadata_json</span></code></a>(model_prefix[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.write_file_metadata_json" title="sasctl.pzmm.write_json_files.JSONFiles.write_file_metadata_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_file_metadata_json</span></code></a>(model_prefix[, ...])</p></td>
 <td><p>Writes a file metadata JSON file pointing to all relevant files.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.write_model_properties_json" title="sasctl.pzmm.write_json_files.JSONFiles.write_model_properties_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_model_properties_json</span></code></a>(model_name, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.write_model_properties_json" title="sasctl.pzmm.write_json_files.JSONFiles.write_model_properties_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_model_properties_json</span></code></a>(model_name, ...)</p></td>
 <td><p>Writes a JSON file containing SAS Model Manager model properties.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.write_var_json" title="sasctl.pzmm.write_json_files.JSONFiles.write_var_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_var_json</span></code></a>(input_data[, is_input, json_path])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.write_json_files.JSONFiles.write_var_json" title="sasctl.pzmm.write_json_files.JSONFiles.write_var_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_var_json</span></code></a>(input_data[, is_input, json_path])</p></td>
 <td><p>Writes a variable descriptor JSON file for input or output variables, based on input data containing predictor and prediction columns.</p></td>
 </tr>
 </tbody>
@@ -682,7 +701,7 @@ dumps respectively.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.pzmm.write_json_files.JSONFiles.calculate_model_statistics">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_model_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.12)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.12)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.12)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/sasctl/pzmm/write_json_files.html#JSONFiles.calculate_model_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.write_json_files.JSONFiles.calculate_model_statistics" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_model_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.12)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.12)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.12)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'classification'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/sasctl/pzmm/write_json_files.html#JSONFiles.calculate_model_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.write_json_files.JSONFiles.calculate_model_statistics" title="Link to this definition">#</a></dt>
 <dd><p>Calculates fit statistics (including ROC and Lift curves) from datasets and then
 either writes them to JSON files or returns them as a single dictionary.</p>
 <p>Calculations are performed using a call to SAS CAS via the swat package. An
@@ -716,6 +735,9 @@ default value is 0.5.</p>
 <dt><strong>test_data</strong><span class="classifier">pandas.DataFrame, list of list, or numpy array, optional</span></dt><dd><p>Dataset pertaining to the test data. The default value is None.</p>
 </dd>
 <dt><strong>json_path</strong><span class="classifier">str or Path, optional</span></dt><dd><p>Location for the output JSON files. The default value is None.</p>
+</dd>
+<dt><strong>target_type: str, optional</strong></dt><dd><p>Type of target the model is trying to find. Currently supports “classification”
+and “prediction” types. The default value is “classification”.</p>
 </dd>
 </dl>
 </dd>
@@ -948,6 +970,23 @@ maxdiff_dfs: List[DataFrame]</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="sasctl.pzmm.write_json_files.JSONFiles.generate_misc">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_misc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/pzmm/write_json_files.html#JSONFiles.generate_misc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_misc" title="Link to this definition">#</a></dt>
+<dd><p>Generates the dmcas_relativeimportance.json file, which is used to determine variable importance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>conn</strong></dt><dd><p>A SWAT connection used to connect to the user’s CAS server</p>
+</dd>
+<dt><strong>model_files</strong><span class="classifier">string, Path, or dict</span></dt><dd><p>Either the directory location of the model files (string or Path object), or
+a dictionary containing the contents of all the model files.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="sasctl.pzmm.write_json_files.JSONFiles.generate_mlflow_variable_properties">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_mlflow_variable_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.12)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/sasctl/pzmm/write_json_files.html#JSONFiles.generate_mlflow_variable_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_mlflow_variable_properties" title="Link to this definition">#</a></dt>
 <dd><p>Create a list of dictionaries containing the variable properties found in the
@@ -962,6 +1001,113 @@ MLModel file for MLFlow model runs.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>dict_list</strong><span class="classifier">list of dict</span></dt><dd><p>List of dictionaries containing the variable properties.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sasctl.pzmm.write_json_files.JSONFiles.generate_model_card">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_model_card</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_predictions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'classificaiton'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_statistic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cas-shared-default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caslib</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Public'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/pzmm/write_json_files.html#JSONFiles.generate_model_card"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_model_card" title="Link to this definition">#</a></dt>
+<dd><p>Generates everything required for the model card feature within SAS Model Manager.</p>
+<p>This includes uploading the training data to CAS, updating ModelProperties.json to have
+some extra properties, and generating dmcas_relativeimportance.json.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model_prefix</strong><span class="classifier">string</span></dt><dd><p>The prefix used to name files relating to the model. This is used to provide a unique
+name to the training data table when it is uploaded to CAS.</p>
+</dd>
+<dt><strong>model_files</strong><span class="classifier">string, Path, or dict</span></dt><dd><p>Either the directory location of the model files (string or Path object), or
+a dictionary containing the contents of all the model files.</p>
+</dd>
+<dt><strong>algorithm</strong><span class="classifier">str</span></dt><dd><p>The name of the algorithm used to generate the model.</p>
+</dd>
+<dt><strong>train_data: pandas.DataFrame</strong></dt><dd><p>Training data that contains all input variables as well as the target variable.</p>
+</dd>
+<dt><strong>train_predictions</strong><span class="classifier">pandas.Series, list</span></dt><dd><p>List of predictions made by the model on the training data.</p>
+</dd>
+<dt><strong>target_type</strong><span class="classifier">string</span></dt><dd><p>Type of target the model is trying to find. Currently supports “classification” and “prediction” types.
+The default value is “classification”.</p>
+</dd>
+<dt><strong>target_value</strong><span class="classifier">string, int, float, optional</span></dt><dd><p>Value the model is targeting for classification models. This argument is not needed for
+prediction models. The default value is None.</p>
+</dd>
+<dt><strong>interval_vars</strong><span class="classifier">list, optional</span></dt><dd><p>A list of interval variables. The default value is an empty list.</p>
+</dd>
+<dt><strong>class_vars</strong><span class="classifier">list, optional</span></dt><dd><p>A list of classification variables. The default value is an empty list.</p>
+</dd>
+<dt><strong>selection_statistic: str, optional</strong></dt><dd><p>The selection statistic chosen to score the model against other models. Classification
+models can take any of the following values: “_RASE_”, “_GINI_”, “_GAMMA_”, “_MCE_”,
+“_ASE_”, “_MCLL_”, “_KS_”, “_KSPostCutoff_”, “_DIV_”, “_TAU_”, “_KSCut_”, or “_C_”.
+Prediction models can take any of the following values: “_ASE_”, “_DIV_”, “_RASE_”, “_MAE_”,
+“_RMAE_”, “_MSLE_”, “_RMSLE_” The default value is “_KS_” for classification models and
+“_ASE_” for prediction models.</p>
+</dd>
+<dt><strong>server: str, optional</strong></dt><dd><p>The CAS server the training data will be stored on. The default value is “cas-shared-default”</p>
+</dd>
+<dt><strong>caslib: str, optional</strong></dt><dd><p>The caslib the training data will be stored on. The default value is “Public”</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sasctl.pzmm.write_json_files.JSONFiles.generate_outcome_average">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_outcome_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/pzmm/write_json_files.html#JSONFiles.generate_outcome_average"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_outcome_average" title="Link to this definition">#</a></dt>
+<dd><p>Generates the outcome average of the training data. For prediction targets, the event average
+is generated. For Classification targets, the event percentage is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>train_data: pandas.DataFrame</strong></dt><dd><p>Training data that contains all input variables as well as the target variable. If multiple
+non-input variables are included, the function will assume that the first non-input variable row
+is the output.</p>
+</dd>
+<dt><strong>input_variables: list</strong></dt><dd><p>A list of all input variables used by the model. Used to isolate the output variable.</p>
+</dd>
+<dt><strong>target_type</strong><span class="classifier">string</span></dt><dd><p>Type the model is targeting. Currently supports “classification” and “prediction” types.</p>
+</dd>
+<dt><strong>target_value</strong><span class="classifier">string, int, float, optional</span></dt><dd><p>Value the model is targeting for Classification models. This argument is not needed for
+prediction models. The default value is None.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>dict</dt><dd></dd>
+<dt>Returns a dictionary with a key value pair that represents the outcome average.</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sasctl.pzmm.write_json_files.JSONFiles.generate_variable_importance">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_variable_importance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_predictions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'classification'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caslib</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Public'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/pzmm/write_json_files.html#JSONFiles.generate_variable_importance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_variable_importance" title="Link to this definition">#</a></dt>
+<dd><p>Generates the dmcas_relativeimportance.json file, which is used to determine variable importance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>conn</strong></dt><dd><p>A SWAT connection used to connect to the user’s CAS server</p>
+</dd>
+<dt><strong>model_files</strong><span class="classifier">string, Path, or dict</span></dt><dd><p>Either the directory location of the model files (string or Path object), or
+a dictionary containing the contents of all the model files.</p>
+</dd>
+<dt><strong>train_data: pandas.DataFrame</strong></dt><dd><p>Training data that contains all input variables as well as the target variable.</p>
+</dd>
+<dt><strong>train_predictions</strong><span class="classifier">pandas.Series, list</span></dt><dd><p>List of predictions made by the model on the training data.</p>
+</dd>
+<dt><strong>target_type</strong><span class="classifier">string, optional</span></dt><dd><p>Type the model is targeting. Currently supports “classification” and “prediction” types.
+The default value is “classification”.</p>
+</dd>
+<dt><strong>interval_vars</strong><span class="classifier">list, optional</span></dt><dd><p>A list of interval variables. The default value is an empty list.</p>
+</dd>
+<dt><strong>class_vars</strong><span class="classifier">list, optional</span></dt><dd><p>A list of classification variables. The default value is an empty list.</p>
+</dd>
+<dt><strong>caslib: str, optional</strong></dt><dd><p>The caslib the training data will be stored on. The default value is “Public”</p>
 </dd>
 </dl>
 </dd>
@@ -1102,6 +1248,32 @@ working directory.</p>
 <dd class="field-even"><dl class="simple">
 <dt>list of Path</dt><dd><p>A list of pickle files.</p>
 </dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sasctl.pzmm.write_json_files.JSONFiles.get_selection_statistic_value">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_selection_statistic_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_statistic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'_GINI_'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/pzmm/write_json_files.html#JSONFiles.get_selection_statistic_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.write_json_files.JSONFiles.get_selection_statistic_value" title="Link to this definition">#</a></dt>
+<dd><p>Finds the value of the chosen selection statistic in dmcas_fitstat.json, which should have been
+generated before this function has been called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model_files</strong><span class="classifier">string, Path, or dict</span></dt><dd><p>Either the directory location of the model files (string or Path object), or
+a dictionary containing the contents of all the model files.</p>
+</dd>
+<dt><strong>selection_statistic: str, optional</strong></dt><dd><p>The selection statistic chosen to score the model against other models. Can be any of the
+following values: “_RASE_”, “_NObs_”, “_GINI_”, “_GAMMA_”, “_MCE_”, “_ASE_”, “_MCLL_”,
+“_KS_”, “_KSPostCutoff_”, “_DIV_”, “_TAU_”, “_KSCut_”, or “_C_”. The default value is “_GINI_”.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>float</dt><dd></dd>
+<dt>Returns the numerical value assoicated with the chosen selection statistic.</dt><dd></dd>
 </dl>
 </dd>
 </dl>
@@ -1269,6 +1441,53 @@ larger than 512 characters.</p>
 <dd class="field-even"><dl class="simple">
 <dt><strong>prop</strong><span class="classifier">dict</span></dt><dd><p>Key-value pair, which was truncated as needed by SAS Model Manager.</p>
 </dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sasctl.pzmm.write_json_files.JSONFiles.update_model_properties">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_model_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/pzmm/write_json_files.html#JSONFiles.update_model_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.write_json_files.JSONFiles.update_model_properties" title="Link to this definition">#</a></dt>
+<dd><p>Updates the ModelProperties.json file to include properties listed in the update_dict dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model_files</strong><span class="classifier">string, Path, or dict</span></dt><dd><p>Either the directory location of the model files (string or Path object), or
+a dictionary containing the contents of all the model files.</p>
+</dd>
+<dt><strong>update_dict</strong><span class="classifier">dictionary</span></dt><dd><p>A dictionary containing the key-value pairs that represent properties to be added
+to the ModelProperties.json file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sasctl.pzmm.write_json_files.JSONFiles.upload_training_data">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upload_training_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cas-shared-default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caslib</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Public'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/pzmm/write_json_files.html#JSONFiles.upload_training_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.write_json_files.JSONFiles.upload_training_data" title="Link to this definition">#</a></dt>
+<dd><p>Uploads training data to CAS server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>conn</strong></dt><dd><p>SWAT connection. Used to connect to CAS server.</p>
+</dd>
+<dt><strong>model_prefix</strong><span class="classifier">string</span></dt><dd><p>The prefix used to name files relating to the model. This is used to provide a unique
+name to the training data table when it is uploaded to CAS.</p>
+</dd>
+<dt><strong>train_data: pandas.DataFrame</strong></dt><dd><p>Training data that contains all input variables as well as the target variable.</p>
+</dd>
+<dt><strong>server: str, optional</strong></dt><dd><p>The CAS server the training data will be stored on. The default value is “cas-shared-default”</p>
+</dd>
+<dt><strong>caslib: str, optional</strong></dt><dd><p>The caslib the training data will be stored on. The default value is “Public”</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>string</dt><dd></dd>
+<dt>Returns a string that represents the location of the training table within CAS.</dt><dd></dd>
 </dl>
 </dd>
 </dl>
@@ -1471,7 +1690,7 @@ implement default like this:</p>
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="pickle_model.html"
@@ -1500,11 +1719,14 @@ implement default like this:</p>
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
   <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc">
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles"><code class="docutils literal notranslate"><span class="pre">JSONFiles</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.add_df_to_fitstat"><code class="docutils literal notranslate"><span class="pre">JSONFiles.add_df_to_fitstat()</span></code></a></li>
@@ -1521,19 +1743,26 @@ implement default like this:</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.format_group_metrics"><code class="docutils literal notranslate"><span class="pre">JSONFiles.format_group_metrics()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.format_max_differences"><code class="docutils literal notranslate"><span class="pre">JSONFiles.format_max_differences()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.format_parameter"><code class="docutils literal notranslate"><span class="pre">JSONFiles.format_parameter()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_misc"><code class="docutils literal notranslate"><span class="pre">JSONFiles.generate_misc()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_mlflow_variable_properties"><code class="docutils literal notranslate"><span class="pre">JSONFiles.generate_mlflow_variable_properties()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_model_card"><code class="docutils literal notranslate"><span class="pre">JSONFiles.generate_model_card()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_outcome_average"><code class="docutils literal notranslate"><span class="pre">JSONFiles.generate_outcome_average()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_variable_importance"><code class="docutils literal notranslate"><span class="pre">JSONFiles.generate_variable_importance()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.generate_variable_properties"><code class="docutils literal notranslate"><span class="pre">JSONFiles.generate_variable_properties()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.get_code_dependencies"><code class="docutils literal notranslate"><span class="pre">JSONFiles.get_code_dependencies()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.get_local_package_version"><code class="docutils literal notranslate"><span class="pre">JSONFiles.get_local_package_version()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.get_package_names"><code class="docutils literal notranslate"><span class="pre">JSONFiles.get_package_names()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.get_pickle_dependencies"><code class="docutils literal notranslate"><span class="pre">JSONFiles.get_pickle_dependencies()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.get_pickle_file"><code class="docutils literal notranslate"><span class="pre">JSONFiles.get_pickle_file()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.get_selection_statistic_value"><code class="docutils literal notranslate"><span class="pre">JSONFiles.get_selection_statistic_value()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.input_fit_statistics"><code class="docutils literal notranslate"><span class="pre">JSONFiles.input_fit_statistics()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.notebook_output"><code class="docutils literal notranslate"><span class="pre">JSONFiles.notebook_output</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.read_json_file"><code class="docutils literal notranslate"><span class="pre">JSONFiles.read_json_file()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.remove_standard_library_packages"><code class="docutils literal notranslate"><span class="pre">JSONFiles.remove_standard_library_packages()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.stat_dataset_to_dataframe"><code class="docutils literal notranslate"><span class="pre">JSONFiles.stat_dataset_to_dataframe()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.truncate_properties"><code class="docutils literal notranslate"><span class="pre">JSONFiles.truncate_properties()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.update_model_properties"><code class="docutils literal notranslate"><span class="pre">JSONFiles.update_model_properties()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.upload_training_data"><code class="docutils literal notranslate"><span class="pre">JSONFiles.upload_training_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.user_input_fitstat"><code class="docutils literal notranslate"><span class="pre">JSONFiles.user_input_fitstat()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.valid_params"><code class="docutils literal notranslate"><span class="pre">JSONFiles.valid_params</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.pzmm.write_json_files.JSONFiles.write_file_metadata_json"><code class="docutils literal notranslate"><span class="pre">JSONFiles.write_file_metadata_json()</span></code></a></li>
@@ -1561,8 +1790,8 @@ implement default like this:</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1570,6 +1799,7 @@ implement default like this:</p>
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="copyright">
     
       © Copyright Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
@@ -1579,6 +1809,7 @@ implement default like this:</p>
 </div>
       
         <div class="footer-item">
+
   <p class="sphinx-version">
     Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
@@ -1591,8 +1822,9 @@ implement default like this:</p>
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.2.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
 </p></div>
       
     </div>
