@@ -5,6 +5,17 @@ Unreleased
  - Add `model_info` class to better capture model information.
  - Test `/examples` Jupyter notebooks within normal test suite.
 
+v1.10.2 (2024-04-10)
+----------
+**Improvements**
+- Introduced `generate_model_card` into `write_json_files.py` to allow for python models to work with planned model card tab in SAS Model Manager.
+
+**Bugfixes**
+- Allow for score code to impute NaN values in tables that have been loaded into SAS Model Manager.
+- Fix issue where target_value was not being properly set during score code generation
+- Updated `pzmm_generate_requrirements_json.ipynb` so the requirements file is generated properly.
+- Added missing statistics to `dmcas_fitstat.json` file.
+
 v1.10.1 (2023-08-24)
 ----------
 **Improvements**
