@@ -488,7 +488,6 @@ binary_string = "<binary string>"
 model = pickle.load(codecs.decode(binary_string.encode(), "base64"))
             """
 
-
     @classmethod
     def _viya35_model_load(
         cls,
