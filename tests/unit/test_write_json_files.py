@@ -46,8 +46,10 @@ input_dict = [
     {"name": "REASON_HomeImp", "type": "integer"},
 ]
 
+
 class BadModel:
     attr = None
+
 
 @pytest.fixture
 def bad_model():
@@ -77,6 +79,7 @@ def sklearn_model(train_data):
         )
         model.fit(X, y)
     return model
+
 
 @pytest.fixture
 def change_dir():
@@ -711,9 +714,7 @@ def test_create_requirements_json(change_dir):
             },
         ]
         unittest.TestCase.maxDiff = None
-        unittest.TestCase().assertCountEqual(
-            json_dict, expected
-        )
+        unittest.TestCase().assertCountEqual(json_dict, expected)
 
 
 class TestAssessBiasHelpers(unittest.TestCase):
@@ -887,15 +888,16 @@ class TestAssessBias(unittest.TestCase):
 class TestModelCardGeneration(unittest.TestCase):
     def test_generate_outcome_average_interval(self):
         df = pd.DataFrame({"input": [3, 2, 1], "output": [1, 2, 3]})
-        assert (
-            jf.generate_outcome_average(df, ["input"], "prediction") ==
-            {'eventAverage': 2.0}
-        )
+        assert jf.generate_outcome_average(df, ["input"], "prediction") == {
+            "eventAverage": 2.0
+        }
 
     def test_generate_outcome_average_classification(self):
         df = pd.DataFrame({"input": [3, 2], "output": [0, 1]})
-        event_percentage = jf.generate_outcome_average(df, ["input"], "classification", 1)
-        assert('eventPercentage' in event_percentage)
+        event_percentage = jf.generate_outcome_average(
+            df, ["input"], "classification", 1
+        )
+        assert "eventPercentage" in event_percentage
 
     def test_generate_outcome_average_interval_non_numeric_output(self):
         df = pd.DataFrame({"input": [3, 2, 1], "output": ["one", "two", "three"]})
@@ -912,7 +914,7 @@ class TestGetSelectionStatisticValue(unittest.TestCase):
                         "_GINI_": 1,
                         "_C_": 2,
                         "_TAU_": None,
-                        "_DataRole_": "TRAIN"
+                        "_DataRole_": "TRAIN",
                     }
                 }
             ]
@@ -920,15 +922,17 @@ class TestGetSelectionStatisticValue(unittest.TestCase):
     }
     tmp_dir = tempfile.TemporaryDirectory()
     with open(Path(tmp_dir.name) / "dmcas_fitstat.json", "w+") as f:
-        f.write(json.dumps(model_file_dict['dmcas_fitstat.json']))
+        f.write(json.dumps(model_file_dict["dmcas_fitstat.json"]))
 
     def test_get_statistic_dict_default(self):
         selection_statistic = jf.get_selection_statistic_value(self.model_file_dict)
-        assert(selection_statistic == 1)
+        assert selection_statistic == 1
 
     def test_get_statistic_dict_custom(self):
-        selection_statistic = jf.get_selection_statistic_value(self.model_file_dict, "_C_")
-        assert(selection_statistic == 2)
+        selection_statistic = jf.get_selection_statistic_value(
+            self.model_file_dict, "_C_"
+        )
+        assert selection_statistic == 2
 
     def test_get_blank_statistic_dict(self):
         with pytest.raises(RuntimeError):
@@ -936,11 +940,13 @@ class TestGetSelectionStatisticValue(unittest.TestCase):
 
     def test_get_statistics_path_default(self):
         selection_statistic = jf.get_selection_statistic_value(Path(self.tmp_dir.name))
-        assert(selection_statistic == 1)
+        assert selection_statistic == 1
 
     def test_get_statistics_path_custom(self):
-        selection_statistic = jf.get_selection_statistic_value(Path(self.tmp_dir.name), "_C_")
-        assert(selection_statistic == 2)
+        selection_statistic = jf.get_selection_statistic_value(
+            Path(self.tmp_dir.name), "_C_"
+        )
+        assert selection_statistic == 2
 
     def test_get_blank_statistic_path(self):
         with pytest.raises(RuntimeError):
@@ -948,11 +954,11 @@ class TestGetSelectionStatisticValue(unittest.TestCase):
 
     def test_get_statistics_str_default(self):
         selection_statistic = jf.get_selection_statistic_value(self.tmp_dir.name)
-        assert (selection_statistic == 1)
+        assert selection_statistic == 1
 
     def test_get_statistics_str_custom(self):
         selection_statistic = jf.get_selection_statistic_value(self.tmp_dir.name, "_C_")
-        assert (selection_statistic == 2)
+        assert selection_statistic == 2
 
     def test_get_blank_statistic_str(self):
         with pytest.raises(RuntimeError):
@@ -961,69 +967,66 @@ class TestGetSelectionStatisticValue(unittest.TestCase):
 
 class TestUpdateModelProperties(unittest.TestCase):
     def setUp(self):
-        self.model_file_dict = {
-            "ModelProperties.json":
-                {
-                    "example": "property"
-                }
-        }
+        self.model_file_dict = {"ModelProperties.json": {"example": "property"}}
         self.tmp_dir = tempfile.TemporaryDirectory()
         with open(Path(self.tmp_dir.name) / "ModelProperties.json", "w+") as f:
-            f.write(json.dumps(self.model_file_dict['ModelProperties.json']))
+            f.write(json.dumps(self.model_file_dict["ModelProperties.json"]))
 
     def tearDown(self):
         self.tmp_dir.cleanup()
 
     def test_update_model_properties_dict(self):
-        update_dict = {'new': 'arg', 'newer': 'thing'}
+        update_dict = {"new": "arg", "newer": "thing"}
         jf.update_model_properties(self.model_file_dict, update_dict)
-        assert(self.model_file_dict['ModelProperties.json']['example'] == 'property')
-        assert(self.model_file_dict['ModelProperties.json']['new'] == 'arg')
-        assert(self.model_file_dict['ModelProperties.json']['newer'] == 'thing')
+        assert self.model_file_dict["ModelProperties.json"]["example"] == "property"
+        assert self.model_file_dict["ModelProperties.json"]["new"] == "arg"
+        assert self.model_file_dict["ModelProperties.json"]["newer"] == "thing"
 
     def test_update_model_properties_dict_overwrite(self):
-        update_dict = {'new': 'arg', 'example': 'thing'}
+        update_dict = {"new": "arg", "example": "thing"}
         jf.update_model_properties(self.model_file_dict, update_dict)
-        assert (self.model_file_dict['ModelProperties.json']['example'] == 'thing')
-        assert (self.model_file_dict['ModelProperties.json']['new'] == 'arg')
+        assert self.model_file_dict["ModelProperties.json"]["example"] == "thing"
+        assert self.model_file_dict["ModelProperties.json"]["new"] == "arg"
 
     def test_update_model_properties_dict_number(self):
         update_dict = {"number": 1}
         jf.update_model_properties(self.model_file_dict, update_dict)
-        assert (self.model_file_dict['ModelProperties.json']['number'] == '1')
+        assert self.model_file_dict["ModelProperties.json"]["number"] == "1"
 
     def test_update_model_properties_dict_round_number(self):
-        update_dict = {'number': 0.123456789012345}
+        update_dict = {"number": 0.123456789012345}
         jf.update_model_properties(self.model_file_dict, update_dict)
-        assert (self.model_file_dict['ModelProperties.json']['number'] == '0.12345678901234')
+        assert (
+            self.model_file_dict["ModelProperties.json"]["number"] == "0.12345678901234"
+        )
 
     def test_update_model_properties_str(self):
-        update_dict = {'new': 'arg', 'newer': 'thing'}
+        update_dict = {"new": "arg", "newer": "thing"}
         jf.update_model_properties(self.tmp_dir.name, update_dict)
-        with open(Path(self.tmp_dir.name) / 'ModelProperties.json', 'r') as f:
+        with open(Path(self.tmp_dir.name) / "ModelProperties.json", "r") as f:
             model_properties = json.load(f)
-            assert(model_properties['example'] == 'property')
-            assert(model_properties['new'] == 'arg')
-            assert(model_properties['newer'] == 'thing')
+            assert model_properties["example"] == "property"
+            assert model_properties["new"] == "arg"
+            assert model_properties["newer"] == "thing"
 
     def test_update_model_properties_str_overwrite(self):
-        update_dict = {'new': 'arg', 'example': 'thing'}
+        update_dict = {"new": "arg", "example": "thing"}
         jf.update_model_properties(self.tmp_dir.name, update_dict)
-        with open(Path(self.tmp_dir.name) / 'ModelProperties.json', 'r') as f:
+        with open(Path(self.tmp_dir.name) / "ModelProperties.json", "r") as f:
             model_properties = json.load(f)
-            assert (model_properties['example'] == 'thing')
-            assert (model_properties['new'] == 'arg')
+            assert model_properties["example"] == "thing"
+            assert model_properties["new"] == "arg"
 
     def test_update_model_properties_str_number(self):
         update_dict = {"number": 1}
         jf.update_model_properties(self.tmp_dir.name, update_dict)
-        with open(Path(self.tmp_dir.name) / 'ModelProperties.json', 'r') as f:
+        with open(Path(self.tmp_dir.name) / "ModelProperties.json", "r") as f:
             model_properties = json.load(f)
-            assert (model_properties['number'] == '1')
+            assert model_properties["number"] == "1"
 
     def test_update_model_properties_str_round_number(self):
-        update_dict = {'number': 0.123456789012345}
+        update_dict = {"number": 0.123456789012345}
         jf.update_model_properties(self.tmp_dir.name, update_dict)
-        with open(Path(self.tmp_dir.name) / 'ModelProperties.json', 'r') as f:
+        with open(Path(self.tmp_dir.name) / "ModelProperties.json", "r") as f:
             model_properties = json.load(f)
-            assert (model_properties['number'] == '0.12345678901234')
+            assert model_properties["number"] == "0.12345678901234"
