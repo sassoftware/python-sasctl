@@ -2366,7 +2366,7 @@ class JSONFiles:
         )
 
         # Generates dmcas_misc.json file
-        cls.generate_misc(conn, model_files)
+        cls.generate_misc(model_files)
 
     @staticmethod
     def upload_training_data(
