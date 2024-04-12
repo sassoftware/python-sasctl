@@ -327,6 +327,24 @@ class ImportModel:
                 )
                 if cls.notebook_output:
                     print(f"All model files were zipped to {Path(model_files)}.")
+            project_response = mr.get_project(project)
+            project = project_exists(
+                project,
+                project_response,
+                target_values,
+                model_files,
+                overwrite_project_properties,
+            )
+
+            # Check if model with same name already exists in project.
+            model_exists(
+                project, model_prefix, overwrite_model, version_name=project_version
+            )
+
+            model = mr.import_model_from_zip(
+                model_prefix, project, zip_io_file, version=project_version
+            )
+            return model, model_files
 
         # Import model without generating score code (SAS Viya version invariant)
         if input_data is None or not predict_method or not score_metrics:
