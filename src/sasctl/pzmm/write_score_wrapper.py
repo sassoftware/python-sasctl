@@ -20,8 +20,10 @@ class ScoreWrapper:
     @classmethod
     def write_score_wrapper_function_input(cls,
                                            imports: List[str],
-                                           function_definition: str,
-                                           function_body: str,
+                                           score_function_definition: str,
+                                           score_function_body: str,
+                                           score_function_exception_body:str,
+                                           items_to_return: str,
                                            model_load: str,
                                            model_name_with_file_extension: str,
                                            output_variables: List[str]):
@@ -51,22 +53,24 @@ class ScoreWrapper:
         cls.score_wrapper += f"with open(Path(settings.pickle_path) / '{model_name_with_file_extension}', 'rb') as f:\n\tmodel = {model_load}\n\n"
 
         # Define the score function and add the function body specified
-        cls.score_wrapper += f"{function_definition}:\n"
+        cls.score_wrapper += f"{score_function_definition}:\n"
         cls.score_wrapper += '\t"'
         cls.score_wrapper += "Output: " + ", ".join(output_variables)  # Join output variables with comma
         cls.score_wrapper += '"\n'
         cls.score_wrapper += "\tglobal model\n"
-        cls.score_wrapper += "\ttry:\n"
-        cls.score_wrapper += f"\t\t{function_body}\n"
-        cls.score_wrapper += "\texcept Exception as e:\n"
-        cls.score_wrapper += "\t\tprint(f'Error: {e}')\n"
-        cls.score_wrapper += "\t\treturn None\n"
-
-        # Validate syntax before returning
-        if not cls.validate_score_wrapper_syntax(cls.score_wrapper):
-            raise SyntaxError("Syntax error in generated code.")
+        cls.score_wrapper += "\ttry:"
+        cls.score_wrapper += f"\n{score_function_body}\n"
+        cls.score_wrapper += "\n\texcept Exception as e:\n"
+        cls.score_wrapper += f"\t\t{score_function_exception_body}\n"
+        cls.score_wrapper += f"\treturn {items_to_return}\n"
 
         return cls.score_wrapper
+
+        # # Validate syntax before returning
+        # if not cls.validate_score_wrapper_syntax(cls.score_wrapper):
+        #     raise SyntaxError("Syntax error in generated code.")
+
+        # return cls.score_wrapper
 
     @classmethod
     def write_score_wrapper_file_input(cls,
@@ -77,6 +81,8 @@ class ScoreWrapper:
                                        score_function_body: str,
                                        score_function_input_parameters: str,
                                        output_variables: List[str],
+                                       score_function_exception_body: str,
+                                       items_to_return: str,
                                        ):
         """
         Method to generate scoring code from a file and add it to cls.score_wrapper.
@@ -117,10 +123,8 @@ class ScoreWrapper:
         cls.score_wrapper += "\ttry:"
         cls.score_wrapper += f"\n{score_function_body}\n"
         cls.score_wrapper += "\n\texcept Exception as e:\n"
-        cls.score_wrapper += "\t\tprint(f'Error: {e}')\n"
-        cls.score_wrapper += "\t\treturn None\n"
-        # Need some kind of return value here
-        return cls.score_wrapper
+        cls.score_wrapper += f"\t\t{score_function_exception_body}\n"
+        cls.score_wrapper += f"\treturn {items_to_return}\n"
 
         # Validate Syntax before returning
         if not cls.validate_score_wrapper_syntax(cls.score_wrapper):
