@@ -5,6 +5,12 @@ Unreleased
  - Add `model_info` class to better capture model information.
  - Test `/examples` Jupyter notebooks within normal test suite.
 
+v1.10.3 (2024-04-12)
+----------
+**Bugfixes**
+- Updated all examples to use current versions of sasctl functions
+- Fixed bug in `generate_model_card` that threw an error when trying to generate the `dmcas_misc.json` file
+
 v1.10.2 (2024-04-10)
 ----------
 **Improvements**
