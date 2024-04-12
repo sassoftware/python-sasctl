@@ -351,9 +351,8 @@ class ImportModel:
             )
             return model, model_files
         elif score_wrapper:
-            warn (
-                "The user has made use of the score_wrapper argument, score code has already been generated and will not be generated again."
-            )
+            print("The user has made use of the score_wrapper argument, score code has already been generated and will not be generated again.")
+
             if isinstance(model_files, dict):
                 zip_io_file = zm.zip_files(model_files, model_prefix, is_viya4=False)
             else:
@@ -361,7 +360,7 @@ class ImportModel:
                     Path(model_files), model_prefix, is_viya4=False
                 )
                 if cls.notebook_output:
-                    print(f"All model files were zipped tofdfffffffffffff {Path(model_files)}.")
+                    print(f"All model files were zipped to {Path(model_files)}.")
 
             project_response = mr.get_project(project)
             project = project_exists(
