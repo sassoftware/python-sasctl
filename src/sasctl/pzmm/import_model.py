@@ -315,7 +315,7 @@ class ImportModel:
         if mlflow_details:
             pickle_type = mlflow_details["serialization_format"]
 
-        if input_data is score_wrapper:
+        if score_wrapper is True:
             warn (
                 "The user has made use of the score_wrapper argument, score code has already been generated and will not be generated again."
             )
