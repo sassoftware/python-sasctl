@@ -320,10 +320,10 @@ class ImportModel:
                 "The user has made use of the score_wrapper argument, score code has already been generated and will not be generated again."
             )
             if isinstance(model_files, dict):
-                zip_io_file = zm.zip_files(model_files, model_prefix, is_viya4=True)
+                zip_io_file = zm.zip_files(model_files, model_prefix, is_viya4=False)
             else:
                 zip_io_file = zm.zip_files(
-                    Path(model_files), model_prefix, is_viya4=True
+                    Path(model_files), model_prefix, is_viya4=False
                 )
                 if cls.notebook_output:
                     print(f"All model files were zipped to {Path(model_files)}.")
