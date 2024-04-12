@@ -361,7 +361,7 @@ class ImportModel:
                     Path(model_files), model_prefix, is_viya4=False
                 )
                 if cls.notebook_output:
-                    print(f"All model files were zipped to {Path(model_files)}.")
+                    print(f"All model files were zipped tofdfffffffffffff {Path(model_files)}.")
 
             project_response = mr.get_project(project)
             project = project_exists(
