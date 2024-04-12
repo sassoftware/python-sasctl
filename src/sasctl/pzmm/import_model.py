@@ -315,37 +315,6 @@ class ImportModel:
         if mlflow_details:
             pickle_type = mlflow_details["serialization_format"]
 
-        if score_wrapper is True:
-            warn (
-                "The user has made use of the score_wrapper argument, score code has already been generated and will not be generated again."
-            )
-            if isinstance(model_files, dict):
-                zip_io_file = zm.zip_files(model_files, model_prefix, is_viya4=False)
-            else:
-                zip_io_file = zm.zip_files(
-                    Path(model_files), model_prefix, is_viya4=False
-                )
-                if cls.notebook_output:
-                    print(f"All model files were zipped to {Path(model_files)}.")
-            project_response = mr.get_project(project)
-            project = project_exists(
-                project,
-                project_response,
-                target_values,
-                model_files,
-                overwrite_project_properties,
-            )
-
-            # Check if model with same name already exists in project.
-            model_exists(
-                project, model_prefix, overwrite_model, version_name=project_version
-            )
-
-            model = mr.import_model_from_zip(
-                model_prefix, project, zip_io_file, version=project_version
-            )
-            return model, model_files
-
         # Import model without generating score code (SAS Viya version invariant)
         if input_data is None or not predict_method or not score_metrics:
             warn(
@@ -381,6 +350,39 @@ class ImportModel:
                 model_prefix, project, zip_io_file, version=project_version
             )
             return model, model_files
+        elif score_wrapper:
+            warn (
+                "The user has made use of the score_wrapper argument, score code has already been generated and will not be generated again."
+            )
+            if isinstance(model_files, dict):
+                zip_io_file = zm.zip_files(model_files, model_prefix, is_viya4=False)
+            else:
+                zip_io_file = zm.zip_files(
+                    Path(model_files), model_prefix, is_viya4=False
+                )
+                if cls.notebook_output:
+                    print(f"All model files were zipped to {Path(model_files)}.")
+
+            project_response = mr.get_project(project)
+            project = project_exists(
+                project,
+                project_response,
+                target_values,
+                model_files,
+                overwrite_project_properties,
+            )
+
+            # Check if model with same name already exists in project.
+            model_exists(
+                project, model_prefix, overwrite_model, version_name=project_version
+            )
+
+            model = mr.import_model_from_zip(
+                model_prefix, project, zip_io_file, version=project_version
+            )
+
+            return model, model_files
+
         # For SAS Viya 4, the score code can be written beforehand and imported with
         # all the model files
         elif current_session().version_info() == 4:
