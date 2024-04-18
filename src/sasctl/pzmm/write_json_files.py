@@ -2775,7 +2775,7 @@ class JSONFiles:
                         "dataMap": {
                             "CorrectText": c_text,
                             "Outcome": o_val,
-                            "_Count_": c_val,
+                            "_Count_": f"{c_val}",
                             "_DataRole_": roc_data["_DataRole_"],
                             "_cutoffSource_": "Default",
                             "_cutoff_": "0.5",
