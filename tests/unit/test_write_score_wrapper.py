@@ -33,6 +33,6 @@ class TestScoreWrapper(unittest.TestCase):
         code = 'def score_function():\n\tprint("Scoring")\n\tresult = model.predict(data)\n\treturn result\n'
         #send through validate score_wrapper_syntax
         result = pzmm.ScoreWrapper.validate_score_wrapper_syntax(code)
-        #assert true
+        #assert
         self.assertTrue(result)
 
