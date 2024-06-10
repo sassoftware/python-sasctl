@@ -476,7 +476,6 @@ import tensorflow as tf
 
             """
 
-
     @classmethod
     def _viya35_model_load(
         cls,
