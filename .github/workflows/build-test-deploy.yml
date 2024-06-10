@@ -21,8 +21,13 @@ jobs:
       LANG: en_US.UTF-8
     strategy:
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
         os-version: ['ubuntu-20.04', 'windows-latest', 'macos-latest']
+        exclude:
+          - python-version: '3.6'
+            os-version: 'macos-latest'
+          - python-version: '3.7'
+            os-version: 'macos-latest'
 # Pinned Ubuntu version to 20.04 since no Python 3.6 builds available on ubuntu-latest (22.04) as of 2022-12-7.
 #        os-version: [ubuntu-latest, windows-latest, macos-latest]
 
