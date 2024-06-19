@@ -42,4 +42,4 @@ def score_definition(score_def_name: str,  model_id: str, table_name: str = "", 
         model_project_id = model.json()["projectId"]
         
     except:
-        print("This model may not exist in a project.") #tested -> should also catch if model just doesn't exist
+        print("This model may not exist in a project.")
