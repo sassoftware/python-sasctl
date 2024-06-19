@@ -62,3 +62,29 @@ def score_definition(score_def_name: str,  model_id: str, table_name: str, descr
             table = sess.get(f"casManagement/servers/{server_name}/caslibs/{library_name}/tables/{table_name}")
     except:
         print("Table GET API call successful due to no 'httpStatusCode' key.")
+    
+    save_score_def = {"name": score_def_name,
+                "description": description,
+                "objectDescriptor":{"uri":f"/modelManagement/models/{model_id}",
+                                    "name":f"{model_name}({model_version})",
+                                    "type":"sas.models.model"}, 
+                "inputData":{"type":"CASTable",
+                             "serverName":server_name,
+                             "libraryName":library_name,
+                             "tableName":table_name},
+                "properties":{"tableBaseName":"",
+                              "modelOrigUri":f"/modelRepository/models/{model_id}",
+                              "projectUri":f"/modelRepository/projects/{model_project_id}",
+                              "projectVersionUri": f"/modelRepository/projects/{model_project_id}/projectVersions/{model_project_version_id}",
+                              "publishDestination":"",
+                              "versionedModel": f"{model_name}({model_version})"},
+                "mappings": inputMapping} # Getting the input variables from the model that eventually have to be mapped to the input table created/retrieved from CAS Management
+                                        #Array of mappings between Score Object variables and Input Data columns.
+    
+    headers_score_def = {
+    'Content-Type': "application/json"
+    }
+
+    new_score_def = sess.post("scoreDefinitions/definitions", data=json.dumps(save_score_def), headers=headers_score_def)
+
+    return new_score_def
