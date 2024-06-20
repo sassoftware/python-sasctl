@@ -1,4 +1,5 @@
 import requests
+import sys
 
 from pathlib import Path
 import json
@@ -7,9 +8,6 @@ from typing import Union
 from sasctl import Session
 from sasctl._services.cas_management import CASManagement as cas
 
-DEFAULT_SERVER = "cas-shared-default"
-DEFAULT_CASUSER = "Public"
-DEFAULT_TABLE = ""
 
 def score_definition(score_def_name: str,  model_id: str, table_name: str, description:str = "", server_name: str = "cas-shared-default", library_name: str = "Public", model_version: str = "latest"):
     """Creates the score definition service.
@@ -44,7 +42,7 @@ def score_definition(score_def_name: str,  model_id: str, table_name: str, descr
         model_name = model.json()["name"]
         
     except:
-        print("This model may not exist in a project or the model may not exist at all.")
+        sys.exit("This model may not exist in a project or the model may not exist at all.")
     # Checking if the model exists and if it's in a project
     
     try:
