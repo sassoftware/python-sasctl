@@ -84,6 +84,11 @@ class ScoreDefinitions(Service):
             cls._cas_management.upload_file(str(table_file), table_name) #do I need to add a check if the file doesn't exist or does upload_file take care of that?
             table = cls._cas_management.get_table(server_name, library_name, table_name)
             # Checks if the inputted table exists, and if not, uploads a file to create a new table
+        try:
+            table.raise_for_status()
+        except requests.exceptions.HTTPError as error:
+            print(f"HTTP Error: {error}") 
+            raise Exception("Something went wrong when creating a table. Check to see if the file path inputted exists.")
 
         save_score_def = {"name": score_def_name,
                     "description": description,
