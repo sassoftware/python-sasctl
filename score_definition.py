@@ -5,7 +5,7 @@ from pathlib import Path
 import json
 from typing import Union
 
-from sasctl import Session
+from ..core import current_session, delete, get, sasctl_command
 from .cas_management import CASManagement
 from .model_repository import ModelRepository as mr
 from .service import Service
@@ -20,6 +20,7 @@ class ScoreDefinitions(Service):
     See Also
     --------
     `REST Documentation <https://developers.sas.com/rest-apis/scoreDefinitions-v3>`
+    
     """
     
     _SERVICE_ROOT = "/scoreDefinitions"

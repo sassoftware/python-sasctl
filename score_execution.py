@@ -4,8 +4,8 @@ from pathlib import Path
 import json
 from typing import Union
 
-from sasctl import Session
-#from sasctl._services.cas_management import CASManagement as cas
+#from sasctl import Session
+from ..core import current_session, delete, get, sasctl_command
 from .score_definition import ScoreDefinitions as sd
 from .service import Service
 
@@ -17,6 +17,7 @@ class ScoreExecutions(Service):
     See Also
     --------
     `REST Documentation <https://developers.sas.com/rest-apis/scoreExecution-v2>`
+    
     """
     
     _SERVICE_ROOT = "/scoreExecution"
