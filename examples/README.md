@@ -37,9 +37,7 @@ Tasks and Services
 - [Modeling with Python & SAS AutoML](#modeling-with-python--sas-automl)
 - [Making direct REST API calls](#making-direct-rest-api-calls)
 
-- [Register an Azure OpenAI GPT model using REST API calls](#register-Azure-OpenAI-GPT-Model-REST-API-Calls)
-
-- Using Azure OpenAI GPT Models
+- [Register an Azure OpenAI GPT model using REST API calls](#register-an-azure-openai-gpt-model-using-rest-api-calls)
 
 ---
 Register binary classification models
@@ -98,11 +96,11 @@ Generates a requirements.json file which includes the minimal number of dependen
 
 Create and update custom model KPIs
 -----------------------------------
-Filename: [pzmm_custom_kpis.ipynb](pzmm_custom_kpis.ipynb)
+Filename: [pzmm_custom_kpis.ipynb](pzmm_custom_kpi_model_parameters.ipynb)
 
 Level: Intermediate
 
-Create and update custom model parameters and kpis on SAS Model Manager
+Create and update custom model parameters and kpis on SAS Model Manager.
 
 
 Register a SAS classification model
