@@ -355,17 +355,17 @@ class JSONFiles:
                 )
 
         if not target_values:
-            model_function = model_function if model_function else "Prediction"
+            model_function = model_function if model_function else "prediction"
             target_level = "Interval"
             target_event = ""
             event_prob_var = ""
         elif isinstance(target_values, list) and len(target_values) == 2:
-            model_function = model_function if model_function else "Classification"
+            model_function = model_function if model_function else "classification"
             target_level = "Binary"
             target_event = str(target_values[0])
             event_prob_var = f"P_{target_values[0]}"
         elif isinstance(target_values, list) and len(target_values) > 2:
-            model_function = model_function if model_function else "Classification"
+            model_function = model_function if model_function else "classification"
             target_level = "Nominal"
             target_event = ""
             event_prob_var = ""
@@ -2410,7 +2410,7 @@ class JSONFiles:
                 "either delete/rename the old table or give a new name to the current table."
             )
 
-        return server + "/" + caslib + "/" + train_data_name
+        return server + "/" + caslib + "/" + train_data_name.upper()
 
     @staticmethod
     def generate_outcome_average(
@@ -2730,7 +2730,7 @@ class JSONFiles:
     @classmethod
     def generate_misc(cls, model_files: Union[str, Path, dict]):
         """
-        Generates the dmcas_relativeimportance.json file, which is used to determine variable importance
+        Generates the dmcas_misc.json file, which is used to determine variable importance
 
         Parameters
         ----------
