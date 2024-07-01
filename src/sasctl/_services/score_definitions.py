@@ -5,7 +5,7 @@ from pathlib import Path
 import json
 from typing import Union
 
-from sasctl import Session
+from ..core import current_session, delete, get, sasctl_command
 from .cas_management import CASManagement
 from .model_repository import ModelRepository as mr
 from .service import Service
@@ -19,7 +19,8 @@ class ScoreDefinitions(Service):
     
     See Also
     --------
-    `<add link here>`
+    `REST Documentation <https://developers.sas.com/rest-apis/scoreDefinitions-v3>`
+    
     """
     
     _SERVICE_ROOT = "/scoreDefinitions"
@@ -28,8 +29,8 @@ class ScoreDefinitions(Service):
     list_definitions, get_definition, update_definition, delete_definition = Service._crud_funcs(
         "/definitions", "definition")
     
-    # def create_score_definition()
-    def score_definition(cls, score_def_name: str,  model_id: str, table_name: str, description:str = "", server_name: str = "cas-shared-default", library_name: str = "Public", model_version: str = "latest"):
+    @classmethod
+    def create_score_definition(cls, score_def_name: str,  model_id: str, table_name: str, description:str = "", server_name: str = "cas-shared-default", library_name: str = "Public", model_version: str = "latest"):
         """Creates the score definition service.
         
         Parameters
@@ -62,7 +63,7 @@ class ScoreDefinitions(Service):
             model_name = model.json()["name"]
             
         except:
-            sys.exit("This model may not exist in a project or the model may not exist at all.")
+            raise Exception("This model may not exist in a project or the model may not exist at all.")
         # Checking if the model exists and if it's in a project
         
         try:
@@ -77,15 +78,18 @@ class ScoreDefinitions(Service):
     
         table = cls._cas_management.get_table(server_name, library_name, table_name)
         try:
-            table_status_code = table.json()['httpStatusCode']
-            if table_status_code == 404 or table_status_code == 400:
-                table_file = input("The inputted table does not exist. Enter the file path for the data in your table (CSV, XLS, XLSX, SAS7BDT or SASHDAT file).")
-                cls._cas_management.upload_file(str(table_file), table_name) #do I need to add a check if the file doesn't exist or does upload_file take care of that?
-                table = cls._cas_management.get_table(server_name, library_name, table_name)
-                # Checks if the inputted table exists, and if not, uploads a file to create a new table
-        except:
-            pass 
-            #The API call to get the table was successful, and therefore will not have an 'httpStatusCode' value. This 'pass' statement will allow the successful get API calls to proceed.
+            table.raise_for_status()
+        except requests.exceptions.HTTPError as error:
+            print(f"HTTP Error: {error}")
+            table_file = input("The inputted table does not exist. Enter the file path for the data in your table (CSV, XLS, XLSX, SAS7BDT or SASHDAT file).")
+            cls._cas_management.upload_file(str(table_file), table_name) #do I need to add a check if the file doesn't exist or does upload_file take care of that?
+            table = cls._cas_management.get_table(server_name, library_name, table_name)
+            # Checks if the inputted table exists, and if not, uploads a file to create a new table
+        try:
+            table.raise_for_status()
+        except requests.exceptions.HTTPError as error:
+            print(f"HTTP Error: {error}") 
+            raise Exception("Something went wrong when creating a table. Check to see if the file path inputted exists.")
 
         save_score_def = {"name": score_def_name,
                     "description": description,
