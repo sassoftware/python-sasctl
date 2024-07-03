@@ -7,7 +7,7 @@ from typing import Union
 
 from ..core import current_session, delete, get, sasctl_command
 from .cas_management import CASManagement
-from .model_repository import ModelRepository as mr
+from .model_repository import ModelRepository
 from .service import Service
 
 
@@ -25,6 +25,7 @@ class ScoreDefinitions(Service):
 
     _SERVICE_ROOT = "/scoreDefinitions"
     _cas_management = CASManagement()
+    _model_respository = ModelRepository()
 
     list_definitions, get_definition, update_definition, delete_definition = (
         Service._crud_funcs("/definitions", "definition")
@@ -67,7 +68,7 @@ class ScoreDefinitions(Service):
         """
 
         try:
-            model = mr.get_model(model_id)
+            model = cls._model_respository.get_model(model_id)
             model_project_id = model.json()["projectId"]
             model_project_version_id = model.json()["projectVersionId"]
             model_name = model.json()["name"]
