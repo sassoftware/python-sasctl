@@ -71,7 +71,7 @@ class ScoreExecution(Service):
         try:
             score_execution = cls.get(
                 f"/executions?filter=eq(scoreExecutionRequest.scoreDefinitionId,%27{score_definition_id}%27)"
-            )  # how to use crud functions on something with such a specifc filter -- You can't; this is as good as it gets -- Scott
+            ) 
             execution_count = score_execution.json()[
                 "count"
             ]  # Exception catch location

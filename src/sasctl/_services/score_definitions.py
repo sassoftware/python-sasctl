@@ -1,4 +1,5 @@
 import requests
+from requests import HTTPError
 import sys
 
 from pathlib import Path
@@ -73,9 +74,9 @@ class ScoreDefinitions(Service):
             model_project_version_id = model.json()["projectVersionId"]
             model_name = model.json()["name"]
 
-        except:
-            raise Exception(
-                "This model may not exist in a project or the model may not exist at all."
+        except KeyError:
+            raise HTTPError(
+                "This model may not exist in a project or the model may not exist at all. See error: " + model.json()
             )
         # Checking if the model exists and if it's in a project
 
