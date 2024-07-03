@@ -1,6 +1,4 @@
-from pathlib import Path
 import json
-from typing import Union
 
 from requests import HTTPError
 
@@ -54,7 +52,7 @@ class ScoreExecution(Service):
         RestObj
 
         """
-        
+
         # Gets information about the scoring object from the score definition and raises an exception if the score definition does not exist
         score_definition = sd.get_definition(score_definition_id)
         if score_definition.status_code >= 400:
@@ -63,25 +61,26 @@ class ScoreExecution(Service):
         model_uri = score_definition.json()["objectDescriptor"]["uri"]
         model_name = score_definition.json()["objectDescriptor"]["name"]
         model_input_library = score_definition.json()["inputData"]["libraryName"]
-        model_input_server = score_definition.json()["inputData"]["serverName"] # Will this value be used in the future? If not, remove? -- Scott
         model_table_name = score_definition.json()["inputData"]["tableName"]
-        
+
         # Defining a default output table name if none is provided
         if not output_table_name:
             output_table_name = f"{model_name}_{score_definition_id}"
-            
+
         # Deleting any score executions that are already executing the same score definition
         try:
-            score_execution = sd.get(
-                f"/scoreExecution/executions?filter=eq(scoreExecutionRequest.scoreDefinitionId,%27{score_definition_id}%27)"
+            score_execution = cls.get(
+                f"/executions?filter=eq(scoreExecutionRequest.scoreDefinitionId,%27{score_definition_id}%27)"
             )  # how to use crud functions on something with such a specifc filter -- You can't; this is as good as it gets -- Scott
-            execution_count = score_execution.json()["count"] # Exception catch location
+            execution_count = score_execution.json()[
+                "count"
+            ]  # Exception catch location
             if execution_count == 1:
                 execution_id = score_execution.json()["items"][0]["id"]
                 deleted_score_execution = cls.delete_execution(execution_id)
                 print(deleted_score_execution)
         except KeyError:
-            print("There may not be a score execution already running.")     
+            print("There may not be a score execution already running.")
 
         headers_score_exec = {"Content-Type": "application/json"}
 
