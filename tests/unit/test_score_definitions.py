@@ -32,6 +32,12 @@ def test_create_score_definition():
     - Valid input mapping?
         - yes 
         - no
+    -Valid table name?
+        -yes
+        -no
+    -Valid file?
+        -yes
+        -no
     """
     
     with mock.patch(
@@ -64,11 +70,23 @@ def test_create_score_definition():
                 get_model.return_value = RestObj()
                 with pytest.raises(
                     HTTPError
-                ):
+                ): #test tget_Table since we don't know what the return value is restobj
                     sd.create_score_definition(
                         score_def_name = "test_create_sd",
                         model_id = "12345",
                         table_name = "test_table",
                     )
-                    
+                #Test for invalid tableName
+
+                #Test for invalid score_definition json/post doesn't succeed
+
+                #Test for valid model id, with input mapping, get_table succeeded, and post succeeds
+
+                #Test for valid model id, with input mapping, get_table didn't succeed, post succeeds
+
+                #Test for valid model id, with input mapping, get_Table succeeds, post doesn't succeed
+
+                #Testing for valid model id, no input, no get_Table, post doesn't succee
+
+                #do we need to test every possibility of valids and invalids against all the api calls?
     

@@ -24,7 +24,7 @@ class ScoreExecution(Service):
     )
 
     @classmethod
-    def score_execution(
+    def create_score_execution(
         cls,
         score_definition_id: str,
         description: str = "",
