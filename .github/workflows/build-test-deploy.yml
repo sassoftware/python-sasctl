@@ -45,7 +45,7 @@ jobs:
         run: |
           # Setup tox & code coverage
           pip install --upgrade pip
-          pip install tox tox-gh-actions pytest pytest-cov scikit-learn
+          pip install tox tox-gh-actions pytest pytest-cov 'scikit-learn<=1.5.0'
 
       - name: Run Tests
         run: |
