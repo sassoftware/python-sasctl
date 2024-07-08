@@ -5,6 +5,16 @@ Unreleased
  - Add `model_info` class to better capture model information.
  - Test `/examples` Jupyter notebooks within normal test suite.
 
+v1.10.4 (2024-07-08)
+----------
+**Improvements**
+- Added example Jupyter notebook for OpenAI models.
+
+**Buxfixes**
+- Dropped support for Python 3.6 and Python 3.7, as those are no longer officially supported versions.
+- Added `dmcas_misc.json` template file for model card generation.
+- Updated generation of `ModelProperties.json` to allow for model card generation immediately upon upload.
+
 v1.10.3 (2024-04-12)
 ----------
 **Bugfixes**
