@@ -38,6 +38,7 @@ class ScoreDefinitions(Service):
         score_def_name: str,
         model_id: str,
         table_name: str,
+        table_file: Union[str, Path] = None,
         description: str = "",
         server_name: str = "cas-shared-default",
         library_name: str = "Public",
@@ -53,6 +54,8 @@ class ScoreDefinitions(Service):
             A user-inputted model if where the model exists in a project.
         table_name: str
             A user-inputted table name in CAS Management.
+        table_file: str or Path, optional
+            A user-provided path to an uploadable file. Defaults to None.
         description: str, optional
             Description of score definition. Defaults to an empty string.
         server_name: str, optional
@@ -68,16 +71,15 @@ class ScoreDefinitions(Service):
 
         """
 
-        try:
-            model = cls._model_respository.get_model(model_id)
-            model_project_id = model.json()["projectId"]
-            model_project_version_id = model.json()["projectVersionId"]
-            model_name = model.json()["name"]
-
-        except KeyError:
+        model = cls._model_respository.get_model(model_id)
+        
+        if model.status_code >= 400:
             raise HTTPError(
                 "This model may not exist in a project or the model may not exist at all. See error: " + model.json()
             )
+        model_project_id = model.json()["projectId"]
+        model_project_version_id = model.json()["projectVersionId"]
+        model_name = model.json()["name"]
         # Checking if the model exists and if it's in a project
 
         try:
@@ -95,25 +97,16 @@ class ScoreDefinitions(Service):
         # Optional mapping - Maps the variables in the data to the variables of the score object. It's not necessary to create a score definition.
 
         table = cls._cas_management.get_table(server_name, library_name, table_name)
-        try:
-            table.raise_for_status()
-        except requests.exceptions.HTTPError as error:
-            print(f"HTTP Error: {error}")
-            table_file = input(
-                "The inputted table does not exist. Enter the file path for the data in your table (CSV, XLS, XLSX, SAS7BDT or SASHDAT file)."
-            )
+        if table.status_code >= 400 and not table_file:
+            raise HTTPError("This table may not exist in CAS. Please include the `table_file` argument in the function call if it doesn't exist. See error" + table.json())
+        elif table.status_code >= 400 and table_file:    
             cls._cas_management.upload_file(
                 str(table_file), table_name
             )  # do I need to add a check if the file doesn't exist or does upload_file take care of that?
-            table = cls._cas_management.get_table(server_name, library_name, table_name)
+            uploaded_table = cls._cas_management.get_table(server_name, library_name, table_name)
+            if uploaded_table.status_code >= 400:
+                raise HTTPError("The file failed to upload properly or another error occurred. See the error: " + uploaded_table.json())
             # Checks if the inputted table exists, and if not, uploads a file to create a new table
-        try:
-            table.raise_for_status()
-        except requests.exceptions.HTTPError as error:
-            print(f"HTTP Error: {error}")
-            raise Exception(
-                "Something went wrong when creating a table. Check to see if the file path inputted exists."
-            )
 
         save_score_def = {
             "name": score_def_name,
