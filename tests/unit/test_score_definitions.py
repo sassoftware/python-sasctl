@@ -20,7 +20,7 @@ from requests import HTTPError
 
 import sasctl.pzmm as pzmm
 from sasctl import current_session
-from sasctl.core import RestObj, VersionInfo
+from sasctl.core import RestObj, VersionInfo, request
 from sasctl._services.score_definitions import ScoreDefinitions as sd
 
 def test_create_score_definition():
@@ -43,50 +43,47 @@ def test_create_score_definition():
     with mock.patch(
         "sasctl._services.model_repository.ModelRepository.get_model"
     ) as get_model:
-        with mock.patch(
+         with mock.patch(
             "sasctl._services.cas_management.CASManagement.get_table"
         ) as get_table:
             with mock.patch(
                 "sasctl._services.cas_management.CASManagement.upload_file"
             ) as upload_file:
+                get_model.request.return_value.json.return_value = {
+                "projectId": "54321",
+                "projectVersionId": "67890",
+                "name": "test_model"
+                }
+                #get_table.return_value = None
+                #upload_file.return_value = RestObj
+         
+                response = sd.create_score_definition(
+                        score_def_name = "test_create_sd",
+                        model_id = "12345",
+                        table_name = "test_table"
+                    )
+                assert response
+         
                 # # Test for valid model id, no input mapping, get_table succeeded, and post succeeds
-                # get_model.return_value = RestObj(
-                #         projectId = "54321",
-                #         projectVersionId = "67890",
-                #         name = "test_model",
-                #     )
+               
                 # get_table.return_value = RestObj()
                 # raise_for_status.return_value = None
                 
-                # response = sd.create_score_definition(
-                #     score_def_name = "test_create_sd",
-                #     model_id = "12345",
-                #     table_name = "test_table",
-                # )
+                
                 
                 # assert response
                 
                 # Test for invalid model id
-                get_model.return_value = RestObj()
-                with pytest.raises(
-                    HTTPError
-                ): #test tget_Table since we don't know what the return value is restobj
-                    sd.create_score_definition(
-                        score_def_name = "test_create_sd",
-                        model_id = "12345",
-                        table_name = "test_table",
-                    )
-                #Test for invalid tableName
-
-                #Test for invalid score_definition json/post doesn't succeed
-
-                #Test for valid model id, with input mapping, get_table succeeded, and post succeeds
-
-                #Test for valid model id, with input mapping, get_table didn't succeed, post succeeds
-
-                #Test for valid model id, with input mapping, get_Table succeeds, post doesn't succeed
-
-                #Testing for valid model id, no input, no get_Table, post doesn't succee
-
-                #do we need to test every possibility of valids and invalids against all the api calls?
+                #get_model.return_value = RestObj()
+                #with pytest.raises(
+                    #HTTPError
+                #): #test tget_Table since we don't know what the return value is restobj
+                    #sd.create_score_definition(
+                        #score_def_name = "test_create_sd",
+                        #model_id = "12345",
+                        #table_name = "test_table",
+                    #)
+                #Test for valid and invalid for each
+                #Start with testing invalid and realize you can work from the last call to the first because the last call working means the first call must have worked
+               
     
