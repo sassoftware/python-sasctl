@@ -49,20 +49,28 @@ def test_create_score_definition():
             with mock.patch(
                 "sasctl._services.cas_management.CASManagement.upload_file"
             ) as upload_file:
-                get_model.request.return_value.json.return_value = {
-                "projectId": "54321",
-                "projectVersionId": "67890",
-                "name": "test_model"
-                }
-                #get_table.return_value = None
-                #upload_file.return_value = RestObj
-         
-                response = sd.create_score_definition(
+                get_model.return_value.status_code = 404
+                with pytest.raises(HTTPError):
+                    sd.create_score_definition(
                         score_def_name = "test_create_sd",
                         model_id = "12345",
                         table_name = "test_table"
                     )
-                assert response
+                    
+                get_model.return_value.status_code = 200
+                get_model.return_value.json.return_value = {
+                    "id": "12345",
+                    "projectId": "54321",
+                    "projectVersionId": "67890",
+                    "name": "test_model",
+                }
+                get_table.return_value.status_code = 404
+                with pytest.raises(HTTPError):
+                    sd.create_score_definition(
+                            score_def_name = "test_create_sd",
+                            model_id = "12345",
+                            table_name = "test_table"
+                    )
          
                 # # Test for valid model id, no input mapping, get_table succeeded, and post succeeds
                
