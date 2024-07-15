@@ -1,0 +1,267 @@
+{
+    "creationTimeStamp": "0001-01-01T00:00:00Z",
+    "modifiedTimeStamp": "0001-01-01T00:00:00Z",
+    "revision": 0,
+    "name": "dmcas_misc",
+    "version": 0,
+    "order": 0,
+    "parameterMap": {
+        "CorrectText": {
+            "label": "Status",
+            "length": 12,
+            "order": 8,
+            "parameter": "CorrectText",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "CorrectText"
+            ]
+        },
+        "Outcome": {
+            "label": "Predicted Outcome",
+            "length": 256,
+            "order": 6,
+            "parameter": "Outcome",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "Outcome"
+            ]
+        },
+        "OutcomeText": {
+            "label": "Predicted Outcome (Event/NonEvent)",
+            "length": 12,
+            "order": 7,
+            "parameter": "OutcomeText",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "OutcomeText"
+            ]
+        },
+        "Target": {
+            "label": "Target",
+            "length": 256,
+            "order": 4,
+            "parameter": "Target",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "Target"
+            ]
+        },
+        "TargetText": {
+            "label": "Target (Event/NonEvent)",
+            "length": 12,
+            "order": 5,
+            "parameter": "TargetText",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "TargetText"
+            ]
+        },
+        "_Count_": {
+            "label": "Count",
+            "length": 8,
+            "order": 10,
+            "parameter": "_Count_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_Count_"
+            ]
+        },
+        "_DataRole_": {
+            "label": "Data Role",
+            "length": 10,
+            "order": 11,
+            "parameter": "_DataRole_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_DataRole_"
+            ]
+        },
+        "_Percent_": {
+            "label": "Percent",
+            "length": 8,
+            "order": 9,
+            "parameter": "_Percent_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_Percent_"
+            ]
+        },
+        "_TargetName_": {
+            "label": "Target Name",
+            "length": 3,
+            "order": 1,
+            "parameter": "_TargetName_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_TargetName_"
+            ]
+        },
+        "_cutoffSource_": {
+            "label": "Cutoff Source",
+            "length": 8,
+            "order": 3,
+            "parameter": "_cutoffSource_",
+            "preformatted": false,
+            "type": "char",
+            "values": [
+                "_cutoffSource_"
+            ]
+        },
+        "_cutoff_": {
+            "label": "Cutoff",
+            "length": 8,
+            "order": 2,
+            "parameter": "_cutoff_",
+            "preformatted": false,
+            "type": "num",
+            "values": [
+                "_cutoff_"
+            ]
+        }
+    },
+    "data": [
+        {
+            "dataMap": {
+                "CorrectText": "CORRECT",
+                "Outcome": "1",
+                "_Count_": "None",
+                "_DataRole_": "VALIDATE",
+                "_cutoffSource_": "Default",
+                "_cutoff_": "0.5"
+            },
+            "rowNumber": 1
+        },
+        {
+            "dataMap": {
+                "CorrectText": "INCORRECT",
+                "Outcome": "0",
+                "_Count_": "None",
+                "_DataRole_": "VALIDATE",
+                "_cutoffSource_": "Default",
+                "_cutoff_": "0.5"
+            },
+            "rowNumber": 2
+        },
+        {
+            "dataMap": {
+                "CorrectText": "CORRECT",
+                "Outcome": "0",
+                "_Count_": "None",
+                "_DataRole_": "VALIDATE",
+                "_cutoffSource_": "Default",
+                "_cutoff_": "0.5"
+            },
+            "rowNumber": 3
+        },
+        {
+            "dataMap": {
+                "CorrectText": "INCORRECT",
+                "Outcome": "1",
+                "_Count_": "None",
+                "_DataRole_": "VALIDATE",
+                "_cutoffSource_": "Default",
+                "_cutoff_": "0.5"
+            },
+            "rowNumber": 4
+        },
+        {
+            "dataMap": {
+                "CorrectText": "CORRECT",
+                "Outcome": "1",
+                "_Count_": "840.0",
+                "_DataRole_": "TRAIN",
+                "_cutoffSource_": "Default",
+                "_cutoff_": "0.5"
+            },
+            "rowNumber": 5
+        },
+        {
+            "dataMap": {
+                "CorrectText": "INCORRECT",
+                "Outcome": "0",
+                "_Count_": "2.0",
+                "_DataRole_": "TRAIN",
+                "_cutoffSource_": "Default",
+                "_cutoff_": "0.5"
+            },
+            "rowNumber": 6
+        },
+        {
+            "dataMap": {
+                "CorrectText": "CORRECT",
+                "Outcome": "0",
+                "_Count_": "3328.0",
+                "_DataRole_": "TRAIN",
+                "_cutoffSource_": "Default",
+                "_cutoff_": "0.5"
+            },
+            "rowNumber": 7
+        },
+        {
+            "dataMap": {
+                "CorrectText": "INCORRECT",
+                "Outcome": "1",
+                "_Count_": "2.0",
+                "_DataRole_": "TRAIN",
+                "_cutoffSource_": "Default",
+                "_cutoff_": "0.5"
+            },
+            "rowNumber": 8
+        },
+        {
+            "dataMap": {
+                "CorrectText": "CORRECT",
+                "Outcome": "1",
+                "_Count_": "145.0",
+                "_DataRole_": "TEST",
+                "_cutoffSource_": "Default",
+                "_cutoff_": "0.5"
+            },
+            "rowNumber": 9
+        },
+        {
+            "dataMap": {
+                "CorrectText": "INCORRECT",
+                "Outcome": "0",
+                "_Count_": "202.0",
+                "_DataRole_": "TEST",
+                "_cutoffSource_": "Default",
+                "_cutoff_": "0.5"
+            },
+            "rowNumber": 10
+        },
+        {
+            "dataMap": {
+                "CorrectText": "CORRECT",
+                "Outcome": "0",
+                "_Count_": "1436.0",
+                "_DataRole_": "TEST",
+                "_cutoffSource_": "Default",
+                "_cutoff_": "0.5"
+            },
+            "rowNumber": 11
+        },
+        {
+            "dataMap": {
+                "CorrectText": "INCORRECT",
+                "Outcome": "1",
+                "_Count_": "5.0",
+                "_DataRole_": "TEST",
+                "_cutoffSource_": "Default",
+                "_cutoff_": "0.5"
+            },
+            "rowNumber": 12
+        }
+    ],
+    "xInteger": false,
+    "yInteger": false
+}
