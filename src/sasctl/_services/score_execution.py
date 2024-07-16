@@ -57,11 +57,11 @@ class ScoreExecution(Service):
         score_definition = sd.get_definition(score_definition_id)
         if score_definition.status_code >= 400:
             raise HTTPError(score_definition.json())
-        score_exec_name = score_definition.json()["name"]
-        model_uri = score_definition.json()["objectDescriptor"]["uri"]
-        model_name = score_definition.json()["objectDescriptor"]["name"]
-        model_input_library = score_definition.json()["inputData"]["libraryName"]
-        model_table_name = score_definition.json()["inputData"]["tableName"]
+        score_exec_name = score_definition.get("name")
+        model_uri = score_definition.get("objectDescriptor", ["uri"])
+        model_name = score_definition.get("objectDescriptor", ["name"])
+        model_input_library = score_definition.get("inputData", ["libraryName"])
+        model_table_name = score_definition.get("inputData", ["tableName"])
 
         # Defining a default output table name if none is provided
         if not output_table_name:
@@ -72,11 +72,11 @@ class ScoreExecution(Service):
             score_execution = cls.get(
                 f"/executions?filter=eq(scoreExecutionRequest.scoreDefinitionId,%27{score_definition_id}%27)"
             ) 
-            execution_count = score_execution.json()[
+            execution_count = score_execution.get(
                 "count"
-            ]  # Exception catch location
+              )  # Exception catch location
             if execution_count == 1:
-                execution_id = score_execution.json()["items"][0]["id"]
+                execution_id = score_execution.get("items", [0], ["id"])
                 deleted_score_execution = cls.delete_execution(execution_id)
                 print(deleted_score_execution)
         except KeyError:

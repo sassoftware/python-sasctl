@@ -56,6 +56,24 @@ def test_create_score_definition():
                         model_id = "12345",
                         table_name = "test_table"
                     )
+                # get_model.return_value.status_code = 200
+                # get_model.return_value.json.return_value = {
+                #     "id": "12345",
+                #     "projectId": "54321",
+                #     "projectVersionId": "67890",
+                #     "name": "test_model"
+                #     "inputVariables": {"A", "B", "C"} #look at syntax combine square brackets and curly bracket
+                # }
+                #     sd.create_score_definition(
+                #         score_def_name = "test_create_sd",
+                #         model_id = "12345",
+                #         table_name = "test_table",
+                #         mappings = {
+                #             {"mappingVariable": "A", "datasource": "datasource", "variableName": "A"},
+                #             {"mappingVariable": "B", "datasource": "datasource", "variableName": "B"},
+                #             {"mappingVariable": "C", "datasource": "datasource", "variableName": "C"}
+                #         }
+                #     )
                     
                 get_model.return_value.status_code = 200
                 get_model.return_value.json.return_value = {
@@ -71,6 +89,45 @@ def test_create_score_definition():
                             model_id = "12345",
                             table_name = "test_table"
                     )
+                get_table.return_value.status_code = 404
+                upload_file.return_value = None
+                get_table.return_value.status_code = 404
+                with pytest.raises(HTTPError):
+                    sd.create_score_definition(
+                            score_def_name = "test_create_sd",
+                            model_id = "12345",
+                            table_name = "test_table",
+                            table_file = "test_path"
+                        )
+                
+                get_table.return_value.status_code = 404
+                upload_file.return_value = RestObj
+                get_table.return_value.status_code = 200
+                response = sd.create_score_definition(
+                        score_def_name = "test_create_sd",
+                        model_id = "12345",
+                        table_name = "test_table",
+                        table_file = "test_path"
+                )
+                assert response
+                
+                
+                
+                
+                # get_table.return_value.status_code = 200
+                # get_table.return_value.json.return_value = {
+                #     "tableName": "test_table"
+                # }
+                # sd.create_score_definition(
+                #     score_def_name = "test_create_sd",
+                #     model_id = "12345",
+                #     table_name = "test_table"
+                # )
+
+                
+                
+                
+                
          
                 # # Test for valid model id, no input mapping, get_table succeeded, and post succeeds
                
