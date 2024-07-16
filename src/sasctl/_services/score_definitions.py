@@ -77,14 +77,14 @@ class ScoreDefinitions(Service):
             raise HTTPError({
                 f"This model may not exist in a project or the model may not exist at all. See error: {model.json()}"}
             )
-        model_project_id = model.json()["projectId"]
-        model_project_version_id = model.json()["projectVersionId"]
-        model_name = model.json()["name"]
+        model_project_id = model.get("projectId")
+        model_project_version_id = model.get("projectVersionId")
+        model_name = model.get("name")
         # Checking if the model exists and if it's in a project
 
         try:
             inputMapping = []
-            for input_item in model.json()["inputVariables"]:
+            for input_item in model.get("inputVariables"):
                 var = {
                     "mappingValue": input_item["name"],
                     "mappingType": "datasource",
