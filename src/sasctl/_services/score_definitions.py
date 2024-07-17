@@ -28,9 +28,12 @@ class ScoreDefinitions(Service):
     _cas_management = CASManagement()
     _model_respository = ModelRepository()
 
-    list_definitions, get_definition, update_definition, delete_definition = (
-        Service._crud_funcs("/definitions", "definition")
-    )
+    (
+        list_definitions,
+        get_definition,
+        update_definition,
+        delete_definition,
+    ) = Service._crud_funcs("/definitions", "definition")
 
     @classmethod
     def create_score_definition(
@@ -72,10 +75,12 @@ class ScoreDefinitions(Service):
         """
 
         model = cls._model_respository.get_model(model_id)
-        
+
         if model.status_code >= 400:
-            raise HTTPError({
-                f"This model may not exist in a project or the model may not exist at all. See error: {model.json()}"}
+            raise HTTPError(
+                {
+                    f"This model may not exist in a project or the model may not exist at all. See error: {model.json()}"
+                }
             )
         model_project_id = model.get("projectId")
         model_project_version_id = model.get("projectVersionId")
@@ -98,21 +103,25 @@ class ScoreDefinitions(Service):
 
         table = cls._cas_management.get_table(server_name, library_name, table_name)
         if table.status_code >= 400 and not table_file:
-            raise HTTPError(f"This table may not exist in CAS. Please include the `table_file` argument in the function call if it doesn't exist. See error {table.json()}")
-        elif table.status_code >= 400 and table_file:    
+            raise HTTPError(
+                f"This table may not exist in CAS. Please include the `table_file` argument in the function call if it doesn't exist. See error {table.json()}"
+            )
+        elif table.status_code >= 400 and table_file:
             cls._cas_management.upload_file(
                 str(table_file), table_name
             )  # do I need to add a check if the file doesn't exist or does upload_file take care of that?
             table = cls._cas_management.get_table(server_name, library_name, table_name)
             if table.status_code >= 400:
-                raise HTTPError(f"The file failed to upload properly or another error occurred. See the error: {table.json()}")
+                raise HTTPError(
+                    f"The file failed to upload properly or another error occurred. See the error: {table.json()}"
+                )
             # Checks if the inputted table exists, and if not, uploads a file to create a new table
 
         save_score_def = {
             "name": score_def_name,
             "description": description,
             "objectDescriptor": {
-                "uri": f"/modelManagement/models/{model_id}",
+                "uri": f"/modelRepository/models/{model_id}",
                 "name": f"{model_name}({model_version})",
                 "type": "sas.models.model",
             },
@@ -136,9 +145,7 @@ class ScoreDefinitions(Service):
 
         headers_score_def = {"Content-Type": "application/json"}
 
-        new_score_def = cls.post(
+        return cls.post(
             "/definitions", data=json.dumps(save_score_def), headers=headers_score_def
         )
-
-        return new_score_def
-        # The response information of the score definition can be seen as a JSON as well as the RestOBJ
+        # The response information of the score definition can be seen as a JSON as well as a RestOBJ
