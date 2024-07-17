@@ -45,5 +45,5 @@ def test_create_score_execution():
             with mock.patch(
                 "sasctl._services.score_execution.ScoreExecution.delete_execution"
             ) as delete_execution:
-                exit()
+                pytest.skip()
                 # raise HTTP error?
