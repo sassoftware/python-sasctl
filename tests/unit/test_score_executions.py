@@ -23,6 +23,7 @@ from sasctl import current_session
 from sasctl.core import RestObj, VersionInfo
 from sasctl._services.score_definitions import ScoreDefinitions as sd
 
+
 def test_create_score_execution():
     """
     Test Cases:
@@ -32,9 +33,9 @@ def test_create_score_execution():
     - Valid execution id?
 
     -Valid count key?
-  
+
     """
-    
+
     with mock.patch(
         "sasctl._services.score_definitions.ScoreDefinitions.get_definition"
     ) as get_definition:
@@ -45,4 +46,4 @@ def test_create_score_execution():
                 "sasctl._services.score_execution.ScoreExecution.delete_execution"
             ) as delete_execution:
                 exit()
-                #raise HTTP error?
+                # raise HTTP error?
