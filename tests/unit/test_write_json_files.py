@@ -262,7 +262,7 @@ def test_write_model_properties_json():
         target_values=None,
     )
     assert "ModelProperties.json" in prop_dict
-    assert json.loads(prop_dict["ModelProperties.json"])["function"] == "Prediction"
+    assert json.loads(prop_dict["ModelProperties.json"])["function"] == "prediction"
     assert json.loads(prop_dict["ModelProperties.json"])["targetLevel"] == "Interval"
     assert json.loads(prop_dict["ModelProperties.json"])["targetEvent"] == ""
     assert json.loads(prop_dict["ModelProperties.json"])["eventProbVar"] == ""
@@ -270,7 +270,7 @@ def test_write_model_properties_json():
     prop_dict = jf.write_model_properties_json(
         model_name="Test_Model", target_variable="BAD", target_values=[1, 0]
     )
-    assert json.loads(prop_dict["ModelProperties.json"])["function"] == "Classification"
+    assert json.loads(prop_dict["ModelProperties.json"])["function"] == "classification"
     assert json.loads(prop_dict["ModelProperties.json"])["targetLevel"] == "Binary"
     assert json.loads(prop_dict["ModelProperties.json"])["targetEvent"] == "1"
     assert json.loads(prop_dict["ModelProperties.json"])["eventProbVar"] == "P_1"
