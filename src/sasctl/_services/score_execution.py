@@ -19,9 +19,12 @@ class ScoreExecution(Service):
 
     _SERVICE_ROOT = "/scoreExecution"
 
-    list_executions, get_execution, update_execution, delete_execution = (
-        Service._crud_funcs("/executions", "execution")
-    )
+    (
+        list_executions,
+        get_execution,
+        update_execution,
+        delete_execution,
+    ) = Service._crud_funcs("/executions", "execution")
 
     @classmethod
     def create_score_execution(
@@ -71,10 +74,8 @@ class ScoreExecution(Service):
         try:
             score_execution = cls.get(
                 f"/executions?filter=eq(scoreExecutionRequest.scoreDefinitionId,%27{score_definition_id}%27)"
-            ) 
-            execution_count = score_execution.get(
-                "count"
-              )  # Exception catch location
+            )
+            execution_count = score_execution.get("count")  # Exception catch location
             if execution_count == 1:
                 execution_id = score_execution.get("items", [0], ["id"])
                 deleted_score_execution = cls.delete_execution(execution_id)
