@@ -37,6 +37,8 @@ Tasks and Services
 - [Modeling with Python & SAS AutoML](#modeling-with-python--sas-automl)
 - [Making direct REST API calls](#making-direct-rest-api-calls)
 
+- [Register an Azure OpenAI GPT model using REST API calls](#register-an-azure-openai-gpt-model-using-rest-api-calls)
+
 ---
 Register binary classification models
 -------------------------------------
@@ -94,11 +96,11 @@ Generates a requirements.json file which includes the minimal number of dependen
 
 Create and update custom model KPIs
 -----------------------------------
-Filename: [pzmm_custom_kpis.ipynb](pzmm_custom_kpis.ipynb)
+Filename: [pzmm_custom_kpis.ipynb](pzmm_custom_kpi_model_parameters.ipynb)
 
 Level: Intermediate
 
-Create and update custom model parameters and kpis on SAS Model Manager
+Create and update custom model parameters and kpis on SAS Model Manager.
 
 
 Register a SAS classification model
@@ -206,3 +208,11 @@ Level: Advanced
 Demonstrates using `sasctl` to make REST calls over HTTP(S) directly to the SAS microservices.
 
 Use if you need to customize behavior or use functionality not yet exposed through higher-level `sasctl` functions.
+
+Register an Azure OpenAI GPT Model Using REST API Calls
+--------------------------
+Filename: [register_Azure_OpenAI_model_using_REST_calls.ipynb](register_Azure_OpenAI_model_using_REST_calls.ipynb)
+
+Level: Intermediate
+
+Leverages a GPT-3.5-Turbo model from Azure OpenAI in SAS® Model Manager and SAS® Intelligent Decisioning.
