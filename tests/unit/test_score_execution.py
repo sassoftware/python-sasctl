@@ -34,7 +34,7 @@ def test_create_score_execution():
     - Valid execution id?
 
     -Valid count key? -> treated like input mapping -> no because i think it's required
-    - output table -> treat like input mapping but within the create_score_execution step (do I for library and server in score definition thought?)
+    - output table -> treat like input mapping but within the create_score_execution step (do I for library and server in score definition thought? but I think you need a target step here too)
 
     """
     with mock.patch("sasctl.core.Session._get_authorization_token"):
@@ -44,8 +44,8 @@ def test_create_score_execution():
         "sasctl._services.score_definitions.ScoreDefinitions.get_definition"
     ) as get_definition:
         with mock.patch(
-            "sasctl._services.score_execution.ScoreExecution.get_execution"
-        ) as get_execution:
+            "sasctl._services.score_execution.ScoreExecution.list_executions"
+        ) as list_executions:
             with mock.patch(
                 "sasctl._services.score_execution.ScoreExecution.delete_execution"
             ) as delete_execution:
@@ -58,12 +58,33 @@ def test_create_score_execution():
                             score_definition_id="12345",
                         )
                     get_definition.return_value.status_code = 200
-                    get_execution.return_value.status_code = 400 #we might need a separate try except here to show that 404 statement is weird and should exit the program
+                    get_definition.return_value.json.return_value = {
+                        "inputData": {
+                            "libraryName": "cas-shared-default",
+                            "tableName": ""
+                        },
+                        "name": "publish_automated_1720400011_2024-07-08T00:54:41.859Z",
+                        "objectDescriptor": {
+                            "name": "test_model",
+                            "type": "sas.publish.example",
+                            "uri": "/modelPublish/models/example"
+                         }
+                    }
+                    list_executions.return_value.status_code = 400 #we might need a separate try except here to show that 404 statement is weird and should exit the program
                     with pytest.raises(HTTPError):
                         se.create_score_execution(
                             score_definition_id="12345",
                         )
-                    #stdout or pytest.raises but without ending program?
+                    
+                    list_executions.return_value.status_code = 200
+                    list_executions.return_value.json.return_value = {
+                        "count": 1
+                    }
+                    delete_execution.return_value.status_code = 2
+
+                    
                 
                 #pytest.skip()
                 # raise HTTP error?
+#notes -> how to test count because it should only delete if count == 1 so how do I test that if/else
+#notes -> output table case, again TARGET?
