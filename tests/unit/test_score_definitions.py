@@ -36,6 +36,38 @@ def test_create_score_definition():
     """
     with mock.patch("sasctl.core.Session._get_authorization_token"):
         current_session("example.com", "username", "password")
+    
+    TARGET = {
+        "name": MODEL_NAME,
+        "projectId": PROJECT_ID,
+        "modeler": USER,
+        "description": "model description",
+        "function": "Classification",
+        "algorithm": "Dummy Algorithm",
+        "tool": "pytest",
+        "champion": True,
+        "role": "champion",
+        "immutable": True,
+        "retrainable": True,
+        "scoreCodeType": None,
+        "targetVariable": None,
+        "trainTable": None,
+        "classificationEventProbabilityVariableName": None,
+        "classificationTargetEventValue": None,
+        "location": None,
+        "properties": [
+            {"name": "custom1", "value": 123, "type": "numeric"},
+            {"name": "custom2", "value": "somevalue", "type": "string"},
+            # {'name': 'customDate', 'value': 1672462800000, 'type': 'date'},
+            {"name": "customDateTime", "value": 1672481272000, "type": "dateTime"},
+        ],
+        "inputVariables": [],
+        "outputVariables": [],
+        "version": 2,
+    }
+
+    # Passed params should be set correctly
+    target = copy.deepcopy(TARGET)
 
     with mock.patch(
         "sasctl._services.model_repository.ModelRepository.get_model"
