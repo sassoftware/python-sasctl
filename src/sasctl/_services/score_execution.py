@@ -70,18 +70,22 @@ class ScoreExecution(Service):
         if not output_table_name:
             output_table_name = f"{model_name}_{score_definition_id}"
 
-        # Deleting any score executions that are already executing the same score definition
-        try:
-            score_execution = cls.get(
-                f"/executions?filter=eq(scoreExecutionRequest.scoreDefinitionId,%27{score_definition_id}%27)"
+        # Getting all score executions that are using the inputted score_definition_id
+       
+        score_execution = cls.list_executions(filter=f"eq(scoreDefinitionId, '{score_definition_id}')")
+        
+        if score_execution.status_code >= 400:
+            raise HTTPError(
+                {
+                    f"Something went wrong in the GET statement. See error: {score_execution.json()}"
+                }
             )
-            execution_count = score_execution.get("count")  # Exception catch location
-            if execution_count == 1:
-                execution_id = score_execution.get("items", [0], ["id"])
-                deleted_score_execution = cls.delete_execution(execution_id)
-                print(deleted_score_execution)
-        except KeyError:
-            print("There may not be a score execution already running.")
+        
+        # Checking the count of the execution list to see if there are any score executions for this score_definition_id already running
+        execution_count = score_execution.get("count")  # Exception catch location
+        if execution_count == 1:
+            execution_id = score_execution.get("items", [0], ["id"])
+            deleted_execution = cls.delete_execution(execution_id)       
 
         headers_score_exec = {"Content-Type": "application/json"}
 
