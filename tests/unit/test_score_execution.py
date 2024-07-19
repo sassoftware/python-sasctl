@@ -76,11 +76,9 @@ def test_create_score_execution():
                         se.create_score_execution(
                             score_definition_id="12345"
                         )
-                    
-                    mock_response = MagicMock()
-                    mock_response.status_code = 200
-                    mock_response.json.return_value = {"count": 1}
-                    list_executions.return_value = mock_response
+
+                    list_executions.status_code = 200
+                    list_executions.return_value.json.return_value = {"count": 1}
 
                     delete_execution.return_value.status_code = 404
                     with pytest.raises(HTTPError):
@@ -93,8 +91,6 @@ def test_create_score_execution():
                     #         score_definition_id="12345"
                     #     )
                     # assert response
-
-test_create_score_execution()
                 
                 #pytest.skip()
                 # raise HTTP error?
