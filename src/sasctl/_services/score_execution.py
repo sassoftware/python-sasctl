@@ -77,7 +77,7 @@ class ScoreExecution(Service):
         if score_execution.status_code >= 400:
             raise HTTPError(
                 {
-                    f"Something went wrong in the GET statement. See error: {score_execution.json()}"
+                    f"Something went wrong in the LIST_EXECUTIONS statement. See error: {score_execution.json()}"
                 }
             )
         
@@ -85,7 +85,13 @@ class ScoreExecution(Service):
         execution_count = score_execution.get("count")  # Exception catch location
         if execution_count == 1:
             execution_id = score_execution.get("items", [0], ["id"])
-            deleted_execution = cls.delete_execution(execution_id)       
+            deleted_execution = cls.delete_execution(execution_id)
+            if deleted_execution.status_code >= 400:
+                raise HTTPError(
+                    {
+                        f"Something went wrong in the DELETE statement. See error: {score_execution.json()}"
+                    }
+                )       
 
         headers_score_exec = {"Content-Type": "application/json"}
 
