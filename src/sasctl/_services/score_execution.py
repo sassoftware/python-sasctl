@@ -89,7 +89,7 @@ class ScoreExecution(Service):
             if deleted_execution.status_code >= 400:
                 raise HTTPError(
                     {
-                        f"Something went wrong in the DELETE statement. See error: {score_execution.json()}"
+                        f"Something went wrong in the DELETE statement. See error: {deleted_execution.json()}"
                     }
                 )       
 

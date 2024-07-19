@@ -12,6 +12,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
+from unittest.mock import MagicMock
 
 import numpy as np
 import pandas as pd
@@ -55,7 +56,7 @@ def test_create_score_execution():
                     get_definition.return_value.status_code = 404
                     with pytest.raises(HTTPError):
                         se.create_score_execution(
-                            score_definition_id="12345",
+                            score_definition_id="12345"
                         )
                     get_definition.return_value.status_code = 200
                     get_definition.return_value.json.return_value = {
@@ -63,7 +64,7 @@ def test_create_score_execution():
                             "libraryName": "cas-shared-default",
                             "tableName": ""
                         },
-                        "name": "publish_automated_1720400011_2024-07-08T00:54:41.859Z",
+                        "name": "score_def_name",
                         "objectDescriptor": {
                             "name": "test_model",
                             "type": "sas.publish.example",
@@ -73,16 +74,27 @@ def test_create_score_execution():
                     list_executions.return_value.status_code = 400 #we might need a separate try except here to show that 404 statement is weird and should exit the program
                     with pytest.raises(HTTPError):
                         se.create_score_execution(
-                            score_definition_id="12345",
+                            score_definition_id="12345"
                         )
                     
-                    list_executions.return_value.status_code = 200
-                    list_executions.return_value.json.return_value = {
-                        "count": 1
-                    }
-                    delete_execution.return_value.status_code = 2
+                    mock_response = MagicMock()
+                    mock_response.status_code = 200
+                    mock_response.json.return_value = {"count": 1}
+                    list_executions.return_value = mock_response
 
+                    delete_execution.return_value.status_code = 404
+                    with pytest.raises(HTTPError):
+                        se.create_score_execution(
+                            score_definition_id="12345"
+                        )
                     
+                    # delete_execution.return_value.status_code = 200
+                    # response = se.create_score_execution(
+                    #         score_definition_id="12345"
+                    #     )
+                    # assert response
+
+test_create_score_execution()
                 
                 #pytest.skip()
                 # raise HTTP error?
