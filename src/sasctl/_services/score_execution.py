@@ -2,7 +2,7 @@ import json
 
 from requests import HTTPError
 
-from .score_definitions import ScoreDefinitions as sd
+from .score_definitions import ScoreDefinitions
 from .service import Service
 
 
@@ -18,6 +18,7 @@ class ScoreExecution(Service):
     """
 
     _SERVICE_ROOT = "/scoreExecution"
+    _score_definitions = ScoreDefinitions()
 
     (
         list_executions,
@@ -57,7 +58,7 @@ class ScoreExecution(Service):
         """
 
         # Gets information about the scoring object from the score definition and raises an exception if the score definition does not exist
-        score_definition = sd.get_definition(score_definition_id)
+        score_definition = cls._score_definitions.get_definition(score_definition_id)
         if score_definition.status_code >= 400:
             raise HTTPError(score_definition.json())
         score_exec_name = score_definition.get("name")
