@@ -71,26 +71,42 @@ def test_create_score_execution():
                             "uri": "/modelPublish/models/example"
                          }
                     }
-                    list_executions.return_value.status_code = 400 #we might need a separate try except here to show that 404 statement is weird and should exit the program
+                    list_executions.return_value.status_code = 400 #test case worked with .return_value.status_code but caused an HTTP error that said error with list_Executions
                     with pytest.raises(HTTPError):
                         se.create_score_execution(
                             score_definition_id="12345"
                         )
 
-                    list_executions.status_code = 200
+                    list_executions.status_code = 200 #why does this not have a return value and how is this related to different score_Defintion instantiation in score_execution
                     list_executions.return_value.json.return_value = {"count": 1}
-
                     delete_execution.return_value.status_code = 404
                     with pytest.raises(HTTPError):
                         se.create_score_execution(
                             score_definition_id="12345"
                         )
+                    #Test cases that don't work or I haven't tested
+                    delete_execution.return_value.status_code = 200 
+                    response = se.create_score_execution(
+                        score_definition_id="3456"
+                    )
+                    assert response
+
+                    list_executions.status_code = 200 #shouldn't this work with 200 response and not give me a type rror >= since it's not running 400 statement
                     
-                    # delete_execution.return_value.status_code = 200
-                    # response = se.create_score_execution(
-                    #         score_definition_id="12345"
-                    #     )
-                    # assert response
+                    list_executions.return_value.json.return_value = {"count": 0}
+                    response = se.create_score_execution(
+                        score_definition_id="12345"
+                    )
+                    assert response
+
+                    list_executions.status_code = 200
+                    list_executions.return_value.json.return_value = {"count": 0}
+                    response = se.create_score_execution(
+                        score_definition_id="12345",
+                        output_table_name = "test_output_table"
+                    )
+                    assert response #target needed here to test with and without specified output_table_name
+                    
                 
                 #pytest.skip()
                 # raise HTTP error?
