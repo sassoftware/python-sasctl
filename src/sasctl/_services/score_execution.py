@@ -74,12 +74,9 @@ class ScoreExecution(Service):
         # Getting all score executions that are using the inputted score_definition_id
        
         score_execution = cls.list_executions(filter=f"eq(scoreDefinitionId, '{score_definition_id}')")
-        
         if score_execution.status_code >= 400:
             raise HTTPError(
-                {
-                    f"Something went wrong in the LIST_EXECUTIONS statement. See error: {score_execution.json()}"
-                }
+                    f"Something went wrong in the LIST_EXECUTIONS statement. See error: {score_execution.json()}"   
             )
         
         # Checking the count of the execution list to see if there are any score executions for this score_definition_id already running
@@ -89,9 +86,7 @@ class ScoreExecution(Service):
             deleted_execution = cls.delete_execution(execution_id)
             if deleted_execution.status_code >= 400:
                 raise HTTPError(
-                    {
                         f"Something went wrong in the DELETE statement. See error: {deleted_execution.json()}"
-                    }
                 )       
 
         headers_score_exec = {"Content-Type": "application/json"}
