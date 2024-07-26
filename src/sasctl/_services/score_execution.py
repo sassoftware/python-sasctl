@@ -62,44 +62,46 @@ class ScoreExecution(Service):
         if score_definition.status_code >= 400:
             raise HTTPError(score_definition.json())
         score_exec_name = score_definition.get("name")
-        model_uri = score_definition.get("objectDescriptor", ["uri"])
-        model_name = score_definition.get("objectDescriptor", ["name"])
-        model_input_library = score_definition.get("inputData", ["libraryName"])
-        model_table_name = score_definition.get("inputData", ["tableName"])
+        model_uri = score_definition.get("objectDescriptor", "uri")
+        model_name = score_definition.get("objectDescriptor", "name")
+        model_input_library = score_definition.get("inputData", "libraryName")
+        model_table_name = score_definition.get("inputData", "tableName")
 
         # Defining a default output table name if none is provided
         if not output_table_name:
             output_table_name = f"{model_name}_{score_definition_id}"
 
         # Getting all score executions that are using the inputted score_definition_id
-       
-        score_execution = cls.list_executions(filter=f"eq(scoreDefinitionId, '{score_definition_id}')")
+
+        score_execution = cls.list_executions(
+            filter=f"eq(scoreDefinitionId, '{score_definition_id}')"
+        )
         if score_execution.status_code >= 400:
             raise HTTPError(
-                    f"Something went wrong in the LIST_EXECUTIONS statement. See error: {score_execution.json()}"   
+                f"Something went wrong in the LIST_EXECUTIONS statement. See error: {score_execution.json()}"
             )
-        
+
         # Checking the count of the execution list to see if there are any score executions for this score_definition_id already running
         execution_count = score_execution.get("count")  # Exception catch location
         if execution_count == 1:
-            execution_id = score_execution.get("items", [0], ["id"])
+            execution_id = score_execution.get("items", 0, "id")
             deleted_execution = cls.delete_execution(execution_id)
             if deleted_execution.status_code >= 400:
                 raise HTTPError(
-                        f"Something went wrong in the DELETE statement. See error: {deleted_execution.json()}"
-                )       
+                    f"Something went wrong in the DELETE statement. See error: {deleted_execution.json()}"
+                )
 
         headers_score_exec = {"Content-Type": "application/json"}
 
         create_score_exec = {
-            "name": score_exec_name,
+            "name": f"{score_exec_name}",
             "description": description,
             "hints": {
-                "objectURI": model_uri,
-                "inputTableName": model_table_name,
-                "inputLibraryName": model_input_library,
+                "objectURI": f"{model_uri}",
+                "inputTableName": f"{model_table_name}",
+                "inputLibraryName": f"{model_input_library}",
             },
-            "scoreDefinitionId": score_definition_id,
+            "scoreDefinitionId": f"{score_definition_id}",
             "outputTable": {
                 "tableName": output_table_name,
                 "libraryName": output_library_name,
