@@ -6,15 +6,10 @@ from pathlib import Path
 import json
 from typing import Union
 
-# from ..core import current_session, delete, get, sasctl_command
-from sasctl.core import current_session, delete, get, sasctl_command
-from sasctl._services.cas_management import CASManagement
-from sasctl._services.model_repository import ModelRepository
-from sasctl._services.service import Service
-
-# from .cas_management import CASManagement
-# from .model_repository import ModelRepository
-# from .service import Service
+from ..core import current_session, delete, get, sasctl_command
+from .cas_management import CASManagement
+from .model_repository import ModelRepository
+from .service import Service
 
 
 class ScoreDefinitions(Service):
