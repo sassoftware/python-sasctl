@@ -6,10 +6,15 @@ from pathlib import Path
 import json
 from typing import Union
 
-from ..core import current_session, delete, get, sasctl_command
-from .cas_management import CASManagement
-from .model_repository import ModelRepository
-from .service import Service
+# from ..core import current_session, delete, get, sasctl_command
+from sasctl.core import current_session, delete, get, sasctl_command
+from sasctl._services.cas_management import CASManagement
+from sasctl._services.model_repository import ModelRepository
+from sasctl._services.service import Service
+
+# from .cas_management import CASManagement
+# from .model_repository import ModelRepository
+# from .service import Service
 
 
 class ScoreDefinitions(Service):
@@ -96,6 +101,7 @@ class ScoreDefinitions(Service):
                     "variableName": input_item["name"],
                 }
                 inputMapping.append(var)
+
         except:
             print("This model does not have the optional 'inputVariables' parameter.")
 
@@ -149,3 +155,11 @@ class ScoreDefinitions(Service):
             "/definitions", data=json.dumps(save_score_def), headers=headers_score_def
         )
         # The response information of the score definition can be seen as a JSON as well as a RestOBJ
+
+
+score_def = ScoreDefinitions()
+print(
+    score_def.create_score_definition(
+        "test_name", "69ed3f2f-b4c2-43e7-9f9c-24d009e20e16", "HMEQPERF_1_Q1"
+    )
+)

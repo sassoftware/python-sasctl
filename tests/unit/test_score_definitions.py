@@ -25,6 +25,18 @@ from sasctl.core import RestObj, VersionInfo, request
 from sasctl._services.score_definitions import ScoreDefinitions as sd
 
 
+class CustomMock:
+    def __init__(self, status_code, json_info):
+        self.status_code = status_code
+        self.json_info = json_info
+
+    def get(self, key1, key2=None, key3=None):
+        if key2 is None and key3 is None:
+            return self.json_info[key1]
+        else:
+            return self.json_info[key1][key2][key3]
+
+
 def test_create_score_definition():
     """
     Test Cases:
@@ -39,16 +51,6 @@ def test_create_score_definition():
     # Mocking a session to allow the post call to go through
     with mock.patch("sasctl.core.Session._get_authorization_token"):
         current_session("example.com", "username", "password")
-
-    # TARGET = {
-    #         "mappings": [
-    #             {"mappingValue": "first", "mappingType": "datasource", "variableName": "first"},
-    #             {"mappingValue": "second", "mappingType": "datasource", "variableName": "second"},
-    #             {"mappingValue": "third", "mappingType": "datasource", "variableName": "third"}
-    #             ]
-    #     }
-
-    # target = copy.deepcopy(TARGET)
 
     # Mocking the REST API calls and functions
     with mock.patch(
@@ -129,18 +131,21 @@ def test_create_score_definition():
                     assert response
 
                     # Checking response with inputVariables in model elements
-                    get_model.return_value.status_code = 200
-                    get_model.return_value.json.return_value = {
-                        "id": "12345",
-                        "projectId": "54321",
-                        "projectVersionId": "67890",
-                        "name": "test_model",
-                        "inputVariables": [
-                            {"name": "first"},
-                            {"name": "second"},
-                            {"name": "third"},
-                        ],
-                    }
+                    model_mock_execution = CustomMock(
+                        status_code=200,
+                        json_info={
+                            "id": "12345",
+                            "projectId": "54321",
+                            "projectVersionId": "67890",
+                            "name": "test_model",
+                            "inputVariables": [
+                                {"name": "first"},
+                                {"name": "second"},
+                                {"name": "third"},
+                            ],
+                        },
+                    )
+                    get_model.return_value = model_mock_execution
                     get_table.return_value.status_code = 200
                     get_table.return_value.json.return_value = {
                         "tableName": "test_table"
@@ -153,6 +158,6 @@ def test_create_score_definition():
                     assert response
                     assert post.call_count == 3
 
-                    # data = post.call_args
-                    # json_data = json.loads(data.kwargs["data"])
-                    # assert target["mappings"] == json_data["mappings"]
+                    data = post.call_args
+                    json_data = json.loads(data.kwargs["data"])
+                    assert json_data["mappings"] != []
