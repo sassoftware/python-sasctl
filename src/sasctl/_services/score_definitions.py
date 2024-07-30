@@ -150,11 +150,3 @@ class ScoreDefinitions(Service):
             "/definitions", data=json.dumps(save_score_def), headers=headers_score_def
         )
         # The response information of the score definition can be seen as a JSON as well as a RestOBJ
-
-
-score_def = ScoreDefinitions()
-print(
-    score_def.create_score_definition(
-        "test_name", "69ed3f2f-b4c2-43e7-9f9c-24d009e20e16", "HMEQPERF_1_Q1"
-    )
-)
