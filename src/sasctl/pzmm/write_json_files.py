@@ -1393,7 +1393,7 @@ class JSONFiles:
     def stat_dataset_to_dataframe(
         data: Union[DataFrame, List[list], Type["numpy.array"]],
         target_value: Union[str, int, float] = None,
-        target_type: str = 'classification'
+        target_type: str = "classification",
     ) -> DataFrame:
         """
         Convert the user supplied statistical dataset from either a pandas DataFrame,
@@ -1441,14 +1441,14 @@ class JSONFiles:
         if isinstance(data, pd.DataFrame):
             if len(data.columns) == 2:
                 data.columns = ["actual", "predict"]
-                if target_type == 'classification':
+                if target_type == "classification":
                     data["predict_proba"] = data["predict"].gt(target_value).astype(int)
             elif len(data.columns) == 3:
                 data.columns = ["actual", "predict", "predict_proba"]
         elif isinstance(data, list):
             if len(data) == 2:
                 data = pd.DataFrame({"actual": data[0], "predict": data[1]})
-                if target_type == 'classification':
+                if target_type == "classification":
                     data["predict_proba"] = data["predict"].gt(target_value).astype(int)
             elif len(data) == 3:
                 data = pd.DataFrame(
@@ -1461,7 +1461,7 @@ class JSONFiles:
         elif isinstance(data, np.ndarray):
             if len(data) == 2:
                 data = pd.DataFrame({"actual": data[0, :], "predict": data[1, :]})
-                if target_type == 'classification':
+                if target_type == "classification":
                     data["predict_proba"] = data["predict"].gt(target_value).astype(int)
             elif len(data) == 3:
                 data = pd.DataFrame(
@@ -2372,7 +2372,7 @@ class JSONFiles:
         )
 
         # Generates dmcas_misc.json file
-        if target_type == 'classification':
+        if target_type == "classification":
             cls.generate_misc(model_files)
 
     @staticmethod
@@ -2782,7 +2782,11 @@ class JSONFiles:
                 roc_data["_FN_"],
             ]
             for c_text, c_val, o_val, t_txt, t_val in zip(
-                correct_text, correctness_values, outcome_values, target_texts, target_values
+                correct_text,
+                correctness_values,
+                outcome_values,
+                target_texts,
+                target_values,
             ):
                 misc_data.append(
                     {
@@ -2794,7 +2798,7 @@ class JSONFiles:
                             "_cutoffSource_": "Default",
                             "_cutoff_": "0.5",
                             "TargetText": t_txt,
-                            "Target": t_val
+                            "Target": t_val,
                         },
                         "rowNumber": len(misc_data) + 1,
                     }
