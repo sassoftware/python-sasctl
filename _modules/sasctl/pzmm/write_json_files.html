@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.10.4 documentation</title>
+    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.10.5 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=3efdd20e"></script>
+    <script src="../../../_static/documentation_options.js?v=5a32024a"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/write_json_files';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Jul 08, 2024"/>
+    <meta name="docbuild:last-update" content="Aug 01, 2024"/>
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.4 documentation</p>
+    <p class="title logo__title">sasctl 1.10.5 documentation</p>
   
 </a></div>
     
@@ -1347,6 +1347,7 @@ document.write(`
         <span class="n">maxdiff_df</span> <span class="o">=</span> <span class="n">maxdiff_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
             <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="s2">&quot;maxdiff&quot;</span><span class="p">,</span> <span class="s2">&quot;Base&quot;</span><span class="p">:</span> <span class="s2">&quot;BASE&quot;</span><span class="p">,</span> <span class="s2">&quot;Compare&quot;</span><span class="p">:</span> <span class="s2">&quot;COMPARE&quot;</span><span class="p">}</span>
         <span class="p">)</span>
+        <span class="n">maxdiff_df</span><span class="p">[</span><span class="s2">&quot;maxdiff&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">maxdiff_df</span><span class="p">[</span><span class="s2">&quot;maxdiff&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
 
         <span class="n">maxdiff_df</span><span class="p">[</span><span class="s2">&quot;VLABEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="n">maxdiff_df</span><span class="p">[</span><span class="s2">&quot;_DATAROLE_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datarole</span>
@@ -1651,7 +1652,7 @@ document.write(`
             <span class="k">if</span> <span class="ow">not</span> <span class="n">partition</span><span class="p">:</span>
                 <span class="k">continue</span>
 
-            <span class="n">data</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">stat_dataset_to_dataframe</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target_value</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">stat_dataset_to_dataframe</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target_value</span><span class="p">,</span> <span class="n">target_type</span><span class="p">)</span>
 
             <span class="n">conn</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span>
                 <span class="n">data</span><span class="p">,</span>
@@ -1789,6 +1790,7 @@ document.write(`
     <span class="k">def</span> <span class="nf">stat_dataset_to_dataframe</span><span class="p">(</span>
         <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]],</span>
         <span class="n">target_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">target_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert the user supplied statistical dataset from either a pandas DataFrame,</span>
@@ -1836,13 +1838,15 @@ document.write(`
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;actual&quot;</span><span class="p">,</span> <span class="s2">&quot;predict&quot;</span><span class="p">]</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict_proba&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">target_value</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict_proba&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">target_value</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;actual&quot;</span><span class="p">,</span> <span class="s2">&quot;predict&quot;</span><span class="p">,</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">]</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;actual&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;predict&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]})</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict_proba&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">target_value</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict_proba&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">target_value</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
                     <span class="p">{</span>
@@ -1854,7 +1858,8 @@ document.write(`
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;actual&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="s2">&quot;predict&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]})</span>
-                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict_proba&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">target_value</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict_proba&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;predict&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">target_value</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
                     <span class="p">{</span><span class="s2">&quot;actual&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;predict&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]}</span>
@@ -2689,6 +2694,7 @@ document.write(`
         <span class="n">interval_vars</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
         <span class="n">class_vars</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
         <span class="n">selection_statistic</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">training_table_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span>
         <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Public&quot;</span><span class="p">,</span>
     <span class="p">):</span>
@@ -2768,7 +2774,7 @@ document.write(`
 
         <span class="c1"># Upload training table to CAS. The location of the training table is returned.</span>
         <span class="n">training_table</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">upload_training_data</span><span class="p">(</span>
-            <span class="n">conn</span><span class="p">,</span> <span class="n">model_prefix</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">caslib</span>
+            <span class="n">conn</span><span class="p">,</span> <span class="n">model_prefix</span><span class="p">,</span> <span class="n">train_data</span><span class="p">,</span> <span class="n">training_table_name</span><span class="p">,</span> <span class="n">server</span><span class="p">,</span> <span class="n">caslib</span>
         <span class="p">)</span>
 
         <span class="c1"># Generates the event percentage for Classification targets, and the event average</span>
@@ -2802,7 +2808,8 @@ document.write(`
         <span class="p">)</span>
 
         <span class="c1"># Generates dmcas_misc.json file</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">generate_misc</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">generate_misc</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="JSONFiles.upload_training_data">
@@ -2812,6 +2819,7 @@ document.write(`
         <span class="n">conn</span><span class="p">,</span>
         <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">train_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+        <span class="n">train_data_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span>
         <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Public&quot;</span><span class="p">,</span>
     <span class="p">):</span>
@@ -2838,15 +2846,18 @@ document.write(`
 <span class="sd">        Returns a string that represents the location of the training table within CAS.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Upload raw training data to caslib so that data can be analyzed</span>
-        <span class="n">train_data_name</span> <span class="o">=</span> <span class="n">model_prefix</span> <span class="o">+</span> <span class="s2">&quot;_train_data&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">train_data_name</span><span class="p">:</span>
+            <span class="n">train_data_name</span> <span class="o">=</span> <span class="n">model_prefix</span> <span class="o">+</span> <span class="s2">&quot;_train_data&quot;</span>
         <span class="n">upload_train_data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span>
             <span class="n">train_data</span><span class="p">,</span> <span class="n">casout</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">train_data_name</span><span class="p">,</span> <span class="s2">&quot;caslib&quot;</span><span class="p">:</span> <span class="n">caslib</span><span class="p">},</span> <span class="n">promote</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">upload_train_data</span><span class="o">.</span><span class="n">status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;A table with the name </span><span class="si">{</span><span class="n">train_data_name</span><span class="si">}</span><span class="s2"> already exists in the specified caslib. Please &quot;</span>
-                <span class="s2">&quot;either delete/rename the old table or give a new name to the current table.&quot;</span>
+            <span class="c1"># raise RuntimeError(</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;A table with the name </span><span class="si">{</span><span class="n">train_data_name</span><span class="si">}</span><span class="s2"> already exists in the specified caslib. If this &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;is not intentional, please either rename the training data file or remove the duplicate from &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;the caslib.&quot;</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">server</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">caslib</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">train_data_name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span></div>
@@ -3068,7 +3079,7 @@ document.write(`
         <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
             <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;DTREE&quot;</span>
             <span class="n">treeCrit</span> <span class="o">=</span> <span class="s2">&quot;Entropy&quot;</span>
-        <span class="k">elif</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span><span class="p">:</span>
             <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;RTREE&quot;</span>
             <span class="n">treeCrit</span> <span class="o">=</span> <span class="s2">&quot;RSS&quot;</span>
         <span class="k">else</span><span class="p">:</span>
@@ -3197,20 +3208,23 @@ document.write(`
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_files</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">ROC</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_files</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="s2">&quot;The ModelProperties.json file must be generated before the model card data &quot;</span>
+                    <span class="s2">&quot;The dmcas_roc.json file must be generated before the model card data &quot;</span>
                     <span class="s2">&quot;can be generated.&quot;</span>
                 <span class="p">)</span>
             <span class="n">roc_table</span> <span class="o">=</span> <span class="n">model_files</span><span class="p">[</span><span class="n">ROC</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="n">ROC</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="s2">&quot;The ModelProperties.json file must be generated before the model card data &quot;</span>
+                    <span class="s2">&quot;The dmcas_roc.json file must be generated before the model card data &quot;</span>
                     <span class="s2">&quot;can be generated.&quot;</span>
                 <span class="p">)</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_files</span><span class="p">)</span> <span class="o">/</span> <span class="n">ROC</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">roc_file</span><span class="p">:</span>
                 <span class="n">roc_table</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">roc_file</span><span class="p">)</span>
         <span class="n">correct_text</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CORRECT&quot;</span><span class="p">,</span> <span class="s2">&quot;INCORRECT&quot;</span><span class="p">,</span> <span class="s2">&quot;CORRECT&quot;</span><span class="p">,</span> <span class="s2">&quot;INCORRECT&quot;</span><span class="p">]</span>
         <span class="n">outcome_values</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">]</span>
+        <span class="n">target_texts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Event&quot;</span><span class="p">,</span> <span class="s2">&quot;Event&quot;</span><span class="p">,</span> <span class="s2">&quot;NEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;NEvent&quot;</span><span class="p">]</span>
+        <span class="n">target_values</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">]</span>
+
         <span class="n">misc_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="c1"># Iterates through ROC table to get TRAIN, TEST, and VALIDATE data with a cutoff of .5</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
@@ -3221,8 +3235,12 @@ document.write(`
                 <span class="n">roc_data</span><span class="p">[</span><span class="s2">&quot;_TN_&quot;</span><span class="p">],</span>
                 <span class="n">roc_data</span><span class="p">[</span><span class="s2">&quot;_FN_&quot;</span><span class="p">],</span>
             <span class="p">]</span>
-            <span class="k">for</span> <span class="n">c_text</span><span class="p">,</span> <span class="n">c_val</span><span class="p">,</span> <span class="n">o_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                <span class="n">correct_text</span><span class="p">,</span> <span class="n">correctness_values</span><span class="p">,</span> <span class="n">outcome_values</span>
+            <span class="k">for</span> <span class="n">c_text</span><span class="p">,</span> <span class="n">c_val</span><span class="p">,</span> <span class="n">o_val</span><span class="p">,</span> <span class="n">t_txt</span><span class="p">,</span> <span class="n">t_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="n">correct_text</span><span class="p">,</span>
+                <span class="n">correctness_values</span><span class="p">,</span>
+                <span class="n">outcome_values</span><span class="p">,</span>
+                <span class="n">target_texts</span><span class="p">,</span>
+                <span class="n">target_values</span><span class="p">,</span>
             <span class="p">):</span>
                 <span class="n">misc_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="p">{</span>
@@ -3233,6 +3251,8 @@ document.write(`
                             <span class="s2">&quot;_DataRole_&quot;</span><span class="p">:</span> <span class="n">roc_data</span><span class="p">[</span><span class="s2">&quot;_DataRole_&quot;</span><span class="p">],</span>
                             <span class="s2">&quot;_cutoffSource_&quot;</span><span class="p">:</span> <span class="s2">&quot;Default&quot;</span><span class="p">,</span>
                             <span class="s2">&quot;_cutoff_&quot;</span><span class="p">:</span> <span class="s2">&quot;0.5&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;TargetText&quot;</span><span class="p">:</span> <span class="n">t_txt</span><span class="p">,</span>
+                            <span class="s2">&quot;Target&quot;</span><span class="p">:</span> <span class="n">t_val</span><span class="p">,</span>
                         <span class="p">},</span>
                         <span class="s2">&quot;rowNumber&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">misc_data</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
                     <span class="p">}</span>
@@ -3310,7 +3330,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
     <br/>
   </p>
 </div>
