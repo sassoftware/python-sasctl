@@ -29,13 +29,14 @@ from sasctl._services.score_execution import ScoreExecution as se
 
 # Creating a CustomMock for list_executions to avoid a TypeError when comparing status code from mock with >= 400 in score_execution
 class CustomMock:
-    def __init__(self, status_code, json_info):
-        self.status_code = status_code
+    def __init__(self, json_info):
         self.json_info = json_info
 
     def get(self, key1, key2=None, key3=None):
         if key2 is None and key3 is None:
             return self.json_info[key1]
+        elif key2 and not key3:
+            return self.json_info[key1][key2]
         else:
             return self.json_info[key1][key2][key3]
 
@@ -74,31 +75,32 @@ def test_create_score_execution():
                     "sasctl._services.score_execution.ScoreExecution.post"
                 ) as post:
                     # Invalid score definition id test case
-                    get_definition.return_value.status_code = 404
+                    get_definition.return_value = None
                     with pytest.raises(HTTPError):
                         se.create_score_execution(score_definition_id="12345")
 
                     # Valid score definition id and invalid list_executions argument test case
-                    get_definition.return_value.status_code = 200
-                    get_definition.return_value.json.return_value = {
-                        "inputData": {
-                            "libraryName": "cas-shared-default",
-                            "tableName": "test_table",
+                    get_definition_mock = CustomMock(
+                        json_info={
+                            "inputData": {
+                                "libraryName": "cas-shared-default",
+                                "tableName": "test_table",
+                            },
+                            "name": "score_def_name",
+                            "objectDescriptor": {
+                                "name": "test_model",
+                                "type": "sas.publish.example",
+                                "uri": "/modelPublish/models/example",
+                            },
                         },
-                        "name": "score_def_name",
-                        "objectDescriptor": {
-                            "name": "test_model",
-                            "type": "sas.publish.example",
-                            "uri": "/modelPublish/models/example",
-                        },
-                    }
-                    list_executions.return_value.status_code = 404
+                    )
+                    get_definition.return_value = get_definition_mock
+                    list_executions.return_value = None
                     with pytest.raises(HTTPError):
                         se.create_score_execution(score_definition_id="12345")
 
                     # Valid list_executions argument with execution already running but invalid delete_execution argument test case
                     list_mock_execution = CustomMock(
-                        status_code=200,
                         json_info={"count": 1, "items": [{"id": "1234"}]},
                     )
                     list_executions.return_value = list_mock_execution
@@ -114,7 +116,6 @@ def test_create_score_execution():
 
                     # Valid list_executions argument without execution already running test case
                     list_mock_execution_diff_count = CustomMock(
-                        status_code=200,
                         json_info={"count": 0, "items": [{"id": "1234"}]},
                     )
                     list_executions.return_value = list_mock_execution_diff_count
