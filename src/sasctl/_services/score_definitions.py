@@ -102,7 +102,7 @@ class ScoreDefinitions(Service):
 
         # Optional mapping - Maps the variables in the data to the variables of the score object. It's not necessary to create a score definition.
 
-        table = cls._cas_management.get_table(server_name, library_name, table_name)
+        table = cls._cas_management.get_table(table_name, library_name, server_name)
         if not table and not table_file:
             raise HTTPError(
                 f"This table may not exist in CAS. Please include the `table_file` argument in the function call if it doesn't exist."
@@ -111,7 +111,7 @@ class ScoreDefinitions(Service):
             cls._cas_management.upload_file(
                 str(table_file), table_name
             )  # do I need to add a check if the file doesn't exist or does upload_file take care of that?
-            table = cls._cas_management.get_table(server_name, library_name, table_name)
+            table = cls._cas_management.get_table(table_name, library_name, server_name)
             if not table:
                 raise HTTPError(
                     f"The file failed to upload properly or another error occurred."
