@@ -6,7 +6,7 @@ from pathlib import Path
 import json
 from typing import Union
 
-from ..core import current_session, delete, get, sasctl_command
+from ..core import current_session, delete, get, sasctl_command, RestObj
 from .cas_management import CASManagement
 from .model_repository import ModelRepository
 from .service import Service
@@ -76,10 +76,10 @@ class ScoreDefinitions(Service):
 
         model = cls._model_respository.get_model(model_id)
 
-        if model.status_code >= 400:
+        if not model:
             raise HTTPError(
                 {
-                    f"This model may not exist in a project or the model may not exist at all. See error: {model.json()}"
+                    f"This model may not exist in a project or the model may not exist at all."
                 }
             )
         model_project_id = model.get("projectId")
@@ -103,18 +103,18 @@ class ScoreDefinitions(Service):
         # Optional mapping - Maps the variables in the data to the variables of the score object. It's not necessary to create a score definition.
 
         table = cls._cas_management.get_table(server_name, library_name, table_name)
-        if table.status_code >= 400 and not table_file:
+        if not table and not table_file:
             raise HTTPError(
-                f"This table may not exist in CAS. Please include the `table_file` argument in the function call if it doesn't exist. See error {table.json()}"
+                f"This table may not exist in CAS. Please include the `table_file` argument in the function call if it doesn't exist."
             )
-        elif table.status_code >= 400 and table_file:
+        elif not table and table_file:
             cls._cas_management.upload_file(
                 str(table_file), table_name
             )  # do I need to add a check if the file doesn't exist or does upload_file take care of that?
             table = cls._cas_management.get_table(server_name, library_name, table_name)
-            if table.status_code >= 400:
+            if not table:
                 raise HTTPError(
-                    f"The file failed to upload properly or another error occurred. See the error: {table.json()}"
+                    f"The file failed to upload properly or another error occurred."
                 )
             # Checks if the inputted table exists, and if not, uploads a file to create a new table
 

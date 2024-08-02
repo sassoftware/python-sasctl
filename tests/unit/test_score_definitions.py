@@ -26,8 +26,7 @@ from sasctl._services.score_definitions import ScoreDefinitions as sd
 
 
 class CustomMock:
-    def __init__(self, status_code, json_info):
-        self.status_code = status_code
+    def __init__(self, json_info):
         self.json_info = json_info
 
     def get(self, key1, key2=None, key3=None):
@@ -66,7 +65,7 @@ def test_create_score_definition():
                     "sasctl._services.score_definitions.ScoreDefinitions.post"
                 ) as post:
                     # Invalid model id test case
-                    get_model.return_value.status_code = 404
+                    get_model.return_value = None
                     with pytest.raises(HTTPError):
                         sd.create_score_definition(
                             score_def_name="test_create_sd",
@@ -75,14 +74,16 @@ def test_create_score_definition():
                         )
 
                     # Valid model id but invalid table name with no table_file argument test case
-                    get_model.return_value.status_code = 200
-                    get_model.return_value.json.return_value = {
-                        "id": "12345",
-                        "projectId": "54321",
-                        "projectVersionId": "67890",
-                        "name": "test_model",
-                    }
-                    get_table.return_value.status_code = 404
+                    get_model_mock = CustomMock(
+                        json_info={
+                            "id": "12345",
+                            "projectId": "54321",
+                            "projectVersionId": "67890",
+                            "name": "test_model",
+                        },
+                    )
+                    get_model.return_value = get_model_mock
+                    get_table.return_value = None
                     with pytest.raises(HTTPError):
                         sd.create_score_definition(
                             score_def_name="test_create_sd",
@@ -91,9 +92,9 @@ def test_create_score_definition():
                         )
 
                     # Invalid table name with a table_file argument that doesn't work test case
-                    get_table.return_value.status_code = 404
+                    get_table.return_value = None
                     upload_file.return_value = None
-                    get_table.return_value.status_code = 404
+                    get_table.return_value = None
                     with pytest.raises(HTTPError):
                         sd.create_score_definition(
                             score_def_name="test_create_sd",
@@ -103,12 +104,12 @@ def test_create_score_definition():
                         )
 
                     # Valid table_file argument that successfully creates a table test case
-                    get_table.return_value.status_code = 404
+                    get_table.return_value = None
                     upload_file.return_value = RestObj
-                    get_table.return_value.status_code = 200
-                    get_table.return_value.json.return_value = {
-                        "tableName": "test_table"
-                    }
+                    get_table_mock = CustomMock(
+                        json_info={"tableName": "test_table"},
+                    )
+                    get_table.return_value = get_table_mock
                     response = sd.create_score_definition(
                         score_def_name="test_create_sd",
                         model_id="12345",
@@ -118,10 +119,7 @@ def test_create_score_definition():
                     assert response
 
                     # Valid table_name argument test case
-                    get_table.return_value.status_code = 200
-                    get_table.return_value.json.return_value = {
-                        "tableName": "test_table"
-                    }
+                    get_table.return_value = get_table_mock
                     response = sd.create_score_definition(
                         score_def_name="test_create_sd",
                         model_id="12345",
@@ -131,8 +129,7 @@ def test_create_score_definition():
                     assert response
 
                     # Checking response with inputVariables in model elements
-                    model_mock_execution = CustomMock(
-                        status_code=200,
+                    get_model_mock = CustomMock(
                         json_info={
                             "id": "12345",
                             "projectId": "54321",
@@ -145,11 +142,8 @@ def test_create_score_definition():
                             ],
                         },
                     )
-                    get_model.return_value = model_mock_execution
-                    get_table.return_value.status_code = 200
-                    get_table.return_value.json.return_value = {
-                        "tableName": "test_table"
-                    }
+                    get_model.return_value = get_model_mock
+                    get_table.return_value = get_table_mock
                     response = sd.create_score_definition(
                         score_def_name="test_create_sd",
                         model_id="12345",

@@ -59,8 +59,8 @@ class ScoreExecution(Service):
 
         # Gets information about the scoring object from the score definition and raises an exception if the score definition does not exist
         score_definition = cls._score_definitions.get_definition(score_definition_id)
-        if score_definition.status_code >= 400:
-            raise HTTPError(score_definition.json())
+        if not score_definition:
+            raise HTTPError
         score_exec_name = score_definition.get("name")
         model_uri = score_definition.get("objectDescriptor", "uri")
         model_name = score_definition.get("objectDescriptor", "name")
@@ -76,10 +76,8 @@ class ScoreExecution(Service):
         score_execution = cls.list_executions(
             filter=f"eq(scoreDefinitionId, '{score_definition_id}')"
         )
-        if score_execution.status_code >= 400:
-            raise HTTPError(
-                f"Something went wrong in the LIST_EXECUTIONS statement. See error: {score_execution.json()}"
-            )
+        if not score_execution:
+            raise HTTPError(f"Something went wrong in the LIST_EXECUTIONS statement.")
 
         # Checking the count of the execution list to see if there are any score executions for this score_definition_id already running
         execution_count = score_execution.get("count")  # Exception catch location
@@ -87,9 +85,7 @@ class ScoreExecution(Service):
             execution_id = score_execution.get("items", 0, "id")
             deleted_execution = cls.delete_execution(execution_id)
             if deleted_execution.status_code >= 400:
-                raise HTTPError(
-                    f"Something went wrong in the DELETE statement. See error: {deleted_execution.json()}"
-                )
+                raise HTTPError(f"Something went wrong in the DELETE statement.")
 
         headers_score_exec = {"Content-Type": "application/json"}
 
