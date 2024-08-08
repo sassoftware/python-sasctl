@@ -2314,9 +2314,9 @@ class JSONFiles:
                 "Only classification and prediction target types are currently accepted."
             )
         if selection_statistic is None:
-            if target_type is "classification":
+            if target_type == "classification":
                 selection_statistic = "_KS_"
-            elif target_type is "prediction":
+            elif target_type == "prediction":
                 selection_statistic = "_ASE_"
         if selection_statistic not in cls.valid_params:
             raise RuntimeError(
