@@ -122,7 +122,7 @@ class ScoreDefinitions(Service):
             "name": score_def_name,
             "description": description,
             "objectDescriptor": {
-                "uri": f"/modelRepository/models/{model_id}",
+                "uri": f"/modelManagement/models/{model_id}",
                 "name": f"{model_name}({model_version})",
                 "type": "sas.models.model",
             },
