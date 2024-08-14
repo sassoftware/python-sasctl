@@ -5,12 +5,19 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from abc import ABC, abstractmethod
+from collections import OrderedDict
 from typing import Any, Callable, Dict, List, Union
 
+import numpy as np
 import pandas as pd
 
+try:
+    import torch
+except ImportError:
+    torch = None
 
-def get_model_info(model, X, y):
+
+def get_model_info(model, X, y=None):
     """Extracts metadata about the model and associated data sets.
 
     Parameters
@@ -32,10 +39,17 @@ def get_model_info(model, X, y):
         If `model` is not a recognized type.
 
     """
+
+    # Don't need to import sklearn, just check if the class is part of that module.
     if model.__class__.__module__.startswith("sklearn."):
         return SklearnModelInfo(model, X, y)
 
-    raise ValueError(f"Unrecognized model type {model} received.")
+    # Most PyTorch models are actually subclasses of torch.nn.Module, so checking module
+    # name alone is not sufficient.
+    elif torch and isinstance(model, torch.nn.Module):
+        return PyTorchModelInfo(model, X, y)
+
+    raise ValueError(f"Unrecognized model type {type(model)} received.")
 
 
 class ModelInfo(ABC):
@@ -63,6 +77,10 @@ class ModelInfo(ABC):
     threshold : float or None
         The cutoff value used in a binary classification model to determine which class an
         observation belongs to.  Returns None if not a binary classification model.
+    X : pandas.DataFrame
+        A sample of the input data used to train the model.
+    y : pandas.DataFrame
+        A sample of the output data produced by the model.
 
     """
 
@@ -113,9 +131,8 @@ class ModelInfo(ABC):
         return
 
     @property
-    @abstractmethod
     def output_column_names(self) -> List[str]:
-        return
+        return self.y.columns.tolist()
 
     @property
     @abstractmethod
@@ -124,15 +141,158 @@ class ModelInfo(ABC):
 
     @property
     @abstractmethod
+    def target_column(self):
+        return
+
+    @property
+    @abstractmethod
     def target_values(self):
         # "target event"
-        # value that indicates the target event has occurred in bianry classi
+        # value that indicates the target event has occurred in bianry classification
         return
 
     @property
     @abstractmethod
     def threshold(self) -> Union[str, None]:
         return
+
+    @property
+    @abstractmethod
+    def X(self) -> pd.DataFrame:
+        return
+
+    @property
+    @abstractmethod
+    def y(self) -> pd.DataFrame:
+        return
+
+
+class PyTorchModelInfo(ModelInfo):
+    """Stores model information for a PyTorch model instance."""
+
+    def __init__(self, model, X, y=None):
+
+        if torch is None:
+            raise RuntimeError("The PyTorch library must be installed to work with PyTorch models.  Please `pip install torch`.")
+
+        if not isinstance(model, torch.nn.Module):
+            raise ValueError(f"Expected PyTorch model, received {type(model)}.")
+        if not isinstance(X, (np.ndarray, torch.Tensor)):
+            raise ValueError(f"Expected input data to be a numpy array or PyTorch tensor, received {type(X)}.")
+        if X.ndim != 2:
+            raise ValueError(f"Expected input date with shape (n_samples, n_dim), received shape {X.shape}.")
+
+        # Store the current setting so that we can restore it later
+        is_training = model.training
+
+        if y is None:
+            model.eval()
+
+            with torch.no_grad():
+                y = model(X)
+
+        if not isinstance(y, (np.ndarray, torch.Tensor)):
+            raise ValueError(f"Expected output data to be a numpy array or PyTorch tensor, received {type(y)}.")
+
+        self._model = model
+
+        # TODO: convert X and y to DF with arbitrary names
+        self._X = X
+        self._y = y
+
+        self._X_df = pd.DataFrame(X, columns=[f"Var{i+1}" for i in range(X.shape[1])])
+        self._y_df = pd.DataFrame(y, columns=[f"Out{i+1}" for i in range(y.shape[1])])
+
+        self._layer_info = self._get_layer_info(model, X)
+
+        # Reset the model to its original training state
+        model.train(is_training)
+
+    @staticmethod
+    def _get_layer_info(model, X):
+        """Run data through the model to determine layer types and tensor shapes.
+
+        Parameters
+        ----------
+        model : torch.nn.Module
+        X : torch.Tensor
+
+        Returns
+        -------
+        List[Tuple[torch.nn.Module, torch.Tensor, torch.Tensor]]
+
+        """
+        is_training = model.training
+        layers = []
+
+        def hook(module, input, output, *args):
+            # layers[module] = (input, output)
+            layers.append((module, input, output))
+
+        for module in model.modules():
+            module.register_forward_hook(hook)
+
+        model.eval()
+        with torch.no_grad():
+            model(X)
+
+        return layers
+
+    @property
+    def algorithm(self):
+        return "PyTorch"
+
+    @property
+    def is_binary_classifier(self):
+        return False
+
+    @property
+    def is_classifier(self):
+        return False
+
+    @property
+    def is_clusterer(self):
+        return False
+
+    @property
+    def is_regressor(self):
+        return False
+
+    @property
+    def model(self):
+        return self._model
+
+    @property
+    def model_params(self) -> Dict[str, Any]:
+        return self.model.__dict__
+
+    @property
+    def output_column_names(self):
+        return list(self.y.columns)
+
+    @property
+    def predict_function(self):
+        return self.model.forward
+
+    @property
+    def target_column(self):
+        return self.y.columns[0]
+
+    @property
+    def target_values(self):
+        return []
+
+    @property
+    def threshold(self):
+        return None
+
+    @property
+    def X(self):
+        return self._X_df
+
+    @property
+    def y(self):
+        return self._y_df
 
 
 class SklearnModelInfo(ModelInfo):
@@ -163,7 +323,7 @@ class SklearnModelInfo(ModelInfo):
 
         # If not a classfier or a clustering algorithm and output is a single column, then
         # assume its a regression algorithm
-        is_regressor = not is_classifier and not is_clusterer and y_df.shape[1] == 1
+        is_regressor = not is_classifier and not is_clusterer and (y_df.shape[1] == 1 or "Regress" in type(model).__name__)
 
         if not is_classifier and not is_regressor and not is_clusterer:
             raise ValueError(f"Unexpected model type {model} received.")
@@ -182,7 +342,8 @@ class SklearnModelInfo(ModelInfo):
             elif self.is_classifier:
                 # Output is probability of each label.  Name columns according to classes.
                 y_df.columns = [f"P_{class_}" for class_ in model.classes_]
-            else:
+            elif not y_df.empty:
+                # If we were passed data for `y` but we don't know the format raise an error.
                 # This *shouldn't* happen unless a cluster algorithm somehow produces wide output.
                 raise ValueError(f"Unrecognized model output format.")
 
@@ -237,6 +398,10 @@ class SklearnModelInfo(ModelInfo):
         return self.model.predict
 
     @property
+    def target_column(self):
+        return self.y.columns[0]
+
+    @property
     def target_values(self):
         if self.is_binary_classifier:
             return [self.model.classes_[-1]]
@@ -248,3 +413,11 @@ class SklearnModelInfo(ModelInfo):
         # sklearn seems to always use 0.5 as a cutoff for .predict()
         if self.is_binary_classifier:
             return 0.5
+
+    @property
+    def X(self):
+        return self._X
+
+    @property
+    def y(self):
+        return self._y
