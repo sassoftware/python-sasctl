@@ -313,13 +313,21 @@ class SklearnModelInfo(ModelInfo):
     }
 
     def __init__(self, model, X, y):
-        # Ensure input/output is a DataFrame for consistency
-        X_df = pd.DataFrame(X)
-        y_df = pd.DataFrame(y)
+
 
         is_classifier = hasattr(model, "classes_")
         is_binary_classifier = is_classifier and len(model.classes_) == 2
         is_clusterer = hasattr(model, "cluster_centers_")
+
+        if y is None:
+            if hasattr(model, "predict_proba"):
+                y = model.predict_proba(X)
+            else:
+                y = model.predict(X)
+
+        # Ensure input/output is a DataFrame for consistency
+        X_df = pd.DataFrame(X)
+        y_df = pd.DataFrame(y)
 
         # If not a classfier or a clustering algorithm and output is a single column, then
         # assume its a regression algorithm
