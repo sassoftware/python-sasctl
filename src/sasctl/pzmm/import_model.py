@@ -111,7 +111,9 @@ def project_exists(
                 response = _create_project(project, model, repo, input_var, output_var)
             else:
                 response = mr.create_project(project, repo)
-            print(f"A new project named {response.name} was created.")
+
+            if check_if_jupyter():
+                print(f"A new project named {response.name} was created.")
             return response
     else:
         model, input_var, output_var = get_model_properties(target_values, model_files)
