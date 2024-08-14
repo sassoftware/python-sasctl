@@ -22,9 +22,21 @@ def get_model_properties(
     model_files: Union[str, Path, None] = None,
 ):
     if type(model_files) is dict:
-        model = model_files["ModelProperties.json"]
-        input_var = model_files["inputVar.json"]
-        output_var = model_files["outputVar.json"]
+        try:
+            model = json.loads(model_files["ModelProperties.json"])
+        except json.JSONDecodeError:
+            model = model_files["ModelProperties.json"]
+
+        try:
+            input_var = json.loads(model_files["inputVar.json"])
+        except json.JSONDecodeError:
+            input_var = model_files["inputVar.json"]
+
+        try:
+            output_var = json.loads(model_files["outputVar.json"])
+        except json.JSONDecodeError:
+            output_var = model_files["outputVar.json"]
+
     else:
         with open(Path(model_files) / "ModelProperties.json") as f:
             model = json.load(f)
@@ -319,9 +331,7 @@ class ImportModel:
             if isinstance(model_files, dict):
                 zip_io_file = zm.zip_files(model_files, model_prefix, is_viya4=False)
             else:
-                zip_io_file = zm.zip_files(
-                    Path(model_files), model_prefix, is_viya4=False
-                )
+                zip_io_file = zm.zip_files(Path(model_files), model_prefix, is_viya4=False)
                 if cls.notebook_output:
                     print(f"All model files were zipped to {Path(model_files)}.")
 
