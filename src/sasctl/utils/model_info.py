@@ -223,19 +223,29 @@ class PyTorchModelInfo(ModelInfo):
 
         """
         is_training = model.training
+
+        # Track the registered hooks so we can unregister them after running.
+        # NOTE: if not removed, hooks can prevent model from being sucessfully pickled.
+        hooks = []
+
+        # Track the layers and their input/output tensors for later reference.
         layers = []
 
         def hook(module, input, output, *args):
-            # layers[module] = (input, output)
             layers.append((module, input, output))
 
         for module in model.modules():
-            module.register_forward_hook(hook)
+            handle = module.register_forward_hook(hook)
+            hooks.append(handle)
 
         model.eval()
         with torch.no_grad():
             model(X)
 
+        for handle in hooks:
+            handle.remove()
+
+        model.train(is_training)
         return layers
 
     @property
