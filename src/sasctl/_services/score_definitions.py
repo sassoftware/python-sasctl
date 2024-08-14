@@ -124,7 +124,7 @@ class ScoreDefinitions(Service):
             "objectDescriptor": {
                 "uri": f"/modelManagement/models/{model_id}",
                 "name": f"{model_name}({model_version})",
-                "type": "sas.models.model",
+                "type": "sas.models.model.python",
             },
             "inputData": {
                 "type": "CASTable",
