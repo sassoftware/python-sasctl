@@ -469,7 +469,7 @@ def register_model(
 
         pzmm_files = {}
 
-        pickled_model = PickleModel.pickle_trained_model("model", info.model)
+        pickled_model = PickleModel.pickle_trained_model(name, info.model)
         # Returns dict with "prefix.pickle": bytes
         assert len(pickled_model) == 1
 
@@ -490,7 +490,13 @@ def register_model(
         pzmm_files.update(metadata)
         pzmm_files.update(properties)
 
-        model_obj, _ = ImportModel.import_model(pzmm_files, name, project)
+        model_obj, _ = ImportModel.import_model(model_files=pzmm_files,
+                                                model_prefix=name,
+                                                project=project,
+                                                input_data=info.X,
+                                                predict_method=info.predict_function,
+                                                predict_threshold=info.threshold,
+                                                target_values=info.target_values)
         return model_obj
 
     # # If the model is a scikit-learn model, generate the model dictionary
