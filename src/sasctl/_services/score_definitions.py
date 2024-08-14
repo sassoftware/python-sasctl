@@ -26,7 +26,7 @@ class ScoreDefinitions(Service):
 
     _SERVICE_ROOT = "/scoreDefinitions"
     _cas_management = CASManagement()
-    _model_respository = ModelRepository()
+    _model_repository = ModelRepository()
 
     (
         list_definitions,
@@ -74,7 +74,7 @@ class ScoreDefinitions(Service):
 
         """
 
-        model = cls._model_respository.get_model(model_id)
+        model = cls._model_repository.get_model(model_id)
 
         if not model:
             raise HTTPError(
