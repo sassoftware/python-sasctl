@@ -494,9 +494,11 @@ def register_model(
                                                 model_prefix=name,
                                                 project=project,
                                                 input_data=info.X,
-                                                predict_method=info.predict_function,
+                                                predict_method=[info.predict_function, info.y.iloc[0].to_list()],
                                                 predict_threshold=info.threshold,
-                                                target_values=info.target_values)
+                                                score_metrics=info.output_column_names,
+                                                target_values=info.target_values,
+                                                model_file_name=list(pickled_model.keys())[0])
         return model_obj
 
     # # If the model is a scikit-learn model, generate the model dictionary
