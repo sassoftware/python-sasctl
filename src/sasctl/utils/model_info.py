@@ -5,7 +5,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from abc import ABC, abstractmethod
-from collections import OrderedDict
 from typing import Any, Callable, Dict, List, Union
 
 import numpy as np
@@ -78,9 +77,9 @@ class ModelInfo(ABC):
         The cutoff value used in a binary classification model to determine which class an
         observation belongs to.  Returns None if not a binary classification model.
     X : pandas.DataFrame
-        A sample of the input data used to train the model.
+        A sample of the input data used to train the model.  Must contain at least one row.
     y : pandas.DataFrame
-        A sample of the output data produced by the model.
+        A sample of the output data produced by the model.  Must have at least one row.
 
     """
 
