@@ -30,8 +30,7 @@ from .exceptions import AuthorizationError
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
-from .utils.misc import installed_packages
-from .utils.pymas import from_pickle
+
 
 logger = logging.getLogger(__name__)
 
@@ -501,91 +500,7 @@ def register_model(
                                                 model_file_name=list(pickled_model.keys())[0])
         return model_obj
 
-    # # If the model is a scikit-learn model, generate the model dictionary
-    # # from it and pickle the model for storage
-    # if all(hasattr(model, attr) for attr in ["_estimator_type", "get_params"]):
-    #     # Pickle the model so we can store it
-    #     model_pkl = pickle.dumps(model)
-    #     files.append({"name": "model.pkl", "file": model_pkl, "role": "Python Pickle"})
-    #
-    #     target_funcs = [f for f in ("predict", "predict_proba") if hasattr(model, f)]
-    #
-    #     # Extract model properties
-    #     model = _sklearn_to_dict(model)
-    #     model["name"] = name
-    #
-    #     # Get package versions in environment
-    #     packages = installed_packages()
-    #     if record_packages and packages is not None:
-    #         model.setdefault("properties", [])
-    #
-    #         # Define a custom property to capture each package version
-    #         # NOTE: some packages may not conform to the 'name==version' format
-    #         #  expected here (e.g those installed with pip install -e). Such
-    #         #  packages also generally contain characters that are not allowed
-    #         # in custom properties, so they are excluded here.
-    #         for p in packages:
-    #             if "==" in p:
-    #                 n, v = p.split("==")
-    #                 model["properties"].append(_property("env_%s" % n, v))
-    #
-    #         # Generate and upload a requirements.txt file
-    #         files.append({"name": "requirements.txt", "file": "\n".join(packages)})
-    #
-    #     # Generate PyMAS wrapper
-    #     try:
-    #         mas_module = from_pickle(
-    #             model_pkl, target_funcs, input_types=input, array_input=True
-    #         )
-    #
-    #         # Include score code files from ESP and MAS
-    #         files.append(
-    #             {
-    #                 "name": "dmcas_packagescorecode.sas",
-    #                 "file": mas_module.score_code(),
-    #                 "role": "Score Code",
-    #             }
-    #         )
-    #         files.append(
-    #             {
-    #                 "name": "dmcas_epscorecode.sas",
-    #                 "file": mas_module.score_code(dest="CAS"),
-    #                 "role": "score",
-    #             }
-    #         )
-    #         files.append(
-    #             {
-    #                 "name": "python_wrapper.py",
-    #                 "file": mas_module.score_code(dest="Python"),
-    #             }
-    #         )
-    #
-    #         model["inputVariables"] = [
-    #             var.as_model_metadata() for var in mas_module.variables if not var.out
-    #         ]
-    #
-    #         model["outputVariables"] = [
-    #             var.as_model_metadata() for var in mas_module.variables if var.out
-    #         ]
-    #     except ValueError:
-    #         # PyMAS creation failed, most likely because input data wasn't
-    #         # provided
-    #         logger.exception("Unable to inspect model %s", model)
-    #
-    #         warn(
-    #             "Unable to determine input/output variables. "
-    #             " Model variables will not be specified and some "
-    #             "model functionality may not be available."
-    #         )
-    # else:
-    #     # Otherwise, the model better be a dictionary of metadata
-    #     if not isinstance(model, dict):
-    #         raise TypeError(
-    #             "Expected an instance of '%r' but received '%r'." % ({}, model)
-    #         )
-
     # If we got this far, then `model` is a dictionary of model metadata.
-
     if create_project:
         project = _create_project(project, model, repo_obj)
 
