@@ -1170,8 +1170,8 @@ def test_check_valid_model_prefix():
     - check model_prefix validity
         - raise warning and replace if invalid
     """
-    assert sc._check_valid_model_prefix("TestPrefix") == "TestPrefix"
-    assert sc._check_valid_model_prefix("Test Prefix") == "Test_Prefix"
+    assert sc.sanitize_model_prefix("TestPrefix") == "TestPrefix"
+    assert sc.sanitize_model_prefix("Test Prefix") == "Test_Prefix"
 
 
 def test_write_score_code(score_code_mocks):

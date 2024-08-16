@@ -153,6 +153,8 @@ class ScoreCode:
 
         model_id = cls._check_viya_version(model)
 
+        sanitized_model_prefix = cls.sanitize_model_prefix(model_prefix)
+
         # Set the model_file_name based on kwargs input
         if "model_file_name" in kwargs and "binary_string" in kwargs:
             raise ValueError(
@@ -203,7 +205,7 @@ class ScoreCode:
         else:
             model_load = None
 
-        model_prefix = cls._check_valid_model_prefix(model_prefix)
+
 
         # Define the score function using the variables found in input_data
         cls.score_code += f"def score({', '.join(input_var_list)}):\n"
@@ -295,7 +297,7 @@ def score(var1, var2, var3, var4):
             )
 
         if score_code_path:
-            py_code_path = Path(score_code_path) / f"score_{model_prefix}.py"
+            py_code_path = Path(score_code_path) / f"score_{sanitized_model_prefix}.py"
             with open(py_code_path, "w") as py_file:
                 py_file.write(cls.score_code)
             if model_id and score_cas:
@@ -306,7 +308,7 @@ def score(var1, var2, var3, var4):
                     # noinspection PyUnboundLocalVariable
                     sas_file.write(cas_code)
         else:
-            output_dict = {f"score_{model_prefix}.py": cls.score_code}
+            output_dict = {f"score_{sanitized_model_prefix}.py": cls.score_code}
             if model_id and score_cas:
                 # noinspection PyUnboundLocalVariable
                 output_dict[MAS_CODE_NAME] = mas_code
@@ -2139,7 +2141,7 @@ if not isinstance(var1, pd.Series):
                 return None
 
     @staticmethod
-    def _check_valid_model_prefix(prefix: str) -> str:
+    def sanitize_model_prefix(prefix: str) -> str:
         """
         Check the model_prefix for a valid Python function name.
 
@@ -2153,6 +2155,7 @@ if not isinstance(var1, pd.Series):
         -------
         model_prefix : str
             Returns a model_prefix, adjusted as needed for valid Python function names.
+
         """
         # Replace model_prefix if a valid function name is not provided
         if not prefix.isidentifier():
