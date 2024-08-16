@@ -39,7 +39,7 @@ class ScoreDefinitions(Service):
     def create_score_definition(
         cls,
         score_def_name: str,
-        model_id: str,
+        model: Union[str, dict],
         table_name: str,
         table_file: Union[str, Path] = None,
         description: str = "",
@@ -53,8 +53,8 @@ class ScoreDefinitions(Service):
         --------
         score_def_name: str
             Name of score definition.
-        model_id: str
-            A user-inputted model if where the model exists in a project.
+        model : str or dict
+            The name or id of the model, or a dictionary representation of the model.
         table_name: str
             A user-inputted table name in CAS Management.
         table_file: str or Path, optional
@@ -74,7 +74,8 @@ class ScoreDefinitions(Service):
 
         """
 
-        model = cls._model_repository.get_model(model_id)
+        model = cls._model_repository.get_model(model)
+        model_id = model.id
 
         if not model:
             raise HTTPError(
