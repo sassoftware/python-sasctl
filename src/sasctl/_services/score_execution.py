@@ -139,10 +139,10 @@ class ScoreExecution(Service):
         start_poll = time.time()
         while time.time() - start_poll < timeout:
             score_execution_state = cls.get(f"executions/{exec_id}/state")
-            if score_execution_state.text == "complete":
-                print("Score execution state is 'complete'")
-                return "complete"
-            elif score_execution_state.text == "failed":
+            if score_execution_state == "completed":
+                print("Score execution state is 'completed'")
+                return "completed"
+            elif score_execution_state == "failed":
                 # TODO: Grab score execution logs and return those
                 print("The score execution state is failed.")
                 return "failed"
@@ -169,20 +169,10 @@ class ScoreExecution(Service):
 
         # If swat is not available, then
         if not swat:
-            if pd.__version__ >= StrictVersion("1.0.3"):
-                from pandas import json_normalize
-            else:
-                from pandas.io.json import json_normalize
-
-            warnings.warn(
-                "Without swat installed, the amount of rows from the output table that "
-                "can be collected are memory limited by the CAS worker."
-            )
-
-            output_columns = cls._cas_management.get(
-                f"servers/{server_name}/"
-                f"caslibs/{library_name}/"
-                f"tables/{table_name}/columns?limit=10000"
+            output_table = cls._no_gateway_get_results(
+                server_name,
+                library_name,
+                table_name
             )
             columns = json_normalize(output_columns.json(), "items")
             column_names = columns["names"].to_list()
@@ -200,25 +190,63 @@ class ScoreExecution(Service):
         else:
             session = current_session()
             cas = session.as_swat()
-            cas.loadActionSet("gateway")
-
-            gateway_code = f"""
-            import pandas as pd
-            import numpy as np
+            response = cas.loadActionSet("gateway")
+            if not response:
+                output_table = cls._no_gateway_get_results(
+                    server_name,
+                    library_name,
+                    table_name
+                )
+                return output_table
+            else:
+                gateway_code = f"""
+import pandas as pd
+import numpy as np
             
-            table = gateway.read_table({{"caslib": {library_name}, "name": {table_name}}}
+table = gateway.read_table({{"caslib": "{library_name}", "name": "{table_name}"}})
             
-            gateway.return_table(
-                "Execution Results", 
-                df = table, 
-                label = "label", 
-                title = "title"
-            )
-            """
+gateway.return_table("Execution Results", df = table, label = "label", title = "title")"""
 
-            output_table = cas.gateway.runlang(
-                code=gateway_code,
-                single=True,
-                timeout_millis=10000
-            )
-            return output_table
+                output_table = cas.gateway.runlang(
+                    code=gateway_code,
+                    single=True,
+                    timeout_millis=10000
+                )
+                output_table = pd.DataFrame(output_table["Execution Results"])
+                return output_table
+
+    @classmethod
+    def _no_gateway_get_results(
+            cls,
+            server_name,
+            library_name,
+            table_name
+    ):
+        if pd.__version__ >= StrictVersion("1.0.3"):
+            from pandas import json_normalize
+        else:
+            from pandas.io.json import json_normalize
+
+        warnings.warn(
+            "Without swat installed, the amount of rows from the output table that "
+            "can be collected are memory limited by the CAS worker."
+        )
+
+        output_columns = cls._cas_management.get(
+            f"servers/{server_name}/"
+            f"caslibs/{library_name}/"
+            f"tables/{table_name}/columns?limit=10000"
+        )
+        columns = json_normalize(output_columns.json(), "items")
+        column_names = columns["names"].to_list()
+
+        output_rows = cls._services.get(
+            f"casRowSets/servers/{server_name}"
+            f"caslibs/{library_name}"
+            f"tables/{table_name}/rows?limit=10000"
+        )
+        output_table = pd.DataFrame(
+            json_normalize(output_rows.json()["items"])["cells"].to_list(),
+            columns=column_names
+        )
+        return output_table
