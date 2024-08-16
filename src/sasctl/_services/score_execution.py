@@ -174,18 +174,6 @@ class ScoreExecution(Service):
                 library_name,
                 table_name
             )
-            columns = json_normalize(output_columns.json(), "items")
-            column_names = columns["names"].to_list()
-
-            output_rows = cls._services.get(
-                f"casRowSets/servers/{server_name}"
-                f"caslibs/{library_name}"
-                f"tables/{table_name}/rows?limit=10000"
-            )
-            output_table = pd.DataFrame(
-                json_normalize(output_rows.json()["items"])["cells"].to_list(),
-                columns=column_names
-            )
             return output_table
         else:
             session = current_session()
