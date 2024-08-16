@@ -10,7 +10,6 @@ import json
 import logging
 import math
 import os
-import pickle  # skipcq BAN-B301
 import re
 import sys
 from warnings import warn
@@ -47,59 +46,6 @@ _PROP_NAME_MAXLEN = 60
 
 def _property(k, v):
     return {"name": str(k)[:_PROP_NAME_MAXLEN], "value": str(v)[:_PROP_VALUE_MAXLEN]}
-
-
-def _sklearn_to_dict(model):
-    # Convert Scikit-learn values to built-in Model Manager values
-    mappings = {
-        "LogisticRegression": "Logistic regression",
-        "LinearRegression": "Linear regression",
-        "SVC": "Support vector machine",
-        "GradientBoostingClassifier": "Gradient boosting",
-        "GradientBoostingRegressor": "Gradient boosting",
-        "XGBClassifier": "Gradient boosting",
-        "XGBRegressor": "Gradient boosting",
-        "RandomForestClassifier": "Forest",
-        "DecisionTreeClassifier": "Decision tree",
-        "DecisionTreeRegressor": "Decision tree",
-        "classifier": "classification",
-        "regressor": "prediction",
-    }
-
-    if hasattr(model, "_final_estimator"):
-        estimator = model._final_estimator
-    else:
-        estimator = model
-    estimator = type(estimator).__name__
-
-    # Standardize algorithm names
-    algorithm = mappings.get(estimator, estimator)
-
-    # Standardize regression/classification terms
-    analytic_function = mappings.get(model._estimator_type, model._estimator_type)
-
-    if analytic_function == "classification" and "logistic" in algorithm.lower():
-        target_level = "Binary"
-    elif analytic_function == "prediction" and (
-        "regressor" in estimator.lower() or "regression" in algorithm.lower()
-    ):
-        target_level = "Interval"
-    else:
-        target_level = None
-
-    # Can tell if multi-class .multi_class
-    result = dict(
-        description=str(model)[:_DESC_MAXLEN],
-        algorithm=algorithm,
-        scoreCodeType="ds2MultiType",
-        trainCodeType="Python",
-        targetLevel=target_level,
-        function=analytic_function,
-        tool="Python %s.%s" % (sys.version_info.major, sys.version_info.minor),
-        properties=[_property(k, v) for k, v in model.get_params().items()],
-    )
-
-    return result
 
 
 def _create_project(project_name, model, repo, input_vars=None, output_vars=None):
@@ -468,14 +414,14 @@ def register_model(
 
         pzmm_files = {}
 
-        pickled_model = PickleModel.pickle_trained_model(name, info.model)
+        pickled_model = PickleModel().pickle_trained_model(name, info.model)
         # Returns dict with "prefix.pickle": bytes
         assert len(pickled_model) == 1
 
-        input_vars = JSONFiles.write_var_json(info.X, is_input=True)
-        output_vars = JSONFiles.write_var_json(info.y, is_input=False)
-        metadata = JSONFiles.write_file_metadata_json(model_prefix=name)
-        properties = JSONFiles.write_model_properties_json(
+        input_vars = JSONFiles().write_var_json(info.X, is_input=True)
+        output_vars = JSONFiles().write_var_json(info.y, is_input=False)
+        metadata = JSONFiles().write_file_metadata_json(model_prefix=name)
+        properties = JSONFiles().write_model_properties_json(
             model_name=name,
             model_desc=info.description,
             model_algorithm=info.algorithm,
@@ -489,7 +435,7 @@ def register_model(
         pzmm_files.update(metadata)
         pzmm_files.update(properties)
 
-        model_obj, _ = ImportModel.import_model(model_files=pzmm_files,
+        model_obj, _ = ImportModel().import_model(model_files=pzmm_files,
                                                 model_prefix=name,
                                                 project=project,
                                                 input_data=info.X,

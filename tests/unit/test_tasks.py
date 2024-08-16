@@ -19,41 +19,6 @@ from sasctl.tasks import (
 )
 
 
-def test_sklearn_metadata():
-    pytest.importorskip("sklearn")
-
-    from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
-    from sklearn.linear_model import LinearRegression, LogisticRegression
-    from sklearn.svm import SVC
-    from sklearn.tree import DecisionTreeClassifier
-
-    from sasctl.tasks import _sklearn_to_dict
-
-    info = _sklearn_to_dict(LinearRegression())
-    assert info["algorithm"] == "Linear regression"
-    assert info["function"] == "prediction"
-
-    info = _sklearn_to_dict(LogisticRegression())
-    assert info["algorithm"] == "Logistic regression"
-    assert info["function"] == "classification"
-
-    info = _sklearn_to_dict(SVC())
-    assert info["algorithm"] == "Support vector machine"
-    assert info["function"] == "classification"
-
-    info = _sklearn_to_dict(GradientBoostingClassifier())
-    assert info["algorithm"] == "Gradient boosting"
-    assert info["function"] == "classification"
-
-    info = _sklearn_to_dict(DecisionTreeClassifier())
-    assert info["algorithm"] == "Decision tree"
-    assert info["function"] == "classification"
-
-    info = _sklearn_to_dict(RandomForestClassifier())
-    assert info["algorithm"] == "Forest"
-    assert info["function"] == "classification"
-
-
 def test_parse_module_url():
     from sasctl.tasks import _parse_module_url
 
