@@ -360,7 +360,7 @@ class ImportModel:
         # For SAS Viya 4, the score code can be written beforehand and imported with
         # all the model files
         elif current_session().version_info() == 4:
-            score_code_dict = sc.write_score_code(
+            score_code_dict = sc().write_score_code(
                 model_prefix,
                 input_data,
                 predict_method,
