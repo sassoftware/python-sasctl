@@ -13,6 +13,8 @@ import os
 import pickle  # skipcq BAN-B301
 import re
 import sys
+from pathlib import Path
+from typing import Union
 from warnings import warn
 
 import pandas as pd
@@ -30,6 +32,8 @@ from .exceptions import AuthorizationError
 from .services import model_management as mm
 from .services import model_publish as mp
 from .services import model_repository as mr
+from .services import score_definitions as sd
+from .services import score_execution as se
 from .utils.misc import installed_packages
 from .utils.pymas import from_pickle
 
@@ -1008,3 +1012,30 @@ def get_project_kpis(
     kpiTableDf = kpiTableDf.apply(lambda x: x.str.strip()).replace([".", ""], None)
 
     return kpiTableDf
+
+
+def score_model_with_cas(
+    score_def_name: str,
+    model: Union[str, dict],
+    table_name: str,
+    table_file: Union[str, Path] = None,
+    description: str = "",
+    server_name: str = "cas-shared-default",
+    library_name: str = "Public",
+    model_version: str = "latest"
+):
+    score_definition = sd.create_score_definition(
+        score_def_name,
+        model,
+        table_name,
+        table_file=table_file,
+        description=description,
+        server_name=server_name,
+        library_name=library_name,
+        model_version=model_version
+    )
+    score_execution = se.create_score_execution(score_definition.id)
+    score_execution_poll = se.poll_score_execution_state(score_execution)
+    print(score_execution_poll)
+    score_results = se.get_score_execution_results(score_execution)
+    return score_results
