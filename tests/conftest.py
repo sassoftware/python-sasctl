@@ -152,7 +152,7 @@ betamax.Betamax.register_request_matcher(RedactedPathMatcher)
 # See https://betamax.readthedocs.io/en/latest/record_modes.html for details.
 # NOTE: We've added a custom "live" record mode that bypasses all recording/replaying of cassettes
 #       and allows test suite to be run against a live server.
-record_mode = os.environ.get("SASCTL_RECORD_MODE", "none").lower()
+record_mode = os.environ.get("SASCTL_RECORD_MODE", "none").lower().strip()
 if record_mode not in ("once", "new_episodes", "all", "none", "live"):
     record_mode = "none"
 
