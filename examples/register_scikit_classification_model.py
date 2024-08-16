@@ -36,5 +36,5 @@ with Session('hostname', 'username', 'password'):
     x = X.iloc[0, :]
 
     # Call the published module and score the record
-    result = module.predict(x)
+    result = module.score(x)
     print(result)
