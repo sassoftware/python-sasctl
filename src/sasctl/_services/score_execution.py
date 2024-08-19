@@ -73,8 +73,11 @@ class ScoreExecution(Service):
 
         # Getting all score executions that are using the inputted score_definition_id
 
-        score_execution = cls.list_executions(
-            filter=f"eq(scoreDefinitionId, '{score_definition_id}')"
+        # score_execution = cls.list_executions(
+        #     filter=f"eq(scoreDefinitionId, '{score_definition_id}')"
+        # )
+        score_execution = cls.get("scoreExecution/executions",
+            filter=f"filter=eq(scoreExecutionRequest.scoreDefinitionId,%{score_definition_id}%27)"
         )
         if not score_execution:
             raise HTTPError(f"Something went wrong in the LIST_EXECUTIONS statement.")
