@@ -494,8 +494,8 @@ def cancer_dataset():
     raw = datasets.load_breast_cancer()
     df = pd.DataFrame(raw.data, columns=raw.feature_names)
     df["Type"] = raw.target
-    df.Type = df.Type.astype("category")
-    df.Type.cat.categories = raw.target_names
+    df.Type = df.Type.astype("category").cat.rename_categories(raw.target_names)
+
     return df
 
 
