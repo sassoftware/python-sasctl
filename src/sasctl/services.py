@@ -21,6 +21,8 @@ from ._services.relationships import Relationships as relationships
 from ._services.report_images import ReportImages as report_images
 from ._services.reports import Reports as reports
 from ._services.saslogon import SASLogon as saslogon
+from ._services.score_definitions import ScoreDefinitions as score_definitions
+from ._services.score_execution import ScoreExecution as score_execution
 from ._services.sentiment_analysis import SentimentAnalysis as sentiment_analysis
 from ._services.text_categorization import TextCategorization as text_categorization
 from ._services.text_parsing import TextParsing as text_parsing
