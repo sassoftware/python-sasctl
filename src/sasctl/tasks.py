@@ -1022,7 +1022,7 @@ def score_model_with_cas(
     description: str = "",
     server_name: str = "cas-shared-default",
     library_name: str = "Public",
-    model_version: str = "latest"
+    model_version: str = "latest",
 ):
     score_definition = sd.create_score_definition(
         score_def_name,
@@ -1032,7 +1032,7 @@ def score_model_with_cas(
         description=description,
         server_name=server_name,
         library_name=library_name,
-        model_version=model_version
+        model_version=model_version,
     )
     score_execution = se.create_score_execution(score_definition.id)
     score_execution_poll = se.poll_score_execution_state(score_execution)
