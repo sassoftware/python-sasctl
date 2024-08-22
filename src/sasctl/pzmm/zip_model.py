@@ -75,6 +75,8 @@ class ZipModel:
 
             with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED, False) as archive:
                 for file_name, data in model_files.items():
+                    if not isinstance(data, (str, bytes)):
+                        data = str(data)
                     archive.writestr(file_name, data)
 
             # NOTE: bytes are added to the buffer when zip file is closed
