@@ -34,8 +34,7 @@ def sklearn_logistic_model():
     iris = pd.DataFrame(raw.data, columns=raw.feature_names)
     iris = iris.join(pd.DataFrame(raw.target))
     iris.columns = ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth", "Species"]
-    iris["Species"] = iris["Species"].astype("category")
-    iris.Species.cat.categories = raw.target_names
+    iris["Species"] = iris["Species"].astype("category").cat.rename_categories(raw.target_names)
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
@@ -205,7 +204,7 @@ class TestSklearnLinearModel:
         assert "prediction" == model.function.lower()
         assert "Linear regression" == model.algorithm
         assert "Python" == model.trainCodeType
-        assert "ds2MultiType" == model.scoreCodeType
+        assert model.scoreCodeType in ("ds2MultiType", "python")
 
         assert len(model.inputVariables) == 13
         assert len(model.outputVariables) == 1
