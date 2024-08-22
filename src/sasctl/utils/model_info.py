@@ -176,10 +176,20 @@ class PyTorchModelInfo(ModelInfo):
 
         if not isinstance(model, torch.nn.Module):
             raise ValueError(f"Expected PyTorch model, received {type(model)}.")
-        if not isinstance(X, (np.ndarray, torch.Tensor)):
-            raise ValueError(f"Expected input data to be a numpy array or PyTorch tensor, received {type(X)}.")
-        if X.ndim != 2:
-            raise ValueError(f"Expected input date with shape (n_samples, n_dim), received shape {X.shape}.")
+
+        # Some models may take multiple tensors as input.  These can be passed as a tuple
+        # of tensors.  To simplify processing, convert even single inputs into tuples.
+        if not isinstance(X, tuple):
+            X = (X, )
+
+        for x in X:
+            if not isinstance(x, (np.ndarray, torch.Tensor)):
+                raise ValueError(f"Expected input data to be a numpy array or PyTorch tensor, received {type(X)}.")
+        # if X.ndim != 2:
+        #     raise ValueError(f"Expected input date with shape (n_samples, n_dim), received shape {X.shape}.")
+
+        # Ensure each input is a PyTorch Tensor
+        X = tuple(x if isinstance(x, torch.Tensor) else torch.tensor(x) for x in X)
 
         # Store the current setting so that we can restore it later
         is_training = model.training
@@ -188,7 +198,7 @@ class PyTorchModelInfo(ModelInfo):
             model.eval()
 
             with torch.no_grad():
-                y = model(X)
+                y = model(*X)
 
         if not isinstance(y, (np.ndarray, torch.Tensor)):
             raise ValueError(f"Expected output data to be a numpy array or PyTorch tensor, received {type(y)}.")
@@ -199,7 +209,17 @@ class PyTorchModelInfo(ModelInfo):
         self._X = X
         self._y = y
 
-        self._X_df = pd.DataFrame(X, columns=[f"Var{i+1}" for i in range(X.shape[1])])
+        # Model Manager doesn't currently support arrays or vectors.  Capture the first
+        # input tensor and reshape to 2 dimensions if necessary.
+        x0 = X[0]
+        if x0.ndim > 2:
+            x0 = x0.reshape((x0.shape[0], -1))
+        self._X_df = pd.DataFrame(x0, columns=[f"Var{i+1}" for i in range(x0.shape[1])])
+
+        # Flatten to 2 dimensions if necessary
+        if y.ndim > 2:
+            y = y.reshape((y.shape[0], -1))
+
         self._y_df = pd.DataFrame(y, columns=[f"Out{i+1}" for i in range(y.shape[1])])
 
         self._layer_info = self._get_layer_info(model, X)
@@ -239,7 +259,7 @@ class PyTorchModelInfo(ModelInfo):
 
         model.eval()
         with torch.no_grad():
-            model(X)
+            model(*X)
 
         for handle in hooks:
             handle.remove()
