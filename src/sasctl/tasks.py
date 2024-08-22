@@ -187,16 +187,168 @@ def _compare_properties(project_name, model, input_vars=None, output_vars=None):
         )
 
 
+def _register_open_source_model(model, name, project, X):
+    try:
+        info = utils.get_model_info(model, X=X)
+    except ValueError as e:
+        logger.debug("Model of type %s could not be inspected: %s", type(model), e)
+        raise
+
+    from .pzmm import ImportModel, JSONFiles, PickleModel, ScoreCode
+
+    pzmm_files = {}
+
+    # If the model's type wasn't defined in a package, then it's a custom model
+    # and we need to ensure that the class definitions are serialized too.
+    # Using dill makes this easier.
+    module = sys.modules[type(model).__module__]
+    serialization_format = "dill" if not module.__package__ else "pickle"
+
+    if serialization_format == "pickle":
+        serialized_model = PickleModel().pickle_trained_model(name, info.model)
+        # Returns dict with "prefix.pickle": bytes
+        assert len(serialized_model) == 1
+    else:
+        # Serialize the model using dill
+        import dill
+
+        sanitized_prefix = ScoreCode.sanitize_model_prefix(name)
+        serialized_model = {f"{sanitized_prefix}.pickle": dill.dumps(info.model)}
+
+    input_vars = JSONFiles().write_var_json(info.X, is_input=True)
+    output_vars = JSONFiles().write_var_json(info.y, is_input=False)
+    metadata = JSONFiles().write_file_metadata_json(model_prefix=name)
+    properties = JSONFiles().write_model_properties_json(
+        model_name=name,
+        model_desc=info.description,
+        model_algorithm=info.algorithm,
+        target_variable=info.target_column,
+        target_values=info.target_values
+    )
+
+    # requirements = JSONFiles().create_requirements_json(model)
+
+    pzmm_files.update(serialized_model)
+    pzmm_files.update(input_vars)
+    pzmm_files.update(output_vars)
+    pzmm_files.update(metadata)
+    pzmm_files.update(properties)
+
+    model_obj, _ = ImportModel().import_model(model_files=pzmm_files,
+                                              model_prefix=name,
+                                              project=project,
+                                              input_data=info.X,
+                                              predict_method=[info.predict_function, info.y.iloc[0].to_list()],
+                                              predict_threshold=info.threshold,
+                                              score_metrics=info.output_column_names,
+                                              target_values=info.target_values,
+                                              pickle_type=serialization_format,
+                                              model_file_name=list(serialized_model.keys())[0])
+    return model_obj
+
+
+def _register_sas_model(model, name, project, create_project=False, version=None, X=None, repo_obj=None):
+    if "DataStepSrc" in model.columns:
+        zip_file = utils.create_package_from_datastep(model, input=X)
+        if create_project:
+            out_var = []
+            in_var = []
+            import copy
+            import zipfile as zp
+
+            zip_file_copy = copy.deepcopy(zip_file)
+            tmp_zip = zp.ZipFile(zip_file_copy)
+            if "outputVar.json" in tmp_zip.namelist():
+                out_var = json.loads(
+                    tmp_zip.read("outputVar.json").decode("utf=8")
+                )  # added decode for 3.5 and older
+                for tmp in out_var:
+                    tmp.update({"role": "output"})
+            if "inputVar.json" in tmp_zip.namelist():
+                in_var = json.loads(
+                    tmp_zip.read("inputVar.json").decode("utf-8")
+                )  # added decode for 3.5 and older
+                for tmp in in_var:
+                    if tmp["role"] != "input":
+                        tmp["role"] = "input"
+
+            if "ModelProperties.json" in tmp_zip.namelist():
+                model_props = json.loads(
+                    tmp_zip.read("ModelProperties.json").decode("utf-8")
+                )
+            else:
+                model_props = {}
+            project = _create_project(
+                project, model_props, repo_obj, in_var, out_var
+            )
+        model = mr.import_model_from_zip(name, project, zip_file, version=version)
+    # Assume ASTORE model if not a DataStep model
+    else:
+        cas = model.session.get_connection()
+        cas.loadactionset("astore")
+
+        if create_project:
+            result = cas.astore.describe(rstore=model, epcode=False)
+            model_props = utils.astore._get_model_properties(result)
+
+            # Format input & output variable info as lists of dicts
+            input_vars = [
+                utils.astore.get_variable_properties(v)
+                for v in result.InputVariables.itertuples()
+            ]
+            output_vars = [
+                utils.astore.get_variable_properties(v)
+                for v in result.OutputVariables.itertuples()
+            ]
+
+            # Set the variable 'role' if it wasn't included (not all astores specify)
+            for v in input_vars:
+                v.setdefault("role", "INPUT")
+            for v in output_vars:
+                v.setdefault("role", "OUTPUT")
+
+            # Some astores include the target variable in the 'InputVariable' data frame.  Exclude anything not
+            # marked as INPUT.
+            input_vars = [v for v in input_vars if v["role"] == "INPUT"]
+
+            project = _create_project(
+                project, model_props, repo_obj, input_vars, output_vars
+            )
+        else:
+            project = mr.get_project(project)
+
+        if current_session().version_info() < 4:
+            # Upload the model as a ZIP file if using Viya 3.
+            zipfile = utils.create_package(model, input=input)
+            model = mr.import_model_from_zip(
+                name, project, zipfile, version=version
+            )
+        else:
+            # If using Viya 4, just upload the raw AStore and Model Manager will handle inspection.
+            astore = cas.astore.download(rstore=model)
+            params = {
+                "name": name,
+                "projectId": project.id,
+                "type": "ASTORE",
+            }
+            model = mr.post(
+                "/models",
+                files={"files": (f"{model.params['name']}.sasast", astore["blob"])},
+                data=params,
+            )
+    return model
+
 def register_model(
     model,
     name,
     project,
     repository=None,
-    input=None,
+    X=None,
     version=None,
     files=None,
     force=False,
     record_packages=True,
+    input=None
 ):
     """Register a model in the model repository.
 
@@ -216,7 +368,7 @@ def register_model(
     repository : str or dict, optional
         The name or id of the repository, or a dictionary representation of
         the repository.  If omitted, the default repository will be used.
-    input : DataFrame, type, list of type, or dict of str: type, optional
+    X : DataFrame, type, list of type, or dict of str: type, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
         is provided, the columns will be inspected to determine type
@@ -237,6 +389,8 @@ def register_model(
     record_packages : bool, optional
         Capture Python packages registered in the environment.  Defaults to
         True.  Ignored if `model` is not a Python object.
+    input : DataFrame, type, list of type, or dict of str: type, optional
+        Deprecated, use `X` instead.
 
     Returns
     -------
@@ -269,6 +423,13 @@ def register_model(
     version = version or "new"
 
     files = files or []
+
+    if X is None and input is not None:
+        X = input
+        warn(
+            "The `input` parameter is deprecated.  Use `X` instead.",
+            DeprecationWarning,
+        )
 
     # Find the project if it already exists
     p = mr.get_project(project) if project is not None else None
@@ -313,159 +474,28 @@ def register_model(
                 "received '%r'." % (swat.CASTable, model)
             )
 
-        if "DataStepSrc" in model.columns:
-            zip_file = utils.create_package_from_datastep(model, input=input)
-            if create_project:
-                out_var = []
-                in_var = []
-                import copy
-                import zipfile as zp
+        model_obj = _register_sas_model(model, name, project, repo_obj=repo_obj, X=X, create_project=create_project, version=version)
 
-                zip_file_copy = copy.deepcopy(zip_file)
-                tmp_zip = zp.ZipFile(zip_file_copy)
-                if "outputVar.json" in tmp_zip.namelist():
-                    out_var = json.loads(
-                        tmp_zip.read("outputVar.json").decode("utf=8")
-                    )  # added decode for 3.5 and older
-                    for tmp in out_var:
-                        tmp.update({"role": "output"})
-                if "inputVar.json" in tmp_zip.namelist():
-                    in_var = json.loads(
-                        tmp_zip.read("inputVar.json").decode("utf-8")
-                    )  # added decode for 3.5 and older
-                    for tmp in in_var:
-                        if tmp["role"] != "input":
-                            tmp["role"] = "input"
-
-                if "ModelProperties.json" in tmp_zip.namelist():
-                    model_props = json.loads(
-                        tmp_zip.read("ModelProperties.json").decode("utf-8")
-                    )
-                else:
-                    model_props = {}
-                project = _create_project(
-                    project, model_props, repo_obj, in_var, out_var
-                )
-            model = mr.import_model_from_zip(name, project, zip_file, version=version)
-        # Assume ASTORE model if not a DataStep model
-        else:
-            cas = model.session.get_connection()
-            cas.loadactionset("astore")
-
-            if create_project:
-                result = cas.astore.describe(rstore=model, epcode=False)
-                model_props = utils.astore._get_model_properties(result)
-
-                # Format input & output variable info as lists of dicts
-                input_vars = [
-                    utils.astore.get_variable_properties(v)
-                    for v in result.InputVariables.itertuples()
-                ]
-                output_vars = [
-                    utils.astore.get_variable_properties(v)
-                    for v in result.OutputVariables.itertuples()
-                ]
-
-                # Set the variable 'role' if it wasn't included (not all astores specify)
-                for v in input_vars:
-                    v.setdefault("role", "INPUT")
-                for v in output_vars:
-                    v.setdefault("role", "OUTPUT")
-
-                # Some astores include the target variable in the 'InputVariable' data frame.  Exclude anything not
-                # marked as INPUT.
-                input_vars = [v for v in input_vars if v["role"] == "INPUT"]
-
-                project = _create_project(
-                    project, model_props, repo_obj, input_vars, output_vars
-                )
-            else:
-                project = mr.get_project(project)
-
-            if current_session().version_info() < 4:
-                # Upload the model as a ZIP file if using Viya 3.
-                zipfile = utils.create_package(model, input=input)
-                model = mr.import_model_from_zip(
-                    name, project, zipfile, version=version
-                )
-            else:
-                # If using Viya 4, just upload the raw AStore and Model Manager will handle inspection.
-                astore = cas.astore.download(rstore=model)
-                params = {
-                    "name": name,
-                    "projectId": project.id,
-                    "type": "ASTORE",
-                }
-                model = mr.post(
-                    "/models",
-                    files={"files": (f"{model.params['name']}.sasast", astore["blob"])},
-                    data=params,
-                )
-        return model
-
-    if not isinstance(model, dict):
-        try:
-            info = utils.get_model_info(model, X=input)
-        except ValueError as e:
-            logger.debug("Model of type %s could not be inspected: %s", type(model), e)
-            raise
-
-        from .pzmm import ImportModel, JSONFiles, PickleModel
-
-        pzmm_files = {}
-
-        pickled_model = PickleModel().pickle_trained_model(name, info.model)
-        # Returns dict with "prefix.pickle": bytes
-        assert len(pickled_model) == 1
-
-        input_vars = JSONFiles().write_var_json(info.X, is_input=True)
-        output_vars = JSONFiles().write_var_json(info.y, is_input=False)
-        metadata = JSONFiles().write_file_metadata_json(model_prefix=name)
-        properties = JSONFiles().write_model_properties_json(
-            model_name=name,
-            model_desc=info.description,
-            model_algorithm=info.algorithm,
-            target_variable=info.target_column,
-            target_values=info.target_values
-        )
-
-        pzmm_files.update(pickled_model)
-        pzmm_files.update(input_vars)
-        pzmm_files.update(output_vars)
-        pzmm_files.update(metadata)
-        pzmm_files.update(properties)
-
-        model_obj, _ = ImportModel().import_model(model_files=pzmm_files,
-                                                model_prefix=name,
-                                                project=project,
-                                                input_data=info.X,
-                                                predict_method=[info.predict_function, info.y.iloc[0].to_list()],
-                                                predict_threshold=info.threshold,
-                                                score_metrics=info.output_column_names,
-                                                target_values=info.target_values,
-                                                model_file_name=list(pickled_model.keys())[0])
-        return model_obj
-
-    # If we got this far, then `model` is a dictionary of model metadata.
-    if create_project:
+    elif not isinstance(model, dict):
+        model_obj = _register_open_source_model(model, name, project, X=X)
+    else:
         project = _create_project(project, model, repo_obj)
 
-    # If replacing an existing version, make sure the model version exists
-    if str(version).lower() != "new":
-        # Update an existing model with new files
-        model_obj = mr.get_model(name)
-        if model_obj is None:
-            raise ValueError(
-                "Unable to update version '%s' of model '%s.  "
-                "Model not found." % (version, name)
-            )
-        model = mr.create_model_version(name)
-        mr.delete_model_contents(model)
-    else:
-        # Assume new model to create
-        model = mr.create_model(model, project)
+        # If replacing an existing version, make sure the model version exists
+        if str(version).lower() != "new":
+            # Update an existing model with new files
+            if mr.get_model(name) is None:
+                raise ValueError(
+                    "Unable to update version '%s' of model '%s.  "
+                    "Model not found." % (version, name)
+                )
+            model_obj = mr.create_model_version(name)
+            mr.delete_model_contents(model_obj)
+        else:
+            # Assume new model to create
+            model_obj = mr.create_model(model, project)
 
-    if not isinstance(model, RestObj):
+    if not isinstance(model_obj, RestObj):
         raise TypeError(
             "Model should be an instance of '%r' but received '%r' "
             "instead." % (RestObj, model)
@@ -474,11 +504,14 @@ def register_model(
     # Upload any additional files
     for file in files:
         if isinstance(file, dict):
-            mr.add_model_content(model, **file)
+            for k in file.keys():
+                if k not in ("name", "file", "role"):
+                    raise ValueError(f"Invalid key '{k}' in `file` dictionary.  Valid keys are 'name', 'file', and 'role'.")
+            mr.add_model_content(model_obj, **file)
         else:
-            mr.add_model_content(model, file)
+            mr.add_model_content(model_obj, file)
 
-    return model
+    return model_obj
 
 
 def publish_model(

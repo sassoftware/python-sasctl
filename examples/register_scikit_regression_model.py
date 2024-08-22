@@ -28,7 +28,7 @@ with Session('hostname', 'username', 'password'):
     project_name = 'Boston Housing'
 
     # Register the model in SAS Model Manager
-    register_model(model, model_name, project_name, input=X, force=True)
+    register_model(model, model_name, project_name, X=X, force=True)
 
     # Publish the model to the real-time scoring engine
     module = publish_model(model_name, 'maslocal', replace=True)

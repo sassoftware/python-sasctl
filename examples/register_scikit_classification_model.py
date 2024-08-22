@@ -25,7 +25,7 @@ with Session('hostname', 'username', 'password'):
     # Register the model in Model Manager
     register_model(model,
                    model_name,
-                   input=X,         # Use X to determine model inputs
+                   X=X,         # Use X to determine model inputs
                    project='Iris',  # Register in "Iris" project
                    force=True)      # Create project if it doesn't exist
 
