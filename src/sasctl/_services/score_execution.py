@@ -66,13 +66,12 @@ class ScoreExecution(Service):
 
         """
 
-        # Gets information about the scoring object from the score definition and raises an exception if the score definition does not exist
+        # Gets information about the scoring object from the score definition
         score_definition = cls._score_definitions.get_definition(score_definition_id)
         if not score_definition:
             raise HTTPError
         score_exec_name = score_definition.get("name")
-        # NEEDS modelManagement not modelRepository
-        model_uuid = score_definition.get("objectDescriptor").get("uri").split('/')[-1]
+        model_uuid = score_definition.get("objectDescriptor").get("uri").split("/")[-1]
         model_uri = f"/modelManagement/models/{model_uuid}"
         model_name = score_definition.get("objectDescriptor").get("name")
         model_input_library = score_definition.get("inputData").get("libraryName")
@@ -111,10 +110,22 @@ class ScoreExecution(Service):
 
     @classmethod
     def poll_score_execution_state(
-        cls,
-        score_execution: Union[dict, str],
-        timeout: int = 300
+        cls, score_execution: Union[dict, str], timeout: int = 300
     ):
+        """Checks the state of the score execution.
+
+        Parameters
+        --------
+        score_execution: str or dict
+            A running score_execution.
+        timeout: int
+            Time limit for checking the score_execution state.
+
+        Returns
+        -------
+        String
+
+        """
         if type(score_execution) is str:
             exec_id = score_execution
         else:
@@ -139,6 +150,18 @@ class ScoreExecution(Service):
         cls,
         score_execution: Union[dict, str],
     ):
+        """Generates an output table for the score_execution results.
+
+        Parameters
+        --------
+        score_execution: str or dict
+            A running score_execution.
+
+        Returns
+        -------
+        Table reference
+
+        """
         try:
             import swat
         except ImportError:
@@ -154,9 +177,7 @@ class ScoreExecution(Service):
         # If swat is not available, then
         if not swat:
             output_table = cls._no_gateway_get_results(
-                server_name,
-                library_name,
-                table_name
+                server_name, library_name, table_name
             )
             return output_table
         else:
@@ -165,9 +186,7 @@ class ScoreExecution(Service):
             response = cas.loadActionSet("gateway")
             if not response:
                 output_table = cls._no_gateway_get_results(
-                    server_name,
-                    library_name,
-                    table_name
+                    server_name, library_name, table_name
                 )
                 return output_table
             else:
@@ -180,20 +199,27 @@ table = gateway.read_table({{"caslib": "{library_name}", "name": "{table_name}"}
 gateway.return_table("Execution Results", df = table, label = "label", title = "title")"""
 
                 output_table = cas.gateway.runlang(
-                    code=gateway_code,
-                    single=True,
-                    timeout_millis=10000
+                    code=gateway_code, single=True, timeout_millis=10000
                 )
                 output_table = pd.DataFrame(output_table["Execution Results"])
                 return output_table
 
     @classmethod
-    def _no_gateway_get_results(
-            cls,
-            server_name,
-            library_name,
-            table_name
-    ):
+    def _no_gateway_get_results(cls, server_name, library_name, table_name):
+        """Helper method that builds the output table.
+
+        Parameters
+        --------
+        server_name: str
+            CAS server where original table is stored.
+        library_name: CAS library where original table is stored.
+        table_name: Table that contains row and columns information to build the output table
+
+        Returns
+        -------
+        Pandas Dataframe
+
+        """
         if pd.__version__ >= StrictVersion("1.0.3"):
             from pandas import json_normalize
         else:
@@ -219,6 +245,6 @@ gateway.return_table("Execution Results", df = table, label = "label", title = "
         )
         output_table = pd.DataFrame(
             json_normalize(output_rows.json()["items"])["cells"].to_list(),
-            columns=column_names
+            columns=column_names,
         )
         return output_table
