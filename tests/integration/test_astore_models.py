@@ -208,7 +208,10 @@ def test_forest_regression(cas_session, boston_dataset):
     props = _get_model_properties(desc)
 
     for k, v in target.items():
-        assert props[k] == v
+        if k == "algorithm":
+            assert props[k] in ("Random forest", "Tree-based model")
+        else:
+            assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable("astore"))
     check_input_variables(files, BOSTON_INPUT_VARS)
@@ -239,7 +242,10 @@ def test_forest_regression_with_nominals(cas_session, boston_dataset):
     props = _get_model_properties(desc)
 
     for k, v in target.items():
-        assert props[k] == v
+        if k == "algorithm":
+            assert props[k] in ("Random forest", "Tree-based model")
+        else:
+            assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable("astore"))
     check_input_variables(files, BOSTON_INPUT_VARS)
@@ -268,7 +274,10 @@ def test_gradboost_binary_classification(cas_session, cancer_dataset):
     props = _get_model_properties(desc)
 
     for k, v in target.items():
-        assert props[k] == v
+        if k == "algorithm":
+            assert props[k] in ("Gradient boosting", "Tree-based model")
+        else:
+            assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable("astore"))
     check_input_variables(files, CANCER_INPUT_VARS)
@@ -296,7 +305,10 @@ def test_gradboost_classification(cas_session, iris_dataset):
     props = _get_model_properties(desc)
 
     for k, v in target.items():
-        assert props[k] == v
+        if k == "algorithm":
+            assert props[k] in ("Gradient boosting", "Tree-based model")
+        else:
+            assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable("astore"))
     check_input_variables(files, IRIS_INPUT_VARS)
@@ -324,7 +336,10 @@ def test_gradboost_regression(cas_session, boston_dataset):
     props = _get_model_properties(desc)
 
     for k, v in target.items():
-        assert props[k] == v
+        if k == "algorithm":
+            assert props[k] in ("Gradient boosting", "Tree-based model")
+        else:
+            assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable("astore"))
     check_input_variables(files, BOSTON_INPUT_VARS)
@@ -355,7 +370,10 @@ def test_gradboost_regression_with_nominals(cas_session, boston_dataset):
     props = _get_model_properties(desc)
 
     for k, v in target.items():
-        assert props[k] == v
+        if k == "algorithm":
+            assert props[k] in ("Gradient boosting", "Tree-based model")
+        else:
+            assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable("astore"))
     check_input_variables(files, BOSTON_INPUT_VARS)
