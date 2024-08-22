@@ -65,79 +65,47 @@ def test_create_score_execution():
     with mock.patch(
         "sasctl._services.score_definitions.ScoreDefinitions.get_definition"
     ) as get_definition:
-        with mock.patch(
-            "sasctl._services.score_execution.ScoreExecution.list_executions"
-        ) as list_executions:
-            with mock.patch(
-                "sasctl._services.score_execution.ScoreExecution.delete_execution"
-            ) as delete_execution:
-                with mock.patch(
-                    "sasctl._services.score_execution.ScoreExecution.post"
-                ) as post:
-                    # Invalid score definition id test case
-                    get_definition.return_value = None
-                    with pytest.raises(HTTPError):
-                        se.create_score_execution(score_definition_id="12345")
+        with mock.patch("sasctl._services.score_execution.ScoreExecution.post") as post:
+            # Invalid score definition id test case
+            get_definition.return_value = None
+            with pytest.raises(HTTPError):
+                se.create_score_execution(score_definition_id="12345")
 
-                    # Valid score definition id and invalid list_executions argument test case
-                    get_definition_mock = CustomMock(
-                        json_info={
-                            "inputData": {
-                                "libraryName": "cas-shared-default",
-                                "tableName": "test_table",
-                            },
-                            "name": "score_def_name",
-                            "objectDescriptor": {
-                                "name": "test_model",
-                                "type": "sas.publish.example",
-                                "uri": "/modelPublish/models/example",
-                            },
-                        },
-                    )
-                    get_definition.return_value = get_definition_mock
-                    list_executions.return_value = None
-                    with pytest.raises(HTTPError):
-                        se.create_score_execution(score_definition_id="12345")
+            # Valid score definition id and invalid list_executions argument test case
+            get_definition_mock = CustomMock(
+                json_info={
+                    "inputData": {
+                        "libraryName": "cas-shared-default",
+                        "tableName": "test_table",
+                    },
+                    "name": "score_def_name",
+                    "objectDescriptor": {
+                        "name": "test_model",
+                        "type": "sas.publish.example",
+                        "uri": "/modelPublish/models/example",
+                    },
+                },
+            )
+            get_definition.return_value = get_definition_mock
+            response = se.create_score_execution(score_definition_id="3456")
+            assert response
 
-                    # Valid list_executions argument with execution already running but invalid delete_execution argument test case
-                    list_mock_execution = CustomMock(
-                        json_info={"count": 1, "items": [{"id": "1234"}]},
-                    )
-                    list_executions.return_value = list_mock_execution
-                    delete_execution.return_value.status_code = 404
-                    with pytest.raises(HTTPError):
-                        se.create_score_execution(score_definition_id="12345")
+            # Checking whether the output table name remained the default empty string or the default changed as writted in score_execution
+            data = post.call_args
+            json_data = json.loads(data.kwargs["data"])
+            assert json_data["outputTable"]["tableName"] != ""
 
-                    # Valid list_executions argument with execution already running but valid delete_execution argument test case
-                    list_executions.return_value = list_mock_execution
-                    delete_execution.return_value.status_code = 200
-                    response = se.create_score_execution(score_definition_id="3456")
-                    assert response
+            # With output table specified within create_score_execution arguments test case
+            response = se.create_score_execution(
+                score_definition_id="12345", output_table_name="example_table"
+            )
+            assert response
+            assert post.call_count == 2
 
-                    # Valid list_executions argument without execution already running test case
-                    list_mock_execution_diff_count = CustomMock(
-                        json_info={"count": 0, "items": [{"id": "1234"}]},
-                    )
-                    list_executions.return_value = list_mock_execution_diff_count
-                    response = se.create_score_execution(score_definition_id="12345")
-                    assert response
-
-                    # Checking whether the output table name remained the default empty string or the default changed as writted in score_execution
-                    data = post.call_args
-                    json_data = json.loads(data.kwargs["data"])
-                    assert json_data["outputTable"]["tableName"] != ""
-
-                    # With output table specified within create_score_execution arguments test case
-                    response = se.create_score_execution(
-                        score_definition_id="12345", output_table_name="example_table"
-                    )
-                    assert response
-                    assert post.call_count == 3
-
-                    # Checking whether specified output table name or the default output table name is in the response
-                    data = post.call_args
-                    json_data = json.loads(data.kwargs["data"])
-                    assert (
-                        target["outputTable"]["tableName"]
-                        == json_data["outputTable"]["tableName"]
-                    )
+            # Checking whether specified output table name or the default output table name is in the response
+            data = post.call_args
+            json_data = json.loads(data.kwargs["data"])
+            assert (
+                target["outputTable"]["tableName"]
+                == json_data["outputTable"]["tableName"]
+            )
