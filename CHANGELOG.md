@@ -4,6 +4,13 @@ Unreleased
  - Refactor `tasks.py` to utilize `sasctl.pzmm` functions.
  - Add `model_info` class to better capture model information.
  - Test `/examples` Jupyter notebooks within normal test suite.
+ - Add option for data preprocessing in generated score code.
+
+v1.10.5 (2024-08-01)
+----------
+**Buxfixes**
+- Updated `write_json_files.py` to allow for better support for prediction models
+- Fixed issues relating to model card support.
 
 v1.10.4 (2024-07-08)
 ----------
