@@ -170,9 +170,10 @@ class PyTorchModelInfo(ModelInfo):
     """Stores model information for a PyTorch model instance."""
 
     def __init__(self, model, X, y=None):
-
         if torch is None:
-            raise RuntimeError("The PyTorch library must be installed to work with PyTorch models.  Please `pip install torch`.")
+            raise RuntimeError(
+                "The PyTorch library must be installed to work with PyTorch models.  Please `pip install torch`."
+            )
 
         if not isinstance(model, torch.nn.Module):
             raise ValueError(f"Expected PyTorch model, received {type(model)}.")
@@ -180,11 +181,13 @@ class PyTorchModelInfo(ModelInfo):
         # Some models may take multiple tensors as input.  These can be passed as a tuple
         # of tensors.  To simplify processing, convert even single inputs into tuples.
         if not isinstance(X, tuple):
-            X = (X, )
+            X = (X,)
 
         for x in X:
             if not isinstance(x, (np.ndarray, torch.Tensor)):
-                raise ValueError(f"Expected input data to be a numpy array or PyTorch tensor, received {type(X)}.")
+                raise ValueError(
+                    f"Expected input data to be a numpy array or PyTorch tensor, received {type(X)}."
+                )
         # if X.ndim != 2:
         #     raise ValueError(f"Expected input date with shape (n_samples, n_dim), received shape {X.shape}.")
 
@@ -201,7 +204,9 @@ class PyTorchModelInfo(ModelInfo):
                 y = model(*X)
 
         if not isinstance(y, (np.ndarray, torch.Tensor)):
-            raise ValueError(f"Expected output data to be a numpy array or PyTorch tensor, received {type(y)}.")
+            raise ValueError(
+                f"Expected output data to be a numpy array or PyTorch tensor, received {type(y)}."
+            )
 
         self._model = model
 
@@ -342,8 +347,6 @@ class SklearnModelInfo(ModelInfo):
     }
 
     def __init__(self, model, X, y):
-
-
         is_classifier = hasattr(model, "classes_")
         is_binary_classifier = is_classifier and len(model.classes_) == 2
         is_clusterer = hasattr(model, "cluster_centers_")
@@ -360,7 +363,11 @@ class SklearnModelInfo(ModelInfo):
 
         # If not a classfier or a clustering algorithm and output is a single column, then
         # assume its a regression algorithm
-        is_regressor = not is_classifier and not is_clusterer and (y_df.shape[1] == 1 or "Regress" in type(model).__name__)
+        is_regressor = (
+            not is_classifier
+            and not is_clusterer
+            and (y_df.shape[1] == 1 or "Regress" in type(model).__name__)
+        )
 
         if not is_classifier and not is_regressor and not is_clusterer:
             raise ValueError(f"Unexpected model type {model} received.")

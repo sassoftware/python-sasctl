@@ -31,7 +31,6 @@ def assert_job_succeeds(job):
 
 
 def test_from_table(cas_session, airline_dataset):
-
     if current_session().version_info() > 3.5:
         pytest.skip("Concepts service was removed in Viya 4.")
 
@@ -48,12 +47,10 @@ def test_from_table(cas_session, airline_dataset):
 
 
 def test_from_inline_docs():
-
     if current_session().version_info() > 3.5:
         pytest.skip("Concepts service was removed in Viya 4.")
 
     from sasctl.services import cas_management as cm
-
 
     caslib = cm.get_caslib("Public")
     input = [

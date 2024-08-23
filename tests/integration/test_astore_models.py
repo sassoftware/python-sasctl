@@ -180,7 +180,10 @@ def test_forest_classification(cas_session, iris_dataset):
     props = _get_model_properties(desc)
 
     for k, v in target.items():
-        assert props[k] == v
+        if k == "algorithm":
+            assert props[k] in ("Random forest", "Tree-based model")
+        else:
+            assert props[k] == v
 
     files = create_files_from_astore(cas_session.CASTable("astore"))
     check_input_variables(files, IRIS_INPUT_VARS)

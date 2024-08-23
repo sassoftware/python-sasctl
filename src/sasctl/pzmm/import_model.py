@@ -24,17 +24,17 @@ def get_model_properties(
     if type(model_files) is dict:
         try:
             model = json.loads(model_files["ModelProperties.json"])
-        except json.JSONDecodeError:
+        except (json.JSONDecodeError, TypeError):
             model = model_files["ModelProperties.json"]
 
         try:
             input_var = json.loads(model_files["inputVar.json"])
-        except json.JSONDecodeError:
+        except (json.JSONDecodeError, TypeError):
             input_var = model_files["inputVar.json"]
 
         try:
             output_var = json.loads(model_files["outputVar.json"])
-        except json.JSONDecodeError:
+        except (json.JSONDecodeError, TypeError):
             output_var = model_files["outputVar.json"]
 
     else:
@@ -333,7 +333,9 @@ class ImportModel:
             if isinstance(model_files, dict):
                 zip_io_file = zm.zip_files(model_files, model_prefix, is_viya4=False)
             else:
-                zip_io_file = zm.zip_files(Path(model_files), model_prefix, is_viya4=False)
+                zip_io_file = zm.zip_files(
+                    Path(model_files), model_prefix, is_viya4=False
+                )
                 if cls.notebook_output:
                     print(f"All model files were zipped to {Path(model_files)}.")
 
@@ -459,7 +461,7 @@ class ImportModel:
                 except AttributeError:
                     print("Model failed to import to SAS Model Manager.")
 
-            score_code_dict = sc.write_score_code(
+            score_code_dict = sc().write_score_code(
                 model_prefix,
                 input_data,
                 predict_method,

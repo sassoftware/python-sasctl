@@ -18,7 +18,6 @@ CAS_CODE_NAME = "dmcas_epscorecode.sas"
 
 
 class ScoreCode:
-
     def __init__(self):
         self.score_code = ""
 
@@ -1068,6 +1067,7 @@ if not isinstance(var1, pd.Series):
             classification values and `False` represents probability or prediction
             values.
         """
+
         def is_str(val):
             if isinstance(val, str) or val == str:
                 return True

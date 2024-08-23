@@ -422,7 +422,6 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc = ScoreCode()
         self.target_values = ["A", "B"]
 
-
     def execute_snippet(self, *args):
         scope = {}
         exec(self.sc.score_code, scope)

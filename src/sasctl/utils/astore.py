@@ -384,7 +384,6 @@ def _get_model_properties(result):
         properties["targetVariable"] = classification_target(result)
 
     elif algorithm in ("forest", "gradboost", "tree-based models"):
-
         if algorithm == "forest":
             properties["algorithm"] = "Random forest"
         elif algorithm == "gradboost":

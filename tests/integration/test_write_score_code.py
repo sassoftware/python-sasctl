@@ -57,7 +57,7 @@ def test_write_score_code(hmeq_dataset):
         )
     input_data = hmeq_dataset.drop(columns=["BAD"])
     model = example_model(input_data)
-    output_dict = sc.write_score_code(
+    output_dict = sc().write_score_code(
         model_prefix="TestModel",
         input_data=input_data,
         predict_method=[fake_predict, ["A", 1.0]],

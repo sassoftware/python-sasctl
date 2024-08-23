@@ -11,7 +11,10 @@ from unittest import mock
 import pytest
 
 
-pytest.skip("PyMAS functionality is deprecated and will be removed in a future release.", allow_module_level=True)
+pytest.skip(
+    "PyMAS functionality is deprecated and will be removed in a future release.",
+    allow_module_level=True,
+)
 
 
 def dummy_function(x1, x2):

@@ -35,7 +35,9 @@ def train_data():
     iris = pd.DataFrame(raw.data, columns=raw.feature_names)
     iris = iris.join(pd.DataFrame(raw.target))
     iris.columns = ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth", "Species"]
-    iris["Species"] = iris["Species"].astype("category").cat.rename_categories(raw.target_names)
+    iris["Species"] = (
+        iris["Species"].astype("category").cat.rename_categories(raw.target_names)
+    )
     return iris.iloc[:, 0:4], iris["Species"]
 
 

@@ -500,6 +500,7 @@ class JSONFiles:
         """
 
         from .write_score_code import ScoreCode
+
         sanitized_prefix = ScoreCode.sanitize_model_prefix(model_prefix)
 
         dict_list = [
@@ -508,9 +509,13 @@ class JSONFiles:
             {"role": "score", "name": f"score_{sanitized_prefix}.py"},
         ]
         if is_h2o_model:
-            dict_list.append({"role": "scoreResource", "name": sanitized_prefix + ".mojo"})
+            dict_list.append(
+                {"role": "scoreResource", "name": sanitized_prefix + ".mojo"}
+            )
         elif is_tf_keras_model:
-            dict_list.append({"role": "scoreResource", "name": sanitized_prefix + ".h5"})
+            dict_list.append(
+                {"role": "scoreResource", "name": sanitized_prefix + ".h5"}
+            )
         else:
             dict_list.append(
                 {"role": "scoreResource", "name": sanitized_prefix + ".pickle"}

@@ -185,6 +185,7 @@ config = betamax.Betamax.configure()
 # config.cassette_library_dir = 'tests/cassettes'
 # config.default_cassette_options['serialize_with'] = 'prettyjson'
 config.default_cassette_options["serialize_with"] = "binary"
+config.default_cassette_options["preserve_exact_body_bytes"] = True
 config.default_cassette_options["record_mode"] = record_mode
 config.default_cassette_options["match_requests_on"] = [
     "method",

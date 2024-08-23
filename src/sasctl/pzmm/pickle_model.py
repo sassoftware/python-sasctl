@@ -77,6 +77,7 @@ class PickleModel:
 
         """
         from .write_score_code import ScoreCode
+
         sanitized_prefix = ScoreCode.sanitize_model_prefix(model_prefix)
 
         if is_binary_string:
@@ -132,7 +133,9 @@ class PickleModel:
                         "The h2o package is required to save the model as a mojo model."
                     )
                 trained_model.save_mojo(
-                    force=True, path=str(pickle_path), filename=f"{sanitized_prefix}.mojo"
+                    force=True,
+                    path=str(pickle_path),
+                    filename=f"{sanitized_prefix}.mojo",
                 )
             elif is_binary_model or is_h2o_model:
                 raise ValueError(

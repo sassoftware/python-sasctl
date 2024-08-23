@@ -187,7 +187,7 @@ def _compare_properties(project_name, model, input_vars=None, output_vars=None):
         )
 
 
-def _register_open_source_model(model, name, project, X):
+def _register_open_source_model(model, name, project, X, modeler):
     try:
         info = utils.get_model_info(model, X=X)
     except ValueError as e:
@@ -222,8 +222,9 @@ def _register_open_source_model(model, name, project, X):
         model_name=name,
         model_desc=info.description,
         model_algorithm=info.algorithm,
+        modeler=modeler,
         target_variable=info.target_column,
-        target_values=info.target_values
+        target_values=info.target_values,
     )
 
     # requirements = JSONFiles().create_requirements_json(model)
@@ -234,20 +235,24 @@ def _register_open_source_model(model, name, project, X):
     pzmm_files.update(metadata)
     pzmm_files.update(properties)
 
-    model_obj, _ = ImportModel().import_model(model_files=pzmm_files,
-                                              model_prefix=name,
-                                              project=project,
-                                              input_data=info.X,
-                                              predict_method=[info.predict_function, info.y.iloc[0].to_list()],
-                                              predict_threshold=info.threshold,
-                                              score_metrics=info.output_column_names,
-                                              target_values=info.target_values,
-                                              pickle_type=serialization_format,
-                                              model_file_name=list(serialized_model.keys())[0])
+    model_obj, _ = ImportModel().import_model(
+        model_files=pzmm_files,
+        model_prefix=name,
+        project=project,
+        input_data=info.X,
+        predict_method=[info.predict_function, info.y.iloc[0].to_list()],
+        predict_threshold=info.threshold,
+        score_metrics=info.output_column_names,
+        target_values=info.target_values,
+        pickle_type=serialization_format,
+        model_file_name=list(serialized_model.keys())[0],
+    )
     return model_obj
 
 
-def _register_sas_model(model, name, project, create_project=False, version=None, X=None, repo_obj=None):
+def _register_sas_model(
+    model, name, project, create_project=False, version=None, X=None, repo_obj=None
+):
     if "DataStepSrc" in model.columns:
         zip_file = utils.create_package_from_datastep(model, input=X)
         if create_project:
@@ -278,9 +283,7 @@ def _register_sas_model(model, name, project, create_project=False, version=None
                 )
             else:
                 model_props = {}
-            project = _create_project(
-                project, model_props, repo_obj, in_var, out_var
-            )
+            project = _create_project(project, model_props, repo_obj, in_var, out_var)
         model = mr.import_model_from_zip(name, project, zip_file, version=version)
     # Assume ASTORE model if not a DataStep model
     else:
@@ -320,9 +323,7 @@ def _register_sas_model(model, name, project, create_project=False, version=None
         if current_session().version_info() < 4:
             # Upload the model as a ZIP file if using Viya 3.
             zipfile = utils.create_package(model, input=input)
-            model = mr.import_model_from_zip(
-                name, project, zipfile, version=version
-            )
+            model = mr.import_model_from_zip(name, project, zipfile, version=version)
         else:
             # If using Viya 4, just upload the raw AStore and Model Manager will handle inspection.
             astore = cas.astore.download(rstore=model)
@@ -338,6 +339,7 @@ def _register_sas_model(model, name, project, create_project=False, version=None
             )
     return model
 
+
 def register_model(
     model,
     name,
@@ -348,7 +350,8 @@ def register_model(
     files=None,
     force=False,
     record_packages=True,
-    input=None
+    modeler=None,
+    input=None,
 ):
     """Register a model in the model repository.
 
@@ -389,6 +392,9 @@ def register_model(
     record_packages : bool, optional
         Capture Python packages registered in the environment.  Defaults to
         True.  Ignored if `model` is not a Python object.
+    modeler : str, optional
+        The name of the user who created the model.  Will default ot the
+        current user if not specified.
     input : DataFrame, type, list of type, or dict of str: type, optional
         Deprecated, use `X` instead.
 
@@ -474,10 +480,20 @@ def register_model(
                 "received '%r'." % (swat.CASTable, model)
             )
 
-        model_obj = _register_sas_model(model, name, project, repo_obj=repo_obj, X=X, create_project=create_project, version=version)
+        model_obj = _register_sas_model(
+            model,
+            name,
+            project,
+            repo_obj=repo_obj,
+            X=X,
+            create_project=create_project,
+            version=version,
+        )
 
     elif not isinstance(model, dict):
-        model_obj = _register_open_source_model(model, name, project, X=X)
+        model_obj = _register_open_source_model(
+            model, name, project, X=X, modeler=modeler or current_session().username
+        )
     else:
         project = _create_project(project, model, repo_obj)
 
@@ -506,7 +522,9 @@ def register_model(
         if isinstance(file, dict):
             for k in file.keys():
                 if k not in ("name", "file", "role"):
-                    raise ValueError(f"Invalid key '{k}' in `file` dictionary.  Valid keys are 'name', 'file', and 'role'.")
+                    raise ValueError(
+                        f"Invalid key '{k}' in `file` dictionary.  Valid keys are 'name', 'file', and 'role'."
+                    )
             mr.add_model_content(model_obj, **file)
         else:
             mr.add_model_content(model_obj, file)

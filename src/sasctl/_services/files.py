@@ -57,9 +57,7 @@ class Files(Service):
 
         """
         if isinstance(file, (str, Path)):
-            # file = str(file)
-            # filename = filename or os.path.splitext(os.path.split(file)[1])[0]
-            filename = Path(file).name
+            filename = filename or Path(file).name
 
             with open(file, "rb") as f:
                 file = f.read()
