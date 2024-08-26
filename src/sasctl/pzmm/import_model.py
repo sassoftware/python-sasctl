@@ -22,9 +22,21 @@ def get_model_properties(
     model_files: Union[str, Path, None] = None,
 ):
     if type(model_files) is dict:
-        model = model_files["ModelProperties.json"]
-        input_var = model_files["inputVar.json"]
-        output_var = model_files["outputVar.json"]
+        try:
+            model = json.loads(model_files["ModelProperties.json"])
+        except (json.JSONDecodeError, TypeError):
+            model = model_files["ModelProperties.json"]
+
+        try:
+            input_var = json.loads(model_files["inputVar.json"])
+        except (json.JSONDecodeError, TypeError):
+            input_var = model_files["inputVar.json"]
+
+        try:
+            output_var = json.loads(model_files["outputVar.json"])
+        except (json.JSONDecodeError, TypeError):
+            output_var = model_files["outputVar.json"]
+
     else:
         with open(Path(model_files) / "ModelProperties.json") as f:
             model = json.load(f)
@@ -99,7 +111,9 @@ def project_exists(
                 response = _create_project(project, model, repo, input_var, output_var)
             else:
                 response = mr.create_project(project, repo)
-            print(f"A new project named {response.name} was created.")
+
+            if check_if_jupyter():
+                print(f"A new project named {response.name} was created.")
             return response
     else:
         model, input_var, output_var = get_model_properties(target_values, model_files)
@@ -348,7 +362,7 @@ class ImportModel:
         # For SAS Viya 4, the score code can be written beforehand and imported with
         # all the model files
         elif current_session().version_info() == 4:
-            score_code_dict = sc.write_score_code(
+            score_code_dict = sc().write_score_code(
                 model_prefix,
                 input_data,
                 predict_method,
@@ -447,7 +461,7 @@ class ImportModel:
                 except AttributeError:
                     print("Model failed to import to SAS Model Manager.")
 
-            score_code_dict = sc.write_score_code(
+            score_code_dict = sc().write_score_code(
                 model_prefix,
                 input_data,
                 predict_method,

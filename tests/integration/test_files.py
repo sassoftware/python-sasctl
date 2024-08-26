@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import pickle
+from pathlib import Path
 from unittest import mock
 
 import pytest
@@ -76,14 +77,15 @@ class TestTextFile:
             file = files.create_file(dummy_file)
 
         assert isinstance(file, RestObj)
-        assert FILENAME == file.name
+        assert Path(dummy_file).name == file.name
 
     def test_get_file_without_name(self):  # skipcq: PYL-R0201
         """Ensure previously created file can be retrieved."""
-        file = files.get_file(FILENAME)
+        filename = f"{FILENAME}.txt"
+        file = files.get_file(filename)
 
         assert isinstance(file, RestObj)
-        assert FILENAME == file.name
+        assert filename == file.name
 
     def test_delete_file_without_name(self):  # skipcq: PYL-R0201
         """Delete previously created file."""
@@ -186,14 +188,15 @@ class TestPickleFile:
             file = files.create_file(dummy_file)
 
         assert isinstance(file, RestObj)
-        assert FILENAME == file.name
+        assert Path(dummy_file).name == file.name
 
     def test_get_file_without_name(self):
         """Ensure previously created file can be retrieved."""
-        file = files.get_file(FILENAME)
+        filename = f"{FILENAME}.txt"
+        file = files.get_file(filename)
 
         assert isinstance(file, RestObj)
-        assert FILENAME == file.name
+        assert filename == file.name
 
     def test_delete_file_without_name(self):
         """Delete previously created file."""

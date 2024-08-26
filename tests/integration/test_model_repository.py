@@ -54,7 +54,9 @@ class TestAStoreModel:
         """Copy the ASTORE to filesystem for MAS"""
         job = mr.copy_analytic_store(self.MODEL_NAME)
 
-        assert job.state == "pending"
+        # Later versions of Viya 4 seem to have dropped the "state" attribute.
+        if hasattr(job, "state"):
+            assert job.state == "pending"
 
     def test_model_publish(self, cache):
         """Publish the imported model to MAS"""

@@ -498,18 +498,27 @@ class JSONFiles:
             Dictionary containing a key-value pair representing the file name and json
             dump respectively.
         """
+
+        from .write_score_code import ScoreCode
+
+        sanitized_prefix = ScoreCode.sanitize_model_prefix(model_prefix)
+
         dict_list = [
             {"role": "inputVariables", "name": INPUT},
             {"role": "outputVariables", "name": OUTPUT},
-            {"role": "score", "name": f"score_{model_prefix}.py"},
+            {"role": "score", "name": f"score_{sanitized_prefix}.py"},
         ]
         if is_h2o_model:
-            dict_list.append({"role": "scoreResource", "name": model_prefix + ".mojo"})
+            dict_list.append(
+                {"role": "scoreResource", "name": sanitized_prefix + ".mojo"}
+            )
         elif is_tf_keras_model:
-            dict_list.append({"role": "scoreResource", "name": model_prefix + ".h5"})
+            dict_list.append(
+                {"role": "scoreResource", "name": sanitized_prefix + ".h5"}
+            )
         else:
             dict_list.append(
-                {"role": "scoreResource", "name": model_prefix + ".pickle"}
+                {"role": "scoreResource", "name": sanitized_prefix + ".pickle"}
             )
 
         if json_path:
@@ -2314,9 +2323,9 @@ class JSONFiles:
                 "Only classification and prediction target types are currently accepted."
             )
         if selection_statistic is None:
-            if target_type is "classification":
+            if target_type == "classification":
                 selection_statistic = "_KS_"
-            elif target_type is "prediction":
+            elif target_type == "prediction":
                 selection_statistic = "_ASE_"
         if selection_statistic not in cls.valid_params:
             raise RuntimeError(

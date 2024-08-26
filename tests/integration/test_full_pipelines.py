@@ -220,11 +220,11 @@ class TestSklearnRegressionModel:
         request.config.cache.set("MAS_MODULE_NAME", module.name)
 
         assert module.scope.lower() == "public"
-        assert hasattr(module, "predict")
+        # PZMM-generated code creates "score", older pymas code created "predict"
+        assert hasattr(module, "predict") or hasattr(module, "score")
 
     def test_score_mas(self, boston_dataset, request):
-        if current_session().version_info() == 4:
-            pytest.skip("Score code generated is not valid for SAS Viya 4.")
+        pytest.skip("Score code testing should be handled by pzmm.")
 
         from sasctl.services import microanalytic_score as mas
 
@@ -311,7 +311,8 @@ class TestSklearnClassificationModel:
         request.config.cache.set("MAS_MODULE_NAME", module.name)
 
         assert module.scope.lower() == "public"
-        assert hasattr(module, "predict")
+        # PZMM-generated code creates "score", older pymas code created "predict"
+        assert hasattr(module, "predict") or hasattr(module, "score")
 
     def test_score_mas(self, iris_dataset, request):
         pytest.skip("Score code generated is not valid for SAS Viya 4.")

@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
+from pathlib import Path
 
 from sasctl.utils.cli import sasctl_command
 
@@ -40,7 +41,7 @@ class Files(Service):
 
         Parameters
         ----------
-        file : str or file_like
+        file : str, pathlib.Path, or file_like
             Path to the file to upload or a file-like object.
         folder : str or dict, optional
             Name, or, or folder information as returned by :func:`.get_folder`.
@@ -55,8 +56,8 @@ class Files(Service):
             A dictionary containing the file attributes.
 
         """
-        if isinstance(file, str):
-            filename = filename or os.path.splitext(os.path.split(file)[1])[0]
+        if isinstance(file, (str, Path)):
+            filename = filename or Path(file).name
 
             with open(file, "rb") as f:
                 file = f.read()
