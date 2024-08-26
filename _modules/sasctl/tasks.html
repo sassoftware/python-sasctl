@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.tasks &#8212; sasctl 1.10.5 documentation</title>
+    <title>sasctl.tasks &#8212; sasctl 1.10.6 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=5a32024a"></script>
+    <script src="../../_static/documentation_options.js?v=f7627286"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/tasks';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 01, 2024"/>
+    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.5 documentation</p>
+    <p class="title logo__title">sasctl 1.10.6 documentation</p>
   
 </a></div>
     
@@ -346,7 +346,6 @@ document.write(`
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pickle</span>  <span class="c1"># skipcq BAN-B301</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
@@ -366,8 +365,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">model_management</span> <span class="k">as</span> <span class="n">mm</span>
 <span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">model_publish</span> <span class="k">as</span> <span class="n">mp</span>
 <span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">model_repository</span> <span class="k">as</span> <span class="n">mr</span>
-<span class="kn">from</span> <span class="nn">.utils.misc</span> <span class="kn">import</span> <span class="n">installed_packages</span>
-<span class="kn">from</span> <span class="nn">.utils.pymas</span> <span class="kn">import</span> <span class="n">from_pickle</span>
+
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -384,59 +382,6 @@ document.write(`
 
 <span class="k">def</span> <span class="nf">_property</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)[:</span><span class="n">_PROP_NAME_MAXLEN</span><span class="p">],</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)[:</span><span class="n">_PROP_VALUE_MAXLEN</span><span class="p">]}</span>
-
-
-<span class="k">def</span> <span class="nf">_sklearn_to_dict</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
-    <span class="c1"># Convert Scikit-learn values to built-in Model Manager values</span>
-    <span class="n">mappings</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;LogisticRegression&quot;</span><span class="p">:</span> <span class="s2">&quot;Logistic regression&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;LinearRegression&quot;</span><span class="p">:</span> <span class="s2">&quot;Linear regression&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;SVC&quot;</span><span class="p">:</span> <span class="s2">&quot;Support vector machine&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;GradientBoostingClassifier&quot;</span><span class="p">:</span> <span class="s2">&quot;Gradient boosting&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;GradientBoostingRegressor&quot;</span><span class="p">:</span> <span class="s2">&quot;Gradient boosting&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;XGBClassifier&quot;</span><span class="p">:</span> <span class="s2">&quot;Gradient boosting&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;XGBRegressor&quot;</span><span class="p">:</span> <span class="s2">&quot;Gradient boosting&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;RandomForestClassifier&quot;</span><span class="p">:</span> <span class="s2">&quot;Forest&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;DecisionTreeClassifier&quot;</span><span class="p">:</span> <span class="s2">&quot;Decision tree&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;DecisionTreeRegressor&quot;</span><span class="p">:</span> <span class="s2">&quot;Decision tree&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;classifier&quot;</span><span class="p">:</span> <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;regressor&quot;</span><span class="p">:</span> <span class="s2">&quot;prediction&quot;</span><span class="p">,</span>
-    <span class="p">}</span>
-
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;_final_estimator&quot;</span><span class="p">):</span>
-        <span class="n">estimator</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_final_estimator</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">estimator</span> <span class="o">=</span> <span class="n">model</span>
-    <span class="n">estimator</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
-
-    <span class="c1"># Standardize algorithm names</span>
-    <span class="n">algorithm</span> <span class="o">=</span> <span class="n">mappings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">estimator</span><span class="p">)</span>
-
-    <span class="c1"># Standardize regression/classification terms</span>
-    <span class="n">analytic_function</span> <span class="o">=</span> <span class="n">mappings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_estimator_type</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">_estimator_type</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">analytic_function</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span> <span class="ow">and</span> <span class="s2">&quot;logistic&quot;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-        <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;Binary&quot;</span>
-    <span class="k">elif</span> <span class="n">analytic_function</span> <span class="o">==</span> <span class="s2">&quot;prediction&quot;</span> <span class="ow">and</span> <span class="p">(</span>
-        <span class="s2">&quot;regressor&quot;</span> <span class="ow">in</span> <span class="n">estimator</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;regression&quot;</span> <span class="ow">in</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="p">):</span>
-        <span class="n">target_level</span> <span class="o">=</span> <span class="s2">&quot;Interval&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">target_level</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="c1"># Can tell if multi-class .multi_class</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">model</span><span class="p">)[:</span><span class="n">_DESC_MAXLEN</span><span class="p">],</span>
-        <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span>
-        <span class="n">scoreCodeType</span><span class="o">=</span><span class="s2">&quot;ds2MultiType&quot;</span><span class="p">,</span>
-        <span class="n">trainCodeType</span><span class="o">=</span><span class="s2">&quot;Python&quot;</span><span class="p">,</span>
-        <span class="n">targetLevel</span><span class="o">=</span><span class="n">target_level</span><span class="p">,</span>
-        <span class="n">function</span><span class="o">=</span><span class="n">analytic_function</span><span class="p">,</span>
-        <span class="n">tool</span><span class="o">=</span><span class="s2">&quot;Python </span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">minor</span><span class="p">),</span>
-        <span class="n">properties</span><span class="o">=</span><span class="p">[</span><span class="n">_property</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span>
-    <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">result</span>
 
 
 <span class="k">def</span> <span class="nf">_create_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -578,6 +523,159 @@ document.write(`
         <span class="p">)</span>
 
 
+<span class="k">def</span> <span class="nf">_register_open_source_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">modeler</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_model_info</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Model of type </span><span class="si">%s</span><span class="s2"> could not be inspected: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">model</span><span class="p">),</span> <span class="n">e</span><span class="p">)</span>
+        <span class="k">raise</span>
+
+    <span class="kn">from</span> <span class="nn">.pzmm</span> <span class="kn">import</span> <span class="n">ImportModel</span><span class="p">,</span> <span class="n">JSONFiles</span><span class="p">,</span> <span class="n">PickleModel</span><span class="p">,</span> <span class="n">ScoreCode</span>
+
+    <span class="n">pzmm_files</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># If the model&#39;s type wasn&#39;t defined in a package, then it&#39;s a custom model</span>
+    <span class="c1"># and we need to ensure that the class definitions are serialized too.</span>
+    <span class="c1"># Using dill makes this easier.</span>
+    <span class="n">module</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">model</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span><span class="p">]</span>
+    <span class="n">serialization_format</span> <span class="o">=</span> <span class="s2">&quot;dill&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">module</span><span class="o">.</span><span class="n">__package__</span> <span class="k">else</span> <span class="s2">&quot;pickle&quot;</span>
+
+    <span class="k">if</span> <span class="n">serialization_format</span> <span class="o">==</span> <span class="s2">&quot;pickle&quot;</span><span class="p">:</span>
+        <span class="n">serialized_model</span> <span class="o">=</span> <span class="n">PickleModel</span><span class="p">()</span><span class="o">.</span><span class="n">pickle_trained_model</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">info</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+        <span class="c1"># Returns dict with &quot;prefix.pickle&quot;: bytes</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">serialized_model</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Serialize the model using dill</span>
+        <span class="kn">import</span> <span class="nn">dill</span>
+
+        <span class="n">sanitized_prefix</span> <span class="o">=</span> <span class="n">ScoreCode</span><span class="o">.</span><span class="n">sanitize_model_prefix</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">serialized_model</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sanitized_prefix</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">:</span> <span class="n">dill</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">model</span><span class="p">)}</span>
+
+    <span class="n">input_vars</span> <span class="o">=</span> <span class="n">JSONFiles</span><span class="p">()</span><span class="o">.</span><span class="n">write_var_json</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">is_input</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">output_vars</span> <span class="o">=</span> <span class="n">JSONFiles</span><span class="p">()</span><span class="o">.</span><span class="n">write_var_json</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">is_input</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">JSONFiles</span><span class="p">()</span><span class="o">.</span><span class="n">write_file_metadata_json</span><span class="p">(</span><span class="n">model_prefix</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">properties</span> <span class="o">=</span> <span class="n">JSONFiles</span><span class="p">()</span><span class="o">.</span><span class="n">write_model_properties_json</span><span class="p">(</span>
+        <span class="n">model_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">model_desc</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+        <span class="n">model_algorithm</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">algorithm</span><span class="p">,</span>
+        <span class="n">modeler</span><span class="o">=</span><span class="n">modeler</span><span class="p">,</span>
+        <span class="n">target_variable</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">target_column</span><span class="p">,</span>
+        <span class="n">target_values</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">target_values</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># requirements = JSONFiles().create_requirements_json(model)</span>
+
+    <span class="n">pzmm_files</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">serialized_model</span><span class="p">)</span>
+    <span class="n">pzmm_files</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">input_vars</span><span class="p">)</span>
+    <span class="n">pzmm_files</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">output_vars</span><span class="p">)</span>
+    <span class="n">pzmm_files</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+    <span class="n">pzmm_files</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
+
+    <span class="n">model_obj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ImportModel</span><span class="p">()</span><span class="o">.</span><span class="n">import_model</span><span class="p">(</span>
+        <span class="n">model_files</span><span class="o">=</span><span class="n">pzmm_files</span><span class="p">,</span>
+        <span class="n">model_prefix</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
+        <span class="n">input_data</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">X</span><span class="p">,</span>
+        <span class="n">predict_method</span><span class="o">=</span><span class="p">[</span><span class="n">info</span><span class="o">.</span><span class="n">predict_function</span><span class="p">,</span> <span class="n">info</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()],</span>
+        <span class="n">predict_threshold</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">threshold</span><span class="p">,</span>
+        <span class="n">score_metrics</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">output_column_names</span><span class="p">,</span>
+        <span class="n">target_values</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">target_values</span><span class="p">,</span>
+        <span class="n">pickle_type</span><span class="o">=</span><span class="n">serialization_format</span><span class="p">,</span>
+        <span class="n">model_file_name</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">serialized_model</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">model_obj</span>
+
+
+<span class="k">def</span> <span class="nf">_register_sas_model</span><span class="p">(</span>
+    <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">create_project</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">repo_obj</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+    <span class="k">if</span> <span class="s2">&quot;DataStepSrc&quot;</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">zip_file</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">create_package_from_datastep</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">create_project</span><span class="p">:</span>
+            <span class="n">out_var</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">in_var</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="kn">import</span> <span class="nn">copy</span>
+            <span class="kn">import</span> <span class="nn">zipfile</span> <span class="k">as</span> <span class="nn">zp</span>
+
+            <span class="n">zip_file_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">zip_file</span><span class="p">)</span>
+            <span class="n">tmp_zip</span> <span class="o">=</span> <span class="n">zp</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_file_copy</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;outputVar.json&quot;</span> <span class="ow">in</span> <span class="n">tmp_zip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
+                <span class="n">out_var</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
+                    <span class="n">tmp_zip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;outputVar.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf=8&quot;</span><span class="p">)</span>
+                <span class="p">)</span>  <span class="c1"># added decode for 3.5 and older</span>
+                <span class="k">for</span> <span class="n">tmp</span> <span class="ow">in</span> <span class="n">out_var</span><span class="p">:</span>
+                    <span class="n">tmp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;output&quot;</span><span class="p">})</span>
+            <span class="k">if</span> <span class="s2">&quot;inputVar.json&quot;</span> <span class="ow">in</span> <span class="n">tmp_zip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
+                <span class="n">in_var</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
+                    <span class="n">tmp_zip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;inputVar.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+                <span class="p">)</span>  <span class="c1"># added decode for 3.5 and older</span>
+                <span class="k">for</span> <span class="n">tmp</span> <span class="ow">in</span> <span class="n">in_var</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;input&quot;</span><span class="p">:</span>
+                        <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;input&quot;</span>
+
+            <span class="k">if</span> <span class="s2">&quot;ModelProperties.json&quot;</span> <span class="ow">in</span> <span class="n">tmp_zip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
+                <span class="n">model_props</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
+                    <span class="n">tmp_zip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;ModelProperties.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">model_props</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">project</span> <span class="o">=</span> <span class="n">_create_project</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">model_props</span><span class="p">,</span> <span class="n">repo_obj</span><span class="p">,</span> <span class="n">in_var</span><span class="p">,</span> <span class="n">out_var</span><span class="p">)</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">import_model_from_zip</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">zip_file</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
+    <span class="c1"># Assume ASTORE model if not a DataStep model</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cas</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_connection</span><span class="p">()</span>
+        <span class="n">cas</span><span class="o">.</span><span class="n">loadactionset</span><span class="p">(</span><span class="s2">&quot;astore&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">create_project</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">cas</span><span class="o">.</span><span class="n">astore</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">rstore</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">epcode</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">model_props</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">astore</span><span class="o">.</span><span class="n">_get_model_properties</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+            <span class="c1"># Format input &amp; output variable info as lists of dicts</span>
+            <span class="n">input_vars</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">astore</span><span class="o">.</span><span class="n">get_variable_properties</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">InputVariables</span><span class="o">.</span><span class="n">itertuples</span><span class="p">()</span>
+            <span class="p">]</span>
+            <span class="n">output_vars</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">utils</span><span class="o">.</span><span class="n">astore</span><span class="o">.</span><span class="n">get_variable_properties</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">itertuples</span><span class="p">()</span>
+            <span class="p">]</span>
+
+            <span class="c1"># Set the variable &#39;role&#39; if it wasn&#39;t included (not all astores specify)</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">input_vars</span><span class="p">:</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">,</span> <span class="s2">&quot;INPUT&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">output_vars</span><span class="p">:</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">,</span> <span class="s2">&quot;OUTPUT&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Some astores include the target variable in the &#39;InputVariable&#39; data frame.  Exclude anything not</span>
+            <span class="c1"># marked as INPUT.</span>
+            <span class="n">input_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">input_vars</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;INPUT&quot;</span><span class="p">]</span>
+
+            <span class="n">project</span> <span class="o">=</span> <span class="n">_create_project</span><span class="p">(</span>
+                <span class="n">project</span><span class="p">,</span> <span class="n">model_props</span><span class="p">,</span> <span class="n">repo_obj</span><span class="p">,</span> <span class="n">input_vars</span><span class="p">,</span> <span class="n">output_vars</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">current_session</span><span class="p">()</span><span class="o">.</span><span class="n">version_info</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="c1"># Upload the model as a ZIP file if using Viya 3.</span>
+            <span class="n">zipfile</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">create_package</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="nb">input</span><span class="p">)</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">import_model_from_zip</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">zipfile</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># If using Viya 4, just upload the raw AStore and Model Manager will handle inspection.</span>
+            <span class="n">astore</span> <span class="o">=</span> <span class="n">cas</span><span class="o">.</span><span class="n">astore</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">rstore</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;projectId&quot;</span><span class="p">:</span> <span class="n">project</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;ASTORE&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="s2">&quot;/models&quot;</span><span class="p">,</span>
+                <span class="n">files</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;files&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.sasast&quot;</span><span class="p">,</span> <span class="n">astore</span><span class="p">[</span><span class="s2">&quot;blob&quot;</span><span class="p">])},</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+
 <div class="viewcode-block" id="register_model">
 <a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.register_model">[docs]</a>
 <span class="k">def</span> <span class="nf">register_model</span><span class="p">(</span>
@@ -585,11 +683,13 @@ document.write(`
     <span class="n">name</span><span class="p">,</span>
     <span class="n">project</span><span class="p">,</span>
     <span class="n">repository</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">files</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">record_packages</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">modeler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Register a model in the model repository.</span>
 
@@ -609,7 +709,7 @@ document.write(`
 <span class="sd">    repository : str or dict, optional</span>
 <span class="sd">        The name or id of the repository, or a dictionary representation of</span>
 <span class="sd">        the repository.  If omitted, the default repository will be used.</span>
-<span class="sd">    input : DataFrame, type, list of type, or dict of str: type, optional</span>
+<span class="sd">    X : DataFrame, type, list of type, or dict of str: type, optional</span>
 <span class="sd">        The expected type for each input value of the target function.</span>
 <span class="sd">        Can be omitted if target function includes type hints.  If a DataFrame</span>
 <span class="sd">        is provided, the columns will be inspected to determine type</span>
@@ -630,6 +730,11 @@ document.write(`
 <span class="sd">    record_packages : bool, optional</span>
 <span class="sd">        Capture Python packages registered in the environment.  Defaults to</span>
 <span class="sd">        True.  Ignored if `model` is not a Python object.</span>
+<span class="sd">    modeler : str, optional</span>
+<span class="sd">        The name of the user who created the model.  Will default ot the</span>
+<span class="sd">        current user if not specified.</span>
+<span class="sd">    input : DataFrame, type, list of type, or dict of str: type, optional</span>
+<span class="sd">        Deprecated, use `X` instead.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -662,6 +767,13 @@ document.write(`
     <span class="n">version</span> <span class="o">=</span> <span class="n">version</span> <span class="ow">or</span> <span class="s2">&quot;new&quot;</span>
 
     <span class="n">files</span> <span class="o">=</span> <span class="n">files</span> <span class="ow">or</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">input</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;The `input` parameter is deprecated.  Use `X` instead.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="c1"># Find the project if it already exists</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span> <span class="k">if</span> <span class="n">project</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
@@ -706,198 +818,38 @@ document.write(`
                 <span class="s2">&quot;received &#39;</span><span class="si">%r</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">swat</span><span class="o">.</span><span class="n">CASTable</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;DataStepSrc&quot;</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="n">zip_file</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">create_package_from_datastep</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="nb">input</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">create_project</span><span class="p">:</span>
-                <span class="n">out_var</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="n">in_var</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="kn">import</span> <span class="nn">copy</span>
-                <span class="kn">import</span> <span class="nn">zipfile</span> <span class="k">as</span> <span class="nn">zp</span>
+        <span class="n">model_obj</span> <span class="o">=</span> <span class="n">_register_sas_model</span><span class="p">(</span>
+            <span class="n">model</span><span class="p">,</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">project</span><span class="p">,</span>
+            <span class="n">repo_obj</span><span class="o">=</span><span class="n">repo_obj</span><span class="p">,</span>
+            <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+            <span class="n">create_project</span><span class="o">=</span><span class="n">create_project</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+        <span class="p">)</span>
 
-                <span class="n">zip_file_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">zip_file</span><span class="p">)</span>
-                <span class="n">tmp_zip</span> <span class="o">=</span> <span class="n">zp</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_file_copy</span><span class="p">)</span>
-                <span class="k">if</span> <span class="s2">&quot;outputVar.json&quot;</span> <span class="ow">in</span> <span class="n">tmp_zip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
-                    <span class="n">out_var</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
-                        <span class="n">tmp_zip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;outputVar.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf=8&quot;</span><span class="p">)</span>
-                    <span class="p">)</span>  <span class="c1"># added decode for 3.5 and older</span>
-                    <span class="k">for</span> <span class="n">tmp</span> <span class="ow">in</span> <span class="n">out_var</span><span class="p">:</span>
-                        <span class="n">tmp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;output&quot;</span><span class="p">})</span>
-                <span class="k">if</span> <span class="s2">&quot;inputVar.json&quot;</span> <span class="ow">in</span> <span class="n">tmp_zip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
-                    <span class="n">in_var</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
-                        <span class="n">tmp_zip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;inputVar.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-                    <span class="p">)</span>  <span class="c1"># added decode for 3.5 and older</span>
-                    <span class="k">for</span> <span class="n">tmp</span> <span class="ow">in</span> <span class="n">in_var</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;input&quot;</span><span class="p">:</span>
-                            <span class="n">tmp</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;input&quot;</span>
-
-                <span class="k">if</span> <span class="s2">&quot;ModelProperties.json&quot;</span> <span class="ow">in</span> <span class="n">tmp_zip</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
-                    <span class="n">model_props</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
-                        <span class="n">tmp_zip</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;ModelProperties.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-                    <span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">model_props</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="n">project</span> <span class="o">=</span> <span class="n">_create_project</span><span class="p">(</span>
-                    <span class="n">project</span><span class="p">,</span> <span class="n">model_props</span><span class="p">,</span> <span class="n">repo_obj</span><span class="p">,</span> <span class="n">in_var</span><span class="p">,</span> <span class="n">out_var</span>
-                <span class="p">)</span>
-            <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">import_model_from_zip</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">zip_file</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
-        <span class="c1"># Assume ASTORE model if not a DataStep model</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">cas</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_connection</span><span class="p">()</span>
-            <span class="n">cas</span><span class="o">.</span><span class="n">loadactionset</span><span class="p">(</span><span class="s2">&quot;astore&quot;</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">create_project</span><span class="p">:</span>
-                <span class="n">result</span> <span class="o">=</span> <span class="n">cas</span><span class="o">.</span><span class="n">astore</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">rstore</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">epcode</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-                <span class="n">model_props</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">astore</span><span class="o">.</span><span class="n">_get_model_properties</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-
-                <span class="c1"># Format input &amp; output variable info as lists of dicts</span>
-                <span class="n">input_vars</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">utils</span><span class="o">.</span><span class="n">astore</span><span class="o">.</span><span class="n">get_variable_properties</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">InputVariables</span><span class="o">.</span><span class="n">itertuples</span><span class="p">()</span>
-                <span class="p">]</span>
-                <span class="n">output_vars</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">utils</span><span class="o">.</span><span class="n">astore</span><span class="o">.</span><span class="n">get_variable_properties</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">OutputVariables</span><span class="o">.</span><span class="n">itertuples</span><span class="p">()</span>
-                <span class="p">]</span>
-
-                <span class="c1"># Set the variable &#39;role&#39; if it wasn&#39;t included (not all astores specify)</span>
-                <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">input_vars</span><span class="p">:</span>
-                    <span class="n">v</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">,</span> <span class="s2">&quot;INPUT&quot;</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">output_vars</span><span class="p">:</span>
-                    <span class="n">v</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;role&quot;</span><span class="p">,</span> <span class="s2">&quot;OUTPUT&quot;</span><span class="p">)</span>
-
-                <span class="c1"># Some astores include the target variable in the &#39;InputVariable&#39; data frame.  Exclude anything not</span>
-                <span class="c1"># marked as INPUT.</span>
-                <span class="n">input_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">input_vars</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;INPUT&quot;</span><span class="p">]</span>
-
-                <span class="n">project</span> <span class="o">=</span> <span class="n">_create_project</span><span class="p">(</span>
-                    <span class="n">project</span><span class="p">,</span> <span class="n">model_props</span><span class="p">,</span> <span class="n">repo_obj</span><span class="p">,</span> <span class="n">input_vars</span><span class="p">,</span> <span class="n">output_vars</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">current_session</span><span class="p">()</span><span class="o">.</span><span class="n">version_info</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
-                <span class="c1"># Upload the model as a ZIP file if using Viya 3.</span>
-                <span class="n">zipfile</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">create_package</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="nb">input</span><span class="p">)</span>
-                <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">import_model_from_zip</span><span class="p">(</span>
-                    <span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">zipfile</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># If using Viya 4, just upload the raw AStore and Model Manager will handle inspection.</span>
-                <span class="n">astore</span> <span class="o">=</span> <span class="n">cas</span><span class="o">.</span><span class="n">astore</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">rstore</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
-                <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
-                    <span class="s2">&quot;projectId&quot;</span><span class="p">:</span> <span class="n">project</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;ASTORE&quot;</span><span class="p">,</span>
-                <span class="p">}</span>
-                <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-                    <span class="s2">&quot;/models&quot;</span><span class="p">,</span>
-                    <span class="n">files</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;files&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.sasast&quot;</span><span class="p">,</span> <span class="n">astore</span><span class="p">[</span><span class="s2">&quot;blob&quot;</span><span class="p">])},</span>
-                    <span class="n">data</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
-                <span class="p">)</span>
-        <span class="k">return</span> <span class="n">model</span>
-
-    <span class="c1"># If the model is a scikit-learn model, generate the model dictionary</span>
-    <span class="c1"># from it and pickle the model for storage</span>
-    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;_estimator_type&quot;</span><span class="p">,</span> <span class="s2">&quot;get_params&quot;</span><span class="p">]):</span>
-        <span class="c1"># Pickle the model so we can store it</span>
-        <span class="n">model_pkl</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-        <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;model.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">model_pkl</span><span class="p">,</span> <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;Python Pickle&quot;</span><span class="p">})</span>
-
-        <span class="n">target_funcs</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;predict&quot;</span><span class="p">,</span> <span class="s2">&quot;predict_proba&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">f</span><span class="p">)]</span>
-
-        <span class="c1"># Extract model properties</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">_sklearn_to_dict</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
-
-        <span class="c1"># Get package versions in environment</span>
-        <span class="n">packages</span> <span class="o">=</span> <span class="n">installed_packages</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">record_packages</span> <span class="ow">and</span> <span class="n">packages</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">model</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;properties&quot;</span><span class="p">,</span> <span class="p">[])</span>
-
-            <span class="c1"># Define a custom property to capture each package version</span>
-            <span class="c1"># NOTE: some packages may not conform to the &#39;name==version&#39; format</span>
-            <span class="c1">#  expected here (e.g those installed with pip install -e). Such</span>
-            <span class="c1">#  packages also generally contain characters that are not allowed</span>
-            <span class="c1"># in custom properties, so they are excluded here.</span>
-            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">packages</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s2">&quot;==&quot;</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
-                    <span class="n">n</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;==&quot;</span><span class="p">)</span>
-                    <span class="n">model</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_property</span><span class="p">(</span><span class="s2">&quot;env_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
-
-            <span class="c1"># Generate and upload a requirements.txt file</span>
-            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;requirements.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packages</span><span class="p">)})</span>
-
-        <span class="c1"># Generate PyMAS wrapper</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">mas_module</span> <span class="o">=</span> <span class="n">from_pickle</span><span class="p">(</span>
-                <span class="n">model_pkl</span><span class="p">,</span> <span class="n">target_funcs</span><span class="p">,</span> <span class="n">input_types</span><span class="o">=</span><span class="nb">input</span><span class="p">,</span> <span class="n">array_input</span><span class="o">=</span><span class="kc">True</span>
-            <span class="p">)</span>
-
-            <span class="c1"># Include score code files from ESP and MAS</span>
-            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;dmcas_packagescorecode.sas&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">score_code</span><span class="p">(),</span>
-                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;Score Code&quot;</span><span class="p">,</span>
-                <span class="p">}</span>
-            <span class="p">)</span>
-            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;dmcas_epscorecode.sas&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">score_code</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="s2">&quot;CAS&quot;</span><span class="p">),</span>
-                    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;score&quot;</span><span class="p">,</span>
-                <span class="p">}</span>
-            <span class="p">)</span>
-            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;python_wrapper.py&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">score_code</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="s2">&quot;Python&quot;</span><span class="p">),</span>
-                <span class="p">}</span>
-            <span class="p">)</span>
-
-            <span class="n">model</span><span class="p">[</span><span class="s2">&quot;inputVariables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">var</span><span class="o">.</span><span class="n">as_model_metadata</span><span class="p">()</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">variables</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">var</span><span class="o">.</span><span class="n">out</span>
-            <span class="p">]</span>
-
-            <span class="n">model</span><span class="p">[</span><span class="s2">&quot;outputVariables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">var</span><span class="o">.</span><span class="n">as_model_metadata</span><span class="p">()</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">mas_module</span><span class="o">.</span><span class="n">variables</span> <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">out</span>
-            <span class="p">]</span>
-        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="c1"># PyMAS creation failed, most likely because input data wasn&#39;t</span>
-            <span class="c1"># provided</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Unable to inspect model </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-
-            <span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;Unable to determine input/output variables. &quot;</span>
-                <span class="s2">&quot; Model variables will not be specified and some &quot;</span>
-                <span class="s2">&quot;model functionality may not be available.&quot;</span>
-            <span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">model_obj</span> <span class="o">=</span> <span class="n">_register_open_source_model</span><span class="p">(</span>
+            <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">modeler</span><span class="o">=</span><span class="n">modeler</span> <span class="ow">or</span> <span class="n">current_session</span><span class="p">()</span><span class="o">.</span><span class="n">username</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Otherwise, the model better be a dictionary of metadata</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="s2">&quot;Expected an instance of &#39;</span><span class="si">%r</span><span class="s2">&#39; but received &#39;</span><span class="si">%r</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="p">({},</span> <span class="n">model</span><span class="p">)</span>
-            <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">create_project</span><span class="p">:</span>
         <span class="n">project</span> <span class="o">=</span> <span class="n">_create_project</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">repo_obj</span><span class="p">)</span>
 
-    <span class="c1"># If replacing an existing version, make sure the model version exists</span>
-    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">version</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;new&quot;</span><span class="p">:</span>
-        <span class="c1"># Update an existing model with new files</span>
-        <span class="n">model_obj</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">model_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Unable to update version &#39;</span><span class="si">%s</span><span class="s2">&#39; of model &#39;</span><span class="si">%s</span><span class="s2">.  &quot;</span>
-                <span class="s2">&quot;Model not found.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-            <span class="p">)</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">create_model_version</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">mr</span><span class="o">.</span><span class="n">delete_model_contents</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Assume new model to create</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
+        <span class="c1"># If replacing an existing version, make sure the model version exists</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">version</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;new&quot;</span><span class="p">:</span>
+            <span class="c1"># Update an existing model with new files</span>
+            <span class="k">if</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Unable to update version &#39;</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&#39; of model &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;.  &quot;</span>
+                    <span class="s2">&quot;Model not found.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">model_obj</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">create_model_version</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">mr</span><span class="o">.</span><span class="n">delete_model_contents</span><span class="p">(</span><span class="n">model_obj</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Assume new model to create</span>
+            <span class="n">model_obj</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
             <span class="s2">&quot;Model should be an instance of &#39;</span><span class="si">%r</span><span class="s2">&#39; but received &#39;</span><span class="si">%r</span><span class="s2">&#39; &quot;</span>
             <span class="s2">&quot;instead.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">RestObj</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
@@ -906,11 +858,16 @@ document.write(`
     <span class="c1"># Upload any additional files</span>
     <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="n">mr</span><span class="o">.</span><span class="n">add_model_content</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">file</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">file</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="s2">&quot;role&quot;</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Invalid key &#39;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&#39; in `file` dictionary.  Valid keys are &#39;name&#39;, &#39;file&#39;, and &#39;role&#39;.&quot;</span>
+                    <span class="p">)</span>
+            <span class="n">mr</span><span class="o">.</span><span class="n">add_model_content</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="o">**</span><span class="n">file</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">mr</span><span class="o">.</span><span class="n">add_model_content</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+            <span class="n">mr</span><span class="o">.</span><span class="n">add_model_content</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">model</span></div>
+    <span class="k">return</span> <span class="n">model_obj</span></div>
 
 
 
@@ -1075,9 +1032,7 @@ document.write(`
 <span class="sd">    .. versionadded:: v1.3</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">swat</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">swat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
             <span class="s2">&quot;The &#39;swat&#39; package is required to save model &quot;</span> <span class="s2">&quot;performance data.&quot;</span>
         <span class="p">)</span>

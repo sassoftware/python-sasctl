@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_score_code &#8212; sasctl 1.10.5 documentation</title>
+    <title>sasctl.pzmm.write_score_code &#8212; sasctl 1.10.6 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=5a32024a"></script>
+    <script src="../../../_static/documentation_options.js?v=f7627286"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/write_score_code';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 01, 2024"/>
+    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.5 documentation</p>
+    <p class="title logo__title">sasctl 1.10.6 documentation</p>
   
 </a></div>
     
@@ -340,7 +340,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">textwrap</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -356,13 +356,13 @@ document.write(`
 <div class="viewcode-block" id="ScoreCode">
 <a class="viewcode-back" href="../../../api/pzmm/write_score_code.html#sasctl.pzmm.write_score_code.ScoreCode">[docs]</a>
 <span class="k">class</span> <span class="nc">ScoreCode</span><span class="p">:</span>
-    <span class="n">score_code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
 <div class="viewcode-block" id="ScoreCode.write_score_code">
 <a class="viewcode-back" href="../../../api/pzmm/write_score_code.html#sasctl.pzmm.write_score_code.ScoreCode.write_score_code">[docs]</a>
-    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">write_score_code</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]],</span>
         <span class="n">predict_method</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">List</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]],</span>
@@ -489,9 +489,11 @@ document.write(`
 <span class="sd">              target_values=None, predict_threshold=None, h2o_model=None)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Extract the variable names and types from the input data</span>
-        <span class="n">input_var_list</span><span class="p">,</span> <span class="n">input_dtypes_list</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_input_var_lists</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+        <span class="n">input_var_list</span><span class="p">,</span> <span class="n">input_dtypes_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_var_lists</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
 
-        <span class="n">model_id</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_check_viya_version</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">model_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_viya_version</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="n">sanitized_model_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sanitize_model_prefix</span><span class="p">(</span><span class="n">model_prefix</span><span class="p">)</span>
 
         <span class="c1"># Set the model_file_name based on kwargs input</span>
         <span class="k">if</span> <span class="s2">&quot;model_file_name&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">and</span> <span class="s2">&quot;binary_string&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
@@ -513,7 +515,7 @@ document.write(`
             <span class="p">)</span>
 
         <span class="c1"># Add the core imports to the score code with the specified model serializer</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_write_imports</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_imports</span><span class="p">(</span>
             <span class="n">pickle_type</span><span class="p">,</span>
             <span class="n">mojo_model</span><span class="o">=</span><span class="s2">&quot;mojo_model&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">,</span>
             <span class="n">binary_h2o_model</span><span class="o">=</span><span class="s2">&quot;binary_h2o_model&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">,</span>
@@ -523,7 +525,7 @@ document.write(`
 
         <span class="c1"># Generate model loading code for SAS Viya 3.5 models without binary strings</span>
         <span class="k">if</span> <span class="n">model_id</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">binary_string</span><span class="p">:</span>
-            <span class="n">model_load</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_viya35_model_load</span><span class="p">(</span>
+            <span class="n">model_load</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_viya35_model_load</span><span class="p">(</span>
                 <span class="n">model_id</span><span class="p">,</span>
                 <span class="n">model_file_name</span><span class="p">,</span>
                 <span class="n">pickle_type</span><span class="o">=</span><span class="n">pickle_type</span><span class="p">,</span>
@@ -532,7 +534,7 @@ document.write(`
             <span class="p">)</span>
         <span class="c1"># As above, but for SAS Viya 4 models</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="n">binary_string</span><span class="p">:</span>
-            <span class="n">model_load</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_viya4_model_load</span><span class="p">(</span>
+            <span class="n">model_load</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_viya4_model_load</span><span class="p">(</span>
                 <span class="n">model_file_name</span><span class="p">,</span>
                 <span class="n">pickle_type</span><span class="o">=</span><span class="n">pickle_type</span><span class="p">,</span>
                 <span class="n">mojo_model</span><span class="o">=</span><span class="s2">&quot;mojo_model&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">,</span>
@@ -543,21 +545,19 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="n">model_load</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">model_prefix</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_check_valid_model_prefix</span><span class="p">(</span><span class="n">model_prefix</span><span class="p">)</span>
-
         <span class="c1"># Define the score function using the variables found in input_data</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;def score(</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_var_list</span><span class="p">)</span><span class="si">}</span><span class="s2">):</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;def score(</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_var_list</span><span class="p">)</span><span class="si">}</span><span class="s2">):</span><span class="se">\n</span><span class="s2">&quot;</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">def score(var1, var2, var3, var4):</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">score_metrics</span><span class="p">:</span>
-            <span class="n">score_metrics</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_determine_score_metrics</span><span class="p">(</span>
+            <span class="n">score_metrics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_score_metrics</span><span class="p">(</span>
                 <span class="n">predict_method</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">target_variable</span><span class="p">,</span> <span class="n">target_values</span>
             <span class="p">)</span>
         <span class="c1"># Set the output variables in the line below from score_metrics</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">Output: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">score_metrics</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;\n\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">Output: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">score_metrics</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;\n\n</span><span class="s2">&quot;</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;Output: classification_variable, prediction_variable&quot;</span>
 <span class="sd">    </span>
@@ -566,7 +566,7 @@ document.write(`
 
         <span class="c1"># Run a try/except block to catch errors for model loading (skip binary string)</span>
         <span class="k">if</span> <span class="n">model_load</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">try:</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">global model</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;except NameError:</span><span class="se">\n</span><span class="si">{</span><span class="n">model_load</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
@@ -580,13 +580,13 @@ document.write(`
 
         <span class="c1"># Create the appropriate style of input array and write out the predict method</span>
         <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;mojo_model&quot;</span><span class="p">,</span> <span class="s2">&quot;binary_h2o_model&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">):</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_predict_method</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_predict_method</span><span class="p">(</span>
                 <span class="n">predict_method</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                 <span class="n">input_var_list</span><span class="p">,</span>
                 <span class="n">missing_values</span><span class="o">=</span><span class="n">missing_values</span><span class="p">,</span>
                 <span class="n">dtype_list</span><span class="o">=</span><span class="n">input_dtypes_list</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_predictions_to_metrics</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_predictions_to_metrics</span><span class="p">(</span>
                 <span class="n">score_metrics</span><span class="p">,</span>
                 <span class="n">predict_method</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
                 <span class="n">target_values</span><span class="o">=</span><span class="n">target_values</span><span class="p">,</span>
@@ -595,7 +595,7 @@ document.write(`
                 <span class="n">h2o_model</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_predict_method</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_predict_method</span><span class="p">(</span>
                 <span class="n">predict_method</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                 <span class="n">input_var_list</span><span class="p">,</span>
                 <span class="n">missing_values</span><span class="o">=</span><span class="n">missing_values</span><span class="p">,</span>
@@ -603,7 +603,7 @@ document.write(`
                 <span class="n">tf_model</span><span class="o">=</span><span class="s2">&quot;tf_keras_model&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="s2">&quot;tf_core_model&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="c1"># Include check for numpy values and a conversion operation as needed</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2"># Check for numpy values and convert to a CAS readable &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;representation</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if isinstance(prediction, np.ndarray):</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -617,7 +617,7 @@ document.write(`
 <span class="sd">        </span>
 <span class="sd">        </span>
 <span class="sd">            &quot;&quot;&quot;</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_predictions_to_metrics</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_predictions_to_metrics</span><span class="p">(</span>
                 <span class="n">score_metrics</span><span class="p">,</span>
                 <span class="n">predict_method</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
                 <span class="n">target_values</span><span class="o">=</span><span class="n">target_values</span><span class="p">,</span>
@@ -626,18 +626,18 @@ document.write(`
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">missing_values</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_impute_missing_values</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">missing_values</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_impute_missing_values</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="n">missing_values</span><span class="p">)</span>
 
         <span class="c1"># SAS Viya 3.5 model</span>
         <span class="k">if</span> <span class="n">model_id</span><span class="p">:</span>
-            <span class="n">mas_code</span><span class="p">,</span> <span class="n">cas_code</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_viya35_score_code_import</span><span class="p">(</span>
+            <span class="n">mas_code</span><span class="p">,</span> <span class="n">cas_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_viya35_score_code_import</span><span class="p">(</span>
                 <span class="n">model_prefix</span><span class="p">,</span> <span class="n">model_id</span><span class="p">,</span> <span class="n">score_cas</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">score_code_path</span><span class="p">:</span>
-            <span class="n">py_code_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">score_code_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;score_</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">.py&quot;</span>
+            <span class="n">py_code_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">score_code_path</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;score_</span><span class="si">{</span><span class="n">sanitized_model_prefix</span><span class="si">}</span><span class="s2">.py&quot;</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">py_code_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">py_file</span><span class="p">:</span>
-                <span class="n">py_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span><span class="p">)</span>
+                <span class="n">py_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score_code</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">model_id</span> <span class="ow">and</span> <span class="n">score_cas</span><span class="p">:</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">score_code_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">MAS_CODE_NAME</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">sas_file</span><span class="p">:</span>
                     <span class="c1"># noinspection PyUnboundLocalVariable</span>
@@ -646,7 +646,7 @@ document.write(`
                     <span class="c1"># noinspection PyUnboundLocalVariable</span>
                     <span class="n">sas_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">cas_code</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">output_dict</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;score_</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">.py&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span><span class="p">}</span>
+            <span class="n">output_dict</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;score_</span><span class="si">{</span><span class="n">sanitized_model_prefix</span><span class="si">}</span><span class="s2">.py&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span><span class="p">}</span>
             <span class="k">if</span> <span class="n">model_id</span> <span class="ow">and</span> <span class="n">score_cas</span><span class="p">:</span>
                 <span class="c1"># noinspection PyUnboundLocalVariable</span>
                 <span class="n">output_dict</span><span class="p">[</span><span class="n">MAS_CODE_NAME</span><span class="p">]</span> <span class="o">=</span> <span class="n">mas_code</span>
@@ -742,9 +742,8 @@ document.write(`
                 <span class="sa">f</span><span class="s2">&quot;E.g. `str(name).isidentifier() == True`.&quot;</span>
             <span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_write_imports</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">pickle_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">mojo_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">binary_h2o_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -776,7 +775,7 @@ document.write(`
 <span class="sd">            None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pickle_type</span> <span class="o">=</span> <span class="n">pickle_type</span> <span class="k">if</span> <span class="n">pickle_type</span> <span class="k">else</span> <span class="s2">&quot;pickle&quot;</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;import math</span><span class="se">\n</span><span class="s2">import </span><span class="si">{</span><span class="n">pickle_type</span><span class="si">}</span><span class="se">\n</span><span class="s2">import pandas as pd</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="s2">&quot;import numpy as np</span><span class="se">\n</span><span class="s2">from pathlib import Path</span><span class="se">\n\n</span><span class="s2">&quot;</span>
         <span class="p">)</span>
@@ -792,7 +791,7 @@ document.write(`
 
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">current_session</span><span class="p">()</span><span class="o">.</span><span class="n">version_info</span><span class="p">()</span> <span class="o">!=</span> <span class="mf">3.5</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="s2">&quot;import settings</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="s2">&quot;import settings</span><span class="se">\n\n</span><span class="s2">&quot;</span>
 <span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">import settings</span>
 <span class="sd">                </span>
@@ -806,7 +805,7 @@ document.write(`
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">mojo_model</span> <span class="ow">or</span> <span class="n">binary_h2o_model</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="s2">&quot;import h2o</span><span class="se">\n\n</span><span class="s2">h2o.init()</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="s2">&quot;import h2o</span><span class="se">\n\n</span><span class="s2">h2o.init()</span><span class="se">\n\n</span><span class="s2">&quot;</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">import h2o</span>
 
@@ -814,13 +813,13 @@ document.write(`
 
 <span class="sd">            &quot;&quot;&quot;</span>
         <span class="k">elif</span> <span class="n">tf_model</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="s2">&quot;import tensorflow as tf</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="s2">&quot;import tensorflow as tf</span><span class="se">\n\n</span><span class="s2">&quot;</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">import tensorflow as tf</span>
 
 <span class="sd">            &quot;&quot;&quot;</span>
         <span class="k">elif</span> <span class="n">binary_string</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s1">&#39;import codecs</span><span class="se">\n\n</span><span class="s1">binary_string = &quot;</span><span class="si">{</span><span class="n">binary_string</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">model = </span><span class="si">{</span><span class="n">pickle_type</span><span class="si">}</span><span class="s2">.loads(codecs.decode(binary_string&quot;</span>
                 <span class="s1">&#39;.encode(), &quot;base64&quot;))</span><span class="se">\n\n</span><span class="s1">&#39;</span>
@@ -832,9 +831,8 @@ document.write(`
 <span class="sd">model = pickle.load(codecs.decode(binary_string.encode(), &quot;base64&quot;))</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
-    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_viya35_model_load</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">model_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">model_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">pickle_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -869,7 +867,7 @@ document.write(`
         <span class="n">pickle_type</span> <span class="o">=</span> <span class="n">pickle_type</span> <span class="k">if</span> <span class="n">pickle_type</span> <span class="k">else</span> <span class="s2">&quot;pickle&quot;</span>
 
         <span class="k">if</span> <span class="n">mojo_model</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;model = h2o.import_mojo(str(Path(&quot;</span>
                 <span class="sa">f</span><span class="s1">&#39;&quot;/models/resources/viya/</span><span class="si">{</span><span class="n">model_id</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;)))</span><span class="se">\n\n</span><span class="s1">&#39;</span>
             <span class="p">)</span>
@@ -882,7 +880,7 @@ document.write(`
                 <span class="sa">f</span><span class="s1">&#39;&quot;/models/resources/viya/</span><span class="si">{</span><span class="n">model_id</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;)))&#39;</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="n">binary_h2o_model</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s1">&#39;model = h2o.load(str(Path(&quot;/models/resources/viya/&#39;</span>
                 <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">model_id</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;)))</span><span class="se">\n\n</span><span class="s1">&#39;</span>
             <span class="p">)</span>
@@ -895,7 +893,7 @@ document.write(`
                 <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">model_id</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;)))&#39;</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s1">&#39;model_path = Path(&quot;/models/resources/viya/</span><span class="si">{</span><span class="n">model_id</span><span class="si">}</span><span class="s1">&#39;</span>
                 <span class="sa">f</span><span class="s1">&#39;&quot;)</span><span class="se">\n</span><span class="s1">with open(model_path / &quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;, &#39;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">rb</span><span class="se">\&quot;</span><span class="s2">) as pickle_model:</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">model = </span><span class="si">{</span><span class="n">pickle_type</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -914,9 +912,8 @@ document.write(`
                 <span class="s2">&quot;.load(pickle_model)&quot;</span>
             <span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_viya4_model_load</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">model_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">pickle_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">mojo_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -951,7 +948,7 @@ document.write(`
         <span class="n">pickle_type</span> <span class="o">=</span> <span class="n">pickle_type</span> <span class="k">if</span> <span class="n">pickle_type</span> <span class="k">else</span> <span class="s2">&quot;pickle&quot;</span>
 
         <span class="k">if</span> <span class="n">mojo_model</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;model = h2o.import_mojo(str(Path(settings.pickle_path&quot;</span>
                 <span class="sa">f</span><span class="s1">&#39;) / &quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;))</span><span class="se">\n\n</span><span class="s1">&#39;</span>
             <span class="p">)</span>
@@ -964,7 +961,7 @@ document.write(`
                 <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;))</span><span class="se">\n\n</span><span class="s1">&#39;</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="n">binary_h2o_model</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;model = h2o.load(str(Path(settings.pickle_path) / &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s2">))</span><span class="se">\n\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
@@ -977,7 +974,7 @@ document.write(`
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s2">))</span><span class="se">\n\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="n">tf_keras_model</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;model = tf.keras.models.load_model(Path(settings.pickle_path) / &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">model_file_name</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s1">&#39;.h5&#39;</span><span class="p">))</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">, &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;safe_mode=True)</span><span class="se">\n\n</span><span class="s2">&quot;</span>
@@ -992,7 +989,7 @@ document.write(`
                 <span class="sa">f</span><span class="s2">&quot;safe_mode=True)</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;with open(Path(settings.pickle_path) / &quot;</span>
                 <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;, &quot;rb&quot;) as pickle_model:</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">model = </span><span class="si">{</span><span class="n">pickle_type</span><span class="si">}</span><span class="s2">.load(pickle_model)</span><span class="se">\n\n</span><span class="s2">&quot;</span>
@@ -1008,9 +1005,8 @@ document.write(`
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}</span><span class="s2">model = </span><span class="si">{</span><span class="n">pickle_type</span><span class="si">}</span><span class="s2">.load(pickle_model)</span><span class="se">\n\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_impute_missing_values</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">missing_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">missing_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Write the missing value imputation function of the score code. This section of</span>
@@ -1024,7 +1020,7 @@ document.write(`
 <span class="sd">        missing_values : bool, list, or dict</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">def impute_missing_values(data):</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">def impute_missing_values(data):</span><span class="se">\n</span><span class="s2">&quot;</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 
@@ -1058,13 +1054,13 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="n">impute_values</span> <span class="o">=</span> <span class="n">missing_values</span>
 
-        <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">impute_values = </span><span class="se">\\\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_wrap_indent_string</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">impute_values = </span><span class="se">\\\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_indent_string</span><span class="p">(</span>
             <span class="n">impute_values</span><span class="p">,</span> <span class="mi">8</span>
         <span class="p">)</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    impute_values = \\\n + {&quot;var1&quot;: 0, &quot;var2&quot;: &quot;&quot;, &quot;var3&quot;: 125.3}</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">return data.replace(&#39;           .&#39;, np.nan).fillna(impute_values).apply(pd.to_numeric, errors=&#39;ignore&#39;)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">return data.replace(&#39;           .&#39;, np.nan).fillna(impute_values).apply(pd.to_numeric, errors=&#39;ignore&#39;)</span><span class="se">\n</span><span class="s2">&quot;</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        </span>
 <span class="sd">    return data.replace(&#39;           .&#39;, np.nan).fillna(impute_values).apply(pd.to_numeric, errors=&#39;ignore&#39;)</span>
@@ -1095,9 +1091,8 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">wrapped_lines</span><span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_predict_method</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">method</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">List</span><span class="p">],</span>
         <span class="n">var_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">dtype_list</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1126,7 +1121,7 @@ document.write(`
 <span class="sd">            Flag to indicate that the model is a tensorflow model. The default value is</span>
 <span class="sd">            False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">index=None</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if not isinstance(</span><span class="si">{</span><span class="n">var_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">, pd.Series):</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">index=[0]</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1150,15 +1145,15 @@ document.write(`
             <span class="n">column_types</span> <span class="o">+=</span> <span class="s2">&quot;}&quot;</span>
             <span class="n">input_dict</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&quot;: </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">var_list</span><span class="p">]</span>
 
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = pd.DataFrame(</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = pd.DataFrame(</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="n">input_frame</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">{{</span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dict</span><span class="p">)</span><span class="si">}</span><span class="se">}}</span><span class="s1">, index=index&#39;</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_wrap_indent_string</span><span class="p">(</span><span class="n">input_frame</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_indent_string</span><span class="p">(</span><span class="n">input_frame</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="k">if</span> <span class="n">missing_values</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = impute_missing_values(input_array)</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">column_types = </span><span class="si">{</span><span class="n">column_types</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">h2o_array = h2o.H2OFrame(input_array, &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;column_types=column_types)</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">prediction = &quot;</span>
@@ -1179,7 +1174,7 @@ document.write(`
         <span class="k">elif</span> <span class="n">statsmodels_model</span><span class="p">:</span>
             <span class="n">var_list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;const&quot;</span><span class="p">)</span>
             <span class="n">input_dict</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&quot;: </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">var_list</span><span class="p">]</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if not isinstance(</span><span class="se">\&quot;</span><span class="si">{</span><span class="n">var_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">, pd.Series):</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">const = 1</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1192,15 +1187,15 @@ document.write(`
 <span class="sd">        const = pd.Series([1 for x in len(var1)])</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = pd.DataFrame(</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = pd.DataFrame(</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="n">input_frame</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">{{</span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dict</span><span class="p">)</span><span class="si">}</span><span class="se">}}</span><span class="s1">, index=index&#39;</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_wrap_indent_string</span><span class="p">(</span><span class="n">input_frame</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_indent_string</span><span class="p">(</span><span class="n">input_frame</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="k">if</span> <span class="n">missing_values</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = impute_missing_values(input_array)</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">prediction = model.</span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(input_array)</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1213,15 +1208,15 @@ document.write(`
         <span class="k">elif</span> <span class="n">tf_model</span><span class="p">:</span>
             <span class="n">input_dict</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&quot;: </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">var_list</span><span class="p">]</span>
 
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = pd.DataFrame(</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = pd.DataFrame(</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="n">input_frame</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">{{</span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dict</span><span class="p">)</span><span class="si">}</span><span class="se">}}</span><span class="s1">, index=index&#39;</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_wrap_indent_string</span><span class="p">(</span><span class="n">input_frame</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_indent_string</span><span class="p">(</span><span class="n">input_frame</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="k">if</span> <span class="n">missing_values</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = impute_missing_values(input_array)</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">prediction = model.</span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(input_array)</span><span class="se">\n\n</span><span class="s2">&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2"> # Check if model returns logits or probabilities</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if not math.isclose(sum(predictions[0]), 1, rel_tol=.01):</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1245,15 +1240,15 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="n">input_dict</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&quot;: </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">var_list</span><span class="p">]</span>
 
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = pd.DataFrame(</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = pd.DataFrame(</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="n">input_frame</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">{{</span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dict</span><span class="p">)</span><span class="si">}</span><span class="se">}}</span><span class="s1">, index=index&#39;</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_wrap_indent_string</span><span class="p">(</span><span class="n">input_frame</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_indent_string</span><span class="p">(</span><span class="n">input_frame</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">)</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="k">if</span> <span class="n">missing_values</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">input_array = impute_missing_values(input_array)</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">prediction = model.</span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(input_array).tolist()</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1397,7 +1392,7 @@ document.write(`
                 <span class="n">proba_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_determine_returns_type</span><span class="p">(</span><span class="n">returns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_determine_returns_type</span><span class="p">(</span><span class="n">outputs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine the return type of the prediction method.</span>
 
@@ -1406,7 +1401,7 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        returns : list</span>
+<span class="sd">        outputs : list</span>
 <span class="sd">            The list of expected outputs from the prediction method.</span>
 
 <span class="sd">        Returns</span>
@@ -1416,18 +1411,19 @@ document.write(`
 <span class="sd">            classification values and `False` represents probability or prediction</span>
 <span class="sd">            values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">returns</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="n">val</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
-                <span class="n">returns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="ow">or</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-                <span class="n">returns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">returns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="n">returns</span>
 
-    <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">is_str</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="n">val</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="ow">or</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">is_str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">]</span>
+
     <span class="k">def</span> <span class="nf">_predictions_to_metrics</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">metrics</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">predict_returns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
         <span class="n">target_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1472,7 +1468,7 @@ document.write(`
 
         <span class="c1"># Prediction model or no-calculation classification model</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">target_values</span> <span class="ow">or</span> <span class="n">predict_threshold</span><span class="p">):</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_no_targets_no_thresholds</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">predict_returns</span><span class="p">,</span> <span class="n">h2o_model</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_no_targets_no_thresholds</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">predict_returns</span><span class="p">,</span> <span class="n">h2o_model</span><span class="p">)</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="n">target_values</span> <span class="ow">and</span> <span class="n">predict_threshold</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;A threshold was provided to interpret the prediction results, however &quot;</span>
@@ -1480,7 +1476,7 @@ document.write(`
             <span class="p">)</span>
         <span class="c1"># Binary classification model</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_binary_target</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_binary_target</span><span class="p">(</span>
                 <span class="n">metrics</span><span class="p">,</span>
                 <span class="n">target_values</span><span class="p">,</span>
                 <span class="n">predict_returns</span><span class="p">,</span>
@@ -1490,11 +1486,10 @@ document.write(`
             <span class="p">)</span>
         <span class="c1"># Multiclass classification model</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_nonbinary_targets</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">target_values</span><span class="p">,</span> <span class="n">predict_returns</span><span class="p">,</span> <span class="n">h2o_model</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nonbinary_targets</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">target_values</span><span class="p">,</span> <span class="n">predict_returns</span><span class="p">,</span> <span class="n">h2o_model</span><span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_no_targets_no_thresholds</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">metrics</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">returns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
         <span class="n">h2o_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -1527,7 +1522,7 @@ document.write(`
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="c1"># Classification (with only classification output) or prediction model</span>
             <span class="k">if</span> <span class="n">h2o_model</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}{</span><span class="n">metrics</span><span class="si">}</span><span class="s2"> = prediction[1][0]</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return </span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1545,7 +1540,7 @@ document.write(`
 <span class="sd">        return output_table</span>
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}{</span><span class="n">metrics</span><span class="si">}</span><span class="s2"> = prediction[0][0]</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return </span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1563,15 +1558,15 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Classification model including predictions and classification</span>
             <span class="k">if</span> <span class="n">h2o_model</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}{</span><span class="n">metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> = prediction[1][0]</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}{</span><span class="n">metrics</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> = float(prediction[1][</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">])</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="p">)</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">prediction.columns = </span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1590,11 +1585,11 @@ document.write(`
 
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">)):</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}{</span><span class="n">metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2"> = prediction[0][</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}{</span><span class="n">metrics</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2"> = prediction[0][</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">output_table = pd.DataFrame(prediction, columns=</span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="s2">)&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return output_table</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1613,9 +1608,8 @@ document.write(`
 
 <span class="sd">            &quot;&quot;&quot;</span>
 
-    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_binary_target</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">metrics</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">target_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">returns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
@@ -1649,7 +1643,7 @@ document.write(`
             <span class="c1"># Set default threshold</span>
             <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.5</span>
 
-        <span class="n">returns</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_determine_returns_type</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
+        <span class="n">returns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_returns_type</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;The prediction method has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span><span class="si">}</span><span class="s2"> returns. The score code &quot;</span>
@@ -1665,7 +1659,7 @@ document.write(`
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="c1"># For h2o models with only one metric provided, return the classification</span>
             <span class="k">if</span> <span class="n">h2o_model</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">if prediction[1][</span><span class="si">{</span><span class="n">target_index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">] &gt; </span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}{</span><span class="n">metrics</span><span class="si">}</span><span class="s2"> = </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">target_values</span><span class="p">[</span><span class="n">target_index</span><span class="p">]</span><span class="si">}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
@@ -1689,7 +1683,7 @@ document.write(`
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="c1"># One return that is the classification</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">returns</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return prediction[0]</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1703,7 +1697,7 @@ document.write(`
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="c1"># One return that is a probability</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">returns</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">if prediction[0] &gt; </span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}{</span><span class="n">metrics</span><span class="si">}</span><span class="s2"> = </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">target_values</span><span class="p">[</span><span class="n">target_index</span><span class="p">]</span><span class="si">}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
@@ -1726,7 +1720,7 @@ document.write(`
             <span class="c1"># Two returns from the prediction method</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="nb">sum</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="c1"># Only probabilities returned; return classification for larger value</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">if prediction[0][</span><span class="si">{</span><span class="n">target_index</span><span class="si">}</span><span class="s2">] &gt; </span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}{</span><span class="n">metrics</span><span class="si">}</span><span class="s2"> = </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">target_values</span><span class="p">[</span><span class="n">target_index</span><span class="p">]</span><span class="si">}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
@@ -1757,7 +1751,7 @@ document.write(`
                 <span class="c1"># TODO: Either figure out how to handle threshold or add warning</span>
                 <span class="c1"># Determine which return is the classification value</span>
                 <span class="n">class_index</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}{</span><span class="n">metrics</span><span class="si">}</span><span class="s2"> = prediction[0][</span><span class="si">{</span><span class="n">class_index</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return </span><span class="si">{</span><span class="n">metrics</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1773,7 +1767,7 @@ document.write(`
 <span class="sd">        return output_table</span>
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="c1"># H2O models with two metrics are assumed to be classification + probability</span>
             <span class="k">if</span> <span class="n">h2o_model</span><span class="p">:</span>
@@ -1782,7 +1776,7 @@ document.write(`
                     <span class="s2">&quot;score code should output the classification and probability for &quot;</span>
                     <span class="s2">&quot;the target event to occur.&quot;</span>
                 <span class="p">)</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">if prediction[1][</span><span class="si">{</span><span class="n">target_index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">] &gt; </span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}{</span><span class="n">metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> = &#39;</span><span class="si">{</span><span class="n">target_values</span><span class="p">[</span><span class="n">target_index</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1816,7 +1810,7 @@ document.write(`
                     <span class="s2">&quot;probability output metrics, it is assumed that the classification &quot;</span>
                     <span class="s2">&quot;metric is returned first.&quot;</span>
                 <span class="p">)</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">if prediction[0] &gt; </span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}{</span><span class="n">metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> = </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">target_values</span><span class="p">[</span><span class="n">target_index</span><span class="p">]</span><span class="si">}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
@@ -1846,7 +1840,7 @@ document.write(`
                     <span class="s2">&quot; types, the score code assumes that a classification and the &quot;</span>
                     <span class="s2">&quot;target event probability should be returned.&quot;</span>
                 <span class="p">)</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">if prediction[0][</span><span class="si">{</span><span class="n">target_index</span><span class="si">}</span><span class="s2">] &gt; </span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}{</span><span class="n">metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> = </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">target_values</span><span class="p">[</span><span class="n">target_index</span><span class="p">]</span><span class="si">}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
@@ -1875,7 +1869,7 @@ document.write(`
             <span class="c1"># TODO: Potentially add threshold</span>
             <span class="c1"># Return classification and probability value</span>
             <span class="k">elif</span> <span class="nb">sum</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return prediction[0][0], prediction[0][1]</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1896,7 +1890,7 @@ document.write(`
                 <span class="c1"># Determine which return is the classification value</span>
                 <span class="n">class_index</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">class_index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return prediction[0][0], prediction[0][</span><span class="si">{</span><span class="n">target_index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1915,7 +1909,7 @@ document.write(`
 <span class="sd">        return output_table</span>
 <span class="sd">                    &quot;&quot;&quot;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return prediction[0][</span><span class="si">{</span><span class="n">class_index</span><span class="si">}</span><span class="s2">], prediction[0][</span><span class="si">{</span><span class="n">target_index</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1935,10 +1929,10 @@ document.write(`
 <span class="sd">        return output_table.drop(&#39;drop&#39;, axis=1)</span>
 <span class="sd">                    &quot;&quot;&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">h2o_model</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return prediction[1][0], float(prediction[1][1]), &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;float(prediction[1][2])</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -1959,7 +1953,7 @@ document.write(`
                     <span class="s2">&quot; types, the score code assumes the return order to be: &quot;</span>
                     <span class="s2">&quot;[classification, probability of event, probability of no event].&quot;</span>
                 <span class="p">)</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">if prediction[0] &gt; </span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}{</span><span class="n">metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> = </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">target_values</span><span class="p">[</span><span class="n">target_index</span><span class="p">]</span><span class="si">}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
@@ -1994,7 +1988,7 @@ document.write(`
                     <span class="s2">&quot;for a single return. For batch scoring, the return order of the &quot;</span>
                     <span class="s2">&quot;probabilities will mirror their return order in the model.&quot;</span>
                 <span class="p">)</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">if prediction[0][</span><span class="si">{</span><span class="n">target_index</span><span class="si">}</span><span class="s2">] &gt; </span><span class="si">{</span><span class="n">threshold</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}{</span><span class="n">metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> = </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">target_values</span><span class="p">[</span><span class="n">target_index</span><span class="p">]</span><span class="si">}</span><span class="se">\&quot;\n</span><span class="s2">&quot;</span>
@@ -2025,7 +2019,7 @@ document.write(`
                 <span class="c1"># Determine which return is the classification value</span>
                 <span class="n">class_index</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">class_index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return prediction[0][0], prediction[0][1], 1 - prediction[0][1]</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -2042,7 +2036,7 @@ document.write(`
 <span class="sd">        return output_table</span>
 <span class="sd">                    &quot;&quot;&quot;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return prediction[0][1], prediction[0][0], 1 - prediction[0][0]</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -2062,7 +2056,7 @@ document.write(`
 <span class="sd">                    &quot;&quot;&quot;</span>
             <span class="c1"># Return all values from prediction method</span>
             <span class="k">elif</span> <span class="nb">sum</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return prediction[0][0], prediction[0][1], prediction[0][2]</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -2075,13 +2069,12 @@ document.write(`
 <span class="sd">        return pd.DataFrame(prediction, columns=[&#39;Classification&#39;, &#39;Proba_0&#39;, &#39;Proba_1&#39;])</span>
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Too many score metrics were provided for a binary model.&quot;</span><span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_nonbinary_targets</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">metrics</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">target_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">returns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
@@ -2103,7 +2096,7 @@ document.write(`
 <span class="sd">            Flag to indicate that the model is an H2O.ai model. The default value is</span>
 <span class="sd">            False.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">returns</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_determine_returns_type</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
+        <span class="n">returns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_returns_type</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">&quot;Based on the return types provided, the prediction method returns &quot;</span>
@@ -2114,7 +2107,7 @@ document.write(`
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="c1"># For h2o models with only one metric provided, return the classification</span>
             <span class="k">if</span> <span class="n">h2o_model</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">target_values = </span><span class="si">{</span><span class="n">target_values</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}{</span><span class="n">metrics</span><span class="si">}</span><span class="s2"> = target_values[prediction[1][1:].&quot;</span>
@@ -2135,7 +2128,7 @@ document.write(`
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="c1"># One return that is the classification</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return prediction[0][0]</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -2148,7 +2141,7 @@ document.write(`
 <span class="sd">        return pd.DataFrame({&#39;Classification&#39;: prediction})</span>
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">):</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">target_values = </span><span class="si">{</span><span class="n">target_values</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return target_values[prediction[0].index(max(prediction[0]))]</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -2167,7 +2160,7 @@ document.write(`
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="c1"># Determine which return is the classification value</span>
                 <span class="n">class_index</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return prediction[0][</span><span class="si">{</span><span class="n">class_index</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -2180,10 +2173,10 @@ document.write(`
 <span class="sd">        return pd.DataFrame({&#39;Classification&#39;: [p[0] for p in prediction]})</span>
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">h2o_model</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">target_values = </span><span class="si">{</span><span class="n">target_values</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}{</span><span class="n">metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> = target_values[prediction[1][1:].&quot;</span>
@@ -2203,7 +2196,7 @@ document.write(`
 <span class="sd">        return pd.DataFrame({&#39;Classification&#39;: np.array(target_values)[index], &#39;Probability&#39;: np.max(prediction.iloc[0:, 1:], axis=1)})</span>
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">):</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">target_values = </span><span class="si">{</span><span class="n">target_values</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return target_values[prediction[0].index(max(prediction[0]))], &quot;</span>
@@ -2229,7 +2222,7 @@ document.write(`
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="c1"># Determine which return is the classification value</span>
                 <span class="n">class_index</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return prediction[0][</span><span class="si">{</span><span class="n">class_index</span><span class="si">}</span><span class="s2">], &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;max(prediction[0][:</span><span class="si">{</span><span class="n">class_index</span><span class="si">}</span><span class="s2">] + prediction[0][</span><span class="si">{</span><span class="n">class_index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">:])</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -2249,12 +2242,12 @@ document.write(`
 <span class="sd">        return pd.DataFrame({&#39;Classification&#39;: df[0], &#39;Probability&#39;: max_proba})</span>
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">h2o_model</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">):</span>
                     <span class="n">h2o_returns</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;prediction[1][</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">]&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">))]</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">h2o_returns</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -2272,7 +2265,7 @@ document.write(`
 <span class="sd">                    &quot;&quot;&quot;</span>
                 <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
                     <span class="n">h2o_returns</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;prediction[1][</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">))]</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">h2o_returns</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -2293,7 +2286,7 @@ document.write(`
                 <span class="ow">and</span> <span class="nb">sum</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
             <span class="p">):</span>
                 <span class="n">proba_returns</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;prediction[0][</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">))]</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">proba_returns</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">else:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -2311,7 +2304,7 @@ document.write(`
                 <span class="n">returns</span>
             <span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">proba_returns</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;prediction[0][</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">))]</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">target_values = </span><span class="si">{</span><span class="n">target_values</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">if input_array.shape[0] == 1:</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">return target_values[prediction[0].index(max(prediction[0]))], &quot;</span>
@@ -2334,7 +2327,7 @@ document.write(`
 <span class="sd">        return output_table</span>
 <span class="sd">                &quot;&quot;&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_invalid_predict_config</span><span class="p">():</span>
@@ -2485,8 +2478,10 @@ document.write(`
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span>
 
+<div class="viewcode-block" id="ScoreCode.sanitize_model_prefix">
+<a class="viewcode-back" href="../../../api/pzmm/write_score_code.html#sasctl.pzmm.write_score_code.ScoreCode.sanitize_model_prefix">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_check_valid_model_prefix</span><span class="p">(</span><span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sanitize_model_prefix</span><span class="p">(</span><span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check the model_prefix for a valid Python function name.</span>
 
@@ -2500,6 +2495,7 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        model_prefix : str</span>
 <span class="sd">            Returns a model_prefix, adjusted as needed for valid Python function names.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Replace model_prefix if a valid function name is not provided</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">prefix</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">():</span>
@@ -2511,11 +2507,11 @@ document.write(`
             <span class="p">)</span>
             <span class="k">return</span> <span class="n">new_prefix</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">prefix</span>
+            <span class="k">return</span> <span class="n">prefix</span></div>
 
-    <span class="nd">@classmethod</span>
+
     <span class="k">def</span> <span class="nf">_viya35_score_code_import</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">score_cas</span><span class="p">:</span> <span class="nb">bool</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">score_cas</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Upload the score code to SAS Model Manager and generate DS2 wrappers as needed.</span>
@@ -2546,11 +2542,11 @@ document.write(`
         <span class="n">files</span> <span class="o">=</span> <span class="p">[</span>
             <span class="p">{</span>
                 <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;score_</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">.py&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">score_code</span><span class="p">,</span>
+                <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span><span class="p">,</span>
                 <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;score&quot;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">]</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">upload_and_copy_score_resources</span><span class="p">(</span><span class="n">model_id</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upload_and_copy_score_resources</span><span class="p">(</span><span class="n">model_id</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
         <span class="c1"># The typeConversion endpoint is only valid for models with Python score code</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model_id</span><span class="p">)</span>
         <span class="n">model</span><span class="p">[</span><span class="s2">&quot;scoreCodeType&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Python&quot;</span>
@@ -2563,7 +2559,7 @@ document.write(`
                     <span class="n">mas_code</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;models/</span><span class="si">{</span><span class="n">file</span><span class="o">.</span><span class="n">modelId</span><span class="si">}</span><span class="s2">/contents/</span><span class="si">{</span><span class="n">file</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/content&quot;</span>
                     <span class="p">)</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">upload_and_copy_score_resources</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">upload_and_copy_score_resources</span><span class="p">(</span>
                         <span class="n">model_id</span><span class="p">,</span>
                         <span class="p">[</span>
                             <span class="p">{</span>
@@ -2573,8 +2569,8 @@ document.write(`
                             <span class="p">}</span>
                         <span class="p">],</span>
                     <span class="p">)</span>
-                    <span class="n">cas_code</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">convert_mas_to_cas</span><span class="p">(</span><span class="n">mas_code</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-                    <span class="bp">cls</span><span class="o">.</span><span class="n">upload_and_copy_score_resources</span><span class="p">(</span>
+                    <span class="n">cas_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_mas_to_cas</span><span class="p">(</span><span class="n">mas_code</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">upload_and_copy_score_resources</span><span class="p">(</span>
                         <span class="n">model</span><span class="p">,</span>
                         <span class="p">[</span>
                             <span class="p">{</span>

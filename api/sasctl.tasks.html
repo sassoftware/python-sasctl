@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.tasks &#8212; sasctl 1.10.5 documentation</title>
+    <title>sasctl.tasks &#8212; sasctl 1.10.6 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=5a32024a"></script>
+    <script src="../_static/documentation_options.js?v=f7627286"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/sasctl.tasks';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.core" href="sasctl.core.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 01, 2024"/>
+    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.5 documentation</p>
+    <p class="title logo__title">sasctl 1.10.6 documentation</p>
   
 </a></div>
     
@@ -400,7 +400,7 @@ missing values are replaced with pandas valid missing values.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sasctl.tasks.register_model">
-<span class="sig-prename descclassname"><span class="pre">sasctl.tasks.</span></span><span class="sig-name descname"><span class="pre">register_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_packages</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/tasks.html#register_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.tasks.register_model" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sasctl.tasks.</span></span><span class="sig-name descname"><span class="pre">register_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_packages</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modeler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/tasks.html#register_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.tasks.register_model" title="Link to this definition">#</a></dt>
 <dd><p>Register a model in the model repository.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -419,7 +419,7 @@ the project.</p>
 <dt><strong>repository</strong><span class="classifier">str or dict, optional</span></dt><dd><p>The name or id of the repository, or a dictionary representation of
 the repository.  If omitted, the default repository will be used.</p>
 </dd>
-<dt><strong>input</strong><span class="classifier">DataFrame, type, list of type, or dict of str: type, optional</span></dt><dd><p>The expected type for each input value of the target function.
+<dt><strong>X</strong><span class="classifier">DataFrame, type, list of type, or dict of str: type, optional</span></dt><dd><p>The expected type for each input value of the target function.
 Can be omitted if target function includes type hints.  If a DataFrame
 is provided, the columns will be inspected to determine type
 information.  If a single type is provided, all columns will be assumed
@@ -439,6 +439,11 @@ already exist.</p>
 </dd>
 <dt><strong>record_packages</strong><span class="classifier">bool, optional</span></dt><dd><p>Capture Python packages registered in the environment.  Defaults to
 True.  Ignored if <cite>model</cite> is not a Python object.</p>
+</dd>
+<dt><strong>modeler</strong><span class="classifier">str, optional</span></dt><dd><p>The name of the user who created the model.  Will default ot the
+current user if not specified.</p>
+</dd>
+<dt><strong>input</strong><span class="classifier">DataFrame, type, list of type, or dict of str: type, optional</span></dt><dd><p>Deprecated, use <cite>X</cite> instead.</p>
 </dd>
 </dl>
 </dd>

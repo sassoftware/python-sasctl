@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.utils.astore &#8212; sasctl 1.10.5 documentation</title>
+    <title>sasctl.utils.astore &#8212; sasctl 1.10.6 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=5a32024a"></script>
+    <script src="../../../_static/documentation_options.js?v=f7627286"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/utils/astore';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 01, 2024"/>
+    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.5 documentation</p>
+    <p class="title logo__title">sasctl 1.10.6 documentation</p>
   
 </a></div>
     
@@ -734,18 +734,13 @@ document.write(`
         <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span>
         <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">classification_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;forest&quot;</span><span class="p">:</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Random forest&quot;</span>
-
-        <span class="k">if</span> <span class="n">is_classification</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">classification_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">algorithm</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;forest&quot;</span><span class="p">,</span> <span class="s2">&quot;gradboost&quot;</span><span class="p">,</span> <span class="s2">&quot;tree-based models&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;forest&quot;</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Random forest&quot;</span>
+        <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;gradboost&quot;</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Gradient boosting&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;prediction&quot;</span>
-            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">regression_target</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;gradboost&quot;</span><span class="p">:</span>
-        <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Gradient boosting&quot;</span>
+            <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Tree-based model&quot;</span>
 
         <span class="k">if</span> <span class="n">is_classification</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
             <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span>
@@ -778,7 +773,7 @@ document.write(`
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">properties</span><span class="p">[</span><span class="s2">&quot;tool&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
+    <span class="c1"># todo: warn</span>
     <span class="k">return</span> <span class="n">properties</span>
 
 

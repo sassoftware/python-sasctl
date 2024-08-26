@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.pickle_model &#8212; sasctl 1.10.5 documentation</title>
+    <title>sasctl.pzmm.pickle_model &#8212; sasctl 1.10.6 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=5a32024a"></script>
+    <script src="../../../_static/documentation_options.js?v=f7627286"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/pickle_model';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 01, 2024"/>
+    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.5 documentation</p>
+    <p class="title logo__title">sasctl 1.10.6 documentation</p>
   
 </a></div>
     
@@ -338,7 +338,6 @@ document.write(`
 <span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 <span class="c1"># %%</span>
 <span class="kn">import</span> <span class="nn">codecs</span>
-<span class="kn">import</span> <span class="nn">gzip</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -417,6 +416,10 @@ document.write(`
 <span class="sd">            models.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.write_score_code</span> <span class="kn">import</span> <span class="n">ScoreCode</span>
+
+        <span class="n">sanitized_prefix</span> <span class="o">=</span> <span class="n">ScoreCode</span><span class="o">.</span><span class="n">sanitize_model_prefix</span><span class="p">(</span><span class="n">model_prefix</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">is_binary_string</span><span class="p">:</span>
             <span class="c1"># For models that use a binary string representation</span>
             <span class="n">binary_string</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
@@ -431,25 +434,25 @@ document.write(`
                 <span class="c1"># For models imported from MLFlow</span>
                 <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">ml_pickle_path</span><span class="p">,</span> <span class="n">pickle_path</span><span class="p">)</span>
                 <span class="n">pzmm_pickle_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">mlflow_details</span><span class="p">[</span><span class="s2">&quot;model_path&quot;</span><span class="p">]</span>
-                <span class="n">pzmm_pickle_path</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">model_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">))</span>
+                <span class="n">pzmm_pickle_path</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">sanitized_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ml_pickle_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">pickle_file</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="p">{</span><span class="n">model_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">:</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pickle_file</span><span class="p">)}</span>
+                    <span class="k">return</span> <span class="p">{</span><span class="n">sanitized_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">:</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">pickle_file</span><span class="p">)}</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># For all other model types</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">is_h2o_model</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">pickle_path</span><span class="p">:</span>
                     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
-                        <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">model_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span>
+                        <span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">sanitized_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span>
                     <span class="p">)</span> <span class="k">as</span> <span class="n">pickle_file</span><span class="p">:</span>
                         <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">trained_model</span><span class="p">,</span> <span class="n">pickle_file</span><span class="p">)</span>
                     <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">notebook_output</span><span class="p">:</span>
                         <span class="nb">print</span><span class="p">(</span>
                             <span class="sa">f</span><span class="s2">&quot;Model </span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2"> was successfully pickled and saved &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;to </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">model_prefix</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">PICKLE</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;to </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">sanitized_prefix</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">PICKLE</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
                         <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="p">{</span><span class="n">model_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">:</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">trained_model</span><span class="p">)}</span>
+                    <span class="k">return</span> <span class="p">{</span><span class="n">sanitized_prefix</span> <span class="o">+</span> <span class="n">PICKLE</span><span class="p">:</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">trained_model</span><span class="p">)}</span>
             <span class="c1"># For binary H2O models, save the binary file as a &quot;pickle&quot; file</span>
             <span class="k">elif</span> <span class="n">is_h2o_model</span> <span class="ow">and</span> <span class="n">is_binary_model</span> <span class="ow">and</span> <span class="n">pickle_path</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">h2o</span><span class="p">:</span>
@@ -461,7 +464,7 @@ document.write(`
                     <span class="n">model</span><span class="o">=</span><span class="n">trained_model</span><span class="p">,</span>
                     <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">),</span>
-                    <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">,</span>
+                    <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sanitized_prefix</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="c1"># For MOJO H2O models, save as a mojo file and adjust the extension to .mojo</span>
             <span class="k">elif</span> <span class="n">is_h2o_model</span> <span class="ow">and</span> <span class="n">pickle_path</span><span class="p">:</span>
@@ -470,7 +473,9 @@ document.write(`
                         <span class="s2">&quot;The h2o package is required to save the model as a mojo model.&quot;</span>
                     <span class="p">)</span>
                 <span class="n">trained_model</span><span class="o">.</span><span class="n">save_mojo</span><span class="p">(</span>
-                    <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">),</span> <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_prefix</span><span class="si">}</span><span class="s2">.mojo&quot;</span>
+                    <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">pickle_path</span><span class="p">),</span>
+                    <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sanitized_prefix</span><span class="si">}</span><span class="s2">.mojo&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="n">is_binary_model</span> <span class="ow">or</span> <span class="n">is_h2o_model</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
