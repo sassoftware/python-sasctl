@@ -502,8 +502,8 @@ def register_model(
             # Update an existing model with new files
             if mr.get_model(name) is None:
                 raise ValueError(
-                    "Unable to update version '%s' of model '%s.  "
-                    "Model not found." % (version, name)
+                    f"Unable to update version '{version}' of model '{name}'.  "
+                    "Model not found."
                 )
             model_obj = mr.create_model_version(name)
             mr.delete_model_contents(model_obj)
@@ -693,9 +693,7 @@ def update_model_performance(data, model, label, refresh=True):
     .. versionadded:: v1.3
 
     """
-    try:
-        import swat
-    except ImportError:
+    if swat is None:
         raise RuntimeError(
             "The 'swat' package is required to save model " "performance data."
         )

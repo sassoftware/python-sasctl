@@ -1,10 +1,8 @@
-Unreleased
+v1.10.6 (2024-08-26)
 ----------
 **Improvements**
  - Refactor `tasks.py` to utilize `sasctl.pzmm` functions.
  - Add `model_info` class to better capture model information.
- - Test `/examples` Jupyter notebooks within normal test suite.
- - Add option for data preprocessing in generated score code.
 
 v1.10.5 (2024-08-01)
 ----------
