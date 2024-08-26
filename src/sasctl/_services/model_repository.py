@@ -360,8 +360,8 @@ class ModelRepository(Service):
         model["scoreCodeType"] = score_code_type or model.get("scoreCodeType")
         model["trainTable"] = training_table or model.get("trainTable")
         model["classificationEventProbabilityVariableName"] = (
-                event_prob_variable
-                or model.get("classificationEventProbabilityVariableName")
+            event_prob_variable
+            or model.get("classificationEventProbabilityVariableName")
         )
         model["classificationTargetEventValue"] = event_target_value or model.get(
             "classificationTargetEventValue"
