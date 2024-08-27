@@ -4,6 +4,8 @@
 # Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+#WARNING DLPY Does not work with Python 3.10 and later
+
 import swat
 from dlpy.applications import Sequential
 from dlpy.layers import Dense, InputLayer, OutputLayer

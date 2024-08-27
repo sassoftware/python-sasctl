@@ -359,10 +359,9 @@ class ModelRepository(Service):
 
         model["scoreCodeType"] = score_code_type or model.get("scoreCodeType")
         model["trainTable"] = training_table or model.get("trainTable")
-        model[
-            "classificationEventProbabilityVariableName"
-        ] = event_prob_variable or model.get(
-            "classificationEventProbabilityVariableName"
+        model["classificationEventProbabilityVariableName"] = (
+            event_prob_variable
+            or model.get("classificationEventProbabilityVariableName")
         )
         model["classificationTargetEventValue"] = event_target_value or model.get(
             "classificationTargetEventValue"
@@ -525,7 +524,7 @@ class ModelRepository(Service):
         project : str or dict
             The name or id of the model project, or a dictionary
             representation of the project.
-        file : bytes
+        file : bytes or file-like object
             The ZIP file containing the model and contents.
         description : str
             The description of the model.
@@ -552,9 +551,14 @@ class ModelRepository(Service):
         }
         params = "&".join("{}={}".format(k, v) for k, v in params.items())
 
+        if not isinstance(file, bytes):
+            if file.seekable():
+                file.seek(0)
+            file = file.read()
+
         r = cls.post(
             "/models#octetStream",
-            data=file.read(),
+            data=file,
             params=params,
             headers={"Content-Type": "application/octet-stream"},
         )

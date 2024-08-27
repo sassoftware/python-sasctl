@@ -4,23 +4,16 @@
 # Copyright © 2023, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-import json
-import os
-import pickle
-import random
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import DEFAULT, MagicMock, patch
 
-import numpy as np
 import pandas as pd
 import pytest
 
-import sasctl.pzmm as pzmm
 from sasctl import current_session
 from sasctl.core import RestObj, VersionInfo
-from sasctl.pzmm.write_score_code import ScoreCode as sc
 from sasctl.pzmm.write_score_code import ScoreCode
 
 
@@ -38,7 +31,7 @@ def score_code_mocks():
         _write_imports=MagicMock(),
         _viya35_model_load=DEFAULT,
         _viya4_model_load=DEFAULT,
-        _check_valid_model_prefix=DEFAULT,
+        sanitize_model_prefix=DEFAULT,
         _impute_missing_values=MagicMock(),
         _predict_method=MagicMock(),
         _predictions_to_metrics=MagicMock(),
@@ -54,6 +47,7 @@ def test_get_model_id():
     - Model not found
     - Model found
     """
+    sc = ScoreCode()
     with pytest.raises(ValueError):
         sc._get_model_id(None)
 
@@ -74,6 +68,7 @@ def test_check_for_invalid_variable_names():
     - Valid variables only
     """
     var_list = ["bad_variable", "good_variable", "awful variable"]
+    sc = ScoreCode()
     with pytest.raises(SyntaxError):
         sc._check_for_invalid_variable_names(var_list)
     try:
@@ -97,21 +92,21 @@ def test_write_imports():
         current_session("example.com", "user", "password")
 
     with patch("sasctl.core.Session.version_info") as version:
+        sc = ScoreCode()
         version.return_value = VersionInfo(3)
         sc._write_imports(pickle_type="dill")
         assert "import settings" not in sc.score_code
         assert "import dill" in sc.score_code
-        sc.score_code = ""
 
+        sc = ScoreCode()
         version.return_value = VersionInfo(4)
         sc._write_imports(mojo_model=True)
         assert "import settings" in sc.score_code
         assert "import h2o" in sc.score_code
-        sc.score_code = ""
 
+        sc = ScoreCode()
         sc._write_imports(binary_string=b"test binary string")
         assert "import codecs" in sc.score_code
-        sc.score_code = ""
 
 
 def test_viya35_model_load():
@@ -121,20 +116,20 @@ def test_viya35_model_load():
     - mojo model
     - binary h2o model
     """
+    sc = ScoreCode()
     load_text = sc._viya35_model_load("1234", "normal")
     assert "pickle.load(pickle_model)" in sc.score_code
     assert "pickle.load(pickle_model)" in load_text
-    sc.score_code = ""
 
+    sc = ScoreCode()
     mojo_text = sc._viya35_model_load("2345", "mojo", mojo_model=True)
     assert "h2o.import_mojo" in sc.score_code
     assert "h2o.import_mojo" in mojo_text
-    sc.score_code = ""
 
+    sc = ScoreCode()
     binary_text = sc._viya35_model_load("3456", "binary", binary_h2o_model=True)
     assert "h2o.load" in sc.score_code
     assert "h2o.load" in binary_text
-    sc.score_code = ""
 
 
 def test_viya4_model_load():
@@ -145,21 +140,22 @@ def test_viya4_model_load():
     - binary h2o model
     - Tensorflow keras model
     """
+    sc = ScoreCode()
     load_text = sc._viya4_model_load("normal")
     assert "pickle.load(pickle_model)" in sc.score_code
     assert "pickle.load(pickle_model)" in load_text
-    sc.score_code = ""
 
+    sc = ScoreCode()
     mojo_text = sc._viya4_model_load("mojo", mojo_model=True)
     assert "h2o.import_mojo" in sc.score_code
     assert "h2o.import_mojo" in mojo_text
-    sc.score_code = ""
 
+    sc = ScoreCode()
     binary_text = sc._viya4_model_load("binary", binary_h2o_model=True)
     assert "h2o.load" in sc.score_code
     assert "h2o.load" in binary_text
-    sc.score_code = ""
 
+    sc = ScoreCode()
     keras_text = sc._viya4_model_load("tensorflow", tf_keras_model=True)
     assert "tf.keras.models.load_model" in sc.score_code
     assert "tf.keras.models.load_model" in keras_text
@@ -174,20 +170,23 @@ def test_impute_missing_values():
     test_df = pd.DataFrame(
         data=[[0, "a", 1], [2, "b", 0]], columns=["num", "char", "bin"]
     )
+    sc = ScoreCode()
     sc._impute_missing_values(test_df, True)
-    assert "'num': 1" in sc.score_code
+    assert "'num': 1" in sc.score_code or "'num': np.float64(1.0)" in sc.score_code
     assert "'char': ''" in sc.score_code
-    assert "'bin': 0" in sc.score_code
+    assert "'bin': 0" in sc.score_code or "'bin': np.int64(0)" in sc.score_code
 
+    sc = ScoreCode()
     sc._impute_missing_values(test_df, [5, "test", 1])
-    assert "'num': 5" in sc.score_code
+    assert "'num': 5" in sc.score_code or "'num': np.float64(5.0)" in sc.score_code
     assert "'char': 'test'" in sc.score_code
-    assert "'bin': 1" in sc.score_code
+    assert "'bin': 1" in sc.score_code or "'bin': np.int64(1)" in sc.score_code
 
+    sc = ScoreCode()
     sc._impute_missing_values(test_df, {"a": 5, "b": "test", "c": 1})
-    assert "'a': 5" in sc.score_code
+    assert "'a': 5" in sc.score_code or "'a': np.float64(5.0)" in sc.score_code
     assert "'b': 'test'" in sc.score_code
-    assert "'c': 1" in sc.score_code
+    assert "'c': 1" in sc.score_code or "'c': np.int64(1)" in sc.score_code
 
 
 def test_predict_method():
@@ -197,19 +196,19 @@ def test_predict_method():
     - h2o model, based of dtype_list input
     - statsmodels model
     """
+    sc = ScoreCode()
     var_list = ["first", "second", "third"]
     dtype_list = ["str", "int", "float"]
     sc._predict_method(predict_proba, var_list)
     assert '{"first": first, "second": second' in sc.score_code
-    sc.score_code = ""
 
+    sc = ScoreCode()
     sc._predict_method(predict_proba, var_list, dtype_list=dtype_list)
     assert "column_types = " in sc.score_code
-    sc.score_code = ""
 
+    sc = ScoreCode()
     sc._predict_method(predict_proba, var_list, statsmodels_model=True)
     assert '{"const": const, "first": first' in sc.score_code
-    sc.score_code = ""
 
 
 def test_determine_returns_type():
@@ -220,6 +219,7 @@ def test_determine_returns_type():
     - mixture of values/types
     - unexpected types
     """
+    sc = ScoreCode()
     assert sc._determine_returns_type(["TestReturn", 1.2]) == [True, False]
     assert sc._determine_returns_type([int, float, str]) == [False, False, True]
     assert sc._determine_returns_type(["TestReturn", int, str]) == [True, False, True]
@@ -232,6 +232,7 @@ def test_yield_score_metrics():
     - Any order for classification/prediction values
     - No target variable provided
     """
+    sc = ScoreCode()
     metrics = sc._yield_score_metrics(
         [False, True, False], ["Math", "English"], "ClassyVar"
     )
@@ -251,6 +252,7 @@ def test_determine_score_metrics():
         - len(predict_returns == False) = [0, =len(tv), Any]
         - target_variable = [None, Any]
     """
+    sc = ScoreCode()
     assert sc._determine_score_metrics([float], "TestPredict", None) == [
         f"I_TestPredict"
     ]
@@ -305,7 +307,7 @@ def test_determine_score_metrics():
 
 class TestNoTargetsNoThresholds(unittest.TestCase):
     def setUp(self):
-        self.sc = ScoreCode
+        self.sc = ScoreCode()
 
     def tearDown(self):
         self.sc.score_code = ""
@@ -331,7 +333,7 @@ class TestNoTargetsNoThresholds(unittest.TestCase):
         self.sc._no_targets_no_thresholds(metrics, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.5]
+        prediction = [[0.5]]
         self.assertEqual(self.execute_snippet(input_array, prediction), 0.5)
         # Multi row
         input_array = pd.DataFrame({"A": [0.9, 1, 1.1]})
@@ -369,7 +371,7 @@ class TestNoTargetsNoThresholds(unittest.TestCase):
         self.sc._no_targets_no_thresholds(metrics, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["i", 0.3, 0.4, 0.5]
+        prediction = [["i", 0.3, 0.4, 0.5]]
         self.assertEqual(
             self.execute_snippet(input_array, prediction), ("i", 0.3, 0.4, 0.5)
         )
@@ -417,11 +419,8 @@ class TestNoTargetsNoThresholds(unittest.TestCase):
 
 class TestBinaryTarget(unittest.TestCase):
     def setUp(self):
-        self.sc = ScoreCode
+        self.sc = ScoreCode()
         self.target_values = ["A", "B"]
-
-    def tearDown(self):
-        self.sc.score_code = ""
 
     def execute_snippet(self, *args):
         scope = {}
@@ -430,6 +429,8 @@ class TestBinaryTarget(unittest.TestCase):
         return test_snippet(*args)
 
     def test_improper_arguments(self):
+        sc = ScoreCode()
+
         with pytest.raises(ValueError):
             sc._binary_target([], [], ["A", 1, 2, 3])
         with pytest.raises(ValueError):
@@ -449,7 +450,7 @@ class TestBinaryTarget(unittest.TestCase):
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
         prediction = [[], [1, 2, 3]]
-        self.assertEqual(self.execute_snippet(input_array, prediction), "A")
+        self.assertEqual(self.execute_snippet(input_array, prediction), "B")
         # Multi row
         input_array = pd.DataFrame({"A": [0, 1]})
         prediction = pd.DataFrame(
@@ -469,7 +470,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = 0.5
+        prediction = [0.5]
         self.assertEqual(self.execute_snippet(input_array, prediction), 0.5)
         # Multi row
         input_array = pd.DataFrame({"A": [0.9, 1, 1.1]})
@@ -488,14 +489,14 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = 1
-        self.assertEqual(self.execute_snippet(input_array, prediction), "A")
+        prediction = [1]
+        self.assertEqual(self.execute_snippet(input_array, prediction), "B")
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
         prediction = [0, 1, 0]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({metrics: ["B", "A", "B"]}),
+            pd.DataFrame({metrics: ["A", "B", "A"]}),
         )
 
     def test_one_metric_two_returns(self):
@@ -509,7 +510,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [1, 0]
+        prediction = [[1, 0]]
         self.assertEqual(self.execute_snippet(input_array, prediction), "A")
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -528,7 +529,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0, "Y", "z"]
+        prediction = [[0, "Y", "z"]]
         self.assertEqual(self.execute_snippet(input_array, prediction), "Y")
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -542,13 +543,15 @@ class TestBinaryTarget(unittest.TestCase):
         metrics = ["Classification", "Probability"]
         returns = ["", int, int]
         self.sc.score_code += (
-            "import pandas as pd\n" "def test_snippet(input_array, prediction):\n"
+            "import pandas as pd\n"
+            "import numpy as np\n"
+            "def test_snippet(input_array, prediction):\n"
         )
         self.sc._binary_target(metrics, self.target_values, returns, h2o_model=True)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
         prediction = [[], ["a", -1, 1]]
-        self.assertEqual(self.execute_snippet(input_array, prediction), ("a", 1))
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 1.0))
         # Multi row
         input_array = pd.DataFrame({"A": [0, 1]})
         prediction = pd.DataFrame(
@@ -556,7 +559,7 @@ class TestBinaryTarget(unittest.TestCase):
         )
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({"Classification": [0, 1], "Probability": [0.1, 0.8]}),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.1, 0.8]}),
         )
 
     def test_two_metrics_one_return(self):
@@ -568,14 +571,14 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = 0.2
-        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        prediction = [0.2]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("A", 0.2))
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
         prediction = [1, -1]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({"Classification": ["A", "B"], "Probability": [1, -1]}),
+            pd.DataFrame({"Classification": ["B", "A"], "Probability": [1, -1]}),
         )
 
     def test_two_metrics_two_returns_no_classification(self):
@@ -589,14 +592,14 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.2, 0.8]
-        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        prediction = [[0.2, 0.8]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.8))
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
         prediction = [[0.9, 0.1], [0.4, 0.6]]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.9, 0.4]}),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.1, 0.6]}),
         )
 
     def test_two_metrics_two_returns_classification(self):
@@ -610,7 +613,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["B", 0.2]
+        prediction = [["B", 0.2]]
         self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -631,14 +634,14 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["B", 0.2, 0.8]
-        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        prediction = [["B", 0.2, 0.8]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.8))
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
         prediction = [["A", 0.9, 0.1], ["B", 0.4, 0.6]]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.9, 0.4]}),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.1, 0.6]}),
         )
 
     def test_two_metrics_three_returns_class_last(self):
@@ -652,14 +655,14 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.2, 0.8, "B"]
-        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.2))
+        prediction = [[0.2, 0.8, "B"]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("B", 0.8))
         # Multi row
         input_array = pd.DataFrame({"A": [1, 0, 1]})
         prediction = [[0.9, 0.1, "A"], [0.4, 0.6, "B"]]
         pd.testing.assert_frame_equal(
             self.execute_snippet(input_array, prediction),
-            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.9, 0.4]}),
+            pd.DataFrame({"Classification": ["A", "B"], "Probability": [0.1, 0.6]}),
         )
 
     def test_three_metrics_h2o(self):
@@ -695,9 +698,9 @@ class TestBinaryTarget(unittest.TestCase):
         print(self.sc.score_code)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = 0.9
+        prediction = [0.9]
         self.assertEqual(
-            self.execute_snippet(input_array, prediction), ("A", 0.9, 1 - 0.9)
+            self.execute_snippet(input_array, prediction), ("B", 0.9, 1 - 0.9)
         )
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -706,7 +709,7 @@ class TestBinaryTarget(unittest.TestCase):
             self.execute_snippet(input_array, prediction),
             pd.DataFrame(
                 {
-                    "Classification": ["A", "B"],
+                    "Classification": ["B", "A"],
                     "Proba_0": [0.9, 0.1],
                     "Proba_1": [1 - 0.9, 1 - 0.1],
                 }
@@ -724,8 +727,8 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.9, 0.1]
-        self.assertEqual(self.execute_snippet(input_array, prediction), ("A", 0.9, 0.1))
+        prediction = [[0.9, 0.1]]
+        self.assertEqual(self.execute_snippet(input_array, prediction), ("A", 0.1, 0.9))
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
         prediction = [[0.9, 0.1], [0.2, 0.8]]
@@ -751,7 +754,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["A", 0.9]
+        prediction = [["A", 0.9]]
         self.assertEqual(
             self.execute_snippet(input_array, prediction), ("A", 0.9, 1 - 0.9)
         )
@@ -780,7 +783,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.9, "A"]
+        prediction = [[0.9, "A"]]
         self.assertEqual(
             self.execute_snippet(input_array, prediction), ("A", 0.9, 1 - 0.9)
         )
@@ -809,7 +812,7 @@ class TestBinaryTarget(unittest.TestCase):
         self.sc._binary_target(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["A", 0.9, 0.1]
+        prediction = [["A", 0.9, 0.1]]
         self.assertEqual(self.execute_snippet(input_array, prediction), ("A", 0.9, 0.1))
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -828,16 +831,13 @@ class TestBinaryTarget(unittest.TestCase):
 
 class TestNonbinaryTargets(unittest.TestCase):
     def setUp(self):
-        self.sc = ScoreCode
+        self.sc = ScoreCode()
         self.sc.score_code = (
             "import pandas as pd\n"
             "import numpy as np\n"
             "def test_snippet(input_array, prediction):\n"
         )
         self.target_values = ["A", "B", "C"]
-
-    def tearDown(self):
-        self.sc.score_code = ""
 
     def execute_snippet(self, *args):
         scope = {}
@@ -869,7 +869,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = "C"
+        prediction = ["C"]
         self.assertEqual(self.execute_snippet(input_array, prediction), "C")
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -885,7 +885,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.1, 0.2, 0.3]
+        prediction = [[0.1, 0.2, 0.3]]
         self.assertEqual(self.execute_snippet(input_array, prediction), "C")
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -901,7 +901,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["C", 0.1, 0.2, 0.3]
+        prediction = [["C", 0.1, 0.2, 0.3]]
         self.assertEqual(self.execute_snippet(input_array, prediction), "C")
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -935,7 +935,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.1, 0.2, 0.3]
+        prediction = [[0.1, 0.2, 0.3]]
         self.assertEqual(self.execute_snippet(input_array, prediction), ("C", 0.3))
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -951,7 +951,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["C", 0.1, 0.2, 0.3]
+        prediction = [["C", 0.1, 0.2, 0.3]]
         self.assertEqual(self.execute_snippet(input_array, prediction), ("C", 0.3))
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -1014,7 +1014,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.1, 0.2, 0.3]
+        prediction = [[0.1, 0.2, 0.3]]
         self.assertEqual(self.execute_snippet(input_array, prediction), (0.1, 0.2, 0.3))
         # Multiple rows
         input_array = pd.DataFrame({"A": [1, 0, 1]})
@@ -1032,7 +1032,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = ["P", 0.1, 0.2, 0.3]
+        prediction = [["P", 0.1, 0.2, 0.3]]
         self.assertEqual(
             self.execute_snippet(input_array, prediction), ("P", 0.1, 0.2, 0.3)
         )
@@ -1057,7 +1057,7 @@ class TestNonbinaryTargets(unittest.TestCase):
         self.sc._nonbinary_targets(metrics, self.target_values, returns)
         # Single row
         input_array = pd.DataFrame([[1]], columns=["A"], index=[0])
-        prediction = [0.1, 0.2, 0.3]
+        prediction = [[0.1, 0.2, 0.3]]
         self.assertEqual(
             self.execute_snippet(input_array, prediction), ("C", 0.1, 0.2, 0.3)
         )
@@ -1088,6 +1088,7 @@ def test_predictions_to_metrics():
     - raise error for binary model w/ nonbinary targets
     - raise error for no target_values, but thresholds provided
     """
+    sc = ScoreCode()
     with patch("sasctl.pzmm.ScoreCode._no_targets_no_thresholds") as func:
         metrics = ["Classification"]
         returns = [1]
@@ -1103,7 +1104,7 @@ def test_predictions_to_metrics():
         metrics = ["Classification", "Probability"]
         target_values = ["1", "0"]
         sc._predictions_to_metrics(metrics, returns, target_values)
-        func.assert_called_once_with(metrics, ["1", "0"], returns, None, False)
+        func.assert_called_once_with(metrics, ["1", "0"], returns, None, 1, False)
 
     with pytest.raises(
         ValueError,
@@ -1120,6 +1121,7 @@ def test_input_var_lists():
         - default
         - mlflow
     """
+    sc = ScoreCode()
     data = pd.DataFrame(data=[[1, "A"], [5, "B"]], columns=["First", "Second"])
     var_list, dtypes_list = sc._input_var_lists(data)
     assert var_list == ["First", "Second"]
@@ -1144,6 +1146,8 @@ def test_check_viya_version(mock_version, mock_get_model):
     current_session(None)
     mock_version.return_value = None
     model = {"name": "Test", "id": "abc123"}
+    sc = ScoreCode()
+
     with pytest.warns():
         assert sc._check_viya_version(model) is None
 
@@ -1168,8 +1172,9 @@ def test_check_valid_model_prefix():
     - check model_prefix validity
         - raise warning and replace if invalid
     """
-    assert sc._check_valid_model_prefix("TestPrefix") == "TestPrefix"
-    assert sc._check_valid_model_prefix("Test Prefix") == "Test_Prefix"
+    sc = ScoreCode()
+    assert sc.sanitize_model_prefix("TestPrefix") == "TestPrefix"
+    assert sc.sanitize_model_prefix("Test Prefix") == "Test_Prefix"
 
 
 def test_write_score_code(score_code_mocks):
@@ -1192,9 +1197,10 @@ def test_write_score_code(score_code_mocks):
     score_code_mocks["_viya35_model_load"].return_value = "3.5"
     score_code_mocks["_viya4_model_load"].return_value = "4"
     score_code_mocks["_viya35_score_code_import"].return_value = ("MAS", "CAS")
-    score_code_mocks["_check_valid_model_prefix"].return_value = "TestModel"
+    score_code_mocks["sanitize_model_prefix"].return_value = "TestModel"
 
     # No binary string or model file provided
+    sc = ScoreCode()
     with pytest.raises(ValueError):
         sc.write_score_code(
             "TestModel",
@@ -1203,6 +1209,7 @@ def test_write_score_code(score_code_mocks):
         )
 
     # Binary string and model file provided
+    sc = ScoreCode()
     with pytest.raises(ValueError):
         sc.write_score_code(
             "TestModel",
@@ -1212,6 +1219,7 @@ def test_write_score_code(score_code_mocks):
             binary_string=b"Binary model string.",
         )
 
+    sc = ScoreCode()
     sc.write_score_code(
         "TestModel",
         pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
@@ -1220,6 +1228,7 @@ def test_write_score_code(score_code_mocks):
     )
     score_code_mocks["_viya4_model_load"].assert_called_once()
 
+    sc = ScoreCode()
     score_code_mocks["_check_viya_version"].return_value = "abc123"
     sc.write_score_code(
         "TestModel",
@@ -1229,6 +1238,7 @@ def test_write_score_code(score_code_mocks):
     )
     score_code_mocks["_viya35_model_load"].assert_called_once()
 
+    sc = ScoreCode()
     output_dict = sc.write_score_code(
         "TestModel",
         pd.DataFrame(data=[["A", 1], ["B", 2]], columns=["First", "Second"]),
@@ -1239,6 +1249,7 @@ def test_write_score_code(score_code_mocks):
     assert "dmcas_packagescorecode.sas" in output_dict
     assert "dmcas_epscorecode.sas" in output_dict
 
+    sc = ScoreCode()
     tmp_dir = tempfile.TemporaryDirectory()
     sc.write_score_code(
         "TestModel",

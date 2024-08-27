@@ -1,0 +1,58 @@
+{
+    "creationTimeStamp" : "0001-01-01T00:00:00Z",
+    "modifiedTimeStamp" : "0001-01-01T00:00:00Z",
+    "revision" : 0,
+    "name" : "dmcas_relativeimportance",
+    "version" : 0,
+    "order" : 0,
+    "parameterMap" : {
+      "LABEL" : {
+        "label" : "Variable Label",
+        "length" : 256,
+        "order" : 1,
+        "parameter" : "LABEL",
+        "preformatted" : false,
+        "type" : "char",
+        "values" : [ "LABEL" ]
+      },
+      "LEVEL" : {
+        "label" : "Variable Level",
+        "length" : 10,
+        "order" : 5,
+        "parameter" : "LEVEL",
+        "preformatted" : false,
+        "type" : "char",
+        "values" : [ "LEVEL" ]
+      },
+      "ROLE" : {
+        "label" : "Role",
+        "length" : 32,
+        "order" : 4,
+        "parameter" : "ROLE",
+        "preformatted" : false,
+        "type" : "char",
+        "values" : [ "ROLE" ]
+      },
+      "RelativeImportance" : {
+        "label" : "Relative Importance",
+        "length" : 8,
+        "order" : 3,
+        "parameter" : "RelativeImportance",
+        "preformatted" : false,
+        "type" : "num",
+        "values" : [ "RelativeImportance" ]
+      },
+      "Variable" : {
+        "label" : "Variable Name",
+        "length" : 255,
+        "order" : 2,
+        "parameter" : "Variable",
+        "preformatted" : false,
+        "type" : "char",
+        "values" : [ "Variable" ]
+      }
+    },
+    "data" : [],
+    "xInteger" : false,
+    "yInteger" : false
+  }

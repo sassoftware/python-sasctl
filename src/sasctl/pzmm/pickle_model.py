@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # %%
 import codecs
-import gzip
 import pickle
 import shutil
 from pathlib import Path
@@ -78,6 +77,10 @@ class PickleModel:
             models.
 
         """
+        from .write_score_code import ScoreCode
+
+        sanitized_prefix = ScoreCode.sanitize_model_prefix(model_prefix)
+
         if is_binary_string:
             # For models that use a binary string representation
             binary_string = codecs.encode(
@@ -92,25 +95,25 @@ class PickleModel:
                 # For models imported from MLFlow
                 shutil.copy(ml_pickle_path, pickle_path)
                 pzmm_pickle_path = Path(pickle_path) / mlflow_details["model_path"]
-                pzmm_pickle_path.rename(Path(pickle_path) / (model_prefix + PICKLE))
+                pzmm_pickle_path.rename(Path(pickle_path) / (sanitized_prefix + PICKLE))
             else:
                 with open(ml_pickle_path, "rb") as pickle_file:
-                    return {model_prefix + PICKLE: pickle.load(pickle_file)}
+                    return {sanitized_prefix + PICKLE: pickle.load(pickle_file)}
         else:
             # For all other model types
             if not is_h2o_model:
                 if pickle_path:
                     with open(
-                        Path(pickle_path) / (model_prefix + PICKLE), "wb"
+                        Path(pickle_path) / (sanitized_prefix + PICKLE), "wb"
                     ) as pickle_file:
                         pickle.dump(trained_model, pickle_file)
                     if cls.notebook_output:
                         print(
                             f"Model {model_prefix} was successfully pickled and saved "
-                            f"to {Path(pickle_path) / (model_prefix + PICKLE)}."
+                            f"to {Path(pickle_path) / (sanitized_prefix + PICKLE)}."
                         )
                 else:
-                    return {model_prefix + PICKLE: pickle.dumps(trained_model)}
+                    return {sanitized_prefix + PICKLE: pickle.dumps(trained_model)}
             # For binary H2O models, save the binary file as a "pickle" file
             elif is_h2o_model and is_binary_model and pickle_path:
                 if not h2o:
@@ -122,7 +125,7 @@ class PickleModel:
                     model=trained_model,
                     force=True,
                     path=str(pickle_path),
-                    filename=f"{model_prefix}.pickle",
+                    filename=f"{sanitized_prefix}.pickle",
                 )
             # For MOJO H2O models, save as a mojo file and adjust the extension to .mojo
             elif is_h2o_model and pickle_path:
@@ -131,7 +134,9 @@ class PickleModel:
                         "The h2o package is required to save the model as a mojo model."
                     )
                 trained_model.save_mojo(
-                    force=True, path=str(pickle_path), filename=f"{model_prefix}.mojo"
+                    force=True,
+                    path=str(pickle_path),
+                    filename=f"{sanitized_prefix}.mojo",
                 )
             elif is_binary_model or is_h2o_model:
                 raise ValueError(

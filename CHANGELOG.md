@@ -1,9 +1,52 @@
-Unreleased
+v1.10.6 (2024-08-26)
 ----------
 **Improvements**
  - Refactor `tasks.py` to utilize `sasctl.pzmm` functions.
  - Add `model_info` class to better capture model information.
- - Test `/examples` Jupyter notebooks within normal test suite.
+
+v1.10.5 (2024-08-01)
+----------
+**Buxfixes**
+- Updated `write_json_files.py` to allow for better support for prediction models
+- Fixed issues relating to model card support.
+
+v1.10.4 (2024-07-08)
+----------
+**Improvements**
+- Added example Jupyter notebook for OpenAI models.
+
+**Buxfixes**
+- Dropped support for Python 3.6 and Python 3.7, as those are no longer officially supported versions.
+- Added `dmcas_misc.json` template file for model card generation.
+- Updated generation of `ModelProperties.json` to allow for model card generation immediately upon upload.
+
+v1.10.3 (2024-04-12)
+----------
+**Bugfixes**
+- Updated all examples to use current versions of sasctl functions
+- Fixed bug in `generate_model_card` that threw an error when trying to generate the `dmcas_misc.json` file
+
+v1.10.2 (2024-04-10)
+----------
+**Improvements**
+- Introduced `generate_model_card` into `write_json_files.py` to allow for python models to work with planned model card tab in SAS Model Manager.
+
+**Bugfixes**
+- Allow for score code to impute NaN values in tables that have been loaded into SAS Model Manager.
+- Fix issue where target_value was not being properly set during score code generation
+- Updated `pzmm_generate_requrirements_json.ipynb` so the requirements file is generated properly.
+- Added missing statistics to `dmcas_fitstat.json` file.
+
+v1.10.1 (2023-08-24)
+----------
+**Improvements**
+- Introduced ability to specify the target index of a binary model when creating score code.
+  - index can be specified in `pzmm.import_model.ImportModel.import_model()`
+  - Relevant examples updated to include target_index.
+  
+**Bugfixes**
+- Reworked `write_score_code.py` to allow for proper execution of single line scoring.
+- Added template files for `assess_model_bias.py` to allow for proper execution
 
 v1.10 (2023-08-31)
 ----------

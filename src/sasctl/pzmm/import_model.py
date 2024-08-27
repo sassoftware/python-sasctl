@@ -22,9 +22,21 @@ def get_model_properties(
     model_files: Union[str, Path, None] = None,
 ):
     if type(model_files) is dict:
-        model = model_files["ModelProperties.json"]
-        input_var = model_files["inputVar.json"]
-        output_var = model_files["outputVar.json"]
+        try:
+            model = json.loads(model_files["ModelProperties.json"])
+        except (json.JSONDecodeError, TypeError):
+            model = model_files["ModelProperties.json"]
+
+        try:
+            input_var = json.loads(model_files["inputVar.json"])
+        except (json.JSONDecodeError, TypeError):
+            input_var = model_files["inputVar.json"]
+
+        try:
+            output_var = json.loads(model_files["outputVar.json"])
+        except (json.JSONDecodeError, TypeError):
+            output_var = model_files["outputVar.json"]
+
     else:
         with open(Path(model_files) / "ModelProperties.json") as f:
             model = json.load(f)
@@ -99,7 +111,9 @@ def project_exists(
                 response = _create_project(project, model, repo, input_var, output_var)
             else:
                 response = mr.create_project(project, repo)
-            print(f"A new project named {response.name} was created.")
+
+            if check_if_jupyter():
+                print(f"A new project named {response.name} was created.")
             return response
     else:
         model, input_var, output_var = get_model_properties(target_values, model_files)
@@ -198,6 +212,7 @@ class ImportModel:
         predict_threshold: Optional[float] = None,
         target_values: Optional[List[str]] = None,
         overwrite_project_properties: Optional[bool] = False,
+        target_index: Optional[int] = None,
         **kwargs,
     ) -> Tuple[RestObj, Union[dict, str, Path]]:
         """
@@ -278,10 +293,16 @@ class ImportModel:
         target_values : list of str, optional
             A list of target values for the target variable. This argument and the
             score_metrics argument dictate the handling of the predicted values from
-            the prediction method. The default value is None.
+            the prediction method. The order of the target values should reflect the
+            order of the related probabilities in the model. The default value is None.
         overwrite_project_properties : bool, optional
             Set whether the project properties should be overwritten when attempting to
             import the model. The default value is False.
+        target_index : int, optional
+            Sets the index of success for a binary model. If target_values are given, this
+            index should match the index of the target outcome in target_values. If target_values
+            are not given, this index should indicate whether the the target probability variable
+            is the first or second variable returned by the model. The default value is 1.
         **kwargs
             Other keyword arguments are passed to the following function:
             :meth:`.ScoreCode.write_score_code`
@@ -338,7 +359,7 @@ class ImportModel:
         # For SAS Viya 4, the score code can be written beforehand and imported with
         # all the model files
         elif current_session().version_info() == 4:
-            score_code_dict = sc.write_score_code(
+            score_code_dict = sc().write_score_code(
                 model_prefix,
                 input_data,
                 predict_method,
@@ -349,6 +370,7 @@ class ImportModel:
                 target_values=target_values,
                 missing_values=missing_values,
                 score_cas=score_cas,
+                target_index=target_index,
                 **kwargs,
             )
             if score_code_dict:
@@ -436,7 +458,7 @@ class ImportModel:
                 except AttributeError:
                     print("Model failed to import to SAS Model Manager.")
 
-            score_code_dict = sc.write_score_code(
+            score_code_dict = sc().write_score_code(
                 model_prefix,
                 input_data,
                 predict_method,
@@ -448,6 +470,7 @@ class ImportModel:
                 target_values=target_values,
                 missing_values=missing_values,
                 score_cas=score_cas,
+                target_index=target_index,
                 **kwargs,
             )
             if score_code_dict:

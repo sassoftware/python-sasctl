@@ -19,7 +19,8 @@ def _classification_model(data, target):
     from sklearn.model_selection import train_test_split
     from sklearn.tree import DecisionTreeClassifier
 
-    data = pd.get_dummies(data, drop_first=True).fillna(data.mean())
+    data = pd.get_dummies(data, drop_first=True)
+    data.fillna(data.mean(), inplace=True)
     x_train, x_test, y_train, y_test = train_test_split(
         data.drop(columns=target), data[target], test_size=0.3
     )

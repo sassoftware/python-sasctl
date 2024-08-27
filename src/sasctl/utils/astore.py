@@ -383,18 +383,13 @@ def _get_model_properties(result):
         properties["function"] = "classification"
         properties["targetVariable"] = classification_target(result)
 
-    elif algorithm == "forest":
-        properties["algorithm"] = "Random forest"
-
-        if is_classification(result):
-            properties["function"] = "classification"
-            properties["targetVariable"] = classification_target(result)
+    elif algorithm in ("forest", "gradboost", "tree-based models"):
+        if algorithm == "forest":
+            properties["algorithm"] = "Random forest"
+        elif algorithm == "gradboost":
+            properties["algorithm"] = "Gradient boosting"
         else:
-            properties["function"] = "prediction"
-            properties["targetVariable"] = regression_target(result)
-
-    elif algorithm == "gradboost":
-        properties["algorithm"] = "Gradient boosting"
+            properties["algorithm"] = "Tree-based model"
 
         if is_classification(result):
             properties["function"] = "classification"
@@ -427,7 +422,7 @@ def _get_model_properties(result):
 
     else:
         properties["tool"] = ""
-
+    # todo: warn
     return properties
 
 

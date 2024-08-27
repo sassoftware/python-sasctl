@@ -69,14 +69,19 @@ class ZipModel:
             For Viya 3.5 models, ignore score code that is already in place in the file
             directory provided. Default value is False.
         """
+
         if isinstance(model_files, dict):
-            zip_buffer = BytesIO()
-            with zipfile.ZipFile(
-                zip_buffer, "a", zipfile.ZIP_DEFLATED, False
-            ) as zip_file:
+            buffer = io.BytesIO()
+
+            with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED, False) as archive:
                 for file_name, data in model_files.items():
-                    zip_file.writestr(file_name, str(data))
-                return BytesIO(zip_buffer.getvalue())
+                    if not isinstance(data, (str, bytes)):
+                        data = str(data)
+                    archive.writestr(file_name, data)
+
+            # NOTE: bytes are added to the buffer when zip file is closed
+            # so ensure closed before returning
+            return buffer
         else:
             file_names = _filter_files(model_files, is_viya4)
             with zipfile.ZipFile(

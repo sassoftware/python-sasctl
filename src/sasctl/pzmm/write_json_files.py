@@ -57,6 +57,8 @@ ROC = "dmcas_roc.json"
 LIFT = "dmcas_lift.json"
 MAXDIFFERENCES = "maxDifferences.json"
 GROUPMETRICS = "groupMetrics.json"
+VARIMPORTANCES = "dmcas_relativeimportance.json"
+MISC = "dmcas_misc.json"
 
 
 def _flatten(nested_list: Iterable) -> Generator[Any, None, None]:
@@ -353,17 +355,17 @@ class JSONFiles:
                 )
 
         if not target_values:
-            model_function = model_function if model_function else "Prediction"
+            model_function = model_function if model_function else "prediction"
             target_level = "Interval"
             target_event = ""
             event_prob_var = ""
         elif isinstance(target_values, list) and len(target_values) == 2:
-            model_function = model_function if model_function else "Classification"
+            model_function = model_function if model_function else "classification"
             target_level = "Binary"
             target_event = str(target_values[0])
             event_prob_var = f"P_{target_values[0]}"
         elif isinstance(target_values, list) and len(target_values) > 2:
-            model_function = model_function if model_function else "Classification"
+            model_function = model_function if model_function else "classification"
             target_level = "Nominal"
             target_event = ""
             event_prob_var = ""
@@ -496,18 +498,27 @@ class JSONFiles:
             Dictionary containing a key-value pair representing the file name and json
             dump respectively.
         """
+
+        from .write_score_code import ScoreCode
+
+        sanitized_prefix = ScoreCode.sanitize_model_prefix(model_prefix)
+
         dict_list = [
             {"role": "inputVariables", "name": INPUT},
             {"role": "outputVariables", "name": OUTPUT},
-            {"role": "score", "name": f"score_{model_prefix}.py"},
+            {"role": "score", "name": f"score_{sanitized_prefix}.py"},
         ]
         if is_h2o_model:
-            dict_list.append({"role": "scoreResource", "name": model_prefix + ".mojo"})
+            dict_list.append(
+                {"role": "scoreResource", "name": sanitized_prefix + ".mojo"}
+            )
         elif is_tf_keras_model:
-            dict_list.append({"role": "scoreResource", "name": model_prefix + ".h5"})
+            dict_list.append(
+                {"role": "scoreResource", "name": sanitized_prefix + ".h5"}
+            )
         else:
             dict_list.append(
-                {"role": "scoreResource", "name": model_prefix + ".pickle"}
+                {"role": "scoreResource", "name": sanitized_prefix + ".pickle"}
             )
 
         if json_path:
@@ -879,9 +890,9 @@ class JSONFiles:
             # run assessBias, if levels=None then assessBias treats the input like a regression problem
             tables = conn.fairaitools.assessbias(
                 modelTableType="None",
-                predictedVariables=pred_values
-                if pred_values is not None
-                else prob_values,
+                predictedVariables=(
+                    pred_values if pred_values is not None else prob_values
+                ),
                 response=actual_values,
                 responseLevels=levels,
                 sensitiveVariable=x,
@@ -968,6 +979,7 @@ class JSONFiles:
         maxdiff_df = maxdiff_df.rename(
             columns={"Value": "maxdiff", "Base": "BASE", "Compare": "COMPARE"}
         )
+        maxdiff_df["maxdiff"] = maxdiff_df["maxdiff"].apply(str)
 
         maxdiff_df["VLABEL"] = ""
         maxdiff_df["_DATAROLE_"] = datarole
@@ -1185,6 +1197,8 @@ class JSONFiles:
         train_data: Union[DataFrame, List[list], Type["numpy.ndarray"]] = None,
         test_data: Union[DataFrame, List[list], Type["numpy.ndarray"]] = None,
         json_path: Union[str, Path, None] = None,
+        target_type: str = "classification",
+        cutoff: Optional[float] = None,
     ) -> Union[dict, None]:
         """
         Calculates fit statistics (including ROC and Lift curves) from datasets and then
@@ -1226,6 +1240,9 @@ class JSONFiles:
             Dataset pertaining to the test data. The default value is None.
         json_path : str or pathlib.Path, optional
             Location for the output JSON files. The default value is None.
+        target_type: str, optional
+            Type of target the model is trying to find. Currently supports "classification"
+            and "prediction" types. The default value is "classification".
 
         Returns
         -------
@@ -1266,24 +1283,32 @@ class JSONFiles:
             if not partition:
                 continue
 
-            data = cls.stat_dataset_to_dataframe(data, target_value)
+            data = cls.stat_dataset_to_dataframe(data, target_value, target_type)
 
             conn.upload(
                 data,
                 casout={"name": "assess_dataset", "replace": True, "caslib": "Public"},
             )
-
-            conn.percentile.assess(
-                table={"name": "assess_dataset", "caslib": "Public"},
-                response="predict",
-                pVar="predict_proba",
-                event=str(target_value),
-                pEvent=str(prob_value) if prob_value else str(0.5),
-                inputs="actual",
-                fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
-                rocOut={"name": "ROC", "replace": True, "caslib": "Public"},
-                casout={"name": "Lift", "replace": True, "caslib": "Public"},
-            )
+            if target_type == "classification":
+                conn.percentile.assess(
+                    table={"name": "assess_dataset", "caslib": "Public"},
+                    response="predict",
+                    pVar="predict_proba",
+                    event=str(target_value),
+                    pEvent=str(prob_value) if prob_value else str(0.5),
+                    inputs="actual",
+                    fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
+                    rocOut={"name": "ROC", "replace": True, "caslib": "Public"},
+                    casout={"name": "Lift", "replace": True, "caslib": "Public"},
+                )
+            else:
+                conn.percentile.assess(
+                    table={"name": "assess_dataset", "caslib": "Public"},
+                    response="predict",
+                    inputs="actual",
+                    fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
+                    casout={"name": "Lift", "replace": True, "caslib": "Public"},
+                )
 
             fitstat_dict = (
                 pd.DataFrame(conn.CASTable("FitStat", caslib="Public").to_frame())
@@ -1293,10 +1318,27 @@ class JSONFiles:
             )
             json_dict[0]["data"][i]["dataMap"].update(fitstat_dict)
 
-            roc_df = pd.DataFrame(conn.CASTable("ROC", caslib="Public").to_frame())
-            roc_dict = cls.apply_dataframe_to_json(json_dict[1]["data"], i, roc_df)
-            for j in range(len(roc_dict)):
-                json_dict[1]["data"][j].update(roc_dict[j])
+            if target_type == "classification":
+                roc_df = pd.DataFrame(conn.CASTable("ROC", caslib="Public").to_frame())
+                roc_dict = cls.apply_dataframe_to_json(json_dict[1]["data"], i, roc_df)
+                for j in range(len(roc_dict)):
+                    json_dict[1]["data"][j].update(roc_dict[j])
+                    fitstat_data = None
+                    if roc_dict[j]["dataMap"]["_KS_"] == 1:
+                        fitstat_data = dict()
+                        missing_stats = (
+                            "_KS_",
+                            "_KS2_",
+                            "_C_",
+                            "_Gini_",
+                            "_Gamma_",
+                            "_Tau_",
+                        )
+                        for stat in missing_stats:
+                            if stat in roc_dict[j]["dataMap"]:
+                                fitstat_data[stat] = roc_dict[j]["dataMap"][stat]
+                    if fitstat_data:
+                        json_dict[0]["data"][i]["dataMap"].update(fitstat_data)
 
             lift_df = pd.DataFrame(conn.CASTable("Lift", caslib="Public").to_frame())
             lift_dict = cls.apply_dataframe_to_json(json_dict[2]["data"], i, lift_df, 1)
@@ -1305,19 +1347,28 @@ class JSONFiles:
 
         if json_path:
             for i, name in enumerate([FITSTAT, ROC, LIFT]):
-                with open(Path(json_path) / name, "w") as json_file:
-                    json_file.write(json.dumps(json_dict[i], indent=4, cls=NpEncoder))
-                if cls.notebook_output:
-                    print(
-                        f"{name} was successfully written and saved to "
-                        f"{Path(json_path) / name}"
-                    )
+                if not (name == ROC and target_type == "prediction"):
+                    with open(Path(json_path) / name, "w") as json_file:
+                        json_file.write(
+                            json.dumps(json_dict[i], indent=4, cls=NpEncoder)
+                        )
+                    if cls.notebook_output:
+                        print(
+                            f"{name} was successfully written and saved to "
+                            f"{Path(json_path) / name}"
+                        )
         else:
-            return {
-                FITSTAT: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
-                ROC: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
-                LIFT: json.dumps(json_dict[2], indent=4, cls=NpEncoder),
-            }
+            if target_type == "classification":
+                return {
+                    FITSTAT: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
+                    ROC: json.dumps(json_dict[1], indent=4, cls=NpEncoder),
+                    LIFT: json.dumps(json_dict[2], indent=4, cls=NpEncoder),
+                }
+            else:
+                return {
+                    FITSTAT: json.dumps(json_dict[0], indent=4, cls=NpEncoder),
+                    LIFT: json.dumps(json_dict[2], indent=4, cls=NpEncoder),
+                }
 
     @staticmethod
     def check_for_data(
@@ -1364,6 +1415,7 @@ class JSONFiles:
     def stat_dataset_to_dataframe(
         data: Union[DataFrame, List[list], Type["numpy.ndarray"]],
         target_value: Union[str, int, float] = None,
+        target_type: str = "classification",
     ) -> DataFrame:
         """
         Convert the user supplied statistical dataset from either a pandas DataFrame,
@@ -1411,13 +1463,15 @@ class JSONFiles:
         if isinstance(data, pd.DataFrame):
             if len(data.columns) == 2:
                 data.columns = ["actual", "predict"]
-                data["predict_proba"] = data["predict"].gt(target_value).astype(int)
+                if target_type == "classification":
+                    data["predict_proba"] = data["predict"].gt(target_value).astype(int)
             elif len(data.columns) == 3:
                 data.columns = ["actual", "predict", "predict_proba"]
         elif isinstance(data, list):
             if len(data) == 2:
                 data = pd.DataFrame({"actual": data[0], "predict": data[1]})
-                data["predict_proba"] = data["predict"].gt(target_value).astype(int)
+                if target_type == "classification":
+                    data["predict_proba"] = data["predict"].gt(target_value).astype(int)
             elif len(data) == 3:
                 data = pd.DataFrame(
                     {
@@ -1429,7 +1483,8 @@ class JSONFiles:
         elif isinstance(data, np.ndarray):
             if len(data) == 2:
                 data = pd.DataFrame({"actual": data[0, :], "predict": data[1, :]})
-                data["predict_proba"] = data["predict"].gt(target_value).astype(int)
+                if target_type == "classification":
+                    data["predict_proba"] = data["predict"].gt(target_value).astype(int)
             elif len(data) == 3:
                 data = pd.DataFrame(
                     {"actual": data[0], "predict": data[1], "predict_proba": data[2]}
@@ -1645,7 +1700,7 @@ class JSONFiles:
             ) as file:
                 file.write(json.dumps(json_dicts, indent=4))
         else:
-            return {"requirements.json": json.dumps(json_dicts)}
+            return json_dicts
 
     @staticmethod
     def get_local_package_version(package_list: List[str]) -> List[List[str]]:
@@ -2212,3 +2267,583 @@ class JSONFiles:
             package for package in package_list if package not in py10stdlib
         ]
         return package_list
+
+    @classmethod
+    def generate_model_card(
+        cls,
+        model_prefix: str,
+        model_files: Union[str, Path, dict],
+        algorithm: str,
+        train_data: pd.DataFrame,
+        train_predictions: Union[pd.Series, list],
+        target_type: str = "classificaiton",
+        target_value: Union[str, int, float, None] = None,
+        interval_vars: Optional[list] = [],
+        class_vars: Optional[list] = [],
+        selection_statistic: str = None,
+        training_table_name: str = None,
+        server: str = "cas-shared-default",
+        caslib: str = "Public",
+    ):
+        """
+        Generates everything required for the model card feature within SAS Model Manager.
+
+        This includes uploading the training data to CAS, updating ModelProperties.json to have
+        some extra properties, and generating dmcas_relativeimportance.json.
+
+        Parameters
+        ----------
+        model_prefix : string
+            The prefix used to name files relating to the model. This is used to provide a unique
+            name to the training data table when it is uploaded to CAS.
+        model_files : string, Path, or dict
+            Either the directory location of the model files (string or Path object), or
+            a dictionary containing the contents of all the model files.
+        algorithm : str
+            The name of the algorithm used to generate the model.
+        train_data: pandas.DataFrame
+            Training data that contains all input variables as well as the target variable.
+        train_predictions : pandas.Series, list
+            List of predictions made by the model on the training data.
+        target_type : string
+            Type of target the model is trying to find. Currently supports "classification" and "prediction" types.
+            The default value is "classification".
+        target_value : string, int, float, optional
+            Value the model is targeting for classification models. This argument is not needed for
+            prediction models. The default value is None.
+        interval_vars : list, optional
+            A list of interval variables. The default value is an empty list.
+        class_vars : list, optional
+            A list of classification variables. The default value is an empty list.
+        selection_statistic: str, optional
+            The selection statistic chosen to score the model against other models. Classification
+            models can take any of the following values: "_RASE_", "_GINI_", "_GAMMA_", "_MCE_",
+            "_ASE_", "_MCLL_", "_KS_", "_KSPostCutoff_", "_DIV_", "_TAU_", "_KSCut_", or "_C_".
+            Prediction models can take any of the following values: "_ASE_", "_DIV_", "_RASE_", "_MAE_",
+            "_RMAE_", "_MSLE_", "_RMSLE_" The default value is "_KS_" for classification models and
+            "_ASE_" for prediction models.
+        server: str, optional
+            The CAS server the training data will be stored on. The default value is "cas-shared-default"
+        caslib: str, optional
+            The caslib the training data will be stored on. The default value is "Public"
+        """
+        if not target_value and target_type == "classification":
+            raise RuntimeError(
+                "For the model card data to be properly generated on a classification "
+                "model, a target value is required."
+            )
+        if target_type not in ["classification", "prediction"]:
+            raise RuntimeError(
+                "Only classification and prediction target types are currently accepted."
+            )
+        if selection_statistic is None:
+            if target_type == "classification":
+                selection_statistic = "_KS_"
+            elif target_type == "prediction":
+                selection_statistic = "_ASE_"
+        if selection_statistic not in cls.valid_params:
+            raise RuntimeError(
+                "The selection statistic must be a value generated in dmcas_fitstat.json. See "
+                "the documentation for a list of valid selection statistic values."
+            )
+        if not algorithm:
+            raise RuntimeError(
+                "Either a given algorithm or a model is required for the model card."
+            )
+        try:
+            sess = current_session()
+            conn = sess.as_swat()
+        except ImportError:
+            raise RuntimeError(
+                "The `swat` package is required to generate fit statistics, ROC, and "
+                "Lift charts with the calculate_model_statistics function."
+            )
+
+        # Upload training table to CAS. The location of the training table is returned.
+        training_table = cls.upload_training_data(
+            conn, model_prefix, train_data, training_table_name, server, caslib
+        )
+
+        # Generates the event percentage for Classification targets, and the event average
+        # for prediction targets
+        update_dict = cls.generate_outcome_average(
+            train_data=train_data,
+            input_variables=interval_vars + class_vars,
+            target_type=target_type,
+            target_value=target_value,
+        )
+
+        # Formats all new ModelProperties information into one dictionary that can be used to update the json file
+        update_dict["trainTable"] = training_table
+        update_dict["selectionStatistic"] = selection_statistic
+        update_dict["algorithm"] = algorithm
+        update_dict["selectionStatisticValue"] = cls.get_selection_statistic_value(
+            model_files, selection_statistic
+        )
+        cls.update_model_properties(model_files, update_dict)
+
+        # Generates dmcas_relativeimportance.json file
+        cls.generate_variable_importance(
+            conn,
+            model_files,
+            train_data,
+            train_predictions,
+            target_type,
+            interval_vars,
+            class_vars,
+            caslib,
+        )
+
+        # Generates dmcas_misc.json file
+        if target_type == "classification":
+            cls.generate_misc(model_files)
+
+    @staticmethod
+    def upload_training_data(
+        conn,
+        model_prefix: str,
+        train_data: pd.DataFrame,
+        train_data_name: str,
+        server: str = "cas-shared-default",
+        caslib: str = "Public",
+    ):
+        """
+        Uploads training data to CAS server.
+
+        Parameters
+        ----------
+        conn
+            SWAT connection. Used to connect to CAS server.
+        model_prefix : string
+            The prefix used to name files relating to the model. This is used to provide a unique
+            name to the training data table when it is uploaded to CAS.
+        train_data: pandas.DataFrame
+            Training data that contains all input variables as well as the target variable.
+        server: str, optional
+            The CAS server the training data will be stored on. The default value is "cas-shared-default"
+        caslib: str, optional
+            The caslib the training data will be stored on. The default value is "Public"
+
+        Returns
+        -------
+        string
+        Returns a string that represents the location of the training table within CAS.
+        """
+        # Upload raw training data to caslib so that data can be analyzed
+        if not train_data_name:
+            train_data_name = model_prefix + "_train_data"
+        upload_train_data = conn.upload(
+            train_data, casout={"name": train_data_name, "caslib": caslib}, promote=True
+        )
+
+        if upload_train_data.status is not None:
+            # raise RuntimeError(
+            warnings.warn(
+                f"A table with the name {train_data_name} already exists in the specified caslib. If this "
+                f"is not intentional, please either rename the training data file or remove the duplicate from "
+                f"the caslib."
+            )
+
+        return server + "/" + caslib + "/" + train_data_name.upper()
+
+    @staticmethod
+    def generate_outcome_average(
+        train_data: pd.DataFrame,
+        input_variables: list,
+        target_type,
+        target_value: Union[str, int, float] = None,
+    ):
+        """
+        Generates the outcome average of the training data. For prediction targets, the event average
+        is generated. For Classification targets, the event percentage is returned.
+
+        Parameters
+        ----------
+        train_data: pandas.DataFrame
+            Training data that contains all input variables as well as the target variable. If multiple
+            non-input variables are included, the function will assume that the first non-input variable row
+            is the output.
+        input_variables: list
+            A list of all input variables used by the model. Used to isolate the output variable.
+        target_type : string
+            Type the model is targeting. Currently supports "classification" and "prediction" types.
+        target_value : string, int, float, optional
+            Value the model is targeting for Classification models. This argument is not needed for
+            prediction models. The default value is None.
+
+        Returns
+        -------
+        dict
+        Returns a dictionary with a key value pair that represents the outcome average.
+        """
+        import numbers
+
+        output_var = train_data.drop(input_variables, axis=1)
+        if target_type == "classification":
+            value_counts = output_var[output_var.columns[0]].value_counts()
+            return {"eventPercentage": value_counts[target_value] / sum(value_counts)}
+        elif target_type == "prediction":
+            if not isinstance(
+                output_var[output_var.columns[0]].iloc[0], numbers.Number
+            ):
+                raise ValueError(
+                    "Detected output column is not numeric. Please ensure that "
+                    + "the correct output column is being passed, and that no extra columns "
+                    + "are in front of the output column. This function assumes that the first "
+                    + "non-input column is the output column.jf"
+                )
+            return {
+                "eventAverage": sum(output_var[output_var.columns[0]]) / len(output_var)
+            }
+
+    @staticmethod
+    def get_selection_statistic_value(
+        model_files: Union[str, Path, dict], selection_statistic: str = "_GINI_"
+    ):
+        """
+        Finds the value of the chosen selection statistic in dmcas_fitstat.json, which should have been
+        generated before this function has been called.
+
+        Parameters
+        ----------
+        model_files : string, Path, or dict
+            Either the directory location of the model files (string or Path object), or
+            a dictionary containing the contents of all the model files.
+        selection_statistic: str, optional
+            The selection statistic chosen to score the model against other models. Can be any of the
+            following values: "_RASE_", "_NObs_", "_GINI_", "_GAMMA_", "_MCE_", "_ASE_", "_MCLL_",
+            "_KS_", "_KSPostCutoff_", "_DIV_", "_TAU_", "_KSCut_", or "_C_". The default value is "_GINI_".
+
+        Returns
+        -------
+        float
+        Returns the numerical value assoicated with the chosen selection statistic.
+        """
+        if isinstance(model_files, dict):
+            if FITSTAT not in model_files:
+                raise RuntimeError(
+                    "The dmcas_fitstat.json file must be generated before the model card data "
+                    "can be generated."
+                )
+            for fitstat in model_files[FITSTAT]["data"]:
+                if fitstat["dataMap"]["_DataRole_"] == "TRAIN":
+                    if (
+                        selection_statistic not in fitstat["dataMap"]
+                        or fitstat["dataMap"][selection_statistic] == None
+                    ):
+                        raise RuntimeError(
+                            "The chosen selection statistic was not generated properly. Please ensure the value has been "
+                            "properly created then try again."
+                        )
+                    return fitstat["dataMap"][selection_statistic]
+        else:
+            if not Path.exists(Path(model_files) / FITSTAT):
+                raise RuntimeError(
+                    "The dmcas_fitstat.json file must be generated before the model card data "
+                    "can be generated."
+                )
+            with open(Path(model_files) / FITSTAT, "r") as fitstat_json:
+                fitstat_dict = json.load(fitstat_json)
+                for fitstat in fitstat_dict["data"]:
+                    if fitstat["dataMap"]["_DataRole_"] == "TRAIN":
+                        if (
+                            selection_statistic not in fitstat["dataMap"]
+                            or fitstat["dataMap"][selection_statistic] == None
+                        ):
+                            raise RuntimeError(
+                                "The chosen selection statistic was not generated properly. Please ensure the value has been "
+                                "properly created then try again."
+                            )
+                        return fitstat["dataMap"][selection_statistic]
+
+    @staticmethod
+    def update_model_properties(model_files, update_dict):
+        """
+        Updates the ModelProperties.json file to include properties listed in the update_dict dictionary.
+
+        Parameters
+        ----------
+        model_files : string, Path, or dict
+            Either the directory location of the model files (string or Path object), or
+            a dictionary containing the contents of all the model files.
+        update_dict : dictionary
+            A dictionary containing the key-value pairs that represent properties to be added
+            to the ModelProperties.json file.
+        """
+        if isinstance(model_files, dict):
+            if PROP not in model_files:
+                raise RuntimeError(
+                    "The ModelProperties.json file must be generated before the model card data "
+                    "can be generated."
+                )
+            for key in update_dict:
+                if not isinstance(update_dict[key], str):
+                    model_files[PROP][key] = str(round(update_dict[key], 14))
+                else:
+                    model_files[PROP][key] = update_dict[key]
+        else:
+            if not Path.exists(Path(model_files) / PROP):
+                raise RuntimeError(
+                    "The ModelProperties.json file must be generated before the model card data "
+                    "can be generated."
+                )
+            with open(Path(model_files) / PROP, "r+") as properties_json:
+                model_properties = json.load(properties_json)
+                for key in update_dict:
+                    if not isinstance(update_dict[key], str):
+                        model_properties[key] = str(round(update_dict[key], 14))
+                    else:
+                        model_properties[key] = update_dict[key]
+                properties_json.seek(0)
+                properties_json.write(
+                    json.dumps(model_properties, indent=4, cls=NpEncoder)
+                )
+                properties_json.truncate()
+
+    @classmethod
+    def generate_variable_importance(
+        cls,
+        conn,
+        model_files: Union[str, Path, dict],
+        train_data: pd.DataFrame,
+        train_predictions: Union[pd.Series, list],
+        target_type: str = "classification",
+        interval_vars: Optional[list] = [],
+        class_vars: Optional[list] = [],
+        caslib: str = "Public",
+    ):
+        """
+        Generates the dmcas_relativeimportance.json file, which is used to determine variable importance
+
+        Parameters
+        ----------
+        conn
+            A SWAT connection used to connect to the user's CAS server
+        model_files : string, Path, or dict
+            Either the directory location of the model files (string or Path object), or
+            a dictionary containing the contents of all the model files.
+        train_data: pandas.DataFrame
+            Training data that contains all input variables as well as the target variable.
+        train_predictions : pandas.Series, list
+            List of predictions made by the model on the training data.
+        target_type : string, optional
+            Type the model is targeting. Currently supports "classification" and "prediction" types.
+            The default value is "classification".
+        interval_vars : list, optional
+            A list of interval variables. The default value is an empty list.
+        class_vars : list, optional
+            A list of classification variables. The default value is an empty list.
+        caslib: str, optional
+            The caslib the training data will be stored on. The default value is "Public"
+        """
+        # Remove target variable from training data by selecting only input variable columns
+        x_train_data = train_data[interval_vars + class_vars]
+        # Upload scored training data to run variable importance on
+        x_train_data.insert(0, "Prediction", train_predictions, True)
+        conn.upload(
+            x_train_data,
+            casout={"name": "train_data", "replace": True, "caslib": caslib},
+        )
+
+        # Load actionset necessary to generate variable importance
+        conn.loadactionset("dataPreprocess")
+        request_packages = list()
+        if target_type == "classification":
+            method = "DTREE"
+            treeCrit = "Entropy"
+        elif target_type == "prediction":
+            method = "RTREE"
+            treeCrit = "RSS"
+        else:
+            raise RuntimeError(
+                "The selected model type is unsupported. Currently, only models that have prediction or classification target types are supported."
+            )
+        request_packages = list()
+        if interval_vars:
+            request_packages.append(
+                {
+                    "name": "BIN",
+                    "inputs": [{"name": var} for var in interval_vars],
+                    "targets": [{"name": "Prediction"}],
+                    "discretize": {
+                        "method": method,
+                        "arguments": {
+                            "minNBins": 1,
+                            "maxNBins": 8,
+                            "treeCrit": treeCrit,
+                            "contingencyTblOpts": {
+                                "inputsMethod": "BUCKET",
+                                "inputsNLevels": 100,
+                            },
+                            "overrides": {
+                                "minNObsInBin": 5,
+                                "binMissing": True,
+                                "noDataLowerUpperBound": True,
+                            },
+                        },
+                    },
+                }
+            )
+        if class_vars:
+            request_packages.append(
+                {
+                    "name": "BIN_NOM",
+                    "inputs": [{"name": var} for var in class_vars],
+                    "targets": [{"name": "Prediction"}],
+                    "catTrans": {
+                        "method": method,
+                        "arguments": {
+                            "minNBins": 1,
+                            "maxNBins": 8,
+                            "treeCrit": treeCrit,
+                            "overrides": {"minNObsInBin": 5, "binMissing": True},
+                        },
+                    },
+                }
+            )
+        var_data = conn.dataPreprocess.transform(
+            table={"name": "train_data", "caslib": caslib},
+            requestPackages=request_packages,
+            evaluationStats=True,
+            percentileMaxIterations=10,
+            percentileTolerance=0.00001,
+            distinctCountLimit=5000,
+            sasVarNameLength=True,
+            outputTableOptions={"inputVarPrintOrder": True},
+            sasProcClient=True,
+        )
+        var_importances = var_data["VarTransInfo"][["Variable", "RelVarImportance"]]
+        var_importances = var_importances.sort_values(
+            by=["RelVarImportance"], ascending=False
+        ).reset_index(drop=True)
+        relative_importances = list()
+        for index, row in var_importances.iterrows():
+            if row["Variable"] in interval_vars:
+                level = "INTERVAL"
+            elif row["Variable"] in class_vars:
+                level = "NOMINAL"
+            relative_importances.append(
+                {
+                    "dataMap": {
+                        "LABEL": "",
+                        "LEVEL": level,
+                        "ROLE": "INPUT",
+                        "RelativeImportance": str(row["RelVarImportance"]),
+                        "Variable": row["Variable"],
+                    },
+                    "rowNumber": index + 1,
+                }
+            )
+        json_template_path = (
+            Path(__file__).resolve().parent / f"template_files/{VARIMPORTANCES}"
+        )
+        with open(json_template_path, "r") as f:
+            relative_importance_json = json.load(f)
+        relative_importance_json["data"] = relative_importances
+
+        if isinstance(model_files, dict):
+            model_files[VARIMPORTANCES] = json.dumps(
+                relative_importance_json, indent=4, cls=NpEncoder
+            )
+            if cls.notebook_output:
+                print(
+                    f"{VARIMPORTANCES} was successfully written and saved to "
+                    f"model files dictionary."
+                )
+        else:
+            with open(Path(model_files) / VARIMPORTANCES, "w") as json_file:
+                json_file.write(
+                    json.dumps(relative_importance_json, indent=4, cls=NpEncoder)
+                )
+            if cls.notebook_output:
+                print(
+                    f"{VARIMPORTANCES} was successfully written and saved to "
+                    f"{Path(model_files) / VARIMPORTANCES}"
+                )
+
+    @classmethod
+    def generate_misc(cls, model_files: Union[str, Path, dict]):
+        """
+        Generates the dmcas_misc.json file, which is used to determine variable importance
+
+        Parameters
+        ----------
+        conn
+            A SWAT connection used to connect to the user's CAS server
+        model_files : string, Path, or dict
+            Either the directory location of the model files (string or Path object), or
+            a dictionary containing the contents of all the model files.
+        """
+        if isinstance(model_files, dict):
+            if ROC not in model_files:
+                raise RuntimeError(
+                    "The dmcas_roc.json file must be generated before the model card data "
+                    "can be generated."
+                )
+            roc_table = model_files[ROC]
+        else:
+            if not Path.exists(Path(model_files) / ROC):
+                raise RuntimeError(
+                    "The dmcas_roc.json file must be generated before the model card data "
+                    "can be generated."
+                )
+            with open(Path(model_files) / ROC, "r") as roc_file:
+                roc_table = json.load(roc_file)
+        correct_text = ["CORRECT", "INCORRECT", "CORRECT", "INCORRECT"]
+        outcome_values = ["1", "0", "0", "1"]
+        target_texts = ["Event", "Event", "NEvent", "NEvent"]
+        target_values = ["1", "1", "0", "0"]
+
+        misc_data = list()
+        # Iterates through ROC table to get TRAIN, TEST, and VALIDATE data with a cutoff of .5
+        for i in range(50, 300, 100):
+            roc_data = roc_table["data"][i]["dataMap"]
+            correctness_values = [
+                roc_data["_TP_"],
+                roc_data["_FP_"],
+                roc_data["_TN_"],
+                roc_data["_FN_"],
+            ]
+            for c_text, c_val, o_val, t_txt, t_val in zip(
+                correct_text,
+                correctness_values,
+                outcome_values,
+                target_texts,
+                target_values,
+            ):
+                misc_data.append(
+                    {
+                        "dataMap": {
+                            "CorrectText": c_text,
+                            "Outcome": o_val,
+                            "_Count_": f"{c_val}",
+                            "_DataRole_": roc_data["_DataRole_"],
+                            "_cutoffSource_": "Default",
+                            "_cutoff_": "0.5",
+                            "TargetText": t_txt,
+                            "Target": t_val,
+                        },
+                        "rowNumber": len(misc_data) + 1,
+                    }
+                )
+
+        json_template_path = Path(__file__).resolve().parent / f"template_files/{MISC}"
+        with open(json_template_path, "r") as f:
+            misc_json = json.load(f)
+        misc_json["data"] = misc_data
+
+        if isinstance(model_files, dict):
+            model_files[MISC] = json.dumps(misc_json, indent=4, cls=NpEncoder)
+            if cls.notebook_output:
+                print(
+                    f"{MISC} was successfully written and saved to "
+                    f"model files dictionary."
+                )
+        else:
+            with open(Path(model_files) / MISC, "w") as json_file:
+                json_file.write(json.dumps(misc_json, indent=4, cls=NpEncoder))
+            if cls.notebook_output:
+                print(
+                    f"{MISC} was successfully written and saved to "
+                    f"{Path(model_files) / MISC}"
+                )
