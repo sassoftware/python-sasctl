@@ -4,11 +4,6 @@ sasctl
 
 Version |version|
 
-.. toctree::
-    :maxdepth: 3
-    :hidden: true
-
-    index
 
 Introduction
 ------------
@@ -313,7 +308,7 @@ Logging
 +++++++
 
 All logging is handled through the built-in :mod:`logging` module with standard module-level loggers.  The one exception
-to this is :class:`.Session` request/response logging.  Sessions contain a :attr:`~sasctl.core.Session.message_log` which is exclusively used
+to this is :class:`.Session` request/response logging.  Sessions contain a `message_log` which is exclusively used
 to record requests and responses made through the session.  Message recording can be configured on a per-session basis
 by updating this logger, or the ``sasctl.core.session`` logger can be configured to control all message recording by all sessions.
 
@@ -497,7 +492,7 @@ Python versions.
 
 Useful Tox Commands
 +++++++++++++++++++
-:mod:`tox`  is used to automate common development tasks such as testing, linting, and building documentation.
+:mod:`tox` is used to automate common development tasks such as testing, linting, and building documentation.
 Running :program:`tox` from the project root directory will automatically build virtual environments for all Python interpreters
 found on the system and then install the required packages necessary to perform a given task.  The simplest way to run Tox is:
 

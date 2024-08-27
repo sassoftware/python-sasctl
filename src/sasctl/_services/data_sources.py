@@ -227,7 +227,7 @@ class DataSources(Service):
 
         Parameters
         ----------
-        table : dict or CASTable
+        table : dict or swat.cas.table.CASTable
 
         Returns
         -------
