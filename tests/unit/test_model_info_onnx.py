@@ -13,6 +13,7 @@ from sasctl.utils import get_model_info
 # classification/regression/etc
 #
 
+
 @pytest.fixture
 def mnist_model(tmp_path):
     class Net(torch.nn.Module):

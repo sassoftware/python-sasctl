@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import math
+import warnings
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Dict, List, Union
 
@@ -202,8 +203,6 @@ class OnnxModelInfo(ModelInfo):
                 "The onnx package must be installed to work with ONNX models.  Please `pip install onnx`."
             )
 
-        # TODO: size of X should match size of graph.input
-
         self._model = model
         self._X = X
         self._y = y
@@ -214,10 +213,14 @@ class OnnxModelInfo(ModelInfo):
         outputs = [self._tensor_to_dataframe(o) for o in inferred_model.graph.output]
 
         if len(inputs) > 1:
-            pass # TODO: warn that only first input will be captured
+            warnings.warn(
+                f"The ONNX model has {len(inputs)} inputs but only the first input will be captured in Model Manager."
+            )
 
         if len(outputs) > 1:
-            pass # TODO: warn that only the first output will be captured
+            warnings.warn(
+                f"The ONNX model has {len(outputs)} outputs but only the first input will be captured in Model Manager."
+            )
 
         self._X_df = inputs[0]
         self._y_df = outputs[0]
@@ -263,7 +266,7 @@ class OnnxModelInfo(ModelInfo):
         """
         if isinstance(tensor, onnx.onnx_ml_pb2.ValueInfoProto):
             tensor = json_format.MessageToDict(tensor)
-        elif not isinstance(tensor,  dict):
+        elif not isinstance(tensor, dict):
             raise ValueError(f"Unexpected type {type(tensor)}.")
 
         name = tensor.get("name", "Var")
@@ -275,9 +278,13 @@ class OnnxModelInfo(ModelInfo):
         dtype = onnx.helper.tensor_dtype_to_np_dtype(type_["tensorType"]["elemType"])
 
         # Tuple of tensor dimensions e.g. (1, 1, 24)
-        input_dims = tuple(int(d["dimValue"]) for d in type_["tensorType"]["shape"]["dim"])
+        input_dims = tuple(
+            int(d["dimValue"]) for d in type_["tensorType"]["shape"]["dim"]
+        )
 
-        return pd.DataFrame(dtype=dtype, columns=[f"{name}{i+1}" for i in range(math.prod(input_dims))])
+        return pd.DataFrame(
+            dtype=dtype, columns=[f"{name}{i+1}" for i in range(math.prod(input_dims))]
+        )
 
     @property
     def algorithm(self) -> str:
@@ -309,7 +316,16 @@ class OnnxModelInfo(ModelInfo):
 
     @property
     def model_params(self) -> Dict[str, Any]:
-        return {k: getattr(self.model, k, None) for k in ("ir_version", "model_version", "opset_import", "producer_name", "producer_version")}
+        return {
+            k: getattr(self.model, k, None)
+            for k in (
+                "ir_version",
+                "model_version",
+                "opset_import",
+                "producer_name",
+                "producer_version",
+            )
+        }
 
     @property
     def predict_function(self) -> Callable:
