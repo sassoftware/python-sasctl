@@ -11,7 +11,7 @@ import pytest
 from sasctl.core import PageIterator, RestObj
 
 
-@pytest.fixture(params=[(6, 2, 2), (6, 1, 4), (6, 5, 4), (6, 6, 2), (100, 10, 20)])
+@pytest.fixture(scope="function", params=[(6, 2, 2), (6, 1, 4), (6, 5, 4), (6, 6, 2), (100, 10, 20)])
 def paging(request):
     """Create a RestObj designed to page through a collection of items and the
     collection itself.
@@ -64,7 +64,7 @@ class TestPageIterator:
         items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
         obj = RestObj(items=items, count=len(items))
 
-        with mock.patch("sasctl.core.request") as request:
+        with mock.patch("sasctl.core.request") as req:
             pager = PageIterator(obj)
 
             # Returned page of items should preserve item order
@@ -72,12 +72,12 @@ class TestPageIterator:
             for idx, item in enumerate(items):
                 assert item.name == RestObj(items[idx]).name
 
-        # No request should have been made to retrieve additional data.
+        # No req should have been made to retrieve additional data.
         try:
-            request.assert_not_called()
+            req.assert_not_called()
         except AssertionError as e:
             raise AssertionError(
-                f"method_calls={request.mock_calls}  call_args={request.call_args_list}"
+                f"method_calls={req.mock_calls}  call_args={req.call_args_list}"
             )
 
     def test_paging_required(self, paging):
