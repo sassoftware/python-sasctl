@@ -1,10 +1,10 @@
+import pandas as pd
 import pytest
-
-import sasctl.utils.model_info
 
 onnx = pytest.importorskip("onnx")
 torch = pytest.importorskip("torch")
 
+import sasctl.utils.model_info
 from sasctl.utils import get_model_info
 
 # mnist
@@ -41,4 +41,15 @@ def mnist_model(tmp_path):
 def test_get_info(mnist_model):
     info = get_model_info(*mnist_model)
     assert isinstance(info, sasctl.utils.model_info.OnnxModelInfo)
-    print(mnist_model)
+
+    # Output be classification into 10 digits
+    assert len(info.output_column_names) == 10
+    assert all(c.startswith("digit") for c in info.output_column_names)
+
+    assert isinstance(info.X, pd.DataFrame)
+    assert len(info.X.columns) == 28 * 28
+
+    assert info.is_classifier
+    assert not info.is_binary_classifier
+    assert not info.is_regressor
+    assert not info.is_clusterer
