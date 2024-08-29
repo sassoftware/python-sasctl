@@ -56,7 +56,7 @@ class Concepts(Service):
         output_postfix : str, optional
             Text to be added to the end of all output table names.
         match_type : str, optional
-            Choose from ``{'all', 'longest', 'best'}``. 
+            Choose from ``{'all', 'longest', 'best'}``.
             Type of matches to return. Defaults to 'all'.
         enable_facts : bool, optional
             Whether to enable facts in the results.  Defaults to False.

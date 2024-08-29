@@ -31,7 +31,7 @@ def check_keys(valid_keys: list, input_keys: list, parameters: str):
 
     Raises
     ------
-    ValueError 
+    ValueError
         if input_keys are not valid
     """
     if not all(key in valid_keys for key in input_keys):
