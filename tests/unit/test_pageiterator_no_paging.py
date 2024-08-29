@@ -1,3 +1,4 @@
+import unittest.mock
 from unittest import mock
 
 from sasctl.core import PageIterator, RestObj
@@ -8,6 +9,9 @@ def test_no_paging_required():
 
     items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
     obj = RestObj(items=items, count=len(items))
+
+    import sasctl
+    assert not isinstance(sasctl.core.request, unittest.mock.Mock)
 
     with mock.patch("sasctl.core.request") as req:
         req.reset_mock(side_effect=True)
