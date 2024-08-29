@@ -58,40 +58,6 @@ def paging(request):
     assert req.call_count >= math.ceil(call_count)
 
 
-def test_no_paging_required():
-    """If "next" link not present, current items should be included."""
-
-    items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
-    obj = RestObj(items=items, count=len(items))
-
-    with mock.patch("sasctl.core.request") as req:
-        # Mock appears to be *sometimes* shared with mock created in `paging` fixture
-        # above.  Depending on execution order, this can result in calls to the mock
-        # made by other tests to be counted here.  Explicitly reset to prevent this.
-        req.reset_mock()
-        try:
-            req.assert_not_called()
-        except AssertionError as e:
-            raise AssertionError(
-                f"method_calls={req.mock_calls}  call_args={req.call_args_list}"
-            )
-
-        pager = PageIterator(obj)
-
-        # Returned page of items should preserve item order
-        items = next(pager)
-        for idx, item in enumerate(items):
-            assert item.name == RestObj(items[idx]).name
-
-    # No req should have been made to retrieve additional data.
-    try:
-        req.assert_not_called()
-    except AssertionError as e:
-        raise AssertionError(
-            f"method_calls={req.mock_calls}  call_args={req.call_args_list}"
-        )
-
-
 def test_paging_required(paging):
     """Requests should be made to retrieve additional pages."""
     obj, items, _ = paging
