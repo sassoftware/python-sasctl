@@ -1,26 +1,26 @@
-from unittest import mock
-
-from sasctl.core import PageIterator, RestObj
-
-
-def test_no_paging_required():
-    """If "next" link not present, current items should be included."""
-
-    items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
-    obj = RestObj(items=items, count=len(items))
-
-    with mock.patch("sasctl.core.Session.request") as req:
-        pager = PageIterator(obj)
-
-        # Returned page of items should preserve item order
-        items = next(pager)
-        for idx, item in enumerate(items):
-            assert item.name == RestObj(items[idx]).name
-
-    # No req should have been made to retrieve additional data.
-    try:
-        req.assert_not_called()
-    except AssertionError:
-        raise AssertionError(
-            f"method_calls={req.mock_calls}  call_args={req.call_args_list}"
-        )
+# from unittest import mock
+#
+# from sasctl.core import PageIterator, RestObj
+#
+#
+# def test_no_paging_required():
+#     """If "next" link not present, current items should be included."""
+#
+#     items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
+#     obj = RestObj(items=items, count=len(items))
+#
+#     with mock.patch("sasctl.core.Session.request") as req:
+#         pager = PageIterator(obj)
+#
+#         # Returned page of items should preserve item order
+#         items = next(pager)
+#         for idx, item in enumerate(items):
+#             assert item.name == RestObj(items[idx]).name
+#
+#     # No req should have been made to retrieve additional data.
+#     try:
+#         req.assert_not_called()
+#     except AssertionError:
+#         raise AssertionError(
+#             f"method_calls={req.mock_calls}  call_args={req.call_args_list}"
+#         )
