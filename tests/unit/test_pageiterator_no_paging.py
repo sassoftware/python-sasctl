@@ -10,7 +10,7 @@ def test_no_paging_required():
     obj = RestObj(items=items, count=len(items))
 
     with mock.patch("sasctl.core.request") as req:
-        req.reset_mock(visited=True, side_effect=True)
+        req.reset_mock(side_effect=True)
         pager = PageIterator(obj)
 
         # Returned page of items should preserve item order
