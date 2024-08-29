@@ -357,10 +357,10 @@ def register_model(
 
     Parameters
     ----------
-    model : swat.CASTable or sklearn.BaseEstimator
-        The model to register.  If an instance of ``swat.CASTable`` the table
-        is assumed to hold an ASTORE, which will be downloaded and used to
-        construct the model to register.  If a scikit-learn estimator, the
+    model : swat.cas.table.CASTable or sklearn.base.BaseEstimator
+        The model to register.  If an instance of :class:`swat.cas.table.CASTable`
+        the table is assumed to hold an ASTORE, which will be downloaded and used
+        to construct the model to register.  If a scikit-learn estimator, the
         model will be pickled and uploaded to the registry and score code will
         be generated for publishing the model to MAS.
     name : str
@@ -371,14 +371,15 @@ def register_model(
     repository : str or dict, optional
         The name or id of the repository, or a dictionary representation of
         the repository.  If omitted, the default repository will be used.
-    X : DataFrame, type, list of type, or dict of str: type, optional
+    X : pandas.DataFrame, type, list of type, or dict of str: type, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
         is provided, the columns will be inspected to determine type
         information.  If a single type is provided, all columns will be assumed
         to be that type, otherwise a list of column types or a dictionary of
         column_name: type may be provided.
-    version : {'new', 'latest', int}, optional
+    version : str or int, optional
+        If str choose from ``{'new', 'latest'}``.
         Version number of the project in which the model should be created.
         Defaults to 'new'.
     files : list
@@ -395,13 +396,13 @@ def register_model(
     modeler : str, optional
         The name of the user who created the model.  Will default ot the
         current user if not specified.
-    input : DataFrame, type, list of type, or dict of str: type, optional
+    input : pandas.DataFrame, type, list of type, or dict of str: type, optional
         Deprecated, use `X` instead.
 
     Returns
     -------
     model : RestObj
-        The newly registered model as an instance of ``RestObj``
+        The newly registered model as an instance of :class:`.core.RestObj`
 
     Notes
     -----
@@ -550,7 +551,7 @@ def publish_model(
     replace : bool, optional
         Whether to overwrite the model if it already exists in
         the `destination`
-    kwargs : optional
+    **kwargs
         additional arguments will be passed to the underlying publish
         functions.
 
@@ -670,7 +671,7 @@ def update_model_performance(data, model, label, refresh=True):
 
     Parameters
     ----------
-    data : Dataframe
+    data : pandas.DataFrame
     model : str or dict
         The name or id of the model, or a dictionary representation of
         the model.
@@ -683,12 +684,12 @@ def update_model_performance(data, model, label, refresh=True):
 
     Returns
     -------
-    CASTable
+    swat.cas.table.CASTable
         The CAS table containing the performance data.
 
     See Also
     --------
-     :meth:`model_management.create_performance_definition <.ModelManagement.create_performance_definition>`
+    :meth:`model_management.create_performance_definition <.ModelManagement.create_performance_definition>`
 
     .. versionadded:: v1.3
 
@@ -885,7 +886,7 @@ def get_project_kpis(
         Column value to be filtered, by default None
     Returns
     -------
-    kpiTableDf : DataFrame
+    kpiTableDf : pandas.DataFrame
         A pandas DataFrame representing the MM_STD_KPI table. Note that SAS
         missing values are replaced with pandas valid missing values.
     """

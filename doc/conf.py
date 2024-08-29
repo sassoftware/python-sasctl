@@ -44,22 +44,31 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
-    "numpydoc",  # "sphinx.ext.napoleon",
+    "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
 ]
 
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3", None),
+    "python": ("https://docs.python.org/3/", None),
+    "pandas": ("https://pandas.pydata.org/docs/", None),
+    "sklearn": ("https://scikit-learn.org/stable/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
     "swat": ("https://sassoftware.github.io/python-swat/", None),
     "pytest": ("https://docs.pytest.org/en/latest/", None),
     "betamax": ("https://betamax.readthedocs.io/en/latest/", None),
-    "requests": ("https://2.python-requests.org/en/master/", None),
-    "tox": ("https://tox.wiki/en/latest/objects.inv", None),
-    "flake8": ("https://flake8.pycqa.org/en/latest/objects.inv", None),
+    "requests": ("https://requests.readthedocs.io/en/latest/", None),
+    "tox": ("https://tox.wiki/en/latest/", None),
+    "flake8": ("https://flake8.pycqa.org/en/latest/", None),
 }
 
 autosummary_generate = True
+
+# Napoleon settings
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_use_ivar = True
+napoleon_use_rtype = False
 
 todo_include_todos = True
 
@@ -92,6 +101,17 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
 
+# Suppress warnings 'py:class reference target not found: <type>'
+nitpicky = True
+nitpick_ignore = [
+    ('py:class','optional'),
+    ('py:class','json.encoder.JSONEncoder'), # I don't understand why it can't find it
+    ('py:class','Response'),
+    ('py:class','Request'),
+    ('py:class','_io.BytesIO'),
+    ('py:class','sasctl.utils.pymas.ds2.Ds2Variable'), # not sure what is wrong
+    ('py:class','sasctl._services.service.Service') # should the Service class be documented?
+]
 
 # -- Options for HTML output -------------------------------------------------
 
