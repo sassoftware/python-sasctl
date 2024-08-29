@@ -1534,7 +1534,7 @@ class PageIterator:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self._pool is not None:
-            self._pool.shutdown(wait=False, cancel_futures=True)
+            self._pool.shutdown(wait=False)
 
     def __next__(self):
         if self._pool is None:
