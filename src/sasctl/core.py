@@ -571,11 +571,11 @@ class Session(requests.Session):
     def hostname(self):
         return self._settings.get("domain")
 
-    def send(self, request, **kwargs):
+    def send(self, req, **kwargs):
         if self.message_log.isEnabledFor(logging.DEBUG):
-            r = copy.deepcopy(request)
-            for filter in self.filters:
-                r = filter(r)
+            r = copy.deepcopy(req)
+            for filter_ in self.filters:
+                r = filter_(r)
 
             self.message_log.debug(
                 "HTTP/1.1 {verb} {url}\n{headers}\nBody:\n{body}".format(
@@ -588,14 +588,14 @@ class Session(requests.Session):
                 )
             )
         else:
-            self.message_log.info("HTTP/1.1 %s %s", request.method, request.url)
+            self.message_log.info("HTTP/1.1 %s %s", req.method, req.url)
 
-        response = super(Session, self).send(request, **kwargs)
+        response = super(Session, self).send(req, **kwargs)
 
         if self.message_log.isEnabledFor(logging.DEBUG):
             r = copy.deepcopy(response)
-            for filter in self.filters:
-                r = filter(r)
+            for filter_ in self.filters:
+                r = filter_(r)
 
             self.message_log.debug(
                 "HTTP {status} {url}\n{headers}\nBody:\n{body}".format(

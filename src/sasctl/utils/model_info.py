@@ -63,7 +63,7 @@ def get_model_info(model, X, y=None):
 
     # Most PyTorch models are actually subclasses of torch.nn.Module, so checking module
     # name alone is not sufficient.
-    elif torch and isinstance(model, torch.nn.Module):
+    if torch and isinstance(model, torch.nn.Module):
         return PyTorchModelInfo(model, X, y)
 
     raise ValueError(f"Unrecognized model type {type(model)} received.")
@@ -200,7 +200,8 @@ class OnnxModelInfo(ModelInfo):
     def __init__(self, model, X, y=None):
         if onnx is None:
             raise RuntimeError(
-                "The onnx package must be installed to work with ONNX models.  Please `pip install onnx`."
+                "The onnx package must be installed to work with ONNX models.  "
+                "Please `pip install onnx`."
             )
 
         self._model = model
@@ -214,37 +215,18 @@ class OnnxModelInfo(ModelInfo):
 
         if len(inputs) > 1:
             warnings.warn(
-                f"The ONNX model has {len(inputs)} inputs but only the first input will be captured in Model Manager."
+                f"The ONNX model has {len(inputs)} inputs but only the first input "
+                f"will be captured in Model Manager."
             )
 
         if len(outputs) > 1:
             warnings.warn(
-                f"The ONNX model has {len(outputs)} outputs but only the first input will be captured in Model Manager."
+                f"The ONNX model has {len(outputs)} outputs but only the first output "
+                f"will be captured in Model Manager."
             )
 
         self._X_df = inputs[0]
         self._y_df = outputs[0]
-
-        # initializer (static params)
-
-        # for field in model.ListFields():
-        # doc_string
-        # domain
-        # metadata_props
-        # model_author
-        # model_license
-        # model_version
-        # producer_name
-        # producer_version
-        # training_info
-
-        # irVersion
-        # producerName
-        # producerVersion
-        # opsetImport
-
-        # # list of (FieldDescriptor, value)
-        # fields = model.ListFields()
 
     @staticmethod
     def _tensor_to_dataframe(tensor):
@@ -272,7 +254,7 @@ class OnnxModelInfo(ModelInfo):
         name = tensor.get("name", "Var")
         type_ = tensor["type"]
 
-        if not "tensorType" in type_:
+        if "tensorType" not in type_:
             raise ValueError(f"Received an unexpected ONNX input type: {type_}.")
 
         dtype = onnx.helper.tensor_dtype_to_np_dtype(type_["tensorType"]["elemType"])
@@ -374,8 +356,6 @@ class PyTorchModelInfo(ModelInfo):
                 raise ValueError(
                     f"Expected input data to be a numpy array or PyTorch tensor, received {type(X)}."
                 )
-        # if X.ndim != 2:
-        #     raise ValueError(f"Expected input date with shape (n_samples, n_dim), received shape {X.shape}.")
 
         # Ensure each input is a PyTorch Tensor
         X = tuple(x if isinstance(x, torch.Tensor) else torch.tensor(x) for x in X)
@@ -395,8 +375,6 @@ class PyTorchModelInfo(ModelInfo):
             )
 
         self._model = model
-
-        # TODO: convert X and y to DF with arbitrary names
         self._X = X
         self._y = y
 

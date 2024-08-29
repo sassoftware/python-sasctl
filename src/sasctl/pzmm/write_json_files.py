@@ -6,7 +6,6 @@ import ast
 import importlib
 import json
 
-# import math #not used
 import pickle
 import pickletools
 import sys
@@ -1449,13 +1448,6 @@ class JSONFiles:
             Raised if an improper data format is provided.
 
         """
-        # If numpy inputs are supplied, then assume numpy is installed
-        try:
-            # noinspection PyPackageRequirements
-            import numpy as np
-        except ImportError:
-            np = None
-
         # Convert target_value to numeric for creating binary probabilities
         if isinstance(target_value, str):
             target_value = float(target_value)
