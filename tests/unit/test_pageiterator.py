@@ -69,6 +69,13 @@ def test_no_paging_required():
         # above.  Depending on execution order, this can result in calls to the mock
         # made by other tests to be counted here.  Explicitly reset to prevent this.
         req.reset_mock()
+        try:
+            req.assert_not_called()
+        except AssertionError as e:
+            raise AssertionError(
+                f"method_calls={req.mock_calls}  call_args={req.call_args_list}"
+            )
+
         pager = PageIterator(obj)
 
         # Returned page of items should preserve item order
