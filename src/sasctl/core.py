@@ -1529,6 +1529,13 @@ class PageIterator:
         # Store the current items to iterate over
         self._obj = obj
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self._pool is not None:
+            self._pool.shutdown(wait=False, cancel_futures=True)
+
     def __next__(self):
         if self._pool is None:
             self._pool = concurrent.futures.ThreadPoolExecutor(

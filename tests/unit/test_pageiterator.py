@@ -62,16 +62,16 @@ def test_paging_required(paging):
     """Requests should be made to retrieve additional pages."""
     obj, items, _ = paging
 
-    pager = PageIterator(obj)
-    init_count = pager._start
+    with PageIterator(obj) as pager:
+        init_count = pager._start
 
-    for i, page in enumerate(pager):
-        for j, item in enumerate(page):
-            if i == 0:
-                item_idx = j
-            else:
-                # Account for initial page size not necessarily being same size
-                # as additional pages
-                item_idx = init_count + (i - 1) * pager._limit + j
-            target = RestObj(items[item_idx])
-            assert item.name == target.name
+        for i, page in enumerate(pager):
+            for j, item in enumerate(page):
+                if i == 0:
+                    item_idx = j
+                else:
+                    # Account for initial page size not necessarily being same size
+                    # as additional pages
+                    item_idx = init_count + (i - 1) * pager._limit + j
+                target = RestObj(items[item_idx])
+                assert item.name == target.name
