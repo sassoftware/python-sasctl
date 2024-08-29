@@ -639,10 +639,11 @@ def pytest_runtest_makereport(item, call):
             # elif "cas_session" in item.callspec.params:
             #     key = item.callspec.params["cas_session"]
             # else:
-            key = item.callspec.id
+            if hasattr(item, "callspec"):
+                key = item.callspec.id
 
-            # Track that this test was the last test to fail for this Viya version
-            parent._previousfailed[key] = item
+                # Track that this test was the last test to fail for this Viya version
+                parent._previousfailed[key] = item
 
 
 def pytest_runtest_setup(item):

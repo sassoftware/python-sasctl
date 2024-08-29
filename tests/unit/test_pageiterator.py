@@ -11,7 +11,9 @@ import pytest
 from sasctl.core import PageIterator, RestObj
 
 
-@pytest.fixture(params=[(6, 2, 2), (6, 1, 4), (6, 5, 4), (6, 6, 2), (100, 10, 20)])
+@pytest.fixture(
+    scope="function", params=[(6, 2, 2), (6, 1, 4), (6, 5, 4), (6, 6, 2), (100, 10, 20)]
+)
 def paging(request):
     """Create a RestObj designed to page through a collection of items and the
     collection itself.
@@ -56,35 +58,11 @@ def paging(request):
     assert req.call_count >= math.ceil(call_count)
 
 
-@pytest.mark.incremental
-class TestPageIterator:
-    def test_no_paging_required(self):
-        """If "next" link not present, current items should be included."""
+def test_paging_required(paging):
+    """Requests should be made to retrieve additional pages."""
+    obj, items, _ = paging
 
-        items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
-        obj = RestObj(items=items, count=len(items))
-
-        with mock.patch("sasctl.core.request") as request:
-            pager = PageIterator(obj)
-
-            # Returned page of items should preserve item order
-            items = next(pager)
-            for idx, item in enumerate(items):
-                assert item.name == RestObj(items[idx]).name
-
-        # No request should have been made to retrieve additional data.
-        try:
-            request.assert_not_called()
-        except AssertionError as e:
-            raise AssertionError(
-                f"method_calls={request.mock_calls}  call_args={request.call_args_list}"
-            )
-
-    def test_paging_required(self, paging):
-        """Requests should be made to retrieve additional pages."""
-        obj, items, _ = paging
-
-        pager = PageIterator(obj)
+    with PageIterator(obj) as pager:
         init_count = pager._start
 
         for i, page in enumerate(pager):

@@ -71,7 +71,7 @@ class ZipModel:
         """
 
         if isinstance(model_files, dict):
-            buffer = io.BytesIO()
+            buffer = BytesIO()
 
             with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED, False) as archive:
                 for file_name, data in model_files.items():

@@ -4,6 +4,8 @@
 # Copyright © 2023, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+import math
+import warnings
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Dict, List, Union
 
@@ -14,6 +16,19 @@ try:
     import torch
 except ImportError:
     torch = None
+
+try:
+    import onnx
+
+    # ONNX serializes models using protobuf, so this should be safe
+    from google.protobuf import json_format
+except ImportError:
+    onnx = None
+
+try:
+    import onnxruntime
+except ImportError:
+    onnxruntime = None
 
 
 def get_model_info(model, X, y=None):
@@ -40,8 +55,11 @@ def get_model_info(model, X, y=None):
     """
 
     # Don't need to import sklearn, just check if the class is part of that module.
-    if model.__class__.__module__.startswith("sklearn."):
+    if type(model).__module__.startswith("sklearn."):
         return SklearnModelInfo(model, X, y)
+
+    if type(model).__module__.startswith("onnx"):
+        return _load_onnx_model(model, X, y)
 
     # Most PyTorch models are actually subclasses of torch.nn.Module, so checking module
     # name alone is not sufficient.
@@ -51,17 +69,29 @@ def get_model_info(model, X, y=None):
     raise ValueError(f"Unrecognized model type {type(model)} received.")
 
 
+def _load_onnx_model(model, X, y=None):
+    # TODO: unncessary?  static analysis of onnx file sufficient?
+    if onnxruntime:
+        return OnnxModelInfo(model, X, y)
+
+    return OnnxModelInfo(model, X, y)
+
+
 class ModelInfo(ABC):
     """Base class for storing model metadata.
 
     Attributes
     ----------
     algorithm : str
+        Will appear in the "Algorithm" drop-down menu in Model Manager.
+        Example: "Forest", "Neural networks", "Binning", etc.
     analytic_function : str
+        Will appear in the "Function" drop-down menu in Model Manager.
+        Example: "Classification", "Clustering", "Prediction"
     is_binary_classifier : bool
-    is_classifier
-    is_regressor
-    is_clusterer
+    is_classifier : bool
+    is_regressor : bool
+    is_clusterer : bool
     model : object
         The model instance that the information was extracted from.
     model_params : {str: any}
@@ -166,13 +196,169 @@ class ModelInfo(ABC):
         return
 
 
+class OnnxModelInfo(ModelInfo):
+    def __init__(self, model, X, y=None):
+        if onnx is None:
+            raise RuntimeError(
+                "The onnx package must be installed to work with ONNX models.  Please `pip install onnx`."
+            )
+
+        self._model = model
+        self._X = X
+        self._y = y
+
+        inferred_model = onnx.shape_inference.infer_shapes(model)
+
+        inputs = [self._tensor_to_dataframe(i) for i in inferred_model.graph.input]
+        outputs = [self._tensor_to_dataframe(o) for o in inferred_model.graph.output]
+
+        if len(inputs) > 1:
+            warnings.warn(
+                f"The ONNX model has {len(inputs)} inputs but only the first input will be captured in Model Manager."
+            )
+
+        if len(outputs) > 1:
+            warnings.warn(
+                f"The ONNX model has {len(outputs)} outputs but only the first input will be captured in Model Manager."
+            )
+
+        self._X_df = inputs[0]
+        self._y_df = outputs[0]
+
+        # initializer (static params)
+
+        # for field in model.ListFields():
+        # doc_string
+        # domain
+        # metadata_props
+        # model_author
+        # model_license
+        # model_version
+        # producer_name
+        # producer_version
+        # training_info
+
+        # irVersion
+        # producerName
+        # producerVersion
+        # opsetImport
+
+        # # list of (FieldDescriptor, value)
+        # fields = model.ListFields()
+
+    @staticmethod
+    def _tensor_to_dataframe(tensor):
+        """
+
+        Parameters
+        ----------
+        tensor : onnx.onnx_ml_pb2.ValueInfoProto or dict
+            A protobuf `Message` containing information
+
+        Returns
+        -------
+        pandas.DataFrame
+
+        Examples
+        --------
+        df = _tensor_to_dataframe(model.graph.input[0])
+
+        """
+        if isinstance(tensor, onnx.onnx_ml_pb2.ValueInfoProto):
+            tensor = json_format.MessageToDict(tensor)
+        elif not isinstance(tensor, dict):
+            raise ValueError(f"Unexpected type {type(tensor)}.")
+
+        name = tensor.get("name", "Var")
+        type_ = tensor["type"]
+
+        if not "tensorType" in type_:
+            raise ValueError(f"Received an unexpected ONNX input type: {type_}.")
+
+        dtype = onnx.helper.tensor_dtype_to_np_dtype(type_["tensorType"]["elemType"])
+
+        # Tuple of tensor dimensions e.g. (1, 1, 24)
+        input_dims = tuple(
+            int(d["dimValue"]) for d in type_["tensorType"]["shape"]["dim"]
+        )
+
+        return pd.DataFrame(
+            dtype=dtype, columns=[f"{name}{i+1}" for i in range(math.prod(input_dims))]
+        )
+
+    @property
+    def algorithm(self) -> str:
+        return "neural network"
+
+    @property
+    def description(self) -> str:
+        return self.model.doc_string
+
+    @property
+    def is_binary_classifier(self) -> bool:
+        return len(self.output_column_names) == 2
+
+    @property
+    def is_classifier(self) -> bool:
+        return len(self.output_column_names) > 1
+
+    @property
+    def is_clusterer(self) -> bool:
+        return False
+
+    @property
+    def is_regressor(self) -> bool:
+        return len(self.output_column_names) == 1
+
+    @property
+    def model(self) -> object:
+        return self._model
+
+    @property
+    def model_params(self) -> Dict[str, Any]:
+        return {
+            k: getattr(self.model, k, None)
+            for k in (
+                "ir_version",
+                "model_version",
+                "opset_import",
+                "producer_name",
+                "producer_version",
+            )
+        }
+
+    @property
+    def predict_function(self) -> Callable:
+        return None
+
+    @property
+    def target_column(self):
+        return None
+
+    @property
+    def target_values(self):
+        return None
+
+    @property
+    def threshold(self) -> Union[str, None]:
+        return None
+
+    @property
+    def X(self) -> pd.DataFrame:
+        return self._X_df
+
+    @property
+    def y(self) -> pd.DataFrame:
+        return self._y_df
+
+
 class PyTorchModelInfo(ModelInfo):
     """Stores model information for a PyTorch model instance."""
 
     def __init__(self, model, X, y=None):
         if torch is None:
             raise RuntimeError(
-                "The PyTorch library must be installed to work with PyTorch models.  Please `pip install torch`."
+                "The PyTorch package must be installed to work with PyTorch models.  Please `pip install torch`."
             )
 
         if not isinstance(model, torch.nn.Module):

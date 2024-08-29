@@ -1254,7 +1254,7 @@ class Session(requests.Session):
         """Request a token from the SAS SASLogon service.
 
         Supports four different flows:
-        
+
         - authenticate with a username & password and receive a token
         - authenticate with a client id & secret and receive a token
         - provide an authorization code and receive a token
@@ -1531,6 +1531,13 @@ class PageIterator:
         # Store the current items to iterate over
         self._obj = obj
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self._pool is not None:
+            self._pool.shutdown(wait=False)
+
     def __next__(self):
         if self._pool is None:
             self._pool = concurrent.futures.ThreadPoolExecutor(
@@ -1778,7 +1785,7 @@ class VersionInfo:
         Release cadence for Viya 4.  Should be one of 'stable' or 'LTS'.
     release : str, optional
         Release number for Viya 4.  Two formats are currently possible:
-        
+
         - YYYY.R.U where R is the LTS release number in YYYY and U is the updates since R
         - YYYY.MM where MM is the month of the release.
 
@@ -2028,6 +2035,7 @@ def request(verb, path, session=None, format="auto", **kwargs):
 
     Returns
     -------
+    str, bytes, or requests.Response
 
     """
     session = session or current_session()
@@ -2111,6 +2119,7 @@ def request_link(obj, rel, **kwargs):
 
     Returns
     -------
+    RestObj
 
     """
     link = get_link(obj, rel)
@@ -2359,7 +2368,7 @@ def platform_version():
 
     Returns
     -------
-    str 
+    str
         SAS Viya version number '3.5' or '4.0'
 
     """

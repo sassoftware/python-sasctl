@@ -306,7 +306,7 @@ class ImportModel:
         **kwargs
             Other keyword arguments are passed to the following function:
             :meth:`.ScoreCode.write_score_code`
-            
+
 
         Returns
         -------
