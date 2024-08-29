@@ -11,7 +11,9 @@ import pytest
 from sasctl.core import PageIterator, RestObj
 
 
-@pytest.fixture(scope="function", params=[(6, 2, 2), (6, 1, 4), (6, 5, 4), (6, 6, 2), (100, 10, 20)])
+@pytest.fixture(
+    scope="function", params=[(6, 2, 2), (6, 1, 4), (6, 5, 4), (6, 6, 2), (100, 10, 20)]
+)
 def paging(request):
     """Create a RestObj designed to page through a collection of items and the
     collection itself.
@@ -56,7 +58,7 @@ def paging(request):
     assert req.call_count >= math.ceil(call_count)
 
 
-def test_no_paging_required(self):
+def test_no_paging_required():
     """If "next" link not present, current items should be included."""
 
     items = [{"name": "a"}, {"name": "b"}, {"name": "c"}]
@@ -79,7 +81,7 @@ def test_no_paging_required(self):
         )
 
 
-def test_paging_required(self, paging):
+def test_paging_required(paging):
     """Requests should be made to retrieve additional pages."""
     obj, items, _ = paging
 
