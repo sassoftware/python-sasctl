@@ -13,7 +13,8 @@ def test_no_paging_required():
     import sasctl
     assert not isinstance(sasctl.core.request, unittest.mock.Mock)
 
-    with mock.patch("sasctl.core.request") as req:
+    with mock.patch("sasctl.core.Session.request") as req:
+    # with mock.patch("sasctl.core.request") as req:
         req.reset_mock(side_effect=True)
         try:
             req.assert_not_called()
