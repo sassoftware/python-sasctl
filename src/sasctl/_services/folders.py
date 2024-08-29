@@ -71,7 +71,7 @@ class Folders(Service):
         ----------
         folder : str or dict
             May be one of:
-            
+
             - folder name
             - folder ID
             - folder path
