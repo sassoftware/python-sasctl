@@ -40,7 +40,7 @@ class DataSources(Service):
             A dictionary containing the provider attributes or None.
 
         Notes
-        -------
+        -----
         If `provider` is a complete representation of the provider it will be
         returned unless `refresh` is set.  This prevents unnecessary REST calls
         when data is already available on the client.

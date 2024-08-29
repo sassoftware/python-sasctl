@@ -2032,7 +2032,7 @@ def request(verb, path, session=None, format="auto", **kwargs):
 
     Returns
     -------
-
+    str, bytes, or requests.Response
     """
     session = session or current_session()
 
@@ -2111,10 +2111,11 @@ def request_link(obj, rel, **kwargs):
     obj : dict
     rel : str
     kwargs : any
-        Passed to :function:`request`
+        Passed to :func:`request`
 
     Returns
     -------
+    RestObj
 
     """
     link = get_link(obj, rel)

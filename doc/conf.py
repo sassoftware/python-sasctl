@@ -55,8 +55,8 @@ intersphinx_mapping = {
     "pytest": ("https://docs.pytest.org/en/latest/", None),
     "betamax": ("https://betamax.readthedocs.io/en/latest/", None),
     "requests": ("https://2.python-requests.org/en/master/", None),
-    "tox": ("https://tox.readthedocs.io/en/latest/", None),
-    "flake8": ("http://flake8.pycqa.org/en/latest/", None),
+    "tox": ("https://tox.wiki/en/latest/objects.inv", None),
+    "flake8": ("https://flake8.pycqa.org/en/latest/objects.inv", None),
 }
 
 autosummary_generate = True

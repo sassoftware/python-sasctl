@@ -229,7 +229,7 @@ class Service(object):  # skipcq PYL-R0205
                 A dictionary containing the {item} attributes or None.
 
             Notes
-            -------
+            -----
             If `item` is a complete representation of the {item} it will be
             returned unless `refresh` is set.  This prevents unnecessary REST
             calls when data is already available on the client.

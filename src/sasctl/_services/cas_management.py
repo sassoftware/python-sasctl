@@ -93,7 +93,7 @@ class CASManagement(Service):
         Returns a collection of sessions available on the CAS server.
 
         Parameters
-        ------
+        ----------
         query_params : dict, optional
             Query parameters.
             Valid keys are `start`, `limit`, `filter`,
@@ -129,7 +129,7 @@ class CASManagement(Service):
         """Creates a new session on the CAS server.
 
         Parameters
-        ------
+        ----------
         properties : dict
             Properties of the session.
             Valid keys are `authenticationType` (required),
@@ -164,7 +164,7 @@ class CASManagement(Service):
         """Terminates a session on the CAS server.
 
         Parameters
-        ------
+        ----------
         sess_id : str
             A string indicating the Session id.
         server : str
