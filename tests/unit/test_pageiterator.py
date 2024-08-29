@@ -65,6 +65,10 @@ def test_no_paging_required():
     obj = RestObj(items=items, count=len(items))
 
     with mock.patch("sasctl.core.request") as req:
+        # Mock appears to be *sometimes* shared with mock created in `paging` fixture
+        # above.  Depending on execution order, this can result in calls to the mock
+        # made by other tests to be counted here.  Explicitly reset to prevent this.
+        req.reset_mock()
         pager = PageIterator(obj)
 
         # Returned page of items should preserve item order
