@@ -26,8 +26,9 @@ from sasctl._services.score_definitions import ScoreDefinitions as sd
 
 
 class CustomMock:
-    def __init__(self, json_info):
+    def __init__(self, json_info,  id=""):
         self.json_info = json_info
+        self.id = id
 
     def get(self, key1, key2=None, key3=None):
         if key2 is None and key3 is None:
@@ -69,7 +70,7 @@ def test_create_score_definition():
                     with pytest.raises(HTTPError):
                         sd.create_score_definition(
                             score_def_name="test_create_sd",
-                            model_id="12345",
+                            model="12345",
                             table_name="test_table",
                         )
 
@@ -87,7 +88,7 @@ def test_create_score_definition():
                     with pytest.raises(HTTPError):
                         sd.create_score_definition(
                             score_def_name="test_create_sd",
-                            model_id="12345",
+                            model="12345",
                             table_name="test_table",
                         )
 
@@ -98,7 +99,7 @@ def test_create_score_definition():
                     with pytest.raises(HTTPError):
                         sd.create_score_definition(
                             score_def_name="test_create_sd",
-                            model_id="12345",
+                            model="12345",
                             table_name="test_table",
                             table_file="test_path",
                         )
@@ -112,7 +113,7 @@ def test_create_score_definition():
                     get_table.return_value = get_table_mock
                     response = sd.create_score_definition(
                         score_def_name="test_create_sd",
-                        model_id="12345",
+                        model="12345",
                         table_name="test_table",
                         table_file="test_path",
                     )
@@ -122,7 +123,7 @@ def test_create_score_definition():
                     get_table.return_value = get_table_mock
                     response = sd.create_score_definition(
                         score_def_name="test_create_sd",
-                        model_id="12345",
+                        model="12345",
                         table_name="test_table",
                         table_file="test_path",
                     )
@@ -146,7 +147,7 @@ def test_create_score_definition():
                     get_table.return_value = get_table_mock
                     response = sd.create_score_definition(
                         score_def_name="test_create_sd",
-                        model_id="12345",
+                        model="12345",
                         table_name="test_table",
                     )
                     assert response
