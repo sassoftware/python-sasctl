@@ -214,19 +214,19 @@ jobs:
 
     steps:
       - name: Download documentation
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: html-docs
           path: ./html-docs
 
       - name: Download release
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: pypi-dist
           path: ./dist
 
       - name: Download release notes
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: release_notes
 
@@ -292,7 +292,7 @@ jobs:
 
       # Download release files
       - name: Download release
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: conda-dist
           path: ./dist
