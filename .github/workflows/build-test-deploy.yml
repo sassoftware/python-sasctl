@@ -113,7 +113,7 @@ jobs:
         run: sphinx-build -Ean -b html -j auto -D todo_include_todos=0 ./docs ./docs/_build/html
 
       - name: Archive artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: html-docs
           path: ./docs/_build/html
@@ -159,13 +159,13 @@ jobs:
 
       - name: Archive distribution artifacts
         # Archive distribution files for use by auto (or manual) PyPI upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pypi-dist
           path: ./dist
 
       - name: Archive changelog artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release_notes
           path: release_notes.md
@@ -199,7 +199,7 @@ jobs:
 
       # Archive distribution files.  Will upload in a downstream job.
       - name: Archive distribution artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: conda-dist
           path: .build
@@ -214,19 +214,19 @@ jobs:
 
     steps:
       - name: Download documentation
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: html-docs
           path: ./html-docs
 
       - name: Download release
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: pypi-dist
           path: ./dist
 
       - name: Download release notes
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: release_notes
 
@@ -292,7 +292,7 @@ jobs:
 
       # Download release files
       - name: Download release
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: conda-dist
           path: ./dist
