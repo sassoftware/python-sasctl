@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.cas_management &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl._services.cas_management &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/cas_management';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -367,9 +367,10 @@ document.write(`
 <span class="sd">        String describing the type of parameters</span>
 <span class="sd">        that are being tested.</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    raises ValueError if input_keys are not valid</span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        if input_keys are not valid</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">key</span> <span class="ow">in</span> <span class="n">valid_keys</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">input_keys</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -396,10 +397,12 @@ document.write(`
 <span class="sd">        String describing the type of parameters</span>
 <span class="sd">        that are being tested.</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    raises ValueError if required_key is not present.</span>
-<span class="sd">    raises TypeError if required_key is neither a list or a string.</span>
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        if required_key is not present.</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        if required_key is neither a list or a string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">required_key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">required_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">input_keys</span><span class="p">:</span>
@@ -439,7 +442,7 @@ document.write(`
 <span class="sd">        Returns a collection of sessions available on the CAS server.</span>
 
 <span class="sd">        Parameters</span>
-<span class="sd">        ------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        query_params : dict, optional</span>
 <span class="sd">            Query parameters.</span>
 <span class="sd">            Valid keys are `start`, `limit`, `filter`,</span>
@@ -478,7 +481,7 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new session on the CAS server.</span>
 
 <span class="sd">        Parameters</span>
-<span class="sd">        ------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        properties : dict</span>
 <span class="sd">            Properties of the session.</span>
 <span class="sd">            Valid keys are `authenticationType` (required),</span>
@@ -516,7 +519,7 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Terminates a session on the CAS server.</span>
 
 <span class="sd">        Parameters</span>
-<span class="sd">        ------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        sess_id : str</span>
 <span class="sd">            A string indicating the Session id.</span>
 <span class="sd">        server : str</span>
@@ -583,7 +586,7 @@ document.write(`
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        RestObj</span>
+<span class="sd">        RestObj or None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="ow">or</span> <span class="n">DEFAULT_SERVER</span>
@@ -642,7 +645,7 @@ document.write(`
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        RestObj</span>
+<span class="sd">        RestObj or None</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">caslib</span> <span class="o">=</span> <span class="n">caslib</span> <span class="ow">or</span> <span class="n">DEFAULT_CASLIB</span>
@@ -676,7 +679,7 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        file : str or file-like object</span>
+<span class="sd">        file : str or typing.TextIO</span>
 <span class="sd">            File containing data to upload or path to the file.</span>
 <span class="sd">        name : str</span>
 <span class="sd">            Name of the table to create</span>
@@ -688,7 +691,8 @@ document.write(`
 <span class="sd">        header : bool, optional</span>
 <span class="sd">            Whether the first row of data contains column headers.  Defaults to</span>
 <span class="sd">            True.</span>
-<span class="sd">        format_ : {&quot;csv&quot;, &quot;xls&quot;, &quot;xlsx&quot;, &quot;sas7bdat&quot;, &quot;sashdat&quot;}, optional</span>
+<span class="sd">        format_ : str, optional</span>
+<span class="sd">            Choose from {&quot;csv&quot;, &quot;xls&quot;, &quot;xlsx&quot;, &quot;sas7bdat&quot;, &quot;sashdat&quot;}.</span>
 <span class="sd">            File of input `file`.  Not required if format can be discerned from</span>
 <span class="sd">            the file path.</span>
 <span class="sd">        detail : dict, optional</span>
@@ -1016,6 +1020,11 @@ document.write(`
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        RestObj</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `query_params` is empty</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">server</span> <span class="o">=</span> <span class="n">server</span> <span class="ow">or</span> <span class="n">DEFAULT_SERVER</span>

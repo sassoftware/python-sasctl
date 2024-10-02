@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.services.files &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.services.files &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/files';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.services.data_sources" href="data_sources.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -399,90 +399,21 @@ associated with the file or the actual content can be updated. A single
 file can be deleted by using a specific ID. Multiple files can be deleted
 by specifying a parentUri.  A file can be uploaded via raw request or
 multipart form request.</p>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.files.Files.create_file" title="sasctl._services.files.Files.create_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_file</span></code></a>(file[, folder, filename, expiration])</p></td>
-<td><p>Create a new file on the server by uploading a local file.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a DELETE request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.files.Files.delete_file" title="sasctl._services.files.Files.delete_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_file</span></code></a>(item)</p></td>
-<td><p>Delete a file instance.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a GET request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.files.Files.get_file" title="sasctl._services.files.Files.get_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_file</span></code></a>(item[, refresh])</p></td>
-<td><p>Return a file instance.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.files.Files.get_file_content" title="sasctl._services.files.Files.get_file_content"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_file_content</span></code></a>(file)</p></td>
-<td><p>Download the contents of a file.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link</span></code>(obj, rel)</p></td>
-<td><p>Get link information from a resource.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">head</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a HEAD request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code>()</p></td>
-<td><p>Version and build information for the service.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_available</span></code>()</p></td>
-<td><p>Check if the service is currently available.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.files.Files.list_files" title="sasctl._services.files.Files.list_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_files</span></code></a>([filter, start, limit])</p></td>
-<td><p>List all files available in the environment.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a POST request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">put</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a PUT request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request</span></code>(verb, path[, session, format_])</p></td>
-<td><p>Send an HTTP request with a session.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_link</span></code>(obj, rel, **kwargs)</p></td>
-<td><p>Request a link from a resource.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.files.Files.update_file" title="sasctl._services.files.Files.update_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_file</span></code></a>(item)</p></td>
-<td><p>Update a file instance.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>is_uuid</strong></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.files.Files.create_file">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/files.html#Files.create_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.files.Files.create_file" title="Link to this definition">#</a></dt>
 <dd><p>Create a new file on the server by uploading a local file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>file</strong><span class="classifier">str, pathlib.Path, or file_like</span></dt><dd><p>Path to the file to upload or a file-like object.</p>
-</dd>
-<dt><strong>folder</strong><span class="classifier">str or dict, optional</span></dt><dd><p>Name, or, or folder information as returned by <code class="xref py py-func docutils literal notranslate"><span class="pre">get_folder()</span></code>.</p>
-</dd>
-<dt><strong>filename</strong><span class="classifier">str, optional</span></dt><dd><p>Name to assign to the uploaded file.  Defaults to the filename if <cite>file</cite> is a path, otherwise required.</p>
-</dd>
-<dt><strong>expiration</strong><span class="classifier">datetime, optional</span></dt><dd><p>A timestamp that indicates when to expire the file.  Defaults to no expiration.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.BinaryIO" title="(in Python v3.12)"><em>BinaryIO</em></a>) – Path to the file to upload or a file-like object.</p></li>
+<li><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Name or folder information as returned by <a class="reference internal" href="folders.html#sasctl._services.folders.Folders.get_folder" title="sasctl._services.folders.Folders.get_folder"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_folder()</span></code></a>.</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Name to assign to the uploaded file.  Defaults to the filename if <cite>file</cite> is a path, otherwise required.</p></li>
+<li><p><strong>expiration</strong> (<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.12)"><em>datetime.datetime</em></a><em>, </em><em>optional</em>) – A timestamp that indicates when to expire the file.  Defaults to no expiration.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd><p>A dictionary containing the file attributes.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em> – A dictionary containing the file attributes.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -493,14 +424,10 @@ multipart form request.</p>
 <dd><p>Delete a file instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>item</strong></dt><dd></dd>
-</dl>
+<dd class="field-odd"><p><strong>item</strong></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>None</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>None</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -511,18 +438,13 @@ multipart form request.</p>
 <dd><p>Return a file instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>item</strong><span class="classifier">str or dict</span></dt><dd><p>Name, ID, or dictionary representation of the file.</p>
-</dd>
-<dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Obtain an updated copy of the file.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Name, ID, or dictionary representation of the file.</p></li>
+<li><p><strong>refresh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Obtain an updated copy of the file.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj or None</dt><dd><p>A dictionary containing the file attributes or None.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>RestObj or None</em> – A dictionary containing the file attributes or None.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -537,15 +459,10 @@ calls when data is already available on the client.</p>
 <dd><p>Download the contents of a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>file</strong><span class="classifier">str or dict, optional</span></dt><dd><p>Name or file information as returned by <a class="reference internal" href="#sasctl._services.files.Files.get_file" title="sasctl._services.files.Files.get_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_file()</span></code></a>.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Name or file information as returned by <a class="reference internal" href="#sasctl._services.files.Files.get_file" title="sasctl._services.files.Files.get_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_file()</span></code></a>.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>content</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>str</em> – content</p>
 </dd>
 </dl>
 </dd></dl>
@@ -556,19 +473,14 @@ calls when data is already available on the client.</p>
 <dd><p>List all files available in the environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>filter</strong><span class="classifier">str, optional</span></dt><dd></dd>
-<dt><strong>start</strong><span class="classifier">int, optional</span></dt><dd><p>Zero-based index of the first item to return.  Defaults to 0.</p>
-</dd>
-<dt><strong>limit</strong><span class="classifier">int, optional</span></dt><dd><p>The maximum number of items to return.  Defaults to 20.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>)</p></li>
+<li><p><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Zero-based index of the first item to return.  Defaults to 0.</p></li>
+<li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The maximum number of items to return.  Defaults to 20.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>A list of dictionaries containing the files.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>list</em> – A list of dictionaries containing the files.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -581,14 +493,10 @@ calls when data is already available on the client.</p>
 <dd><p>Update a file instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>item</strong><span class="classifier">dict</span></dt><dd></dd>
-</dl>
+<dd class="field-odd"><p><strong>item</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>None</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>None</em></p>
 </dd>
 </dl>
 </dd></dl>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.services.text_parsing &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.services.text_parsing &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/text_parsing';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.services.text_categorization" href="text_categorization.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -391,63 +391,14 @@ document.write(`
 <p>The Text Parsing API parses natural language text documents.</p>
 <p>Parsing is a key operation in understanding your data. Parsing a document
 involves the following analyses:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p>Identifying terms used in the document</p></li>
 <li><p>Recognizing parts of speech for each term</p></li>
 <li><p>Identifying which terms are entities (person, country, and so on)</p></li>
 <li><p>Resolving synonyms, misspellings, and so on</p></li>
 </ul>
-</div></blockquote>
 <p>The output tables that are generated during parsing can also be used in
 downstream analyses such as topic generation.</p>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a DELETE request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a GET request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link</span></code>(obj, rel)</p></td>
-<td><p>Get link information from a resource.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">head</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a HEAD request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code>()</p></td>
-<td><p>Version and build information for the service.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_available</span></code>()</p></td>
-<td><p>Check if the service is currently available.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.text_parsing.TextParsing.parse_documents" title="sasctl._services.text_parsing.TextParsing.parse_documents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_documents</span></code></a>(documents[, caslib, ...])</p></td>
-<td><p>Performs natural language parsing on the input data.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a POST request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">put</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a PUT request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request</span></code>(verb, path[, session, format_])</p></td>
-<td><p>Send an HTTP request with a session.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_link</span></code>(obj, rel, **kwargs)</p></td>
-<td><p>Request a link from a resource.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>is_uuid</strong></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.text_parsing.TextParsing.parse_documents">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_documents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">documents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caslib</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_entities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noun_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_doc_count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concept_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_postfix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spell_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">synonym_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'en'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/text_parsing.html#TextParsing.parse_documents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.text_parsing.TextParsing.parse_documents" title="Link to this definition">#</a></dt>
@@ -457,55 +408,38 @@ different interactions for parsing: parsing documents in CAS tables and
 parsing documents that are uploaded directly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>documents</strong><span class="classifier">str or dict or list_like:</span></dt><dd><p>Documents to parse.  May be either the URI to a CAS table where the
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>documents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> or </em><em>Iterable</em>) – Documents to parse.  May be either the URI to a CAS table where the
 documents are currently stored, or an iterable of strings containing
-the documents’ text.</p>
-</dd>
-<dt><strong>caslib</strong><span class="classifier">str or dict, optional</span></dt><dd><p>URI of a caslib in which the documents will be stored.  Required if
-<cite>documents</cite> is a list of strings.</p>
-</dd>
-<dt><strong>id_column</strong><span class="classifier">str, optional</span></dt><dd><p>The column in <cite>documents</cite> that contains a unique id for each
-document.  Required if <cite>documents</cite> is a CAS table URI.</p>
-</dd>
-<dt><strong>text_column</strong><span class="classifier">str, optional</span></dt><dd><p>The column in <cite>documents</cite> that contains the document text to parse.
-Required if <cite>documents</cite> is a CAS table URI.</p>
-</dd>
-<dt><strong>description</strong><span class="classifier">str, optional</span></dt><dd><p>Description to add to the text parsing job.</p>
-</dd>
-<dt><strong>standard_entities</strong><span class="classifier">bool, optional</span></dt><dd></dd>
-<dt><strong>noun_groups</strong><span class="classifier">bool, optional</span></dt><dd></dd>
-<dt><strong>min_doc_count</strong><span class="classifier">int, optional</span></dt><dd><p>Minimum number of documents in which a term must appear to be kept.
-Defaults to 10.</p>
-</dd>
-<dt><strong>output_postfix</strong><span class="classifier">str, optional</span></dt><dd><p>Text to be added to the end of all output table names.</p>
-</dd>
-<dt><strong>spell_check</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether spell checking should be performed during parsing.</p>
-</dd>
-<dt><strong>concept_model</strong><span class="classifier">str or dict, optional</span></dt><dd><p>URI of a table containing the concept LITI binaries to apply during
-parsing.</p>
-</dd>
-<dt><strong>override_list</strong><span class="classifier">str or dict, optional</span></dt><dd><p>URI of a table containing overrides for the keep and drop terms.</p>
-</dd>
-<dt><strong>language</strong><span class="classifier">str, optional</span></dt><dd><p>Two letter
+the documents’ text.</p></li>
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – URI of a caslib in which the documents will be stored.  Required if
+<cite>documents</cite> is a list of strings.</p></li>
+<li><p><strong>id_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The column in <cite>documents</cite> that contains a unique id for each
+document.  Required if <cite>documents</cite> is a CAS table URI.</p></li>
+<li><p><strong>text_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The column in <cite>documents</cite> that contains the document text to parse.
+Required if <cite>documents</cite> is a CAS table URI.</p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Description to add to the text parsing job.</p></li>
+<li><p><strong>standard_entities</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>)</p></li>
+<li><p><strong>noun_groups</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>)</p></li>
+<li><p><strong>min_doc_count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Minimum number of documents in which a term must appear to be kept.
+Defaults to 10.</p></li>
+<li><p><strong>output_postfix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Text to be added to the end of all output table names.</p></li>
+<li><p><strong>spell_check</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether spell checking should be performed during parsing.</p></li>
+<li><p><strong>concept_model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – URI of a table containing the concept LITI binaries to apply during
+parsing.</p></li>
+<li><p><strong>override_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – URI of a table containing overrides for the keep and drop terms.</p></li>
+<li><p><strong>language</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Two letter
 <a class="reference external" href="https://en.wikipedia.org/wiki/ISO_639">ISO 639-1</a>
-code indicating the source language.  Defaults to ‘en’.</p>
-</dd>
-</dl>
+code indicating the source language.  Defaults to ‘en’.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd><p>The submitted job</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em> – The submitted job</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">cas_management.get_caslib</span></code></dt><dd></dd>
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">cas_management.get_table</span></code></dt><dd></dd>
-</dl>
+<p><a class="reference internal" href="cas_management.html#sasctl._services.cas_management.CASManagement.get_caslib" title="sasctl._services.cas_management.CASManagement.get_caslib"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cas_management.CASManagement.get_caslib</span></code></a>, <a class="reference internal" href="cas_management.html#sasctl._services.cas_management.CASManagement.get_table" title="sasctl._services.cas_management.CASManagement.get_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cas_management.CASManagement.get_table</span></code></a></p>
 </div>
 </dd></dl>
 

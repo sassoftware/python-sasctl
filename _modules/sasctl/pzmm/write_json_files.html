@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/write_json_files';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -341,7 +341,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">ast</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">math</span>
+
 <span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">import</span> <span class="nn">pickletools</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -475,7 +475,7 @@ document.write(`
 <span class="sd">        is_input : bool, optional</span>
 <span class="sd">            Boolean flag to check if generating the input or output variable JSON. The</span>
 <span class="sd">            default value is True.</span>
-<span class="sd">        json_path : str or Path, optional</span>
+<span class="sd">        json_path : str or pathlib.Path, optional</span>
 <span class="sd">            File location for the output JSON file. The default value is None.</span>
 
 <span class="sd">        Returns</span>
@@ -521,12 +521,12 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        input_data : pandas.Dataframe or pandas.Series</span>
+<span class="sd">        input_data : pandas.DataFrame or pandas.Series</span>
 <span class="sd">            Dataset for either the input or output example data for the model.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        dict_list : list of dicts</span>
+<span class="sd">        dict_list : list of dict</span>
 <span class="sd">            List of dictionaries containing the variable properties.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Check if input_data is a Series or DataFrame</span>
@@ -674,7 +674,7 @@ document.write(`
 <span class="sd">            classification model. Providing &gt; 2 target values will supply the values</span>
 <span class="sd">            for the different target events as a custom property. An error is raised if</span>
 <span class="sd">            only 1 target value is supplied. The default value is None.</span>
-<span class="sd">        json_path : str or Path, optional</span>
+<span class="sd">        json_path : str or pathlib.Path, optional</span>
 <span class="sd">            Path for an output ModelProperties.json file to be generated. If no value</span>
 <span class="sd">            is supplied a dict is returned instead. The default value is None.</span>
 <span class="sd">        model_desc : str, optional</span>
@@ -689,7 +689,7 @@ document.write(`
 <span class="sd">        train_table : str, optional</span>
 <span class="sd">            The path to the model&#39;s training table within SAS Viya. The default value is</span>
 <span class="sd">            an empty string.</span>
-<span class="sd">        properties : List of dict, optional</span>
+<span class="sd">        properties : list of dict, optional</span>
 <span class="sd">            List of custom properties to be shown in the user-defined properties section</span>
 <span class="sd">            of the model in SAS Model Manager. Dict entries should contain the `name`,</span>
 <span class="sd">            `value`, and `type` keys. The default value is an empty list.</span>
@@ -848,7 +848,7 @@ document.write(`
 <span class="sd">        model_prefix : str</span>
 <span class="sd">            The variable for the model name that is used when naming model files. For</span>
 <span class="sd">            example: hmeqClassTree + [Score.py | .pickle].</span>
-<span class="sd">        json_path : str or Path, optional</span>
+<span class="sd">        json_path : str or pathlib.Path, optional</span>
 <span class="sd">            Path for an output ModelProperties.json file to be generated. If no value</span>
 <span class="sd">            is supplied a dict is returned instead. The default value is None.</span>
 <span class="sd">        is_h2o_model : bool, optional</span>
@@ -912,29 +912,30 @@ document.write(`
 
 <span class="sd">        There are three modes to add fit parameters to the JSON file:</span>
 
-<span class="sd">            1. Call the function with additional tuple arguments containing</span>
-<span class="sd">            the name of the parameter, its value, and the partition that it</span>
-<span class="sd">            belongs to.</span>
+<span class="sd">        1. Call the function with additional tuple arguments containing</span>
+<span class="sd">        the name of the parameter, its value, and the partition that it</span>
+<span class="sd">        belongs to.</span>
 
-<span class="sd">            2. Provide line by line user input prompted by the function.</span>
+<span class="sd">        2. Provide line by line user input prompted by the function.</span>
 
-<span class="sd">            3. Import values from a CSV file. Format should contain the above</span>
-<span class="sd">            tuple in each row.</span>
+<span class="sd">        3. Import values from a CSV file. Format should contain the above</span>
+<span class="sd">        tuple in each row.</span>
 
 <span class="sd">        The following are the base statistical parameters SAS Viya supports:</span>
-<span class="sd">            * RASE = Root Average Squared Error</span>
-<span class="sd">            * NObs = Sum of Frequencies</span>
-<span class="sd">            * GINI = Gini Coefficient</span>
-<span class="sd">            * GAMMA = Gamma</span>
-<span class="sd">            * MCE = Misclassification Rate</span>
-<span class="sd">            * ASE = Average Squared Error</span>
-<span class="sd">            * MCLL = Multi-Class Log Loss</span>
-<span class="sd">            * KS = KS (Youden)</span>
-<span class="sd">            * KSPostCutoff = ROC Separation</span>
-<span class="sd">            * DIV = Divisor for ASE</span>
-<span class="sd">            * TAU = Tau</span>
-<span class="sd">            * KSCut = KS Cutoff</span>
-<span class="sd">            * C = Area Under ROC</span>
+
+<span class="sd">        * RASE = Root Average Squared Error</span>
+<span class="sd">        * NObs = Sum of Frequencies</span>
+<span class="sd">        * GINI = Gini Coefficient</span>
+<span class="sd">        * GAMMA = Gamma</span>
+<span class="sd">        * MCE = Misclassification Rate</span>
+<span class="sd">        * ASE = Average Squared Error</span>
+<span class="sd">        * MCLL = Multi-Class Log Loss</span>
+<span class="sd">        * KS = KS (Youden)</span>
+<span class="sd">        * KSPostCutoff = ROC Separation</span>
+<span class="sd">        * DIV = Divisor for ASE</span>
+<span class="sd">        * TAU = Tau</span>
+<span class="sd">        * KSCut = KS Cutoff</span>
+<span class="sd">        * C = Area Under ROC</span>
 
 <span class="sd">        This function outputs a JSON file named &quot;dmcas_fitstat.json&quot;.</span>
 
@@ -950,7 +951,7 @@ document.write(`
 <span class="sd">            data_role). For example, a sample parameter call would be</span>
 <span class="sd">            &#39;NObs&#39;, 3488, or &#39;TRAIN&#39;. Variable data_role is typically either TRAIN,</span>
 <span class="sd">            TEST, or VALIDATE or 1, 2, 3 respectively. The default value is None.</span>
-<span class="sd">        json_path : str or Path, optional</span>
+<span class="sd">        json_path : str or pathlib.Path, optional</span>
 <span class="sd">            Location for the output JSON file. The default value is None.</span>
 
 <span class="sd">        Returns</span>
@@ -1061,13 +1062,13 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        data : list of dicts</span>
+<span class="sd">        data : list of dict</span>
 <span class="sd">            List of dicts for the data values of each parameter. Split into the three</span>
 <span class="sd">            valid partitions (TRAIN, TEST, VALIDATE).</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        list of dicts</span>
+<span class="sd">        list of dict</span>
 <span class="sd">            List of dicts with the user provided values inputted.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -1174,37 +1175,40 @@ document.write(`
 <span class="sd">        score_table : pandas.DataFrame</span>
 <span class="sd">            Data structure containing actual values, predicted or predicted probability values, and sensitive variable</span>
 <span class="sd">            values. All columns in the score table must have valid variable names.</span>
-<span class="sd">        sensitive_values : string or list of strings</span>
+<span class="sd">        sensitive_values : str or list of str</span>
 <span class="sd">            Sensitive variable name or names in score_table. The variable name must follow SAS naming conventions (no</span>
 <span class="sd">            spaces and the name cannot begin with a number or symbol).</span>
-<span class="sd">        actual_values : string</span>
+<span class="sd">        actual_values : str</span>
 <span class="sd">            Variable name containing the actual values in score_table. The variable name must follow SAS naming</span>
 <span class="sd">            conventions (no spaces and the name cannot begin with a number or symbol).</span>
-<span class="sd">        pred_values : string, required for regression problems, otherwise not used</span>
+<span class="sd">        pred_values : str</span>
+<span class="sd">            Required for regression problems, otherwise not used</span>
 <span class="sd">            Variable name containing the predicted values in score_table. The variable name must follow SAS naming</span>
 <span class="sd">            conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.</span>
 <span class="sd">            The default value is None.</span>
-<span class="sd">        prob_values : list of strings, required for classification problems, otherwise not used</span>
-<span class="sd">           A list of variable names containing the predicted probability values in the score table. The first element</span>
-<span class="sd">           should represent the predicted probability of the target class. Required for classification problems. Default</span>
-<span class="sd">           is None.</span>
-<span class="sd">        levels: List of strings, integers, booleans, required for classification problems, otherwise not used</span>
+<span class="sd">        prob_values : list of str</span>
+<span class="sd">            Required for classification problems, otherwise not used</span>
+<span class="sd">            A list of variable names containing the predicted probability values in the score table. The first element</span>
+<span class="sd">            should represent the predicted probability of the target class. Required for classification problems. Default</span>
+<span class="sd">            is None.</span>
+<span class="sd">        levels : list of str, list of int, or list of bool</span>
+<span class="sd">            Required for classification problems, otherwise not used</span>
 <span class="sd">            List of classes of a nominal target in the order they were passed in prob_values. Levels must be passed as a</span>
 <span class="sd">            string. Default is None.</span>
-<span class="sd">        json_path : str or Path, optional</span>
+<span class="sd">        json_path : str or pathlib.Path, optional</span>
 <span class="sd">            Location for the output JSON files. If a path is passed, the json files will populate in the directory and</span>
 <span class="sd">            the function will return None, unless return_dataframes is True. Otherwise, the function will return the json</span>
-<span class="sd">             strings in a dictionary (dict[&quot;maxDifferences.json&quot;] and dict[&quot;groupMetrics.json&quot;]). The default value is</span>
-<span class="sd">             None.</span>
+<span class="sd">            strings in a dictionary (dict[&quot;maxDifferences.json&quot;] and dict[&quot;groupMetrics.json&quot;]). The default value is</span>
+<span class="sd">            None.</span>
 <span class="sd">        cutoff : float, optional</span>
 <span class="sd">            Cutoff value for confusion matrix. Default is 0.5.</span>
-<span class="sd">        datarole : string, optional</span>
+<span class="sd">        datarole : str, optional</span>
 <span class="sd">            The data being used to assess bias (i.e. &#39;TEST&#39;, &#39;VALIDATION&#39;, etc.). Default is &#39;TEST.&#39;</span>
-<span class="sd">        return_dataframes : boolean, optional</span>
+<span class="sd">        return_dataframes : bool, optional</span>
 <span class="sd">            If true, the function returns the pandas data frames used to create the JSON files and a table for bias</span>
 <span class="sd">            metrics. If a JSON path is passed, then the function will return a dictionary that only includes the data</span>
 <span class="sd">            frames (dict[&quot;maxDifferencesData&quot;], dict[&quot;groupMetricData&quot;], and dict[&quot;biasMetricsData&quot;]). If a JSON path is</span>
-<span class="sd">             not passed, the function will return a dictionary with the three tables  and the two JSON strings</span>
+<span class="sd">            not passed, the function will return a dictionary with the three tables  and the two JSON strings</span>
 <span class="sd">            (dict[&quot;maxDifferences.json&quot;] and dict[&quot;groupMetrics.json&quot;]). The default value is False.</span>
 
 <span class="sd">        Returns</span>
@@ -1216,7 +1220,7 @@ document.write(`
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        RuntimeError</span>
-<span class="sd">            If swat is not installed, this function cannot perform the necessary</span>
+<span class="sd">            If :mod:`swat` is not installed, this function cannot perform the necessary</span>
 <span class="sd">            calculations.</span>
 
 <span class="sd">        ValueError</span>
@@ -1340,16 +1344,17 @@ document.write(`
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a list of max differences DataFrames into a singular DataFrame</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        maxdiff_dfs: List[DataFrame]</span>
+<span class="sd">        maxdiff_dfs: list of pandas.DataFrame</span>
 <span class="sd">            A list of max_differences DataFrames returned by CAS</span>
-<span class="sd">        datarole : string, optional</span>
+<span class="sd">        datarole : str, optional</span>
 <span class="sd">            The data being used to assess bias (i.e. &#39;TEST&#39;, &#39;VALIDATION&#39;, etc.). Default is &#39;TEST.&#39;</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        DataFrame</span>
+<span class="sd">        pandas.DataFrame</span>
 <span class="sd">            A singluar DataFrame containing all max differences data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">maxdiff_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">maxdiff_dfs</span><span class="p">)</span>
@@ -1377,24 +1382,27 @@ document.write(`
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts list of group metrics DataFrames to a single DataFrame</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        groupmetrics_dfs: List[DataFrame]</span>
+<span class="sd">        groupmetrics_dfs: list of pandas.DataFrame</span>
 <span class="sd">            List of group metrics DataFrames generated by CASAction</span>
-<span class="sd">        pred_values : string, required for regression problems, otherwise not used</span>
+<span class="sd">        pred_values : str</span>
+<span class="sd">            Required for regression problems, otherwise not used.</span>
 <span class="sd">            Variable name containing the predicted values in score_table. The variable name must follow SAS naming</span>
 <span class="sd">            conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.</span>
 <span class="sd">            The default value is None.</span>
-<span class="sd">        prob_values : list of strings, required for classification problems, otherwise not used</span>
-<span class="sd">           A list of variable names containing the predicted probability values in the score table. The first element</span>
-<span class="sd">           should represent the predicted probability of the target class. Required for classification problems. Default</span>
-<span class="sd">           is None.</span>
-<span class="sd">        datarole : string, optional</span>
-<span class="sd">            The data being used to assess bias (i.e. &#39;TEST&#39;, &#39;VALIDATION&#39;, etc.). Default is &#39;TEST.&#39;</span>
+<span class="sd">        prob_values : list of str</span>
+<span class="sd">            Required for classification problems, otherwise not used</span>
+<span class="sd">            A list of variable names containing the predicted probability values in the score table. The first element</span>
+<span class="sd">            should represent the predicted probability of the target class. Required for classification problems. Default</span>
+<span class="sd">            is None.</span>
+<span class="sd">        datarole : str, optional</span>
+<span class="sd">            The data being used to assess bias (i.e. &#39;TEST&#39;, &#39;VALIDATION&#39;, etc.). Default is &#39;TEST&#39;.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        DataFrame</span>
+<span class="sd">        pandas.DataFrame</span>
 <span class="sd">            A singular DataFrame containing formatted data for group metrics</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># adding group metrics dataframes and adding values/ formatting</span>
@@ -1455,33 +1463,37 @@ document.write(`
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Properly formats data from FairAITools CAS Action Set into a JSON readable formats</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        groupmetrics: DataFrame</span>
+<span class="sd">        groupmetrics: pandas.DataFrame</span>
 <span class="sd">            A DataFrame containing the group metrics data</span>
-<span class="sd">        maxdifference: DataFrame</span>
+<span class="sd">        maxdifference: pandas.DataFrame</span>
 <span class="sd">            A DataFrame containing the max difference data</span>
 <span class="sd">        n_sensitivevariables: int</span>
 <span class="sd">            The total number of sensitive values</span>
-<span class="sd">        actual_values : String</span>
+<span class="sd">        actual_values : str</span>
 <span class="sd">            Variable name containing the actual values in score_table. The variable name must follow SAS naming</span>
 <span class="sd">            conventions (no spaces and the name cannot begin with a number or symbol).</span>
-<span class="sd">        prob_values : list of strings, required for classification problems, otherwise not used</span>
-<span class="sd">           A list of variable names containing the predicted probability values in the score table. The first element</span>
-<span class="sd">           should represent the predicted probability of the target class. Required for classification problems. Default</span>
-<span class="sd">           is None.</span>
-<span class="sd">        levels: List of strings, required for classification problems, otherwise not used</span>
-<span class="sd">            List of classes of a nominal target in the order they were passed in prob_values. Levels must be passed as a</span>
+<span class="sd">        prob_values : list of str</span>
+<span class="sd">            Required for classification problems, otherwise not used</span>
+<span class="sd">            A list of variable names containing the predicted probability values in the score table. The first element</span>
+<span class="sd">            should represent the predicted probability of the target class. Required for classification problems. Default</span>
+<span class="sd">            is None.</span>
+<span class="sd">        levels: list of str</span>
+<span class="sd">            Required for classification problems, otherwise not used</span>
+<span class="sd">            List of classes of a nominal target in the order they were passed in `prob_values`. Levels must be passed as a</span>
 <span class="sd">            string. Default is None.</span>
-<span class="sd">        pred_values : string, required for regression problems, otherwise not used</span>
-<span class="sd">            Variable name containing the predicted values in score_table. The variable name must follow SAS naming</span>
-<span class="sd">            conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.</span>
+<span class="sd">        pred_values : str</span>
+<span class="sd">            Required for regression problems, otherwise not used</span>
+<span class="sd">            Variable name containing the predicted values in `score_table`. The variable name must follow SAS naming</span>
+<span class="sd">            conventions (no spaces and the name cannot begin with a number or symbol). Required for regression problems.</span>
 <span class="sd">            The default value is None.</span>
-<span class="sd">        json_path : str or Path, optional</span>
+<span class="sd">        json_path : str or pathlib.Path, optional</span>
 <span class="sd">            Location for the output JSON files. If a path is passed, the json files will populate in the directory and</span>
 <span class="sd">            the function will return None, unless return_dataframes is True. Otherwise, the function will return the json</span>
-<span class="sd">             strings in a dictionary (dict[&quot;maxDifferences.json&quot;] and dict[&quot;groupMetrics.json&quot;]). The default value is</span>
-<span class="sd">             None.</span>
+<span class="sd">            strings in a dictionary (dict[&quot;maxDifferences.json&quot;] and dict[&quot;groupMetrics.json&quot;]). The default value is</span>
+<span class="sd">            None.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1572,9 +1584,9 @@ document.write(`
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">target_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
         <span class="n">prob_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">validate_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">train_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">test_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">validate_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">train_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">test_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">json_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">target_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
         <span class="n">cutoff</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1595,10 +1607,11 @@ document.write(`
 
 <span class="sd">        Datasets can be provided in the following forms, with the assumption that data</span>
 <span class="sd">        is ordered as `actual`, `predict`, and `probability` respectively:</span>
+
 <span class="sd">        * pandas dataframe: the actual and predicted values are their own columns</span>
-<span class="sd">        * numpy array: the actual and predicted values are their own columns or rows and</span>
-<span class="sd">        ordered such that the actual values come first and the predicted second</span>
 <span class="sd">        * list: the actual and predicted values are their own indexed entry</span>
+<span class="sd">        * numpy array: the actual and predicted values are their own columns or rows \</span>
+<span class="sd">        and ordered such that the actual values come first and the predicted second</span>
 
 <span class="sd">        If a json_path is supplied, then this function outputs a set of JSON files named</span>
 <span class="sd">        &quot;dmcas_fitstat.json&quot;, &quot;dmcas_roc.json&quot;, &quot;dmcas_lift.json&quot;.</span>
@@ -1610,13 +1623,13 @@ document.write(`
 <span class="sd">        prob_value : int or float, optional</span>
 <span class="sd">            The threshold value for model predictions to indicate an event occurred. The</span>
 <span class="sd">            default value is 0.5.</span>
-<span class="sd">        validate_data : pandas.DataFrame, list of list, or numpy array, optional</span>
+<span class="sd">        validate_data : pandas.DataFrame, list of list, or numpy.ndarray, optional</span>
 <span class="sd">            Dataset pertaining to the validation data. The default value is None.</span>
-<span class="sd">        train_data : pandas.DataFrame, list of list, or numpy array, optional</span>
+<span class="sd">        train_data : pandas.DataFrame, list of list, or numpy.ndarray, optional</span>
 <span class="sd">            Dataset pertaining to the training data. The default value is None.</span>
-<span class="sd">        test_data : pandas.DataFrame, list of list, or numpy array, optional</span>
+<span class="sd">        test_data : pandas.DataFrame, list of list, or numpy.ndarray, optional</span>
 <span class="sd">            Dataset pertaining to the test data. The default value is None.</span>
-<span class="sd">        json_path : str or Path, optional</span>
+<span class="sd">        json_path : str or pathlib.Path, optional</span>
 <span class="sd">            Location for the output JSON files. The default value is None.</span>
 <span class="sd">        target_type: str, optional</span>
 <span class="sd">            Type of target the model is trying to find. Currently supports &quot;classification&quot;</span>
@@ -1753,20 +1766,20 @@ document.write(`
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.check_for_data">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">check_for_data</span><span class="p">(</span>
-        <span class="n">validate</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">train</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">test</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">validate</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">train</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">test</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check which datasets were provided and return a list of flags.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        validate : pandas.DataFrame, list of list, or numpy array, optional</span>
+<span class="sd">        validate : pandas.DataFrame, list of list, or numpy.ndarray, optional</span>
 <span class="sd">            Dataset pertaining to the validation data. The default value is None.</span>
-<span class="sd">        train : pandas.DataFrame, list of list, or numpy array, optional</span>
+<span class="sd">        train : pandas.DataFrame, list of list, or numpy.ndarray, optional</span>
 <span class="sd">            Dataset pertaining to the training data. The default value is None.</span>
-<span class="sd">        test : pandas.DataFrame, list of list, or numpy array, optional</span>
+<span class="sd">        test : pandas.DataFrame, list of list, or numpy.ndarray, optional</span>
 <span class="sd">            Dataset pertaining to the test data. The default value is None.</span>
 
 <span class="sd">        Returns</span>
@@ -1797,7 +1810,7 @@ document.write(`
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.stat_dataset_to_dataframe">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">stat_dataset_to_dataframe</span><span class="p">(</span>
-        <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.array&quot;</span><span class="p">]],</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]],</span>
         <span class="n">target_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">target_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
@@ -1813,7 +1826,7 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        data : pandas.DataFrame, list of list, or numpy array</span>
+<span class="sd">        data : pandas.DataFrame, list of list, or numpy.ndarray</span>
 <span class="sd">            Dataset representing the actual and predicted values of the model. May also</span>
 <span class="sd">            include the prediction probabilities.</span>
 <span class="sd">        target_value : str, int, or float, optional</span>
@@ -1832,13 +1845,6 @@ document.write(`
 <span class="sd">            Raised if an improper data format is provided.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># If numpy inputs are supplied, then assume numpy is installed</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># noinspection PyPackageRequirements</span>
-            <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="n">np</span> <span class="o">=</span> <span class="kc">None</span>
-
         <span class="c1"># Convert target_value to numeric for creating binary probabilities</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">target_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">target_value</span><span class="p">)</span>
@@ -1931,7 +1937,7 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        path : str or Path</span>
+<span class="sd">        path : str or pathlib.Path</span>
 <span class="sd">            Location of the JSON file to be opened.</span>
 
 <span class="sd">        Returns</span>
@@ -2048,9 +2054,9 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        model_path : str or Path, optional</span>
+<span class="sd">        model_path : str or pathlib.Path, optional</span>
 <span class="sd">            The path to a Python project, by default the current working directory.</span>
-<span class="sd">        output_path : str or Path, optional</span>
+<span class="sd">        output_path : str or pathlib.Path, optional</span>
 <span class="sd">            The path for the output requirements.json file. The default value is None.</span>
 
 <span class="sd">        Returns</span>
@@ -2175,7 +2181,7 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        model_path : string or Path, optional</span>
+<span class="sd">        model_path : str or pathlib.Path, optional</span>
 <span class="sd">            File location for the output JSON file. The default value is the current</span>
 <span class="sd">            working directory.</span>
 
@@ -2205,7 +2211,7 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        file_path : str or Path</span>
+<span class="sd">        file_path : str or pathlib.Path</span>
 <span class="sd">            File location for the Python file to be parsed.</span>
 
 <span class="sd">        Returns</span>
@@ -2246,13 +2252,13 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        pickle_folder : str or Path</span>
+<span class="sd">        pickle_folder : str or pathlib.Path</span>
 <span class="sd">            File location for the input pickle file. The default value is the current</span>
 <span class="sd">            working directory.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        list of Path</span>
+<span class="sd">        list of pathlib.Path</span>
 <span class="sd">            A list of pickle files.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span>
@@ -2271,7 +2277,7 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        pickle_file : str or Path</span>
+<span class="sd">        pickle_file : str or pathlib.Path</span>
 <span class="sd">            The file where you stored pickle data.</span>
 
 <span class="sd">        Returns</span>
@@ -2301,9 +2307,10 @@ document.write(`
 
 <span class="sd">        This code has been adapted from the following stackoverflow example and</span>
 <span class="sd">        utilizes the pickletools package.</span>
+
 <span class="sd">        Credit: modified from</span>
-<span class="sd">        https://stackoverflow.com/questions/64850179/inspecting-a-pickle-dump-for</span>
-<span class="sd">        -dependencies</span>
+<span class="sd">        https://stackoverflow.com/questions/64850179/inspecting-a-pickle-dump-for-dependencies</span>
+
 <span class="sd">        More information here:</span>
 <span class="sd">        https://github.com/python/cpython/blob/main/Lib/pickletools.py</span>
 
@@ -2314,7 +2321,7 @@ document.write(`
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List of str</span>
+<span class="sd">        list of str</span>
 <span class="sd">            List of package names found as module dependencies in the pickle file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Collect opcodes, arguments, and position values from the pickle stream</span>

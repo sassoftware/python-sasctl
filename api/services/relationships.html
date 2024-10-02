@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.services.relationships &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.services.relationships &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/relationships';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.services.projects" href="projects.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -394,76 +394,16 @@ contains a subject resource, the related resource, and the relationship
 type.  A relationship type describes the nature of the relationship between
 two resources. The relationship type includes a name, label, and
 description.</p>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a DELETE request.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.relationships.Relationships.delete_relationship" title="sasctl._services.relationships.Relationships.delete_relationship"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_relationship</span></code></a>(item)</p></td>
-<td><p>Delete a relationship instance.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a GET request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link</span></code>(obj, rel)</p></td>
-<td><p>Get link information from a resource.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.relationships.Relationships.get_relationship" title="sasctl._services.relationships.Relationships.get_relationship"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_relationship</span></code></a>(item[, refresh])</p></td>
-<td><p>Return a relationship instance.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">head</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a HEAD request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code>()</p></td>
-<td><p>Version and build information for the service.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_available</span></code>()</p></td>
-<td><p>Check if the service is currently available.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.relationships.Relationships.list_relationships" title="sasctl._services.relationships.Relationships.list_relationships"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_relationships</span></code></a>([filter, start, limit])</p></td>
-<td><p>List all relationships available in the environment.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a POST request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">put</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a PUT request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request</span></code>(verb, path[, session, format_])</p></td>
-<td><p>Send an HTTP request with a session.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_link</span></code>(obj, rel, **kwargs)</p></td>
-<td><p>Request a link from a resource.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.relationships.Relationships.update_relationship" title="sasctl._services.relationships.Relationships.update_relationship"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_relationship</span></code></a>(item)</p></td>
-<td><p>Update a relationship instance.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>is_uuid</strong></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.relationships.Relationships.delete_relationship">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_relationship</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sasctl._services.relationships.Relationships.delete_relationship" title="Link to this definition">#</a></dt>
 <dd><p>Delete a relationship instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>item</strong></dt><dd></dd>
-</dl>
+<dd class="field-odd"><p><strong>item</strong></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>None</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>None</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -474,18 +414,13 @@ description.</p>
 <dd><p>Return a relationship instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>item</strong><span class="classifier">str or dict</span></dt><dd><p>Name, ID, or dictionary representation of the relationship.</p>
-</dd>
-<dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Obtain an updated copy of the relationship.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Name, ID, or dictionary representation of the relationship.</p></li>
+<li><p><strong>refresh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Obtain an updated copy of the relationship.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj or None</dt><dd><p>A dictionary containing the relationship attributes or None.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>RestObj or None</em> – A dictionary containing the relationship attributes or None.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -500,19 +435,14 @@ calls when data is already available on the client.</p>
 <dd><p>List all relationships available in the environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>filter</strong><span class="classifier">str, optional</span></dt><dd></dd>
-<dt><strong>start</strong><span class="classifier">int, optional</span></dt><dd><p>Zero-based index of the first item to return.  Defaults to 0.</p>
-</dd>
-<dt><strong>limit</strong><span class="classifier">int, optional</span></dt><dd><p>The maximum number of items to return.  Defaults to 20.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>)</p></li>
+<li><p><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Zero-based index of the first item to return.  Defaults to 0.</p></li>
+<li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The maximum number of items to return.  Defaults to 20.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>A list of dictionaries containing the relationships.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>list</em> – A list of dictionaries containing the relationships.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -525,14 +455,10 @@ calls when data is already available on the client.</p>
 <dd><p>Update a relationship instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>item</strong><span class="classifier">dict</span></dt><dd></dd>
-</dl>
+<dd class="field-odd"><p><strong>item</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>None</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>None</em></p>
 </dd>
 </dl>
 </dd></dl>

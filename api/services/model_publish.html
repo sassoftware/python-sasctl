@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.services.model_publish &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.services.model_publish &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/model_publish';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.services.model_management" href="model_management.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -392,100 +392,22 @@ document.write(`
 <p>Enables publishing objects such as models to various destinations.</p>
 <p>The service provides methods for managing publish destinations like CAS,
 Hadoop, Teradata, or SAS Micro Analytic Service</p>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.model_publish.ModelPublish.create_cas_destination" title="sasctl._services.model_publish.ModelPublish.create_cas_destination"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_cas_destination</span></code></a>(name, library, table)</p></td>
-<td><p>Define a new CAS publishing destination.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.model_publish.ModelPublish.create_destination" title="sasctl._services.model_publish.ModelPublish.create_destination"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_destination</span></code></a>(name, type_[, ...])</p></td>
-<td><p>Define a new publishing destination.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.model_publish.ModelPublish.create_mas_destination" title="sasctl._services.model_publish.ModelPublish.create_mas_destination"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_mas_destination</span></code></a>(name, uri[, description])</p></td>
-<td><p>Define a new Micro Analytic Server (MAS) publishing destination.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a DELETE request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.model_publish.ModelPublish.delete_destination" title="sasctl._services.model_publish.ModelPublish.delete_destination"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_destination</span></code></a>(item)</p></td>
-<td><p>Delete a destination instance.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a GET request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.model_publish.ModelPublish.get_destination" title="sasctl._services.model_publish.ModelPublish.get_destination"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_destination</span></code></a>(item[, refresh])</p></td>
-<td><p>Return a destination instance.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link</span></code>(obj, rel)</p></td>
-<td><p>Get link information from a resource.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">head</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a HEAD request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code>()</p></td>
-<td><p>Version and build information for the service.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_available</span></code>()</p></td>
-<td><p>Check if the service is currently available.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.model_publish.ModelPublish.list_destinations" title="sasctl._services.model_publish.ModelPublish.list_destinations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_destinations</span></code></a>([filter, start, limit])</p></td>
-<td><p>List all destinations available in the environment.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a POST request.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.model_publish.ModelPublish.publish_model" title="sasctl._services.model_publish.ModelPublish.publish_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">publish_model</span></code></a>(model, destination[, name, ...])</p></td>
-<td><p>Publish a model to an existing publishing destination.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">put</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a PUT request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request</span></code>(verb, path[, session, format_])</p></td>
-<td><p>Send an HTTP request with a session.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_link</span></code>(obj, rel, **kwargs)</p></td>
-<td><p>Request a link from a resource.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.model_publish.ModelPublish.update_destination" title="sasctl._services.model_publish.ModelPublish.update_destination"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_destination</span></code></a>(item)</p></td>
-<td><p>Update a destination instance.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>is_uuid</strong></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p><strong>list_models</strong></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.model_publish.ModelPublish.create_cas_destination">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_cas_destination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/model_publish.html#ModelPublish.create_cas_destination"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.model_publish.ModelPublish.create_cas_destination" title="Link to this definition">#</a></dt>
 <dd><p>Define a new CAS publishing destination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the publishing destination.</p>
-</dd>
-<dt><strong>library</strong><span class="classifier">str</span></dt><dd><p>The CAS library in which <cite>table</cite> will be stored.</p>
-</dd>
-<dt><strong>table</strong><span class="classifier">str</span></dt><dd><p>Name of the CAS table in which models will be stored.</p>
-</dd>
-<dt><strong>server</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the CAS server.  Defaults to ‘cas-shared-default’.</p>
-</dd>
-<dt><strong>description</strong><span class="classifier">str, optional</span></dt><dd><p>Description of the publishing destination.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the publishing destination.</p></li>
+<li><p><strong>library</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The CAS library in which <cite>table</cite> will be stored.</p></li>
+<li><p><strong>table</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the CAS table in which models will be stored.</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the CAS server.  Defaults to ‘cas-shared-default’.</p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Description of the publishing destination.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -496,38 +418,26 @@ Hadoop, Teradata, or SAS Micro Analytic Service</p>
 <dd><p>Define a new publishing destination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the publishing destination.</p>
-</dd>
-<dt><strong>type_</strong><span class="classifier">{‘cas’, ‘mas’, ‘hadoop’, ‘teradata’}</span></dt><dd><p>Type of publishing definition being created</p>
-</dd>
-<dt><strong>cas_server</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the CAS server.  Defaults to ‘cas-shared-default’.
-Required if <cite>type_</cite> is ‘cas’, otherwise ignored.</p>
-</dd>
-<dt><strong>cas_library</strong><span class="classifier">str, optional</span></dt><dd><p>The CAS library in which <cite>cas_table</cite> will be stored.  Required if
-<cite>type_</cite> is ‘cas’, otherwise ignored.</p>
-</dd>
-<dt><strong>cas_table</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the CAS table in which models will be stored.  Required
-if <cite>type_</cite> is ‘cas’, otherwise ignored.</p>
-</dd>
-<dt><strong>description</strong><span class="classifier">str, optional</span></dt><dd><p>Description of the publishing destination.</p>
-</dd>
-<dt><strong>mas_uri</strong><span class="classifier">str, optional</span></dt><dd><p>Required if <cite>type_</cite> is ‘mas’, otherwise ignored.</p>
-</dd>
-<dt><strong>hdfs_dir</strong><span class="classifier">str, optional</span></dt><dd><p>Required if <cite>type_</cite> is ‘hadoop’, otherwise ignored.</p>
-</dd>
-<dt><strong>conf_dir</strong><span class="classifier">str, optional</span></dt><dd><p>Required if <cite>type_</cite> is ‘hadoop’, otherwise ignored.</p>
-</dd>
-<dt><strong>user</strong><span class="classifier">str, optional</span></dt><dd><p>Required if <cite>type_</cite> is ‘hadoop’, otherwise ignored.</p>
-</dd>
-<dt><strong>database_library</strong><span class="classifier">str, optional</span></dt><dd><p>Required if <cite>type_</cite> is ‘teradata’, otherwise ignored.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the publishing destination.</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Choose from <code class="docutils literal notranslate"><span class="pre">{'cas',</span> <span class="pre">'mas',</span> <span class="pre">'hadoop',</span> <span class="pre">'teradata'}</span></code>
+Type of publishing definition being created</p></li>
+<li><p><strong>cas_server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the CAS server.  Defaults to ‘cas-shared-default’.
+Required if <cite>type_</cite> is ‘cas’, otherwise ignored.</p></li>
+<li><p><strong>cas_library</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The CAS library in which <cite>cas_table</cite> will be stored.  Required if
+<cite>type_</cite> is ‘cas’, otherwise ignored.</p></li>
+<li><p><strong>cas_table</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the CAS table in which models will be stored.  Required
+if <cite>type_</cite> is ‘cas’, otherwise ignored.</p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Description of the publishing destination.</p></li>
+<li><p><strong>mas_uri</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Required if <cite>type_</cite> is ‘mas’, otherwise ignored.</p></li>
+<li><p><strong>hdfs_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Required if <cite>type_</cite> is ‘hadoop’, otherwise ignored.</p></li>
+<li><p><strong>conf_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Required if <cite>type_</cite> is ‘hadoop’, otherwise ignored.</p></li>
+<li><p><strong>user</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Required if <cite>type_</cite> is ‘hadoop’, otherwise ignored.</p></li>
+<li><p><strong>database_library</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Required if <cite>type_</cite> is ‘teradata’, otherwise ignored.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -538,21 +448,16 @@ if <cite>type_</cite> is ‘cas’, otherwise ignored.</p>
 <dd><p>Define a new Micro Analytic Server (MAS) publishing destination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the publishing destination.</p>
-</dd>
-<dt><strong>uri</strong><span class="classifier">str</span></dt><dd><p>The base URI that contains the host, the protocol, and optionally
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the publishing destination.</p></li>
+<li><p><strong>uri</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The base URI that contains the host, the protocol, and optionally
 the port, which addresses the remote SAS Micro Analytic Service to
-use.  Example: <a class="reference external" href="http://spam.com">http://spam.com</a></p>
-</dd>
-<dt><strong>description</strong><span class="classifier">str, optional</span></dt><dd><p>Description of the publishing destination.</p>
-</dd>
-</dl>
+use.  Example: <a class="reference external" href="http://spam.com">http://spam.com</a></p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Description of the publishing destination.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -563,15 +468,10 @@ use.  Example: <a class="reference external" href="http://spam.com">http://spam.
 <dd><p>Delete a destination instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>item</strong><span class="classifier">str or dict</span></dt><dd><p>Name or dictionary representation of publishing destination.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>item</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Name or dictionary representation of publishing destination.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>None</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>None</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -582,18 +482,13 @@ use.  Example: <a class="reference external" href="http://spam.com">http://spam.
 <dd><p>Return a destination instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>item</strong><span class="classifier">str or dict</span></dt><dd><p>Name, ID, or dictionary representation of the destination.</p>
-</dd>
-<dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Obtain an updated copy of the destination.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Name, ID, or dictionary representation of the destination.</p></li>
+<li><p><strong>refresh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Obtain an updated copy of the destination.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj or None</dt><dd><p>A dictionary containing the destination attributes or None.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>RestObj or None</em> – A dictionary containing the destination attributes or None.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -608,19 +503,14 @@ calls when data is already available on the client.</p>
 <dd><p>List all destinations available in the environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>filter</strong><span class="classifier">str, optional</span></dt><dd></dd>
-<dt><strong>start</strong><span class="classifier">int, optional</span></dt><dd><p>Zero-based index of the first item to return.  Defaults to 0.</p>
-</dd>
-<dt><strong>limit</strong><span class="classifier">int, optional</span></dt><dd><p>The maximum number of items to return.  Defaults to 20.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>)</p></li>
+<li><p><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Zero-based index of the first item to return.  Defaults to 0.</p></li>
+<li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The maximum number of items to return.  Defaults to 20.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>A list of dictionaries containing the destinations.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>list</em> – A list of dictionaries containing the destinations.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -638,22 +528,16 @@ calls when data is already available on the client.</p>
 <dd><p>Publish a model to an existing publishing destination.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>model</strong><span class="classifier">str or dict</span></dt><dd><p>The name or id of the model, or a dictionary representation of
-the model.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – The name or id of the model, or a dictionary representation of
+the model.</p></li>
+<li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – The name or id of the publishing destination, or a dictionary
+representation of the destination</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the published model.  Defaults to the model name.</p></li>
+<li><p><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The code to be published.</p></li>
+<li><p><strong>notes</strong></p></li>
+</ul>
 </dd>
-<dt><strong>destination</strong><span class="classifier">str or dict</span></dt><dd><p>The name or id of the publishing destination, or a dictionary
-representation of the destination</p>
-</dd>
-<dt><strong>name</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the published model.  Defaults to the model name.</p>
-</dd>
-<dt><strong>code</strong><span class="classifier">str, optional</span></dt><dd><p>The code to be published.</p>
-</dd>
-<dt><strong>notes</strong></dt><dd></dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"></dd>
 </dl>
 </dd></dl>
 
@@ -663,14 +547,10 @@ representation of the destination</p>
 <dd><p>Update a destination instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>item</strong><span class="classifier">dict</span></dt><dd></dd>
-</dl>
+<dd class="field-odd"><p><strong>item</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>None</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>None</em></p>
 </dd>
 </dl>
 </dd></dl>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.services.report_images &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.services.report_images &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/report_images';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.services.relationships" href="relationships.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -209,6 +209,10 @@ document.write(`
     </div>
   
 
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
   
 </div>
 
@@ -380,6 +384,119 @@ document.write(`
                   
   <section id="module-sasctl._services.report_images">
 <span id="sasctl-services-report-images"></span><h1>sasctl.services.report_images<a class="headerlink" href="#module-sasctl._services.report_images" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="sasctl._services.report_images.ReportImages">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl._services.report_images.</span></span><span class="sig-name descname"><span class="pre">ReportImages</span></span><a class="reference internal" href="../../_modules/sasctl/_services/report_images.html#ReportImages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.report_images.ReportImages" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></p>
+<p>Delivers SVG images representing elements of a report.</p>
+<p>The images are suitable to the current user, taking row-level-permissions
+and other factors into consideration.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://developer.sas.com/apis/rest/Visualization/#report-images">REST Documentation</a></p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sasctl._services.report_images.ReportImages.LOD_HIGH">
+<span class="sig-name descname"><span class="pre">LOD_HIGH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#sasctl._services.report_images.ReportImages.LOD_HIGH" title="Link to this definition">#</a></dt>
+<dd><p>Renders all of the components of content.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sasctl._services.report_images.ReportImages.LOD_LOW">
+<span class="sig-name descname"><span class="pre">LOD_LOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#sasctl._services.report_images.ReportImages.LOD_LOW" title="Link to this definition">#</a></dt>
+<dd><p>Renders the content with minimal details for creating thumbnails.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sasctl._services.report_images.ReportImages.LOD_MEDIUM">
+<span class="sig-name descname"><span class="pre">LOD_MEDIUM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#sasctl._services.report_images.ReportImages.LOD_MEDIUM" title="Link to this definition">#</a></dt>
+<dd><p>Renders the primary components of the content.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sasctl._services.report_images.ReportImages.get_images">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/report_images.html#ReportImages.get_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.report_images.ReportImages.get_images" title="Link to this definition">#</a></dt>
+<dd><p>Render images of reports or report sections.</p>
+<p>Report contents are sized and arranged dynamically to accommodate
+browser viewing.  Some or all of these contents may be rendered at any
+time to produce an SVG image of the desired size.  A rendering job will
+automatically be created and the resulting images returned upon job
+completion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>report</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><em>RestObj</em></a>) – Report to retrieve images from specified as either a URI or a
+<cite>RestObj</cite> instance as returned from <cite>reports.get_report</cite>.</p></li>
+<li><p><strong>section</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – A specific report section to retrieve, specified by a zero-based
+index.  If not specified, all sections will be returned as separate
+images.</p></li>
+<li><p><strong>elements</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Iterable of tuples containing the element name and the size of the
+element when rendered.</p></li>
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – Size (in pixels) of the resulting images.  Ignored if <cite>elements</cite> is
+specified.</p></li>
+<li><p><strong>lod</strong> (<cite>LOD</cite>, optional) – Level of detail of the rendered image(s).  Defaults to LOD.HIGH.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>List[bytes]</em> – List of binary strings, each representing one SVG image.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Render a single element of a report</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sasctl.services</span> <span class="kn">import</span> <span class="n">reports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">reports</span><span class="o">.</span><span class="n">get_report</span><span class="p">(</span><span class="s1">&#39;Parrot Status&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report_images</span><span class="o">.</span><span class="n">get_images</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">elements</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;Norwegian Blue&#39;</span><span class="p">,</span> <span class="s1">&#39;640x480&#39;</span><span class="p">))</span>
+<span class="go">[b&#39;&lt;svg&gt;beautiful_plummage&lt;/svg&gt;&#39;]</span>
+</pre></div>
+</div>
+<p>Render each page of the report</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sasctl.services</span> <span class="kn">import</span> <span class="n">reports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">reports</span><span class="o">.</span><span class="n">get_report</span><span class="p">(</span><span class="s1">&#39;Parrot Status&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report_images</span><span class="o">.</span><span class="n">get_images</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+<span class="go">[b&#39;&lt;svg&gt;Customer Complaints&lt;/svg&gt;&#39;, b&#39;&lt;svg&gt;Deceased&lt;/svg&gt;&#39;]</span>
+</pre></div>
+</div>
+<p>Render the 2nd page of a report</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sasctl.services</span> <span class="kn">import</span> <span class="n">reports</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">reports</span><span class="o">.</span><span class="n">get_report</span><span class="p">(</span><span class="s1">&#39;Parrot Status&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report_images</span><span class="o">.</span><span class="n">get_images</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">[b&#39;&lt;svg&gt;Deceased&lt;/svg&gt;&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sasctl._services.report_images.ReportImages.get_images_async">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_images_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/report_images.html#ReportImages.get_images_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.report_images.ReportImages.get_images_async" title="Link to this definition">#</a></dt>
+<dd><p>Create a job to render images of reports or report sections.</p>
+<p>Report contents are sized and arranged dynamically to accommodate
+browser viewing.  Some or all of these contents may be rendered at any
+time to produce an SVG image of the desired size.  This is done by
+creating a render job which will create the requested images and return
+their download links.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>report</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><em>RestObj</em></a>) – Report to retrieve images from specified as either a URI or a
+<cite>RestObj</cite> instance as returned from <cite>reports.get_report</cite>.</p></li>
+<li><p><strong>section</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – A specific report section to retrieve, specified by a zero-based
+index.  If not specified, all sections will be returned as separate
+images.</p></li>
+<li><p><strong>elements</strong> (<em>List</em><em>[</em><em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Iterable of tuples containing the element name and the size of the
+element when rendered.</p></li>
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><em>Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – Size (in pixels) of the resulting images.  Ignored if <cite>elements</cite> is
+specified.</p></li>
+<li><p><strong>lod</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Level of detail of the rendered image(s).  Defaults to HIGH.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>RestObj</em> – The render job</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -416,6 +533,30 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl._services.report_images.ReportImages"><code class="docutils literal notranslate"><span class="pre">ReportImages</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl._services.report_images.ReportImages.LOD_HIGH"><code class="docutils literal notranslate"><span class="pre">ReportImages.LOD_HIGH</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl._services.report_images.ReportImages.LOD_LOW"><code class="docutils literal notranslate"><span class="pre">ReportImages.LOD_LOW</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl._services.report_images.ReportImages.LOD_MEDIUM"><code class="docutils literal notranslate"><span class="pre">ReportImages.LOD_MEDIUM</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl._services.report_images.ReportImages.get_images"><code class="docutils literal notranslate"><span class="pre">ReportImages.get_images()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl._services.report_images.ReportImages.get_images_async"><code class="docutils literal notranslate"><span class="pre">ReportImages.get_images_async()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.services.cas_management &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.services.cas_management &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/cas_management';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.services package" href="../sasctl.services.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -390,114 +390,23 @@ document.write(`
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Service</span></code></p>
 <p>The CAS Management service provides the ability to manage and perform
 actions on common resources as they relate to Cloud Analytic Services (CAS).</p>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.create_session" title="sasctl._services.cas_management.CASManagement.create_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_session</span></code></a>(properties[, server])</p></td>
-<td><p>Creates a new session on the CAS server.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.del_table" title="sasctl._services.cas_management.CASManagement.del_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">del_table</span></code></a>(name[, query_params, caslib, server])</p></td>
-<td><p>Deletes a table from Caslib source.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a DELETE request.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.delete_session" title="sasctl._services.cas_management.CASManagement.delete_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_session</span></code></a>(sess_id[, server, query_params])</p></td>
-<td><p>Terminates a session on the CAS server.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a GET request.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.get_caslib" title="sasctl._services.cas_management.CASManagement.get_caslib"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_caslib</span></code></a>(name[, server])</p></td>
-<td><p>Get a caslib by name.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link</span></code>(obj, rel)</p></td>
-<td><p>Get link information from a resource.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.get_server" title="sasctl._services.cas_management.CASManagement.get_server"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_server</span></code></a>(item[, refresh])</p></td>
-<td><p>Return a server instance.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.get_table" title="sasctl._services.cas_management.CASManagement.get_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table</span></code></a>(name[, caslib, server])</p></td>
-<td><p>Get a table by name.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">head</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a HEAD request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code>()</p></td>
-<td><p>Version and build information for the service.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_available</span></code>()</p></td>
-<td><p>Check if the service is currently available.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.list_caslibs" title="sasctl._services.cas_management.CASManagement.list_caslibs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_caslibs</span></code></a>(server[, filter_])</p></td>
-<td><p>List caslibs available on a server.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.list_servers" title="sasctl._services.cas_management.CASManagement.list_servers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_servers</span></code></a>([filter, start, limit])</p></td>
-<td><p>List all servers available in the environment.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.list_sessions" title="sasctl._services.cas_management.CASManagement.list_sessions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_sessions</span></code></a>([query_params, server])</p></td>
-<td><p>Returns a collection of sessions available on the CAS server.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.list_tables" title="sasctl._services.cas_management.CASManagement.list_tables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_tables</span></code></a>(caslib[, server, filter_])</p></td>
-<td><p>List tables available in a caslib.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a POST request.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.promote_table" title="sasctl._services.cas_management.CASManagement.promote_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">promote_table</span></code></a>(name, sess_id, caslib[, server])</p></td>
-<td><p>Changes the scope of a loaded CAS table from session to global scope.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">put</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a PUT request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request</span></code>(verb, path[, session, format_])</p></td>
-<td><p>Send an HTTP request with a session.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_link</span></code>(obj, rel, **kwargs)</p></td>
-<td><p>Request a link from a resource.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.save_table" title="sasctl._services.cas_management.CASManagement.save_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_table</span></code></a>(name, caslib[, properties, ...])</p></td>
-<td><p>Saves a CAS table to a source table</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.update_state_table" title="sasctl._services.cas_management.CASManagement.update_state_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_state_table</span></code></a>(value, name[, caslib, ...])</p></td>
-<td><p>Modifies the state of a table to loaded or unloaded.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.cas_management.CASManagement.upload_file" title="sasctl._services.cas_management.CASManagement.upload_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">upload_file</span></code></a>(file, name[, caslib, server, ...])</p></td>
-<td><p>Upload a file to a CAS table.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>is_uuid</strong></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.cas_management.CASManagement.create_session">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/cas_management.html#CASManagement.create_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.cas_management.CASManagement.create_session" title="Link to this definition">#</a></dt>
 <dd><p>Creates a new session on the CAS server.</p>
-<section id="parameters">
-<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
-<dl class="simple">
-<dt>properties<span class="classifier">dict</span></dt><dd><p>Properties of the session.
-Valid keys are <cite>authenticationType</cite> (required),
-<cite>locale</cite>, <cite>name</cite>, <cite>nodeCount</cite>, <cite>timeOut</cite>.</p>
-</dd>
-<dt>server<span class="classifier">str</span></dt><dd><p>Name of the CAS server.  Defaults to ‘cas-shared-default’.</p>
-</dd>
-</dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>properties</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Properties of the session.
+Valid keys are <cite>authenticationType</cite> (required),
+<cite>locale</cite>, <cite>name</cite>, <cite>nodeCount</cite>, <cite>timeOut</cite>.</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the CAS server.  Defaults to ‘cas-shared-default’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>RestObj</em></p>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py method">
@@ -508,25 +417,22 @@ This operation physically removes the source table (if the source is writable).
 For path-based caslibs, this physically removes the file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the table.</p>
-</dd>
-<dt><strong>query_params</strong><span class="classifier">dict</span></dt><dd><p>Query parameters.
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the table.</p></li>
+<li><p><strong>query_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Query parameters.
 The allowed query parameters are <cite>sessionId</cite>,
 <cite>sourceTableName</cite>, <cite>quiet</cite>, <cite>removeAcs</cite>.
-Note that the last three are required.</p>
-</dd>
-<dt><strong>caslib</strong><span class="classifier">str</span></dt><dd><p>Name of the caslib. Defaults to ‘Public’</p>
-</dd>
-<dt><strong>server</strong><span class="classifier">str</span></dt><dd><p>Server where the <cite>caslib</cite> is registered.
-Defaults to ‘cas-shared-default’.</p>
-</dd>
-</dl>
+Note that the last three are required.</p></li>
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the caslib. Defaults to ‘Public’</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Server where the <cite>caslib</cite> is registered.
+Defaults to ‘cas-shared-default’.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – If <cite>query_params</cite> is empty</p>
 </dd>
 </dl>
 </dd></dl>
@@ -535,25 +441,19 @@ Defaults to ‘cas-shared-default’.</p>
 <dt class="sig sig-object py" id="sasctl._services.cas_management.CASManagement.delete_session">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sess_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/cas_management.html#CASManagement.delete_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.cas_management.CASManagement.delete_session" title="Link to this definition">#</a></dt>
 <dd><p>Terminates a session on the CAS server.</p>
-<section id="id1">
-<h2>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
-<dl class="simple">
-<dt>sess_id<span class="classifier">str</span></dt><dd><p>A string indicating the Session id.</p>
-</dd>
-<dt>server<span class="classifier">str</span></dt><dd><p>Name of the CAS server.  Defaults to ‘cas-shared-default’.</p>
-</dd>
-<dt>query_params<span class="classifier">dict, optional</span></dt><dd><p>Query parameters.
-Valid keys are <cite>force</cite>, <cite>superUserSessionId</cite>.</p>
-</dd>
-</dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sess_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – A string indicating the Session id.</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the CAS server.  Defaults to ‘cas-shared-default’.</p></li>
+<li><p><strong>query_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Query parameters.
+Valid keys are <cite>force</cite>, <cite>superUserSessionId</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>RestObj</em></p>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py method">
@@ -562,17 +462,13 @@ Valid keys are <cite>force</cite>, <cite>superUserSessionId</cite>.</p>
 <dd><p>Get a caslib by name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the caslib</p>
-</dd>
-<dt><strong>server</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the CAS server. Defaults to ‘cas-shared-default’.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the caslib</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the CAS server. Defaults to ‘cas-shared-default’.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj or None</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -583,18 +479,13 @@ Valid keys are <cite>force</cite>, <cite>superUserSessionId</cite>.</p>
 <dd><p>Return a server instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>item</strong><span class="classifier">str or dict</span></dt><dd><p>Name, ID, or dictionary representation of the server.</p>
-</dd>
-<dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Obtain an updated copy of the server.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Name, ID, or dictionary representation of the server.</p></li>
+<li><p><strong>refresh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Obtain an updated copy of the server.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj or None</dt><dd><p>A dictionary containing the server attributes or None.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>RestObj or None</em> – A dictionary containing the server attributes or None.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -609,20 +500,15 @@ calls when data is already available on the client.</p>
 <dd><p>Get a table by name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the table.</p>
-</dd>
-<dt><strong>caslib</strong><span class="classifier">str or dict, optional</span></dt><dd><p>Name, ID, or dictionary representation of the caslib.  Defaults to
-CASUSER.</p>
-</dd>
-<dt><strong>server</strong><span class="classifier">str, optional</span></dt><dd><p>Server where the <cite>caslib</cite> is registered.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the table.</p></li>
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Name, ID, or dictionary representation of the caslib.  Defaults to
+CASUSER.</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Server where the <cite>caslib</cite> is registered.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj or None</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -633,19 +519,14 @@ CASUSER.</p>
 <dd><p>List caslibs available on a server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>server</strong><span class="classifier">str or dict</span></dt><dd><p>Name, ID, or dictionary representation of the server.</p>
-</dd>
-<dt><strong>filter_</strong><span class="classifier">str, optional</span></dt><dd><p>A <a class="reference external" href="https://developer.sas.com/reference/filtering">formatted</a>
-filter string.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Name, ID, or dictionary representation of the server.</p></li>
+<li><p><strong>filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – A <a class="reference external" href="https://developer.sas.com/reference/filtering">formatted</a>
+filter string.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>A collection of <a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> instances.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>list</em> – A collection of <a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> instances.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -656,19 +537,14 @@ filter string.</p>
 <dd><p>List all servers available in the environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>filter</strong><span class="classifier">str, optional</span></dt><dd></dd>
-<dt><strong>start</strong><span class="classifier">int, optional</span></dt><dd><p>Zero-based index of the first item to return.  Defaults to 0.</p>
-</dd>
-<dt><strong>limit</strong><span class="classifier">int, optional</span></dt><dd><p>The maximum number of items to return.  Defaults to 20.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>)</p></li>
+<li><p><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Zero-based index of the first item to return.  Defaults to 0.</p></li>
+<li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The maximum number of items to return.  Defaults to 20.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>A list of dictionaries containing the servers.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>list</em> – A list of dictionaries containing the servers.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -679,25 +555,19 @@ filter string.</p>
 <dt class="sig sig-object py" id="sasctl._services.cas_management.CASManagement.list_sessions">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list_sessions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/cas_management.html#CASManagement.list_sessions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.cas_management.CASManagement.list_sessions" title="Link to this definition">#</a></dt>
 <dd><p>Returns a collection of sessions available on the CAS server.</p>
-<section id="id2">
-<h2>Parameters<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
-<dl class="simple">
-<dt>query_params<span class="classifier">dict, optional</span></dt><dd><p>Query parameters.
-Valid keys are <cite>start</cite>, <cite>limit</cite>, <cite>filter</cite>,
-<cite>sortBy</cite>, <cite>excludeItemLink</cite>, <cite>sessionId</cite>.</p>
-</dd>
-<dt>server<span class="classifier">str, optional</span></dt><dd><p>Name of the CAS server. Defaults to ‘cas-shared-default’.</p>
-</dd>
-</dl>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>list</dt><dd><p>A collection of <a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> instances.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Query parameters.
+Valid keys are <cite>start</cite>, <cite>limit</cite>, <cite>filter</cite>,
+<cite>sortBy</cite>, <cite>excludeItemLink</cite>, <cite>sessionId</cite>.</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the CAS server. Defaults to ‘cas-shared-default’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>list</em> – A collection of <a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> instances.</p>
 </dd>
 </dl>
-</dd>
-</dl>
-</section>
 </dd></dl>
 
 <dl class="py method">
@@ -706,21 +576,15 @@ Valid keys are <cite>start</cite>, <cite>limit</cite>, <cite>filter</cite>,
 <dd><p>List tables available in a caslib.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>caslib</strong><span class="classifier">str or dict</span></dt><dd><p>Name, ID, or dictionary representation of the caslib.</p>
-</dd>
-<dt><strong>server</strong><span class="classifier">str, optional</span></dt><dd><p>Server where the <cite>caslib</cite> is registered.</p>
-</dd>
-<dt><strong>filter_</strong><span class="classifier">str, optional</span></dt><dd><p>Filter string in the <cite>https://developer.sas.com/reference/filtering
-/</cite> format.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Name, ID, or dictionary representation of the caslib.</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Server where the <cite>caslib</cite> is registered.</p></li>
+<li><p><strong>filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Filter string in the <cite>https://developer.sas.com/reference/filtering
+/</cite> format.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>A collection of <a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> instances.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>list</em> – A collection of <a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> instances.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -733,22 +597,16 @@ Operation valid only on a session table.
 Promote target is the same Caslib that contains the session table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the table.</p>
-</dd>
-<dt><strong>sess_id: str</strong></dt><dd><p>The session ID</p>
-</dd>
-<dt><strong>caslib</strong><span class="classifier">str</span></dt><dd><p>Name of the caslib.</p>
-</dd>
-<dt><strong>server</strong><span class="classifier">str</span></dt><dd><p>Server where the <cite>caslib</cite> is registered.
-Defaults to ‘cas-shared-default’.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the table.</p></li>
+<li><p><strong>sess_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The session ID</p></li>
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the caslib.</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Server where the <cite>caslib</cite> is registered.
+Defaults to ‘cas-shared-default’.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -759,25 +617,18 @@ Defaults to ‘cas-shared-default’.</p>
 <dd><p>Saves a CAS table to a source table</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the table.</p>
-</dd>
-<dt><strong>sess_id: str</strong></dt><dd><p>The session ID</p>
-</dd>
-<dt><strong>caslib</strong><span class="classifier">str</span></dt><dd><p>Name of the caslib.</p>
-</dd>
-<dt><strong>properties</strong><span class="classifier">dict, optional</span></dt><dd><p>Properties of the table.
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the table.</p></li>
+<li><p><strong>sess_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The session ID</p></li>
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the caslib.</p></li>
+<li><p><strong>properties</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Properties of the table.
 Valid keys are <cite>caslibName</cite>, <cite>format</cite>, <cite>replace</cite>,
-<cite>compress</cite>, <cite>tableName</cite>, <cite>sourceTableName</cite>, <cite>parameters</cite>.</p>
-</dd>
-<dt><strong>server</strong><span class="classifier">str</span></dt><dd><p>Server where the <cite>caslib</cite> is registered. Defaults to ‘cas-shared-default’.</p>
-</dd>
-</dl>
+<cite>compress</cite>, <cite>tableName</cite>, <cite>sourceTableName</cite>, <cite>parameters</cite>.</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Server where the <cite>caslib</cite> is registered. Defaults to ‘cas-shared-default’.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -789,29 +640,21 @@ Valid keys are <cite>caslibName</cite>, <cite>format</cite>, <cite>replace</cite
 Returns loaded or unloaded to indicate the state after the operation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>value</strong><span class="classifier">str</span></dt><dd><p>State to which to set the table. Valid values include <cite>loaded</cite> or <cite>unloaded</cite>.</p>
-</dd>
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the table.</p>
-</dd>
-<dt><strong>caslib</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the caslib. Defaults to ‘Public’.</p>
-</dd>
-<dt><strong>server</strong><span class="classifier">str, optional</span></dt><dd><p>Server where the <cite>caslib</cite> is registered.
-Defaults to ‘cas-shared-default’.</p>
-</dd>
-<dt><strong>query_params: dict, optional</strong></dt><dd><p>Additional query parameters.
-Valid keys are <cite>sessionId</cite>, <cite>scope</cite>, <cite>sourceTableName</cite>, <cite>createRelationships</cite></p>
-</dd>
-<dt><strong>body</strong><span class="classifier">dict, optional</span></dt><dd><p>Extra instructions providing greater control over the output when a state change to loaded is requested.
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – State to which to set the table. Valid values include <cite>loaded</cite> or <cite>unloaded</cite>.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the table.</p></li>
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the caslib. Defaults to ‘Public’.</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Server where the <cite>caslib</cite> is registered.
+Defaults to ‘cas-shared-default’.</p></li>
+<li><p><strong>query_params</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional query parameters.
+Valid keys are <cite>sessionId</cite>, <cite>scope</cite>, <cite>sourceTableName</cite>, <cite>createRelationships</cite></p></li>
+<li><p><strong>body</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Extra instructions providing greater control over the output when a state change to loaded is requested.
 Valid keys are <cite>copies</cite>, <cite>label</cite>, <cite>outputCaslibName</cite>, <cite>outputTableName</cite>, <cite>parameters</cite>,
-<cite>replace</cite>, <cite>replaceMode</cite>, <cite>scope</cite>.</p>
-</dd>
-</dl>
+<cite>replace</cite>, <cite>replaceMode</cite>, <cite>scope</cite>.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -824,36 +667,27 @@ Valid keys are <cite>copies</cite>, <cite>label</cite>, <cite>outputCaslibName</
 newly created CAS table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>file</strong><span class="classifier">str or file-like object</span></dt><dd><p>File containing data to upload or path to the file.</p>
-</dd>
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the table to create</p>
-</dd>
-<dt><strong>caslib</strong><span class="classifier">str, optional</span></dt><dd><p>caslib in which the table will be created. Defaults to ‘Public’.</p>
-</dd>
-<dt><strong>server</strong><span class="classifier">str, optional</span></dt><dd><p>CAS server on which the table will be created.  Defaults to
-cas-shared-default.</p>
-</dd>
-<dt><strong>header</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether the first row of data contains column headers.  Defaults to
-True.</p>
-</dd>
-<dt><strong>format_</strong><span class="classifier">{“csv”, “xls”, “xlsx”, “sas7bdat”, “sashdat”}, optional</span></dt><dd><p>File of input <cite>file</cite>.  Not required if format can be discerned from
-the file path.</p>
-</dd>
-<dt><strong>detail</strong><span class="classifier">dict, optional</span></dt><dd><p>Additional body parameters. Allowed parameters are
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.TextIO" title="(in Python v3.12)"><em>TextIO</em></a>) – File containing data to upload or path to the file.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the table to create</p></li>
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – caslib in which the table will be created. Defaults to ‘Public’.</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – CAS server on which the table will be created.  Defaults to
+cas-shared-default.</p></li>
+<li><p><strong>header</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether the first row of data contains column headers.  Defaults to
+True.</p></li>
+<li><p><strong>format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Choose from {“csv”, “xls”, “xlsx”, “sas7bdat”, “sashdat”}.
+File of input <cite>file</cite>.  Not required if format can be discerned from
+the file path.</p></li>
+<li><p><strong>detail</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional body parameters. Allowed parameters are
 ‘sessionId’, ‘variables’, ‘label’, ‘scope’, ‘replace’, ‘encoding’,
 ‘allowTruncation’, ‘allowEmbeddedNewLines’, ‘delimiter’,
 ‘varchars’, ‘scanRows’, ‘threadCount’, ‘stripBlanks’, ‘sheetName’,
 ‘password’, ‘decryptionKey’, ‘stringLengthMultiplier’,
-‘varcharConversionThreshold’.</p>
-</dd>
-</dl>
+‘varcharConversionThreshold’.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd><p>Table reference</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em> – Table reference</p>
 </dd>
 </dl>
 </dd></dl>
@@ -868,20 +702,15 @@ to see if they are allowed to be passed
 as parameters in the request.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>valid_keys: list</strong></dt><dd><p>List of allowed parameters</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>valid_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – List of allowed parameters</p></li>
+<li><p><strong>input_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – List of input parameters</p></li>
+<li><p><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – String describing the type of parameters
+that are being tested.</p></li>
+</ul>
 </dd>
-<dt><strong>input_keys: list</strong></dt><dd><p>List of input parameters</p>
-</dd>
-<dt><strong>parameters: str</strong></dt><dd><p>String describing the type of parameters
-that are being tested.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>raises ValueError if input_keys are not valid</dt><dd></dd>
-</dl>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – if input_keys are not valid</p>
 </dd>
 </dl>
 </dd></dl>
@@ -893,21 +722,18 @@ that are being tested.</p>
 are in the list of input_key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>required_key: str or list</strong></dt><dd><p>Required parameters</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>required_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – Required parameters</p></li>
+<li><p><strong>input_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – The input parameters</p></li>
+<li><p><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – String describing the type of parameters
+that are being tested.</p></li>
+</ul>
 </dd>
-<dt><strong>input_keys: list</strong></dt><dd><p>The input parameters</p>
-</dd>
-<dt><strong>parameters: str</strong></dt><dd><p>String describing the type of parameters
-that are being tested.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>raises ValueError if required_key is not present.</dt><dd></dd>
-<dt>raises TypeError if required_key is neither a list or a string.</dt><dd></dd>
-</dl>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – if required_key is not present.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.12)"><strong>TypeError</strong></a> – if required_key is neither a list or a string.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

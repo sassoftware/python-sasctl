@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Session &#8212; sasctl 1.10.6 documentation</title>
+    <title>Session &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/sasctl.session';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl package" href="sasctl.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -368,155 +368,56 @@ document.write(`
 <dd><p>Establish a connection to a SAS Viya server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>hostname</strong><span class="classifier">str or swat.CAS</span></dt><dd><p>Name of the server to connect to or an established swat.CAS session.</p>
-</dd>
-<dt><strong>username</strong><span class="classifier">str, optional</span></dt><dd><p>Username for authentication.  Not required if <cite>host</cite> is a CAS
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hostname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.connection.CAS.html#swat.cas.connection.CAS" title="(in SWAT v1.14.0)"><em>swat.cas.connection.CAS</em></a>) – Name of the server to connect to or an established CAS session.</p></li>
+<li><p><strong>username</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Username for authentication.  Not required if <cite>host</cite> is a CAS
 connection, if Kerberos is used, or if <cite>token</cite> is provided.  If using Kerberos and an explicit
-username is desired, maybe be a string in <a class="reference external" href="mailto:'user&#37;&#52;&#48;REALM">‘user<span>&#64;</span>REALM</a>’ format.</p>
+username is desired, maybe be a string in <cite>‘user&#64;REALM’</cite> format.</p></li>
+<li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Password for authentication.  Not required when <cite>host</cite> is a CAS
+connection, <cite>authinfo</cite> is provided, <cite>token</cite> is provided, or Kerberos is used.</p></li>
+<li><p><strong>authinfo</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Path to a .authinfo or .netrc file from which credentials should be
+pulled.</p></li>
+<li><p><strong>protocol</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Choose from <code class="docutils literal notranslate"><span class="pre">{'http',</span> <span class="pre">'https'}</span></code>.
+Whether to use HTTP or HTTPS connections.  Defaults to <cite>https</cite>.</p></li>
+<li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Port number for the connection if a non-standard port is used.
+Defaults to 80 or 443 depending on <cite>protocol</cite>.</p></li>
+<li><p><strong>verify_ssl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether server-side SSL certificates should be verified.  Defaults
+to true.  Ignored for HTTP connections.</p></li>
+<li><p><strong>token</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – OAuth token to use for authorization.</p></li>
+<li><p><strong>client_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Client ID requesting access.  Use if connection to Viya should be
+made using “client_credentials” method.</p></li>
+<li><p><strong>client_secret</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Client secret for client requesting access. Required if <cite>client_id</cite>
+is provided.</p></li>
+</ul>
 </dd>
-<dt><strong>password</strong><span class="classifier">str, optional</span></dt><dd><p>Password for authentication.  Not required when <cite>host</cite> is a CAS
-connection, <cite>authinfo</cite> is provided, <cite>token</cite> is provided, or Kerberos is used.</p>
-</dd>
-<dt><strong>authinfo</strong><span class="classifier">str, optional</span></dt><dd><p>Path to a .authinfo or .netrc file from which credentials should be
-pulled.</p>
-</dd>
-<dt><strong>protocol</strong><span class="classifier">{‘http’, ‘https’}</span></dt><dd><p>Whether to use HTTP or HTTPS connections.  Defaults to <cite>https</cite>.</p>
-</dd>
-<dt><strong>port</strong><span class="classifier">int, optional</span></dt><dd><p>Port number for the connection if a non-standard port is used.
-Defaults to 80 or 443 depending on <cite>protocol</cite>.</p>
-</dd>
-<dt><strong>verify_ssl</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether server-side SSL certificates should be verified.  Defaults
-to true.  Ignored for HTTP connections.</p>
-</dd>
-<dt><strong>token</strong><span class="classifier">str, optional</span></dt><dd><p>OAuth token to use for authorization.</p>
-</dd>
-<dt><strong>client_id</strong><span class="classifier">str, optional</span></dt><dd><p>Client ID requesting access.  Use if connection to Viya should be
-made using <cite>client_credentials</cite> method.</p>
-</dd>
-<dt><strong>client_secret</strong><span class="classifier">str, optional</span></dt><dd><p>Client secret for client requesting access. Required if <cite>client_id</cite>
-is provided.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Attributes<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>message_log</strong><span class="classifier">logging.Logger</span></dt><dd><p>A log to which all REST request and response messages will be sent.  Attach a handler using
-<cite>add_logger()</cite> to capture these messages.</p>
-</dd>
-<dt><strong>filters</strong><span class="classifier">list of callable</span></dt><dd><p>A collection of functions that will be called with each request and response object <em>prior</em> to logging the
-messages, allowing any sensitive information to be removed first.</p>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>message_log</strong> (<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.12)"><em>logging.Logger</em></a>) – A log to which all REST request and response messages will be sent.  Attach a handler using
+<a class="reference internal" href="#sasctl.core.Session.add_logger" title="sasctl.core.Session.add_logger"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_logger()</span></code></a> to capture these messages.</p></li>
+<li><p><strong>filters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><em>Callable</em>) – A collection of functions that will be called with each request and response object <em>prior</em> to logging the
+messages, allowing any sensitive information to be removed first.</p></li>
+</ul>
 </dd>
 </dl>
-</dd>
-</dl>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.core.Session.add_logger" title="sasctl.core.Session.add_logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_logger</span></code></a>(handler[, level])</p></td>
-<td><p>Log session requests and responses.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.core.Session.add_stderr_logger" title="sasctl.core.Session.add_stderr_logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_stderr_logger</span></code></a>([level])</p></td>
-<td><p>Log session requests and responses to stderr.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.core.Session.as_swat" title="sasctl.core.Session.as_swat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">as_swat</span></code></a>([server])</p></td>
-<td><p>Create a SWAT connection to a CAS server.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.core.Session.cache_token" title="sasctl.core.Session.cache_token"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cache_token</span></code></a>(token, path)</p></td>
-<td><p>Write an OAuth2 token to the cache.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code>()</p></td>
-<td><p>Closes all adapters and as such the session</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.core.Session.delete" title="sasctl.core.Session.delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code></a>(url, **kwargs)</p></td>
-<td><p>Sends a DELETE request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.core.Session.get" title="sasctl.core.Session.get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code></a>(url, **kwargs)</p></td>
-<td><p>Sends a GET request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_adapter</span></code>(url)</p></td>
-<td><p>Returns the appropriate connection adapter for the given URL.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_redirect_target</span></code>(resp)</p></td>
-<td><p>Receives a Response.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.core.Session.head" title="sasctl.core.Session.head"><code class="xref py py-obj docutils literal notranslate"><span class="pre">head</span></code></a>(url, **kwargs)</p></td>
-<td><p>Sends a HEAD request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_environment_settings</span></code>(url, proxies, ...)</p></td>
-<td><p>Check the environment and merge it with some settings.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mount</span></code>(prefix, adapter)</p></td>
-<td><p>Registers a connection adapter to a prefix.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">options</span></code>(url, **kwargs)</p></td>
-<td><p>Sends a OPTIONS request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">patch</span></code>(url[, data])</p></td>
-<td><p>Sends a PATCH request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.core.Session.post" title="sasctl.core.Session.post"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code></a>(url, **kwargs)</p></td>
-<td><p>Sends a POST request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_request</span></code>(request)</p></td>
-<td><p>Constructs a <code class="xref py py-class docutils literal notranslate"><span class="pre">PreparedRequest</span></code> for transmission and returns it.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.core.Session.put" title="sasctl.core.Session.put"><code class="xref py py-obj docutils literal notranslate"><span class="pre">put</span></code></a>(url, **kwargs)</p></td>
-<td><p>Sends a PUT request.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.core.Session.read_cached_token" title="sasctl.core.Session.read_cached_token"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_cached_token</span></code></a>(path)</p></td>
-<td><p>Read any cached access tokens from disk</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">rebuild_auth</span></code>(prepared_request, response)</p></td>
-<td><p>When being redirected we may want to strip authentication from the request to avoid leaking credentials.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">rebuild_method</span></code>(prepared_request, response)</p></td>
-<td><p>When being redirected we may want to change the method of the request based on certain specs or browser behavior.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">rebuild_proxies</span></code>(prepared_request, proxies)</p></td>
-<td><p>This method re-evaluates the proxy configuration by considering the environment variables.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.core.Session.request" title="sasctl.core.Session.request"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request</span></code></a>(method, url[, params, data, ...])</p></td>
-<td><p>Constructs a <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code>, prepares it and sends it.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_redirects</span></code>(resp, req[, stream, ...])</p></td>
-<td><p>Receives a Response.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.core.Session.send" title="sasctl.core.Session.send"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send</span></code></a>(request, **kwargs)</p></td>
-<td><p>Send a given PreparedRequest.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">should_strip_auth</span></code>(old_url, new_url)</p></td>
-<td><p>Decide whether Authorization header should be removed when redirecting</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl.core.Session.version_info" title="sasctl.core.Session.version_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">version_info</span></code></a>()</p></td>
-<td><p>Get version information from the connected SAS Viya environment</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.add_logger">
 <span class="sig-name descname"><span class="pre">add_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.add_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.add_logger" title="Link to this definition">#</a></dt>
 <dd><p>Log session requests and responses.</p>
-<dl class="field-list">
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>handler</strong><span class="classifier">logging.Handler</span></dt><dd><p>A Handler instance to use for logging the requests and responses.</p>
-</dd>
-<dt><strong>level</strong><span class="classifier">int, optional</span></dt><dd><p>The logging level to assign to the handler.  Ignored if handler’s
-logging level is already set.  Defaults to DEBUG.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handler</strong> (<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Handler" title="(in Python v3.12)"><em>logging.Handler</em></a>) – A Handler instance to use for logging the requests and responses.</p></li>
+<li><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The logging level to assign to the handler.  Ignored if handler’s
+logging level is already set.  Defaults to <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.DEBUG" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">logging.DEBUG</span></code></a>.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>handler</dt><dd></dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">Added in version 1.2.0: </span>..</p>
-</div>
+<dd class="field-even"><p><em>logging.Handler</em></p>
 </dd>
 </dl>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.2.0.</span></p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -525,15 +426,10 @@ logging level is already set.  Defaults to DEBUG.</p>
 <dd><p>Log session requests and responses to stderr.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>level</strong><span class="classifier">int, optional</span></dt><dd><p>The logging level of the handler.  Defaults to logging.DEBUG</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The logging level of the handler.  Defaults to <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.DEBUG" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">logging.DEBUG</span></code></a></p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>logging.StreamHandler</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>logging.StreamHandler</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -545,25 +441,17 @@ logging level is already set.  Defaults to DEBUG.</p>
 <p>Uses the authentication information from the session to establish a CAS connection using SWAT.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>server</strong><span class="classifier">str, optional</span></dt><dd><p>The logical name of the CAS server, not the hostname.  Defaults to “cas-shared-default”.</p>
-</dd>
-<dt><strong>kwargs</strong><span class="classifier">any</span></dt><dd><p>Additional arguments to pass to the <cite>swat.CAS</cite> constructor.  Can be used to override this method’s
-default behavior or customize the CAS session.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The logical name of the CAS server, not the hostname.  Defaults to “cas-shared-default”.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments to pass to the <a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.connection.CAS.html#swat.cas.connection.CAS" title="(in SWAT v1.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">swat.CAS</span></code></a> constructor.
+Can be used to override this method’s default behavior or customize the CAS session.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>swat.CAS</dt><dd><p>An active SWAT connection</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>swat.cas.connection.CAS</em> – An active SWAT connection</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>RuntimeError</dt><dd><p>If <cite>swat</cite> package is not available.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.12)"><strong>RuntimeError</strong></a> – If <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.14.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> package is not available.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -586,17 +474,13 @@ default behavior or customize the CAS session.</p>
 <dd><p>Write an OAuth2 token to the cache.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>token</strong><span class="classifier">OAuth2Token</span></dt><dd><p>Token to be cached.</p>
-</dd>
-<dt><strong>path</strong><span class="classifier">str</span></dt><dd><p>Path to file containing cached tokens.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>token</strong> (<a class="reference internal" href="sasctl.core.html#sasctl.core.OAuth2Token" title="sasctl.core.OAuth2Token"><em>OAuth2Token</em></a>) – Token to be cached.</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Path to file containing cached tokens.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>None</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>None</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -613,7 +497,7 @@ default behavior or customize the CAS session.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>requests.Response</p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -630,7 +514,7 @@ default behavior or customize the CAS session.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>requests.Response</p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -647,7 +531,7 @@ default behavior or customize the CAS session.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>requests.Response</p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -667,7 +551,7 @@ object to send in the body of the <code class="xref py py-class docutils literal
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>requests.Response</p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -686,7 +570,7 @@ object to send in the body of the <code class="xref py py-class docutils literal
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>requests.Response</p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -697,15 +581,10 @@ object to send in the body of the <code class="xref py py-class docutils literal
 <dd><p>Read any cached access tokens from disk</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>path</strong><span class="classifier">str</span></dt><dd><p>Path to file containing cached tokens.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Path to file containing cached tokens.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>OAuth2Token or None</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>OAuth2Token or None</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -735,8 +614,8 @@ for multipart encoding upload.</p></li>
 <li><p><strong>auth</strong> – (optional) Auth tuple or callable to enable
 Basic/Digest/Custom HTTP Auth.</p></li>
 <li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><em>tuple</em></a>) – (optional) How long to wait for the server to send
-data before giving up, as a float, or a <span class="xref std std-ref">(connect timeout,
-read timeout)</span> tuple.</p></li>
+data before giving up, as a float, or a <a class="reference external" href="https://requests.readthedocs.io/en/latest/user/advanced/#timeouts" title="(in Requests v2.32.3)"><span class="xref std std-ref">(connect timeout,
+read timeout)</span></a> tuple.</p></li>
 <li><p><strong>allow_redirects</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – (optional) Set to True by default.</p></li>
 <li><p><strong>proxies</strong> – (optional) Dictionary mapping protocol or protocol and
 hostname to the URL of the proxy.</p></li>
@@ -757,18 +636,18 @@ If Tuple, (‘cert’, ‘key’) pair.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>requests.Response</p>
+<dd class="field-even"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.core.Session.send">
-<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.send"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.send" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">send</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/core.html#Session.send"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.core.Session.send" title="Link to this definition">#</a></dt>
 <dd><p>Send a given PreparedRequest.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>requests.Response</p>
+<dd class="field-odd"><p><a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.Response" title="(in Requests v2.32.3)">requests.Response</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -779,9 +658,7 @@ If Tuple, (‘cert’, ‘key’) pair.</p></li>
 <dd><p>Get version information from the connected SAS Viya environment</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>VersionInfo</dt><dd></dd>
-</dl>
+<dd class="field-odd"><p><em>VersionInfo</em></p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>

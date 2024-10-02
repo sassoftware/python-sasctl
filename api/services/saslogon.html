@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.services.saslogon &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.services.saslogon &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/saslogon';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.services.reports" href="reports.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -398,103 +398,35 @@ authentication.  In sasctl all authentication is handled in the
 authentication are implemented here.</p>
 <p>The operations provided by this service are only accessible to users
 with administrator permissions.</p>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.saslogon.SASLogon.create_client" title="sasctl._services.saslogon.SASLogon.create_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_client</span></code></a>(client_id, client_secret[, ...])</p></td>
-<td><p>Register a new client with the SAS Viya environment.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a DELETE request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.saslogon.SASLogon.delete_client" title="sasctl._services.saslogon.SASLogon.delete_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_client</span></code></a>(client)</p></td>
-<td><p>Remove and existing client.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a GET request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.saslogon.SASLogon.get_client" title="sasctl._services.saslogon.SASLogon.get_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_client</span></code></a>(client_id)</p></td>
-<td><p>Retrieve information about a specific client</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link</span></code>(obj, rel)</p></td>
-<td><p>Get link information from a resource.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">head</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a HEAD request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code>()</p></td>
-<td><p>Version and build information for the service.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_available</span></code>()</p></td>
-<td><p>Check if the service is currently available.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.saslogon.SASLogon.list_clients" title="sasctl._services.saslogon.SASLogon.list_clients"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_clients</span></code></a>([start_index, count, descending])</p></td>
-<td><p>Retrieve a details of multiple clients.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a POST request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">put</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a PUT request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request</span></code>(verb, path[, session, format_])</p></td>
-<td><p>Send an HTTP request with a session.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_link</span></code>(obj, rel, **kwargs)</p></td>
-<td><p>Request a link from a resource.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.saslogon.SASLogon.update_client_secret" title="sasctl._services.saslogon.SASLogon.update_client_secret"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_client_secret</span></code></a>(client, secret)</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>is_uuid</strong></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.saslogon.SASLogon.create_client">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_secret</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scopes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redirect_uri</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_client_secret</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_auth_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon.create_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon.create_client" title="Link to this definition">#</a></dt>
 <dd><p>Register a new client with the SAS Viya environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>client_id</strong><span class="classifier">str</span></dt><dd><p>The ID to be assigned to the client.</p>
-</dd>
-<dt><strong>client_secret</strong><span class="classifier">str</span></dt><dd><p>The client secret used for authentication.</p>
-</dd>
-<dt><strong>scopes</strong><span class="classifier">list of string, optional</span></dt><dd><p>Specifies the levels of access that the client will be able to
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The ID to be assigned to the client.</p></li>
+<li><p><strong>client_secret</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The client secret used for authentication.</p></li>
+<li><p><strong>scopes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Specifies the levels of access that the client will be able to
 obtain on behalf of users when not using client credential
 authentication.  If <cite>allow_password</cite> or <cite>allow_auth_code</cite> are
 true, the ‘openid’ scope will also be included.  This is used
 to assert the identity of the user that the client is acting on
 behalf of.  For clients that only use client credential
 authentication and therefore do not act on behalf of users,
-the ‘uaa.none’ scope will automatically be included.</p>
-</dd>
-<dt><strong>redirect_uri</strong><span class="classifier">str, optional</span></dt><dd><p>The allowed URI pattern for redirects during authorization.
-Defaults to ‘<a class="reference external" href="urn:ietf:wg:oauth:2.0:oob">urn:ietf:wg:oauth:2.0:oob</a>’.</p>
-</dd>
-<dt><strong>allow_password</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to allow username &amp; password authentication with this
-client.  Defaults to false.</p>
-</dd>
-<dt><strong>allow_client_secret</strong><span class="classifier">bool</span></dt><dd><p>Whether to allow authentication using just the client ID and
-client secret.  Defaults to false.</p>
-</dd>
-<dt><strong>allow_auth_code</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to allow authorization code access using this client.
-Defaults to false.</p>
-</dd>
-</dl>
+the ‘uaa.none’ scope will automatically be included.</p></li>
+<li><p><strong>redirect_uri</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The allowed URI pattern for redirects during authorization.
+Defaults to ‘<a class="reference external" href="urn:ietf:wg:oauth:2.0:oob">urn:ietf:wg:oauth:2.0:oob</a>’.</p></li>
+<li><p><strong>allow_password</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to allow username &amp; password authentication with this
+client.  Defaults to false.</p></li>
+<li><p><strong>allow_client_secret</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Whether to allow authentication using just the client ID and
+client secret.  Defaults to false.</p></li>
+<li><p><strong>allow_auth_code</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to allow authorization code access using this client.
+Defaults to false.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -505,22 +437,13 @@ Defaults to false.</p>
 <dd><p>Remove and existing client.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>client</strong><span class="classifier">str or RestObj</span></dt><dd><p>The client ID or a RestObj containing the client details.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>client</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><em>RestObj</em></a>) – The client ID or a RestObj containing the client details.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd><p>The deleted client</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em> – The deleted client</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>ValueError</dt><dd><p>If <cite>client</cite> is not found.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – If <cite>client</cite> is not found.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -531,15 +454,10 @@ Defaults to false.</p>
 <dd><p>Retrieve information about a specific client</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>client_id</strong><span class="classifier">str</span></dt><dd><p>The id of the client.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>client_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The id of the client.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj or None</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj or None</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -550,21 +468,15 @@ Defaults to false.</p>
 <dd><p>Retrieve a details of multiple clients.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>start_index</strong><span class="classifier">int, optional</span></dt><dd><p>Index of first client to return.  Defaults to 1.</p>
-</dd>
-<dt><strong>count</strong><span class="classifier">int, optiona;</span></dt><dd><p>Number of clients to retrieve.  Defaults to 100.</p>
-</dd>
-<dt><strong>descending</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to clients should be returned in descending order.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Index of first client to return.  Defaults to 1.</p></li>
+<li><p><strong>count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Number of clients to retrieve.  Defaults to 100.</p></li>
+<li><p><strong>descending</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to clients should be returned in descending order.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>list of dict</dt><dd><p>Each dict contains details for a single client.  If no
+<dd class="field-even"><p><em>list of dict</em> – Each dict contains details for a single client.  If no
 clients were found and empty list is returned.</p>
-</dd>
-</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -574,23 +486,16 @@ clients were found and empty list is returned.</p>
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_client_secret</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/saslogon.html#SASLogon.update_client_secret"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.saslogon.SASLogon.update_client_secret" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>client</strong><span class="classifier">str or RestObj</span></dt><dd><p>The client ID or a RestObj containing the client details.</p>
-</dd>
-<dt><strong>secret</strong><span class="classifier">str</span></dt><dd><p>The new client secret.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><em>RestObj</em></a>) – The client ID or a RestObj containing the client details.</p></li>
+<li><p><strong>secret</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The new client secret.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>None</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>None</em></p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>ValueError</dt><dd><p>If <cite>client</cite> is not found.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – If <cite>client</cite> is not found.</p>
 </dd>
 </dl>
 </dd></dl>

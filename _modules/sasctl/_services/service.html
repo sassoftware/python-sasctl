@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.service &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl._services.service &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/service';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -414,7 +414,7 @@ document.write(`
 <span class="sd">            text: Response.text</span>
 <span class="sd">            auto: `RestObj` constructed from JSON if possible, otherwise same as</span>
 <span class="sd">                  `text`.</span>
-<span class="sd">        kwargs : any</span>
+<span class="sd">        **kwargs</span>
 <span class="sd">            Additional arguments are passed to the session `request` method.</span>
 
 <span class="sd">        Returns</span>
@@ -565,7 +565,7 @@ document.write(`
 <span class="sd">                A dictionary containing the {item} attributes or None.</span>
 
 <span class="sd">            Notes</span>
-<span class="sd">            -------</span>
+<span class="sd">            -----</span>
 <span class="sd">            If `item` is a complete representation of the {item} it will be</span>
 <span class="sd">            returned unless `refresh` is set.  This prevents unnecessary REST</span>
 <span class="sd">            calls when data is already available on the client.</span>
@@ -705,7 +705,7 @@ document.write(`
 <span class="sd">        ----------</span>
 <span class="sd">        item : str or dict</span>
 <span class="sd">        rel : str</span>
-<span class="sd">        args : any</span>
+<span class="sd">        *args</span>
 <span class="sd">            Passed to `func`</span>
 <span class="sd">        func : function, optional</span>
 <span class="sd">            Callable that takes (item, *args) and returns a RestObj of `item`</span>
@@ -744,7 +744,7 @@ document.write(`
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        job</span>
+<span class="sd">        job : dict</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>

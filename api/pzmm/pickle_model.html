@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.pzmm.pickle_model &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.pzmm.pickle_model &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/pzmm/pickle_model';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.pzmm.model_parameters" href="model_parameters.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -378,15 +378,6 @@ document.write(`
 <dt class="sig sig-object py" id="sasctl.pzmm.pickle_model.PickleModel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.pzmm.pickle_model.</span></span><span class="sig-name descname"><span class="pre">PickleModel</span></span><a class="reference internal" href="../../_modules/sasctl/pzmm/pickle_model.html#PickleModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.pickle_model.PickleModel" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.pickle_model.PickleModel.pickle_trained_model" title="sasctl.pzmm.pickle_model.PickleModel.pickle_trained_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pickle_trained_model</span></code></a>(model_prefix[, ...])</p></td>
-<td><p>Write trained model to a binary pickle file, H2O MOJO file, or a binary string object.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sasctl.pzmm.pickle_model.PickleModel.notebook_output">
 <span class="sig-name descname"><span class="pre">notebook_output</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sasctl.pzmm.pickle_model.PickleModel.notebook_output" title="Link to this definition">#</a></dt>
@@ -397,56 +388,46 @@ document.write(`
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pickle_trained_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">trained_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.12)"><span class="pre">Any</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pickle_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_h2o_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_binary_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_binary_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mlflow_details</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/sasctl/pzmm/pickle_model.html#PickleModel.pickle_trained_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.pickle_model.PickleModel.pickle_trained_model" title="Link to this definition">#</a></dt>
 <dd><p>Write trained model to a binary pickle file, H2O MOJO file, or a binary string
 object.</p>
-<dl class="simple">
-<dt>The following files are generated by this function:</dt><dd><ul class="simple">
+<p>The following files are generated by this function:</p>
+<ul class="simple">
 <li><dl class="simple">
-<dt>‘<a href="#id1"><span class="problematic" id="id2">*</span></a>.pickle’</dt><dd><p>Binary pickle file containing a trained model.</p>
+<dt>‘*.pickle’</dt><dd><p>Binary pickle file containing a trained model.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>‘<a href="#id3"><span class="problematic" id="id4">*</span></a>.mojo’</dt><dd><p>Archived H2O.ai MOJO file containing a trained model.</p>
+<dt>‘*.mojo’</dt><dd><p>Archived H2O.ai MOJO file containing a trained model.</p>
 </dd>
 </dl>
 </li>
 </ul>
-</dd>
-</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>model_prefix</strong><span class="classifier">str or Path</span></dt><dd><p>Variable name for the model to be displayed in SAS Open Model Manager
-(i.e. hmeqClassTree + [Score.py || .pickle]).</p>
-</dd>
-<dt><strong>trained_model</strong><span class="classifier">model object</span></dt><dd><p>The trained model to be exported.</p>
-</dd>
-<dt><strong>pickle_path</strong><span class="classifier">str, optional</span></dt><dd><p>File location for the output pickle file. The default value is None.</p>
-</dd>
-<dt><strong>is_h2o_model</strong><span class="classifier">bool, optional</span></dt><dd><p>Sets whether the model file is an H2O.ai MOJO file. If set as True,
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – Variable name for the model to be displayed in SAS Open Model Manager
+(i.e. hmeqClassTree + [Score.py || .pickle]).</p></li>
+<li><p><strong>trained_model</strong> (<em>Any</em>) – The trained model to be exported.</p></li>
+<li><p><strong>pickle_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – File location for the output pickle file. The default value is None.</p></li>
+<li><p><strong>is_h2o_model</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Sets whether the model file is an H2O.ai MOJO file. If set as True,
 the MOJO file will be gzipped before uploading to SAS Model Manager.
-The default value is False.</p>
-</dd>
-<dt><strong>is_binary_model</strong><span class="classifier">bool, optional</span></dt><dd><p>Sets whether the H2O model provided is a binary model or a MOJO model. The
-default value is False.</p>
-</dd>
-<dt><strong>is_binary_string</strong><span class="classifier">bool, optional</span></dt><dd><p>Sets whether the model is to be set as a binary string instead of a pickle
-file. The default value is False.</p>
-</dd>
-<dt><strong>mlflow_details</strong><span class="classifier">dict, optional</span></dt><dd><p>Model details from an MLFlow model. This dictionary is created by the
-readMLModelFile function. The default value is None.</p>
-</dd>
-</dl>
+The default value is False.</p></li>
+<li><p><strong>is_binary_model</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Sets whether the H2O model provided is a binary model or a MOJO model. The
+default value is False.</p></li>
+<li><p><strong>is_binary_string</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Sets whether the model is to be set as a binary string instead of a pickle
+file. The default value is False.</p></li>
+<li><p><strong>mlflow_details</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – Model details from an MLFlow model. This dictionary is created by the
+readMLModelFile function. The default value is None.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>binary_string</strong><span class="classifier">binary str</span></dt><dd><p>When the is_binary_string flag is set to True, return a binary string
-representation of the model instead of a pickle or MOJO file.</p>
-</dd>
-<dt>dict</dt><dd><p>Dictionary containing a key-value pair representing the file name and pickle
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>binary_string</strong> (<em>str</em>) – When the is_binary_string flag is set to True, return a binary string
+representation of the model instead of a pickle or MOJO file.</p></li>
+<li><p><em>dict</em> – Dictionary containing a key-value pair representing the file name and pickle
 dump respectively if pickle_path is None. This is not valid for H2O.ai
-models.</p>
-</dd>
-</dl>
+models.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.tasks &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.tasks &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/tasks';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -695,10 +695,10 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    model : swat.CASTable or sklearn.BaseEstimator</span>
-<span class="sd">        The model to register.  If an instance of ``swat.CASTable`` the table</span>
-<span class="sd">        is assumed to hold an ASTORE, which will be downloaded and used to</span>
-<span class="sd">        construct the model to register.  If a scikit-learn estimator, the</span>
+<span class="sd">    model : swat.cas.table.CASTable or sklearn.base.BaseEstimator</span>
+<span class="sd">        The model to register.  If an instance of :class:`swat.cas.table.CASTable`</span>
+<span class="sd">        the table is assumed to hold an ASTORE, which will be downloaded and used</span>
+<span class="sd">        to construct the model to register.  If a scikit-learn estimator, the</span>
 <span class="sd">        model will be pickled and uploaded to the registry and score code will</span>
 <span class="sd">        be generated for publishing the model to MAS.</span>
 <span class="sd">    name : str</span>
@@ -709,14 +709,15 @@ document.write(`
 <span class="sd">    repository : str or dict, optional</span>
 <span class="sd">        The name or id of the repository, or a dictionary representation of</span>
 <span class="sd">        the repository.  If omitted, the default repository will be used.</span>
-<span class="sd">    X : DataFrame, type, list of type, or dict of str: type, optional</span>
+<span class="sd">    X : pandas.DataFrame, type, list of type, or dict of str: type, optional</span>
 <span class="sd">        The expected type for each input value of the target function.</span>
 <span class="sd">        Can be omitted if target function includes type hints.  If a DataFrame</span>
 <span class="sd">        is provided, the columns will be inspected to determine type</span>
 <span class="sd">        information.  If a single type is provided, all columns will be assumed</span>
 <span class="sd">        to be that type, otherwise a list of column types or a dictionary of</span>
 <span class="sd">        column_name: type may be provided.</span>
-<span class="sd">    version : {&#39;new&#39;, &#39;latest&#39;, int}, optional</span>
+<span class="sd">    version : str or int, optional</span>
+<span class="sd">        If str choose from ``{&#39;new&#39;, &#39;latest&#39;}``.</span>
 <span class="sd">        Version number of the project in which the model should be created.</span>
 <span class="sd">        Defaults to &#39;new&#39;.</span>
 <span class="sd">    files : list</span>
@@ -733,13 +734,13 @@ document.write(`
 <span class="sd">    modeler : str, optional</span>
 <span class="sd">        The name of the user who created the model.  Will default ot the</span>
 <span class="sd">        current user if not specified.</span>
-<span class="sd">    input : DataFrame, type, list of type, or dict of str: type, optional</span>
+<span class="sd">    input : pandas.DataFrame, type, list of type, or dict of str: type, optional</span>
 <span class="sd">        Deprecated, use `X` instead.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    model : RestObj</span>
-<span class="sd">        The newly registered model as an instance of ``RestObj``</span>
+<span class="sd">        The newly registered model as an instance of :class:`.core.RestObj`</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -871,6 +872,8 @@ document.write(`
 
 
 
+<div class="viewcode-block" id="publish_model">
+<a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.publish_model">[docs]</a>
 <span class="k">def</span> <span class="nf">publish_model</span><span class="p">(</span>
     <span class="n">model</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
@@ -889,7 +892,7 @@ document.write(`
 <span class="sd">    replace : bool, optional</span>
 <span class="sd">        Whether to overwrite the model if it already exists in</span>
 <span class="sd">        the `destination`</span>
-<span class="sd">    kwargs : optional</span>
+<span class="sd">    **kwargs</span>
 <span class="sd">        additional arguments will be passed to the underlying publish</span>
 <span class="sd">        functions.</span>
 
@@ -996,9 +999,12 @@ document.write(`
         <span class="kn">from</span> <span class="nn">sasctl.services</span> <span class="kn">import</span> <span class="n">microanalytic_score</span> <span class="k">as</span> <span class="n">mas</span>
 
         <span class="k">return</span> <span class="n">mas</span><span class="o">.</span><span class="n">define_steps</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">module</span>
+    <span class="k">return</span> <span class="n">module</span></div>
 
 
+
+<div class="viewcode-block" id="update_model_performance">
+<a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.update_model_performance">[docs]</a>
 <span class="k">def</span> <span class="nf">update_model_performance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Upload data for calculating model performance metrics.</span>
 
@@ -1009,7 +1015,7 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data : Dataframe</span>
+<span class="sd">    data : pandas.DataFrame</span>
 <span class="sd">    model : str or dict</span>
 <span class="sd">        The name or id of the model, or a dictionary representation of</span>
 <span class="sd">        the model.</span>
@@ -1022,12 +1028,12 @@ document.write(`
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    CASTable</span>
+<span class="sd">    swat.cas.table.CASTable</span>
 <span class="sd">        The CAS table containing the performance data.</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
-<span class="sd">     :meth:`model_management.create_performance_definition &lt;.ModelManagement.create_performance_definition&gt;`</span>
+<span class="sd">    :meth:`model_management.create_performance_definition &lt;.ModelManagement.create_performance_definition&gt;`</span>
 
 <span class="sd">    .. versionadded:: v1.3</span>
 
@@ -1172,7 +1178,8 @@ document.write(`
     <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
         <span class="n">mm</span><span class="o">.</span><span class="n">execute_performance_definition</span><span class="p">(</span><span class="n">perf_def</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">tbl</span>
+    <span class="k">return</span> <span class="n">tbl</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">_parse_module_url</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
@@ -1226,7 +1233,7 @@ document.write(`
 <span class="sd">        Column value to be filtered, by default None</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    kpiTableDf : DataFrame</span>
+<span class="sd">    kpiTableDf : pandas.DataFrame</span>
 <span class="sd">        A pandas DataFrame representing the MM_STD_KPI table. Note that SAS</span>
 <span class="sd">        missing values are replaced with pandas valid missing values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

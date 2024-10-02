@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.utils package &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.utils package &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/sasctl.utils';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.services.text_parsing" href="services/text_parsing.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -381,6 +381,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_inline"><code class="docutils literal notranslate"><span class="pre">from_inline()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_pickle"><code class="docutils literal notranslate"><span class="pre">from_pickle()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_python_file"><code class="docutils literal notranslate"><span class="pre">from_python_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sasctl.utils.pymas.html#sasctl.utils.pymas.core.wrap_predict_method"><code class="docutils literal notranslate"><span class="pre">wrap_predict_method()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sasctl.utils.pymas.html#sasctl.utils.pymas.core.wrap_predict_proba_method"><code class="docutils literal notranslate"><span class="pre">wrap_predict_proba_method()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="sasctl.utils.pymas.html#module-sasctl.utils.pymas.ds2">sasctl.utils.pymas.ds2 module</a><ul>
@@ -433,12 +435,7 @@ document.write(`
 </li>
 <li class="toctree-l1"><a class="reference internal" href="sasctl.utils.pyml2ds.html">sasctl.utils.pyml2ds package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sasctl.utils.pyml2ds.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sasctl.utils.pyml2ds.html#module-sasctl.utils.pyml2ds.pyml2ds">sasctl.utils.pyml2ds.pyml2ds module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="sasctl.utils.pyml2ds.html#parameters">Parameters</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sasctl.utils.pyml2ds.html#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sasctl.utils.pyml2ds.html#examples">Examples</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="sasctl.utils.pyml2ds.html#module-sasctl.utils.pyml2ds.pyml2ds">sasctl.utils.pyml2ds.pyml2ds module</a></li>
 </ul>
 </li>
 </ul>
@@ -455,16 +452,10 @@ document.write(`
 <dd><p>Generate files for importing a model from an ASTORE.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>table</strong><span class="classifier">swat.CASTable</span></dt><dd><p>The CAS table containing the ASTORE.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>table</strong> (<a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.table.CASTable.html#swat.cas.table.CASTable" title="(in SWAT v1.14.0)"><em>swat.cas.table.CASTable</em></a>) – The CAS table containing the ASTORE.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>dict</dt><dd><p>Dictionary of filename: content pairs.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>dict</em> – Dictionary of filename: content pairs.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -475,30 +466,23 @@ document.write(`
 <dd><p>Create an importable model package from a CAS table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>table</strong><span class="classifier">swat.CASTable</span></dt><dd><p>The CAS table containing an ASTORE or score code.</p>
-</dd>
-<dt><strong>input</strong><span class="classifier">DataFrame, type, list of type, or dict of str: type, optional</span></dt><dd><p>The expected type for each input value of the target function.
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.table.CASTable.html#swat.cas.table.CASTable" title="(in SWAT v1.14.0)"><em>swat.cas.table.CASTable</em></a>) – The CAS table containing an ASTORE or score code.</p></li>
+<li><p><strong>input</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.2.3)"><em>pandas.DataFrame</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.12)"><em>type</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.12)"><em>type</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The expected type for each input value of the target function.
 Can be omitted if target function includes type hints.  If a DataFrame
 is provided, the columns will be inspected to determine type information.
 If a single type is provided, all columns will be assumed to be that type,
 otherwise a list of column types or a dictionary of column_name: type
-may be provided.</p>
-</dd>
-</dl>
+may be provided.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>BytesIO</dt><dd><p>A byte stream representing a ZIP archive which can be imported.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>BytesIO</em> – A byte stream representing a ZIP archive which can be imported.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_repository.import_model_from_zip</span></code></dt><dd></dd>
-</dl>
+<p><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.import_model_from_zip" title="sasctl._services.model_repository.ModelRepository.import_model_from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">import_model_from_zip</span></code></a></p>
 </div>
 </dd></dl>
 
@@ -508,23 +492,15 @@ may be provided.</p>
 <dd><p>Create an importable model package from an ASTORE.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>table</strong><span class="classifier">swat.CASTable</span></dt><dd><p>The CAS table containing the ASTORE.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>table</strong> (<a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.table.CASTable.html#swat.cas.table.CASTable" title="(in SWAT v1.14.0)"><em>swat.cas.table.CASTable</em></a>) – The CAS table containing the ASTORE.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>BytesIO</dt><dd><p>A byte stream representing a ZIP archive which can be imported.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>BytesIO</em> – A byte stream representing a ZIP archive which can be imported.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_repository.import_model_from_zip</span></code></dt><dd></dd>
-</dl>
+<p><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.import_model_from_zip" title="sasctl._services.model_repository.ModelRepository.import_model_from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">import_model_from_zip</span></code></a></p>
 </div>
 </dd></dl>
 
@@ -534,30 +510,23 @@ may be provided.</p>
 <dd><p>Create an importable model package from a score code table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>table</strong><span class="classifier">swat.CASTable</span></dt><dd><p>The CAS table containing the score code.</p>
-</dd>
-<dt><strong>input</strong><span class="classifier">DataFrame, type, list of type, or dict of str: type, optional</span></dt><dd><p>The expected type for each input value of the target function.
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.table.CASTable.html#swat.cas.table.CASTable" title="(in SWAT v1.14.0)"><em>swat.cas.table.CASTable</em></a>) – The CAS table containing the score code.</p></li>
+<li><p><strong>input</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.2.3)"><em>pandas.DataFrame</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.12)"><em>type</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.12)"><em>type</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The expected type for each input value of the target function.
 Can be omitted if target function includes type hints.  If a DataFrame
 is provided, the columns will be inspected to determine type information.
 If a single type is provided, all columns will be assumed to be that type,
 otherwise a list of column types or a dictionary of column_name: type
-may be provided.</p>
-</dd>
-</dl>
+may be provided.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>BytesIO</dt><dd><p>A byte stream representing a ZIP archive which can be imported.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>BytesIO</em> – A byte stream representing a ZIP archive which can be imported.</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_repository.import_model_from_zip</span></code></dt><dd></dd>
-</dl>
+<p><a class="reference internal" href="services/model_repository.html#sasctl._services.model_repository.ModelRepository.import_model_from_zip" title="sasctl._services.model_repository.ModelRepository.import_model_from_zip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">import_model_from_zip</span></code></a></p>
 </div>
 </dd></dl>
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=f7627286"></script>
+    <script src="_static/documentation_options.js?v=93ada2c2"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
@@ -45,7 +45,7 @@
     <link rel="next" title="sasctl package" href="api/sasctl.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -119,7 +119,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -312,7 +312,7 @@ document.write(`
                   
   <section id="sasctl">
 <h1>sasctl<a class="headerlink" href="#sasctl" title="Link to this heading">#</a></h1>
-<p>Version 1.10.6</p>
+<p>Version 1.10.7</p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p><strong>sasctl</strong> enables easy integration with the SAS Viya platform.</p>
@@ -589,7 +589,7 @@ When instantiating a <a class="reference internal" href="api/sasctl.session.html
 <section id="logging">
 <h3>Logging<a class="headerlink" href="#logging" title="Link to this heading">#</a></h3>
 <p>All logging is handled through the built-in <a class="reference external" href="https://docs.python.org/3/library/logging.html#module-logging" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a> module with standard module-level loggers.  The one exception
-to this is <a class="reference internal" href="api/sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> request/response logging.  Sessions contain a <code class="xref py py-attr docutils literal notranslate"><span class="pre">message_log</span></code> which is exclusively used
+to this is <a class="reference internal" href="api/sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> request/response logging.  Sessions contain a <cite>message_log</cite> which is exclusively used
 to record requests and responses made through the session.  Message recording can be configured on a per-session basis
 by updating this logger, or the <code class="docutils literal notranslate"><span class="pre">sasctl.core.session</span></code> logger can be configured to control all message recording by all sessions.</p>
 </section>
@@ -656,7 +656,7 @@ will take precedence over <span class="target" id="index-10"></span><a class="re
 <span class="sig-name descname"><span class="pre">REQUESTS_CA_BUNDLE</span></span><a class="headerlink" href="#envvar-REQUESTS_CA_BUNDLE" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code> module.</p>
+<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#module-requests" title="(in Requests v2.32.3)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a> module.</p>
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-SSLREQCERT">
 <span class="sig-name descname"><span class="pre">SSLREQCERT</span></span><a class="headerlink" href="#envvar-SSLREQCERT" title="Link to this definition">#</a></dt>
@@ -757,7 +757,7 @@ part of the project.</p>
 platforms.  To accomplish this, the <code class="file docutils literal notranslate"><span class="pre">tests/</span></code> folder contains a collection of unit tests and integration tests where
 “unit” tests are generally target a single function and “integration” tests target a series of functions or classes
 working together.</p>
-<p>Test execution is handled by the  <a class="reference external" href="https://docs.pytest.org/en/latest/index.html" title="(in pytest v8.4.0.dev49)"><span class="xref std std-doc">py.test</span></a> module which supports tests written using the builtin <a class="reference external" href="https://docs.python.org/3/library/unittest.html#module-unittest" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest</span></code></a>
+<p>Test execution is handled by the  <a class="reference external" href="https://docs.pytest.org/en/latest/index.html" title="(in pytest v8.4.0.dev99)"><span class="xref std std-doc">py.test</span></a> module which supports tests written using the builtin <a class="reference external" href="https://docs.python.org/3/library/unittest.html#module-unittest" title="(in Python v3.12)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest</span></code></a>
 framework, but also adds some powerful features like test fixtures.  It is recommended that you review
 <code class="file docutils literal notranslate"><span class="pre">tests/conftest.py</span></code> and the existing test cases to understand what features are currently available for testing.</p>
 <p>To isolate individual methods for testing, the unit test cases make extensive use of mocking via the
@@ -768,18 +768,18 @@ access to an environment that is suitable for development.  Therefore, most of t
 <a class="reference external" href="https://betamax.readthedocs.io/en/latest/api.html#module-betamax" title="(in Betamax v0.8.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">betamax</span></code></a> module to record and replay HTTP requests and responses.  These recordings are scrubbed of any sensitive
 information and stored in <code class="file docutils literal notranslate"><span class="pre">tests/cassettes/</span></code>.  This allows tests to be rerun repeatedly once the test has been recorded
 once.</p>
-<p>And finally, the <a class="reference external" href="https://tox.wiki/en/latest/index.html" title="(in Project name not set v4.18)"><span class="xref std std-doc">tox</span></a> module is used to ensure that <strong>sasctl</strong> will install and work correctly on all supported
+<p>And finally, the <a class="reference external" href="https://tox.wiki/en/latest/index.html" title="(in Project name not set v4.21)"><span class="xref std std-doc">tox</span></a> module is used to ensure that <strong>sasctl</strong> will install and work correctly on all supported
 Python versions.</p>
 </section>
 <section id="useful-tox-commands">
 <span id="tox-commands"></span><h3>Useful Tox Commands<a class="headerlink" href="#useful-tox-commands" title="Link to this heading">#</a></h3>
-<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">tox</span></code>  is used to automate common development tasks such as testing, linting, and building documentation.
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">tox</span></code> is used to automate common development tasks such as testing, linting, and building documentation.
 Running <strong class="program">tox</strong> from the project root directory will automatically build virtual environments for all Python interpreters
 found on the system and then install the required packages necessary to perform a given task.  The simplest way to run Tox is:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tox
 </pre></div>
 </div>
-<p>This will run the <code class="xref py py-mod docutils literal notranslate"><span class="pre">flake8</span></code> linter followed by <a class="reference external" href="https://docs.pytest.org/en/latest/index.html#module-pytest" title="(in pytest v8.4.0.dev49)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pytest</span></code></a> to test the code against all Python runtimes
+<p>This will run the <code class="xref py py-mod docutils literal notranslate"><span class="pre">flake8</span></code> linter followed by <a class="reference external" href="https://docs.pytest.org/en/latest/index.html#module-pytest" title="(in pytest v8.4.0.dev99)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pytest</span></code></a> to test the code against all Python runtimes
 found on the machine.  One of the great features of Tox is the ability to run specific tasks by specifying the environment to run.
 A few useful environments are listed below, where <strong>XX</strong> indicates a Python version present in your development environment,
 such as ‘27’ or ‘36’.</p>
@@ -810,7 +810,7 @@ such as ‘27’ or ‘36’.</p>
 <p>Starts a Python REPL in an environment with <strong>sasctl</strong> already installed.</p>
 </li>
 </ol>
-<p>For additional information on configuring and using Tox, see the official <a class="reference external" href="https://tox.wiki/en/latest/index.html" title="(in Project name not set v4.18)"><span class="xref std std-doc">documentation</span></a> or Sean Hammond’s excellent <a class="reference external" href="https://seanh.cc/post/tox-tutorial/">tutorial</a>.</p>
+<p>For additional information on configuring and using Tox, see the official <a class="reference external" href="https://tox.wiki/en/latest/index.html" title="(in Project name not set v4.21)"><span class="xref std std-doc">documentation</span></a> or Sean Hammond’s excellent <a class="reference external" href="https://seanh.cc/post/tox-tutorial/">tutorial</a>.</p>
 </section>
 </section>
 </section>

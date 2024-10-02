@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.utils.pyml2ds package &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.utils.pyml2ds package &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/sasctl.utils.pyml2ds';</script>
@@ -45,7 +45,7 @@
     <link rel="prev" title="sasctl.utils.pymas package" href="sasctl.utils.pymas.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -119,7 +119,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -375,26 +375,26 @@ document.write(`
 <span id="sasctl-utils-pyml2ds-pyml2ds-module"></span><h2>sasctl.utils.pyml2ds.pyml2ds module<a class="headerlink" href="#module-sasctl.utils.pyml2ds.pyml2ds" title="Link to this heading">#</a></h2>
 <p>Translate a gradient boosting model and write SAS scoring code to file.</p>
 <p>Supported models are: xgboost, lightgbm and pmml gradient boosting.</p>
-<section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>in_file<span class="classifier">str or bytes or file-like</span></dt><dd><p>Pickled object to translate.  String is assumed to be a path to a picked
+<dl class="field-list simple">
+<dt class="field-odd">param in_file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Pickled object to translate.  String is assumed to be a path to a picked
 file, file-like is assumed to be an open file handle to a pickle
 object, and bytes is assumed to be the raw pickled bytes.</p>
 </dd>
-<dt>out_var_name<span class="classifier">str (optional)</span></dt><dd><p>Output variable name.</p>
+<dt class="field-even">type in_file<span class="colon">:</span></dt>
+<dd class="field-even"><p>str or bytes or file-like</p>
+</dd>
+<dt class="field-odd">param out_var_name<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Output variable name.</p>
+</dd>
+<dt class="field-even">type out_var_name<span class="colon">:</span></dt>
+<dd class="field-even"><p>str (optional)</p>
+</dd>
+<dt class="field-odd">returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>str</em> – A SAS Data Step program implementing the model.</p>
 </dd>
 </dl>
-</section>
-<section id="returns">
-<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h3>
-<dl class="simple">
-<dt>str</dt><dd><p>A SAS Data Step program implementing the model.</p>
-</dd>
-</dl>
-</section>
-<section id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<p class="rubric">Examples</p>
 <p>Generate SAS code from an XGBoost model.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">xgboost.sklearn</span> <span class="kn">import</span> <span class="n">XGBRegressor</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">xgb</span> <span class="o">=</span> <span class="n">XGBRegressor</span><span class="p">()</span>
@@ -407,7 +407,6 @@ object, and bytes is assumed to be the raw pickled bytes.</p>
 <p class="admonition-title">Warning</p>
 <p>This method is experimental and may be modified or removed without warning.</p>
 </div>
-</section>
 </section>
 </section>
 
@@ -449,12 +448,7 @@ object, and bytes is assumed to be the raw pickled bytes.</p>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-sasctl.utils.pyml2ds.pyml2ds">sasctl.utils.pyml2ds.pyml2ds module</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">Parameters</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#returns">Returns</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-sasctl.utils.pyml2ds.pyml2ds">sasctl.utils.pyml2ds.pyml2ds module</a></li>
 </ul>
   </nav></div>
 

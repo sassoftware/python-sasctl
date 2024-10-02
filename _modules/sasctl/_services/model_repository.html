@@ -1,0 +1,1322 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" data-theme="dark">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sasctl._services.model_repository &#8212; sasctl 1.10.7 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=93ada2c2"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/model_repository';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="dark">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/sasctl.html">
+    sasctl package
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/sassoftware/python-sasctl" title="sasctl" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../_static/sas_logo.svg" class="icon-link-image" alt="sasctl"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/sasctl.html">
+    sasctl package
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/sassoftware/python-sasctl" title="sasctl" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../_static/sas_logo.svg" class="icon-link-image" alt="sasctl"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">sasctl._serv...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for sasctl._services.model_repository</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># encoding: utf-8</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
+<span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
+
+<span class="sd">&quot;&quot;&quot;The Model Repository service supports registering and managing models.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
+<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">HTTPError</span><span class="p">,</span> <span class="n">current_session</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">sasctl_command</span>
+<span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
+
+<span class="n">FUNCTIONS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Analytical&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Classification&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Clustering&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Forecasting&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Prediction&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Text categorization&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Text extraction&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Text sentiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Text topics&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Sentiment&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="ModelRepository">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository">[docs]</a>
+<span class="k">class</span> <span class="nc">ModelRepository</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements the Model Repository REST API.</span>
+
+<span class="sd">    The Model Repository API provides support for registering, organizing,</span>
+<span class="sd">    and managing models within a common model repository.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    `REST Documentation &lt;https://developer.sas.com/apis/rest/DecisionManagement</span>
+<span class="sd">    /#model-repository&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;/modelRepository&quot;</span>
+
+    <span class="n">list_repositories</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">update_repository</span><span class="p">,</span> <span class="n">delete_repository</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span>
+        <span class="s2">&quot;/repositories&quot;</span><span class="p">,</span> <span class="s2">&quot;repository&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">list_projects</span><span class="p">,</span> <span class="n">get_project</span><span class="p">,</span> <span class="n">update_project</span><span class="p">,</span> <span class="n">delete_project</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span>
+        <span class="s2">&quot;/projects&quot;</span><span class="p">,</span> <span class="s2">&quot;project&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">list_models</span><span class="p">,</span> <span class="n">get_model</span><span class="p">,</span> <span class="n">update_model</span><span class="p">,</span> <span class="n">delete_model</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span>
+        <span class="s2">&quot;/models&quot;</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="ModelRepository.get_astore">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_astore">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_astore</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the ASTORE for a model registered in the model repository.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model :  str or dict</span>
+<span class="sd">            The name or id of the model, or a dictionary representation of the</span>
+<span class="sd">            model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ----------</span>
+<span class="sd">        BinaryIO</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: Download binary object?</span>
+
+        <span class="n">link</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;analyticStore&quot;</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">link</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.get_model_link">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_link">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_model_link</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a link from a model&#39;s set of links.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name or id of the model, or a dictionary representation of the</span>
+<span class="sd">            model.</span>
+<span class="sd">        rel : str</span>
+<span class="sd">            The name of the link to retrieve</span>
+<span class="sd">        refresh : bool, optional</span>
+<span class="sd">            Whether the model&#39;s data should be refreshed before searching for</span>
+<span class="sd">            the link.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict or None</span>
+<span class="sd">            Dictionary containing the link&#39;s properties</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Try to find the link if the model is a dictionary</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">link</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">rel</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">link</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">refresh</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">link</span>
+
+        <span class="c1"># Model either wasn&#39;t a dictionary or it didn&#39;t include the link</span>
+        <span class="c1"># Pull the model data and then check for the link</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="n">refresh</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">rel</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.get_score_code">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_score_code">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_score_code</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the score code for a model registered in the model repository.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name or id of the model, or a dictionary representation of</span>
+<span class="sd">            the model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The code designated as the model&#39;s score code</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">link</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;scoreCode&quot;</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">link</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">scorecode_uri</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">get</span><span class="p">(</span>
+                <span class="n">scorecode_uri</span><span class="p">,</span>
+                <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;text/vnd.sas.models.score.code.ds2package&quot;</span><span class="p">},</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.get_model_contents">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_contents">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_model_contents</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve the additional files and data associated with the model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name or id of the model, or a dictionary representation of the</span>
+<span class="sd">            model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            The code designated as the model&#39;s score code</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">link</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;contents&quot;</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">contents</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="s2">&quot;contents&quot;</span><span class="p">)</span>
+
+        <span class="c1"># By default, request_link() will unwrap a length-1 list.</span>
+        <span class="c1"># If that happens, re-wrap so a list is always returned.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">contents</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">contents</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.get_repository">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_repository">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="s2">&quot;repositories&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_repository</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">repository</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a repository instance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        repository : str or dict</span>
+<span class="sd">            Name, ID, or dictionary representation of the repository.</span>
+<span class="sd">        refresh : bool, optional</span>
+<span class="sd">            Obtain an updated copy of the repository.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj or None</span>
+<span class="sd">            A dictionary containing the repository attributes or None.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -------</span>
+<span class="sd">        If `repository` is a complete representation of the repository it will be</span>
+<span class="sd">        returned unless `refresh` is set.  This prevents unnecessary REST</span>
+<span class="sd">        calls when data is already available on the client.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If the input already appears to be the requested object just</span>
+        <span class="c1"># return it, unless a refresh of the data was explicitly requested.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">repository</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="n">k</span> <span class="ow">in</span> <span class="n">repository</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="n">refresh</span><span class="p">:</span>
+                <span class="n">repository</span> <span class="o">=</span> <span class="n">repository</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">repository</span>
+
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">repository</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Attempt to GET the repository directly.  Access may be restricted, so allow HTTP 403 errors</span>
+                <span class="c1"># and fall back to using list_repositories() instead.</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/repositories/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">repository</span><span class="p">))</span>
+            <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">!=</span> <span class="mi">403</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">list_repositories</span><span class="p">()</span>
+
+        <span class="c1"># Not sure why, but as of 19w04 the filter doesn&#39;t seem to work</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">repository</span><span class="p">)</span> <span class="ow">or</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">repository</span><span class="p">):</span>
+                <span class="c1"># Make a request for the specific object so that ETag</span>
+                <span class="c1"># is included, allowing updates.</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">)</span>
+
+                    <span class="n">id_</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+                    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/repositories/</span><span class="si">{id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">id_</span><span class="p">))</span>
+                <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="c1"># NOTE: As of Viya 4.0.1 access to GET a repository is restricted to admin users out of the box.</span>
+                    <span class="c1"># Try to GET the repository, but ignore any 403 (permission denied) errors.</span>
+                    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">!=</span> <span class="mi">403</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">e</span>
+                <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.create_model">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.create_model">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create_model</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">project</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">modeler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">algorithm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">tool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">score_code_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">training_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">event_prob_variable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">event_target_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">is_champion</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">is_challenger</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">location</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">target_variable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">is_retrainable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">is_immutable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">properties</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">input_variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">output_variables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a model in an existing project or folder.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name or id of the model, or a dictionary representation of the</span>
+<span class="sd">            model.</span>
+<span class="sd">        project : str or dict</span>
+<span class="sd">            The name or id of the model project, or a dictionary representation</span>
+<span class="sd">            of the model project.</span>
+<span class="sd">        description : str, optional</span>
+<span class="sd">            The description of the model.</span>
+<span class="sd">        modeler : str, optional</span>
+<span class="sd">            Name of the user that created the model.  Current user name will be</span>
+<span class="sd">            used if unspecified.</span>
+<span class="sd">        function : str, optional</span>
+<span class="sd">            The function of the model, valid values include: analytical,</span>
+<span class="sd">            classification, cluster, forecasting, prediction, Text analytics,</span>
+<span class="sd">            transformation.</span>
+<span class="sd">        algorithm : str, optional</span>
+<span class="sd">            The name of the model algorithm.</span>
+<span class="sd">        tool : str, optional</span>
+<span class="sd">            The name of the model tool, can be &#39;Python 2&#39; or &#39;Python 3&#39;.</span>
+<span class="sd">        score_code_type : str, optional</span>
+<span class="sd">            The score code type for the model.</span>
+<span class="sd">        training_table : str, optional</span>
+<span class="sd">            The train data table.</span>
+<span class="sd">        event_prob_variable : str, optional</span>
+<span class="sd">            The name of the event probability variable.  Used for</span>
+<span class="sd">            classification models only.</span>
+<span class="sd">        event_target_value : str, optional</span>
+<span class="sd">            The target event value.  Used for classification models only.</span>
+<span class="sd">        is_champion : bool, optional</span>
+<span class="sd">            Indicates whether the model should be designated as the</span>
+<span class="sd">            project&#39;s champion model.  Defaults to False.</span>
+<span class="sd">        is_challenger : bool, optional</span>
+<span class="sd">            Indicates whether the model should be designated as a</span>
+<span class="sd">            challenger model in the project.  Defaults to False.</span>
+<span class="sd">        location : str, optional,</span>
+<span class="sd">            The location of this model.</span>
+<span class="sd">        target_variable : str, optional</span>
+<span class="sd">            The name of the target variable.</span>
+<span class="sd">        is_retrainable : bool</span>
+<span class="sd">            Indicates whether the model can be retrained or not.</span>
+<span class="sd">        is_immutable : bool</span>
+<span class="sd">            Indicates whether the model can be changed or not.</span>
+<span class="sd">        properties : dict, optional</span>
+<span class="sd">            Custom model properties provided as name: value pairs.</span>
+<span class="sd">            Allowed types are int, float, string, datetime.date, and datetime.datetime</span>
+<span class="sd">        input_variables : Iterable, optional</span>
+<span class="sd">            Model input variables. By default, these are the same as the model</span>
+<span class="sd">            project.</span>
+<span class="sd">        output_variables : Iterable, optional</span>
+<span class="sd">            Model output variables. By default, these are the same as the model</span>
+<span class="sd">             project.</span>
+<span class="sd">        project_version : str</span>
+<span class="sd">            Name of project version to import model in to. Default</span>
+<span class="sd">            value is &quot;latest&quot;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The model schema returned in JSON format.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="n">properties</span> <span class="ow">or</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">model</span><span class="p">}</span>
+
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to find project &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">project</span><span class="p">)</span>
+
+        <span class="c1"># Use any explicitly passed parameter value first.</span>
+        <span class="c1"># Fall back to values in the model dict.</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;projectId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;modeler&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">modeler</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;modeler&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">current_session</span><span class="p">()</span><span class="o">.</span><span class="n">username</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">function</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;function&quot;</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">algorithm</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;algorithm&quot;</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;tool&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tool</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tool&quot;</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;champion&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_champion</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;champion&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">is_champion</span><span class="p">:</span>
+            <span class="n">model</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;champion&quot;</span>
+        <span class="k">elif</span> <span class="n">is_challenger</span><span class="p">:</span>
+            <span class="n">model</span><span class="p">[</span><span class="s2">&quot;role&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;challenger&quot;</span>
+
+        <span class="n">model</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;properties&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">properties</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="s2">&quot;numeric&quot;</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">:</span>
+                <span class="c1"># NOTE: do not use isinstance() to compare types as isinstance(v, datetime.date) evaluates to True</span>
+                <span class="c1">#       even for datetime.datetime instances.</span>
+                <span class="c1"># Convert to datetime to extract timestamp and then scale to milliseconds</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">day</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="s2">&quot;date&quot;</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="ow">is</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">:</span>
+                <span class="c1"># Extract timestamp and scale to milliseconds</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="s2">&quot;dateTime&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+            <span class="n">model</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">k</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">v</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">t</span><span class="p">})</span>
+
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;scoreCodeType&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">score_code_type</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scoreCodeType&quot;</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;trainTable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">training_table</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;trainTable&quot;</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;classificationEventProbabilityVariableName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">event_prob_variable</span>
+            <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;classificationEventProbabilityVariableName&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;classificationTargetEventValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">event_target_value</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;classificationTargetEventValue&quot;</span>
+        <span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">location</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_variable</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;targetVariable&quot;</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;retrainable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_retrainable</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;retrainable&quot;</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;immutable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_immutable</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;immutable&quot;</span><span class="p">)</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;inputVariables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_variables</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;inputVariables&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;outputVariables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_variables</span> <span class="ow">or</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;outputVariables&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">model</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/models&quot;</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.models.model+json&quot;</span><span class="p">},</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.add_model_content">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.add_model_content">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">add_model_content</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;multipart/form-data&quot;</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add additional files to the model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name or id of the model, or a dictionary representation of</span>
+<span class="sd">            the model.</span>
+<span class="sd">        file : str, dict, or bytes</span>
+<span class="sd">            A file related to the model, such as the model code.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Name of the file related to the model.</span>
+<span class="sd">        role : str</span>
+<span class="sd">            Role of the model file, such as &#39;Python pickle&#39;. Default value is None.</span>
+<span class="sd">        content_type : str</span>
+<span class="sd">            An HTTP Content-Type value. Default value is multipart/form-data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The model content schema.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">content_type</span> <span class="o">==</span> <span class="s2">&quot;multipart/form-data&quot;</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="n">content_type</span> <span class="o">=</span> <span class="s2">&quot;application/octet-stream&quot;</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="kn">import</span> <span class="nn">json</span>
+
+            <span class="n">file</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;files&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">content_type</span><span class="p">)}</span>
+
+        <span class="k">if</span> <span class="n">role</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="n">role</span><span class="p">}</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="s2">&quot;&amp;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+
+        <span class="c1"># If the file already exists, a 409 error will be returned</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="s2">&quot;/models/</span><span class="si">{}</span><span class="s2">/contents&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">),</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+            <span class="p">)</span>
+        <span class="c1"># Deletes the duplicate content and reruns the API call</span>
+        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">409</span><span class="p">:</span>
+                <span class="n">model_contents</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_contents</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">model_contents</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                        <span class="bp">cls</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/models/</span><span class="si">{}</span><span class="s2">/contents/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+
+                        <span class="c1"># Return json stream to beginning of file content</span>
+                        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;files&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;seek&quot;</span><span class="p">):</span>
+                            <span class="n">files</span><span class="p">[</span><span class="s2">&quot;files&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                            <span class="s2">&quot;/models/</span><span class="si">{}</span><span class="s2">/contents&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_</span><span class="p">),</span>
+                            <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span>
+                            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+                        <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.default_repository">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.default_repository">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">default_repository</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the built-in default repository.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_repos</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">list_repositories</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">all_repos</span><span class="p">:</span>
+            <span class="c1"># If nothing else, return the first repository</span>
+            <span class="n">repo</span> <span class="o">=</span> <span class="n">all_repos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># Check repository names to find a better default.</span>
+            <span class="c1"># &#39;Repository 1&#39; was default in 19w04</span>
+            <span class="c1"># &#39;Public&#39; was default in 19w21</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">all_repos</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;Repository 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Public&quot;</span><span class="p">):</span>
+                    <span class="n">repo</span> <span class="o">=</span> <span class="n">r</span>
+                    <span class="k">break</span>
+            <span class="k">return</span> <span class="n">repo</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.create_project">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.create_project">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create_project</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">repository</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a model project in the given model repository.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        project : str or dict</span>
+<span class="sd">            The name or id of the model project, or a dictionary representation</span>
+<span class="sd">            of the project.</span>
+<span class="sd">        repository : str or dict</span>
+<span class="sd">            The name or id of the model repository, or a dictionary</span>
+<span class="sd">            representation of the repository.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">project</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">project</span><span class="p">}</span>
+
+        <span class="n">repository</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_repository</span><span class="p">(</span><span class="n">repository</span><span class="p">)</span>
+
+        <span class="n">project</span><span class="p">[</span><span class="s2">&quot;repositoryId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">repository</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">project</span><span class="p">[</span><span class="s2">&quot;folderId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">repository</span><span class="p">[</span><span class="s2">&quot;folderId&quot;</span><span class="p">]</span>
+
+        <span class="n">project</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/projects&quot;</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="n">project</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/vnd.sas.models.project+json&quot;</span><span class="p">},</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.import_model_from_zip">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.import_model_from_zip">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">import_model_from_zip</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;latest&quot;</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Import a model and contents as a ZIP file into a model project.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str or dict</span>
+<span class="sd">            The name of the model.</span>
+<span class="sd">        project : str or dict</span>
+<span class="sd">            The name or id of the model project, or a dictionary</span>
+<span class="sd">            representation of the project.</span>
+<span class="sd">        file : bytes or file-like object</span>
+<span class="sd">            The ZIP file containing the model and contents.</span>
+<span class="sd">        description : str</span>
+<span class="sd">            The description of the model.</span>
+<span class="sd">        version : str, optional</span>
+<span class="sd">            Name of the project version. Default value is &quot;latest&quot;.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+<span class="sd">            The API response after importing the model.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">project_info</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">project_info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Project `</span><span class="si">%s</span><span class="s2">` could not be found.&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">project</span><span class="p">))</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;ZIP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;projectId&quot;</span><span class="p">:</span> <span class="n">project_info</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="s2">&quot;versionOption&quot;</span><span class="p">:</span> <span class="n">version</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="s2">&quot;&amp;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">seekable</span><span class="p">():</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/models#octetStream&quot;</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">file</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/octet-stream&quot;</span><span class="p">},</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.create_model_version">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.create_model_version">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create_model_version</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new version of an existing model.</span>
+
+<span class="sd">        Create a new major (X.0) or minor (1.X) version of an existing</span>
+<span class="sd">        model.  All contents from the current version are copied to the new</span>
+<span class="sd">        version.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name, id, or dictionary representation of a model.</span>
+<span class="sd">        minor : bool, optional</span>
+<span class="sd">            Whether the new version should be a minor version increment from</span>
+<span class="sd">            the current version.  Otherwise, a new major version will be</span>
+<span class="sd">            created.  Defaults to False.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+<span class="sd">            The new version of the model.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model_obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s2">&quot;addModelVersion&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to create a new version for model &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
+
+        <span class="n">option</span> <span class="o">=</span> <span class="s2">&quot;minor&quot;</span> <span class="k">if</span> <span class="n">minor</span> <span class="k">else</span> <span class="s2">&quot;major&quot;</span>
+
+        <span class="c1"># As of 8/9/19 addModelVersion returns the CURRENT model version,</span>
+        <span class="c1"># not the NEW version.  Refresh the model to get the latest version.</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="s2">&quot;addModelVersion&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;option&quot;</span><span class="p">:</span> <span class="n">option</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model_obj</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.list_model_versions">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.list_model_versions">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">list_model_versions</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a list of previous versions of a model.</span>
+
+<span class="sd">        The current model version is not included in the results.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name, id, or dictionary representation of a model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;modelVersions&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unable to retrieve versions for model &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">model</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;modelVersions&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.copy_analytic_store">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.copy_analytic_store">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">copy_analytic_store</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy model ASTOREs to a pre-defined server location.</span>
+
+<span class="sd">        Copies all of the analytic stores for a model to the pre-defined</span>
+<span class="sd">        server location (/config/data/modelsvr/astore).</span>
+<span class="sd">        To enable publishing and scoring, models that contain analytic stores</span>
+<span class="sd">        need the ASTORE files to be copied to a set location</span>
+<span class="sd">        (/config/data/modelsrv/astore).  This location is used for</span>
+<span class="sd">        integration with Event Stream Processing and others. This request</span>
+<span class="sd">        invokes an asynchronous call to copy the analytic store files. Check</span>
+<span class="sd">        the individual analytic store uris to get the completion state:</span>
+<span class="sd">        pending, copying, success, failure. Please review the full Model</span>
+<span class="sd">        Manager documentation before using.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name, id, or dictionary representation of a model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rel</span> <span class="o">=</span> <span class="s2">&quot;copyAnalyticStore&quot;</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">rel</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;copyAnalyticStore&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.delete_model_contents">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.delete_model_contents">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">delete_model_contents</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deletes all contents (files) in the model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name, id, or dictionary representation of a model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rel</span> <span class="o">=</span> <span class="s2">&quot;delete&quot;</span>
+
+        <span class="n">filelist</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model_contents</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">delfile</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
+            <span class="n">modelfileuri</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">delfile</span><span class="p">,</span> <span class="n">rel</span><span class="p">)</span>
+            <span class="n">delete</span><span class="p">(</span><span class="n">modelfileuri</span><span class="p">[</span><span class="s2">&quot;uri&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.copy_python_resources">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.copy_python_resources">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">copy_python_resources</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Moves a model&#39;s score resources to the Compute server.</span>
+
+<span class="sd">        Copies all of the Python score resources for a model to the pre-defined</span>
+<span class="sd">        server location (/models/resources/viya/&lt;model-UUID&gt;/). To enable</span>
+<span class="sd">        publishing and scoring, models that contain Python scoring resources</span>
+<span class="sd">        need the score resource files to be copied to a set location</span>
+<span class="sd">        (/models/resources/viya/&lt;model-UUID&gt;/). This location is used for</span>
+<span class="sd">        integration with Event Stream Processing and others. This request</span>
+<span class="sd">        invokes an asynchronous call to copy the score resource files. Check</span>
+<span class="sd">        the individual score resource uris to get the completion state:</span>
+<span class="sd">        pending, copying, success, failure. Please review the full Model</span>
+<span class="sd">        Manager documentation before using.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name or id of the model, or a dictionary representation of</span>
+<span class="sd">            the model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj or None</span>
+<span class="sd">            JSON response detailing the API metadata</span>
+
+<span class="sd">        Warns</span>
+<span class="sd">        -----</span>
+<span class="sd">        UserWarning</span>
+<span class="sd">            If no score resources exist for the model.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">model_obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">model_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No model &#39;</span><span class="si">{}</span><span class="s2">&#39; found.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">))</span>
+
+        <span class="c1"># Check if symbolic link for resource directories exists</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+                <span class="s2">&quot;/models/</span><span class="si">%s</span><span class="s2">/scoreResources&quot;</span> <span class="o">%</span> <span class="n">model_obj</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+                <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No score resources found for model &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_obj</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">response</span>
+        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">406</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span>
+                    <span class="s2">&quot;The SAS Viya system you are attempting to move score resources with requires an additional&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot; administrator action in order to complete. Please see the documentation at &quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;https://go.documentation.sas.com/doc/en/calcdc/3.5/calmodels/n10916nn7yro46n119nev9sb912c.htm,&quot;</span>
+                    <span class="o">+</span> <span class="s2">&quot;which details the corollary approach for configuring analytic store model files.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.convert_python_to_ds2">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.convert_python_to_ds2">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">convert_python_to_ds2</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a Python model to DS2</span>
+
+<span class="sd">        For SAS Viya 3.5 Python models on SAS Model Manager, wrap the Python score code in DS2</span>
+<span class="sd">        and convert the model score code type to DS2. Models converted in this way are not</span>
+<span class="sd">        scoreable by CAS.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name or id of the model, or a dictionary representation of</span>
+<span class="sd">            the model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        API response</span>
+<span class="sd">            JSON response detailing the API metadata</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span>
+
+        <span class="n">ETag</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_headers</span><span class="p">[</span><span class="s2">&quot;ETag&quot;</span><span class="p">]</span>
+        <span class="n">accept</span> <span class="o">=</span> <span class="s2">&quot;text/vnd.sas.source.ds2&quot;</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;application/json&quot;</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;/models/</span><span class="si">%s</span><span class="s2">/typeConversion&quot;</span> <span class="o">%</span> <span class="n">id_</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Accept-Item&quot;</span><span class="p">:</span> <span class="n">accept</span><span class="p">,</span> <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="n">content</span><span class="p">,</span> <span class="s2">&quot;If-Match&quot;</span><span class="p">:</span> <span class="n">ETag</span><span class="p">},</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.get_model_details">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.get_model_details">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_model_details</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get model details from SAS Model Manager</span>
+
+<span class="sd">        Get model details that pertain to model properties, model metadata,</span>
+<span class="sd">        model input, output, and target variables, and user-defined values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str or dict</span>
+<span class="sd">            The name or id of the model, or a dictionary representation of</span>
+<span class="sd">            the model.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        API response</span>
+<span class="sd">            JSON response detailing the model details</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_uuid</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">model</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/models/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">id_</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModelRepository.list_project_versions">
+<a class="viewcode-back" href="../../../api/services/model_repository.html#sasctl._services.model_repository.ModelRepository.list_project_versions">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">list_project_versions</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">project</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a list of all versions of a project.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        project : str or dict</span>
+<span class="sd">            The name or id of the model project, or a dictionary representation</span>
+<span class="sd">            of the model project.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list of dicts</span>
+<span class="sd">            List of dicts representing different project versions. Dict key/value</span>
+<span class="sd">            pairs are as follows.</span>
+<span class="sd">            - name : str</span>
+<span class="sd">            - id : str</span>
+<span class="sd">            - number : str</span>
+<span class="sd">            - modified : datetime</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">project_info</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">project_info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Project `</span><span class="si">%s</span><span class="s2">` could not be found.&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">project</span><span class="p">))</span>
+
+        <span class="n">projectVersions</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;/projects/</span><span class="si">{}</span><span class="s2">/projectVersions&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_info</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">versionList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">projectVersions</span><span class="p">:</span>
+                <span class="n">versionDict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">version</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">version</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                    <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="n">version</span><span class="o">.</span><span class="n">versionNumber</span><span class="p">,</span>
+                    <span class="s2">&quot;modified&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                        <span class="n">version</span><span class="o">.</span><span class="n">modifiedTimeStamp</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">Z&quot;</span>
+                    <span class="p">),</span>
+                <span class="p">}</span>
+                <span class="n">versionList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">versionDict</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">versionDict</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">projectVersions</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">projectVersions</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="n">projectVersions</span><span class="o">.</span><span class="n">versionNumber</span><span class="p">,</span>
+                <span class="s2">&quot;modified&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                    <span class="n">projectVersions</span><span class="o">.</span><span class="n">modifiedTimeStamp</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">Z&quot;</span>
+                <span class="p">),</span>
+            <span class="p">}</span>
+            <span class="n">versionList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">versionDict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">versionList</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

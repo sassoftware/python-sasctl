@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.pzmm.mlflow_model &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.pzmm.mlflow_model &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/pzmm/mlflow_model';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.pzmm.import_model" href="import_model.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -378,15 +378,6 @@ document.write(`
 <dt class="sig sig-object py" id="sasctl.pzmm.mlflow_model.MLFlowModel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.pzmm.mlflow_model.</span></span><span class="sig-name descname"><span class="pre">MLFlowModel</span></span><a class="reference internal" href="../../_modules/sasctl/pzmm/mlflow_model.html#MLFlowModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.mlflow_model.MLFlowModel" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.mlflow_model.MLFlowModel.read_mlflow_model_file" title="sasctl.pzmm.mlflow_model.MLFlowModel.read_mlflow_model_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_mlflow_model_file</span></code></a>([m_path])</p></td>
-<td><p>Read and return model metadata and input/output variables as dictionaries from an MLFlow model directory.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.pzmm.mlflow_model.MLFlowModel.read_mlflow_model_file">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_mlflow_model_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('/home/runner/work/python-sasctl/python-sasctl')</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/pzmm/mlflow_model.html#MLFlowModel.read_mlflow_model_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.mlflow_model.MLFlowModel.read_mlflow_model_file" title="Link to this definition">#</a></dt>
@@ -396,21 +387,16 @@ an MLFlow model directory.</p>
 is required to include more types of MLFlow models.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>m_path</strong><span class="classifier">str or Path object, optional</span></dt><dd></dd>
-<dt><strong>Directory path of the MLFlow model files. Default is the current working</strong></dt><dd></dd>
-<dt><strong>directory.</strong></dt><dd></dd>
-</dl>
+<dd class="field-odd"><p><strong>m_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a><em>, </em><em>optional</em>) – Directory path of the MLFlow model files. Default is the current working
+directory.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>var_dict</strong><span class="classifier">dict</span></dt><dd><p>Model properties and metadata</p>
-</dd>
-<dt><strong>inputs_dict</strong><span class="classifier">list of dicts</span></dt><dd><p>Model input variables</p>
-</dd>
-<dt><strong>outputs_dict</strong><span class="classifier">list of dicts</span></dt><dd><p>Model output variables</p>
-</dd>
-</dl>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>var_dict</strong> (<em>dict</em>) – Model properties and metadata</p></li>
+<li><p><strong>inputs_dict</strong> (<em>list of dict</em>) – Model input variables</p></li>
+<li><p><strong>outputs_dict</strong> (<em>list of dict</em>) – Model output variables</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

@@ -1,0 +1,638 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" data-theme="dark">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sasctl._services.report_images &#8212; sasctl 1.10.7 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=93ada2c2"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/report_images';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="dark">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/sasctl.html">
+    sasctl package
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/sassoftware/python-sasctl" title="sasctl" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../_static/sas_logo.svg" class="icon-link-image" alt="sasctl"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/sasctl.html">
+    sasctl package
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/sassoftware/python-sasctl" title="sasctl" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../../../_static/sas_logo.svg" class="icon-link-image" alt="sasctl"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">sasctl._serv...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for sasctl._services.report_images</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># encoding: utf-8</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
+<span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
+
+
+<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">RestObj</span>
+<span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
+
+<span class="n">LOW</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">MEDIUM</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">HIGH</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">_LOD_VALUES</span> <span class="o">=</span> <span class="p">{</span><span class="n">LOW</span><span class="p">:</span> <span class="s2">&quot;thumbnail&quot;</span><span class="p">,</span> <span class="n">MEDIUM</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">:</span> <span class="s2">&quot;entireSection&quot;</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="ReportImages">
+<a class="viewcode-back" href="../../../api/services/report_images.html#sasctl._services.report_images.ReportImages">[docs]</a>
+<span class="k">class</span> <span class="nc">ReportImages</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delivers SVG images representing elements of a report.</span>
+
+<span class="sd">    The images are suitable to the current user, taking row-level-permissions</span>
+<span class="sd">    and other factors into consideration.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    `REST Documentation &lt;https://developer.sas.com/apis/rest/Visualization/#</span>
+<span class="sd">    report-images&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;reportImages&quot;</span>
+
+    <span class="n">LOD_LOW</span> <span class="o">=</span> <span class="n">LOW</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Renders the content with minimal details for creating thumbnails.&quot;&quot;&quot;</span>
+
+    <span class="n">LOD_MEDIUM</span> <span class="o">=</span> <span class="n">MEDIUM</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Renders the primary components of the content.&quot;&quot;&quot;</span>
+
+    <span class="n">LOD_HIGH</span> <span class="o">=</span> <span class="n">HIGH</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Renders all of the components of content.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReportImages.get_images_async">
+<a class="viewcode-back" href="../../../api/services/report_images.html#sasctl._services.report_images.ReportImages.get_images_async">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_images_async</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">report</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">elements</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lod</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a job to render images of reports or report sections.</span>
+
+<span class="sd">        Report contents are sized and arranged dynamically to accommodate</span>
+<span class="sd">        browser viewing.  Some or all of these contents may be rendered at any</span>
+<span class="sd">        time to produce an SVG image of the desired size.  This is done by</span>
+<span class="sd">        creating a render job which will create the requested images and return</span>
+<span class="sd">        their download links.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        report : str or RestObj</span>
+<span class="sd">            Report to retrieve images from specified as either a URI or a</span>
+<span class="sd">            `RestObj` instance as returned from `reports.get_report`.</span>
+<span class="sd">        section : int, optional</span>
+<span class="sd">            A specific report section to retrieve, specified by a zero-based</span>
+<span class="sd">            index.  If not specified, all sections will be returned as separate</span>
+<span class="sd">            images.</span>
+<span class="sd">        elements : List[Tuple[str, str]], optional</span>
+<span class="sd">            Iterable of tuples containing the element name and the size of the</span>
+<span class="sd">            element when rendered.</span>
+<span class="sd">        size : str or Tuple[int, int], optional</span>
+<span class="sd">            Size (in pixels) of the resulting images.  Ignored if `elements` is</span>
+<span class="sd">            specified.</span>
+<span class="sd">        lod : int, optional</span>
+<span class="sd">            Level of detail of the rendered image(s).  Defaults to HIGH.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        RestObj</span>
+<span class="sd">            The render job</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">):</span>
+            <span class="n">report</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="s2">&quot;self&quot;</span><span class="p">)[</span><span class="s2">&quot;uri&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">size</span>
+
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="s2">&quot;640x480&quot;</span>
+
+        <span class="n">lod</span> <span class="o">=</span> <span class="n">lod</span> <span class="ow">or</span> <span class="n">HIGH</span>
+
+        <span class="k">if</span> <span class="n">lod</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_LOD_VALUES</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;LOD value of &#39;</span><span class="si">%s</span><span class="s2">&#39; is invalid.  Expected one of &quot;</span> <span class="s2">&quot;LOW, MEDIUM, HIGH.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># LOD.HIGH will render the entire section</span>
+        <span class="c1"># If request is to render individual elements, we must reduce LOD.</span>
+        <span class="k">if</span> <span class="n">elements</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">lod</span> <span class="o">==</span> <span class="n">HIGH</span><span class="p">:</span>
+            <span class="n">lod</span> <span class="o">=</span> <span class="n">MEDIUM</span>
+
+        <span class="c1"># Convert integer enum to string value</span>
+        <span class="n">lod</span> <span class="o">=</span> <span class="n">_LOD_VALUES</span><span class="p">[</span><span class="n">lod</span><span class="p">]</span>
+
+        <span class="n">formatted_elements</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">elements</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="s2">&quot;visualElements&quot;</span>
+
+            <span class="c1"># In the case where a single element was passed, wrap it in a list</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elements</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+                <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span><span class="n">elements</span><span class="p">]</span>
+
+            <span class="c1"># In the case where a single tuple was passed, wrap it in a list</span>
+            <span class="c1"># Don&#39;t do this if a tuple of tuples was passed.</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elements</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span><span class="n">elements</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="c1"># Get element &amp; target size if both were provided</span>
+                    <span class="n">elem_name</span><span class="p">,</span> <span class="n">elem_size</span> <span class="o">=</span> <span class="n">element</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Otherwise, assume top-level size value will be used.</span>
+                    <span class="n">elem_name</span> <span class="o">=</span> <span class="n">element</span>
+                    <span class="n">elem_size</span> <span class="o">=</span> <span class="n">size</span>
+
+                <span class="c1"># If element was passed as a RestObj, extract the name</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">elem_name</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">):</span>
+                    <span class="n">elem_name</span> <span class="o">=</span> <span class="n">elem_name</span><span class="o">.</span><span class="n">name</span>
+
+                <span class="c1"># If size was passed as a tuple, format as string</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">elem_size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                    <span class="n">elem_size</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">elem_size</span>
+
+                <span class="n">formatted_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">elem_name</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">elem_size</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="n">section</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="s2">&quot;report&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="s2">&quot;perSection&quot;</span>
+
+        <span class="n">job</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/jobs#requestBody&quot;</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;reportUri&quot;</span><span class="p">:</span> <span class="n">report</span><span class="p">,</span>
+                <span class="s2">&quot;layoutType&quot;</span><span class="p">:</span> <span class="n">lod</span><span class="p">,</span>
+                <span class="s2">&quot;selectionType&quot;</span><span class="p">:</span> <span class="n">selection</span><span class="p">,</span>
+                <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
+                <span class="s2">&quot;specificVisualElements&quot;</span><span class="p">:</span> <span class="n">formatted_elements</span><span class="p">,</span>
+                <span class="s2">&quot;sectionIndex&quot;</span><span class="p">:</span> <span class="n">section</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">job</span></div>
+
+
+<div class="viewcode-block" id="ReportImages.get_images">
+<a class="viewcode-back" href="../../../api/services/report_images.html#sasctl._services.report_images.ReportImages.get_images">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_images</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">report</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">elements</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lod</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Render images of reports or report sections.</span>
+
+<span class="sd">        Report contents are sized and arranged dynamically to accommodate</span>
+<span class="sd">        browser viewing.  Some or all of these contents may be rendered at any</span>
+<span class="sd">        time to produce an SVG image of the desired size.  A rendering job will</span>
+<span class="sd">        automatically be created and the resulting images returned upon job</span>
+<span class="sd">        completion.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        report : str or RestObj</span>
+<span class="sd">            Report to retrieve images from specified as either a URI or a</span>
+<span class="sd">            `RestObj` instance as returned from `reports.get_report`.</span>
+<span class="sd">        section : int, optional</span>
+<span class="sd">            A specific report section to retrieve, specified by a zero-based</span>
+<span class="sd">            index.  If not specified, all sections will be returned as separate</span>
+<span class="sd">            images.</span>
+<span class="sd">        elements : List[Tuple[str, str]], optional</span>
+<span class="sd">            Iterable of tuples containing the element name and the size of the</span>
+<span class="sd">            element when rendered.</span>
+<span class="sd">        size : str or Tuple[int, int], optional</span>
+<span class="sd">            Size (in pixels) of the resulting images.  Ignored if `elements` is</span>
+<span class="sd">            specified.</span>
+<span class="sd">        lod : `LOD`, optional</span>
+<span class="sd">            Level of detail of the rendered image(s).  Defaults to LOD.HIGH.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[bytes]</span>
+<span class="sd">            List of binary strings, each representing one SVG image.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Render a single element of a report</span>
+
+<span class="sd">        &gt;&gt;&gt; from sasctl.services import reports</span>
+<span class="sd">        &gt;&gt;&gt; report = reports.get_report(&#39;Parrot Status&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; report_images.get_images(report, elements=(&#39;Norwegian Blue&#39;, &#39;640x480&#39;))</span>
+<span class="sd">        [b&#39;&lt;svg&gt;beautiful_plummage&lt;/svg&gt;&#39;]</span>
+
+<span class="sd">        Render each page of the report</span>
+
+<span class="sd">        &gt;&gt;&gt; from sasctl.services import reports</span>
+<span class="sd">        &gt;&gt;&gt; report = reports.get_report(&#39;Parrot Status&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; report_images.get_images(report)</span>
+<span class="sd">        [b&#39;&lt;svg&gt;Customer Complaints&lt;/svg&gt;&#39;, b&#39;&lt;svg&gt;Deceased&lt;/svg&gt;&#39;]</span>
+
+<span class="sd">        Render the 2nd page of a report</span>
+
+<span class="sd">        &gt;&gt;&gt; from sasctl.services import reports</span>
+<span class="sd">        &gt;&gt;&gt; report = reports.get_report(&#39;Parrot Status&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; report_images.get_images(report, section=1)</span>
+<span class="sd">        [b&#39;&lt;svg&gt;Deceased&lt;/svg&gt;&#39;]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_images_async</span><span class="p">(</span>
+            <span class="n">report</span><span class="o">=</span><span class="n">report</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="n">section</span><span class="p">,</span> <span class="n">elements</span><span class="o">=</span><span class="n">elements</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">lod</span><span class="o">=</span><span class="n">lod</span>
+        <span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_monitor_job</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+
+        <span class="n">images</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;content&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">images</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">images</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved..
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

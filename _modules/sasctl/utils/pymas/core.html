@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.utils.pymas.core &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.utils.pymas.core &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/utils/pymas/core';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -373,7 +373,7 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    func : function or str</span>
+<span class="sd">    func : Callable or str</span>
 <span class="sd">        Function name or an instance of Function which will be wrapped</span>
 <span class="sd">    variables : list of DS2Variable</span>
 <span class="sd">    array_input : bool</span>
@@ -381,7 +381,7 @@ document.write(`
 <span class="sd">        passing to `func`</span>
 <span class="sd">    name : str, optional</span>
 <span class="sd">        Name of the generated wrapper function.  Defaults to &#39;wrapper&#39;.</span>
-<span class="sd">    setup : iterable</span>
+<span class="sd">    setup : Iterable</span>
 <span class="sd">        Python source code lines to be executed during package setup</span>
 <span class="sd">    return_msg : bool, optional</span>
 <span class="sd">        Deprecated.</span>
@@ -391,7 +391,7 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
-<span class="sd">        the Python definition for the wrapper function.</span>
+<span class="sd">        The Python definition for the wrapper function.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -497,19 +497,21 @@ document.write(`
 
 
 
+<div class="viewcode-block" id="wrap_predict_method">
+<a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.wrap_predict_method">[docs]</a>
 <span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wrap_predict_method</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a PyMAS wrapper designed for Sci-kit&#39;s `.predict` methods.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    func : function or str</span>
+<span class="sd">    func : Callable or str</span>
 <span class="sd">        Function name or an instance of Function which will be wrapped.  Assumed</span>
 <span class="sd">        to behave as `.predict()` methods.</span>
 <span class="sd">    variables : list of DS2Variable</span>
 <span class="sd">        Input and output variables for the function</span>
-<span class="sd">    kwargs : any</span>
-<span class="sd">        Will be passed to `build_wrapper_function`.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Will be passed to :meth:`build_wrapper_function`.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -524,21 +526,24 @@ document.write(`
     <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;array_input&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
     <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;predict&quot;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">build_wrapper_function</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">build_wrapper_function</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
+
+<div class="viewcode-block" id="wrap_predict_proba_method">
+<a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.wrap_predict_proba_method">[docs]</a>
 <span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">wrap_predict_proba_method</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a PyMAS wrapper designed for Sci-kit&#39;s `.predict_proba` methods.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    func : function or str</span>
+<span class="sd">    func : Callable or str</span>
 <span class="sd">        Function name or an instance of Function which will be wrapped.  Assumed</span>
 <span class="sd">        to behave as `.predict_proba()` methods.</span>
 <span class="sd">    variables : list of DS2Variable</span>
 <span class="sd">        Input and output variables for the function</span>
-<span class="sd">    kwargs : any</span>
+<span class="sd">    **kwargs</span>
 <span class="sd">        Will be passed to `build_wrapper_function`.</span>
 
 <span class="sd">    Returns</span>
@@ -560,7 +565,8 @@ document.write(`
     <span class="n">new_code</span> <span class="o">=</span> <span class="s2">&quot;assert result.shape[0] == 1</span><span class="se">\n</span><span class="s2">&quot;</span>
     <span class="n">new_code</span> <span class="o">+=</span> <span class="s2">&quot;        result = tuple(result[0].tolist())&quot;</span>
 
-    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">old_code</span><span class="p">,</span> <span class="n">new_code</span><span class="p">,</span> <span class="n">wrapper</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">old_code</span><span class="p">,</span> <span class="n">new_code</span><span class="p">,</span> <span class="n">wrapper</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="from_inline">
@@ -573,7 +579,7 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    func : function</span>
+<span class="sd">    func : Callable</span>
 <span class="sd">        A Python function object to be used</span>
 <span class="sd">    input_types : list of type, optional</span>
 <span class="sd">        The expected type for each input value of `func`.  Can be ommitted if</span>
@@ -693,13 +699,13 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    file : str or bytes or file_like</span>
+<span class="sd">    file : str or bytes or io.BytesIO</span>
 <span class="sd">        Pickled object to use.  String is assumed to be a path to a picked</span>
 <span class="sd">        file, file_like is assumed to be an open file handle to a pickle</span>
 <span class="sd">        object, and bytes is assumed to be the raw pickled bytes.</span>
 <span class="sd">    func_name : str</span>
 <span class="sd">        Name of the target function to call</span>
-<span class="sd">    input_types : DataFrame, type, list of type, or dict of str: type, optional</span>
+<span class="sd">    input_types : pandas.DataFrame, type, list of type, or dict of str, optional</span>
 <span class="sd">        The expected type for each input value of the target function.</span>
 <span class="sd">        Can be omitted if target function includes type hints.  If a DataFrame</span>
 <span class="sd">        is provided, the columns will be inspected to determine type information.</span>
@@ -872,7 +878,7 @@ document.write(`
 <span class="sd">    return_msg : bool</span>
 <span class="sd">        Deprecated.</span>
 <span class="sd">        Whether the DS2-generated return message should be included.</span>
-<span class="sd">    kwargs : any</span>
+<span class="sd">    **kwargs</span>
 <span class="sd">        Passed to :func:`build_wrapper_function`.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -980,7 +986,8 @@ document.write(`
 <span class="sd">            The name of the table where execution results will be written</span>
 <span class="sd">        columns : list of str</span>
 <span class="sd">            Names of the columns from `table` that will be passed to `func`</span>
-<span class="sd">        dest : str {&#39;MAS&#39;, &#39;EP&#39;, &#39;CAS&#39;, &#39;Python&#39;}</span>
+<span class="sd">        dest : str</span>
+<span class="sd">            Choose from ``{&#39;MAS&#39;, &#39;EP&#39;, &#39;CAS&#39;, &#39;Python&#39;}``.</span>
 <span class="sd">            Specifies the publishing destination for the score code to ensure</span>
 <span class="sd">            that compatible code is generated.</span>
 

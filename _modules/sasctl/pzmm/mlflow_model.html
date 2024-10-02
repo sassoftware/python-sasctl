@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.mlflow_model &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.pzmm.mlflow_model &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/mlflow_model';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -358,17 +358,17 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        m_path : str or Path object, optional</span>
-<span class="sd">        Directory path of the MLFlow model files. Default is the current working</span>
-<span class="sd">        directory.</span>
+<span class="sd">        m_path : str or pathlib.Path, optional</span>
+<span class="sd">            Directory path of the MLFlow model files. Default is the current working</span>
+<span class="sd">            directory.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        var_dict : dict</span>
 <span class="sd">            Model properties and metadata</span>
-<span class="sd">        inputs_dict : list of dicts</span>
+<span class="sd">        inputs_dict : list of dict</span>
 <span class="sd">            Model input variables</span>
-<span class="sd">        outputs_dict : list of dicts</span>
+<span class="sd">        outputs_dict : list of dict</span>
 <span class="sd">            Model output variables</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">m_path</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;MLmodel&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">m_file</span><span class="p">:</span>

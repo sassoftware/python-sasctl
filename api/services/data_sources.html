@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.services.data_sources &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.services.data_sources &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/services/data_sources';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.services.concepts" href="concepts.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -393,94 +393,19 @@ document.write(`
 APIs to navigate, reference, and retrieve data in the SAS Viya ecosystem.
 The Data Sources API enables retrieval of metadata for data sources and
 linking to their respective tables.</p>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a DELETE request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a GET request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.data_sources.DataSources.get_caslib" title="sasctl._services.data_sources.DataSources.get_caslib"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_caslib</span></code></a>(name[, source])</p></td>
-<td><p>Get a caslib by name.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_link</span></code>(obj, rel)</p></td>
-<td><p>Get link information from a resource.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.data_sources.DataSources.get_provider" title="sasctl._services.data_sources.DataSources.get_provider"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_provider</span></code></a>(provider[, refresh])</p></td>
-<td><p>Returns a provider instance.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.data_sources.DataSources.get_source" title="sasctl._services.data_sources.DataSources.get_source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_source</span></code></a>(provider, source)</p></td>
-<td><p>Returns a data source belonging to a given provider.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.data_sources.DataSources.get_table" title="sasctl._services.data_sources.DataSources.get_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_table</span></code></a>(name, caslib[, session_id])</p></td>
-<td><p>Get metadata for a CAS table.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">head</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a HEAD request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code>()</p></td>
-<td><p>Version and build information for the service.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_available</span></code>()</p></td>
-<td><p>Check if the service is currently available.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.data_sources.DataSources.list_caslibs" title="sasctl._services.data_sources.DataSources.list_caslibs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_caslibs</span></code></a>([source, filter_])</p></td>
-<td><p>Get all caslibs registered with the given CAS server.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.data_sources.DataSources.list_providers" title="sasctl._services.data_sources.DataSources.list_providers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_providers</span></code></a>([filter, start, limit])</p></td>
-<td><p>List all providers available in the environment.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.data_sources.DataSources.list_sources" title="sasctl._services.data_sources.DataSources.list_sources"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_sources</span></code></a>(provider)</p></td>
-<td><p>List all data sources available for a provider.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#sasctl._services.data_sources.DataSources.list_tables" title="sasctl._services.data_sources.DataSources.list_tables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_tables</span></code></a>(caslib[, filter_, session_id])</p></td>
-<td><p>List tables available in a caslib.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">post</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a POST request.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">put</span></code>(*args, **kwargs)</p></td>
-<td><p>Send a PUT request.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request</span></code>(verb, path[, session, format_])</p></td>
-<td><p>Send an HTTP request with a session.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_link</span></code>(obj, rel, **kwargs)</p></td>
-<td><p>Request a link from a resource.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl._services.data_sources.DataSources.table_uri" title="sasctl._services.data_sources.DataSources.table_uri"><code class="xref py py-obj docutils literal notranslate"><span class="pre">table_uri</span></code></a>(table)</p></td>
-<td><p>Get the URI identifying a table.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p><strong>is_uuid</strong></p></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl._services.data_sources.DataSources.get_caslib">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_caslib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/sasctl/_services/data_sources.html#DataSources.get_caslib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl._services.data_sources.DataSources.get_caslib" title="Link to this definition">#</a></dt>
 <dd><p>Get a caslib by name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the caslib</p>
-</dd>
-<dt><strong>source</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the CAS server.  Defaults to <cite>cas-shared-default</cite>.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the caslib</p></li>
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the CAS server.  Defaults to <cite>cas-shared-default</cite>.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -491,18 +416,13 @@ linking to their respective tables.</p>
 <dd><p>Returns a provider instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>provider</strong><span class="classifier">str or dict</span></dt><dd><p>Name, ID, or dictionary representation of the provider.</p>
-</dd>
-<dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Obtain an updated copy of the {item}.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>provider</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Name, ID, or dictionary representation of the provider.</p></li>
+<li><p><strong>refresh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Obtain an updated copy of the {item}.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj or None</dt><dd><p>A dictionary containing the provider attributes or None.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>RestObj or None</em> – A dictionary containing the provider attributes or None.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -517,18 +437,13 @@ when data is already available on the client.</p>
 <dd><p>Returns a data source belonging to a given provider.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>provider</strong><span class="classifier">str or dict</span></dt><dd><p>Name, ID, or dictionary representation of the provider.</p>
-</dd>
-<dt><strong>source</strong><span class="classifier">str</span></dt><dd><p>Name or id of the data source</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>provider</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Name, ID, or dictionary representation of the provider.</p></li>
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name or id of the data source</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj or None</dt><dd><p>A dictionary containing the data source attributes or None.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>RestObj or None</em> – A dictionary containing the data source attributes or None.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -539,17 +454,13 @@ when data is already available on the client.</p>
 <dd><p>Get metadata for a CAS table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the table</p>
-</dd>
-<dt><strong>caslib</strong><span class="classifier">str or dict</span></dt><dd><p>Name, ID, or dictionary representation of the caslib.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Name of the table</p></li>
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Name, ID, or dictionary representation of the caslib.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>RestObj</dt><dd></dd>
-</dl>
+<dd class="field-even"><p><em>RestObj</em></p>
 </dd>
 </dl>
 </dd></dl>
@@ -560,17 +471,13 @@ when data is already available on the client.</p>
 <dd><p>Get all caslibs registered with the given CAS server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>source</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the CAS server.  Defaults to <cite>cas-shared-default</cite>.</p>
-</dd>
-<dt><strong>filter_</strong><span class="classifier">str, optional</span></dt><dd></dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the CAS server.  Defaults to <cite>cas-shared-default</cite>.</p></li>
+<li><p><strong>filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>A collection of <a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> instances.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>list</em> – A collection of <a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> instances.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -583,19 +490,14 @@ when data is already available on the client.</p>
 <dd><p>List all providers available in the environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>filter</strong><span class="classifier">str, optional</span></dt><dd></dd>
-<dt><strong>start</strong><span class="classifier">int, optional</span></dt><dd><p>Zero-based index of the first item to return.  Defaults to 0.</p>
-</dd>
-<dt><strong>limit</strong><span class="classifier">int, optional</span></dt><dd><p>The maximum number of items to return.  Defaults to 20.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>)</p></li>
+<li><p><strong>start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – Zero-based index of the first item to return.  Defaults to 0.</p></li>
+<li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – The maximum number of items to return.  Defaults to 20.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>A list of dictionaries containing the providers.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>list</em> – A list of dictionaries containing the providers.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -608,16 +510,10 @@ when data is already available on the client.</p>
 <dd><p>List all data sources available for a provider.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>provider</strong><span class="classifier">str or dict</span></dt><dd><p>Name, ID, or dictionary representation of the provider.</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><strong>provider</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Name, ID, or dictionary representation of the provider.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>A collection of <a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> instances.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>list</em> – A collection of <a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> instances.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -628,20 +524,15 @@ when data is already available on the client.</p>
 <dd><p>List tables available in a caslib.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>caslib</strong><span class="classifier">str or dict</span></dt><dd><p>Name, ID, or dictionary representation of the caslib.</p>
-</dd>
-<dt><strong>filter_</strong><span class="classifier">str, optional</span></dt><dd></dd>
-<dt><strong>session_id</strong><span class="classifier">str, optional</span></dt><dd><p>ID of an existing CAS session to use.  Otherwise a new session will
-be created.</p>
-</dd>
-</dl>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Name, ID, or dictionary representation of the caslib.</p></li>
+<li><p><strong>filter</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>)</p></li>
+<li><p><strong>session_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – ID of an existing CAS session to use.  Otherwise a new session will
+be created.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>A collection of <a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> instances.</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>list</em> – A collection of <a class="reference internal" href="../sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">RestObj</span></code></a> instances.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -654,15 +545,10 @@ be created.</p>
 <dd><p>Get the URI identifying a table.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>table</strong><span class="classifier">dict or CASTable</span></dt><dd></dd>
-</dl>
+<dd class="field-odd"><p><strong>table</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> or </em><a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.table.CASTable.html#swat.cas.table.CASTable" title="(in SWAT v1.14.0)"><em>swat.cas.table.CASTable</em></a>)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>str</dt><dd><p>table URI</p>
-</dd>
-</dl>
+<dd class="field-even"><p><em>str</em> – table URI</p>
 </dd>
 </dl>
 </dd></dl>

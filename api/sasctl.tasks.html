@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.tasks &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.tasks &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/sasctl.tasks';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.core" href="sasctl.core.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -374,28 +374,60 @@ column name and column value. Currently, only exact matches are available when f
 by this method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>project</strong><span class="classifier">str or dict</span></dt><dd><p>The name or id of the project, or a dictionary representation of
-the project.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – The name or id of the project, or a dictionary representation of
+the project.</p></li>
+<li><p><strong>server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – SAS Viya 4 server where the MM_STD_KPI table exists,
+by default “cas-shared-default”</p></li>
+<li><p><strong>caslib</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – SAS Viya 4 caslib where the MM_STD_KPI table exists,
+by default “ModelPerformanceData”</p></li>
+<li><p><strong>filterColumn</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Column name from the MM_STD_KPI table to be filtered, by default None</p></li>
+<li><p><strong>filterValue</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Column value to be filtered, by default None</p></li>
+</ul>
 </dd>
-<dt><strong>server</strong><span class="classifier">str, optional</span></dt><dd><p>SAS Viya 4 server where the MM_STD_KPI table exists,
-by default “cas-shared-default”</p>
-</dd>
-<dt><strong>caslib</strong><span class="classifier">str, optional</span></dt><dd><p>SAS Viya 4 caslib where the MM_STD_KPI table exists,
-by default “ModelPerformanceData”</p>
-</dd>
-<dt><strong>filterColumn</strong><span class="classifier">str, optional</span></dt><dd><p>Column name from the MM_STD_KPI table to be filtered, by default None</p>
-</dd>
-<dt><strong>filterValue</strong><span class="classifier">str, optional</span></dt><dd><p>Column value to be filtered, by default None</p>
-</dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
-<dt><strong>kpiTableDf</strong><span class="classifier">DataFrame</span></dt><dd><p>A pandas DataFrame representing the MM_STD_KPI table. Note that SAS
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>kpiTableDf</strong> (<em>pandas.DataFrame</em>) – A pandas DataFrame representing the MM_STD_KPI table. Note that SAS
 missing values are replaced with pandas valid missing values.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sasctl.tasks.publish_model">
+<span class="sig-prename descclassname"><span class="pre">sasctl.tasks.</span></span><span class="sig-name descname"><span class="pre">publish_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/tasks.html#publish_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.tasks.publish_model" title="Link to this definition">#</a></dt>
+<dd><p>Publish a model to a configured publishing destination.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – The name or id of the model, or a dictionary representation of
+the model.</p></li>
+<li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>)</p></li>
+<li><p><strong>code</strong> (<em>optional</em>)</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – Name of custom publish name for publish calls that do not have code. Default is None.</p></li>
+<li><p><strong>max_retries</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>)</p></li>
+<li><p><strong>replace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to overwrite the model if it already exists in
+the <cite>destination</cite></p></li>
+<li><p><strong>**kwargs</strong> – additional arguments will be passed to the underlying publish
+functions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>RestObj</em> – The published model</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>If no code is specified, the model is assumed to be already registered in
+the model repository and Model Manager’s publishing functionality will be
+used.</p>
+<p>Otherwise, the model publishing API will be used.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.publish_model" title="sasctl._services.model_management.ModelManagement.publish_model"><code class="xref py py-meth docutils literal notranslate"><span class="pre">model_management.publish_model</span></code></a>
+<a class="reference internal" href="services/model_publish.html#sasctl._services.model_publish.ModelPublish.publish_model" title="sasctl._services.model_publish.ModelPublish.publish_model"><code class="xref py py-meth docutils literal notranslate"><span class="pre">model_publish.publish_model</span></code></a></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.1.0: </span>Added <cite>replace</cite> option.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -404,54 +436,41 @@ missing values are replaced with pandas valid missing values.</p>
 <dd><p>Register a model in the model repository.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>model</strong><span class="classifier">swat.CASTable or sklearn.BaseEstimator</span></dt><dd><p>The model to register.  If an instance of <code class="docutils literal notranslate"><span class="pre">swat.CASTable</span></code> the table
-is assumed to hold an ASTORE, which will be downloaded and used to
-construct the model to register.  If a scikit-learn estimator, the
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.table.CASTable.html#swat.cas.table.CASTable" title="(in SWAT v1.14.0)"><em>swat.cas.table.CASTable</em></a><em> or </em><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.BaseEstimator.html#sklearn.base.BaseEstimator" title="(in scikit-learn v1.5)"><em>sklearn.base.BaseEstimator</em></a>) – The model to register.  If an instance of <a class="reference external" href="https://sassoftware.github.io/python-swat/generated/swat.cas.table.CASTable.html#swat.cas.table.CASTable" title="(in SWAT v1.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">swat.cas.table.CASTable</span></code></a>
+the table is assumed to hold an ASTORE, which will be downloaded and used
+to construct the model to register.  If a scikit-learn estimator, the
 model will be pickled and uploaded to the registry and score code will
-be generated for publishing the model to MAS.</p>
-</dd>
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Designated name for the model in the repository.</p>
-</dd>
-<dt><strong>project</strong><span class="classifier">str or dict</span></dt><dd><p>The name or id of the project, or a dictionary representation of
-the project.</p>
-</dd>
-<dt><strong>repository</strong><span class="classifier">str or dict, optional</span></dt><dd><p>The name or id of the repository, or a dictionary representation of
-the repository.  If omitted, the default repository will be used.</p>
-</dd>
-<dt><strong>X</strong><span class="classifier">DataFrame, type, list of type, or dict of str: type, optional</span></dt><dd><p>The expected type for each input value of the target function.
+be generated for publishing the model to MAS.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Designated name for the model in the repository.</p></li>
+<li><p><strong>project</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – The name or id of the project, or a dictionary representation of
+the project.</p></li>
+<li><p><strong>repository</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em>, </em><em>optional</em>) – The name or id of the repository, or a dictionary representation of
+the repository.  If omitted, the default repository will be used.</p></li>
+<li><p><strong>X</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.2.3)"><em>pandas.DataFrame</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.12)"><em>type</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.12)"><em>type</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><em>str: type</em><em>, </em><em>optional</em>) – The expected type for each input value of the target function.
 Can be omitted if target function includes type hints.  If a DataFrame
 is provided, the columns will be inspected to determine type
 information.  If a single type is provided, all columns will be assumed
 to be that type, otherwise a list of column types or a dictionary of
-column_name: type may be provided.</p>
-</dd>
-<dt><strong>version</strong><span class="classifier">{‘new’, ‘latest’, int}, optional</span></dt><dd><p>Version number of the project in which the model should be created.
-Defaults to ‘new’.</p>
-</dd>
-<dt><strong>files</strong><span class="classifier">list</span></dt><dd><p>A list of dictionaries of the form
+column_name: type may be provided.</p></li>
+<li><p><strong>version</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – If str choose from <code class="docutils literal notranslate"><span class="pre">{'new',</span> <span class="pre">'latest'}</span></code>.
+Version number of the project in which the model should be created.
+Defaults to ‘new’.</p></li>
+<li><p><strong>files</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – A list of dictionaries of the form
 {‘name’: filename, ‘file’: filecontent}.
 An optional ‘role’ key is supported for designating a file as score
-code, astore, etc.</p>
-</dd>
-<dt><strong>force</strong><span class="classifier">bool, optional</span></dt><dd><p>Create dependencies such as projects and repositories if they do not
-already exist.</p>
-</dd>
-<dt><strong>record_packages</strong><span class="classifier">bool, optional</span></dt><dd><p>Capture Python packages registered in the environment.  Defaults to
-True.  Ignored if <cite>model</cite> is not a Python object.</p>
-</dd>
-<dt><strong>modeler</strong><span class="classifier">str, optional</span></dt><dd><p>The name of the user who created the model.  Will default ot the
-current user if not specified.</p>
-</dd>
-<dt><strong>input</strong><span class="classifier">DataFrame, type, list of type, or dict of str: type, optional</span></dt><dd><p>Deprecated, use <cite>X</cite> instead.</p>
-</dd>
-</dl>
+code, astore, etc.</p></li>
+<li><p><strong>force</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Create dependencies such as projects and repositories if they do not
+already exist.</p></li>
+<li><p><strong>record_packages</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Capture Python packages registered in the environment.  Defaults to
+True.  Ignored if <cite>model</cite> is not a Python object.</p></li>
+<li><p><strong>modeler</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – The name of the user who created the model.  Will default ot the
+current user if not specified.</p></li>
+<li><p><strong>input</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.2.3)"><em>pandas.DataFrame</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.12)"><em>type</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.12)"><em>type</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> of </em><em>str: type</em><em>, </em><em>optional</em>) – Deprecated, use <cite>X</cite> instead.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>model</strong><span class="classifier">RestObj</span></dt><dd><p>The newly registered model as an instance of <code class="docutils literal notranslate"><span class="pre">RestObj</span></code></p>
-</dd>
-</dl>
+<dd class="field-even"><p><strong>model</strong> (<em>RestObj</em>) – The newly registered model as an instance of <a class="reference internal" href="sasctl.core.html#sasctl.core.RestObj" title="sasctl.core.RestObj"><code class="xref py py-class docutils literal notranslate"><span class="pre">core.RestObj</span></code></a></p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -469,6 +488,39 @@ be uploaded as content.</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version v1.7.4: </span>Update ASTORE handling for ease of use and removal of SAS Viya 4 score code errors</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sasctl.tasks.update_model_performance">
+<span class="sig-prename descclassname"><span class="pre">sasctl.tasks.</span></span><span class="sig-name descname"><span class="pre">update_model_performance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sasctl/tasks.html#update_model_performance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.tasks.update_model_performance" title="Link to this definition">#</a></dt>
+<dd><p>Upload data for calculating model performance metrics.</p>
+<p>Model performance and data distributions can be tracked over time by
+designating one or more tables that contain input data and target values.
+Performance metrics can be updated by uploading a data set for a new time
+period and executing the performance definition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.2.3)"><em>pandas.DataFrame</em></a>)</p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – The name or id of the model, or a dictionary representation of
+the model.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The time period the data is from.  Should be unique and will be
+displayed on performance charts.  Examples: ‘Q1’, ‘2019’, ‘APR2019’.</p></li>
+<li><p><strong>refresh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to execute the performance definition and refresh results with
+the new data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>swat.cas.table.CASTable</em> – The CAS table containing the performance data.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="services/model_management.html#sasctl._services.model_management.ModelManagement.create_performance_definition" title="sasctl._services.model_management.ModelManagement.create_performance_definition"><code class="xref py py-meth docutils literal notranslate"><span class="pre">model_management.create_performance_definition</span></code></a></p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version v1.3.</span></p>
+</div>
 </div>
 </dd></dl>
 
@@ -521,7 +573,9 @@ be uploaded as content.</p>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.tasks.get_project_kpis"><code class="docutils literal notranslate"><span class="pre">get_project_kpis()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.tasks.publish_model"><code class="docutils literal notranslate"><span class="pre">publish_model()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.tasks.register_model"><code class="docutils literal notranslate"><span class="pre">register_model()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sasctl.tasks.update_model_performance"><code class="docutils literal notranslate"><span class="pre">update_model_performance()</span></code></a></li>
 </ul>
   </nav></div>
 

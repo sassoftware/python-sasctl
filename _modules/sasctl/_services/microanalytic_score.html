@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.microanalytic_score &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl._services.microanalytic_score &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -35,7 +35,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/microanalytic_score';</script>
@@ -43,7 +43,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -451,12 +451,12 @@ document.write(`
 <span class="sd">        return_dict : bool, optional</span>
 <span class="sd">            Whether the results should be returned as a dictionary instead</span>
 <span class="sd">            of a tuple</span>
-<span class="sd">        kwargs : any</span>
+<span class="sd">        **kwargs</span>
 <span class="sd">            Passed as arguments to the module step</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        any</span>
+<span class="sd">        Any</span>
 <span class="sd">            Results of the step execution.  Returned as a dictionary if</span>
 <span class="sd">            `return_dict` is True, otherwise returned as a tuple if more</span>
 <span class="sd">            than one value is returned, otherwise the single value.</span>
@@ -532,8 +532,10 @@ document.write(`
 <span class="sd">        name : str</span>
 <span class="sd">        description : str</span>
 <span class="sd">        source : str</span>
-<span class="sd">        language : str { &#39;python&#39;, &#39;ds2&#39; }</span>
-<span class="sd">        scope : str { &#39;public&#39;, &#39;private&#39; }</span>
+<span class="sd">        language : str</span>
+<span class="sd">            Choose from ``{&#39;python&#39;,&#39;ds2&#39;}``</span>
+<span class="sd">        scope : str</span>
+<span class="sd">            Choose from ``{&#39;public&#39;,&#39;private&#39;}``</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>

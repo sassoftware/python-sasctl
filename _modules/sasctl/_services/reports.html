@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.relationships &#8212; sasctl 1.10.7 documentation</title>
+    <title>sasctl._services.reports &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
     <script src="../../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/relationships';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/reports';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -333,7 +333,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <h1>Source code for sasctl._services.relationships</h1><div class="highlight"><pre>
+  <h1>Source code for sasctl._services.reports</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># encoding: utf-8</span>
 <span class="c1">#</span>
@@ -343,27 +343,50 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
 
 
-<div class="viewcode-block" id="Relationships">
-<a class="viewcode-back" href="../../../api/services/relationships.html#sasctl._services.relationships.Relationships">[docs]</a>
-<span class="k">class</span> <span class="nc">Relationships</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The Relationships API manages a repository of relationships.</span>
+<div class="viewcode-block" id="Reports">
+<a class="viewcode-back" href="../../../api/services/reports.html#sasctl._services.reports.Reports">[docs]</a>
+<span class="k">class</span> <span class="nc">Reports</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates, reads, updates, and deletes reports, report states, and content.</span>
 
-<span class="sd">    A relationship describes how two resources are connected. A relationship</span>
-<span class="sd">    contains a subject resource, the related resource, and the relationship</span>
-<span class="sd">    type.  A relationship type describes the nature of the relationship between</span>
-<span class="sd">    two resources. The relationship type includes a name, label, and</span>
-<span class="sd">    description.</span>
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    `REST Documentation &lt;https://developer.sas.com/apis/rest/Visualization/#</span>
+<span class="sd">    reports&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;/relationships&quot;</span>
+    <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="s2">&quot;reports&quot;</span>
 
-    <span class="p">(</span>
-        <span class="n">list_relationships</span><span class="p">,</span>
-        <span class="n">get_relationship</span><span class="p">,</span>
-        <span class="n">update_relationship</span><span class="p">,</span>
-        <span class="n">delete_relationship</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span><span class="s2">&quot;/relationships&quot;</span><span class="p">,</span> <span class="s2">&quot;relationship&quot;</span><span class="p">)</span></div>
+    <span class="n">list_reports</span><span class="p">,</span> <span class="n">get_report</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Service</span><span class="o">.</span><span class="n">_crud_funcs</span><span class="p">(</span><span class="s2">&quot;/reports&quot;</span><span class="p">,</span> <span class="s2">&quot;report&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Reports.get_visual_elements">
+<a class="viewcode-back" href="../../../api/services/reports.html#sasctl._services.reports.Reports.get_visual_elements">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_visual_elements</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">report</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the visual components of a report.</span>
+
+<span class="sd">        Returned components may be visualized by rendering with the</span>
+<span class="sd">        `report_images.get_images` method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        report : str or dict</span>
+<span class="sd">            The name or id of the report, or a dictionary representation of the</span>
+<span class="sd">            report.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[RestObj]</span>
+<span class="sd">            List of metadata about each element.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_report</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request_link</span><span class="p">(</span><span class="n">report</span><span class="p">,</span> <span class="s2">&quot;contentVisualElements&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Despite being &quot;visual&quot; not all elements can be rendered by</span>
+        <span class="c1"># report_images service.  Only return renderable elements.</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">elements</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;Table&quot;</span><span class="p">)]</span></div>
+</div>
 
 </pre></div>
 

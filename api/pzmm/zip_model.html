@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl.pzmm.zip_model &#8212; sasctl 1.10.6 documentation</title>
+    <title>sasctl.pzmm.zip_model &#8212; sasctl 1.10.7 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f7627286"></script>
+    <script src="../../_static/documentation_options.js?v=93ada2c2"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/pzmm/zip_model';</script>
@@ -46,7 +46,7 @@
     <link rel="prev" title="sasctl.pzmm.write_score_code" href="write_score_code.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Aug 26, 2024"/>
+    <meta name="docbuild:last-update" content="Oct 02, 2024"/>
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.10.6 documentation</p>
+    <p class="title logo__title">sasctl 1.10.7 documentation</p>
   
 </a></div>
     
@@ -378,15 +378,6 @@ document.write(`
 <dt class="sig sig-object py" id="sasctl.pzmm.zip_model.ZipModel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sasctl.pzmm.zip_model.</span></span><span class="sig-name descname"><span class="pre">ZipModel</span></span><a class="reference internal" href="../../_modules/sasctl/pzmm/zip_model.html#ZipModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.zip_model.ZipModel" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#sasctl.pzmm.zip_model.ZipModel.zip_files" title="sasctl.pzmm.zip_model.ZipModel.zip_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zip_files</span></code></a>(model_files, model_prefix[, is_viya4])</p></td>
-<td><p>Combines all JSON files with the model pickle file and associated score code file into a single archive ZIP file.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="sasctl.pzmm.zip_model.ZipModel.zip_files">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">zip_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_viya4</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">BytesIO</span></span></span><a class="reference internal" href="../../_modules/sasctl/pzmm/zip_model.html#ZipModel.zip_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sasctl.pzmm.zip_model.ZipModel.zip_files" title="Link to this definition">#</a></dt>
@@ -397,18 +388,15 @@ be created at the directory location. Otherwise, the zip file is created in
 memory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>model_files</strong><span class="classifier">str, Path, or dict</span></dt><dd><p>Either the directory location of the model files (string or Path object), or
-a dictionary containing the contents of all the model files.</p>
-</dd>
-<dt><strong>model_prefix</strong><span class="classifier">str</span></dt><dd><p>Variable name for the model to be displayed in SAS Open Model Manager
-(i.e. hmeqClassTree + [Score.py || .pickle]).</p>
-</dd>
-<dt><strong>is_viya4</strong><span class="classifier">bool, optional</span></dt><dd><p>Boolean to indicate difference in logic between SAS Viya 3.5 and SAS Viya 4.
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_files</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a>) – Either the directory location of the model files (string or Path object), or
+a dictionary containing the contents of all the model files.</p></li>
+<li><p><strong>model_prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Variable name for the model to be displayed in SAS Open Model Manager
+(i.e. hmeqClassTree + [Score.py || .pickle]).</p></li>
+<li><p><strong>is_viya4</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – Boolean to indicate difference in logic between SAS Viya 3.5 and SAS Viya 4.
 For Viya 3.5 models, ignore score code that is already in place in the file
-directory provided. Default value is False.</p>
-</dd>
-</dl>
+directory provided. Default value is False.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
