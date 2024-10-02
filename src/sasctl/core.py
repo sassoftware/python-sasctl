@@ -327,7 +327,9 @@ class Session(requests.Session):
                     def is_ipaddress(hst):
                         return re.match(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$", hst)
 
-                verify_hostname = not is_ipaddress(hostname)
+                # Do not verify hostname if IP address is used.  Otherwise, will
+                # verify that cert hostname matches the hostname used in the URL.
+                verify_hostname = False if is_ipaddress(hostname) else None
                 adapter = SSLContextAdapter(assert_hostname=verify_hostname)
 
                 self.mount("https://", adapter)
