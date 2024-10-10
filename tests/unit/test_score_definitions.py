@@ -52,7 +52,7 @@ def test_create_score_definition():
     with mock.patch("sasctl.core.Session._get_authorization_token"):
         current_session("example.com", "username", "password")
 
-    # Mocking the REST API calls and functions
+    # Mocking the REST API calls and methods
     with mock.patch(
         "sasctl._services.model_repository.ModelRepository.get_model"
     ) as get_model:
