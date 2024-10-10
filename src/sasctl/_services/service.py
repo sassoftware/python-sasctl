@@ -78,7 +78,7 @@ class Service(object):  # skipcq PYL-R0205
             text: Response.text
             auto: `RestObj` constructed from JSON if possible, otherwise same as
                   `text`.
-        kwargs : any
+        **kwargs
             Additional arguments are passed to the session `request` method.
 
         Returns
@@ -229,7 +229,7 @@ class Service(object):  # skipcq PYL-R0205
                 A dictionary containing the {item} attributes or None.
 
             Notes
-            -------
+            -----
             If `item` is a complete representation of the {item} it will be
             returned unless `refresh` is set.  This prevents unnecessary REST
             calls when data is already available on the client.
@@ -369,7 +369,7 @@ class Service(object):  # skipcq PYL-R0205
         ----------
         item : str or dict
         rel : str
-        args : any
+        *args
             Passed to `func`
         func : function, optional
             Callable that takes (item, *args) and returns a RestObj of `item`
@@ -408,7 +408,7 @@ class Service(object):  # skipcq PYL-R0205
 
         Returns
         -------
-        job
+        job : dict
 
         Raises
         ------

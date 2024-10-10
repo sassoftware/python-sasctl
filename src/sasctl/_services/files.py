@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
+from pathlib import Path
 
 from sasctl.utils.cli import sasctl_command
 
@@ -40,13 +41,13 @@ class Files(Service):
 
         Parameters
         ----------
-        file : str or file_like
+        file : str, pathlib.Path, or typing.BinaryIO
             Path to the file to upload or a file-like object.
         folder : str or dict, optional
-            Name, or, or folder information as returned by :func:`.get_folder`.
+            Name or folder information as returned by :meth:`.get_folder`.
         filename : str, optional
             Name to assign to the uploaded file.  Defaults to the filename if `file` is a path, otherwise required.
-        expiration : datetime, optional
+        expiration : datetime.datetime, optional
             A timestamp that indicates when to expire the file.  Defaults to no expiration.
 
         Returns
@@ -55,8 +56,8 @@ class Files(Service):
             A dictionary containing the file attributes.
 
         """
-        if isinstance(file, str):
-            filename = filename or os.path.splitext(os.path.split(file)[1])[0]
+        if isinstance(file, (str, Path)):
+            filename = filename or Path(file).name
 
             with open(file, "rb") as f:
                 file = f.read()
@@ -96,7 +97,8 @@ class Files(Service):
 
         Returns
         -------
-        content
+        str
+            content
 
         """
         file = cls.get_file(file)

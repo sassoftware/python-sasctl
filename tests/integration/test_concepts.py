@@ -8,7 +8,7 @@ import time
 
 import pytest
 
-from sasctl.core import request_link
+from sasctl.core import current_session, request_link
 from sasctl.services import concepts as cp
 
 pytestmark = pytest.mark.usefixtures("session")
@@ -31,6 +31,9 @@ def assert_job_succeeds(job):
 
 
 def test_from_table(cas_session, airline_dataset):
+    if current_session().version_info() > 3.5:
+        pytest.skip("Concepts service was removed in Viya 4.")
+
     TABLE_NAME = "airline_tweets"
     cas_session.upload(airline_dataset, casout=dict(name=TABLE_NAME, replace=True))
     from sasctl.services import cas_management as cm
@@ -44,6 +47,9 @@ def test_from_table(cas_session, airline_dataset):
 
 
 def test_from_inline_docs():
+    if current_session().version_info() > 3.5:
+        pytest.skip("Concepts service was removed in Viya 4.")
+
     from sasctl.services import cas_management as cm
 
     caslib = cm.get_caslib("Public")

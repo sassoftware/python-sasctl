@@ -18,17 +18,17 @@ class MLFlowModel:
 
         Parameters
         ----------
-        m_path : str or Path object, optional
-        Directory path of the MLFlow model files. Default is the current working
-        directory.
+        m_path : str or pathlib.Path, optional
+            Directory path of the MLFlow model files. Default is the current working
+            directory.
 
         Returns
         -------
         var_dict : dict
             Model properties and metadata
-        inputs_dict : list of dicts
+        inputs_dict : list of dict
             Model input variables
-        outputs_dict : list of dicts
+        outputs_dict : list of dict
             Model output variables
         """
         with open(Path(m_path) / "MLmodel", "r") as m_file:
@@ -39,14 +39,20 @@ class MLFlowModel:
             var_dict = {
                 "python_version": m_yml["flavors"]["python_function"]["python_version"],
                 "model_path": m_yml["flavors"]["python_function"]["model_path"],
-                "serialization_format": m_yml["flavors"]["sklearn"]["serialization_format"],
+                "serialization_format": m_yml["flavors"]["sklearn"][
+                    "serialization_format"
+                ],
                 "run_id": m_yml["run_id"],
-                "mlflowPath": m_path
+                "mlflowPath": m_path,
             }
         except KeyError:
-            raise ValueError("This MLFlow model type is not currently supported.") from None
+            raise ValueError(
+                "This MLFlow model type is not currently supported."
+            ) from None
         except TypeError:
-            raise ValueError("This MLFlow model type is not currently supported.") from None
+            raise ValueError(
+                "This MLFlow model type is not currently supported."
+            ) from None
 
         # Read in the input and output variables
         try:
@@ -57,5 +63,5 @@ class MLFlowModel:
                 "Improper or unset signature values for model. No input or output "
                 "dicts could be generated. "
             ) from None
-        
+
         return var_dict, inputs_dict, outputs_dict

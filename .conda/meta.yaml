@@ -21,6 +21,7 @@ requirements:
     - python >=3.6
     - pip
   run:
+    - dill
     - python >=3.6
     - pandas
     - requests

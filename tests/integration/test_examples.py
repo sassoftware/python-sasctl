@@ -24,6 +24,9 @@ def change_dir():
 def test_astore_model(session, cas_session, change_dir):
     """Ensure the register_sas_classification_model.py example executes successfully."""
 
+    if session.version_info() < 4:
+        pytest.skip("MAS raises HTTP 500")
+
     # Mock up Session() to return the Betamax-recorded session
     def Session(*args, **kwargs):
         return session
@@ -118,13 +121,25 @@ def test_full_lifecycle(session, change_dir):
         exec(code)
 
 
-def test_direct_rest_calls(session, change_dir):
+def test_direct_rest_calls(session, change_dir, tmp_path):
     """Ensure the direct_REST_calls.py example executes successfully."""
+    import pickle
     from pickle import UnpicklingError
+    from sasctl.services import files
 
     # Mock up Session() to return the Betamax-recorded session
     def Session(*args, **kwargs):
         return session
+
+    path = tmp_path / "traincode.sas"
+    with open(path, "w") as f:
+        f.write("An example .sas file to ensure there's a file to find.")
+    files.create_file(path)
+
+    path = tmp_path / "model.pkl"
+    with open(path, "wb") as f:
+        pickle.dumps("This is an example pickle file")
+    files.create_file(path)
 
     change_dir("examples")
     with open("direct_REST_calls.py") as f:

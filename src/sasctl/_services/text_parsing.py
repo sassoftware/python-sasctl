@@ -16,10 +16,10 @@ class TextParsing(Service):
     Parsing is a key operation in understanding your data. Parsing a document
     involves the following analyses:
 
-     - Identifying terms used in the document
-     - Recognizing parts of speech for each term
-     - Identifying which terms are entities (person, country, and so on)
-     - Resolving synonyms, misspellings, and so on
+    - Identifying terms used in the document
+    - Recognizing parts of speech for each term
+    - Identifying which terms are entities (person, country, and so on)
+    - Resolving synonyms, misspellings, and so on
 
     The output tables that are generated during parsing can also be used in
     downstream analyses such as topic generation.
@@ -56,7 +56,7 @@ class TextParsing(Service):
 
         Parameters
         ----------
-        documents : str or dict or list_like:
+        documents : str or dict or Iterable
             Documents to parse.  May be either the URI to a CAS table where the
             documents are currently stored, or an iterable of strings containing
             the documents' text.
@@ -97,8 +97,8 @@ class TextParsing(Service):
 
         See Also
         --------
-        cas_management.get_caslib
-        cas_management.get_table
+        .cas_management.CASManagement.get_caslib
+        .cas_management.CASManagement.get_table
 
         """
         if current_session().version_info() >= 4:
