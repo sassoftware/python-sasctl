@@ -26,7 +26,7 @@ from sasctl._services.score_definitions import ScoreDefinitions as sd
 
 
 class CustomMock:
-    def __init__(self, json_info,  id=""):
+    def __init__(self, json_info, id=""):
         self.json_info = json_info
         self.id = id
 
