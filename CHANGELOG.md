@@ -1,5 +1,8 @@
 v1.10.7 (2024-10-02)
 --------------------
+**Changes**
+ - Due to licensing restrictions, the `sasctl` package will no longer be available through Anaconda.
+
 **Bugfixes**
  - Fixed a bug that caused an error when performing SSL verification without a CA bundle specified.
 
