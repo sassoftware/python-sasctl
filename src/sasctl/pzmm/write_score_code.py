@@ -295,7 +295,7 @@ def score(var1, var2, var3, var4):
 
         if preprocess_function:
             self._add_preprocess_code(preprocess_function)
-        
+
         # SAS Viya 3.5 model
         if model_id:
             mas_code, cas_code = self._viya35_score_code_import(
@@ -2260,13 +2260,10 @@ if not isinstance(var1, pd.Series):
                     mr.update_model(model)
                     return mas_code, cas_code
 
-    def _add_preprocess_code(
-        self, 
-        preprocess_function: Callable[DataFrame, DataFrame]
-    ):
+    def _add_preprocess_code(self, preprocess_function: Callable[DataFrame, DataFrame]):
         """
         Places the given preprocess function, which must both take a DataFrame as an argument
-        and return a DataFrame, into the score code. If the preprocess function does not   
+        and return a DataFrame, into the score code. If the preprocess function does not
         return anything, an error is thrown.
 
         Parameters
@@ -2275,14 +2272,15 @@ if not isinstance(var1, pd.Series):
             The preprocess function to be added to the score code.
         """
         import inspect
+
         preprocess_code = inspect.getsource(preprocess_function)
         if not "return" in preprocess_code:
             raise ValueError(
-                "The given score code does not return a value. " + 
-                "To allow for the score code to work correctly, please ensure the preprocessed " +
-                "data is returned."
+                "The given score code does not return a value. "
+                + "To allow for the score code to work correctly, please ensure the preprocessed "
+                + "data is returned."
             )
-        if self.score_code[-1] == '\n':
+        if self.score_code[-1] == "\n":
             self.score_code += preprocess_code
         else:
-            self.score_code += '\n' + preprocess_code
+            self.score_code += "\n" + preprocess_code
