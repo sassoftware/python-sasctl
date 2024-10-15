@@ -188,6 +188,29 @@ def test_impute_missing_values():
     assert "'b': 'test'" in sc.score_code
     assert "'c': 1" in sc.score_code or "'c': np.int64(1)" in sc.score_code
 
+def test_preprocess_function():
+    """
+    Test Cases:
+    - function
+    - function with no return
+    """
+    test_df = pd.DataFrame(
+        data=[[0, "a", 1], [2, "b", 0]], columns=["num", "char", "bin"]
+    )
+    sc = ScoreCode()
+    def preprocess_function_one(data: pd.DataFrame):
+        print("preprocessing happens here")
+        return data
+    sc._add_preprocess_code(preprocess_function_one)
+    assert "preprocessing happens here" in sc.score_code
+    assert "preprocess_function_one" in sc.score_code
+
+    sc = ScoreCode()
+    def preprocess_function_two(data: pd.DataFrame):
+        print("preprocessing happens here?")
+    with pytest.raises(ValueError):
+        sc._add_preprocess_code(preprocess_function_two)
+    
 
 def test_predict_method():
     """
