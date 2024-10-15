@@ -198,6 +198,7 @@ def test_preprocess_function():
         data=[[0, "a", 1], [2, "b", 0]], columns=["num", "char", "bin"]
     )
     sc = ScoreCode()
+    sc.score_code = " "
     def preprocess_function_one(data: pd.DataFrame):
         print("preprocessing happens here")
         return data
@@ -206,6 +207,7 @@ def test_preprocess_function():
     assert "preprocess_function_one" in sc.score_code
 
     sc = ScoreCode()
+    sc.score_code = " "
     def preprocess_function_two(data: pd.DataFrame):
         print("preprocessing happens here?")
     with pytest.raises(ValueError):
