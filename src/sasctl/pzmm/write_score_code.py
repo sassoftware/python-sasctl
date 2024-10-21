@@ -36,7 +36,7 @@ class ScoreCode:
         score_cas: Optional[bool] = True,
         score_code_path: Union[Path, str, None] = None,
         target_index: Optional[int] = None,
-        preprocess_function: Optional[Callable[DataFrame, DataFrame]] = None,
+        preprocess_function: Optional[Callable[[DataFrame], DataFrame]] = None,
         **kwargs,
     ) -> Union[dict, None]:
         """
@@ -763,7 +763,7 @@ def impute_missing_values(data):
         missing_values: Optional[Any] = None,
         statsmodels_model: Optional[bool] = False,
         tf_model: Optional[bool] = False,
-        preprocess_function: Optional[Callable[DataFrame, DataFrame]] = None,
+        preprocess_function: Optional[Callable[[DataFrame], DataFrame]] = None,
     ) -> None:
         """
         Write the model prediction section of the score code.
@@ -2260,7 +2260,7 @@ if not isinstance(var1, pd.Series):
                     mr.update_model(model)
                     return mas_code, cas_code
 
-    def _add_preprocess_code(self, preprocess_function: Callable[DataFrame, DataFrame]):
+    def _add_preprocess_code(self, preprocess_function: Callable[[DataFrame], DataFrame]):
         """
         Places the given preprocess function, which must both take a DataFrame as an argument
         and return a DataFrame, into the score code. If the preprocess function does not
