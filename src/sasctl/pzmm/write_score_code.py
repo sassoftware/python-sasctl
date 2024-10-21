@@ -451,7 +451,7 @@ from pathlib import Path
 
         try:
             if current_session().version_info() != 3.5:
-                cls.score_code += "import settings\n\n"
+                self.score_code += "import settings\n\n"
                 
                 """
 import settings
@@ -465,7 +465,7 @@ import settings
                 "code will be written under the assumption that the target server is "
                 "SAS Viya 4."
             )
-            cls.score_code += "import settings\n\n"
+            self.score_code += "import settings\n\n"
 			
 
         if mojo_model or binary_h2o_model:
