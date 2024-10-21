@@ -757,7 +757,7 @@ class TestAssessBiasHelpers(unittest.TestCase):
                     "COMPARE": ["C", "C"],
                     "VLABEL": ["", ""],
                     "_DATAROLE_": ["role", "role"],
-                    "maxdiff": [0, 1],
+                    "maxdiff": ["0", "1"],
                 }
             ),
         )
@@ -771,7 +771,7 @@ class TestAssessBiasHelpers(unittest.TestCase):
                     "COMPARE": ["C", "C"],
                     "VLABEL": ["", ""],
                     "_DATAROLE_": ["TEST", "TEST"],
-                    "maxdiff": [0, 1],
+                    "maxdiff": ["0", "1"],
                 }
             ),
         )

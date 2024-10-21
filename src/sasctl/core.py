@@ -113,13 +113,13 @@ def current_session(*args, **kwargs):
     If call with no arguments, the current session instance is returned, or
     None if no session has been created yet.  If called with an existing session
     instance, that session will be set as the default.  Otherwise, a new
-    `Session` is instantiated using the provided arguments and set as the
+    :class:`Session` is instantiated using the provided arguments and set as the
     default.
 
     Parameters
     ----------
-    args : any
-    kwargs : any
+    *args
+    **kwargs
 
     Returns
     -------
@@ -237,19 +237,20 @@ class Session(requests.Session):
 
     Parameters
     ----------
-    hostname : str or swat.CAS
-        Name of the server to connect to or an established swat.CAS session.
+    hostname : str or swat.cas.connection.CAS
+        Name of the server to connect to or an established CAS session.
     username : str, optional
         Username for authentication.  Not required if `host` is a CAS
         connection, if Kerberos is used, or if `token` is provided.  If using Kerberos and an explicit
-        username is desired, maybe be a string in 'user@REALM' format.
+        username is desired, maybe be a string in `'user@REALM'` format.
     password : str, optional
         Password for authentication.  Not required when `host` is a CAS
         connection, `authinfo` is provided, `token` is provided, or Kerberos is used.
     authinfo : str, optional
         Path to a .authinfo or .netrc file from which credentials should be
         pulled.
-    protocol : {'http', 'https'}
+    protocol : str
+        Choose from ``{'http', 'https'}``.
         Whether to use HTTP or HTTPS connections.  Defaults to `https`.
     port : int, optional
         Port number for the connection if a non-standard port is used.
@@ -261,7 +262,7 @@ class Session(requests.Session):
         OAuth token to use for authorization.
     client_id : str, optional
         Client ID requesting access.  Use if connection to Viya should be
-        made using `client_credentials` method.
+        made using "client_credentials" method.
     client_secret : str, optional
         Client secret for client requesting access. Required if `client_id`
         is provided.
@@ -271,9 +272,9 @@ class Session(requests.Session):
     ----------
     message_log : logging.Logger
         A log to which all REST request and response messages will be sent.  Attach a handler using
-        `add_logger()` to capture these messages.
+        :meth:`add_logger()` to capture these messages.
 
-    filters : list of callable
+    filters : list of Callable
         A collection of functions that will be called with each request and response object *prior* to logging the
         messages, allowing any sensitive information to be removed first.
 
@@ -326,7 +327,9 @@ class Session(requests.Session):
                     def is_ipaddress(hst):
                         return re.match(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$", hst)
 
-                verify_hostname = not is_ipaddress(hostname)
+                # Do not verify hostname if IP address is used.  Otherwise, will
+                # verify that cert hostname matches the hostname used in the URL.
+                verify_hostname = False if is_ipaddress(hostname) else None
                 adapter = SSLContextAdapter(assert_hostname=verify_hostname)
 
                 self.mount("https://", adapter)
@@ -450,11 +453,11 @@ class Session(requests.Session):
             A Handler instance to use for logging the requests and responses.
         level : int, optional
             The logging level to assign to the handler.  Ignored if handler's
-            logging level is already set.  Defaults to DEBUG.
+            logging level is already set.  Defaults to :data:`logging.DEBUG`.
 
         Returns
         -------
-        handler
+        logging.Handler
 
 
         .. versionadded:: 1.2.0
@@ -478,7 +481,7 @@ class Session(requests.Session):
         Parameters
         ----------
         level : int, optional
-            The logging level of the handler.  Defaults to logging.DEBUG
+            The logging level of the handler.  Defaults to :data:`logging.DEBUG`
 
         Returns
         -------
@@ -497,19 +500,19 @@ class Session(requests.Session):
         ----------
         server : str, optional
             The logical name of the CAS server, not the hostname.  Defaults to "cas-shared-default".
-        kwargs : any
-            Additional arguments to pass to the `swat.CAS` constructor.  Can be used to override this method's
-            default behavior or customize the CAS session.
+        **kwargs
+            Additional arguments to pass to the :class:`swat.CAS <swat.cas.connection.CAS>` constructor.
+            Can be used to override this method's default behavior or customize the CAS session.
 
         Returns
         -------
-        swat.CAS
+        swat.cas.connection.CAS
             An active SWAT connection
 
         Raises
         ------
         RuntimeError
-            If `swat` package is not available.
+            If :mod:`swat` package is not available.
 
         Examples
         --------
@@ -570,11 +573,11 @@ class Session(requests.Session):
     def hostname(self):
         return self._settings.get("domain")
 
-    def send(self, request, **kwargs):
+    def send(self, req, **kwargs):
         if self.message_log.isEnabledFor(logging.DEBUG):
-            r = copy.deepcopy(request)
-            for filter in self.filters:
-                r = filter(r)
+            r = copy.deepcopy(req)
+            for filter_ in self.filters:
+                r = filter_(r)
 
             self.message_log.debug(
                 "HTTP/1.1 {verb} {url}\n{headers}\nBody:\n{body}".format(
@@ -587,14 +590,14 @@ class Session(requests.Session):
                 )
             )
         else:
-            self.message_log.info("HTTP/1.1 %s %s", request.method, request.url)
+            self.message_log.info("HTTP/1.1 %s %s", req.method, req.url)
 
-        response = super(Session, self).send(request, **kwargs)
+        response = super(Session, self).send(req, **kwargs)
 
         if self.message_log.isEnabledFor(logging.DEBUG):
             r = copy.deepcopy(response)
-            for filter in self.filters:
-                r = filter(r)
+            for filter_ in self.filters:
+                r = filter_(r)
 
             self.message_log.debug(
                 "HTTP {status} {url}\n{headers}\nBody:\n{body}".format(
@@ -896,12 +899,12 @@ class Session(requests.Session):
 
         This method supports multiple authentication methods:
 
-         - an existing OAuth2 token
-         - password authentication
-         - client credentials
-         - Kerberos
-         - cached tokens (from previous authorization codes)
-         - authorization code
+        - an existing OAuth2 token
+        - password authentication
+        - client credentials
+        - Kerberos
+        - cached tokens (from previous authorization codes)
+        - authorization code
 
         If authentication using client credentials fails because the
         client_credentials grant type is not allowed the token cache will
@@ -1253,10 +1256,11 @@ class Session(requests.Session):
         """Request a token from the SAS SASLogon service.
 
         Supports four different flows:
-         - authenticate with a username & password and receive a token
-         - authenticate with a client id & secret and receive a token
-         - provide an authorization code and receive a token
-         - provide a refresh token and receive a new token
+
+        - authenticate with a username & password and receive a token
+        - authenticate with a client id & secret and receive a token
+        - provide an authorization code and receive a token
+        - provide a refresh token and receive a new token
 
         Parameters
         ----------
@@ -1472,17 +1476,17 @@ class PageIterator:
     Parameters
     ----------
     obj : RestObj
-        An instance of `RestObj` containing any initial items and a link to
+        An instance of :class:`RestObj` containing any initial items and a link to
         retrieve additional items.
     session : Session
-        The `Session` instance to use for requesting additional items.  Defaults
-        to current_session()
+        The :class:`Session` instance to use for requesting additional items.  Defaults
+        to :meth:`current_session()`
     threads : int
         Number of threads allocated to downloading additional pages.
 
     Yields
     ------
-    List[RestObj]
+    list of RestObj
         Items contained in the current page
 
     """
@@ -1528,6 +1532,13 @@ class PageIterator:
 
         # Store the current items to iterate over
         self._obj = obj
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self._pool is not None:
+            self._pool.shutdown(wait=False)
 
     def __next__(self):
         if self._pool is None:
@@ -1579,17 +1590,17 @@ class PageIterator:
 class PagedItemIterator:
     """Iterates through a collection that must be "paged" from the server.
 
-    Uses `PageIterator` to transparently download pages of items from the server
+    Uses :class:`PageIterator` to transparently download pages of items from the server
     as needed.
 
     Parameters
     ----------
     obj : RestObj
-        An instance of `RestObj` containing any initial items and a link to
+        An instance of :class:`RestObj` containing any initial items and a link to
         retrieve additional items.
     session : Session
-        The `Session` instance to use for requesting additional items.  Defaults
-        to current_session()
+        The :class:`Session` instance to use for requesting additional items.  Defaults
+        to :meth:`current_session()`
     threads : int
         Number of threads allocated to downloading additional items.
 
@@ -1644,11 +1655,11 @@ class PagedItemIterator:
 
 
 class PagedListIterator:
-    """Iterates over an instance of PagedList
+    """Iterates over an instance of :class:`PagedList`
 
     Parameters
     ----------
-    l : list-like
+    l : list
 
     """
 
@@ -1679,11 +1690,11 @@ class PagedList(list):
     Parameters
     ----------
     obj : RestObj
-        An instance of `RestObj` containing any initial items and a link to
+        An instance of :class:`RestObj` containing any initial items and a link to
         retrieve additional items.
     session : Session, optional
-        The `Session` instance to use for requesting additional items.  Defaults
-        to current_session()
+        The :class:`Session` instance to use for requesting additional items.  Defaults
+        to :meth:`current_session()`
     threads : int, optional
         Number of threads allocated to loading additional items.
 
@@ -1776,8 +1787,9 @@ class VersionInfo:
         Release cadence for Viya 4.  Should be one of 'stable' or 'LTS'.
     release : str, optional
         Release number for Viya 4.  Two formats are currently possible:
-         - YYYY.R.U where R is the LTS release number in YYYY and U is the updates since R
-         - YYYY.MM where MM is the month of the release.
+
+        - YYYY.R.U where R is the LTS release number in YYYY and U is the updates since R
+        - YYYY.MM where MM is the month of the release.
 
     """
 
@@ -1897,8 +1909,8 @@ def get(path, **kwargs):
     ----------
     path : str
         The path portion of the URL.
-    kwargs : any
-        Passed to `request`.
+    **kwargs
+        Passed to :meth:`request`.
 
     Returns
     -------
@@ -1921,8 +1933,8 @@ def head(path, **kwargs):
     ----------
     path : str
         The path portion of the URL.
-    kwargs : any
-        Passed to `request`.
+    **kwargs
+        Passed to :meth:`request`.
 
     Returns
     -------
@@ -1939,8 +1951,8 @@ def post(path, **kwargs):
     ----------
     path : str
         The path portion of the URL.
-    kwargs : any
-        Passed to `request`.
+    **kwargs
+        Passed to :meth:`request`.
 
     Returns
     -------
@@ -1960,8 +1972,8 @@ def put(path, item=None, **kwargs):
     item : RestObj, optional
         A existing object to PUT.  If provided, ETag and Content-Type headers
         will automatically be specified.
-    kwargs : any
-        Passed to `request`.
+    **kwargs
+        Passed to :meth:`request`.
 
     Returns
     -------
@@ -1989,8 +2001,8 @@ def delete(path, **kwargs):
     ----------
     path : str
         The path portion of the URL.
-    kwargs : any
-        Passed to `request`.
+    **kwargs
+        Passed to :meth:`request`.
 
     Returns
     -------
@@ -2011,20 +2023,21 @@ def request(verb, path, session=None, format="auto", **kwargs):
         Path portion of URL to request.
     session : Session, optional
         Defaults to `current_session()`.
-    format : {'auto', 'rest', 'response', 'content', 'json', 'text'}
+    format : str
         The format of the return response.  Defaults to `auto`.
-        rest: `RestObj` constructed from JSON.
-        response: the raw `Response` object.
-        content: Response.content
-        json: Response.json()
-        text: Response.text
-        auto: `RestObj` constructed from JSON if possible, otherwise same as
-              `text`.
-    kwargs : any
-        Additional arguments are passed to the session `request` method.
+
+        - `rest`: :class:`RestObj` constructed from JSON.
+        - `response`: the raw :class:`requests.Response` object.
+        - `content`: :attr:`requests.Response.content`
+        - `json`: :meth:`requests.Response.json`
+        - `text`: :attr:`requests.Response.text`
+        - `auto`: :class:`RestObj` constructed from JSON if possible, otherwise same as `text`.
+    **kwargs
+        Additional arguments are passed to the session :meth:`Session.request` method.
 
     Returns
     -------
+    str, bytes, or requests.Response
 
     """
     session = session or current_session()
@@ -2103,11 +2116,12 @@ def request_link(obj, rel, **kwargs):
     ----------
     obj : dict
     rel : str
-    kwargs : any
-        Passed to :function:`request`
+    **kwargs
+        Passed to :func:`request`
 
     Returns
     -------
+    RestObj
 
     """
     link = get_link(obj, rel)
@@ -2142,7 +2156,7 @@ def uri_as_str(obj):
 
 
 def _unwrap(json):
-    """Converts a JSON response to one or more `RestObj` instances.
+    """Converts a JSON response to one or more :class:`RestObj` instances.
 
     If the JSON contains a .items property, only those items are converted and returned.
 
@@ -2356,9 +2370,8 @@ def platform_version():
 
     Returns
     -------
-    string : {'3.5', '4.0'}
-
-        SAS Viya version number
+    str
+        SAS Viya version number '3.5' or '4.0'
 
     """
     warnings.warn(

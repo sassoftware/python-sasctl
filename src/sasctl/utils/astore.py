@@ -23,9 +23,9 @@ def create_package(table, input=None):
 
     Parameters
     ----------
-    table : swat.CASTable
+    table : swat.cas.table.CASTable
         The CAS table containing an ASTORE or score code.
-    input : DataFrame, type, list of type, or dict of str: type, optional
+    input : pandas.DataFrame, type, list of type, or dict of str, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
         is provided, the columns will be inspected to determine type information.
@@ -40,7 +40,7 @@ def create_package(table, input=None):
 
     See Also
     --------
-    model_repository.import_model_from_zip
+    ~.model_repository.ModelRepository.import_model_from_zip
 
     """
     if swat is None:
@@ -63,9 +63,9 @@ def create_package_from_datastep(table, input=None):
 
     Parameters
     ----------
-    table : swat.CASTable
+    table : swat.cas.table.CASTable
         The CAS table containing the score code.
-    input : DataFrame, type, list of type, or dict of str: type, optional
+    input : pandas.DataFrame, type, list of type, or dict of str, optional
         The expected type for each input value of the target function.
         Can be omitted if target function includes type hints.  If a DataFrame
         is provided, the columns will be inspected to determine type information.
@@ -80,7 +80,7 @@ def create_package_from_datastep(table, input=None):
 
     See Also
     --------
-    model_repository.import_model_from_zip
+    ~.model_repository.ModelRepository.import_model_from_zip
 
     """
     dscode = table.to_frame().loc[0, "DataStepSrc"]
@@ -151,7 +151,7 @@ def create_package_from_astore(table):
 
     Parameters
     ----------
-    table : swat.CASTable
+    table : swat.cas.table.CASTable
         The CAS table containing the ASTORE.
 
     Returns
@@ -161,7 +161,7 @@ def create_package_from_astore(table):
 
     See Also
     --------
-    model_repository.import_model_from_zip
+    ~.model_repository.ModelRepository.import_model_from_zip
 
     """
     files = create_files_from_astore(table)
@@ -174,7 +174,7 @@ def create_files_from_astore(table):
 
     Parameters
     ----------
-    table : swat.CASTable
+    table : swat.cas.table.CASTable
         The CAS table containing the ASTORE.
 
     Returns
@@ -383,18 +383,13 @@ def _get_model_properties(result):
         properties["function"] = "classification"
         properties["targetVariable"] = classification_target(result)
 
-    elif algorithm == "forest":
-        properties["algorithm"] = "Random forest"
-
-        if is_classification(result):
-            properties["function"] = "classification"
-            properties["targetVariable"] = classification_target(result)
+    elif algorithm in ("forest", "gradboost", "tree-based models"):
+        if algorithm == "forest":
+            properties["algorithm"] = "Random forest"
+        elif algorithm == "gradboost":
+            properties["algorithm"] = "Gradient boosting"
         else:
-            properties["function"] = "prediction"
-            properties["targetVariable"] = regression_target(result)
-
-    elif algorithm == "gradboost":
-        properties["algorithm"] = "Gradient boosting"
+            properties["algorithm"] = "Tree-based model"
 
         if is_classification(result):
             properties["function"] = "classification"
@@ -427,7 +422,7 @@ def _get_model_properties(result):
 
     else:
         properties["tool"] = ""
-
+    # todo: warn
     return properties
 
 

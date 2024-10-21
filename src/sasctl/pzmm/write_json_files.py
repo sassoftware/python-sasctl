@@ -5,7 +5,7 @@
 import ast
 import importlib
 import json
-import math
+
 import pickle
 import pickletools
 import sys
@@ -129,7 +129,7 @@ class JSONFiles:
         is_input : bool, optional
             Boolean flag to check if generating the input or output variable JSON. The
             default value is True.
-        json_path : str or Path, optional
+        json_path : str or pathlib.Path, optional
             File location for the output JSON file. The default value is None.
 
         Returns
@@ -172,12 +172,12 @@ class JSONFiles:
 
         Parameters
         ----------
-        input_data : pandas.Dataframe or pandas.Series
+        input_data : pandas.DataFrame or pandas.Series
             Dataset for either the input or output example data for the model.
 
         Returns
         -------
-        dict_list : list of dicts
+        dict_list : list of dict
             List of dictionaries containing the variable properties.
         """
         # Check if input_data is a Series or DataFrame
@@ -316,7 +316,7 @@ class JSONFiles:
             classification model. Providing > 2 target values will supply the values
             for the different target events as a custom property. An error is raised if
             only 1 target value is supplied. The default value is None.
-        json_path : str or Path, optional
+        json_path : str or pathlib.Path, optional
             Path for an output ModelProperties.json file to be generated. If no value
             is supplied a dict is returned instead. The default value is None.
         model_desc : str, optional
@@ -331,7 +331,7 @@ class JSONFiles:
         train_table : str, optional
             The path to the model's training table within SAS Viya. The default value is
             an empty string.
-        properties : List of dict, optional
+        properties : list of dict, optional
             List of custom properties to be shown in the user-defined properties section
             of the model in SAS Model Manager. Dict entries should contain the `name`,
             `value`, and `type` keys. The default value is an empty list.
@@ -484,7 +484,7 @@ class JSONFiles:
         model_prefix : str
             The variable for the model name that is used when naming model files. For
             example: hmeqClassTree + [Score.py | .pickle].
-        json_path : str or Path, optional
+        json_path : str or pathlib.Path, optional
             Path for an output ModelProperties.json file to be generated. If no value
             is supplied a dict is returned instead. The default value is None.
         is_h2o_model : bool, optional
@@ -498,18 +498,27 @@ class JSONFiles:
             Dictionary containing a key-value pair representing the file name and json
             dump respectively.
         """
+
+        from .write_score_code import ScoreCode
+
+        sanitized_prefix = ScoreCode.sanitize_model_prefix(model_prefix)
+
         dict_list = [
             {"role": "inputVariables", "name": INPUT},
             {"role": "outputVariables", "name": OUTPUT},
-            {"role": "score", "name": f"score_{model_prefix}.py"},
+            {"role": "score", "name": f"score_{sanitized_prefix}.py"},
         ]
         if is_h2o_model:
-            dict_list.append({"role": "scoreResource", "name": model_prefix + ".mojo"})
+            dict_list.append(
+                {"role": "scoreResource", "name": sanitized_prefix + ".mojo"}
+            )
         elif is_tf_keras_model:
-            dict_list.append({"role": "scoreResource", "name": model_prefix + ".h5"})
+            dict_list.append(
+                {"role": "scoreResource", "name": sanitized_prefix + ".h5"}
+            )
         else:
             dict_list.append(
-                {"role": "scoreResource", "name": model_prefix + ".pickle"}
+                {"role": "scoreResource", "name": sanitized_prefix + ".pickle"}
             )
 
         if json_path:
@@ -536,29 +545,30 @@ class JSONFiles:
 
         There are three modes to add fit parameters to the JSON file:
 
-            1. Call the function with additional tuple arguments containing
-            the name of the parameter, its value, and the partition that it
-            belongs to.
+        1. Call the function with additional tuple arguments containing
+        the name of the parameter, its value, and the partition that it
+        belongs to.
 
-            2. Provide line by line user input prompted by the function.
+        2. Provide line by line user input prompted by the function.
 
-            3. Import values from a CSV file. Format should contain the above
-            tuple in each row.
+        3. Import values from a CSV file. Format should contain the above
+        tuple in each row.
 
         The following are the base statistical parameters SAS Viya supports:
-            * RASE = Root Average Squared Error
-            * NObs = Sum of Frequencies
-            * GINI = Gini Coefficient
-            * GAMMA = Gamma
-            * MCE = Misclassification Rate
-            * ASE = Average Squared Error
-            * MCLL = Multi-Class Log Loss
-            * KS = KS (Youden)
-            * KSPostCutoff = ROC Separation
-            * DIV = Divisor for ASE
-            * TAU = Tau
-            * KSCut = KS Cutoff
-            * C = Area Under ROC
+
+        * RASE = Root Average Squared Error
+        * NObs = Sum of Frequencies
+        * GINI = Gini Coefficient
+        * GAMMA = Gamma
+        * MCE = Misclassification Rate
+        * ASE = Average Squared Error
+        * MCLL = Multi-Class Log Loss
+        * KS = KS (Youden)
+        * KSPostCutoff = ROC Separation
+        * DIV = Divisor for ASE
+        * TAU = Tau
+        * KSCut = KS Cutoff
+        * C = Area Under ROC
 
         This function outputs a JSON file named "dmcas_fitstat.json".
 
@@ -574,7 +584,7 @@ class JSONFiles:
             data_role). For example, a sample parameter call would be
             'NObs', 3488, or 'TRAIN'. Variable data_role is typically either TRAIN,
             TEST, or VALIDATE or 1, 2, 3 respectively. The default value is None.
-        json_path : str or Path, optional
+        json_path : str or pathlib.Path, optional
             Location for the output JSON file. The default value is None.
 
         Returns
@@ -679,13 +689,13 @@ class JSONFiles:
 
         Parameters
         ----------
-        data : list of dicts
+        data : list of dict
             List of dicts for the data values of each parameter. Split into the three
             valid partitions (TRAIN, TEST, VALIDATE).
 
         Returns
         -------
-        list of dicts
+        list of dict
             List of dicts with the user provided values inputted.
         """
         while True:
@@ -786,37 +796,40 @@ class JSONFiles:
         score_table : pandas.DataFrame
             Data structure containing actual values, predicted or predicted probability values, and sensitive variable
             values. All columns in the score table must have valid variable names.
-        sensitive_values : string or list of strings
+        sensitive_values : str or list of str
             Sensitive variable name or names in score_table. The variable name must follow SAS naming conventions (no
             spaces and the name cannot begin with a number or symbol).
-        actual_values : string
+        actual_values : str
             Variable name containing the actual values in score_table. The variable name must follow SAS naming
             conventions (no spaces and the name cannot begin with a number or symbol).
-        pred_values : string, required for regression problems, otherwise not used
+        pred_values : str
+            Required for regression problems, otherwise not used
             Variable name containing the predicted values in score_table. The variable name must follow SAS naming
             conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.
             The default value is None.
-        prob_values : list of strings, required for classification problems, otherwise not used
-           A list of variable names containing the predicted probability values in the score table. The first element
-           should represent the predicted probability of the target class. Required for classification problems. Default
-           is None.
-        levels: List of strings, integers, booleans, required for classification problems, otherwise not used
+        prob_values : list of str
+            Required for classification problems, otherwise not used
+            A list of variable names containing the predicted probability values in the score table. The first element
+            should represent the predicted probability of the target class. Required for classification problems. Default
+            is None.
+        levels : list of str, list of int, or list of bool
+            Required for classification problems, otherwise not used
             List of classes of a nominal target in the order they were passed in prob_values. Levels must be passed as a
             string. Default is None.
-        json_path : str or Path, optional
+        json_path : str or pathlib.Path, optional
             Location for the output JSON files. If a path is passed, the json files will populate in the directory and
             the function will return None, unless return_dataframes is True. Otherwise, the function will return the json
-             strings in a dictionary (dict["maxDifferences.json"] and dict["groupMetrics.json"]). The default value is
-             None.
+            strings in a dictionary (dict["maxDifferences.json"] and dict["groupMetrics.json"]). The default value is
+            None.
         cutoff : float, optional
             Cutoff value for confusion matrix. Default is 0.5.
-        datarole : string, optional
+        datarole : str, optional
             The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
-        return_dataframes : boolean, optional
+        return_dataframes : bool, optional
             If true, the function returns the pandas data frames used to create the JSON files and a table for bias
             metrics. If a JSON path is passed, then the function will return a dictionary that only includes the data
             frames (dict["maxDifferencesData"], dict["groupMetricData"], and dict["biasMetricsData"]). If a JSON path is
-             not passed, the function will return a dictionary with the three tables  and the two JSON strings
+            not passed, the function will return a dictionary with the three tables  and the two JSON strings
             (dict["maxDifferences.json"] and dict["groupMetrics.json"]). The default value is False.
 
         Returns
@@ -828,7 +841,7 @@ class JSONFiles:
         Raises
         ------
         RuntimeError
-            If swat is not installed, this function cannot perform the necessary
+            If :mod:`swat` is not installed, this function cannot perform the necessary
             calculations.
 
         ValueError
@@ -949,22 +962,24 @@ class JSONFiles:
     ) -> DataFrame:
         """
         Converts a list of max differences DataFrames into a singular DataFrame
+
         Parameters
         ----------
-        maxdiff_dfs: List[DataFrame]
+        maxdiff_dfs: list of pandas.DataFrame
             A list of max_differences DataFrames returned by CAS
-        datarole : string, optional
+        datarole : str, optional
             The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
 
         Returns
         -------
-        DataFrame
+        pandas.DataFrame
             A singluar DataFrame containing all max differences data
         """
         maxdiff_df = pd.concat(maxdiff_dfs)
         maxdiff_df = maxdiff_df.rename(
             columns={"Value": "maxdiff", "Base": "BASE", "Compare": "COMPARE"}
         )
+        maxdiff_df["maxdiff"] = maxdiff_df["maxdiff"].apply(str)
 
         maxdiff_df["VLABEL"] = ""
         maxdiff_df["_DATAROLE_"] = datarole
@@ -982,24 +997,27 @@ class JSONFiles:
     ) -> DataFrame:
         """
         Converts list of group metrics DataFrames to a single DataFrame
+
         Parameters
         ----------
-        groupmetrics_dfs: List[DataFrame]
+        groupmetrics_dfs: list of pandas.DataFrame
             List of group metrics DataFrames generated by CASAction
-        pred_values : string, required for regression problems, otherwise not used
+        pred_values : str
+            Required for regression problems, otherwise not used.
             Variable name containing the predicted values in score_table. The variable name must follow SAS naming
             conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.
             The default value is None.
-        prob_values : list of strings, required for classification problems, otherwise not used
-           A list of variable names containing the predicted probability values in the score table. The first element
-           should represent the predicted probability of the target class. Required for classification problems. Default
-           is None.
-        datarole : string, optional
-            The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST.'
+        prob_values : list of str
+            Required for classification problems, otherwise not used
+            A list of variable names containing the predicted probability values in the score table. The first element
+            should represent the predicted probability of the target class. Required for classification problems. Default
+            is None.
+        datarole : str, optional
+            The data being used to assess bias (i.e. 'TEST', 'VALIDATION', etc.). Default is 'TEST'.
 
         Returns
         -------
-        DataFrame
+        pandas.DataFrame
             A singular DataFrame containing formatted data for group metrics
         """
         # adding group metrics dataframes and adding values/ formatting
@@ -1057,33 +1075,37 @@ class JSONFiles:
     ):
         """
         Properly formats data from FairAITools CAS Action Set into a JSON readable formats
+
         Parameters
         ----------
-        groupmetrics: DataFrame
+        groupmetrics: pandas.DataFrame
             A DataFrame containing the group metrics data
-        maxdifference: DataFrame
+        maxdifference: pandas.DataFrame
             A DataFrame containing the max difference data
         n_sensitivevariables: int
             The total number of sensitive values
-        actual_values : String
+        actual_values : str
             Variable name containing the actual values in score_table. The variable name must follow SAS naming
             conventions (no spaces and the name cannot begin with a number or symbol).
-        prob_values : list of strings, required for classification problems, otherwise not used
-           A list of variable names containing the predicted probability values in the score table. The first element
-           should represent the predicted probability of the target class. Required for classification problems. Default
-           is None.
-        levels: List of strings, required for classification problems, otherwise not used
-            List of classes of a nominal target in the order they were passed in prob_values. Levels must be passed as a
+        prob_values : list of str
+            Required for classification problems, otherwise not used
+            A list of variable names containing the predicted probability values in the score table. The first element
+            should represent the predicted probability of the target class. Required for classification problems. Default
+            is None.
+        levels: list of str
+            Required for classification problems, otherwise not used
+            List of classes of a nominal target in the order they were passed in `prob_values`. Levels must be passed as a
             string. Default is None.
-        pred_values : string, required for regression problems, otherwise not used
-            Variable name containing the predicted values in score_table. The variable name must follow SAS naming
-            conventions (no spaces and the name cannot begin with a number or symbol).Required for regression problems.
+        pred_values : str
+            Required for regression problems, otherwise not used
+            Variable name containing the predicted values in `score_table`. The variable name must follow SAS naming
+            conventions (no spaces and the name cannot begin with a number or symbol). Required for regression problems.
             The default value is None.
-        json_path : str or Path, optional
+        json_path : str or pathlib.Path, optional
             Location for the output JSON files. If a path is passed, the json files will populate in the directory and
             the function will return None, unless return_dataframes is True. Otherwise, the function will return the json
-             strings in a dictionary (dict["maxDifferences.json"] and dict["groupMetrics.json"]). The default value is
-             None.
+            strings in a dictionary (dict["maxDifferences.json"] and dict["groupMetrics.json"]). The default value is
+            None.
 
         Returns
         -------
@@ -1171,9 +1193,9 @@ class JSONFiles:
         cls,
         target_value: Union[str, int, float],
         prob_value: Union[int, float, None] = None,
-        validate_data: Union[DataFrame, List[list], Type["numpy.array"]] = None,
-        train_data: Union[DataFrame, List[list], Type["numpy.array"]] = None,
-        test_data: Union[DataFrame, List[list], Type["numpy.array"]] = None,
+        validate_data: Union[DataFrame, List[list], Type["numpy.ndarray"]] = None,
+        train_data: Union[DataFrame, List[list], Type["numpy.ndarray"]] = None,
+        test_data: Union[DataFrame, List[list], Type["numpy.ndarray"]] = None,
         json_path: Union[str, Path, None] = None,
         target_type: str = "classification",
         cutoff: Optional[float] = None,
@@ -1194,10 +1216,11 @@ class JSONFiles:
 
         Datasets can be provided in the following forms, with the assumption that data
         is ordered as `actual`, `predict`, and `probability` respectively:
+
         * pandas dataframe: the actual and predicted values are their own columns
-        * numpy array: the actual and predicted values are their own columns or rows and
-        ordered such that the actual values come first and the predicted second
         * list: the actual and predicted values are their own indexed entry
+        * numpy array: the actual and predicted values are their own columns or rows \
+        and ordered such that the actual values come first and the predicted second
 
         If a json_path is supplied, then this function outputs a set of JSON files named
         "dmcas_fitstat.json", "dmcas_roc.json", "dmcas_lift.json".
@@ -1209,13 +1232,13 @@ class JSONFiles:
         prob_value : int or float, optional
             The threshold value for model predictions to indicate an event occurred. The
             default value is 0.5.
-        validate_data : pandas.DataFrame, list of list, or numpy array, optional
+        validate_data : pandas.DataFrame, list of list, or numpy.ndarray, optional
             Dataset pertaining to the validation data. The default value is None.
-        train_data : pandas.DataFrame, list of list, or numpy array, optional
+        train_data : pandas.DataFrame, list of list, or numpy.ndarray, optional
             Dataset pertaining to the training data. The default value is None.
-        test_data : pandas.DataFrame, list of list, or numpy array, optional
+        test_data : pandas.DataFrame, list of list, or numpy.ndarray, optional
             Dataset pertaining to the test data. The default value is None.
-        json_path : str or Path, optional
+        json_path : str or pathlib.Path, optional
             Location for the output JSON files. The default value is None.
         target_type: str, optional
             Type of target the model is trying to find. Currently supports "classification"
@@ -1260,7 +1283,7 @@ class JSONFiles:
             if not partition:
                 continue
 
-            data = cls.stat_dataset_to_dataframe(data, target_value)
+            data = cls.stat_dataset_to_dataframe(data, target_value, target_type)
 
             conn.upload(
                 data,
@@ -1349,20 +1372,20 @@ class JSONFiles:
 
     @staticmethod
     def check_for_data(
-        validate: Union[DataFrame, List[list], Type["numpy.array"]] = None,
-        train: Union[DataFrame, List[list], Type["numpy.array"]] = None,
-        test: Union[DataFrame, List[list], Type["numpy.array"]] = None,
+        validate: Union[DataFrame, List[list], Type["numpy.ndarray"]] = None,
+        train: Union[DataFrame, List[list], Type["numpy.ndarray"]] = None,
+        test: Union[DataFrame, List[list], Type["numpy.ndarray"]] = None,
     ) -> list:
         """
         Check which datasets were provided and return a list of flags.
 
         Parameters
         ----------
-        validate : pandas.DataFrame, list of list, or numpy array, optional
+        validate : pandas.DataFrame, list of list, or numpy.ndarray, optional
             Dataset pertaining to the validation data. The default value is None.
-        train : pandas.DataFrame, list of list, or numpy array, optional
+        train : pandas.DataFrame, list of list, or numpy.ndarray, optional
             Dataset pertaining to the training data. The default value is None.
-        test : pandas.DataFrame, list of list, or numpy array, optional
+        test : pandas.DataFrame, list of list, or numpy.ndarray, optional
             Dataset pertaining to the test data. The default value is None.
 
         Returns
@@ -1390,8 +1413,9 @@ class JSONFiles:
 
     @staticmethod
     def stat_dataset_to_dataframe(
-        data: Union[DataFrame, List[list], Type["numpy.array"]],
+        data: Union[DataFrame, List[list], Type["numpy.ndarray"]],
         target_value: Union[str, int, float] = None,
+        target_type: str = "classification",
     ) -> DataFrame:
         """
         Convert the user supplied statistical dataset from either a pandas DataFrame,
@@ -1405,7 +1429,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        data : pandas.DataFrame, list of list, or numpy array
+        data : pandas.DataFrame, list of list, or numpy.ndarray
             Dataset representing the actual and predicted values of the model. May also
             include the prediction probabilities.
         target_value : str, int, or float, optional
@@ -1424,13 +1448,6 @@ class JSONFiles:
             Raised if an improper data format is provided.
 
         """
-        # If numpy inputs are supplied, then assume numpy is installed
-        try:
-            # noinspection PyPackageRequirements
-            import numpy as np
-        except ImportError:
-            np = None
-
         # Convert target_value to numeric for creating binary probabilities
         if isinstance(target_value, str):
             target_value = float(target_value)
@@ -1439,13 +1456,15 @@ class JSONFiles:
         if isinstance(data, pd.DataFrame):
             if len(data.columns) == 2:
                 data.columns = ["actual", "predict"]
-                data["predict_proba"] = data["predict"].gt(target_value).astype(int)
+                if target_type == "classification":
+                    data["predict_proba"] = data["predict"].gt(target_value).astype(int)
             elif len(data.columns) == 3:
                 data.columns = ["actual", "predict", "predict_proba"]
         elif isinstance(data, list):
             if len(data) == 2:
                 data = pd.DataFrame({"actual": data[0], "predict": data[1]})
-                data["predict_proba"] = data["predict"].gt(target_value).astype(int)
+                if target_type == "classification":
+                    data["predict_proba"] = data["predict"].gt(target_value).astype(int)
             elif len(data) == 3:
                 data = pd.DataFrame(
                     {
@@ -1457,7 +1476,8 @@ class JSONFiles:
         elif isinstance(data, np.ndarray):
             if len(data) == 2:
                 data = pd.DataFrame({"actual": data[0, :], "predict": data[1, :]})
-                data["predict_proba"] = data["predict"].gt(target_value).astype(int)
+                if target_type == "classification":
+                    data["predict_proba"] = data["predict"].gt(target_value).astype(int)
             elif len(data) == 3:
                 data = pd.DataFrame(
                     {"actual": data[0], "predict": data[1], "predict_proba": data[2]}
@@ -1514,7 +1534,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        path : str or Path
+        path : str or pathlib.Path
             Location of the JSON file to be opened.
 
         Returns
@@ -1622,9 +1642,9 @@ class JSONFiles:
 
         Parameters
         ----------
-        model_path : str or Path, optional
+        model_path : str or pathlib.Path, optional
             The path to a Python project, by default the current working directory.
-        output_path : str or Path, optional
+        output_path : str or pathlib.Path, optional
             The path for the output requirements.json file. The default value is None.
 
         Returns
@@ -1743,7 +1763,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        model_path : string or Path, optional
+        model_path : str or pathlib.Path, optional
             File location for the output JSON file. The default value is the current
             working directory.
 
@@ -1770,7 +1790,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        file_path : str or Path
+        file_path : str or pathlib.Path
             File location for the Python file to be parsed.
 
         Returns
@@ -1808,13 +1828,13 @@ class JSONFiles:
 
         Parameters
         ----------
-        pickle_folder : str or Path
+        pickle_folder : str or pathlib.Path
             File location for the input pickle file. The default value is the current
             working directory.
 
         Returns
         -------
-        list of Path
+        list of pathlib.Path
             A list of pickle files.
         """
         return [
@@ -1830,7 +1850,7 @@ class JSONFiles:
 
         Parameters
         ----------
-        pickle_file : str or Path
+        pickle_file : str or pathlib.Path
             The file where you stored pickle data.
 
         Returns
@@ -1857,9 +1877,10 @@ class JSONFiles:
 
         This code has been adapted from the following stackoverflow example and
         utilizes the pickletools package.
+
         Credit: modified from
-        https://stackoverflow.com/questions/64850179/inspecting-a-pickle-dump-for
-        -dependencies
+        https://stackoverflow.com/questions/64850179/inspecting-a-pickle-dump-for-dependencies
+
         More information here:
         https://github.com/python/cpython/blob/main/Lib/pickletools.py
 
@@ -1870,7 +1891,7 @@ class JSONFiles:
 
         Returns
         -------
-        List of str
+        list of str
             List of package names found as module dependencies in the pickle file.
         """
         # Collect opcodes, arguments, and position values from the pickle stream
@@ -2253,6 +2274,7 @@ class JSONFiles:
         interval_vars: Optional[list] = [],
         class_vars: Optional[list] = [],
         selection_statistic: str = None,
+        training_table_name: str = None,
         server: str = "cas-shared-default",
         caslib: str = "Public",
     ):
@@ -2308,9 +2330,9 @@ class JSONFiles:
                 "Only classification and prediction target types are currently accepted."
             )
         if selection_statistic is None:
-            if target_type is "classification":
+            if target_type == "classification":
                 selection_statistic = "_KS_"
-            elif target_type is "prediction":
+            elif target_type == "prediction":
                 selection_statistic = "_ASE_"
         if selection_statistic not in cls.valid_params:
             raise RuntimeError(
@@ -2332,7 +2354,7 @@ class JSONFiles:
 
         # Upload training table to CAS. The location of the training table is returned.
         training_table = cls.upload_training_data(
-            conn, model_prefix, train_data, server, caslib
+            conn, model_prefix, train_data, training_table_name, server, caslib
         )
 
         # Generates the event percentage for Classification targets, and the event average
@@ -2366,13 +2388,15 @@ class JSONFiles:
         )
 
         # Generates dmcas_misc.json file
-        cls.generate_misc(model_files)
+        if target_type == "classification":
+            cls.generate_misc(model_files)
 
     @staticmethod
     def upload_training_data(
         conn,
         model_prefix: str,
         train_data: pd.DataFrame,
+        train_data_name: str,
         server: str = "cas-shared-default",
         caslib: str = "Public",
     ):
@@ -2399,15 +2423,18 @@ class JSONFiles:
         Returns a string that represents the location of the training table within CAS.
         """
         # Upload raw training data to caslib so that data can be analyzed
-        train_data_name = model_prefix + "_train_data"
+        if not train_data_name:
+            train_data_name = model_prefix + "_train_data"
         upload_train_data = conn.upload(
             train_data, casout={"name": train_data_name, "caslib": caslib}, promote=True
         )
 
         if upload_train_data.status is not None:
-            raise RuntimeError(
-                f"A table with the name {train_data_name} already exists in the specified caslib. Please "
-                "either delete/rename the old table or give a new name to the current table."
+            # raise RuntimeError(
+            warnings.warn(
+                f"A table with the name {train_data_name} already exists in the specified caslib. If this "
+                f"is not intentional, please either rename the training data file or remove the duplicate from "
+                f"the caslib."
             )
 
         return server + "/" + caslib + "/" + train_data_name.upper()
@@ -2617,7 +2644,7 @@ class JSONFiles:
         if target_type == "classification":
             method = "DTREE"
             treeCrit = "Entropy"
-        elif target_type == "interval":
+        elif target_type == "prediction":
             method = "RTREE"
             treeCrit = "RSS"
         else:
@@ -2743,20 +2770,23 @@ class JSONFiles:
         if isinstance(model_files, dict):
             if ROC not in model_files:
                 raise RuntimeError(
-                    "The ModelProperties.json file must be generated before the model card data "
+                    "The dmcas_roc.json file must be generated before the model card data "
                     "can be generated."
                 )
             roc_table = model_files[ROC]
         else:
             if not Path.exists(Path(model_files) / ROC):
                 raise RuntimeError(
-                    "The ModelProperties.json file must be generated before the model card data "
+                    "The dmcas_roc.json file must be generated before the model card data "
                     "can be generated."
                 )
             with open(Path(model_files) / ROC, "r") as roc_file:
                 roc_table = json.load(roc_file)
         correct_text = ["CORRECT", "INCORRECT", "CORRECT", "INCORRECT"]
         outcome_values = ["1", "0", "0", "1"]
+        target_texts = ["Event", "Event", "NEvent", "NEvent"]
+        target_values = ["1", "1", "0", "0"]
+
         misc_data = list()
         # Iterates through ROC table to get TRAIN, TEST, and VALIDATE data with a cutoff of .5
         for i in range(50, 300, 100):
@@ -2767,8 +2797,12 @@ class JSONFiles:
                 roc_data["_TN_"],
                 roc_data["_FN_"],
             ]
-            for c_text, c_val, o_val in zip(
-                correct_text, correctness_values, outcome_values
+            for c_text, c_val, o_val, t_txt, t_val in zip(
+                correct_text,
+                correctness_values,
+                outcome_values,
+                target_texts,
+                target_values,
             ):
                 misc_data.append(
                     {
@@ -2779,6 +2813,8 @@ class JSONFiles:
                             "_DataRole_": roc_data["_DataRole_"],
                             "_cutoffSource_": "Default",
                             "_cutoff_": "0.5",
+                            "TargetText": t_txt,
+                            "Target": t_val,
                         },
                         "rowNumber": len(misc_data) + 1,
                     }

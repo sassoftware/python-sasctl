@@ -65,7 +65,7 @@ class ModelRepository(Service):
 
         Returns
         ----------
-        binary?
+        BinaryIO
 
         """
         # TODO: Download binary object?
@@ -296,10 +296,10 @@ class ModelRepository(Service):
         properties : dict, optional
             Custom model properties provided as name: value pairs.
             Allowed types are int, float, string, datetime.date, and datetime.datetime
-        input_variables : array_like, optional
+        input_variables : Iterable, optional
             Model input variables. By default, these are the same as the model
             project.
-        output_variables : array_like, optional
+        output_variables : Iterable, optional
             Model output variables. By default, these are the same as the model
              project.
         project_version : str
@@ -524,7 +524,7 @@ class ModelRepository(Service):
         project : str or dict
             The name or id of the model project, or a dictionary
             representation of the project.
-        file : bytes
+        file : bytes or file-like object
             The ZIP file containing the model and contents.
         description : str
             The description of the model.
@@ -551,9 +551,14 @@ class ModelRepository(Service):
         }
         params = "&".join("{}={}".format(k, v) for k, v in params.items())
 
+        if not isinstance(file, bytes):
+            if file.seekable():
+                file.seek(0)
+            file = file.read()
+
         r = cls.post(
             "/models#octetStream",
-            data=file.read(),
+            data=file,
             params=params,
             headers={"Content-Type": "application/octet-stream"},
         )
@@ -812,10 +817,10 @@ class ModelRepository(Service):
         list of dicts
             List of dicts representing different project versions. Dict key/value
             pairs are as follows.
-                name : str
-                id : str
-                number : str
-                modified : datetime
+            - name : str
+            - id : str
+            - number : str
+            - modified : datetime
 
         """
         project_info = cls.get_project(project)

@@ -1,9 +1,32 @@
-Unreleased
-----------
+v1.10.7 (2024-10-02)
+--------------------
+**Changes**
+ - Due to licensing restrictions, the `sasctl` package will no longer be available through Anaconda.
+
+**Bugfixes**
+ - Fixed a bug that caused an error when performing SSL verification without a CA bundle specified.
+
+v1.10.6 (2024-08-26)
+--------------------
 **Improvements**
  - Refactor `tasks.py` to utilize `sasctl.pzmm` functions.
  - Add `model_info` class to better capture model information.
- - Test `/examples` Jupyter notebooks within normal test suite.
+
+v1.10.5 (2024-08-01)
+--------------------
+**Buxfixes**
+- Updated `write_json_files.py` to allow for better support for prediction models
+- Fixed issues relating to model card support.
+
+v1.10.4 (2024-07-08)
+--------------------
+**Improvements**
+- Added example Jupyter notebook for OpenAI models.
+
+**Buxfixes**
+- Dropped support for Python 3.6 and Python 3.7, as those are no longer officially supported versions.
+- Added `dmcas_misc.json` template file for model card generation.
+- Updated generation of `ModelProperties.json` to allow for model card generation immediately upon upload.
 
 v1.10.4 (2024-07-08)
 ----------
@@ -16,13 +39,13 @@ v1.10.4 (2024-07-08)
 - Updated generation of `ModelProperties.json` to allow for model card generation immediately upon upload.
 
 v1.10.3 (2024-04-12)
-----------
+--------------------
 **Bugfixes**
 - Updated all examples to use current versions of sasctl functions
 - Fixed bug in `generate_model_card` that threw an error when trying to generate the `dmcas_misc.json` file
 
 v1.10.2 (2024-04-10)
-----------
+--------------------
 **Improvements**
 - Introduced `generate_model_card` into `write_json_files.py` to allow for python models to work with planned model card tab in SAS Model Manager.
 
@@ -33,7 +56,7 @@ v1.10.2 (2024-04-10)
 - Added missing statistics to `dmcas_fitstat.json` file.
 
 v1.10.1 (2023-08-24)
-----------
+--------------------
 **Improvements**
 - Introduced ability to specify the target index of a binary model when creating score code.
   - index can be specified in `pzmm.import_model.ImportModel.import_model()`
@@ -44,7 +67,7 @@ v1.10.1 (2023-08-24)
 - Added template files for `assess_model_bias.py` to allow for proper execution
 
 v1.10 (2023-08-31)
-----------
+------------------
 **Improvements**
  - `write_score_code.py` refactored to include ability to run batch scoring.
  - Added handling for TensorFlow Keras models.
@@ -57,7 +80,7 @@ v1.10 (2023-08-31)
    - Updated `pzmm_custom_kpi_model_parameters` notebook to have correct parameter casing.
 
 v1.9.4 (2023-06-15)
-----------
+-------------------
 **Improvements**
  - Created pytest fixture to begin running Jupyter notebooks within the GitHub automated test actions.
  - Updated examples:
@@ -71,7 +94,7 @@ v1.9.4 (2023-06-15)
  - Fixed call to `pzmm.JSONFiles.calculate_model_statistics()` in `pzmm_binary_classification_model_import.ipynb`.
 
 v1.9.3 (2023-06-08)
-----------
+-------------------
 **Improvements**
  - Refactored gitIntegration.py to `git_integration.py` and added unit tests for better test coverage.
 
@@ -84,7 +107,7 @@ v1.9.3 (2023-06-08)
  - Fixed issue with `services.model_publish.list_models`, which was using an older API format that is not valid in SAS Viya 3.5 or SAS Viya 4.
 
 v1.9.2 (2023-05-17)
-----------
+-------------------
 **Improvements**
  - Add recursive folder creation and an example.
  - Add example for migrating models from SAS Viya 3.5 to SAS Viya 4.
@@ -96,7 +119,7 @@ v1.9.2 (2023-05-17)
  - Fix minor errors in h2o score code generation
 
 v1.9.1 (2023-05-04)
-----------
+-------------------
 **Improvements**
  - Updated handling of H2O models in `sasctl.pzmm`.
    - Models are now saved with the appropriate `h2o` functions within the `sasctl.pzmm.PickleModel.pickle_trained_model` function.
@@ -108,7 +131,7 @@ v1.9.1 (2023-05-04)
  - Added NpEncoder class to check for numpy values in JSON files. Numpy-types cannot be used in SAS Viya.
 
 v1.9.0 (2023-04-04)
-----------
+-------------------
 **Improvements**
  - `sasctl.pzmm` refactored to follow PEP8 standards, include type hinting, and major expansion of code coverage.
    - `sasctl.pzmm` functions that can generate files can now run in-memory instead of writing to disk.
@@ -136,7 +159,7 @@ v1.8.2 (2023-01-30)
    - Better handling for invalid project versions included.
 
 v1.8.1 (2023-01-19)
-----------
+-------------------
 **Changes**
  - Adjusted workflow for code coverage reporting. Prepped to add components in next release.
  - Added `generate_requirements_json.ipynb` example.

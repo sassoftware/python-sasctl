@@ -29,9 +29,10 @@ def check_keys(valid_keys: list, input_keys: list, parameters: str):
         String describing the type of parameters
         that are being tested.
 
-    Returns
-    -------
-    raises ValueError if input_keys are not valid
+    Raises
+    ------
+    ValueError
+        if input_keys are not valid
     """
     if not all(key in valid_keys for key in input_keys):
         raise ValueError(
@@ -55,10 +56,12 @@ def check_required_key(
         String describing the type of parameters
         that are being tested.
 
-    Returns
-    -------
-    raises ValueError if required_key is not present.
-    raises TypeError if required_key is neither a list or a string.
+    Raises
+    ------
+    ValueError
+        if required_key is not present.
+    TypeError
+        if required_key is neither a list or a string.
     """
     if isinstance(required_key, str):
         if required_key not in input_keys:
@@ -93,7 +96,7 @@ class CASManagement(Service):
         Returns a collection of sessions available on the CAS server.
 
         Parameters
-        ------
+        ----------
         query_params : dict, optional
             Query parameters.
             Valid keys are `start`, `limit`, `filter`,
@@ -129,7 +132,7 @@ class CASManagement(Service):
         """Creates a new session on the CAS server.
 
         Parameters
-        ------
+        ----------
         properties : dict
             Properties of the session.
             Valid keys are `authenticationType` (required),
@@ -164,7 +167,7 @@ class CASManagement(Service):
         """Terminates a session on the CAS server.
 
         Parameters
-        ------
+        ----------
         sess_id : str
             A string indicating the Session id.
         server : str
@@ -225,7 +228,7 @@ class CASManagement(Service):
 
         Returns
         -------
-        RestObj
+        RestObj or None
 
         """
         server = server or DEFAULT_SERVER
@@ -278,7 +281,7 @@ class CASManagement(Service):
 
         Returns
         -------
-        RestObj
+        RestObj or None
 
         """
         caslib = caslib or DEFAULT_CASLIB
@@ -309,7 +312,7 @@ class CASManagement(Service):
 
         Parameters
         ----------
-        file : str or file-like object
+        file : str or typing.TextIO
             File containing data to upload or path to the file.
         name : str
             Name of the table to create
@@ -321,7 +324,8 @@ class CASManagement(Service):
         header : bool, optional
             Whether the first row of data contains column headers.  Defaults to
             True.
-        format_ : {"csv", "xls", "xlsx", "sas7bdat", "sashdat"}, optional
+        format_ : str, optional
+            Choose from {"csv", "xls", "xlsx", "sas7bdat", "sashdat"}.
             File of input `file`.  Not required if format can be discerned from
             the file path.
         detail : dict, optional
@@ -637,6 +641,11 @@ class CASManagement(Service):
         Returns
         -------
         RestObj
+
+        Raises
+        ------
+        ValueError
+            If `query_params` is empty
         """
 
         server = server or DEFAULT_SERVER

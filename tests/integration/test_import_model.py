@@ -111,6 +111,7 @@ def test_import_model(hmeq_dataset):
             "ModelProperties.json",
             "inputVar.json",
             "outputVar.json",
+            "MM_Import_Error.log",
         ]
 
     input_data = hmeq_dataset.drop(columns=["BAD", "REASON", "JOB"])
@@ -135,6 +136,7 @@ def test_import_model(hmeq_dataset):
                 "ModelProperties.json",
                 "outputVar.json",
                 "score_Test_Model.py",
+                "MM_Import_Error.log",
             ]
     else:
         model, model_files = im.import_model(
@@ -159,5 +161,6 @@ def test_import_model(hmeq_dataset):
                 "score.sas",
                 "dmcas_epscorecode.sas",
                 "dmcas_packagescorecode.sas",
+                "MM_Import_Error.log",
             ]
             assert file.name in file_list
