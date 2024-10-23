@@ -13,6 +13,7 @@ from .service import Service
 
 
 class ScoreDefinitions(Service):
+    
     """
     Used for creating and maintaining score definitions.
 
