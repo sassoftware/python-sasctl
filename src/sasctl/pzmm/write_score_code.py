@@ -250,7 +250,7 @@ def score(var1, var2, var3, var4):
                 input_var_list,
                 missing_values=missing_values,
                 dtype_list=input_dtypes_list,
-                preprocess_function=preprocess_function
+                preprocess_function=preprocess_function,
             )
             self._predictions_to_metrics(
                 score_metrics,
@@ -267,7 +267,7 @@ def score(var1, var2, var3, var4):
                 missing_values=missing_values,
                 statsmodels_model="statsmodels_model" in kwargs,
                 tf_model="tf_keras_model" in kwargs or "tf_core_model" in kwargs,
-                preprocess_function=preprocess_function
+                preprocess_function=preprocess_function,
             )
             # Include check for numpy values and a conversion operation as needed
             self.score_code += (
@@ -2263,7 +2263,9 @@ if not isinstance(var1, pd.Series):
                     mr.update_model(model)
                     return mas_code, cas_code
 
-    def _add_preprocess_code(self, preprocess_function: Callable[[DataFrame], DataFrame]):
+    def _add_preprocess_code(
+        self, preprocess_function: Callable[[DataFrame], DataFrame]
+    ):
         """
         Places the given preprocess function, which must both take a DataFrame as an argument
         and return a DataFrame, into the score code. If the preprocess function does not
