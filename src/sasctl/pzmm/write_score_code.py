@@ -250,6 +250,7 @@ def score(var1, var2, var3, var4):
                 input_var_list,
                 missing_values=missing_values,
                 dtype_list=input_dtypes_list,
+                preprocess_function=preprocess_function
             )
             self._predictions_to_metrics(
                 score_metrics,
@@ -266,6 +267,7 @@ def score(var1, var2, var3, var4):
                 missing_values=missing_values,
                 statsmodels_model="statsmodels_model" in kwargs,
                 tf_model="tf_keras_model" in kwargs or "tf_core_model" in kwargs,
+                preprocess_function=preprocess_function
             )
             # Include check for numpy values and a conversion operation as needed
             self.score_code += (
@@ -814,13 +816,14 @@ if not isinstance(var1, pd.Series):
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
             self.score_code += self._wrap_indent_string(input_frame, 8)
             self.score_code += f"\n{'':4})\n"
-            if preprocess_function:
-                self.score_code += (
-                    f"{'':4}input_array = {preprocess_function.__name__}(input_array)"
-                )
+
             if missing_values:
                 self.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)\n"
+                )
+            if preprocess_function:
+                self.score_code += (
+                    f"{'':4}input_array = {preprocess_function.__name__}(input_array)\n"
                 )
             self.score_code += (
                 f"{'':4}column_types = {column_types}\n"
@@ -860,13 +863,13 @@ if not isinstance(var1, pd.Series):
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
             self.score_code += self._wrap_indent_string(input_frame, 8)
             self.score_code += f"\n{'':4})\n"
-            if preprocess_function:
-                self.score_code += (
-                    f"{'':4}input_array = {preprocess_function.__name__}(input_array)"
-                )
             if missing_values:
                 self.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)\n"
+                )
+            if preprocess_function:
+                self.score_code += (
+                    f"{'':4}input_array = {preprocess_function.__name__}(input_array)\n"
                 )
             self.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array)\n"
@@ -885,13 +888,13 @@ if not isinstance(var1, pd.Series):
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
             self.score_code += self._wrap_indent_string(input_frame, 8)
             self.score_code += f"\n{'':4})\n"
-            if preprocess_function:
-                self.score_code += (
-                    f"{'':4}input_array = {preprocess_function.__name__}(input_array)"
-                )
             if missing_values:
                 self.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)\n"
+                )
+            if preprocess_function:
+                self.score_code += (
+                    f"{'':4}input_array = {preprocess_function.__name__}(input_array)\n"
                 )
             self.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array)\n\n"
@@ -921,13 +924,13 @@ if not isinstance(var1, pd.Series):
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
             self.score_code += self._wrap_indent_string(input_frame, 8)
             self.score_code += f"\n{'':4})\n"
-            if preprocess_function:
-                self.score_code += (
-                    f"{'':4}input_array = {preprocess_function.__name__}(input_array)"
-                )
             if missing_values:
                 self.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)\n"
+                )
+            if preprocess_function:
+                self.score_code += (
+                    f"{'':4}input_array = {preprocess_function.__name__}(input_array)\n"
                 )
             self.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array).tolist()\n"
