@@ -36,6 +36,7 @@ class ScoreCode:
         score_cas: Optional[bool] = True,
         score_code_path: Union[Path, str, None] = None,
         target_index: Optional[int] = None,
+        preprocess_function: Optional[Callable[[DataFrame], DataFrame]] = None,
         **kwargs,
     ) -> Union[dict, None]:
         """
@@ -249,6 +250,7 @@ def score(var1, var2, var3, var4):
                 input_var_list,
                 missing_values=missing_values,
                 dtype_list=input_dtypes_list,
+                preprocess_function=preprocess_function,
             )
             self._predictions_to_metrics(
                 score_metrics,
@@ -265,6 +267,7 @@ def score(var1, var2, var3, var4):
                 missing_values=missing_values,
                 statsmodels_model="statsmodels_model" in kwargs,
                 tf_model="tf_keras_model" in kwargs or "tf_core_model" in kwargs,
+                preprocess_function=preprocess_function,
             )
             # Include check for numpy values and a conversion operation as needed
             self.score_code += (
@@ -291,6 +294,9 @@ def score(var1, var2, var3, var4):
 
         if missing_values:
             self._impute_missing_values(input_data, missing_values)
+
+        if preprocess_function:
+            self._add_preprocess_code(preprocess_function)
 
         # SAS Viya 3.5 model
         if model_id:
@@ -762,6 +768,7 @@ def impute_missing_values(data):
         missing_values: Optional[Any] = None,
         statsmodels_model: Optional[bool] = False,
         tf_model: Optional[bool] = False,
+        preprocess_function: Optional[Callable[[DataFrame], DataFrame]] = None,
     ) -> None:
         """
         Write the model prediction section of the score code.
@@ -812,9 +819,14 @@ if not isinstance(var1, pd.Series):
             input_frame = f'{{{", ".join(input_dict)}}}, index=index'
             self.score_code += self._wrap_indent_string(input_frame, 8)
             self.score_code += f"\n{'':4})\n"
+
             if missing_values:
                 self.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)\n"
+                )
+            if preprocess_function:
+                self.score_code += (
+                    f"{'':4}input_array = {preprocess_function.__name__}(input_array)\n"
                 )
             self.score_code += (
                 f"{'':4}column_types = {column_types}\n"
@@ -858,6 +870,10 @@ if not isinstance(var1, pd.Series):
                 self.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)\n"
                 )
+            if preprocess_function:
+                self.score_code += (
+                    f"{'':4}input_array = {preprocess_function.__name__}(input_array)\n"
+                )
             self.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array)\n"
             )
@@ -878,6 +894,10 @@ if not isinstance(var1, pd.Series):
             if missing_values:
                 self.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)\n"
+                )
+            if preprocess_function:
+                self.score_code += (
+                    f"{'':4}input_array = {preprocess_function.__name__}(input_array)\n"
                 )
             self.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array)\n\n"
@@ -910,6 +930,10 @@ if not isinstance(var1, pd.Series):
             if missing_values:
                 self.score_code += (
                     f"{'':4}input_array = impute_missing_values(input_array)\n"
+                )
+            if preprocess_function:
+                self.score_code += (
+                    f"{'':4}input_array = {preprocess_function.__name__}(input_array)\n"
                 )
             self.score_code += (
                 f"{'':4}prediction = model.{method.__name__}(input_array).tolist()\n"
@@ -2241,3 +2265,30 @@ if not isinstance(var1, pd.Series):
                     model["scoreCodeType"] = "ds2MultiType"
                     mr.update_model(model)
                     return mas_code, cas_code
+
+    def _add_preprocess_code(
+        self, preprocess_function: Callable[[DataFrame], DataFrame]
+    ):
+        """
+        Places the given preprocess function, which must both take a DataFrame as an argument
+        and return a DataFrame, into the score code. If the preprocess function does not
+        return anything, an error is thrown.
+
+        Parameters
+        ----------
+        preprocess_function: function
+            The preprocess function to be added to the score code.
+        """
+        import inspect
+
+        preprocess_code = inspect.getsource(preprocess_function)
+        if not "return" in preprocess_code:
+            raise ValueError(
+                "The given score code does not return a value. "
+                + "To allow for the score code to work correctly, please ensure the preprocessed "
+                + "data is returned."
+            )
+        if self.score_code[-1] == "\n":
+            self.score_code += preprocess_code
+        else:
+            self.score_code += "\n" + preprocess_code

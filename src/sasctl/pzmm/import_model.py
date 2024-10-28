@@ -213,6 +213,7 @@ class ImportModel:
         target_values: Optional[List[str]] = None,
         overwrite_project_properties: Optional[bool] = False,
         target_index: Optional[int] = None,
+        preprocess_function: Optional[Callable[[DataFrame], DataFrame]] = None,
         **kwargs,
     ) -> Tuple[RestObj, Union[dict, str, Path]]:
         """
@@ -371,6 +372,7 @@ class ImportModel:
                 missing_values=missing_values,
                 score_cas=score_cas,
                 target_index=target_index,
+                preprocess_function=preprocess_function,
                 **kwargs,
             )
             if score_code_dict:
@@ -471,6 +473,7 @@ class ImportModel:
                 missing_values=missing_values,
                 score_cas=score_cas,
                 target_index=target_index,
+                preprocess_function=preprocess_function,
                 **kwargs,
             )
             if score_code_dict:
