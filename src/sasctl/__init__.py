@@ -15,7 +15,7 @@ __credits__ = [
     "Jon Walker",
     "Scott Lindauer",
     "DJ Moore",
-    "Samya Potlapalli"
+    "Samya Potlapalli",
 ]
 __license__ = "Apache 2.0"
 __copyright__ = (
