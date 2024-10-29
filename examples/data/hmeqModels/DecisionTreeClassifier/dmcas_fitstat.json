@@ -222,14 +222,13 @@
                 "_MCE_": 0.88710450623202,
                 "_ASE_": 0.11232295391947,
                 "_MCLL_": 0.99896429012045,
-                "_KS_": 1.0,
+                "_KS_": null,
                 "_KSPostCutoff_": null,
                 "_DIV_": 4172.0,
                 "_TAU_": null,
                 "_KSCut_": null,
-                "_C_": 0.85770092470509,
-                "_PartInd_": null,
-                "_KS2_": 0.71540184941018
+                "_C_": null,
+                "_PartInd_": null
             },
             "rowNumber": 2,
             "header": null
@@ -244,15 +243,14 @@
                 "_DataRole_": "TEST",
                 "_MCE_": 0.99328859060402,
                 "_ASE_": 0.10439243746467,
-                "_MCLL_": 0.1674139049754,
-                "_KS_": 1.0,
+                "_MCLL_": 0.18029189766592,
+                "_KS_": null,
                 "_KSPostCutoff_": null,
                 "_DIV_": 1788.0,
                 "_TAU_": null,
                 "_KSCut_": null,
-                "_C_": 0.83803076656035,
-                "_PartInd_": null,
-                "_KS2_": 0.6760615331207
+                "_C_": null,
+                "_PartInd_": null
             },
             "rowNumber": 3,
             "header": null
