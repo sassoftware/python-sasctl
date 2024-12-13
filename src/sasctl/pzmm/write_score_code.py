@@ -497,7 +497,7 @@ import tensorflow as tf
 import codecs
 
 binary_string = "<binary string>"
-model = pickle.load(codecs.decode(binary_string.encode(), "base64"))
+model = pickle.loads(codecs.decode(binary_string.encode(), "base64"))
             """
 
     def _viya35_model_load(
@@ -562,6 +562,26 @@ model = h2o.load(str(Path("/models/resources/viya/<UUID>/model.h2o")))
                 f'{model_id}/{model_file_name}")))'
             )
         else:
+            if pickle_type.lower() == 'pickle':
+                self.score_code += (
+                f'model_path = Path("/models/resources/viya/{model_id}'
+                f'")\nwith open(model_path / "{model_file_name}", '
+                f"\"rb\") as pickle_model:\n{'':4}model = pd.read_pickle"
+                "(pickle_model)\n\n"
+                )
+                """
+model_path = Path("/models/resources/viya/<UUID>")
+with open(model_path / "model.pickle", "rb") as pickle_model:
+    model = pd.read_pickle(pickle_model)
+    
+                """
+                return (
+                    f"{'':8}model_path = Path(\"/models/resources/viya/{model_id}"
+                    f"\")\n{'':8}with open(model_path / \"{model_file_name}\", "
+                    f"\"rb\") as pickle_model:\n{'':12}model = pd.read_pickle"
+                    "(pickle_model)"
+                )
+
             self.score_code += (
                 f'model_path = Path("/models/resources/viya/{model_id}'
                 f'")\nwith open(model_path / "{model_file_name}", '
@@ -658,6 +678,23 @@ model = tf.keras.models.load_model(Path(settings.pickle_path) / "model.h5", safe
                 f"safe_mode=True)\n"
             )
         else:
+            if pickle_type.lower() == "pickle":
+                self.score_code += (
+                    f"with open(Path(settings.pickle_path) / "
+                    f'"{model_file_name}", "rb") as pickle_model:\n'
+                    f"{'':4}model = pd.read_pickle(pickle_model)\n\n"
+                )
+                """
+    with open(Path(settings.pickle_path) / "model.pickle", "rb") as pickle_model:
+        model = pd.read_pickle(pickle_model)
+
+                """
+                return (
+                    f"{'':8}with open(Path(settings.pickle_path) / "
+                    f'"{model_file_name}", "rb") as pickle_model:\n'
+                    f"{'':12}model = pd.read_pickle(pickle_model)\n\n"
+                )
+
             self.score_code += (
                 f"with open(Path(settings.pickle_path) / "
                 f'"{model_file_name}", "rb") as pickle_model:\n'
