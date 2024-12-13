@@ -562,12 +562,12 @@ model = h2o.load(str(Path("/models/resources/viya/<UUID>/model.h2o")))
                 f'{model_id}/{model_file_name}")))'
             )
         else:
-            if pickle_type.lower() == 'pickle':
+            if pickle_type.lower() == "pickle":
                 self.score_code += (
-                f'model_path = Path("/models/resources/viya/{model_id}'
-                f'")\nwith open(model_path / "{model_file_name}", '
-                f"\"rb\") as pickle_model:\n{'':4}model = pd.read_pickle"
-                "(pickle_model)\n\n"
+                    f'model_path = Path("/models/resources/viya/{model_id}'
+                    f'")\nwith open(model_path / "{model_file_name}", '
+                    f"\"rb\") as pickle_model:\n{'':4}model = pd.read_pickle"
+                    "(pickle_model)\n\n"
                 )
                 """
 model_path = Path("/models/resources/viya/<UUID>")
