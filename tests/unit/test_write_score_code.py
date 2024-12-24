@@ -118,8 +118,13 @@ def test_viya35_model_load():
     """
     sc = ScoreCode()
     load_text = sc._viya35_model_load("1234", "normal")
-    assert "pickle.load(pickle_model)" in sc.score_code
-    assert "pickle.load(pickle_model)" in load_text
+    assert "pd.read_pickle(pickle_model)" in sc.score_code
+    assert "pd.read_pickle(pickle_model)" in load_text
+
+    sc = ScoreCode()
+    load_text = sc._viya35_model_load("1234", "normal", pickle_type="dill")
+    assert "dill.load(pickle_model)" in sc.score_code
+    assert "dill.load(pickle_model)" in load_text
 
     sc = ScoreCode()
     mojo_text = sc._viya35_model_load("2345", "mojo", mojo_model=True)
@@ -142,8 +147,13 @@ def test_viya4_model_load():
     """
     sc = ScoreCode()
     load_text = sc._viya4_model_load("normal")
-    assert "pickle.load(pickle_model)" in sc.score_code
-    assert "pickle.load(pickle_model)" in load_text
+    assert "pd.read_pickle(pickle_model)" in sc.score_code
+    assert "pd.read_pickle(pickle_model)" in load_text
+
+    sc = ScoreCode()
+    load_text = sc._viya35_model_load("1234", "normal", pickle_type="dill")
+    assert "dill.load(pickle_model)" in sc.score_code
+    assert "dill.load(pickle_model)" in load_text
 
     sc = ScoreCode()
     mojo_text = sc._viya4_model_load("mojo", mojo_model=True)
