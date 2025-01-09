@@ -66,14 +66,13 @@ def test_create_score_definition():
                     "sasctl._services.score_definitions.ScoreDefinitions.post"
                 ) as post:
                     # Invalid model id test case
-                    get_model.side_effect = HTTPError("No Model Found")
+                    get_model.return_value = None
                     with pytest.raises(HTTPError):
                         sd.create_score_definition(
                             score_def_name="test_create_sd",
                             model="12345",
                             table_name="test_table",
                         )
-                    get_model.side_effect = None
                     # Valid model id but invalid table name with no table_file argument test case
                     get_model_mock = {
                         "id": "12345",
