@@ -83,7 +83,13 @@ class ScoreDefinitions(Service):
         else:
             object_descriptor_type = "sas.models.model.ds2"
 
-        model = cls._model_repository.get_model(model)
+        if cls._model_repository.is_uuid(model):
+            model_id = model
+        elif isinstance(model, dict) and "id" in model:
+            model_id = model["id"]
+        else:
+            model = cls._model_repository.get_model(model)
+            model_id = model["id"]
 
         if not model:
             raise HTTPError(
@@ -91,7 +97,6 @@ class ScoreDefinitions(Service):
                     f"This model may not exist in a project or the model may not exist at all."
                 }
             )
-        model_id = model.id
         model_project_id = model.get("projectId")
         model_project_version_id = model.get("projectVersionId")
         model_name = model.get("name")

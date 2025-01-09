@@ -996,5 +996,5 @@ def score_model_with_cas(
     score_execution = se.create_score_execution(score_definition.id)
     score_execution_poll = se.poll_score_execution_state(score_execution)
     print(score_execution_poll)
-    score_results = se.get_score_execution_results(score_execution)
+    score_results = se.get_score_execution_results(score_execution, use_cas_gateway)
     return score_results

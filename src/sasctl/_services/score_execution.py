@@ -149,6 +149,7 @@ class ScoreExecution(Service):
     def get_score_execution_results(
         cls,
         score_execution: Union[dict, str],
+        use_cas_gateway: False
     ):
         """Generates an output table for the score_execution results.
 
@@ -183,13 +184,13 @@ class ScoreExecution(Service):
         else:
             session = current_session()
             cas = session.as_swat()
-            response = cas.loadActionSet("gateway")
-            if not response:
+            if not use_cas_gateway:
                 output_table = cls._no_gateway_get_results(
                     server_name, library_name, table_name
                 )
                 return output_table
             else:
+                cas.loadActionSet("gateway")
                 gateway_code = f"""
 import pandas as pd
 import numpy as np
@@ -235,12 +236,14 @@ gateway.return_table("Execution Results", df = table, label = "label", title = "
             f"caslibs/{library_name}/"
             f"tables/{table_name}/columns?limit=10000"
         )
-        columns = json_normalize(output_columns.json(), "items")
-        column_names = columns["names"].to_list()
+        columns = json_normalize(output_columns)
+        column_names = columns["name"].to_list()
 
-        output_rows = cls._services.get(
-            f"casRowSets/servers/{server_name}"
-            f"caslibs/{library_name}"
+        session = current_session()
+
+        output_rows = session.get(
+            f"casRowSets/servers/{server_name}/"
+            f"caslibs/{library_name}/"
             f"tables/{table_name}/rows?limit=10000"
         )
         output_table = pd.DataFrame(
