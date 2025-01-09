@@ -89,6 +89,12 @@ class ScoreDefinitions(Service):
             model_id = model["id"]
         else:
             model = cls._model_repository.get_model(model)
+            if not model:
+                raise HTTPError(
+                    {
+                        f"This model may not exist in a project or the model may not exist at all."
+                    }
+                )
             model_id = model["id"]
 
         if not model:
