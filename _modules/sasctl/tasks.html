@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.tasks &#8212; sasctl 1.11.0 documentation</title>
+    <title>sasctl.tasks &#8212; sasctl 1.11.1 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,19 +26,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/sasctl.css?v=6840086e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=6475a945"></script>
+    <script src="../../_static/documentation_options.js?v=00ba7901"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/tasks';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.0" />
-    <meta name="docbuild:last-update" content="Oct 29, 2024"/>
+  <meta name="docsearch:version" content="1.11.1" />
+    <meta name="docbuild:last-update" content="Jan 22, 2025"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.0 documentation</p>
+    <p class="title logo__title">sasctl 1.11.1 documentation</p>
   
 </a></div>
     
@@ -260,9 +260,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -317,35 +322,35 @@
 
 <span class="sd">&quot;&quot;&quot;Commonly used tasks in the analytics life cycle.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">swat</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">swat</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">swat</span> <span class="o">=</span> <span class="kc">None</span>
 
-<span class="kn">from</span> <span class="nn">urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.error</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPError</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">.core</span> <span class="kn">import</span> <span class="n">RestObj</span><span class="p">,</span> <span class="n">current_session</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">get_link</span><span class="p">,</span> <span class="n">request_link</span>
-<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">AuthorizationError</span>
-<span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">model_management</span> <span class="k">as</span> <span class="n">mm</span>
-<span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">model_publish</span> <span class="k">as</span> <span class="n">mp</span>
-<span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">model_repository</span> <span class="k">as</span> <span class="n">mr</span>
-<span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">score_definitions</span> <span class="k">as</span> <span class="n">sd</span>
-<span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">score_execution</span> <span class="k">as</span> <span class="n">se</span>
-<span class="kn">from</span> <span class="nn">.utils.misc</span> <span class="kn">import</span> <span class="n">installed_packages</span>
-<span class="kn">from</span> <span class="nn">.utils.pymas</span> <span class="kn">import</span> <span class="n">from_pickle</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">RestObj</span><span class="p">,</span> <span class="n">current_session</span><span class="p">,</span> <span class="n">get</span><span class="p">,</span> <span class="n">get_link</span><span class="p">,</span> <span class="n">request_link</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthorizationError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_management</span> <span class="k">as</span> <span class="n">mm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_publish</span> <span class="k">as</span> <span class="n">mp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_repository</span> <span class="k">as</span> <span class="n">mr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">score_definitions</span> <span class="k">as</span> <span class="n">sd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">score_execution</span> <span class="k">as</span> <span class="n">se</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">installed_packages</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils.pymas</span><span class="w"> </span><span class="kn">import</span> <span class="n">from_pickle</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -360,11 +365,11 @@
 <span class="n">_PROP_NAME_MAXLEN</span> <span class="o">=</span> <span class="mi">60</span>
 
 
-<span class="k">def</span> <span class="nf">_property</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_property</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)[:</span><span class="n">_PROP_NAME_MAXLEN</span><span class="p">],</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)[:</span><span class="n">_PROP_VALUE_MAXLEN</span><span class="p">]}</span>
 
 
-<span class="k">def</span> <span class="nf">_create_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">repo</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a project based on the model specifications.</span>
 
 <span class="sd">    Parameters</span>
@@ -406,7 +411,7 @@
 
 
 <span class="c1"># TODO: Add doc_string and unit/integration tests</span>
-<span class="k">def</span> <span class="nf">_update_properties</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_update_properties</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">properties</span><span class="p">,</span> <span class="n">variables</span> <span class="o">=</span> <span class="n">_format_properties</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="p">,</span> <span class="n">output_vars</span><span class="p">)</span>
     <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">)</span>
     <span class="n">formatted_variables</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
@@ -433,7 +438,7 @@
 
 
 <span class="c1"># TODO: Add doc_string and unit tests</span>
-<span class="k">def</span> <span class="nf">_format_properties</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_format_properties</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">k</span><span class="p">:</span> <span class="n">model</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">model</span>
@@ -487,7 +492,7 @@
     <span class="k">return</span> <span class="n">properties</span><span class="p">,</span> <span class="n">formatted_variables</span>
 
 
-<span class="k">def</span> <span class="nf">_compare_properties</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_compare_properties</span><span class="p">(</span><span class="n">project_name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">properties</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_format_properties</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">input_vars</span><span class="p">,</span> <span class="n">output_vars</span><span class="p">)</span>
     <span class="n">project</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project_name</span><span class="p">)</span>
     <span class="n">same_properties</span> <span class="o">=</span> <span class="kc">True</span>
@@ -503,14 +508,14 @@
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_register_open_source_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">modeler</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_register_open_source_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">modeler</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">info</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_model_info</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Model of type </span><span class="si">%s</span><span class="s2"> could not be inspected: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">model</span><span class="p">),</span> <span class="n">e</span><span class="p">)</span>
         <span class="k">raise</span>
 
-    <span class="kn">from</span> <span class="nn">.pzmm</span> <span class="kn">import</span> <span class="n">ImportModel</span><span class="p">,</span> <span class="n">JSONFiles</span><span class="p">,</span> <span class="n">PickleModel</span><span class="p">,</span> <span class="n">ScoreCode</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.pzmm</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImportModel</span><span class="p">,</span> <span class="n">JSONFiles</span><span class="p">,</span> <span class="n">PickleModel</span><span class="p">,</span> <span class="n">ScoreCode</span>
 
     <span class="n">pzmm_files</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -526,7 +531,7 @@
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">serialized_model</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Serialize the model using dill</span>
-        <span class="kn">import</span> <span class="nn">dill</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">dill</span>
 
         <span class="n">sanitized_prefix</span> <span class="o">=</span> <span class="n">ScoreCode</span><span class="o">.</span><span class="n">sanitize_model_prefix</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">serialized_model</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sanitized_prefix</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">:</span> <span class="n">dill</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">model</span><span class="p">)}</span>
@@ -566,7 +571,7 @@
     <span class="k">return</span> <span class="n">model_obj</span>
 
 
-<span class="k">def</span> <span class="nf">_register_sas_model</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_register_sas_model</span><span class="p">(</span>
     <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">create_project</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">repo_obj</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
     <span class="k">if</span> <span class="s2">&quot;DataStepSrc&quot;</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
@@ -574,8 +579,8 @@
         <span class="k">if</span> <span class="n">create_project</span><span class="p">:</span>
             <span class="n">out_var</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">in_var</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="kn">import</span> <span class="nn">copy</span>
-            <span class="kn">import</span> <span class="nn">zipfile</span> <span class="k">as</span> <span class="nn">zp</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">zp</span>
 
             <span class="n">zip_file_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">zip_file</span><span class="p">)</span>
             <span class="n">tmp_zip</span> <span class="o">=</span> <span class="n">zp</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_file_copy</span><span class="p">)</span>
@@ -658,7 +663,7 @@
 
 <div class="viewcode-block" id="register_model">
 <a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.register_model">[docs]</a>
-<span class="k">def</span> <span class="nf">register_model</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_model</span><span class="p">(</span>
     <span class="n">model</span><span class="p">,</span>
     <span class="n">name</span><span class="p">,</span>
     <span class="n">project</span><span class="p">,</span>
@@ -854,7 +859,7 @@
 
 <div class="viewcode-block" id="publish_model">
 <a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.publish_model">[docs]</a>
-<span class="k">def</span> <span class="nf">publish_model</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">publish_model</span><span class="p">(</span>
     <span class="n">model</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Publish a model to a configured publishing destination.</span>
@@ -900,7 +905,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">submit_request</span><span class="p">():</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">submit_request</span><span class="p">():</span>
         <span class="c1"># Submit a publishing request</span>
         <span class="k">if</span> <span class="n">code</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">dest_obj</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">get_destination</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span>
@@ -943,7 +948,7 @@
         <span class="ow">and</span> <span class="n">replace</span>
         <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">destinationType</span> <span class="o">==</span> <span class="s2">&quot;microAnalyticService&quot;</span>
     <span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">microanalytic_score</span> <span class="k">as</span> <span class="n">mas</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">microanalytic_score</span> <span class="k">as</span> <span class="n">mas</span>
 
         <span class="n">mas</span><span class="o">.</span><span class="n">delete_module</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">publishName</span><span class="p">)</span>
 
@@ -976,7 +981,7 @@
     <span class="k">if</span> <span class="s2">&quot;application/vnd.sas.microanalytic.module&quot;</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">_headers</span><span class="p">[</span><span class="s2">&quot;content-type&quot;</span><span class="p">]:</span>
         <span class="c1"># Bind Python methods to the module instance that will execute the</span>
         <span class="c1"># corresponding MAS module step.</span>
-        <span class="kn">from</span> <span class="nn">sasctl.services</span> <span class="kn">import</span> <span class="n">microanalytic_score</span> <span class="k">as</span> <span class="n">mas</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">sasctl.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">microanalytic_score</span> <span class="k">as</span> <span class="n">mas</span>
 
         <span class="k">return</span> <span class="n">mas</span><span class="o">.</span><span class="n">define_steps</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">module</span></div>
@@ -985,7 +990,7 @@
 
 <div class="viewcode-block" id="update_model_performance">
 <a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.update_model_performance">[docs]</a>
-<span class="k">def</span> <span class="nf">update_model_performance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">update_model_performance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Upload data for calculating model performance metrics.</span>
 
 <span class="sd">    Model performance and data distributions can be tracked over time by</span>
@@ -1162,7 +1167,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_parse_module_url</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_module_url</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">details</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
@@ -1181,7 +1186,7 @@
 
 <div class="viewcode-block" id="get_project_kpis">
 <a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.get_project_kpis">[docs]</a>
-<span class="k">def</span> <span class="nf">get_project_kpis</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_project_kpis</span><span class="p">(</span>
     <span class="n">project</span><span class="p">,</span>
     <span class="n">server</span><span class="o">=</span><span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span>
     <span class="n">caslib</span><span class="o">=</span><span class="s2">&quot;ModelPerformanceData&quot;</span><span class="p">,</span>
@@ -1217,15 +1222,15 @@
 <span class="sd">        A pandas DataFrame representing the MM_STD_KPI table. Note that SAS</span>
 <span class="sd">        missing values are replaced with pandas valid missing values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">distutils.version</span> <span class="kn">import</span> <span class="n">StrictVersion</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">distutils.version</span><span class="w"> </span><span class="kn">import</span> <span class="n">StrictVersion</span>
 
-    <span class="kn">from</span> <span class="nn">.core</span> <span class="kn">import</span> <span class="n">is_uuid</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_uuid</span>
 
     <span class="c1"># Check the pandas version for where the json_normalize function exists</span>
     <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">__version__</span> <span class="o">&gt;=</span> <span class="n">StrictVersion</span><span class="p">(</span><span class="s2">&quot;1.0.3&quot;</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">json_normalize</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_normalize</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">pandas.io.json</span> <span class="kn">import</span> <span class="n">json_normalize</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">pandas.io.json</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_normalize</span>
 
     <span class="c1"># Collect the current session for authentication of API calls</span>
     <span class="n">sess</span> <span class="o">=</span> <span class="n">current_session</span><span class="p">()</span>
@@ -1296,7 +1301,7 @@
 
 <div class="viewcode-block" id="score_model_with_cas">
 <a class="viewcode-back" href="../../api/sasctl.tasks.html#sasctl.tasks.score_model_with_cas">[docs]</a>
-<span class="k">def</span> <span class="nf">score_model_with_cas</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">score_model_with_cas</span><span class="p">(</span>
     <span class="n">score_def_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
     <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1321,7 +1326,7 @@
     <span class="n">score_execution</span> <span class="o">=</span> <span class="n">se</span><span class="o">.</span><span class="n">create_score_execution</span><span class="p">(</span><span class="n">score_definition</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
     <span class="n">score_execution_poll</span> <span class="o">=</span> <span class="n">se</span><span class="o">.</span><span class="n">poll_score_execution_state</span><span class="p">(</span><span class="n">score_execution</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">score_execution_poll</span><span class="p">)</span>
-    <span class="n">score_results</span> <span class="o">=</span> <span class="n">se</span><span class="o">.</span><span class="n">get_score_execution_results</span><span class="p">(</span><span class="n">score_execution</span><span class="p">)</span>
+    <span class="n">score_results</span> <span class="o">=</span> <span class="n">se</span><span class="o">.</span><span class="n">get_score_execution_results</span><span class="p">(</span><span class="n">score_execution</span><span class="p">,</span> <span class="n">use_cas_gateway</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">score_results</span></div>
 
 </pre></div>
@@ -1353,8 +1358,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1387,7 +1392,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

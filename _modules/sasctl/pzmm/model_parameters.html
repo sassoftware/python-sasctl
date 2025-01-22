@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.model_parameters &#8212; sasctl 1.11.0 documentation</title>
+    <title>sasctl.pzmm.model_parameters &#8212; sasctl 1.11.1 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,19 +26,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=6475a945"></script>
+    <script src="../../../_static/documentation_options.js?v=00ba7901"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/model_parameters';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.0" />
-    <meta name="docbuild:last-update" content="Oct 29, 2024"/>
+  <meta name="docsearch:version" content="1.11.1" />
+    <meta name="docbuild:last-update" content="Jan 22, 2025"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.0 documentation</p>
+    <p class="title logo__title">sasctl 1.11.1 documentation</p>
   
 </a></div>
     
@@ -260,9 +260,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -311,19 +316,19 @@
   <h1>Source code for sasctl.pzmm.model_parameters</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Copyright (c) 2022, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
 <span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">distutils.version</span> <span class="kn">import</span> <span class="n">StrictVersion</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">distutils.version</span><span class="w"> </span><span class="kn">import</span> <span class="n">StrictVersion</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataFrame</span>
 
-<span class="kn">from</span> <span class="nn">.._services.model_repository</span> <span class="kn">import</span> <span class="n">ModelRepository</span> <span class="k">as</span> <span class="n">mr</span>
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">RestObj</span><span class="p">,</span> <span class="n">current_session</span><span class="p">,</span> <span class="n">is_uuid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._services.model_repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelRepository</span> <span class="k">as</span> <span class="n">mr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">RestObj</span><span class="p">,</span> <span class="n">current_session</span><span class="p">,</span> <span class="n">is_uuid</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">xgboost</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">xgboost</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="n">xgboost</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -337,7 +342,7 @@
 
 
 <span class="c1"># TODO: Maybe just move _find_file altogether?</span>
-<span class="k">def</span> <span class="nf">_find_file</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span> <span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">RestObj</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_file</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span> <span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">RestObj</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieves the contents of the first file from a registered model on SAS Model</span>
 <span class="sd">    Manager that contains the provided file_name as an exact match or substring.</span>
@@ -366,9 +371,9 @@
 
 <div class="viewcode-block" id="ModelParameters">
 <a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters">[docs]</a>
-<span class="k">class</span> <span class="nc">ModelParameters</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ModelParameters</span><span class="p">:</span>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_update_json</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">kpis</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_json</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_json</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">kpis</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Updates the contents of the hyperparameter json file</span>
 
@@ -400,7 +405,7 @@
 <div class="viewcode-block" id="ModelParameters.generate_hyperparameters">
 <a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.generate_hyperparameters">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">generate_hyperparameters</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_hyperparameters</span><span class="p">(</span>
         <span class="n">model</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pickle_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -422,7 +427,7 @@
 <span class="sd">            Directory location of model files.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">sklearn_params</span><span class="p">():</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">sklearn_params</span><span class="p">():</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Generates hyperparameters for the models generated by scikit-learn.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -433,7 +438,7 @@
             <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
-        <span class="k">def</span> <span class="nf">tf_params</span><span class="p">():</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">tf_params</span><span class="p">():</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Generates hyperparameters for the models generated by tensorflow.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -444,7 +449,7 @@
             <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
-        <span class="k">def</span> <span class="nf">xg_params</span><span class="p">():</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">xg_params</span><span class="p">():</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Generates hyperparameters for the models generated by xgboost.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -459,7 +464,7 @@
             <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
-        <span class="k">def</span> <span class="nf">h2o_params</span><span class="p">():</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">h2o_params</span><span class="p">():</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Generates hyperparameters for the models generated by h2o.ai.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -470,7 +475,7 @@
             <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">model_json</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
-        <span class="k">def</span> <span class="nf">statsmodels_params</span><span class="p">():</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">statsmodels_params</span><span class="p">():</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Generates hyperparameters for the models generated by statsmodels.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -505,7 +510,7 @@
 <div class="viewcode-block" id="ModelParameters.update_kpis">
 <a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.update_kpis">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">update_kpis</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_kpis</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span>
         <span class="n">server</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span>
@@ -548,7 +553,7 @@
 <div class="viewcode-block" id="ModelParameters.get_hyperparameters">
 <a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.get_hyperparameters">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_hyperparameters</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_hyperparameters</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieves the hyperparameter json file from specified model on SAS Model</span>
 <span class="sd">        Manager.</span>
@@ -578,7 +583,7 @@
 <div class="viewcode-block" id="ModelParameters.add_hyperparameters">
 <a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.add_hyperparameters">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">add_hyperparameters</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_hyperparameters</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Adds custom hyperparameters to the hyperparameter file contained within the</span>
 <span class="sd">        model in SAS Model Manager.</span>
@@ -612,7 +617,7 @@
 <div class="viewcode-block" id="ModelParameters.get_project_kpis">
 <a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.get_project_kpis">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_project_kpis</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_project_kpis</span><span class="p">(</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span>
         <span class="n">server</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;cas-shared-default&quot;</span><span class="p">,</span>
         <span class="n">caslib</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ModelPerformanceData&quot;</span><span class="p">,</span>
@@ -653,9 +658,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Check the pandas version for where the json_normalize function exists</span>
         <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">__version__</span> <span class="o">&gt;=</span> <span class="n">StrictVersion</span><span class="p">(</span><span class="s2">&quot;1.0.3&quot;</span><span class="p">):</span>
-            <span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">json_normalize</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_normalize</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">pandas.io.json</span> <span class="kn">import</span> <span class="n">json_normalize</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">pandas.io.json</span><span class="w"> </span><span class="kn">import</span> <span class="n">json_normalize</span>
 
         <span class="c1"># Collect the current session for authentication of API calls</span>
         <span class="n">sess</span> <span class="o">=</span> <span class="n">current_session</span><span class="p">()</span>
@@ -728,7 +733,7 @@
 <div class="viewcode-block" id="ModelParameters.sync_model_properties">
 <a class="viewcode-back" href="../../../api/pzmm/model_parameters.html#sasctl.pzmm.model_parameters.ModelParameters.sync_model_properties">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">sync_model_properties</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sync_model_properties</span><span class="p">(</span>
         <span class="n">project</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span> <span class="n">overrwrite</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">):</span>
         <span class="c1"># Step through options to determine project UUID</span>
@@ -782,8 +787,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -816,7 +821,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

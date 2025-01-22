@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.cas_management &#8212; sasctl 1.11.0 documentation</title>
+    <title>sasctl._services.cas_management &#8212; sasctl 1.11.1 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,19 +26,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=6475a945"></script>
+    <script src="../../../_static/documentation_options.js?v=00ba7901"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/cas_management';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.0" />
-    <meta name="docbuild:last-update" content="Oct 29, 2024"/>
+  <meta name="docsearch:version" content="1.11.1" />
+    <meta name="docbuild:last-update" content="Jan 22, 2025"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.0 documentation</p>
+    <p class="title logo__title">sasctl 1.11.1 documentation</p>
   
 </a></div>
     
@@ -260,9 +260,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -315,10 +320,10 @@
 <span class="c1"># Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
 <span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TextIO</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextIO</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">.service</span> <span class="kn">import</span> <span class="n">Service</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">Service</span>
 
 <span class="n">QUERY_PARAMETERS</span> <span class="o">=</span> <span class="s2">&quot;query parameters&quot;</span>
 <span class="n">DEFAULT_SERVER</span> <span class="o">=</span> <span class="s2">&quot;cas-shared-default&quot;</span>
@@ -327,7 +332,7 @@
 
 <div class="viewcode-block" id="check_keys">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.check_keys">[docs]</a>
-<span class="k">def</span> <span class="nf">check_keys</span><span class="p">(</span><span class="n">valid_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">input_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_keys</span><span class="p">(</span><span class="n">valid_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">input_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compares the input_keys against the valid_keys</span>
 <span class="sd">    to see if they are allowed to be passed</span>
 <span class="sd">    as parameters in the request.</span>
@@ -356,7 +361,7 @@
 
 <div class="viewcode-block" id="check_required_key">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.check_required_key">[docs]</a>
-<span class="k">def</span> <span class="nf">check_required_key</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_required_key</span><span class="p">(</span>
     <span class="n">required_key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">input_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check whether the required parameters</span>
@@ -400,7 +405,7 @@
 
 <div class="viewcode-block" id="CASManagement">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement">[docs]</a>
-<span class="k">class</span> <span class="nc">CASManagement</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CASManagement</span><span class="p">(</span><span class="n">Service</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The CAS Management service provides the ability to manage and perform</span>
 <span class="sd">    actions on common resources as they relate to Cloud Analytic Services (CAS).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -412,7 +417,7 @@
 <div class="viewcode-block" id="CASManagement.list_sessions">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.list_sessions">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">list_sessions</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">query_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_sessions</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">query_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a collection of sessions available on the CAS server.</span>
 
@@ -452,7 +457,7 @@
 <div class="viewcode-block" id="CASManagement.create_session">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.create_session">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">create_session</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">properties</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_session</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">properties</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new session on the CAS server.</span>
 
 <span class="sd">        Parameters</span>
@@ -488,7 +493,7 @@
 <div class="viewcode-block" id="CASManagement.delete_session">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.delete_session">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">delete_session</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete_session</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">sess_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">query_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Terminates a session on the CAS server.</span>
@@ -524,7 +529,7 @@
 <div class="viewcode-block" id="CASManagement.list_caslibs">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.list_caslibs">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">list_caslibs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">filter_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_caslibs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">filter_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List caslibs available on a server.</span>
 
 <span class="sd">        Parameters</span>
@@ -549,7 +554,7 @@
 <div class="viewcode-block" id="CASManagement.get_caslib">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.get_caslib">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_caslib</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_caslib</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a caslib by name.</span>
 
 <span class="sd">        Parameters</span>
@@ -575,7 +580,7 @@
 <div class="viewcode-block" id="CASManagement.list_tables">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.list_tables">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">list_tables</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_tables</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">caslib</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">filter_</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List tables available in a caslib.</span>
@@ -605,7 +610,7 @@
 <div class="viewcode-block" id="CASManagement.get_table">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.get_table">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">caslib</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">caslib</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a table by name.</span>
 
 <span class="sd">        Parameters</span>
@@ -636,7 +641,7 @@
 <div class="viewcode-block" id="CASManagement.upload_file">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.upload_file">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">upload_file</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">upload_file</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TextIO</span><span class="p">],</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -787,7 +792,7 @@
 <div class="viewcode-block" id="CASManagement.update_state_table">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.update_state_table">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">update_state_table</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_state_table</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -871,7 +876,7 @@
 <div class="viewcode-block" id="CASManagement.promote_table">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.promote_table">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">promote_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sess_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">promote_table</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sess_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Changes the scope of a loaded CAS table from session to global scope.</span>
 <span class="sd">        Operation valid only on a session table.</span>
 <span class="sd">        Promote target is the same Caslib that contains the session table.</span>
@@ -908,7 +913,7 @@
 <div class="viewcode-block" id="CASManagement.save_table">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.save_table">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">save_table</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_table</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">caslib</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -966,7 +971,7 @@
 <div class="viewcode-block" id="CASManagement.del_table">
 <a class="viewcode-back" href="../../../api/services/cas_management.html#sasctl._services.cas_management.CASManagement.del_table">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">del_table</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">del_table</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">query_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1052,8 +1057,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1086,7 +1091,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

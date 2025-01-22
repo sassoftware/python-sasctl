@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_score_code &#8212; sasctl 1.11.0 documentation</title>
+    <title>sasctl.pzmm.write_score_code &#8212; sasctl 1.11.1 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,19 +26,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=6475a945"></script>
+    <script src="../../../_static/documentation_options.js?v=00ba7901"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/write_score_code';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.0" />
-    <meta name="docbuild:last-update" content="Oct 29, 2024"/>
+  <meta name="docsearch:version" content="1.11.1" />
+    <meta name="docbuild:last-update" content="Jan 22, 2025"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.0 documentation</p>
+    <p class="title logo__title">sasctl 1.11.1 documentation</p>
   
 </a></div>
     
@@ -260,9 +260,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -312,17 +317,17 @@
 <span></span><span class="c1"># Copyright (c) 2020, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
 <span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">textwrap</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">textwrap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataFrame</span>
 
-<span class="kn">from</span> <span class="nn">.._services.model_repository</span> <span class="kn">import</span> <span class="n">ModelRepository</span> <span class="k">as</span> <span class="n">mr</span>
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">RestObj</span><span class="p">,</span> <span class="n">current_session</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.._services.model_repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelRepository</span> <span class="k">as</span> <span class="n">mr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">RestObj</span><span class="p">,</span> <span class="n">current_session</span>
 
 <span class="n">MAS_CODE_NAME</span> <span class="o">=</span> <span class="s2">&quot;dmcas_packagescorecode.sas&quot;</span>
 <span class="n">CAS_CODE_NAME</span> <span class="o">=</span> <span class="s2">&quot;dmcas_epscorecode.sas&quot;</span>
@@ -330,13 +335,13 @@
 
 <div class="viewcode-block" id="ScoreCode">
 <a class="viewcode-back" href="../../../api/pzmm/write_score_code.html#sasctl.pzmm.write_score_code.ScoreCode">[docs]</a>
-<span class="k">class</span> <span class="nc">ScoreCode</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScoreCode</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
 <div class="viewcode-block" id="ScoreCode.write_score_code">
 <a class="viewcode-back" href="../../../api/pzmm/write_score_code.html#sasctl.pzmm.write_score_code.ScoreCode.write_score_code">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_score_code</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_score_code</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]],</span>
@@ -643,7 +648,7 @@
 <div class="viewcode-block" id="ScoreCode.upload_and_copy_score_resources">
 <a class="viewcode-back" href="../../../api/pzmm/write_score_code.html#sasctl.pzmm.write_score_code.ScoreCode.upload_and_copy_score_resources">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">upload_and_copy_score_resources</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">upload_and_copy_score_resources</span><span class="p">(</span>
         <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">],</span> <span class="n">files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RestObj</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -667,7 +672,7 @@
 
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_model_id</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_model_id</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the model uuid from SAS Model Manager.</span>
 
@@ -697,7 +702,7 @@
         <span class="k">return</span> <span class="n">model_id</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_check_for_invalid_variable_names</span><span class="p">(</span><span class="n">var_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_for_invalid_variable_names</span><span class="p">(</span><span class="n">var_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check for invalid variable names in the input dataset.</span>
 
@@ -727,7 +732,7 @@
                 <span class="sa">f</span><span class="s2">&quot;E.g. `str(name).isidentifier() == True`.&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_write_imports</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_write_imports</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">pickle_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">mojo_model</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -816,10 +821,10 @@
 <span class="sd">import codecs</span>
 
 <span class="sd">binary_string = &quot;&lt;binary string&gt;&quot;</span>
-<span class="sd">model = pickle.load(codecs.decode(binary_string.encode(), &quot;base64&quot;))</span>
+<span class="sd">model = pickle.loads(codecs.decode(binary_string.encode(), &quot;base64&quot;))</span>
 <span class="sd">            &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_viya35_model_load</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_viya35_model_load</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">model_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">model_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -881,6 +886,26 @@
                 <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">model_id</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;)))&#39;</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pickle_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;pickle&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;model_path = Path(&quot;/models/resources/viya/</span><span class="si">{</span><span class="n">model_id</span><span class="si">}</span><span class="s1">&#39;</span>
+                    <span class="sa">f</span><span class="s1">&#39;&quot;)</span><span class="se">\n</span><span class="s1">with open(model_path / &quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;, &#39;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">rb</span><span class="se">\&quot;</span><span class="s2">) as pickle_model:</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">model = pd.read_pickle&quot;</span>
+                    <span class="s2">&quot;(pickle_model)</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">model_path = Path(&quot;/models/resources/viya/&lt;UUID&gt;&quot;)</span>
+<span class="sd">with open(model_path / &quot;model.pickle&quot;, &quot;rb&quot;) as pickle_model:</span>
+<span class="sd">    model = pd.read_pickle(pickle_model)</span>
+<span class="sd">    </span>
+<span class="sd">                &quot;&quot;&quot;</span>
+                <span class="k">return</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">model_path = Path(</span><span class="se">\&quot;</span><span class="s2">/models/resources/viya/</span><span class="si">{</span><span class="n">model_id</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">)</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">with open(model_path / </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">, &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">rb</span><span class="se">\&quot;</span><span class="s2">) as pickle_model:</span><span class="se">\n</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}</span><span class="s2">model = pd.read_pickle&quot;</span>
+                    <span class="s2">&quot;(pickle_model)&quot;</span>
+                <span class="p">)</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s1">&#39;model_path = Path(&quot;/models/resources/viya/</span><span class="si">{</span><span class="n">model_id</span><span class="si">}</span><span class="s1">&#39;</span>
                 <span class="sa">f</span><span class="s1">&#39;&quot;)</span><span class="se">\n</span><span class="s1">with open(model_path / &quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;, &#39;</span>
@@ -900,7 +925,7 @@
                 <span class="s2">&quot;.load(pickle_model)&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_viya4_model_load</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_viya4_model_load</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">model_file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">pickle_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -977,6 +1002,23 @@
                 <span class="sa">f</span><span class="s2">&quot;safe_mode=True)</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pickle_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;pickle&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;with open(Path(settings.pickle_path) / &quot;</span>
+                    <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;, &quot;rb&quot;) as pickle_model:</span><span class="se">\n</span><span class="s1">&#39;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2">model = pd.read_pickle(pickle_model)</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    with open(Path(settings.pickle_path) / &quot;model.pickle&quot;, &quot;rb&quot;) as pickle_model:</span>
+<span class="sd">        model = pd.read_pickle(pickle_model)</span>
+
+<span class="sd">                &quot;&quot;&quot;</span>
+                <span class="k">return</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">8</span><span class="si">}</span><span class="s2">with open(Path(settings.pickle_path) / &quot;</span>
+                    <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;, &quot;rb&quot;) as pickle_model:</span><span class="se">\n</span><span class="s1">&#39;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}</span><span class="s2">model = pd.read_pickle(pickle_model)</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">score_code</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;with open(Path(settings.pickle_path) / &quot;</span>
                 <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">model_file_name</span><span class="si">}</span><span class="s1">&quot;, &quot;rb&quot;) as pickle_model:</span><span class="se">\n</span><span class="s1">&#39;</span>
@@ -993,7 +1035,7 @@
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}</span><span class="s2">model = </span><span class="si">{</span><span class="n">pickle_type</span><span class="si">}</span><span class="s2">.load(pickle_model)</span><span class="se">\n\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_impute_missing_values</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_impute_missing_values</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">missing_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1056,7 +1098,7 @@
 
     <span class="c1"># TODO: Needs unit test</span>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_wrap_indent_string</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_wrap_indent_string</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Use the textwrap package to wrap and indent strings longer than 88 characters in</span>
 <span class="sd">        width. The indent value is subtracted from 88 to determine the correct length.</span>
@@ -1079,7 +1121,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">wrapped_lines</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_predict_method</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_predict_method</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">method</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">List</span><span class="p">],</span>
         <span class="n">var_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
@@ -1266,7 +1308,7 @@
 <span class="sd">            &quot;&quot;&quot;</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_determine_score_metrics</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_determine_score_metrics</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">predict_returns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
         <span class="n">target_variable</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1357,7 +1399,7 @@
                 <span class="k">return</span> <span class="p">[</span><span class="n">metric</span> <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">gen</span><span class="p">]</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_yield_score_metrics</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_yield_score_metrics</span><span class="p">(</span>
         <span class="n">returns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
         <span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
         <span class="n">variable</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1398,7 +1440,7 @@
                 <span class="n">proba_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_determine_returns_type</span><span class="p">(</span><span class="n">outputs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_determine_returns_type</span><span class="p">(</span><span class="n">outputs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine the return type of the prediction method.</span>
 
@@ -1418,7 +1460,7 @@
 <span class="sd">            values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">is_str</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">is_str</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="n">val</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">True</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="ow">or</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
@@ -1428,7 +1470,7 @@
 
         <span class="k">return</span> <span class="p">[</span><span class="n">is_str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">_predictions_to_metrics</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_predictions_to_metrics</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">metrics</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">predict_returns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
@@ -1494,7 +1536,7 @@
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_nonbinary_targets</span><span class="p">(</span><span class="n">metrics</span><span class="p">,</span> <span class="n">target_values</span><span class="p">,</span> <span class="n">predict_returns</span><span class="p">,</span> <span class="n">h2o_model</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_no_targets_no_thresholds</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_no_targets_no_thresholds</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">metrics</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">returns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
@@ -1614,7 +1656,7 @@
 
 <span class="sd">            &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_binary_target</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_binary_target</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">metrics</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">target_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
@@ -2079,7 +2121,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Too many score metrics were provided for a binary model.&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_nonbinary_targets</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_nonbinary_targets</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">metrics</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">target_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
@@ -2336,7 +2378,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_invalid_predict_config</span><span class="p">()</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_invalid_predict_config</span><span class="p">():</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_invalid_predict_config</span><span class="p">():</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;An invalid combination of score metrics, target values, predict &quot;</span>
             <span class="s2">&quot;returns, and predict return types was provided, such that the &quot;</span>
@@ -2347,7 +2389,7 @@
 <div class="viewcode-block" id="ScoreCode.convert_mas_to_cas">
 <a class="viewcode-back" href="../../../api/pzmm/write_score_code.html#sasctl.pzmm.write_score_code.ScoreCode.convert_mas_to_cas">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">convert_mas_to_cas</span><span class="p">(</span><span class="n">mas_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_mas_to_cas</span><span class="p">(</span><span class="n">mas_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Using the generated score.sas code from the Python wrapper API, convert the</span>
 <span class="sd">        SAS Microanalytic Service based code to CAS compatible.</span>
@@ -2402,7 +2444,7 @@
 
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_input_var_lists</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_input_var_lists</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">input_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2441,7 +2483,7 @@
         <span class="k">return</span> <span class="n">input_var_list</span><span class="p">,</span> <span class="n">input_dtypes_list</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_check_viya_version</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_viya_version</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">RestObj</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check that a valid SAS Viya version and model argument are provided.</span>
 
@@ -2487,7 +2529,7 @@
 <div class="viewcode-block" id="ScoreCode.sanitize_model_prefix">
 <a class="viewcode-back" href="../../../api/pzmm/write_score_code.html#sasctl.pzmm.write_score_code.ScoreCode.sanitize_model_prefix">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">sanitize_model_prefix</span><span class="p">(</span><span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sanitize_model_prefix</span><span class="p">(</span><span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check the model_prefix for a valid Python function name.</span>
 
@@ -2516,7 +2558,7 @@
             <span class="k">return</span> <span class="n">prefix</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_viya35_score_code_import</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_viya35_score_code_import</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">score_cas</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2591,7 +2633,7 @@
                     <span class="n">mr</span><span class="o">.</span><span class="n">update_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
                     <span class="k">return</span> <span class="n">mas_code</span><span class="p">,</span> <span class="n">cas_code</span>
 
-    <span class="k">def</span> <span class="nf">_add_preprocess_code</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_add_preprocess_code</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">preprocess_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">DataFrame</span><span class="p">]</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2604,7 +2646,7 @@
 <span class="sd">        preprocess_function: function</span>
 <span class="sd">            The preprocess function to be added to the score code.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">import</span> <span class="nn">inspect</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
 
         <span class="n">preprocess_code</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">preprocess_function</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;return&quot;</span> <span class="ow">in</span> <span class="n">preprocess_code</span><span class="p">:</span>
@@ -2647,8 +2689,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2681,7 +2723,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

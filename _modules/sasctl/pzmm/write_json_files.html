@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.11.0 documentation</title>
+    <title>sasctl.pzmm.write_json_files &#8212; sasctl 1.11.1 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,19 +26,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=6475a945"></script>
+    <script src="../../../_static/documentation_options.js?v=00ba7901"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/pzmm/write_json_files';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.0" />
-    <meta name="docbuild:last-update" content="Oct 29, 2024"/>
+  <meta name="docsearch:version" content="1.11.1" />
+    <meta name="docbuild:last-update" content="Jan 22, 2025"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.0 documentation</p>
+    <p class="title logo__title">sasctl 1.11.1 documentation</p>
   
 </a></div>
     
@@ -260,9 +260,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -313,36 +318,36 @@
 <span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 
 <span class="c1"># Standard Library Imports</span>
-<span class="kn">import</span> <span class="nn">ast</span>
-<span class="kn">import</span> <span class="nn">importlib</span>
-<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ast</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 
-<span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">import</span> <span class="nn">pickletools</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickletools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="c1"># Third Party Imports</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">Series</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">Series</span>
 
 <span class="c1"># Package Imports</span>
-<span class="kn">from</span> <span class="nn">sasctl.pzmm.write_score_code</span> <span class="kn">import</span> <span class="n">ScoreCode</span> <span class="k">as</span> <span class="n">sc</span>
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">current_session</span>
-<span class="kn">from</span> <span class="nn">..utils.decorators</span> <span class="kn">import</span> <span class="n">deprecated</span><span class="p">,</span> <span class="n">experimental</span>
-<span class="kn">from</span> <span class="nn">..utils.misc</span> <span class="kn">import</span> <span class="n">check_if_jupyter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sasctl.pzmm.write_score_code</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScoreCode</span> <span class="k">as</span> <span class="n">sc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">current_session</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.decorators</span><span class="w"> </span><span class="kn">import</span> <span class="n">deprecated</span><span class="p">,</span> <span class="n">experimental</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_if_jupyter</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="c1"># noinspection PyPackageRequirements</span>
-    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-    <span class="k">class</span> <span class="nc">NpEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">NpEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
 <div class="viewcode-block" id="NpEncoder.default">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.NpEncoder.default">[docs]</a>
-        <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
                 <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
@@ -357,7 +362,7 @@
 
 <div class="viewcode-block" id="NpEncoder">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.NpEncoder">[docs]</a>
-    <span class="k">class</span> <span class="nc">NpEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">NpEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
 
@@ -378,7 +383,7 @@
 <span class="n">MISC</span> <span class="o">=</span> <span class="s2">&quot;dmcas_misc.json&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">_flatten</span><span class="p">(</span><span class="n">nested_list</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_flatten</span><span class="p">(</span><span class="n">nested_list</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Flatten a nested list.</span>
 
@@ -404,7 +409,7 @@
 
 <div class="viewcode-block" id="JSONFiles">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles">[docs]</a>
-<span class="k">class</span> <span class="nc">JSONFiles</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">JSONFiles</span><span class="p">:</span>
     <span class="n">notebook_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">check_if_jupyter</span><span class="p">()</span>
     <span class="n">valid_params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;_RASE_&quot;</span><span class="p">,</span>
@@ -425,7 +430,7 @@
 <div class="viewcode-block" id="JSONFiles.write_var_json">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.write_var_json">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">write_var_json</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_var_json</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">Series</span><span class="p">],</span>
         <span class="n">is_input</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -488,7 +493,7 @@
 <div class="viewcode-block" id="JSONFiles.generate_variable_properties">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_variable_properties">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">generate_variable_properties</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_variable_properties</span><span class="p">(</span>
         <span class="n">input_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">Series</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -547,7 +552,7 @@
 <div class="viewcode-block" id="JSONFiles.generate_mlflow_variable_properties">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_mlflow_variable_properties">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">generate_mlflow_variable_properties</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">input_data</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_mlflow_variable_properties</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">input_data</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a list of dictionaries containing the variable properties found in the</span>
 <span class="sd">        MLModel file for MLFlow model runs.</span>
@@ -585,7 +590,7 @@
 <div class="viewcode-block" id="JSONFiles.check_if_string">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.check_if_string">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">check_if_string</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_if_string</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine if an MLFlow variable in data is a string type.</span>
 
@@ -613,7 +618,7 @@
 <div class="viewcode-block" id="JSONFiles.write_model_properties_json">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.write_model_properties_json">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">write_model_properties_json</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_model_properties_json</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">target_variable</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -764,7 +769,7 @@
 <div class="viewcode-block" id="JSONFiles.truncate_properties">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.truncate_properties">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">truncate_properties</span><span class="p">(</span><span class="n">prop</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">truncate_properties</span><span class="p">(</span><span class="n">prop</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check custom properties for values larger than SAS Model Manager expects.</span>
 
@@ -806,7 +811,7 @@
 <div class="viewcode-block" id="JSONFiles.write_file_metadata_json">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.write_file_metadata_json">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">write_file_metadata_json</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_file_metadata_json</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">json_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -838,7 +843,7 @@
 <span class="sd">            dump respectively.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="kn">from</span> <span class="nn">.write_score_code</span> <span class="kn">import</span> <span class="n">ScoreCode</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.write_score_code</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScoreCode</span>
 
         <span class="n">sanitized_prefix</span> <span class="o">=</span> <span class="n">ScoreCode</span><span class="o">.</span><span class="n">sanitize_model_prefix</span><span class="p">(</span><span class="n">model_prefix</span><span class="p">)</span>
 
@@ -875,7 +880,7 @@
 <div class="viewcode-block" id="JSONFiles.input_fit_statistics">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.input_fit_statistics">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">input_fit_statistics</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">input_fit_statistics</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">fitstat_df</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">user_input</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -971,7 +976,7 @@
 <div class="viewcode-block" id="JSONFiles.add_tuple_to_fitstat">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.add_tuple_to_fitstat">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">add_tuple_to_fitstat</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_tuple_to_fitstat</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">tuple</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1031,7 +1036,7 @@
 <div class="viewcode-block" id="JSONFiles.user_input_fitstat">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.user_input_fitstat">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">user_input_fitstat</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">user_input_fitstat</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prompt the user to enter parameters for dmcas_fitstat.json.</span>
 
@@ -1084,7 +1089,7 @@
 <div class="viewcode-block" id="JSONFiles.add_df_to_fitstat">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.add_df_to_fitstat">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">add_df_to_fitstat</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_df_to_fitstat</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add parameters from provided DataFrame to the fitstats dictionary.</span>
 
@@ -1128,7 +1133,7 @@
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.assess_model_bias">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="nd">@experimental</span>
-    <span class="k">def</span> <span class="nf">assess_model_bias</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assess_model_bias</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">score_table</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">sensitive_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
@@ -1314,7 +1319,7 @@
 <div class="viewcode-block" id="JSONFiles.format_max_differences">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.format_max_differences">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">format_max_differences</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_max_differences</span><span class="p">(</span>
         <span class="n">maxdiff_dfs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">],</span> <span class="n">datarole</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;TEST&quot;</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1349,7 +1354,7 @@
 <div class="viewcode-block" id="JSONFiles.format_group_metrics">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.format_group_metrics">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">format_group_metrics</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_group_metrics</span><span class="p">(</span>
         <span class="n">groupmetrics_dfs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">],</span>
         <span class="n">prob_values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">pred_values</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1425,7 +1430,7 @@
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.bias_dataframes_to_json">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="nd">@experimental</span>
-    <span class="k">def</span> <span class="nf">bias_dataframes_to_json</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bias_dataframes_to_json</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">groupmetrics</span><span class="p">:</span> <span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">maxdifference</span><span class="p">:</span> <span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1555,7 +1560,7 @@
 <div class="viewcode-block" id="JSONFiles.calculate_model_statistics">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.calculate_model_statistics">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">calculate_model_statistics</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_model_statistics</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">target_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
         <span class="n">prob_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1740,7 +1745,7 @@
 <div class="viewcode-block" id="JSONFiles.check_for_data">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.check_for_data">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">check_for_data</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_for_data</span><span class="p">(</span>
         <span class="n">validate</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">train</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">test</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1784,7 +1789,7 @@
 <div class="viewcode-block" id="JSONFiles.stat_dataset_to_dataframe">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.stat_dataset_to_dataframe">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">stat_dataset_to_dataframe</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stat_dataset_to_dataframe</span><span class="p">(</span>
         <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">list</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;numpy.ndarray&quot;</span><span class="p">]],</span>
         <span class="n">target_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">target_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
@@ -1865,7 +1870,7 @@
 <div class="viewcode-block" id="JSONFiles.apply_dataframe_to_json">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.apply_dataframe_to_json">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">apply_dataframe_to_json</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_dataframe_to_json</span><span class="p">(</span>
         <span class="n">json_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">partition</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">stat_df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">is_lift</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1906,7 +1911,7 @@
 <div class="viewcode-block" id="JSONFiles.read_json_file">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.read_json_file">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">read_json_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_json_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads a JSON file from a given path.</span>
 
@@ -1927,7 +1932,7 @@
 <div class="viewcode-block" id="JSONFiles.format_parameter">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.format_parameter">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">format_parameter</span><span class="p">(</span><span class="n">param_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_parameter</span><span class="p">(</span><span class="n">param_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Formats the parameter name to the JSON standard expected for dmcas_fitstat.json.</span>
 
@@ -1953,7 +1958,7 @@
 <div class="viewcode-block" id="JSONFiles.convert_data_role">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.convert_data_role">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">convert_data_role</span><span class="p">(</span><span class="n">data_role</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_data_role</span><span class="p">(</span><span class="n">data_role</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts the data role identifier from string to int or int to string.</span>
 
@@ -1999,7 +2004,7 @@
 <div class="viewcode-block" id="JSONFiles.create_requirements_json">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.create_requirements_json">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">create_requirements_json</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_requirements_json</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">model_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">(),</span>
         <span class="n">output_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -2086,7 +2091,7 @@
 <div class="viewcode-block" id="JSONFiles.get_local_package_version">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_local_package_version">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_local_package_version</span><span class="p">(</span><span class="n">package_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_local_package_version</span><span class="p">(</span><span class="n">package_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get package_name versions from the local environment.</span>
 
@@ -2104,7 +2109,7 @@
 <span class="sd">            Nested list of Python package_name names and found versions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">package_not_found_output</span><span class="p">(</span><span class="n">package_name</span><span class="p">,</span> <span class="n">package_versions</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">package_not_found_output</span><span class="p">(</span><span class="n">package_name</span><span class="p">,</span> <span class="n">package_versions</span><span class="p">):</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Warning: Package </span><span class="si">{</span><span class="n">package_name</span><span class="si">}</span><span class="s2"> was not found in the local &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;environment. Either </span><span class="si">{</span><span class="n">package_name</span><span class="si">}</span><span class="s2"> is not a valid Python package, &quot;</span>
@@ -2145,7 +2150,7 @@
 <div class="viewcode-block" id="JSONFiles.get_code_dependencies">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_code_dependencies">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_code_dependencies</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_code_dependencies</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">model_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2175,7 +2180,7 @@
 <div class="viewcode-block" id="JSONFiles.find_imports">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.find_imports">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">find_imports</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_imports</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find import calls in provided Python code path.</span>
 
@@ -2221,7 +2226,7 @@
 <div class="viewcode-block" id="JSONFiles.get_pickle_file">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_pickle_file">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_pickle_file</span><span class="p">(</span><span class="n">pickle_folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_pickle_file</span><span class="p">(</span><span class="n">pickle_folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Given a file path, retrieve the pickle file(s).</span>
 
@@ -2244,7 +2249,7 @@
 <div class="viewcode-block" id="JSONFiles.get_pickle_dependencies">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_pickle_dependencies">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_pickle_dependencies</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pickle_file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_pickle_dependencies</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pickle_file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads the pickled byte stream from a file object, serializes the pickled byte</span>
 <span class="sd">        stream as a bytes object, and inspects the bytes object for all Python</span>
@@ -2272,7 +2277,7 @@
 <div class="viewcode-block" id="JSONFiles.get_package_names">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_package_names">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_package_names</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_package_names</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates a list of found `package` names from a pickle stream.</span>
 
@@ -2343,7 +2348,7 @@
 <div class="viewcode-block" id="JSONFiles.remove_standard_library_packages">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.remove_standard_library_packages">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">remove_standard_library_packages</span><span class="p">(</span><span class="n">package_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_standard_library_packages</span><span class="p">(</span><span class="n">package_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove any packages from the required list of installed packages that are</span>
 <span class="sd">        part of the Python Standard Library.</span>
@@ -2673,7 +2678,7 @@
 <div class="viewcode-block" id="JSONFiles.generate_model_card">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_model_card">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">generate_model_card</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_model_card</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">model_files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
@@ -2806,7 +2811,7 @@
 <div class="viewcode-block" id="JSONFiles.upload_training_data">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.upload_training_data">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">upload_training_data</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">upload_training_data</span><span class="p">(</span>
         <span class="n">conn</span><span class="p">,</span>
         <span class="n">model_prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">train_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
@@ -2857,7 +2862,7 @@
 <div class="viewcode-block" id="JSONFiles.generate_outcome_average">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_outcome_average">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">generate_outcome_average</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_outcome_average</span><span class="p">(</span>
         <span class="n">train_data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">input_variables</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
         <span class="n">target_type</span><span class="p">,</span>
@@ -2886,7 +2891,7 @@
 <span class="sd">        dict</span>
 <span class="sd">        Returns a dictionary with a key value pair that represents the outcome average.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">import</span> <span class="nn">numbers</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">numbers</span>
 
         <span class="n">output_var</span> <span class="o">=</span> <span class="n">train_data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">input_variables</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">target_type</span> <span class="o">==</span> <span class="s2">&quot;classification&quot;</span><span class="p">:</span>
@@ -2910,7 +2915,7 @@
 <div class="viewcode-block" id="JSONFiles.get_selection_statistic_value">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.get_selection_statistic_value">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_selection_statistic_value</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_selection_statistic_value</span><span class="p">(</span>
         <span class="n">model_files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span> <span class="n">selection_statistic</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_GINI_&quot;</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2973,7 +2978,7 @@
 <div class="viewcode-block" id="JSONFiles.update_model_properties">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.update_model_properties">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">update_model_properties</span><span class="p">(</span><span class="n">model_files</span><span class="p">,</span> <span class="n">update_dict</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_model_properties</span><span class="p">(</span><span class="n">model_files</span><span class="p">,</span> <span class="n">update_dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Updates the ModelProperties.json file to include properties listed in the update_dict dictionary.</span>
 
@@ -3020,7 +3025,7 @@
 <div class="viewcode-block" id="JSONFiles.generate_variable_importance">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_variable_importance">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">generate_variable_importance</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_variable_importance</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">conn</span><span class="p">,</span>
         <span class="n">model_files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
@@ -3184,7 +3189,7 @@
 <div class="viewcode-block" id="JSONFiles.generate_misc">
 <a class="viewcode-back" href="../../../api/pzmm/write_json_files.html#sasctl.pzmm.write_json_files.JSONFiles.generate_misc">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">generate_misc</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model_files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_misc</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model_files</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates the dmcas_misc.json file, which is used to determine variable importance</span>
 
@@ -3300,8 +3305,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -3334,7 +3339,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

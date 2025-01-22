@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.core &#8212; sasctl 1.11.0 documentation</title>
+    <title>sasctl.core &#8212; sasctl 1.11.1 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,19 +26,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/sasctl.css?v=6840086e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=6475a945"></script>
+    <script src="../../_static/documentation_options.js?v=00ba7901"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/core';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.0" />
-    <meta name="docbuild:last-update" content="Oct 29, 2024"/>
+  <meta name="docsearch:version" content="1.11.1" />
+    <meta name="docbuild:last-update" content="Jan 22, 2025"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.0 documentation</p>
+    <p class="title logo__title">sasctl 1.11.1 documentation</p>
   
 </a></div>
     
@@ -260,9 +260,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -315,50 +320,50 @@
 <span class="c1"># Copyright © 2019, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.</span>
 <span class="c1"># SPDX-License-Identifier: Apache-2.0</span>
 
-<span class="kn">import</span> <span class="nn">concurrent.futures</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">netrc</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">ssl</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">from</span> <span class="nn">urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
-<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlsplit</span><span class="p">,</span> <span class="n">urlunsplit</span>
-<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span><span class="p">,</span> <span class="n">uuid4</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">concurrent.futures</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">netrc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ssl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.error</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlsplit</span><span class="p">,</span> <span class="n">urlunsplit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">uuid</span><span class="w"> </span><span class="kn">import</span> <span class="n">UUID</span><span class="p">,</span> <span class="n">uuid4</span>
 
-<span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">import</span> <span class="nn">requests.exceptions</span>
-<span class="kn">import</span> <span class="nn">yaml</span>
-<span class="kn">from</span> <span class="nn">packaging</span> <span class="kn">import</span> <span class="n">version</span>
-<span class="kn">from</span> <span class="nn">requests.adapters</span> <span class="kn">import</span> <span class="n">HTTPAdapter</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests.exceptions</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">packaging</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">requests.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPAdapter</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">swat</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">swat</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">swat</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">kerberos</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">kerberos</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">winkerberos</span> <span class="k">as</span> <span class="nn">kerberos</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">winkerberos</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">kerberos</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="n">kerberos</span> <span class="o">=</span> <span class="kc">None</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">exceptions</span>
-<span class="kn">from</span> <span class="nn">.utils.cli</span> <span class="kn">import</span> <span class="n">sasctl_command</span>
-<span class="kn">from</span> <span class="nn">.utils.misc</span> <span class="kn">import</span> <span class="n">versionadded</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">exceptions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">sasctl_command</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">versionadded</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="n">_session</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<span class="k">def</span> <span class="nf">_pformat</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pformat</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_pformat</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pformat</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">pformat</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
@@ -369,7 +374,7 @@
             <span class="k">return</span> <span class="n">text</span>
 
 
-<span class="k">def</span> <span class="nf">_redact</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">repl</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_redact</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">repl</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
     <span class="n">is_bytes</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -381,7 +386,7 @@
     <span class="k">return</span> <span class="n">string</span>
 
 
-<span class="k">def</span> <span class="nf">_filter_password</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_filter_password</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;body&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">r</span><span class="o">.</span><span class="n">body</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Filter password from &#39;grant_type=password&amp;username=&lt;user&gt;&amp;password=&lt;password&gt;&#39; during Post to Logon service.</span>
         <span class="n">r</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">_redact</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;=&amp;password=)([^&amp;]*)\b&quot;</span><span class="p">,</span> <span class="s2">&quot;*****&quot;</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
@@ -391,7 +396,7 @@
     <span class="k">return</span> <span class="n">r</span>
 
 
-<span class="k">def</span> <span class="nf">_filter_token</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_filter_token</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
     <span class="c1"># Redact &quot;Bearer &lt;token&gt;&quot; in Authorization headers</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s2">&quot;headers&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;Authorization&quot;</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">headers</span><span class="p">:</span>
         <span class="n">r</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Authorization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_redact</span><span class="p">(</span>
@@ -420,7 +425,7 @@
 
 <div class="viewcode-block" id="current_session">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.current_session">[docs]</a>
-<span class="k">def</span> <span class="nf">current_session</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">current_session</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets and sets the current session.</span>
 
 <span class="sd">    If call with no arguments, the current session instance is returned, or</span>
@@ -472,8 +477,8 @@
 
 <div class="viewcode-block" id="OAuth2Token">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.OAuth2Token">[docs]</a>
-<span class="k">class</span> <span class="nc">OAuth2Token</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">AuthBase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OAuth2Token</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">AuthBase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">access_token</span><span class="p">,</span>
         <span class="n">refresh_token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -488,12 +493,12 @@
         <span class="k">if</span> <span class="n">expires_in</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">expiration</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">expires_in</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
         <span class="n">r</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Authorization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Bearer &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">access_token</span>
         <span class="k">return</span> <span class="n">r</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">is_expired</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_expired</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">expiration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
@@ -503,8 +508,8 @@
 
 <div class="viewcode-block" id="RestObj">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.RestObj">[docs]</a>
-<span class="k">class</span> <span class="nc">RestObj</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RestObj</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="c1"># Only called when __getattribute__ failed to find the attribute</span>
         <span class="c1"># Return the item from underlying dictionary if possible.</span>
         <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
@@ -519,7 +524,7 @@
             <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; object has no attribute &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">headers</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_headers&quot;</span><span class="p">,</span> <span class="p">{})</span>
 
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">(headers=</span><span class="si">%r</span><span class="s2">, data=</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
@@ -528,7 +533,7 @@
             <span class="nb">super</span><span class="p">(</span><span class="n">RestObj</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">(),</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="s2">&quot;id&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
@@ -539,16 +544,16 @@
 
 <div class="viewcode-block" id="SSLContextAdapter">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.SSLContextAdapter">[docs]</a>
-<span class="k">class</span> <span class="nc">SSLContextAdapter</span><span class="p">(</span><span class="n">HTTPAdapter</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SSLContextAdapter</span><span class="p">(</span><span class="n">HTTPAdapter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;HTTPAdapter that uses the default SSL context on the machine.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">assert_hostname</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;assert_hostname&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">requests</span><span class="o">.</span><span class="n">adapters</span><span class="o">.</span><span class="n">HTTPAdapter</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SSLContextAdapter.init_poolmanager">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.SSLContextAdapter.init_poolmanager">[docs]</a>
-    <span class="k">def</span> <span class="nf">init_poolmanager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_poolmanager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">create_default_context</span><span class="p">()</span>
         <span class="n">context</span><span class="o">.</span><span class="n">check_hostname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assert_hostname</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;ssl_context&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">context</span>
@@ -560,7 +565,7 @@
 
 <div class="viewcode-block" id="Session">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session">[docs]</a>
-<span class="k">class</span> <span class="nc">Session</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Session</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Establish a connection to a SAS Viya server.</span>
 
 <span class="sd">    Parameters</span>
@@ -610,7 +615,7 @@
 
     <span class="n">PROFILE_PATH</span> <span class="o">=</span> <span class="s2">&quot;~/.sas/viya-api-profiles.yaml&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">hostname</span><span class="p">,</span>
         <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -649,10 +654,10 @@
                 <span class="c1"># Skip hostname verification if IP address specified instead</span>
                 <span class="c1"># of DNS name.  Prevents error from urllib3.</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="kn">from</span> <span class="nn">urllib3.util.ssl_</span> <span class="kn">import</span> <span class="n">is_ipaddress</span>
+                    <span class="kn">from</span><span class="w"> </span><span class="nn">urllib3.util.ssl_</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_ipaddress</span>
                 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
                     <span class="c1"># is_ipaddres not present in older versions of urllib3</span>
-                    <span class="k">def</span> <span class="nf">is_ipaddress</span><span class="p">(</span><span class="n">hst</span><span class="p">):</span>
+                    <span class="k">def</span><span class="w"> </span><span class="nf">is_ipaddress</span><span class="p">(</span><span class="n">hst</span><span class="p">):</span>
                         <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(?:[0-9]{1,3}\.)</span><span class="si">{3}</span><span class="s2">[0-9]{1,3}$&quot;</span><span class="p">,</span> <span class="n">hst</span><span class="p">)</span>
 
                 <span class="c1"># Do not verify hostname if IP address is used.  Otherwise, will</span>
@@ -665,7 +670,7 @@
         <span class="c1"># If we&#39;re skipping SSL verification, urllib3 will raise InsecureRequestWarnings on</span>
         <span class="c1"># every request.  Insert a warning filter so these warnings only appear on the first request.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">verify_ssl</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">urllib3.exceptions</span> <span class="kn">import</span> <span class="n">InsecureRequestWarning</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">urllib3.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">InsecureRequestWarning</span>
 
             <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">InsecureRequestWarning</span><span class="p">)</span>
 
@@ -676,7 +681,7 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
                 <span class="n">hostname</span><span class="o">.</span><span class="n">_sw_connection</span><span class="p">,</span> <span class="n">swat</span><span class="o">.</span><span class="n">cas</span><span class="o">.</span><span class="n">rest</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">REST_CASConnection</span>
             <span class="p">):</span>
-                <span class="kn">import</span> <span class="nn">base64</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
 
                 <span class="c1"># Use the httpAddress action to retieve information about</span>
                 <span class="c1"># REST endpoints</span>
@@ -774,7 +779,7 @@
 
 <div class="viewcode-block" id="Session.add_logger">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.add_logger">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Log session requests and responses.</span>
 
 <span class="sd">        Parameters</span>
@@ -808,7 +813,7 @@
 
 <div class="viewcode-block" id="Session.add_stderr_logger">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.add_stderr_logger">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_stderr_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_stderr_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Log session requests and responses to stderr.</span>
 
 <span class="sd">        Parameters</span>
@@ -827,7 +832,7 @@
 <div class="viewcode-block" id="Session.as_swat">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.as_swat">[docs]</a>
     <span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5.4&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">as_swat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_swat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a SWAT connection to a CAS server.</span>
 
 <span class="sd">        Uses the authentication information from the session to establish a CAS connection using SWAT.</span>
@@ -903,16 +908,16 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">username</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">username</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">hostname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hostname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;domain&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Session.send">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.send">[docs]</a>
-    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_log</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">filter_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">:</span>
@@ -956,7 +961,7 @@
 
 <div class="viewcode-block" id="Session.request">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.request">[docs]</a>
-    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">method</span><span class="p">,</span>
         <span class="n">url</span><span class="p">,</span>
@@ -1044,37 +1049,37 @@
 
 <div class="viewcode-block" id="Session.get">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.get">[docs]</a>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Session.post">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.post">[docs]</a>
-    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Session.put">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.put">[docs]</a>
-    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Session.head">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.head">[docs]</a>
-    <span class="k">def</span> <span class="nf">head</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">head</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;HEAD&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Session.delete">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.delete">[docs]</a>
-    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Session.cache_token">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.cache_token">[docs]</a>
-    <span class="k">def</span> <span class="nf">cache_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cache_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write an OAuth2 token to the cache.</span>
 
 <span class="sd">        Parameters</span>
@@ -1124,7 +1129,7 @@
 
 <div class="viewcode-block" id="Session.read_cached_token">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.read_cached_token">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_cached_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_cached_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read any cached access tokens from disk</span>
 
 <span class="sd">        Parameters</span>
@@ -1182,7 +1187,7 @@
 
 <div class="viewcode-block" id="Session.version_info">
 <a class="viewcode-back" href="../../api/sasctl.session.html#sasctl.core.Session.version_info">[docs]</a>
-    <span class="k">def</span> <span class="nf">version_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">version_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get version information from the connected SAS Viya environment</span>
 
 <span class="sd">        Returns</span>
@@ -1234,7 +1239,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version_info</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_build_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a complete URL from a path by substituting in session parameters.&quot;&quot;&quot;</span>
         <span class="n">components</span> <span class="o">=</span> <span class="n">urlsplit</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
@@ -1254,7 +1259,7 @@
             <span class="p">]</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_get_authorization_token</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_authorization_token</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1388,7 +1393,7 @@
 
         <span class="k">return</span> <span class="n">token</span>
 
-    <span class="k">def</span> <span class="nf">_prompt_for_auth_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prompt_for_auth_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Prompt the user open a URL to generate an auth code.</span>
 
 <span class="sd">        Note that this halts program execution until input is received and</span>
@@ -1427,7 +1432,7 @@
         <span class="k">return</span> <span class="n">auth_code</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_read_token_cache</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_read_token_cache</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read cached OAuth2 access tokens from disk.</span>
 
 <span class="sd">        Parameters</span>
@@ -1465,7 +1470,7 @@
 
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">_request_token_with_consul</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">consul_token</span><span class="p">,</span> <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_request_token_with_consul</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">consul_token</span><span class="p">,</span> <span class="n">client_id</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Request an OAuth token from Consul.</span>
 
 <span class="sd">        This functionality is reserved for system administrators as access</span>
@@ -1508,9 +1513,9 @@
         <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">AuthenticationError</span><span class="p">(</span>
                 <span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Failed to authenticate using Consul token.&quot;</span>
-            <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
-    <span class="k">def</span> <span class="nf">_request_token_with_kerberos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_request_token_with_kerberos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Authenticate with a Kerberos ticket.</span>
 
 <span class="sd">        Parameters</span>
@@ -1611,7 +1616,7 @@
         <span class="c1"># Extract access token and return as an Oauth token</span>
         <span class="k">return</span> <span class="n">OAuth2Token</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">_request_token_with_oauth</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_request_token_with_oauth</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1774,7 +1779,7 @@
         <span class="k">return</span> <span class="n">OAuth2Token</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_write_token_cache</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_write_token_cache</span><span class="p">(</span><span class="n">profiles</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -1805,7 +1810,7 @@
         <span class="k">if</span> <span class="n">flags</span> <span class="o">!=</span> <span class="s2">&quot;600&quot;</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">,</span> <span class="mo">0o600</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__enter__</span><span class="p">()</span>
 
         <span class="c1"># Make this the current session</span>
@@ -1814,13 +1819,13 @@
 
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
         <span class="c1"># Restore previous current session</span>
         <span class="n">current_session</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_old_session</span><span class="p">)</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">Session</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="s2">&quot;</span><span class="si">{class_}</span><span class="s2">(hostname=&#39;</span><span class="si">{hostname}</span><span class="s2">&#39;, username=&#39;</span><span class="si">{username}</span><span class="s2">&#39;, &quot;</span>
             <span class="s2">&quot;protocol=&#39;</span><span class="si">{protocol}</span><span class="s2">&#39;, verify_ssl=</span><span class="si">{verify}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -1836,7 +1841,7 @@
 
 <div class="viewcode-block" id="PageIterator">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PageIterator">[docs]</a>
-<span class="k">class</span> <span class="nc">PageIterator</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PageIterator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterates through a collection that must be &quot;paged&quot; from the server.</span>
 
 <span class="sd">    Pages contain a batch of items from the overall collection.  Iterates the</span>
@@ -1861,7 +1866,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_threads</span> <span class="o">=</span> <span class="n">threads</span>
 
         <span class="c1"># Session to use when requesting items</span>
@@ -1903,14 +1908,14 @@
         <span class="c1"># Store the current items to iterate over</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_obj</span> <span class="o">=</span> <span class="n">obj</span>
 
-    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pool</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_pool</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pool</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_pool</span> <span class="o">=</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span>
                 <span class="n">max_workers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_threads</span>
@@ -1940,11 +1945,11 @@
 
         <span class="k">raise</span> <span class="ne">StopIteration</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># All Iterators are also Iterables</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">_request_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_request_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Used by worker threads to retrieve next batch of items.&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_link</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1960,7 +1965,7 @@
 
 <div class="viewcode-block" id="PagedItemIterator">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PagedItemIterator">[docs]</a>
-<span class="k">class</span> <span class="nc">PagedItemIterator</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PagedItemIterator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterates through a collection that must be &quot;paged&quot; from the server.</span>
 
 <span class="sd">    Uses :class:`PageIterator` to transparently download pages of items from the server</span>
@@ -1992,7 +1997,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
         <span class="c1"># Iterates over whole pages of items</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pager</span> <span class="o">=</span> <span class="n">PageIterator</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">threads</span><span class="p">)</span>
 
@@ -2008,10 +2013,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count</span>
 
-    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Get next page of items if we&#39;re currently out</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pager</span><span class="p">)</span>
@@ -2023,14 +2028,14 @@
 
         <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
 
 <div class="viewcode-block" id="PagedListIterator">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PagedListIterator">[docs]</a>
-<span class="k">class</span> <span class="nc">PagedListIterator</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PagedListIterator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterates over an instance of :class:`PagedList`</span>
 
 <span class="sd">    Parameters</span>
@@ -2039,11 +2044,11 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__list</span> <span class="o">=</span> <span class="n">l</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__index</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__list</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">StopIteration</span>
 
@@ -2056,14 +2061,14 @@
             <span class="c1"># indexing outside the array.  Just stop the iteration if that occurs.</span>
             <span class="k">raise</span> <span class="ne">StopIteration</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
 
 <div class="viewcode-block" id="PagedList">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.PagedList">[docs]</a>
-<span class="k">class</span> <span class="nc">PagedList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PagedList</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;List that dynamically loads items from the server.</span>
 
 <span class="sd">    Parameters</span>
@@ -2088,7 +2093,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_paged_items</span> <span class="o">=</span> <span class="n">PagedItemIterator</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
 
@@ -2100,7 +2105,7 @@
         <span class="c1"># Assume that server has more items available</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_has_more</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_more</span><span class="p">:</span>
             <span class="c1"># Estimate the total length as items downloaded + items still on server</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paged_items</span><span class="p">)</span>
@@ -2108,15 +2113,15 @@
             <span class="c1"># We&#39;ve pulled everything from the server, so we have an exact length now.</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">PagedListIterator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__getslice__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__getslice__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
         <span class="c1"># Removed from Py3.x but still implemented in CPython built-in list</span>
         <span class="c1"># Override to ensure __getitem__ is used instead.</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s2">&quot;stop&quot;</span><span class="p">):</span>
             <span class="c1"># `item` is a slice</span>
             <span class="c1"># if no stop was specified, assume full length</span>
@@ -2142,7 +2147,7 @@
         <span class="c1"># Get the item from the list</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">string</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">PagedList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
 
         <span class="c1"># If the list has more &quot;items&quot; than are stored in the underlying list</span>
@@ -2156,7 +2161,7 @@
 
 <div class="viewcode-block" id="VersionInfo">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.VersionInfo">[docs]</a>
-<span class="k">class</span> <span class="nc">VersionInfo</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">VersionInfo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Stores the version information for a SAS Viya environment.</span>
 
 <span class="sd">    Parameters</span>
@@ -2175,34 +2180,34 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cadence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">major</span><span class="p">,</span> <span class="n">minor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cadence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_major</span> <span class="o">=</span> <span class="n">major</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_minor</span> <span class="o">=</span> <span class="n">minor</span> <span class="k">if</span> <span class="n">minor</span> <span class="k">else</span> <span class="mi">5</span> <span class="k">if</span> <span class="n">major</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cadence</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cadence</span><span class="p">)</span> <span class="k">if</span> <span class="n">cadence</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_release</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">release</span><span class="p">)</span> <span class="k">if</span> <span class="n">release</span> <span class="k">else</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="fm">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__ge__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span> <span class="o">&gt;</span> <span class="n">other</span> <span class="ow">or</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">other</span>
 
-    <span class="k">def</span> <span class="fm">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__gt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compare</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compare</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="fm">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__le__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span> <span class="o">&lt;</span> <span class="n">other</span> <span class="ow">or</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">other</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compare</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="fm">__float__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__float__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_major</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_minor</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">major</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">minor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">_compare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compare and return -1/0/1 indicating lt/eq/gt.</span>
 
 <span class="sd">        Parameters</span>
@@ -2248,7 +2253,7 @@
         <span class="c1"># they were all equal</span>
         <span class="k">return</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(major=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_major</span><span class="si">}</span><span class="s2">, minor=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_minor</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cadence</span><span class="p">:</span>
@@ -2260,26 +2265,26 @@
         <span class="k">return</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">cadence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cadence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cadence</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">major</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">major</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_major</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">minor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">minor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minor</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_release</span></div>
 
 
 
 <div class="viewcode-block" id="is_uuid">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.is_uuid">[docs]</a>
-<span class="k">def</span> <span class="nf">is_uuid</span><span class="p">(</span><span class="n">id_</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_uuid</span><span class="p">(</span><span class="n">id_</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">UUID</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">id_</span><span class="p">))</span>
         <span class="k">return</span> <span class="kc">True</span>
@@ -2290,7 +2295,7 @@
 
 <div class="viewcode-block" id="get">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.get">[docs]</a>
-<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a GET request.</span>
 
 <span class="sd">    Parameters</span>
@@ -2317,7 +2322,7 @@
 
 <div class="viewcode-block" id="head">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.head">[docs]</a>
-<span class="k">def</span> <span class="nf">head</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">head</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a HEAD request.</span>
 
 <span class="sd">    Parameters</span>
@@ -2338,7 +2343,7 @@
 
 <div class="viewcode-block" id="post">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.post">[docs]</a>
-<span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a POST request.</span>
 
 <span class="sd">    Parameters</span>
@@ -2359,7 +2364,7 @@
 
 <div class="viewcode-block" id="put">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.put">[docs]</a>
-<span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a PUT request.</span>
 
 <span class="sd">    Parameters</span>
@@ -2394,7 +2399,7 @@
 
 <div class="viewcode-block" id="delete">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.delete">[docs]</a>
-<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a DELETE request.</span>
 
 <span class="sd">    Parameters</span>
@@ -2415,7 +2420,7 @@
 
 <div class="viewcode-block" id="request">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.request">[docs]</a>
-<span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="n">verb</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="n">verb</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Send an HTTP request with a session.</span>
 
 <span class="sd">    Parameters</span>
@@ -2486,7 +2491,7 @@
 
 <div class="viewcode-block" id="get_link">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.get_link">[docs]</a>
-<span class="k">def</span> <span class="nf">get_link</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">rel</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_link</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">rel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get link information from a resource.</span>
 
 <span class="sd">    Parameters</span>
@@ -2518,7 +2523,7 @@
 
 <div class="viewcode-block" id="request_link">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.request_link">[docs]</a>
-<span class="k">def</span> <span class="nf">request_link</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">request_link</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Request a link from a resource.</span>
 
 <span class="sd">    Parameters</span>
@@ -2544,7 +2549,7 @@
 
 <div class="viewcode-block" id="uri_as_str">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.uri_as_str">[docs]</a>
-<span class="k">def</span> <span class="nf">uri_as_str</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">uri_as_str</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the URI of a resource in string format.</span>
 
 <span class="sd">    Parameters</span>
@@ -2568,7 +2573,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_unwrap</span><span class="p">(</span><span class="n">json</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_unwrap</span><span class="p">(</span><span class="n">json</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts a JSON response to one or more :class:`RestObj` instances.</span>
 
 <span class="sd">    If the JSON contains a .items property, only those items are converted and returned.</span>
@@ -2591,7 +2596,7 @@
     <span class="k">return</span> <span class="n">RestObj</span><span class="p">(</span><span class="n">json</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_build_crud_funcs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">single_term</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plural_term</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">service_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_crud_funcs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">single_term</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plural_term</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">service_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Utility method for defining simple functions to perform CRUD operations on a REST endpoint.</span>
 
 <span class="sd">    Parameters</span>
@@ -2619,7 +2624,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">list_items</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_items</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List all {items} available in the environment.</span>
 
 <span class="sd">        Parameters</span>
@@ -2644,7 +2649,7 @@
         <span class="k">return</span> <span class="n">results</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">results</span><span class="p">]</span>
 
     <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">get_item</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_item</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a {item} instance.</span>
 
 <span class="sd">        Parameters</span>
@@ -2692,7 +2697,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;update&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">update_item</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_item</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates a {item} instance.</span>
 
 <span class="sd">        Parameters</span>
@@ -2721,7 +2726,7 @@
         <span class="k">return</span> <span class="n">put</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">id_</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">item</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
 
     <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">delete_item</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete_item</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Deletes a {item} instance.</span>
 
 <span class="sd">        Parameters</span>
@@ -2762,8 +2767,8 @@
     <span class="k">return</span> <span class="n">list_items</span><span class="p">,</span> <span class="n">get_item</span><span class="p">,</span> <span class="n">update_item</span><span class="p">,</span> <span class="n">delete_item</span>
 
 
-<span class="k">def</span> <span class="nf">_build_is_available_func</span><span class="p">(</span><span class="n">service_root</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">is_available</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_is_available_func</span><span class="p">(</span><span class="n">service_root</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_available</span><span class="p">():</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the service is currently available.</span>
 
 <span class="sd">        Returns</span>
@@ -2780,7 +2785,7 @@
 <div class="viewcode-block" id="platform_version">
 <a class="viewcode-back" href="../../api/sasctl.core.html#sasctl.core.platform_version">[docs]</a>
 <span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5.6&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">platform_version</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">platform_version</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the version of the SAS Viya platform to which sasctl is connected.</span>
 
 <span class="sd">    Returns</span>
@@ -2795,7 +2800,7 @@
         <span class="ne">DeprecationWarning</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="kn">from</span> <span class="nn">.services</span> <span class="kn">import</span> <span class="n">model_repository</span> <span class="k">as</span> <span class="n">mr</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_repository</span> <span class="k">as</span> <span class="n">mr</span>
 
     <span class="n">response</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
     <span class="n">buildVersion</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;build&quot;</span><span class="p">)[</span><span class="s2">&quot;buildVersion&quot;</span><span class="p">]</span>
@@ -2836,8 +2841,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2870,7 +2875,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

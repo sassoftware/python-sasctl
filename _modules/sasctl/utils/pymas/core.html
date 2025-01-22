@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl.utils.pymas.core &#8212; sasctl 1.11.0 documentation</title>
+    <title>sasctl.utils.pymas.core &#8212; sasctl 1.11.1 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,19 +26,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sasctl.css?v=6840086e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=6475a945"></script>
+    <script src="../../../../_static/documentation_options.js?v=00ba7901"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/utils/pymas/core';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.0" />
-    <meta name="docbuild:last-update" content="Oct 29, 2024"/>
+  <meta name="docsearch:version" content="1.11.1" />
+    <meta name="docbuild:last-update" content="Jan 22, 2025"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.0 documentation</p>
+    <p class="title logo__title">sasctl 1.11.1 documentation</p>
   
 </a></div>
     
@@ -260,9 +260,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -317,26 +322,26 @@
 
 <span class="sd">&quot;&quot;&quot;Contains utilities for wrapping Python models in DS2 for publishing.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_function</span>
 
-<span class="kn">import</span> <span class="nn">base64</span>
-<span class="kn">import</span> <span class="nn">importlib</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pickle</span>  <span class="c1"># skipcq BAN-B301</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>  <span class="c1"># skipcq BAN-B301</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
 
-<span class="kn">from</span> <span class="nn">..decorators</span> <span class="kn">import</span> <span class="n">versionadded</span><span class="p">,</span> <span class="n">versionchanged</span>
-<span class="kn">from</span> <span class="nn">..misc</span> <span class="kn">import</span> <span class="n">random_string</span>
-<span class="kn">from</span> <span class="nn">.ds2</span> <span class="kn">import</span> <span class="n">DS2PyMASPackage</span><span class="p">,</span> <span class="n">DS2Thread</span><span class="p">,</span> <span class="n">DS2Variable</span>
-<span class="kn">from</span> <span class="nn">.python</span> <span class="kn">import</span> <span class="n">ds2_variables</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..decorators</span><span class="w"> </span><span class="kn">import</span> <span class="n">versionadded</span><span class="p">,</span> <span class="n">versionchanged</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">random_string</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.ds2</span><span class="w"> </span><span class="kn">import</span> <span class="n">DS2PyMASPackage</span><span class="p">,</span> <span class="n">DS2Thread</span><span class="p">,</span> <span class="n">DS2Variable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.python</span><span class="w"> </span><span class="kn">import</span> <span class="n">ds2_variables</span>
 
 
 <div class="viewcode-block" id="build_wrapper_function">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.build_wrapper_function">[docs]</a>
 <span class="nd">@versionchanged</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Added `name` parameter.&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">build_wrapper_function</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_wrapper_function</span><span class="p">(</span>
     <span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">array_input</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;wrapper&quot;</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_msg</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wraps a function to ensure compatibility when called by PyMAS.</span>
@@ -475,7 +480,7 @@
 <div class="viewcode-block" id="wrap_predict_method">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.wrap_predict_method">[docs]</a>
 <span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">wrap_predict_method</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">wrap_predict_method</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a PyMAS wrapper designed for Sci-kit&#39;s `.predict` methods.</span>
 
 <span class="sd">    Parameters</span>
@@ -508,7 +513,7 @@
 <div class="viewcode-block" id="wrap_predict_proba_method">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.wrap_predict_proba_method">[docs]</a>
 <span class="nd">@versionadded</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">wrap_predict_proba_method</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">wrap_predict_proba_method</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a PyMAS wrapper designed for Sci-kit&#39;s `.predict_proba` methods.</span>
 
 <span class="sd">    Parameters</span>
@@ -547,7 +552,7 @@
 <div class="viewcode-block" id="from_inline">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_inline">[docs]</a>
 <span class="nd">@versionchanged</span><span class="p">(</span><span class="s2">&quot;Return code and message are disabled by default.&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">from_inline</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">from_inline</span><span class="p">(</span>
     <span class="n">func</span><span class="p">,</span> <span class="n">input_types</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">array_input</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_code</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_message</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a PyMAS wrapper to execute the inline python function.</span>
@@ -591,7 +596,7 @@
 <div class="viewcode-block" id="from_python_file">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_python_file">[docs]</a>
 <span class="nd">@versionchanged</span><span class="p">(</span><span class="s2">&quot;Return code and message are disabled by default.&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">from_python_file</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">from_python_file</span><span class="p">(</span>
     <span class="n">file</span><span class="p">,</span>
     <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">input_types</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -662,7 +667,7 @@
 <div class="viewcode-block" id="from_pickle">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.from_pickle">[docs]</a>
 <span class="nd">@versionchanged</span><span class="p">(</span><span class="s2">&quot;Return code and message are disabled by default.&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.5&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">from_pickle</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">from_pickle</span><span class="p">(</span>
     <span class="n">file</span><span class="p">,</span>
     <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">input_types</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -743,7 +748,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_build_pymas</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_pymas</span><span class="p">(</span>
     <span class="n">obj</span><span class="p">,</span>
     <span class="n">func_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">input_types</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -774,7 +779,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">func_name</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="n">func_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">func_name</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">parse_function</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">func_name</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_function</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">func_name</span><span class="p">):</span>
         <span class="c1"># If the object passed was a function, no need to search for</span>
         <span class="c1"># target function</span>
         <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">func_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="n">func_name</span><span class="p">):</span>
@@ -836,7 +841,7 @@
 
 <div class="viewcode-block" id="PyMAS">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.PyMAS">[docs]</a>
-<span class="k">class</span> <span class="nc">PyMAS</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PyMAS</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">    Parameters</span>
@@ -858,7 +863,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">target_function</span><span class="p">,</span>
         <span class="n">variables</span><span class="p">,</span>
@@ -950,7 +955,7 @@
 <div class="viewcode-block" id="PyMAS.score_code">
 <a class="viewcode-back" href="../../../../api/sasctl.utils.pymas.html#sasctl.utils.pymas.core.PyMAS.score_code">[docs]</a>
     <span class="nd">@versionchanged</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.4&quot;</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;Added `dest=&#39;Python&#39;` option&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">score_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;MAS&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">score_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_table</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;MAS&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate DS2 score code</span>
 
 <span class="sd">        Parameters</span>
@@ -1059,8 +1064,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1093,7 +1098,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

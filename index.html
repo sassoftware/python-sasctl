@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sasctl &#8212; sasctl 1.11.0 documentation</title>
+    <title>sasctl &#8212; sasctl 1.11.1 documentation</title>
   
   
   
@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,19 +27,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/sasctl.css?v=6840086e" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=6475a945"></script>
+    <script src="_static/documentation_options.js?v=00ba7901"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
@@ -48,8 +48,8 @@
     <link rel="next" title="sasctl package" href="api/sasctl.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.0" />
-    <meta name="docbuild:last-update" content="Oct 29, 2024"/>
+  <meta name="docsearch:version" content="1.11.1" />
+    <meta name="docbuild:last-update" content="Jan 22, 2025"/>
   </head>
   
   
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.0 documentation</p>
+    <p class="title logo__title">sasctl 1.11.1 documentation</p>
   
 </a></div>
     
@@ -266,9 +266,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -289,7 +294,7 @@
                   
   <section id="sasctl">
 <h1>sasctl<a class="headerlink" href="#sasctl" title="Link to this heading">#</a></h1>
-<p>Version 1.11.0</p>
+<p>Version 1.11.1</p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p><strong>sasctl</strong> enables easy integration with the SAS Viya platform.</p>
@@ -335,7 +340,7 @@ If not already present, these packages will be downloaded and install automatica
 <h3>As a Module<a class="headerlink" href="#as-a-module" title="Link to this heading">#</a></h3>
 <p>Once the <strong>sasctl</strong> package has been installed and you have a SAS Viya server to
 connect to, the first step is to establish a session:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">Session</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sasctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
 </pre></div>
@@ -343,8 +348,8 @@ connect to, the first step is to establish a session:</p>
 <p>Once a session has been created, all commands will target that environment by default.
 The easiest way to use <strong>sasctl</strong> is often to use a pre-defined task, which will
 handle all necessary communication with the SAS Viya server:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">Session</span><span class="p">,</span> <span class="n">register_model</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span> <span class="k">as</span> <span class="n">lm</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sasctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span><span class="p">,</span> <span class="n">register_model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">linear_model</span> <span class="k">as</span> <span class="n">lm</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="s1">&#39;example.com&#39;</span><span class="p">,</span> <span class="n">authinfo</span><span class="o">=&lt;</span><span class="n">authinfo</span> <span class="n">file</span><span class="o">&gt;</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="n">model</span> <span class="o">=</span> <span class="n">lm</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">()</span>
@@ -353,8 +358,8 @@ handle all necessary communication with the SAS Viya server:</p>
 </div>
 <p>A slightly more low-level way to interact with the environment is to use the service
 methods directly:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">Session</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sasctl.services</span> <span class="kn">import</span> <span class="n">folders</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sasctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sasctl.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">folders</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">folders</span><span class="o">.</span><span class="n">list_folders</span><span class="p">():</span>
@@ -375,8 +380,8 @@ methods directly:</p>
 </div>
 <p>The most basic way to interact with the server is simply to call REST functions
 directly, though in general, this is not recommended.:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">get</span><span class="p">,</span> <span class="n">Session</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sasctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">get</span><span class="p">,</span> <span class="n">Session</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="n">folders</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s1">&#39;/folders&#39;</span><span class="p">)</span>
@@ -440,8 +445,8 @@ command:
 <section id="register-a-sas-model">
 <h4>Register a SAS model<a class="headerlink" href="#register-a-sas-model" title="Link to this heading">#</a></h4>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">swat</span>
-<span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">register_model</span><span class="p">,</span> <span class="n">Session</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">swat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sasctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_model</span><span class="p">,</span> <span class="n">Session</span>
 
 <span class="k">with</span> <span class="n">swat</span><span class="o">.</span><span class="n">CAS</span><span class="p">(</span><span class="s1">&#39;hostname&#39;</span><span class="p">,</span> <span class="mi">5570</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cas</span><span class="p">:</span>
     <span class="n">astore</span> <span class="o">=</span> <span class="n">cas</span><span class="o">.</span><span class="n">CASTable</span><span class="p">(</span><span class="s1">&#39;model_astore_table&#39;</span><span class="p">)</span>
@@ -456,8 +461,8 @@ command:
 <section id="register-a-scikit-learn-model">
 <h4>Register a scikit-learn model<a class="headerlink" href="#register-a-scikit-learn-model" title="Link to this heading">#</a></h4>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
-<span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">register_model</span><span class="p">,</span> <span class="n">Session</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sasctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_model</span><span class="p">,</span> <span class="n">Session</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
 <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -472,8 +477,8 @@ command:
 <section id="publish-a-model">
 <h4>Publish a model<a class="headerlink" href="#publish-a-model" title="Link to this heading">#</a></h4>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">publish_model</span><span class="p">,</span> <span class="n">Session</span>
-<span class="kn">from</span> <span class="nn">sasctl.services</span> <span class="kn">import</span> <span class="n">model_repository</span> <span class="k">as</span> <span class="n">mr</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sasctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">publish_model</span><span class="p">,</span> <span class="n">Session</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sasctl.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_repository</span> <span class="k">as</span> <span class="n">mr</span>
 
 <span class="n">model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s1">&#39;Model Name&#39;</span><span class="p">)</span>
 <span class="n">publish_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;Destination Name&#39;</span><span class="p">)</span>
@@ -484,8 +489,8 @@ command:
 <section id="execute-a-model-in-mas">
 <h4>Execute a model in MAS<a class="headerlink" href="#execute-a-model-in-mas" title="Link to this heading">#</a></h4>
 <blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sasctl</span> <span class="kn">import</span> <span class="n">Session</span>
-<span class="kn">from</span> <span class="nn">sasctl.services</span> <span class="kn">import</span> <span class="n">microanalytic_score</span> <span class="k">as</span> <span class="n">mas</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sasctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sasctl.services</span><span class="w"> </span><span class="kn">import</span> <span class="n">microanalytic_score</span> <span class="k">as</span> <span class="n">mas</span>
 
 <span class="n">module</span> <span class="o">=</span> <span class="n">mas</span><span class="o">.</span><span class="n">get_module</span><span class="p">(</span><span class="s1">&#39;Module Name&#39;</span><span class="p">)</span>
 <span class="n">module</span> <span class="o">=</span> <span class="n">mas</span><span class="o">.</span><span class="n">define_steps</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
@@ -509,7 +514,7 @@ is to just provide the information directly:</p>
 </div>
 <p>Although this is often the easiest method when getting started, it is not the most secure.  If your program will be used
 interactively, consider using the builtin <a class="reference external" href="https://docs.python.org/3/library/getpass.html#module-getpass" title="(in Python v3.13)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">getpass</span></code></a> module to avoid hard-coded user names and passwords.</p>
-<p>Because <strong>sasctl</strong> augments analytic modeling tasks, it may frequently be used in conjuction with the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.14.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a>
+<p>Because <strong>sasctl</strong> augments analytic modeling tasks, it may frequently be used in conjuction with the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.15.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a>
 module.  When this is the case, another easy way to create a <a class="reference internal" href="api/sasctl.session.html#sasctl.core.Session" title="sasctl.core.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> is to simply reuse the existing CAS
 connection from swat:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cas_session</span> <span class="o">=</span> <span class="n">swat</span><span class="o">.</span><span class="n">CAS</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
@@ -518,7 +523,7 @@ connection from swat:</p>
 </pre></div>
 </div>
 <p>Note: this method will only work when the SWAT connection to CAS is using REST.</p>
-<p>A related option is to piggy-back on the <cite>.authinfo</cite> file used by <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.14.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> or a <cite>.netrc</cite> file:</p>
+<p>A related option is to piggy-back on the <cite>.authinfo</cite> file used by <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.15.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> or a <cite>.netrc</cite> file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">authinfo</span><span class="o">=</span><span class="n">file_path</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -619,14 +624,14 @@ links related to that object are accessible via the [‘links’] key.  Each lin
 <span class="sig-name descname"><span class="pre">CAS_CLIENT_SSL_CA_LIST</span></span><a class="headerlink" href="#envvar-CAS_CLIENT_SSL_CA_LIST" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.14.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> module.  This
+<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.15.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> module.  This
 will take precedence over <span class="target" id="index-8"></span><a class="reference internal" href="#envvar-SSLCALISTLOC"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">SSLCALISTLOC</span></code></a> and <span class="target" id="index-9"></span><a class="reference internal" href="#envvar-REQUESTS_CA_BUNDLE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">REQUESTS_CA_BUNDLE</span></code></a>.</p>
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-SSLCALISTLOC">
 <span class="sig-name descname"><span class="pre">SSLCALISTLOC</span></span><a class="headerlink" href="#envvar-SSLCALISTLOC" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.14.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> module.  This
+<p>Client-side path to a certificate file containing <abbr title="Certificate Authority">CA</abbr> certificates to be trusted.  Used by the <a class="reference external" href="https://sassoftware.github.io/python-swat/index.html#module-swat" title="(in SWAT v1.15.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">swat</span></code></a> module.  This
 will take precedence over <span class="target" id="index-10"></span><a class="reference internal" href="#envvar-REQUESTS_CA_BUNDLE"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">REQUESTS_CA_BUNDLE</span></code></a>.</p>
 <dl class="std envvar">
 <dt class="sig sig-object std" id="envvar-REQUESTS_CA_BUNDLE">
@@ -734,7 +739,7 @@ part of the project.</p>
 platforms.  To accomplish this, the <code class="file docutils literal notranslate"><span class="pre">tests/</span></code> folder contains a collection of unit tests and integration tests where
 “unit” tests are generally target a single function and “integration” tests target a series of functions or classes
 working together.</p>
-<p>Test execution is handled by the  <a class="reference external" href="https://docs.pytest.org/en/latest/index.html" title="(in pytest v8.4.0.dev129)"><span class="xref std std-doc">py.test</span></a> module which supports tests written using the builtin <a class="reference external" href="https://docs.python.org/3/library/unittest.html#module-unittest" title="(in Python v3.13)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest</span></code></a>
+<p>Test execution is handled by the  <a class="reference external" href="https://docs.pytest.org/en/latest/index.html" title="(in pytest v8.4.0.dev329)"><span class="xref std std-doc">py.test</span></a> module which supports tests written using the builtin <a class="reference external" href="https://docs.python.org/3/library/unittest.html#module-unittest" title="(in Python v3.13)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest</span></code></a>
 framework, but also adds some powerful features like test fixtures.  It is recommended that you review
 <code class="file docutils literal notranslate"><span class="pre">tests/conftest.py</span></code> and the existing test cases to understand what features are currently available for testing.</p>
 <p>To isolate individual methods for testing, the unit test cases make extensive use of mocking via the
@@ -745,7 +750,7 @@ access to an environment that is suitable for development.  Therefore, most of t
 <a class="reference external" href="https://betamax.readthedocs.io/en/latest/api.html#module-betamax" title="(in Betamax v0.8.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">betamax</span></code></a> module to record and replay HTTP requests and responses.  These recordings are scrubbed of any sensitive
 information and stored in <code class="file docutils literal notranslate"><span class="pre">tests/cassettes/</span></code>.  This allows tests to be rerun repeatedly once the test has been recorded
 once.</p>
-<p>And finally, the <a class="reference external" href="https://tox.wiki/en/latest/index.html" title="(in Project name not set v4.23)"><span class="xref std std-doc">tox</span></a> module is used to ensure that <strong>sasctl</strong> will install and work correctly on all supported
+<p>And finally, the <a class="reference external" href="https://tox.wiki/en/latest/index.html" title="(in Project name not set v4.24)"><span class="xref std std-doc">tox</span></a> module is used to ensure that <strong>sasctl</strong> will install and work correctly on all supported
 Python versions.</p>
 </section>
 <section id="useful-tox-commands">
@@ -756,7 +761,7 @@ found on the system and then install the required packages necessary to perform 
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tox
 </pre></div>
 </div>
-<p>This will run the <code class="xref py py-mod docutils literal notranslate"><span class="pre">flake8</span></code> linter followed by <a class="reference external" href="https://docs.pytest.org/en/latest/index.html#module-pytest" title="(in pytest v8.4.0.dev129)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pytest</span></code></a> to test the code against all Python runtimes
+<p>This will run the <code class="xref py py-mod docutils literal notranslate"><span class="pre">flake8</span></code> linter followed by <a class="reference external" href="https://docs.pytest.org/en/latest/index.html#module-pytest" title="(in pytest v8.4.0.dev329)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pytest</span></code></a> to test the code against all Python runtimes
 found on the machine.  One of the great features of Tox is the ability to run specific tasks by specifying the environment to run.
 A few useful environments are listed below, where <strong>XX</strong> indicates a Python version present in your development environment,
 such as ‘27’ or ‘36’.</p>
@@ -787,7 +792,7 @@ such as ‘27’ or ‘36’.</p>
 <p>Starts a Python REPL in an environment with <strong>sasctl</strong> already installed.</p>
 </li>
 </ol>
-<p>For additional information on configuring and using Tox, see the official <a class="reference external" href="https://tox.wiki/en/latest/index.html" title="(in Project name not set v4.23)"><span class="xref std std-doc">documentation</span></a> or Sean Hammond’s excellent <a class="reference external" href="https://seanh.cc/post/tox-tutorial/">tutorial</a>.</p>
+<p>For additional information on configuring and using Tox, see the official <a class="reference external" href="https://tox.wiki/en/latest/index.html" title="(in Project name not set v4.24)"><span class="xref std std-doc">documentation</span></a> or Sean Hammond’s excellent <a class="reference external" href="https://seanh.cc/post/tox-tutorial/">tutorial</a>.</p>
 </section>
 </section>
 </section>
@@ -879,8 +884,8 @@ such as ‘27’ or ‘36’.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -913,7 +918,8 @@ such as ‘27’ or ‘36’.</p>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

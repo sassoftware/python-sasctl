@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sasctl._services.service &#8212; sasctl 1.11.0 documentation</title>
+    <title>sasctl._services.service &#8212; sasctl 1.11.1 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "dark";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "dark";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,19 +26,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sasctl.css?v=6840086e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=6475a945"></script>
+    <script src="../../../_static/documentation_options.js?v=00ba7901"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/sasctl/_services/service';</script>
@@ -46,8 +46,8 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.11.0" />
-    <meta name="docbuild:last-update" content="Oct 29, 2024"/>
+  <meta name="docsearch:version" content="1.11.1" />
+    <meta name="docbuild:last-update" content="Jan 22, 2025"/>
   </head>
   
   
@@ -109,7 +109,7 @@
   
   
   
-    <p class="title logo__title">sasctl 1.11.0 documentation</p>
+    <p class="title logo__title">sasctl 1.11.1 documentation</p>
   
 </a></div>
     
@@ -260,9 +260,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -317,17 +322,17 @@
 
 <span class="sd">&quot;&quot;&quot;Base functionality for all services.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">quote</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">quote</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">core</span>
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">HTTPError</span><span class="p">,</span> <span class="n">PagedItemIterator</span><span class="p">,</span> <span class="n">sasctl_command</span>
-<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">JobTimeoutError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">core</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPError</span><span class="p">,</span> <span class="n">PagedItemIterator</span><span class="p">,</span> <span class="n">sasctl_command</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobTimeoutError</span>
 
 
-<span class="k">class</span> <span class="nc">Service</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c1"># skipcq PYL-R0205</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Service</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c1"># skipcq PYL-R0205</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for all services.  Should not be used directly.&quot;&quot;&quot;</span>
 
     <span class="n">_SERVICE_ROOT</span> <span class="o">=</span> <span class="kc">None</span>
@@ -339,11 +344,11 @@
     <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">_SERVICE_ROOT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_SERVICE_ROOT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">is_available</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_available</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the service is currently available.</span>
 
 <span class="sd">        Returns</span>
@@ -358,7 +363,7 @@
             <span class="k">return</span> <span class="kc">False</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">info</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Version and build information for the service.</span>
 
 <span class="sd">        Returns</span>
@@ -369,7 +374,7 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/apiMeta&quot;</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">verb</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">format_</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">request</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">verb</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">format_</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Send an HTTP request with a session.</span>
 
 <span class="sd">        Parameters</span>
@@ -404,7 +409,7 @@
         <span class="k">return</span> <span class="n">core</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">verb</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">format_</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a GET request.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -414,27 +419,27 @@
             <span class="k">raise</span> <span class="n">e</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">head</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">head</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a HEAD request.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;head&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">post</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a POST request.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;post&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">put</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a PUT request.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;put&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a DELETE request.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_crud_funcs</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_crud_funcs</span><span class="p">(</span>
         <span class="n">path</span><span class="p">,</span> <span class="n">single_term</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plural_term</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">service_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">get_filter</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Utility method for defining CRUD functions.</span>
@@ -475,13 +480,13 @@
         <span class="c1"># Set a default filter</span>
         <span class="k">if</span> <span class="n">get_filter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
-            <span class="k">def</span> <span class="nf">default_filter</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">default_filter</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
                 <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="s1">&#39;eq(name, &quot;</span><span class="si">%s</span><span class="s1">&quot;)&#39;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
 
             <span class="n">get_filter</span> <span class="o">=</span> <span class="n">default_filter</span>
 
         <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">list_items</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">list_items</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;List all {items} available in the environment.</span>
 
 <span class="sd">            Parameters</span>
@@ -524,7 +529,7 @@
             <span class="k">return</span> <span class="p">[</span><span class="n">results</span><span class="p">]</span>
 
         <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">get_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">get_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">refresh</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Return a {item} instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -587,7 +592,7 @@
             <span class="k">return</span> <span class="n">match</span>
 
         <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;update&quot;</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">update_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">update_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Update a {item} instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -617,7 +622,7 @@
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;/</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">id_</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">item</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
 
         <span class="nd">@sasctl_command</span><span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">delete_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">delete_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Delete a {item} instance.</span>
 
 <span class="sd">            Parameters</span>
@@ -673,7 +678,7 @@
     <span class="c1"># arguments.</span>
     <span class="c1"># skipcq: PYL-W1113</span>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_get_rel</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_rel</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get `item` and request a link.</span>
 
 <span class="sd">        Parameters</span>
@@ -707,7 +712,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">resources</span><span class="p">]</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_monitor_job</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_monitor_job</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Continually poll a job until it reaches the desired status.</span>
 
 <span class="sd">        Parameters</span>
@@ -728,7 +733,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">completed</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">completed</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">job</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;completed&quot;</span><span class="p">,</span> <span class="s2">&quot;failed&quot;</span><span class="p">)</span>
 
         <span class="n">retries</span> <span class="o">=</span> <span class="mi">0</span>
@@ -774,8 +779,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -808,7 +813,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>
