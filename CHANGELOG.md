@@ -1,3 +1,13 @@
+v1.11.1 (2025-01-22)
+--------------------
+**Improvements**
+- Improved functionality for `score_definition.py` and `score_execution.py`, allowing for more general usage of the `score_model_with_cas` task
+  - Also allowed for model name to be passed into functions instead of requiring model UUID
+- Pickle files now loaded with `pd.read_pickle()` instead of `pickle.load()` in score code, allowing for more flexibility between python environments
+
+**Bugfixes**
+- Updated `pzmm_generate_complete_model_card.ipynb` to have better preprocessing function
+
 v1.11.0 (2024-10-29)
 --------------------
 **Changes**
