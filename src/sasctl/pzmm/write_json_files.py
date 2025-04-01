@@ -165,7 +165,7 @@ class JSONFiles:
 
     @staticmethod
     def generate_variable_properties(
-        input_data: Union[DataFrame, Series]
+        input_data: Union[DataFrame, Series],
     ) -> List[dict]:
         """
         Generate a list of dictionaries of variable properties given an input dataframe.
@@ -1192,7 +1192,6 @@ class JSONFiles:
     def calculate_model_statistics(
         cls,
         target_value: Union[str, int, float],
-        prob_value: Union[int, float, None] = None,
         validate_data: Union[DataFrame, List[list], Type["numpy.ndarray"]] = None,
         train_data: Union[DataFrame, List[list], Type["numpy.ndarray"]] = None,
         test_data: Union[DataFrame, List[list], Type["numpy.ndarray"]] = None,
@@ -1211,8 +1210,7 @@ class JSONFiles:
         Datasets must contain the actual and predicted values and may optionally contain
         the predicted probabilities. If no probabilities are provided, a dummy
         probability dataset is generated based on the predicted values and normalized by
-        the target value. If a probability threshold value is not provided, the
-        threshold value is set at 0.5.
+        the target value.
 
         Datasets can be provided in the following forms, with the assumption that data
         is ordered as `actual`, `predict`, and `probability` respectively:
@@ -1229,9 +1227,6 @@ class JSONFiles:
         ----------
         target_value : str, int, or float
             Target event value for model prediction events.
-        prob_value : int or float, optional
-            The threshold value for model predictions to indicate an event occurred. The
-            default value is 0.5.
         validate_data : pandas.DataFrame, list of list, or numpy.ndarray, optional
             Dataset pertaining to the validation data. The default value is None.
         train_data : pandas.DataFrame, list of list, or numpy.ndarray, optional
@@ -1284,19 +1279,23 @@ class JSONFiles:
                 continue
 
             data = cls.stat_dataset_to_dataframe(data, target_value, target_type)
+            data["predict_proba2"] = 1 - data["predict_proba"]
 
-            conn.upload(
+            out = conn.upload(
                 data,
-                casout={"name": "assess_dataset", "replace": True, "caslib": "Public"},
+                casout={"caslib": "Public", "name": "assess_dataset", "replace": True},
             )
+
             if target_type == "classification":
-                conn.percentile.assess(
+                output = conn.percentile.assess(
                     table={"name": "assess_dataset", "caslib": "Public"},
-                    response="predict",
-                    pVar="predict_proba",
-                    event=str(target_value),
-                    pEvent=str(prob_value) if prob_value else str(0.5),
                     inputs="actual",
+                    response="predict_proba",
+                    event="1",
+                    pvar="predict_proba2",
+                    pevent="0",
+                    includeLift=True,
+                    cutstep=0.2,
                     fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
                     rocOut={"name": "ROC", "replace": True, "caslib": "Public"},
                     casout={"name": "Lift", "replace": True, "caslib": "Public"},
@@ -1306,8 +1305,8 @@ class JSONFiles:
                     table={"name": "assess_dataset", "caslib": "Public"},
                     response="predict",
                     inputs="actual",
-                    fitStatOut={"name": "FitStat", "replace": True, "caslib": "Public"},
-                    casout={"name": "Lift", "replace": True, "caslib": "Public"},
+                    fitStatOut={"caslib": "Public", "name": "FitStat", "replace": True},
+                    casout={"caslib": "Public", "name": "Lift", "replace": True},
                 )
 
             fitstat_dict = (
